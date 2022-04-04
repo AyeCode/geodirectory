@@ -693,7 +693,7 @@ class GeoDir_Media {
 			$results = wp_handle_sideload( $file, $overrides );
 
 			// unlink the temp file
-			@unlink($temp_file);
+			@unlink($temp_file); // @codingStandardsIgnoreLine
 
 			if ( ! empty( $results['error'] ) ) {
 				// Insert any error handling here
@@ -799,7 +799,7 @@ class GeoDir_Media {
 			if ( null === $check ) {
 				$wp_upload_dir = wp_upload_dir();
 				$file_path = $wp_upload_dir['basedir'] . $attachment->file;
-				@wp_delete_file( $file_path ); // delete main image
+				wp_delete_file( $file_path ); // delete main image
 
 				if ( ! empty( $attachment->metadata ) ) {
 					$metadata = maybe_unserialize( $attachment->metadata );
@@ -810,7 +810,7 @@ class GeoDir_Media {
 						foreach ( $metadata['sizes'] as $size ) {
 							if ( ! empty( $size['file'] ) ) {
 								$file_path = str_replace( $img_url_basename, wp_basename( $size['file'] ), $wp_upload_dir['basedir'] . $attachment->file );
-								@wp_delete_file( $file_path ); // delete image size
+								wp_delete_file( $file_path ); // delete image size
 							}
 						}
 					}
@@ -1196,7 +1196,7 @@ class GeoDir_Media {
 		$filesize = filesize( $upload['file'] );
 
 		if ( 0 == $filesize ) {
-			@unlink( $upload['file'] );
+			@unlink( $upload['file'] ); // @codingStandardsIgnoreLine
 			unset( $upload );
 
 			return new WP_Error( 'geodir_image_upload_file_error', __( 'Zero size file downloaded.', 'geodirectory' ), array( 'status' => 400 ) );

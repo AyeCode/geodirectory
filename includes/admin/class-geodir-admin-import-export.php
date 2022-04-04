@@ -161,7 +161,7 @@ class GeoDir_Admin_Import_Export {
 		if ( ! ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
 			error_reporting( 0 );
 		}
-		@ini_set( 'display_errors', 0 );
+		@ini_set( 'display_errors', 0 ); // @codingStandardsIgnoreLine
 
 		// try to set higher limits for import
 		$max_input_time     = ini_get( 'max_input_time' );
@@ -169,20 +169,20 @@ class GeoDir_Admin_Import_Export {
 		$memory_limit       = ini_get( 'memory_limit' );
 
 		if ( $max_input_time !== 0 && $max_input_time != -1 && ( ! $max_input_time || $max_input_time < 3000 ) ) {
-			ini_set( 'max_input_time', 3000 );
+			ini_set( 'max_input_time', 3000 ); // @codingStandardsIgnoreLine
 		}
 
 		if ( $max_execution_time !== 0 && ( ! $max_execution_time || $max_execution_time < 3000 ) ) {
-			ini_set( 'max_execution_time', 3000 );
+			ini_set( 'max_execution_time', 3000 ); // @codingStandardsIgnoreLine
 		}
 
 		if ( $memory_limit && str_replace( 'M', '', $memory_limit ) ) {
 			if ( str_replace( 'M', '', $memory_limit ) < 256 ) {
-				ini_set( 'memory_limit', '256M' );
+				ini_set( 'memory_limit', '256M' ); // @codingStandardsIgnoreLine
 			}
 		}
 
-		ini_set( 'auto_detect_line_endings', true );
+		ini_set( 'auto_detect_line_endings', true ); // @codingStandardsIgnoreLine
 	}
 
 	/**
@@ -975,8 +975,8 @@ class GeoDir_Admin_Import_Export {
 	public static function export_categories() {
 		global $wp_filesystem;
 
-		$nonce          = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : null;
-		$post_type      = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : null;
+		$nonce          = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( $_REQUEST['_nonce'] ) : null;
+		$post_type      = isset( $_REQUEST['_pt'] ) ? sanitize_text_field( $_REQUEST['_pt'] ) : null;
 		$chunk_per_page = isset( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : null;
 		$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
 		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
@@ -1076,6 +1076,7 @@ class GeoDir_Admin_Import_Export {
 
 		remove_all_filters( 'get_terms' );
 
+		$post_type = sanitize_text_field( $post_type );
 		$taxonomy = $post_type . 'category';
 
 		if ( $per_page > 0 && $page_no > 0 ) {
@@ -1084,8 +1085,6 @@ class GeoDir_Admin_Import_Export {
 		}
 
 		$terms = get_terms( $taxonomy, $args );
-
-		//print_r($terms);exit;
 
 		$csv_rows = array();
 

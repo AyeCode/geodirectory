@@ -237,6 +237,8 @@ function geodir_get_terms_count( $post_type ) {
 
 	remove_all_filters( 'get_terms' );
 
+	$post_type = sanitize_text_field( $post_type );
+
 	$taxonomy = $post_type . 'category';
 
 	do_action( 'geodir_before_count_terms', $post_type, $taxonomy, $args );

@@ -322,7 +322,7 @@ class GeoDir_Auth {
 			// Login endpoint
 			if ( 'login' == $route && ! is_user_logged_in() ) {
 				geodir_get_template( 'auth/form-login.php', array(
-					'app_name'     => $_REQUEST['app_name'],
+					'app_name'     => geodir_clean( $_REQUEST['app_name'] ),
 					'return_url'   => add_query_arg( array( 'success' => 0, 'user_id' => geodir_clean( $_REQUEST['user_id'] ) ), $this->get_formatted_url( $_REQUEST['return_url'] ) ),
 					'redirect_url' => $this->build_url( $_REQUEST, 'authorize' ),
 				) );
@@ -342,7 +342,7 @@ class GeoDir_Auth {
 			// Authorize endpoint
 			} elseif ( 'authorize' == $route && current_user_can( 'manage_options' ) ) { // @todo manage_options
 				geodir_get_template( 'auth/form-grant-access.php', array(
-					'app_name'    => $_REQUEST['app_name'],
+					'app_name'    => geodir_clean( $_REQUEST['app_name'] ),
 					'return_url'  => add_query_arg( array( 'success' => 0, 'user_id' => geodir_clean( $_REQUEST['user_id'] ) ), $this->get_formatted_url( $_REQUEST['return_url'] ) ),
 					'scope'       => $this->get_i18n_scope( geodir_clean( $_REQUEST['scope'] ) ),
 					'permissions' => $this->get_permissions_in_scope( geodir_clean( $_REQUEST['scope'] ) ),
@@ -358,7 +358,7 @@ class GeoDir_Auth {
 					throw new Exception( __( 'Invalid nonce verification', 'geodirectory' ) );
 				}
 
-				$consumer_data = $this->create_keys( $_REQUEST['app_name'], $_REQUEST['user_id'], $_REQUEST['scope'] );
+				$consumer_data = $this->create_keys( geodir_clean( $_REQUEST['app_name'] ), geodir_clean( $_REQUEST['user_id'] ), geodir_clean( $_REQUEST['scope'] ) );
 				$response      = $this->post_consumer_data( $consumer_data, $this->get_formatted_url( $_REQUEST['callback_url'] ) );
 
 				if ( $response ) {
