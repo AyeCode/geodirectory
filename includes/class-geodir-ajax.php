@@ -124,7 +124,7 @@ class GeoDir_AJAX {
 			if(!defined('DOING_AJAX'))define( 'DOING_AJAX', true );
 			if(!defined('GD_DOING_AJAX'))define( 'GD_DOING_AJAX', true );
 			if ( ! WP_DEBUG || ( WP_DEBUG && ! WP_DEBUG_DISPLAY ) ) {
-				@ini_set( 'display_errors', 0 ); // @codingStandardsIgnoreLine // Turn off display_errors during AJAX events to prevent malformed JSON.
+				/** @scrutinizer ignore-unhandled */ @ini_set( 'display_errors', 0 ); // Turn off display_errors during AJAX events to prevent malformed JSON.
 			}
 			$GLOBALS['wpdb']->hide_errors();
 		}
@@ -157,8 +157,8 @@ class GeoDir_AJAX {
 	 */
 	private static function gd_ajax_headers() {
 		send_origin_headers();
-		@header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) ); // @codingStandardsIgnoreLine
-		@header( 'X-Robots-Tag: noindex' ); // @codingStandardsIgnoreLine
+		/** @scrutinizer ignore-unhandled */ @header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) ); // @codingStandardsIgnoreLine
+		/** @scrutinizer ignore-unhandled */ @header( 'X-Robots-Tag: noindex' ); // @codingStandardsIgnoreLine
 		send_nosniff_header();
 		nocache_headers();
 		status_header( 200 );

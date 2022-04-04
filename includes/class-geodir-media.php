@@ -693,7 +693,7 @@ class GeoDir_Media {
 			$results = wp_handle_sideload( $file, $overrides );
 
 			// unlink the temp file
-			@unlink($temp_file); // @codingStandardsIgnoreLine
+			/** @scrutinizer ignore-unhandled */ @unlink($temp_file);
 
 			if ( ! empty( $results['error'] ) ) {
 				// Insert any error handling here
@@ -1196,7 +1196,7 @@ class GeoDir_Media {
 		$filesize = filesize( $upload['file'] );
 
 		if ( 0 == $filesize ) {
-			@unlink( $upload['file'] ); // @codingStandardsIgnoreLine
+			/** @scrutinizer ignore-unhandled */ @unlink( $upload['file'] );
 			unset( $upload );
 
 			return new WP_Error( 'geodir_image_upload_file_error', __( 'Zero size file downloaded.', 'geodirectory' ), array( 'status' => 400 ) );

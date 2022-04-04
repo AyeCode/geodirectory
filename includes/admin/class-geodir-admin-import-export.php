@@ -161,7 +161,7 @@ class GeoDir_Admin_Import_Export {
 		if ( ! ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
 			error_reporting( 0 );
 		}
-		@ini_set( 'display_errors', 0 ); // @codingStandardsIgnoreLine
+		/** @scrutinizer ignore-unhandled */ @ini_set( 'display_errors', 0 );
 
 		// try to set higher limits for import
 		$max_input_time     = ini_get( 'max_input_time' );
