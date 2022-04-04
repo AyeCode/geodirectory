@@ -557,7 +557,7 @@ class GeoDir_Post_Data {
 
 				// quick edit returns tag ids, we need the strings
 				if ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'inline-save' ) {
-					$post_tags = isset( $_REQUEST['tax_input'][ $post_type . '_tags' ] ) ? $_REQUEST['tax_input'][ $post_type . '_tags' ] : '';
+					$post_tags = isset( $_REQUEST['tax_input'][ $post_type . '_tags' ] ) ? sanitize_text_field( $_REQUEST['tax_input'][ $post_type . '_tags' ] ) : '';
 					if ( $post_tags ) {
 						$post_tags = explode( ",", $post_tags );
 					}
@@ -1147,7 +1147,7 @@ class GeoDir_Post_Data {
 			$posts_array = get_posts( $args );
 		} else {
 			// if its a logged out user the add current nonce as post meta
-			$current_nonce = geodir_getcookie( '_gd_logged_out_post_author' );
+			$current_nonce = sanitize_text_field( geodir_getcookie( '_gd_logged_out_post_author' ) );
 			$args          = array(
 				'posts_per_page'   => - 1,
 				'orderby'          => 'date',

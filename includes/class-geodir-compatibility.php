@@ -58,7 +58,6 @@ class GeoDir_Compatibility {
 		Ninja Forms :: Add our own form tags.
 		######################################################*/
 		add_action( 'ninja_forms_loaded', array( __CLASS__, 'ninja_forms' ) );
-		add_action( 'init',array( __CLASS__, 'ninja_forms_api_fix' ),5);
 
 		/*######################################################
 		Primer (theme) :: Fix single page title.
@@ -323,40 +322,6 @@ class GeoDir_Compatibility {
 			}
 		}
 	}
-
-	/**
-	 * Fix Ninja Forms bug that creates PHP warnings in the REST API result if a array item is used.
-	 *
-	 * @todo remove once fixed in NF: https://wordpress.org/support/topic/breaks-any-rest-api-request-using-array-items/
-	 */
-	public static function ninja_forms_api_fix() {
-		global $wp_version;
-
-		// @todo, NF suck, remove this when then eventually fix their stuff
-		// NF fixed wp_kses_post bug in 3.4.24. see https://git.saturdaydrive.io/_/ninja-forms/ninja-forms/merge_requests/3943
-
-		if ( function_exists( 'Ninja_Forms' ) && version_compare( $wp_version, '5.3.1', '>=' ) && ! defined( 'NF_PLUGIN_VERSION' ) && version_compare( Ninja_Forms::VERSION, '3.4.24', '<' ) ) {
-			remove_action( 'init', array( Ninja_Forms()->merge_tags[ 'other' ], 'init' ) );
-			add_action( 'init', array( __CLASS__, 'nf_mergetags_other_init' ) );
-		}
-	}
-
-	public static function nf_mergetags_other_init() {
-        if ( is_admin() ) {
-            if( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) return;
-            $url_query = parse_url( wp_get_referer(), PHP_URL_QUERY );
-            parse_str( $url_query, $variables );
-        } else {
-            $variables = $_GET;
-        }
-
-        if( ! is_array( $variables ) ) return;
-
-        foreach( $variables as $key => $value ){
-            $value = wp_kses_post_deep( $value );
-            Ninja_Forms()->merge_tags[ 'other' ]->set_merge_tags( $key, $value );
-        }
-    }
 
 	/**
 	 * Set temp globals before looping listings template so we can reset them to proper values after looping.

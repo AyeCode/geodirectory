@@ -335,7 +335,7 @@ class GeoDir_Admin_Dummy_Data {
 		$data_type = sanitize_key($request['data_type']);
 		$update_templates = absint($request['update_templates']);
 
-		ini_set( 'max_execution_time', 999999 ); //300 seconds = 5 minutes
+		ini_set( 'max_execution_time', 999999 ); // @codingStandardsIgnoreLine //300 seconds = 5 minutes
 		$data_types = self::dummy_data_types($post_type);
 
 		$total_count = 0;
