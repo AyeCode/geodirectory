@@ -90,7 +90,7 @@ function geodir_predefined_custom_field_output_distanceto( $html, $location, $cf
 
 		$unit = geodir_get_option( 'search_distance_long', 'miles' );
 		$distance = geodir_calculateDistanceFromLatLong( $start_point, $end_point, $unit );
-		$_distance = geodir_show_distance( (float) $distance );
+		$_distance = geodir_show_distance( geodir_sanitize_float( $distance ) );
 
 		$field_icon = geodir_field_icon_proccess( $cf );
 		$output = geodir_field_output_process($output);

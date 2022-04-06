@@ -1151,7 +1151,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			if ( $instance['slide_interval'] === "0" ) {
 				$slide_interval = "false";
 			} else {
-				$slide_interval = ! empty( $instance['slide_interval'] ) ? (float) $instance['slide_interval'] * 1000 : 5000;
+				$slide_interval = ! empty( $instance['slide_interval'] ) ? geodir_sanitize_float( $instance['slide_interval'] ) * 1000 : 5000;
 			}
 			$wrapper_attrs .= ' data-interval="' . $slide_interval . '"';
 			$wrapper_attrs .= ' data-ride="' . ( $instance['slide_ride'] == 'click' ? 'false' : 'carousel' ) . '"';

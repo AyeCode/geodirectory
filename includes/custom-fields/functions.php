@@ -952,7 +952,7 @@ function geodir_cf_format_number( $number = '', $cf = '' ) {
 		$separator = '';
 	}
 
-	$number = number_format( floatval( $number ), 0, '', $separator );
+	$number = number_format( geodir_sanitize_float( $number ), 0, '', $separator );
 
 	return $number;
 }

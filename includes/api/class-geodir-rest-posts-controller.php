@@ -2899,7 +2899,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		
 		// Extra fields
 		$data['featured'] 		= (bool) $gd_post->featured;
-		$data['rating'] 		= (float) $gd_post->overall_rating;
+		$data['rating'] 		= geodir_sanitize_float( $gd_post->overall_rating );
 		$data['rating_count'] 	= (int) $gd_post->rating_count;
 		
 		// Featured image

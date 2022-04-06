@@ -409,7 +409,7 @@ class GeoDir_Privacy_Exporters {
 					if ( ! empty( $review->rating ) ) {
 						$data[] = array(
 							'name'  => __( 'Rating (Overall)', 'geodirectory' ),
-							'value' => (float)$review->rating . ' / 5',
+							'value' => geodir_sanitize_float( $review->rating ) . ' / 5',
 						);
 					}
 					if ( ! empty( $review->city ) ) {

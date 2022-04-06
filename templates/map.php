@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.4
+ * @version    2.2.6
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -99,8 +99,8 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 
     baseMarker = '';
     geocoder = '';
-    var <?php echo $prefix;?>CITY_MAP_CENTER_LAT = <?php echo ($lat) ? (float) $lat :  '39.952484'; ?>;
-    var <?php echo $prefix;?>CITY_MAP_CENTER_LNG = <?php echo ($lng) ? (float) $lng :  '-75.163786'; ?>;
+    var <?php echo $prefix;?>CITY_MAP_CENTER_LAT = <?php echo ($lat) ? geodir_sanitize_float( $lat ) :  '39.952484'; ?>;
+    var <?php echo $prefix;?>CITY_MAP_CENTER_LNG = <?php echo ($lng) ? geodir_sanitize_float( $lng ) :  '-75.163786'; ?>;
     <?php if($lat_lng_blank){$lat='';$lng='';}?>
     var <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT = <?php echo ($mapzoom) ? absint( $mapzoom ) : 12;?>;
     var minZoomLevel = <?php echo ($is_map_restrict) ? 5 : 0; ?>;

@@ -704,7 +704,7 @@ function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
 		if ( get_query_var( 'dist' ) ) {
 			$dist = get_query_var('dist');
 		}elseif(wp_doing_ajax() && !empty($wp->query_vars['dist'])){
-			$dist = (float)$wp->query_vars['dist'];
+			$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
 		}else{
 			$dist = geodir_get_option( 'search_radius', 5 ); // seems to work in miles
 			$unit = geodir_get_option( 'search_distance_long', 'miles' );
@@ -719,7 +719,7 @@ function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
 	// sanatize just in case
 	$lat = filter_var( $lat, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 	$lon = filter_var( $lon, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
-	$dist = (float) $dist > 0 ? (float)$dist : 5;
+	$dist = geodir_sanitize_float( $dist ) > 0 ? geodir_sanitize_float( $dist ) : 5;
 
 	$lat1 = $lat - ( $dist / 69 );
 	$lat2 = $lat + ( $dist / 69 );
@@ -771,10 +771,10 @@ function geodir_calculateDistanceFromLatLong( $point1, $point2, $uom = 'km' ) {
 
 	$earthMeanRadius = geodir_getDistanceRadius( $uom );
 
-	$deltaLatitude  = deg2rad( (float) $point2['latitude'] - (float) $point1['latitude'] );
-	$deltaLongitude = deg2rad( (float) $point2['longitude'] - (float) $point1['longitude'] );
+	$deltaLatitude  = deg2rad( geodir_sanitize_float( $point2['latitude'] ) - geodir_sanitize_float( $point1['latitude'] ) );
+	$deltaLongitude = deg2rad( geodir_sanitize_float( $point2['longitude'] ) - geodir_sanitize_float( $point1['longitude'] ) );
 	$a              = sin( $deltaLatitude / 2 ) * sin( $deltaLatitude / 2 ) +
-	                  cos( deg2rad( (float) $point1['latitude'] ) ) * cos( deg2rad( (float) $point2['latitude'] ) ) *
+	                  cos( deg2rad( geodir_sanitize_float( $point1['latitude'] ) ) ) * cos( deg2rad( geodir_sanitize_float( $point2['latitude'] ) ) ) *
 	                  sin( $deltaLongitude / 2 ) * sin( $deltaLongitude / 2 );
 	$c              = 2 * atan2( sqrt( $a ), sqrt( 1 - $a ) );
 	$distance       = $earthMeanRadius * $c;
@@ -791,7 +791,7 @@ function geodir_calculateDistanceFromLatLong( $point1, $point2, $uom = 'km' ) {
  * @return string|void Max upload size.
  */
 function geodir_max_upload_size() {
-	$max_filesize = (float) geodir_get_option( 'upload_max_filesize', 2 );
+	$max_filesize = geodir_sanitize_float( geodir_get_option( 'upload_max_filesize', 2 ) );
 
 	if ( $max_filesize > 0 && $max_filesize < 1 ) {
 		$max_filesize = (int) ( $max_filesize * 1024 ) . 'kb';
@@ -1072,9 +1072,9 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 				if ( GeoDir_Post_types::supports( $post_type, 'service_distance' ) ) {
 					$having = " HAVING distance <= `{$table}`.`service_distance` ";
 				} else {
-					$dist = get_query_var( 'dist' ) ? (float) get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
+					$dist = get_query_var( 'dist' ) ? geodir_sanitize_float( get_query_var( 'dist' ) ) : geodir_get_option( 'search_radius', 5 );
 					if ( wp_doing_ajax() && ! empty( $wp->query_vars['dist'] ) ) {
-						$dist = (float)$wp->query_vars['dist'];
+						$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
 					}
 					$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
 				}

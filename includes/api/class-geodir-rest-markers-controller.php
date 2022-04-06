@@ -277,7 +277,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 				if ( GeoDir_Post_types::supports( $request['post_type'], 'service_distance' ) ) {
 					$having = " HAVING distance <= `pd`.`service_distance` ";
 				} else {
-					$distance = ! empty( $request['dist'] ) ? (float) $request['dist'] : geodir_get_option( 'search_radius', 5 );
+					$distance = ! empty( $request['dist'] ) ? geodir_sanitize_float( $request['dist'] ) : geodir_get_option( 'search_radius', 5 );
 					$having = $wpdb->prepare( " HAVING distance <= %f ", $distance );
 				}
 
