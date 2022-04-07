@@ -291,6 +291,11 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
 				$value = round( $value, 1 );
 			}
 
+			// Translate country.
+			if ( $htmlvar_name == 'country' ) {
+				$value = __( $value, 'geodirectory' );
+			}
+
 			if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'INT' || $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) && isset( $cf['extra_fields'] ) && $cf['extra_fields'] ) {
 				$extra_fields = stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) );
 

@@ -1,5 +1,6 @@
 = 2.2.6 =
 * Float value parsing shows comma with pl_PL locale - FIXED
+* Elementor custom tag shows country name untranslated - FIXED
 
 = 2.2.4 =
 * Neighbourhood SEO variable not working on single page - FIXED
