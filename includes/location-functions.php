@@ -561,23 +561,27 @@ function geodir_ip_api_data( $ip = '' ) {
     $data = array();
 
     // check transient cache
-    $cache = get_transient( 'geodir_ip_location_'.$ip );
-    if($cache === false){
+    $cache = get_transient( 'geodir_ip_location_' . $ip );
 
+    if ( $cache === false ) {
         $url = 'http://ip-api.com/json/' . $ip;
         $response = wp_remote_get($url);
 
         if ( is_array( $response ) && wp_remote_retrieve_response_code( $response ) == '200' ) {
-            $data = json_decode(wp_remote_retrieve_body( $response ),true);
-        }
+            $data = json_decode( wp_remote_retrieve_body( $response ), true );
 
-    }else{
+            if ( ! empty( $data ) && ! empty( $data['lat'] ) && ! empty( $data['lon'] ) ) {
+                $data['lat'] = geodir_sanitize_float( $data['lat'] );
+                $data['lon'] = geodir_sanitize_float( $data['lon'] );
+            }
+        }
+    } else {
         $data = $cache;
     }
 
     $data  = apply_filters( 'geodir_ip_api_data', $data, $ip );
 
-    set_transient( 'geodir_ip_location_'.$ip, $data, 24 * HOUR_IN_SECONDS ); // cache ip location for 24 hours
+    set_transient( 'geodir_ip_location_' . $ip, $data, 24 * HOUR_IN_SECONDS ); // cache ip location for 24 hours
 
     return $data;
 }

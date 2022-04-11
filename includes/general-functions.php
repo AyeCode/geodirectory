@@ -691,7 +691,7 @@ function geodir_getDistanceRadius( $uom = 'km' ) {
 			break;
 	endswitch;
 
-	return $earthMeanRadius;
+	return geodir_sanitize_float( $earthMeanRadius );
 }
 
 function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
