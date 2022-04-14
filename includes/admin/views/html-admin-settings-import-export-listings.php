@@ -8,18 +8,6 @@
 
 $nonce = wp_create_nonce( 'geodir_import_export_nonce' );
 
-
-$gd_posts_sample_csv = geodir_plugin_url() . '/assets/place_listing.csv';
-/**
-* Filter sample post data csv file url.
-*
-* @since 1.0.0
-* @package GeoDirectory
-*
-* @param string $gd_posts_sample_csv Sample post data csv file url.
-*/
-$gd_posts_sample_csv = apply_filters( 'geodir_export_posts_sample_csv', $gd_posts_sample_csv );
-
 $gd_posttypes = geodir_get_posttypes( 'options-plural' );
 
 wp_enqueue_script( 'jquery-ui-progressbar' );
@@ -107,10 +95,11 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 							echo aui()->button(
 								array(
 									'type'      => 'a',
-									'class'     => 'btn btn-outline-primary',
-									'content'   => __('Download Sample CSV', 'geodirectory'),
-									'icon'      => 'fas fa-download',
-									'href'      => esc_url($gd_posts_sample_csv),
+									'class'     => 'btn btn-link btn-sm',
+									'content'   => __( 'How To Get Sample CSV File To Prepare Import Listings', 'geodirectory' ),
+									'icon'      => 'fas fa-exclamation-circle',
+									'href'      => 'https://docs.wpgeodirectory.com/article/463-csv-imports-useful-tips',
+									'new_window'=> true
 								)
 							);
 
@@ -129,7 +118,6 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						<div class="plupload-upload-uic hide-if-no-js" id="gd_im_postplupload-upload-ui">
 							<input type="hidden" readonly="readonly" name="gd_im_post_file" class="gd-imex-file gd_im_post_file" id="gd_im_post" onclick="jQuery('#gd_im_postplupload-browse-button').trigger('click');" />
 							<input id="gd_im_postplupload-browse-button" type="hidden" value="<?php esc_attr_e( 'Select & Upload CSV', 'geodirectory' ); ?>" class="gd-imex-pupload button-primary" />
-							<input type="hidden" value="<?php esc_attr_e( 'Download Sample CSV', 'geodirectory' );?>" class="button-secondary" name="gd_ie_download_sample" id="gd_ie_download_sample" data-sample-csv="<?php echo $gd_posts_sample_csv;?>">
 							<input type="hidden" id="gd_im_post_allowed_types" data-exts=".csv" value="csv" />
 							<span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce( 'gd_im_postpluploadan' ); ?>"></span>
 							<div class="filelist"></div>

@@ -18,17 +18,6 @@ $gd_cats_sample_csv = geodir_plugin_url() . '/assets/gd_sample_categories.csv';
 */
 $gd_cats_sample_csv = apply_filters( 'geodir_export_cats_sample_csv', $gd_cats_sample_csv );
 
-$gd_posts_sample_csv = geodir_plugin_url() . '/assets/place_listing.csv';
-/**
-* Filter sample post data csv file url.
-*
-* @since 1.0.0
-* @package GeoDirectory
-*
-* @param string $gd_posts_sample_csv Sample post data csv file url.
-*/
-$gd_posts_sample_csv = apply_filters( 'geodir_export_posts_sample_csv', $gd_posts_sample_csv );
-
 $gd_posttypes = geodir_get_posttypes( 'options-plural' );
 
 wp_enqueue_script( 'jquery-ui-progressbar' );
