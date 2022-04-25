@@ -201,7 +201,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 			return '';
 		}
 
-		$distance = isset( $gd_post->distance ) && (float) $gd_post->distance > 0 ? (float) $gd_post->distance : 0;
+		$distance = isset( $gd_post->distance ) && geodir_sanitize_float( $gd_post->distance ) > 0 ? geodir_sanitize_float( $gd_post->distance ) : 0;
 		$is_single = ( geodir_is_page( 'single' ) || ( ! empty( $_REQUEST['set_post'] ) && wp_doing_ajax() ) ) ? true : false;
 
 		// Default options
@@ -248,7 +248,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 							return '';
 						}
 
-						$distance = (float) geodir_calculateDistanceFromLatLong( $point1, $point2, $distance_unit );
+						$distance = geodir_sanitize_float( geodir_calculateDistanceFromLatLong( $point1, $point2, $distance_unit ) );
 						if ( ! $distance > 0 ) {
 							$distance = 0;
 						}

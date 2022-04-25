@@ -90,7 +90,7 @@ function geodir_predefined_custom_field_output_distanceto( $html, $location, $cf
 
 		$unit = geodir_get_option( 'search_distance_long', 'miles' );
 		$distance = geodir_calculateDistanceFromLatLong( $start_point, $end_point, $unit );
-		$_distance = geodir_show_distance( (float) $distance );
+		$_distance = geodir_show_distance( geodir_sanitize_float( $distance ) );
 
 		$field_icon = geodir_field_icon_proccess( $cf );
 		$output = geodir_field_output_process($output);
@@ -289,6 +289,11 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
 			// round rating
 			if ( $value && $htmlvar_name == 'overall_rating' ) {
 				$value = round( $value, 1 );
+			}
+
+			// Translate country.
+			if ( $htmlvar_name == 'country' ) {
+				$value = __( $value, 'geodirectory' );
 			}
 
 			if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'INT' || $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) && isset( $cf['extra_fields'] ) && $cf['extra_fields'] ) {

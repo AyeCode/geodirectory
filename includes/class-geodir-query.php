@@ -303,7 +303,7 @@ class GeoDir_Query {
 						$_table = geodir_db_cpt_table( $geodir_post_type );
 						$having = " HAVING distance <= `{$_table}`.`service_distance` ";
 					} else {
-						$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
+						$dist = get_query_var( 'dist' ) ? geodir_sanitize_float( get_query_var( 'dist' ) ) : geodir_get_option( 'search_radius', 5 );
 						$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
 					}
 

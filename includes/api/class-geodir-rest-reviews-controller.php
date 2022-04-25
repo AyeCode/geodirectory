@@ -794,8 +794,8 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 			$data['rating'] = array(
 				'id' => 'overall',
 				'label' => __( 'Overall', 'geodirectory' ),
-				'rating' => (float) $review->rating,
-				'html' => GeoDir_Comments::rating_html( (float) $review->rating )
+				'rating' => geodir_sanitize_float( $review->rating ),
+				'html' => GeoDir_Comments::rating_html( geodir_sanitize_float( $review->rating ) )
 			);
 		}
 	

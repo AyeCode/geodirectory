@@ -724,7 +724,12 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type' => 'number',
 					'default'  => '7', // largest city in the world is 6.33
 					'desc_tip' => true,
-					'advanced' => false
+					'advanced' => false,
+					'custom_attributes' => array(
+						'min' => '0.1',
+						'step' => '0.01',
+						'lang' => 'EN'
+					)
 				),
 				array(
 					'name' => __('Search distances', 'geodirectory'),
@@ -845,6 +850,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 						'min'           => '-90',
 						'max'           => '90',
 						'step'          => 'any',
+						'lang'          => 'EN'
 					),
 					'desc_tip' => true,
 					'default'  => '39.9523894183957',
@@ -860,6 +866,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 						'min'           => '-180',
 						'max'           => '180',
 						'step'          => 'any',
+						'lang'          => 'EN'
 					),
 					'desc_tip' => true,
 					'default'  => '-75.16359824536897',
@@ -995,7 +1002,8 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'default'  => '2',
 					'custom_attributes' => array(
 						'min' => '0.1',
-						'step' => '0.1'
+						'step' => '0.1',
+						'lang' => 'EN'
 					),
 					'desc_tip' => true,
 					'advanced' => true

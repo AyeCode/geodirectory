@@ -90,7 +90,7 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 				}
 
 			} elseif ( $key == 'latitude,longitude' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
-				$value = (float) $gd_post->latitude . "," . $gd_post->longitude;
+				$value = geodir_sanitize_float( $gd_post->latitude ) . "," . geodir_sanitize_float( $gd_post->longitude );
 			} elseif ( $key == 'address' && ! empty( $gd_post->city ) ) {
 				$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
 			} elseif ( $key == 'address_raw' && ! empty( $gd_post->city ) ) {

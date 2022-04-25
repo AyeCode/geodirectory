@@ -387,7 +387,7 @@ function geodir_timezone_offset() {
 		$timezone_object = new DateTimeZone( $timezone );
 		return $timezone_object->getOffset( new DateTime( 'now' ) );
 	} else {
-		return floatval( get_option( 'gmt_offset', 0 ) ) * HOUR_IN_SECONDS;
+		return geodir_sanitize_float( get_option( 'gmt_offset', 0 ) ) * HOUR_IN_SECONDS;
 	}
 }
 
@@ -692,4 +692,25 @@ function geodir_unwptexturize( $text ) {
 	$text = str_replace( array_keys( $replacements ), array_values( $replacements ), $text );
 
 	return $text;
+}
+
+/**
+ * Sanitize float value.
+ *
+ * @since 2.2.6
+ *
+ * @param float Number value.
+ * @return float Sanitized number.
+ */
+function geodir_sanitize_float( $number ) {
+	$locale = localeconv();
+
+	$number = floatval( $number );
+
+	// Replace comma to decimal for some locale with decimal_point as a comma.
+	if ( ! empty( $locale['decimal_point'] ) ) {
+		$number = str_replace( $locale['decimal_point'], ".", $number );
+	}
+
+	return $number;
 }
