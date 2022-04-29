@@ -1,19 +1,30 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 /**
+ * Main Search Input
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/bootstrap/search-bar/input-search.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory
+ * @version    2.2.6
+ *
  * Variables.
  *
  * @var string $search_term The current search term.
  * @var string $default_search_for_text The placeholder text.
+ * @var string $input_wrap_class Input wrap CSS class.
  */
-?>
-<div class='gd-search-field-search col-auto flex-fill' style="flex-grow: 9999 !important;">
-	<?php
 
+defined( 'ABSPATH' ) || exit;
+?>
+<div class='gd-search-field-search col-auto flex-fill<?php echo $input_wrap_class; ?>' style="flex-grow:9999 !important;">
+	<?php
 	do_action('geodir_before_search_for_input');
 
 	$input_group_html = '<span class="geodir-search-input-label hover-swap text-muted" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
