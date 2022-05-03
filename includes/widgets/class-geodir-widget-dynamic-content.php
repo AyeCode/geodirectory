@@ -158,16 +158,20 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			$html = geodir_unwptexturize( $html );
 		}
 
-		$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
-		$match_field = $args['key'];
+		$match_field = $_match_field = $args['key'];
 		if ( $match_field == 'address' ) {
 			$match_field = 'street';
+		} elseif ( $match_field == 'post_images' ) {
+			$match_field = 'featured_image';
 		}
 
-		if ( $match_field === '' || ! empty( $find_post ) ) {
+		$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
+
+		if ($match_field === '' || ( ! empty( $find_post ) && ( isset( $find_post->{$match_field} ) || isset( $find_post->{$_match_field} ) ) ) ) {
 			$field = array();
 			$search = $args['search'];
-			if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'post_id' && $match_field !== 'post_status' ) {
+
+			if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' && $match_field !== 'post_id' && $match_field !== 'post_status' ) {
 				$package_id = geodir_get_post_package_id( $post_id, $post_type );
 				$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
@@ -175,7 +179,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 					if ( $match_field == $field_info['htmlvar_name'] ) {
 						$field = $field_info;
 						break;
-					} elseif( $match_field == 'street' && 'address' == $field_info['htmlvar_name'] ) {
+					} elseif( $_match_field == $field_info['htmlvar_name'] ) {
 						$field = $field_info;
 						break;
 					}
@@ -302,14 +306,12 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				 */
 				$match_value = apply_filters( 'geodir_dynamic_content_match_value', $match_value, $match_field, $args, $find_post, $field );
 
-				// File
-				if ( ! empty( $html ) &&  ! empty( $match_value ) && ! empty( $field['type'] ) && $field['type'] == 'file' ) {
-					$html = $match_value;
-				}
-
-				// badge text
-				if ( empty( $html ) && empty( $args['icon_class'] ) && isset( $field['frontend_title'] ) ) {
-					$html = $field['frontend_title'];
+				if ( empty( $html ) && empty( $args['icon_class'] ) ) {
+					if ( isset( $field['frontend_title'] ) ) {
+						$html = $field['frontend_title'];
+					} else if ( $match_field == 'default_category' ) {
+						$html = __( 'Default Category', 'geodirectory' ); // default_category don't have frontend_title.
+					}
 				}
 
 				if ( ! empty( $html ) && $html = str_replace( "%%input%%", $match_value, $html ) ) {

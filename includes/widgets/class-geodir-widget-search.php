@@ -16,9 +16,6 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
      * @since 2.0.0
      */
     public function __construct() {
-
-
-
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
@@ -38,59 +35,77 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 
         $post_types =  $this->post_type_options();
 
-        if(count($post_types) > 2){
+        if ( count( $post_types ) > 2 ) {
             $options['arguments'] = array(
-                'post_type'  => array(
+                'post_type' => array(
                     'title' => __('Default Post Type:', 'geodirectory'),
                     'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
                     'type' => 'select',
-                    'options'   =>  $this->post_type_options(),
-                    'default'  => '',
+                    'options' => $this->post_type_options(),
+                    'default' => '',
                     'desc_tip' => true,
                     'advanced' => true
                 ),
-                'post_type_hide'  => array(
+                'post_type_hide' => array(
                     'title' => __('Hide Post Type Selector:', 'geodirectory'),
                     'desc' => __('Hide the CPT selector (if not on search page) this can be used to setup a specific CPT search and not give the option to change the CPT.', 'geodirectory'),
                     'type' => 'checkbox',
                     'desc_tip' => true,
-                    'value'  => '1',
-                    'default'  => '',
+                    'value' => '1',
+                    'default' => '',
                     'advanced' => true
                 )
             );
         }
 
+        $options['arguments']['hide_search_input'] = array(
+            'type' => 'checkbox',
+            'title' => __( 'Hide Main Search Input:', 'geodirectory' ),
+            'desc' => __( 'Hide the main search input.', 'geodirectory' ),
+            'value' => '1',
+            'default' => '',
+            'desc_tip' => true,
+            'advanced' => true
+        );
+
+        $options['arguments']['hide_near_input'] = array(
+            'type' => 'checkbox',
+            'title' => __( 'Hide Near Search Input:', 'geodirectory' ),
+            'desc' => __( 'Hide the near location search input.', 'geodirectory' ),
+            'value' => '1',
+            'default' => '',
+            'desc_tip' => true,
+            'advanced' => true
+        );
+
         $design_style = geodir_design_style();
 
-        if($design_style) {
-
+        if ( $design_style ) {
+            $arguments = array();
             // background
-            $arguments['bg']  = geodir_get_sd_background_input('mt');
+            $arguments['bg'] = geodir_get_sd_background_input('mt');
             // margins
-            $arguments['mt']  = geodir_get_sd_margin_input('mt');
-            $arguments['mr']  = geodir_get_sd_margin_input('mr');
-            $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
-            $arguments['ml']  = geodir_get_sd_margin_input('ml');
+            $arguments['mt'] = geodir_get_sd_margin_input('mt');
+            $arguments['mr'] = geodir_get_sd_margin_input('mr');
+            $arguments['mb'] = geodir_get_sd_margin_input('mb',array('default'=>3));
+            $arguments['ml'] = geodir_get_sd_margin_input('ml');
 
             // padding
-            $arguments['pt']  = geodir_get_sd_padding_input('pt');
-            $arguments['pr']  = geodir_get_sd_padding_input('pr');
-            $arguments['pb']  = geodir_get_sd_padding_input('pb');
-            $arguments['pl']  = geodir_get_sd_padding_input('pl');
+            $arguments['pt'] = geodir_get_sd_padding_input('pt');
+            $arguments['pr'] = geodir_get_sd_padding_input('pr');
+            $arguments['pb'] = geodir_get_sd_padding_input('pb');
+            $arguments['pl'] = geodir_get_sd_padding_input('pl');
 
             // border
-            $arguments['border']  = geodir_get_sd_border_input('border');
-            $arguments['rounded']  = geodir_get_sd_border_input('rounded');
-            $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+            $arguments['border'] = geodir_get_sd_border_input('border');
+            $arguments['rounded'] = geodir_get_sd_border_input('rounded');
+            $arguments['rounded_size'] = geodir_get_sd_border_input('rounded_size');
 
             // shadow
-            $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
-
+            $arguments['shadow'] = geodir_get_sd_shadow_input('shadow');
 
             $options['arguments'] = $options['arguments'] + $arguments;
         }
-
 
         parent::__construct( $options );
     }
@@ -124,10 +139,19 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
             geodir_get_search_post_type(); // set the post type
         }
 
-        // Set if the cpt selector should be hidden
-        global $geodir_search_post_type_hide;
+        // Set if the cpt selector, search, near should be hidden
+        global $geodir_search_post_type_hide, $geodir_hide_search_input, $geodir_hide_near_input;
+
         if ( isset( $post_type_hide ) && $post_type_hide ) {
             $geodir_search_post_type_hide = true;
+        }
+
+        if ( ! empty( $hide_search_input ) ) {
+            $geodir_hide_search_input = true;
+        }
+
+        if ( ! empty( $hide_near_input ) ) {
+            $geodir_hide_near_input = true;
         }
 
         $design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : geodir_design_style();
@@ -159,6 +183,8 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
         global $geodir_search_post_type;
         $geodir_search_post_type = '';
         $geodir_search_post_type_hide = false;
+        $geodir_hide_search_input = false;
+        $geodir_hide_near_input = false;
 
         return ob_get_clean();
     }

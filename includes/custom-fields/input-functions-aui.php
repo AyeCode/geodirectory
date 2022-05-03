@@ -300,63 +300,79 @@ add_filter('geodir_custom_field_input_url','geodir_cfi_url',10,2);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cfi_radio($html,$cf){
+function geodir_cfi_radio( $html, $cf ) {
+	$html_var = $cf['htmlvar_name'];
 
-    $html_var = $cf['htmlvar_name'];
+	// Check if there is a custom field specific filter.
+	if ( has_filter( "geodir_custom_field_input_radio_{$html_var}" ) ) {
+		/**
+		 * Filter the radio html by individual custom field.
+		 *
+		 * @param string $html The html to filter.
+		 * @param array $cf The custom field array.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_input_radio_{$html_var}", $html, $cf );
+	}
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_input_radio_{$html_var}")){
-        /**
-         * Filter the radio html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_input_radio_{$html_var}",$html,$cf);
-    }
+	// If no html then we run the standard output.
+	if ( empty( $html ) ) {
+		global $geodir_label_type;
 
-    // If no html then we run the standard output.
-    if(empty($html)) {
-        global $geodir_label_type;
+		$option_values_deep = geodir_string_to_options( $cf['option_values'], true );
+		$option_values = array();
 
-        $option_values_deep = geodir_string_to_options($cf['option_values'],true);
-        $option_values = array();
-        if(!empty($option_values_deep)){
-            foreach($option_values_deep as $option){
-                $option_values[$option['value']] = $option['label'];
-            }
-        }
+		if ( ! empty( $option_values_deep ) ) {
+			foreach( $option_values_deep as $option ) {
+				$option_values[$option['value']] = $option['label'];
+			}
+		}
 
-        // required
-        $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
+		// admin only
+		$admin_only = geodir_cfi_admin_only($cf);
+		$conditional_attrs = geodir_conditional_field_attrs( $cf );
 
-        // admin only
-        $admin_only = geodir_cfi_admin_only($cf);
-        $conditional_attrs = geodir_conditional_field_attrs( $cf );
+		// Help text
+		$help_text = $cf['desc'] != '' ? __( $cf['desc'], 'geodirectory' ) : '';
 
-        // Help text
-        $help_text = $cf['desc'] != '' ? __( $cf['desc'], 'geodirectory' ) : '';
+		$value = geodir_get_cf_value( $cf );
 
-        $value = geodir_get_cf_value($cf);
-        $html = aui()->radio(
-            array(
-                'id'                => $cf['name'],
-                'name'              => $cf['name'],
-                'type'              => "radio",
-                'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
-                'label'             => esc_attr__($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-                'label_type'        => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
-                'help_text'         => $help_text,
-                'class'             => '',
-                'value'             => $value,
-                'options'           => $option_values,
-                'wrap_attributes'   => $conditional_attrs
-            )
-        );
-    }
+		// required
+		$_required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+		$required = false;
+		$extra_attributes = array();
 
-    return $html;
+		if ( ! empty( $_required ) ) {
+			$cf_name = esc_attr( $cf['name'] );
+			$extra_attributes['onchange'] = "if(jQuery('input[name=\"" . $cf_name . "\"]:checked').length || !jQuery('input#" . $cf_name . "0').is(':visible')){jQuery('#" . $cf_name . "0').removeAttr('required')}else{jQuery('#" . $cf_name . "0').attr('required',true)}";
+			$extra_attributes['oninput'] = "try{document.getElementById('" . $cf_name . "0').setCustomValidity('')}catch(e){}";
+			$extra_attributes['oninvalid'] = 'try{document.getElementById(\'' . $cf_name . '0\').setCustomValidity(\'' . esc_attr( addslashes( __( $cf['required_msg'], 'geodirectory' ) ) ) . '\')}catch(e){}';
+
+			if ( empty( $value ) ) {
+				$required = true;
+			}
+		}
+
+		$html = aui()->radio(
+			array(
+				'id'                => $cf['name'],
+				'name'              => $cf['name'],
+				'type'              => "radio",
+				'title'             => esc_attr__( $cf['frontend_title'], 'geodirectory' ),
+				'label'             => esc_attr__( $cf['frontend_title'], 'geodirectory' ) . $admin_only . $_required,
+				'label_type'        => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
+				'help_text'         => $help_text,
+				'class'             => '',
+				'value'             => $value,
+				'required'          => $required,
+				'options'           => $option_values,
+				'wrap_attributes'   => $conditional_attrs,
+				'extra_attributes'  => $extra_attributes
+			)
+		);
+	}
+
+	return $html;
 }
 add_filter('geodir_custom_field_input_radio','geodir_cfi_radio',10,2);
 

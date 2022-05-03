@@ -1,17 +1,30 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 /**
+ * Near Search Input
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/bootstrap/search-bar/input-near.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory
+ * @version    2.2.6
+ *
  * Variables.
  *
  * @var string $near The current near search term.
  * @var string $default_near_text The placeholder text.
- * @var string $near_class The near class.
+ * @var string $near_class The near wrapper classes.
+ * @var string $near_input_extra The near wrapper extras.
  */
+
+defined( 'ABSPATH' ) || exit;
 ?>
-<div class='gd-search-field-near <?php echo $near_class;?> col-auto flex-fill' style="flex-grow: 9999 !important;">
+<div class='gd-search-field-near col-auto flex-fill <?php echo $near_class;?>' style="flex-grow:9999 !important;">
 	<?php
 	do_action( 'geodir_before_search_near_input' );
 

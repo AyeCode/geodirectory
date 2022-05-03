@@ -13,9 +13,8 @@ class GeoDir_Comments {
      * @since 2.0.0
 	 */
 	public static function init() {
-
 		// AUI comment inputs
-		add_action( 'comment_form_defaults', array( __CLASS__, 'aui_comment_form_defaults' ) );
+		add_filter( 'comment_form_defaults', array( __CLASS__, 'aui_comment_form_defaults' ), 11, 1 );
 
 		add_action( 'comment_form_logged_in_after', array( __CLASS__, 'rating_input' ) );
 		add_action( 'comment_form_before_fields', array( __CLASS__, 'rating_input' ) );
@@ -49,13 +48,10 @@ class GeoDir_Comments {
 	 *
 	 * @return mixed
 	 */
-	public static function aui_comment_form_defaults($defaults){
-
-//		print_r( $defaults );
+	public static function aui_comment_form_defaults( $defaults ) {
 		$design_style = geodir_design_style();
 
-		if($design_style && geodir_is_page('single') ){
-
+		if ( $design_style && geodir_is_page( 'single' ) ) {
 			// comment field
 			$defaults['comment_field'] = aui()->textarea(array(
 				'name'       => 'comment',
@@ -105,7 +101,7 @@ class GeoDir_Comments {
 					'required'          => true,
 					'label'              => esc_html__( "Website", 'geodirectory'),
 					'type'              => 'url',
-					'placeholder'       => esc_html__( "Website" , 'geodirectory'),
+					'placeholder'       => esc_html__( "Website (required)" , 'geodirectory'),
 					'extra_attributes'  => array(
 						'maxlength' => "200"
 					)
@@ -134,18 +130,13 @@ class GeoDir_Comments {
 				)
 			);
 
+			$reply_text = __( "Leave a Review", "geodirectory" );
+
 			$defaults['class_submit'] .= " btn btn-primary form-control text-white";
-
 			$defaults['submit_field'] = '<div class="form-submit form-group">%1$s %2$s</div>';
-
 			$defaults['label_submit'] = esc_html__( "Post Review" , 'geodirectory');
-
-			$reply_text = esc_attr__("Leave a Review","geodirectory");
-			$defaults['title_reply'] = "<span class='gd-comment-review-title h4' data-review-text='$reply_text' data-reply-text='".esc_attr($defaults['title_reply'])."'>$reply_text</span>";
+			$defaults['title_reply'] = '<span class="gd-comment-review-title h4" data-review-text="' . esc_attr( $reply_text ) . '" data-reply-text="' . esc_attr( $defaults['title_reply'] ) . '">' . $reply_text . '</span>';
 		}
-
-
-
 
 		return $defaults;
 	}

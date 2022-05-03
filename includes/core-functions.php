@@ -1172,22 +1172,45 @@ function geodir_search_form_post_type_input() {
  * @since 2.0.0
  */
 function geodir_search_form_search_input() {
-	$default_search_for_text = geodir_get_option('search_default_text');
-	if(!$default_search_for_text){$default_search_for_text = geodir_get_search_default_text();}
+	global $geodir_hide_search_input;
 
-	$search_term = '';
-	if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
-		$search_term = esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
-		$search_term = str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
+	$design_style = geodir_design_style();
+	$default_search_for_text = geodir_get_option('search_default_text');
+
+	if ( ! $default_search_for_text ) {
+		$default_search_for_text = geodir_get_search_default_text();
 	}
+
+	if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
+		$search_term = stripslashes_deep( $_REQUEST['s'] );
+		$search_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_term ); // apple suck
+	} else {
+		$search_term = '';
+	}
+
+	if ( ! empty( $geodir_hide_search_input ) ) {
+		$input_wrap_class = $design_style ? ' d-none' : ' gd-hide';
+	} else {
+		$input_wrap_class = '';
+	}
+
+	/**
+	 * Filter the CSS class for the search input wrap.
+	 *
+	 * @since 2.2.6
+	 *
+	 * @param string $input_wrap_class CSS class for the search input wrap.
+	 */
+	$input_wrap_class = apply_filters( 'geodir_search_input_wrap_class', $input_wrap_class );
 
 	$args = array(
 		'default_search_for_text' => $default_search_for_text,
-		'search_term'  => $search_term,
+		'search_term' => $search_term,
+		'input_wrap_class' => $input_wrap_class
 	);
 
-	$design_style = geodir_design_style();
-	$template = $design_style ? $design_style."/search-bar/input-search.php" : "legacy/search/input-search.php";
+	$template = $design_style ? $design_style . "/search-bar/input-search.php" : "legacy/search/input-search.php";
+
 	echo geodir_get_template_html( $template, $args  );
 }
 
@@ -1197,24 +1220,30 @@ function geodir_search_form_search_input() {
  * @since 2.0.0
  */
 function geodir_search_form_near_input() {
+	global $geodir_search_post_type, $geodir_hide_near_input;
+
+	$design_style = geodir_design_style();
 	$default_near_text = geodir_get_option('search_default_near_text');
-	if(!$default_near_text){$default_near_text = geodir_get_search_default_near_text();}
+
+	if ( ! $default_near_text ) {
+		$default_near_text = geodir_get_search_default_near_text();
+	}
 
 	if ( isset( $_REQUEST['snear'] ) && $_REQUEST['snear'] != '' ) {
-		$near = esc_attr( stripslashes_deep( $_REQUEST['snear'] ) );
+		$near = stripslashes_deep( $_REQUEST['snear'] );
 	} else {
 		$near = '';
 	}
 
-	global $geodir_search_post_type;
 	$curr_post_type = $geodir_search_post_type;
+
 	/**
 	 * Used to hide the near field and other things.
 	 *
 	 * @since 1.6.9
 	 * @param string $curr_post_type The current post type.
 	 */
-	$near_input_extra = apply_filters('geodir_near_input_extra','',$curr_post_type); // @todo we will need to fix this
+	$near_input_extra = apply_filters( 'geodir_near_input_extra', '', $curr_post_type ); // @todo we will need to fix this
 
 	/**
 	 * Filter the "Near" text value for the search form.
@@ -1238,6 +1267,13 @@ function geodir_search_form_near_input() {
 	 * @param string $default_near_text The default near value.
 	 */
 	$default_near_text = apply_filters( 'geodir_search_default_near_text', $default_near_text, $near );
+
+	if ( ! empty( $geodir_hide_near_input ) ) {
+		$near_class = $design_style ? ' d-none' : ' gd-hide';
+	} else {
+		$near_class = '';
+	}
+
 	/**
 	 * Filter the class for the near search input.
 	 *
@@ -1245,7 +1281,7 @@ function geodir_search_form_near_input() {
 	 *
 	 * @param string $class The class for the HTML near input, default is blank.
 	 */
-	$near_class = apply_filters( 'geodir_search_near_class', '' );
+	$near_class = apply_filters( 'geodir_search_near_class', $near_class );
 
 	add_action( 'wp_print_footer_scripts', array( 'GeoDir_Maps', 'check_map_script' ), 99999 );
 
@@ -1255,8 +1291,9 @@ function geodir_search_form_near_input() {
 		'near' => $near,
 		'near_input_extra' => $near_input_extra,
 	);
-	$design_style = geodir_design_style();
-	$template = $design_style ? $design_style."/search-bar/input-near.php" : "legacy/search/input-near.php";
+
+	$template = $design_style ? $design_style . "/search-bar/input-near.php" : "legacy/search/input-near.php";
+
 	echo geodir_get_template_html( $template, $args );
 }
 
