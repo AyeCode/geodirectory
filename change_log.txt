@@ -1,6 +1,7 @@
 = 2.2.6 =
 * Float value parsing shows comma with pl_PL locale - FIXED
 * Elementor custom tag shows country name untranslated - FIXED
+* GD events widgets not showing in elementor - FIXED
 * Option added to hide search & near inputs in search form - ADDED
 
 = 2.2.4 =
