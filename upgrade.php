@@ -7,25 +7,23 @@
  * @global object $wpdb WordPress Database object.
  */
 
-
-
-// Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 global $wpdb;
 
-if (get_option('geodirectory_db_version') != GEODIRECTORY_VERSION) {
-    /**
-     * Include custom database table related functions.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     */
-    add_action('plugins_loaded', 'geodir_upgrade_all', 10);
+if ( get_option( 'geodirectory_db_version' ) !== GEODIRECTORY_VERSION ) {
+	/**
+	 * Include custom database table related functions.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 */
+	add_action( 'plugins_loaded', 'geodir_upgrade_all', 10 );
 
-    add_action('init', 'geodir_fix_cpt_rewrite_slug', 11);// this needs to be kept for a few versions
-
-    //update_option('geodirectory_db_version', GEODIRECTORY_VERSION); // @todo is this required?
+	add_action( 'init', 'geodir_fix_cpt_rewrite_slug', 11 );// this needs to be kept for a few versions.
 
 }
 
@@ -54,16 +52,16 @@ function geodir_upgrade_200() {
  * @package GeoDirectory
  */
 function geodir_fix_cpt_rewrite_slug() {
-    // flush the rewrite rules
-    flush_rewrite_rules();
+	// flush the rewrite rules.
+	flush_rewrite_rules();
 }
 
 /**
  * Update DB Version.
  */
 function geodir_upgrade_20013() {
-    global $wpdb;
-	$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
+	global $wpdb;
+	$wpdb->query( 'UPDATE ' . GEODIR_ATTACHMENT_TABLE . " SET type='post_images' WHERE type='post_image'" );
 }
 
 function geodir_update_200_settings() {
@@ -97,12 +95,12 @@ function geodir_upgrade_20060() {
 
 	// Archive page
 	$archive_page_id = geodir_archive_page_id();
-	if($archive_page_id){
-		$archive_page_content = get_post_field('post_content', $archive_page_id);
-		if (strpos($archive_page_content, '[gd_loop layout=1]') !== false) {
+	if ( $archive_page_id ) {
+		$archive_page_content = get_post_field( 'post_content', $archive_page_id );
+		if ( strpos( $archive_page_content, '[gd_loop layout=1]' ) !== false ) {
 			$my_post = array(
 				'ID'           => $archive_page_id,
-				'post_content' => str_replace('[gd_loop layout=1]','[gd_loop layout=0]',$archive_page_content),
+				'post_content' => str_replace( '[gd_loop layout=1]', '[gd_loop layout=0]', $archive_page_content ),
 			);
 			wp_update_post( $my_post );
 		}
@@ -110,12 +108,12 @@ function geodir_upgrade_20060() {
 
 	// Search page
 	$search_page_id = geodir_search_page_id();
-	if($search_page_id){
-		$search_page_content = get_post_field('post_content', $search_page_id);
-		if (strpos($search_page_content, '[gd_loop layout=1]') !== false) {
+	if ( $search_page_id ) {
+		$search_page_content = get_post_field( 'post_content', $search_page_id );
+		if ( strpos( $search_page_content, '[gd_loop layout=1]' ) !== false ) {
 			$my_post = array(
 				'ID'           => $search_page_id,
-				'post_content' => str_replace('[gd_loop layout=1]','[gd_loop layout=0]',$search_page_content),
+				'post_content' => str_replace( '[gd_loop layout=1]', '[gd_loop layout=0]', $search_page_content ),
 			);
 			wp_update_post( $my_post );
 		}
@@ -130,9 +128,9 @@ function geodir_upgrade_20064() {
 
 	$post_types = geodir_get_posttypes();
 
-	$search_country = 'Russian Federation';
-	$replace_country = 'Russia';
-	$search_country_slug = 'russian-federation';
+	$search_country       = 'Russian Federation';
+	$replace_country      = 'Russia';
+	$search_country_slug  = 'russian-federation';
 	$replace_country_slug = 'russia';
 
 	// Default Country
@@ -150,24 +148,80 @@ function geodir_upgrade_20064() {
 				continue;
 			}
 
-			$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET country = %s WHERE country LIKE %s", array( $replace_country, $search_country ) ) );
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE {$table} SET country = %s WHERE country LIKE %s",
+					array(
+						$replace_country,
+						$search_country,
+					)
+				)
+			);
 		}
 	}
 
 	// Reviews
-	$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET country = %s WHERE country LIKE %s", array( $replace_country, $search_country ) ) );
-	
+	$wpdb->query(
+		$wpdb->prepare(
+			'UPDATE ' . GEODIR_REVIEW_TABLE . ' SET country = %s WHERE country LIKE %s',
+			array(
+				$replace_country,
+				$search_country,
+			)
+		)
+	);
+
 	if ( class_exists( 'GeoDir_Location' ) ) {
 		// Locations
-		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATIONS_TABLE . " SET country = %s WHERE country LIKE %s", array( $replace_country, $search_country ) ) );
-		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATIONS_TABLE . " SET country_slug = %s WHERE country_slug LIKE %s", array( $replace_country_slug, $search_country_slug ) ) );
+		$wpdb->query(
+			$wpdb->prepare(
+				'UPDATE ' . GEODIR_LOCATIONS_TABLE . ' SET country = %s WHERE country LIKE %s',
+				array(
+					$replace_country,
+					$search_country,
+				)
+			)
+		);
+		$wpdb->query(
+			$wpdb->prepare(
+				'UPDATE ' . GEODIR_LOCATIONS_TABLE . ' SET country_slug = %s WHERE country_slug LIKE %s',
+				array(
+					$replace_country_slug,
+					$search_country_slug,
+				)
+			)
+		);
 
 		// Location SEO
-		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATION_SEO_TABLE . " SET country_slug = %s WHERE country_slug LIKE %s", array( $replace_country_slug, $search_country_slug ) ) );
-		
+		$wpdb->query(
+			$wpdb->prepare(
+				'UPDATE ' . GEODIR_LOCATION_SEO_TABLE . ' SET country_slug = %s WHERE country_slug LIKE %s',
+				array(
+					$replace_country_slug,
+					$search_country_slug,
+				)
+			)
+		);
+
 		// Location Term Meta
-		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATION_TERM_META . " SET country_slug = %s WHERE country_slug LIKE %s", array( $replace_country_slug, $search_country_slug ) ) );
-		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATION_TERM_META . " SET location_name = %s WHERE location_name LIKE %s", array( $replace_country_slug, $search_country_slug ) ) );
+		$wpdb->query(
+			$wpdb->prepare(
+				'UPDATE ' . GEODIR_LOCATION_TERM_META . ' SET country_slug = %s WHERE country_slug LIKE %s',
+				array(
+					$replace_country_slug,
+					$search_country_slug,
+				)
+			)
+		);
+		$wpdb->query(
+			$wpdb->prepare(
+				'UPDATE ' . GEODIR_LOCATION_TERM_META . ' SET location_name = %s WHERE location_name LIKE %s',
+				array(
+					$replace_country_slug,
+					$search_country_slug,
+				)
+			)
+		);
 	}
 }
 
@@ -197,21 +251,22 @@ function geodir_upgrade_20096() {
 	$table = $wpdb->prefix . 'geodir_business_hours';
 
 	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" ) && ! geodir_column_exist( $table, 'open_utc' ) ) {
-		$wpdb->query( "ALTER TABLE `{$table}` 
+		$wpdb->query(
+			"ALTER TABLE `{$table}` 
 			ADD open_utc int(9) UNSIGNED NOT NULL, 
 			ADD close_utc int(9) UNSIGNED NOT NULL, 
 			ADD open_dst int(9) UNSIGNED NOT NULL, 
 			ADD close_dst int(9) UNSIGNED NOT NULL, 
 			ADD timezone_string varchar(100) NOT NULL, 
 			ADD has_dst tinyint(1) NOT NULL DEFAULT '0', 
-			ADD is_dst tinyint(1) NOT NULL DEFAULT '0'" 
+			ADD is_dst tinyint(1) NOT NULL DEFAULT '0'"
 		);
 	}
 
 	// Update timezone to timezone string.
 	if ( ! geodir_get_option( 'default_location_timezone_string' ) ) {
-		$country = geodir_get_option( 'default_location_country' );
-		$timezone = geodir_get_option( 'default_location_timezone' );
+		$country         = geodir_get_option( 'default_location_country' );
+		$timezone        = geodir_get_option( 'default_location_timezone' );
 		$timezone_string = geodir_offset_to_timezone_string( $timezone, $country );
 		geodir_update_option( 'default_location_timezone_string', $timezone_string );
 	}

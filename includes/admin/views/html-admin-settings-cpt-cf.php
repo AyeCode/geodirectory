@@ -1,4 +1,4 @@
-<div id="container_general" class="container p-0">
+<div id="container_general" class="container-fluid p-0">
 
 	<input type="hidden" name="gd_new_field_nonce" id="gd_new_field_nonce" value="<?php echo wp_create_nonce( 'gd_new_field_nonce' );?>"/>
 	<input type="hidden" name="listing_type" id="gd_new_post_type" value="<?php echo self::$post_type;?>"/>
