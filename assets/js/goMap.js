@@ -1483,6 +1483,9 @@ function geodirGoMapInit() {
                     options.icon = this.opts.icon;
 
                 options.position = marker.position ? marker.position : new google.maps.LatLng(marker.latitude, marker.longitude);
+                if (marker.animation) {
+                    options.animation = marker.animation;
+                }
 
                 var cmarker = new google.maps.Marker(options);
 

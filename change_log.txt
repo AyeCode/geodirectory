@@ -3,6 +3,7 @@
 * Elementor custom tag shows country name untranslated - FIXED
 * GD events widgets not showing in elementor - FIXED
 * Option added to hide search & near inputs in search form - ADDED
+* AJAX search compatibility changes - ADDED
 
 = 2.2.4 =
 * Neighbourhood SEO variable not working on single page - FIXED

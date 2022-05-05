@@ -32,7 +32,6 @@ jQuery(document).ready(function($) {
         window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
     });
 
-
     // fix tabs url hash on click and load
     jQuery(function(){
         var hash = window.location.hash;
@@ -90,7 +89,6 @@ function gd_init_carousel_ajax(){
     });
 }
 
-
 /**
  * Open a lightbox when an embed item is clicked.
  */
@@ -142,12 +140,9 @@ function geodir_lightbox_embed($link,ele){
                 $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
                 $carousel  += '<li data-target="#geodir-embed-slider-modal" data-slide-to="'+$i+'" class="'+$active+'"></li>';
                 $i++;
-
             });
             $carousel  += '</ol>';
         }
-
-
 
         // items
         $i = 0;
@@ -157,7 +152,6 @@ function geodir_lightbox_embed($link,ele){
 
             $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
             $carousel  += '<div class="carousel-item '+ $active+'"><div>';
-
 
             // image
             var css_height = window.innerWidth > window.innerHeight ? '90vh' : 'auto';
@@ -169,14 +163,12 @@ function geodir_lightbox_embed($link,ele){
             }
             $carousel  += '</div></div>';
             $i++;
-
         });
         $container.find('.geodir-lightbox-iframe').each(function() {
             var a = this;
 
             $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
             $carousel  += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
-
 
             // iframe
             var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
@@ -187,11 +179,8 @@ function geodir_lightbox_embed($link,ele){
 
             $carousel  += '</div></div>';
             $i++;
-
         });
         $carousel  += '</div>';
-
-
         // next/prev indicators
         if($images.length > 1) {
             $carousel += '<a class="carousel-control-prev" href="#geodir-embed-slider-modal" role="button" data-slide="prev">';
@@ -200,8 +189,6 @@ function geodir_lightbox_embed($link,ele){
             $carousel += '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
             $carousel += '</a>';
         }
-
-
         $carousel  += '</div>';
 
         var $close = '<button type="button" class="close text-white text-right position-fixed" style="font-size: 2.5em;right: 20px;top: 10px; z-index: 1055;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
@@ -214,12 +201,9 @@ function geodir_lightbox_embed($link,ele){
 
 }
 
-
-
 /**
  ################################## old stuff ###################################
  */
-
 // get url paramiters
 var gdUrlParam = function gdUrlParam(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -848,6 +832,10 @@ function geodir_load_search_form(stype, el) {
         data.keepArgs = jQuery('.geodir-keep-args', $container).text();
     }
 
+    if (jQuery(el).closest('form').data('show') == 'main' && jQuery('form.geodir-search-show-advanced').length) {
+        data.advanced = true;
+    }
+
     jQuery.ajax({
         url: geodir_params.ajax_url,
         type: 'POST',
@@ -856,7 +844,7 @@ function geodir_load_search_form(stype, el) {
         beforeSend: function() {
             geodir_search_wait(1);
         },
-        success: function(data, textStatus, xhr) {
+        success: function(res, textStatus, xhr) {
             var $container = jQuery(el).closest('.geodir-search-container');
             if (jQuery('select.search_by_post', $container).length && jQuery('.gd-search-input-wrapper.gd-search-field-near', $container).length) {
                 var before = jQuery('.gd-search-input-wrapper.gd-search-field-near', $container).is(':visible');
@@ -872,7 +860,19 @@ function geodir_load_search_form(stype, el) {
             }
 
             // replace whole form
-            $container.html(data);
+            $container.html(res);
+            if (data.advanced && $container.find('.geodir-search-has-advanced').length) {
+                jQuery('form.geodir-search-show-advanced').html($container.find('.geodir-search-has-advanced').html());
+				jQuery('form.geodir-search-show-advanced').each(function(){
+					if (jQuery(this).find('.geodir-filter-cat').length) {
+						jQuery(this).closest('.geodir-search-container').removeClass('d-none');
+					} else {
+						jQuery(this).closest('.geodir-search-container').addClass('d-none');
+						jQuery(this).find('.geodir_submit_search').closest('.gd-search-field-search').hide();
+					}
+				});
+                $container.find('.geodir-search-has-advanced').remove();
+            }
 
             if (typeof nearH != 'undefined') {
                 var after = jQuery('.gd-search-input-wrapper.gd-search-field-near', $container).is(':visible');
@@ -918,9 +918,8 @@ function geodir_setup_search_form(){
     setTimeout(function(){
         jQuery('.search_by_post').on("change", function() {
             gd_s_post_type = jQuery(this).val();
-
+            window.gdAsCptChanged = gd_s_post_type;
             geodir_load_search_form(gd_s_post_type, this);
-
         });
     }, 100);
 
@@ -947,9 +946,6 @@ function geodir_search_wait(on){
             if(searchPos==1){jQuery('input[type="button"].geodir_submit_search').val('  ');searchPos=2;window.setTimeout(geodir_search_wait_animate, waitTime );return;}
             if(searchPos==2){jQuery('input[type="button"].geodir_submit_search').val('  ');searchPos=3;window.setTimeout(geodir_search_wait_animate, waitTime );return;}
             if(searchPos==3){jQuery('input[type="button"].geodir_submit_search').val('  ');searchPos=1;window.setTimeout(geodir_search_wait_animate, waitTime );return;}
-
-
-
         }
         geodir_search_wait_animate();
         jQuery('button.geodir_submit_search').html('<i class="fas fa-hourglass fa-spin" aria-hidden="true"></i>');
@@ -959,11 +955,15 @@ function geodir_search_wait(on){
         jQuery('.geodir_submit_search').removeClass('gd-wait-btnsearch').prop('disabled', false);
         jQuery('.showFilters').prop('disabled', false);
         gdsText = jQuery('input[type="button"].geodir_submit_search').data('title');
+        if (window.gdAsBtnTitle) {
+            gdsText = window.gdAsBtnTitle;
+        }
         jQuery('input[type="button"].geodir_submit_search').val(gdsText);
-
+        if (window.gdAsBtnText) {
+            gd_search_icon = window.gdAsBtnText;
+        }
         jQuery('button.geodir_submit_search').html(gd_search_icon);
     }
-
 }
 
 function geodir_click_search($this) {
@@ -1010,9 +1010,7 @@ function gd_fav_save(post_id) {
                             .attr("title", geodir_params.text_add_fav)
                             .html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>').tooltip('dispose').tooltip('enable');
                     });
-
                 } else {
-
                     jQuery('.favorite_property_' + post_id + ' a').each(function( index ) {
                         $color_value = jQuery( this ).data("color-on");
                         $icon_value = jQuery( this ).data("icon");
@@ -1025,9 +1023,7 @@ function gd_fav_save(post_id) {
                             .attr("title", geodir_params.text_remove_fav)
                             .html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_unfav ) + '</span>').tooltip('dispose').tooltip('enable');
                     });
-
                 }
-
             } else {
                 alert(geodir_params.loading_listing_error_favorite);
             }

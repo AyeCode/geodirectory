@@ -1371,12 +1371,55 @@ function geodir_search_form() {
 		}
 	}
 
-	$args = array(
-		'wrap_class' => geodir_build_aui_class( $args ),
-		'keep_args' => $args
+	$instance = $args;
+	$keep_args = $args;
+	$show = '';
+
+	$form_class = 'geodir-listing-search gd-search-bar-style';
+
+	if ( $design_style && ! empty( $instance['show'] ) ) {
+		$show = geodir_clean( $instance['show'] );
+		$form_class .= ' geodir-search-show-' . sanitize_html_class( $show );
+	} else {
+		$form_class .= ' geodir-search-show-all';
+	}
+
+	/**
+	 * Filters the GD search form class.
+	 *
+	 * @since 1.0.0
+	 * @param string $form_class The class for the search form, default: 'geodir-listing-search'.
+	 * @param string $wrap_class The wrapper class for styles.
+	 */
+	$form_class = apply_filters( 'geodir_search_form_class', $form_class, $instance );
+
+	$tmpl_args = array(
+		'wrap_class' => geodir_build_aui_class( $instance ),
+		'form_class' => $form_class,
+		'instance' => $instance,
+		'keep_args' => $keep_args,
+		'show' => $show
 	);
 
-	echo geodir_get_template_html( $template, $args );
+	$template_params = array(
+		'template' => $template,
+		'template_args' => $tmpl_args,
+		'template_path' => '',
+		'default_path' => ''
+	);
+
+	/**
+	 * Filter the template parameters.
+	 *
+	 * @since 2.2.6
+	 *
+	 * @param array $template_params Template parameters.
+	 * @param array $instance Settings for the widget instance.
+	 * @param array $widget_args Widget display arguments.
+	 */
+	$template_params = apply_filters( 'geodir_search_form_template_params', $template_params, $instance, array() );
+
+	echo geodir_get_template_html( $template_params['template'], $template_params['template_args'], $template_params['template_path'], $template_params['default_path'] );
 
 	// Always die in functions echoing ajax content
 	die();
