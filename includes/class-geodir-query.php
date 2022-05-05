@@ -288,7 +288,7 @@ class GeoDir_Query {
 	 * @return string
 	 */
 	public function posts_having( $clauses, $query = array() ) {
-		if ( self::is_gd_main_query( $query ) ) {
+		if ( self::is_gd_main_query( $query ) && ! defined( 'GEODIR_MAP_SEARCH' ) ) {
 			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $snear, $geodirectory;
 
 			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
@@ -330,10 +330,8 @@ class GeoDir_Query {
 	 *
 	 * @return string
 	 */
-	public function posts_fields($fields, $query = array()){
-
-		if(self::is_gd_main_query($query)) {
-
+	public function posts_fields( $fields, $query = array() ) {
+		if ( self::is_gd_main_query( $query ) ) {
 			if ( ! ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) ) {
 				global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $snear, $gd_exact_search,$geodirectory;
 				$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
@@ -702,16 +700,12 @@ class GeoDir_Query {
 				 */
 				$status_where = apply_filters( 'geodir_posts_where_post_status', $status_where, $status, $post_types );
 
-				if ( $support_location && $snear != '' && $latlon) {
+				if ( $support_location && $snear != '' && $latlon && ! defined( 'GEODIR_MAP_SEARCH' ) ) {
 					$lat = $latlon['lat'];
 					$lon = $latlon['lon'];
 					$between          = geodir_get_between_latlon( $lat, $lon, $dist );
 					$post_title_where = $s != "" ? $wpdb->prepare( "{$wpdb->posts}.post_title LIKE %s", array( $s ) ) : "1=1";
-					$where .= " AND ( ($post_title_where $better_search_terms)
-								$content_where 
-								$terms_sql
-							)
-						AND $wpdb->posts.post_type = '{$post_types}' {$status_where}";
+					$where .= " AND ( ( $post_title_where $better_search_terms ) $content_where $terms_sql ) AND $wpdb->posts.post_type = '{$post_types}' {$status_where}";
 
 					if ( ! empty( $between ) ) {
 						$where .= $wpdb->prepare( " AND ( latitude BETWEEN %f AND %f ) AND ( longitude BETWEEN %f AND %f ) ", $between['lat1'], $between['lat2'], $between['lon1'], $between['lon2'] );
@@ -728,13 +722,11 @@ class GeoDir_Query {
 					}
 				} else {
 					$post_title_where = $s != "" ? $wpdb->prepare( "{$wpdb->posts}.post_title LIKE %s", array( $s ) ) : "1=1";
-					$where .= " AND ( 
-						( $post_title_where $better_search_terms )
-						$content_where  
-						$terms_sql 
-					)
-					AND $wpdb->posts.post_type = '{$post_types}' {$status_where}";
+					$where .= " AND ( ( $post_title_where $better_search_terms ) $content_where $terms_sql ) AND $wpdb->posts.post_type = '{$post_types}' {$status_where}";
 				}
+
+				// Replace unwanted 1=1 clause.
+				$where = str_replace( " AND ( ( 1=1  )   ) AND", "AND", $where );
 			}
 
 			/**

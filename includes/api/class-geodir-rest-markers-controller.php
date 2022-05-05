@@ -354,12 +354,12 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		*/
 
 		$response = array();
-		$response['m'] 	= $item->ID;
+		$response['m'] = (string) absint( $item->ID );
 		$response['lt'] = $item->latitude;
 		$response['ln'] = $item->longitude;
 		$response['t'] 	= $post_title;
 
-		$icon_id = ! empty( $default_category ) ? $default_category : 'd'; // d = default
+		$icon_id = ! empty( $default_category ) ? absint( $default_category ) : 'd'; // d = default
 
 		if ( empty( $geodir_rest_cache_icons[ $icon_id ] ) ) {
 			$icon_url 		= '';

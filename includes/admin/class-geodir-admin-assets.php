@@ -200,11 +200,6 @@ class GeoDir_Admin_Assets {
 			wp_localize_script('geodir-admin-script', 'geodir_params', geodir_params());
 		}
 
-
-
-
-
-
 		// Admin scripts for GD pages only
 		if ( in_array( $screen_id, geodir_get_screen_ids() ) ) {
 			wp_enqueue_script( 'wp-color-picker' );

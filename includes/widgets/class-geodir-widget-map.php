@@ -572,7 +572,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$map_args['lat'] = ! empty( $current_location->latitude ) ? $current_location->latitude : '';
 			$map_args['lon'] = ! empty( $current_location->longitude ) ? $current_location->longitude : '';
 
-			if ( ( GeoDir_Query::get_query_var( 'snear' ) || GeoDir_Query::get_query_var( 'near' ) ) && ( $distance = geodir_sanitize_float( GeoDir_Query::get_query_var( 'dist' ) )) ) {
+			if ( ( GeoDir_Query::get_query_var( 'snear' ) || GeoDir_Query::get_query_var( 'near' ) ) && ( $distance = geodir_sanitize_float( GeoDir_Query::get_query_var( 'dist' ) ) ) ) {
 				$map_args['dist'] = $distance;
 			}
 		} elseif ( geodir_core_multi_city() ) { /* Core multi city */

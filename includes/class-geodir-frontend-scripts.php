@@ -146,11 +146,34 @@ class GeoDir_Frontend_Scripts {
 			function geodir_setup_submit_search($form) {
 				jQuery('.geodir_submit_search').off('click');// unbind any other click events
 				jQuery('.geodir_submit_search').on("click",function(e) {
-
 					e.preventDefault();
 
 					var s = ' ';
 					var $form = jQuery(this).closest('form');
+					<?php if ( geodir_design_style() && geodir_is_page( 'search' ) ) { ?>
+					if ($form.data('show') == 'advanced') {
+						if (jQuery('form.geodir-search-show-all:visible').length) {
+							$form = jQuery('form.geodir-search-show-all');
+						} else if (jQuery('form.geodir-search-show-main:visible').length) {
+							$form = jQuery('form.geodir-search-show-main');
+						} else if (jQuery('[name="geodir_search"]').closest('form:visible').length) {
+							$form = jQuery('[name="geodir_search"]').closest('form');
+						}
+					}
+
+					if (!(geodir_params.hasAjaxSearch && !window.gdAsCptChanged)) {
+						if ($form.data('show') == 'main' && jQuery('form.geodir-search-show-advanced:visible').length) {
+							var formData = jQuery('form.geodir-search-show-advanced:visible').serializeArray();
+							if (formData && typeof formData == 'object' && formData.length) {
+								$form.find('.geodir-advanced-data').remove();
+								$form.append('<div class="geodir-advanced-data" style="display:none"></div>');
+								jQuery.each(formData, function (i, obj){
+									jQuery('<input type="hidden">').prop(obj).appendTo(jQuery('.geodir-advanced-data'));
+								});
+							}
+						}
+					}
+					<?php } ?>
 
 					if (jQuery("#sdistance input[type='radio']:checked").length != 0) dist = jQuery("#sdistance input[type='radio']:checked").val();
 					if (jQuery('.search_text', $form).val() == '' || jQuery('.search_text', $form).val() == '<?php echo $default_search_for_text;?>') jQuery('.search_text', $form).val(s);

@@ -172,7 +172,7 @@ function geodir_build_static_map(map_canvas) {
     jQuery("." + map_canvas + "_TopLeft").hide();
     jQuery('#' + map_canvas + '_loading_div').hide();
 
-    console.log(img);
+    //console.log(img);
     // "center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap
     // &markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318
     // &markers=color:red%7Clabel:C%7C40.718217,-73.998284
@@ -360,7 +360,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
                     .get(); //ToArray
             }
 
-            if (idarray) {
+            if (idarray.length) {
                 posts = idarray;
             } else {
                 posts = '-1';
@@ -430,7 +430,7 @@ function geodir_activate_collapse_pan() {
     });
 }
 
-function map_ajax_search(map_canvas_var, query_string, marker_jason, hide_loading) {
+function map_ajax_search(map_canvas_var, query_string, marker_jason, hide_loading, keep_markers) {
     if (!window.gdMaps) {
         jQuery('#' + map_canvas_var + '_loading_div').hide();
         jQuery('#' + map_canvas_var + '_map_notloaded').show();
@@ -446,7 +446,7 @@ function map_ajax_search(map_canvas_var, query_string, marker_jason, hide_loadin
         jQuery('#' + map_canvas_var + '_loading_div').show();
     }
     if (marker_jason != '') {
-        parse_marker_jason(marker_jason, map_canvas_var);
+        parse_marker_jason(marker_jason, map_canvas_var, keep_markers);
         //document.getElementById( map_canvas+'_loading_div').style.display="none";
         jQuery('#' + map_canvas_var + '_loading_div').hide();
         return;
@@ -467,7 +467,7 @@ function map_ajax_search(map_canvas_var, query_string, marker_jason, hide_loadin
             dataType: "json",
             success: function(data) {
                 jQuery('#' + map_canvas_var + '_loading_div').hide();
-                parse_marker_jason(data, map_canvas_var);
+                parse_marker_jason(data, map_canvas_var, keep_markers);
             },
             error: function(xhr, textStatus, errorThrown) {
                 console.log(errorThrown);
@@ -480,9 +480,9 @@ function map_ajax_search(map_canvas_var, query_string, marker_jason, hide_loadin
 // read the data, create markers
 var bounds = '';
 
-function parse_marker_jason(json, map_canvas_var) {
+function parse_marker_jason(json, map_canvas_var, keep_markers) {
     if (window.gdMaps == 'osm') {
-        parse_marker_jason_osm(json, map_canvas_var);
+        parse_marker_jason_osm(json, map_canvas_var, keep_markers);
         return;
     }
     var options = eval(map_canvas_var);
@@ -497,21 +497,41 @@ function parse_marker_jason(json, map_canvas_var) {
             remove_cluster_markers(map_canvas_var)
         }
     }
-    // clear old markers
-    jQuery.goMap.clearMarkers();
+	var markerReposition = options.enable_marker_cluster_no_reposition;
+	var animation = geodir_params.gMarkerAnimation ? geodir_params.gMarkerAnimation : null;
+	if (animation === true) {
+		animation = google.maps.Animation.DROP;
+	}
+	if (keep_markers) {
+		gd_map_first_load = true;
+		markerReposition = false;
+		if (typeof keepBounds != 'undefined' && keepBounds) {
+			bounds = keepBounds;
+		}
+	} else {
+		// clear old markers
+		jQuery.goMap.clearMarkers();
+		keepBounds = '';
+	}
+
+	// Don't reposition
+	if (geodir_params.gMarkerReposition) {
+		markerReposition = true;
+	}
+
     // if no markers found, display home_map_nofound div with no search criteria met message
     if (json.total && parseInt(json.total) > 0) {
         document.getElementById(map_canvas_var + '_map_nofound').style.display = 'none';
         var mapcenter = new google.maps.LatLng(options.latitude, options.longitude);
-        list_markers(json, map_canvas_var);
+        list_markers(json, map_canvas_var, animation);
         var center = bounds.getCenter();
         if (options.autozoom && parseInt(json.total) > 1) {
-            if (options.enable_marker_cluster_no_reposition) {} //dont reposition after load
+            if (markerReposition) {} //don't reposition after load
             else {
                 jQuery.goMap.map.fitBounds(bounds);
             }
         } else {
-            if (options.enable_marker_cluster_no_reposition) {} //dont reposition after load
+            if (markerReposition) {} //dont reposition after load
             else {
                 if (options.autozoom && parseInt(json.total) == 1) {
                     jQuery.goMap.map.setZoom(13);
@@ -522,6 +542,9 @@ function parse_marker_jason(json, map_canvas_var) {
         if (jQuery.goMap.map.getZoom() > parseInt(options.maxZoom)) {
             jQuery.goMap.map.setZoom(parseInt(options.maxZoom));
         }
+		if (!(typeof keepBounds != 'undefined' && keepBounds)) {
+			keepBounds = bounds;
+		}
     } else {
         document.getElementById(map_canvas_var + '_map_nofound').style.display = 'flex';
         var nLat = options.nomap_lat ? options.nomap_lat : (options.default_lat ? options.default_lat : '39.952484');
@@ -529,7 +552,7 @@ function parse_marker_jason(json, map_canvas_var) {
         var nZoom = parseInt(options.nomap_zoom) > 0 ? parseInt(options.nomap_zoom) : (parseInt(options.zoom) > 0 ? parseInt(options.zoom) : 11);
         var mapcenter = new google.maps.LatLng(nLat, nLng);
         list_markers(json, map_canvas_var);
-        if (options.enable_marker_cluster_no_reposition) {} //dont reposition after load
+        if (markerReposition) {} //dont reposition after load
         else {
             jQuery.goMap.map.setCenter(mapcenter);
             jQuery.goMap.map.setZoom(nZoom);
@@ -548,7 +571,7 @@ function parse_marker_jason(json, map_canvas_var) {
     jQuery("body").trigger("map_show", map_canvas_var);
 }
 
-function list_markers(json, map_canvas_var) {
+function list_markers(json, map_canvas_var, animation) {
     var map_options = eval(map_canvas_var);
     var total = parseInt(json.total);
     if (total > 0 && json.items) {
@@ -569,6 +592,9 @@ function list_markers(json, map_canvas_var) {
                     marker['w'] = icon['w'];
                     marker['h'] = icon['h'];
                 }
+            }
+            if (marker && !marker.animation && animation) {
+                marker['animation'] = animation;
             }
             if (map_options.map_type == 'post' && i == 0) {
                 jQuery('#' + map_canvas_var).data('lat', marker.lt);
@@ -666,7 +692,8 @@ function create_marker(item, map_canvas) {
             icon: icon,
             label: cs,
             zIndex: (item.zIndex ? item.zIndex : 0),
-            zIndexOrg: (item.zIndexOrg ? item.zIndexOrg : 0)
+            zIndexOrg: (item.zIndexOrg ? item.zIndexOrg : 0),
+            animation: (item.animation ? item.animation : null)
         });
         bounds.extend(latlng);
         // Adding a click event to the marker
@@ -1260,7 +1287,7 @@ function initMapOSM(map_options) {
     window.oms = jQuery.goMap.oms;
 }
 
-function parse_marker_jason_osm(json, map_canvas_var) {
+function parse_marker_jason_osm(json, map_canvas_var, keep_markers) {
     var options = eval(map_canvas_var);
     if (jQuery('#' + map_canvas_var).val() == '') { // if map not loaded then load it
         initMapOSM(map_canvas_var);
@@ -1269,21 +1296,35 @@ function parse_marker_jason_osm(json, map_canvas_var) {
     }
     // get the bounds of the map
     bounds = new L.LatLngBounds([]);
-    // clear old markers
-    jQuery.goMap.clearMarkers();
+	var markerReposition = options.enable_marker_cluster_no_reposition;
+    if (keep_markers) {
+		gd_map_first_load = true;
+		markerReposition = false;
+		if (typeof keepBounds != 'undefined' && keepBounds) {
+			bounds = keepBounds;
+		}
+	} else {
+		// clear old markers
+		jQuery.goMap.clearMarkers();
+		keepBounds = '';
+	}
+	// Don't reposition
+	if (geodir_params.gMarkerReposition) {
+		markerReposition = true;
+	}
     // if no markers found, display home_map_nofound div with no search criteria met message
     if (json.total && parseInt(json.total) > 0) {
         document.getElementById(map_canvas_var + '_map_nofound').style.display = 'none';
         list_markers(json, map_canvas_var);
         var center = bounds.getCenter();
         if (options.autozoom && parseInt(json.total) > 1) {
-            if (options.enable_marker_cluster_no_reposition) {
+            if (markerReposition) {
                 //dont reposition after load
             } else {
                 jQuery.goMap.map.fitBounds(bounds);
             }
         } else {
-            if (options.enable_marker_cluster_no_reposition) {
+            if (markerReposition) {
                 //dont reposition after load
             } else {
                 setZoom = jQuery.goMap.map.getZoom();
@@ -1296,6 +1337,9 @@ function parse_marker_jason_osm(json, map_canvas_var) {
         if (jQuery.goMap.map.getZoom() > parseInt(options.maxZoom)) {
             jQuery.goMap.map.setZoom(parseInt(options.maxZoom));
         }
+		if (!(typeof keepBounds != 'undefined' && keepBounds)) {
+			keepBounds = bounds;
+		}
     } else {
         document.getElementById(map_canvas_var + '_map_nofound').style.display = 'flex';
         var nLat = options.nomap_lat ? options.nomap_lat : (options.default_lat ? options.default_lat : '39.952484');
@@ -1303,7 +1347,7 @@ function parse_marker_jason_osm(json, map_canvas_var) {
         var nZoom = parseInt(options.nomap_zoom) > 0 ? parseInt(options.nomap_zoom) : (parseInt(options.zoom) > 0 ? parseInt(options.zoom) : 11);
         var mapcenter = new L.latLng(nLat, nLng);
         list_markers(json, map_canvas_var);
-        if (options.enable_marker_cluster_no_reposition) {} //dont reposition after load
+        if (markerReposition) {} //dont reposition after load
         else {
             jQuery.goMap.map.setView(mapcenter, nZoom);
         }
