@@ -1,3 +1,6 @@
+= 2.2.7 =
+* SEO title conflicts with SEOPress - FIXED
+
 = 2.2.6 =
 * Float value parsing shows comma with pl_PL locale - FIXED
 * Elementor custom tag shows country name untranslated - FIXED

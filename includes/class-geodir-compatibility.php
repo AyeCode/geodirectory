@@ -655,6 +655,20 @@ class GeoDir_Compatibility {
 	}
 
 	/**
+	 * Fix conflicts for title hook priority with SEOPress.
+	 *
+	 * @since 2.2.7
+	 *
+	 * @param int $priority Title hook priority.
+	 * @return int Filtered priority.
+	 */
+	public static function seopress_titles_the_title_priority( $priority ) {
+		$priority = 1500;
+
+		return $priority;
+	}
+
+	/**
 	 * Adds warning notices if BuddyPress is active and has issues.
 	 */
 	public static function buddypress_notices() {
@@ -1666,6 +1680,11 @@ class GeoDir_Compatibility {
 
 			// Fix Divi builder GD pages header
 			self::et_builder_divi_fix_stylesheet();
+		} else {
+			// SEOPress
+			if ( function_exists( 'seopress_activation' ) ) {
+				add_filter( 'seopress_titles_the_title_priority', array( __CLASS__, 'seopress_titles_the_title_priority' ), 10, 1 );
+			}
 		}
 
 		// GeneratePress theme compatibility
@@ -3584,7 +3603,7 @@ class GeoDir_Compatibility {
 			if ( ! empty( $setting['id'] ) && $setting['id'] == 'map_cache' ) {
 				$_settings[] = array(
 					'name' => __( 'Borlabs Cookie Integration', 'geodirectory'),
-					'desc' => __( 'Enable Borlabs Cookie integration for GeoDirecotry maps.', 'geodirectory' ),
+					'desc' => __( 'Enable Borlabs Cookie integration for GeoDirectory maps.', 'geodirectory' ),
 					'id' => 'borlabs_cookie',
 					'type' => 'checkbox',
 					'default' => '0',
