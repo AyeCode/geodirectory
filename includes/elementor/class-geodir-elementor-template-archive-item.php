@@ -18,8 +18,8 @@ class GeoDir_Elementor_Template_Archive_Item extends \ElementorPro\Modules\Theme
 		parent::print_content();
 	}
 
-	protected function _register_controls() {
-		parent::_register_controls();
+	protected function register_controls() {
+		parent::register_controls();
 
 		$this->update_control(
 			'preview_type',

@@ -139,7 +139,7 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 	/**
 	 * Register controls for the tag.
 	 */
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		$this->add_control(
 			'key',

@@ -66,8 +66,8 @@ class GeoDir_Elementor_Template_Archive extends \ElementorPro\Modules\ThemeBuild
 		];
 	}
 
-	protected function _register_controls() {
-		parent::_register_controls();
+	protected function register_controls() {
+		parent::register_controls();
 
 		$this->update_control(
 			'preview_type',
