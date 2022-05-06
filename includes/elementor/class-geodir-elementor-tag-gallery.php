@@ -98,7 +98,7 @@ Class GeoDir_Elementor_Tag_Gallery extends Elementor\Core\DynamicTags\Data_Tag {
 	/**
 	 * Register controls for the tag.
 	 */
-	protected function _register_controls() {
+	protected function register_controls() {
 
 		$this->add_control(
 			'key',
