@@ -137,6 +137,41 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
             $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
         }
 
+		/*
+		* Elementor Pro features below here
+		*/
+		if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
+			$arguments['skin_id'] = array(
+				'type' => 'select',
+				'title' => __( 'Elementor Skin', 'geodirectory' ),
+				'desc' => '',
+				'options' => GeoDir_Elementor::get_elementor_pro_skins(),
+				'default' => '',
+				'desc_tip' => false,
+				'advanced' => false,
+				'group' => __( 'Design', 'geodirectory' )
+			);
+
+			$arguments['skin_column_gap'] = array(
+				'type' => 'number',
+				'title' => __( 'Skin column gap', 'geodirectory' ),
+				'desc' => __( 'The px value for the column gap.', 'geodirectory' ),
+				'default' => '30',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group' => __( 'Design', 'geodirectory' )
+			);
+
+			$arguments['skin_row_gap'] = array(
+				'type' => 'number',
+				'title' => __( 'Skin row gap', 'geodirectory'),
+				'desc' => __( 'The px value for the row gap.', 'geodirectory' ),
+				'default' => '35',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group' => __( 'Design', 'geodirectory' )
+			);
+		}
 
         $options['arguments'] = $arguments;
 
@@ -159,41 +194,50 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
         ob_start();
         $design_style = geodir_design_style();
         $is_preview = $this->is_preview();
-        if(
-            geodir_is_post_type_archive()
-           ||  geodir_is_taxonomy()
-           ||  geodir_is_page('search')
-           || (is_author() && !empty($wp_query->query['gd_favs'])
-           || apply_filters('geodir_loop_active',false))
-           ||  $is_preview
-        ){
-            $widget_args = wp_parse_args( $args, array(
-                'layout' => '',
-                // AUI settings
-                'column_gap'  => '',
-                'row_gap'  => '',
-                'card_border'  => '',
-                'card_shadow'  => '',
-            ) );
+
+        if ( geodir_is_post_type_archive() || geodir_is_taxonomy() || geodir_is_page( 'search' ) || ( is_author() && ! empty( $wp_query->query['gd_favs'] ) || apply_filters( 'geodir_loop_active', false ) ) || $is_preview ) {
+            $widget_args = wp_parse_args( 
+				$args, 
+				array(
+					'layout' => '',
+					// AUI settings
+					'column_gap'  => '',
+					'row_gap'  => '',
+					'card_border'  => '',
+					'card_shadow'  => '',
+					'skin_id' => '',
+					'skin_column_gap' => '',
+					'skin_row_gap' => ''
+				) 
+			);
+
+			/**
+			 * Filter the widget skin_id param.
+			 *
+			 * @since 2.2.7
+			 *
+			 * @param string $widget_args['skin_id'] Filter skin_id.
+			 */
+			$skin_id = empty( $widget_args['skin_id'] ) ? '' : apply_filters( 'geodir_loop_widget_skin_id', $widget_args['skin_id'], $widget_args, $this->id_base );
 
             // card border class
             $card_border_class = '';
-            if(!empty($widget_args['card_border'])){
-                if($widget_args['card_border']=='none'){
+            if ( ! empty( $widget_args['card_border'] ) ) {
+                if ( $widget_args['card_border'] == 'none' ) {
                     $card_border_class = 'border-0';
-                }else{
-                    $card_border_class = 'border-'.sanitize_html_class($widget_args['card_border']);
+                } else {
+                    $card_border_class = 'border-' . sanitize_html_class( $widget_args['card_border'] );
                 }
             }
 
             // card shadow
             $card_shadow_class = '';
-            if(!empty($widget_args['card_shadow'])){
-                if($widget_args['card_shadow']=='small'){
+            if ( ! empty( $widget_args['card_shadow'] ) ) {
+                if ( $widget_args['card_shadow'] == 'small' ) {
                     $card_shadow_class = 'shadow-sm';
-                }elseif($widget_args['card_shadow']=='medium'){
+                } elseif ( $widget_args['card_shadow'] == 'medium' ) {
                     $card_shadow_class = 'shadow';
-                }elseif($widget_args['card_shadow']=='large'){
+                } elseif ( $widget_args['card_shadow'] == 'large' ) {
                     $card_shadow_class = 'shadow-lg';
                 }
             }
@@ -201,7 +245,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
             $gd_layout_class = geodir_convert_listing_view_class( $widget_args['layout'] );
 
             // for preview just get the main posts
-            if( $is_preview ){
+            if ( $is_preview ) {
                 $wp_query = new WP_Query( array('post_type' => 'gd_place','posts_per_page' => 6 ) );
 
                 // preview message
@@ -235,21 +279,55 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                     geodir_no_listings_found();
                 } else {
                     $design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : geodir_design_style();
-                    $template = $design_style ? $design_style . "/content-archive-listing.php" : "content-archive-listing.php";
 
                     // wrap class
                     $wrap_class = geodir_build_aui_class( $widget_args );
+
+					// Elementor
+					$elementor_skin = false;
+					$elementor_wrapper_class = '';
+
+					if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $skin_id ) {
+						if ( get_post_status ( $skin_id ) == 'publish' ) {
+							$elementor_skin = true;
+						}
+
+						if ( $elementor_skin ) {
+							$columns = isset( $widget_args['layout'] ) ? absint( $widget_args['layout'] ) : 1;
+							if ( $columns == 0 ) {
+								$columns = 6; // we have no 6 row option to lets use list view
+							}
+							$wrap_class .= ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-' . $columns . ' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-archive-posts ';
+						}
+					}
 
                     if ( $wrap_class ) {
                         echo "<div class='$wrap_class'>";
                     }
 
-                    echo geodir_get_template_html( $template, array(
-                        'column_gap_class'   => $widget_args['column_gap'] ? 'mb-'.absint($widget_args['column_gap']) : 'mb-4',
-                        'row_gap_class'   => $widget_args['row_gap'] ? 'px-'.absint($widget_args['row_gap']) : '',
-                        'card_border_class'   => $card_border_class,
-                        'card_shadow_class'  =>  $card_shadow_class,
-                    ) );
+
+					if ( $elementor_skin ) {
+						$column_gap = ! empty( $widget_args['skin_column_gap'] ) ? absint( $widget_args['skin_column_gap'] ) : '';
+						$row_gap = ! empty( $widget_args['skin_row_gap'] ) ? absint( $widget_args['skin_row_gap'] ) : '';
+
+						geodir_get_template( 'elementor/content-archive-listing.php', 
+							array( 
+								'skin_id' => $skin_id, 
+								'columns' => $columns, 
+								'column_gap' => $column_gap, 
+								'row_gap' => $row_gap 
+							) 
+						);
+					} else {
+						$template = $design_style ? $design_style . "/content-archive-listing.php" : "content-archive-listing.php";
+
+						 echo geodir_get_template_html( $template, array(
+							'column_gap_class' => $widget_args['column_gap'] ? 'mb-' . absint( $widget_args['column_gap'] ) : 'mb-4',
+							'row_gap_class' => $widget_args['row_gap'] ? 'px-' . absint( $widget_args['row_gap'] ) : '',
+							'card_border_class' => $card_border_class,
+							'card_shadow_class' => $card_shadow_class,
+						) );
+					}
 
                     if ( $wrap_class ) {
                         echo "</div>";
