@@ -631,17 +631,11 @@ class GeoDir_Frontend_Scripts {
 
 		$design_style = geodir_design_style();
 
-		// register scripts/styles
+		// Register scripts/styles
 		self::register_scripts();
 		self::register_styles();
 
-
-
-//		self::enqueue_script( 'geodir' );
-
-		if(!$design_style){
-
-
+		if ( ! $design_style ) {
 			// global enqueues
 			// css
 			self::enqueue_style( 'select2' );
@@ -652,41 +646,27 @@ class GeoDir_Frontend_Scripts {
 			self::enqueue_script( 'geodir' );
 			self::enqueue_script( 'geodir_lity' );
 
-
-			//rtl
-			if(is_rtl()){
+			// rtl
+			if ( is_rtl() ) {
 				self::enqueue_style( 'geodir-rtl' );
 			}
 
-
-		// add-listing
-		if(geodir_is_page('add-listing') && !isset($_REQUEST['ct_builder'])){
-			self::enqueue_script( 'geodir-plupload' );
-			self::enqueue_script( 'geodir-add-listing' );
-			self::enqueue_script( 'geodir-jquery-ui-timepicker' );
+			// add-listing
+			if ( geodir_is_page( 'add-listing' ) && ! isset( $_REQUEST['ct_builder'] ) ) {
+				self::enqueue_script( 'geodir-plupload' );
+				self::enqueue_script( 'geodir-add-listing' );
+				self::enqueue_script( 'geodir-jquery-ui-timepicker' );
 
 				wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
-
 			}
-
-			// details page
-			if(geodir_is_page('single')){
-				//self::enqueue_script( 'jquery-flexslider' ); // moved to widget
-			}
-
-		}else{
+		} else {
 			// js
 			self::enqueue_script( 'geodir' ); // original
 
 			// add-listing @todo do we need all these?
-			if(geodir_is_page('add-listing') && !isset($_REQUEST['ct_builder'])){
+			if ( geodir_is_page( 'add-listing' ) && ! isset( $_REQUEST['ct_builder'] ) ) {
 				self::enqueue_script( 'geodir-plupload' );
 				self::enqueue_script( 'geodir-add-listing' );
-//				self::enqueue_script( 'geodir-jquery-ui-timepicker' );
-				//self::enqueue_script( 'geodir-select2' );
-
-//				wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
-
 			}
 		}
 

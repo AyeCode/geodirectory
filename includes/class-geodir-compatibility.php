@@ -26,7 +26,6 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_filter( 'option_wpseo_taxonomy_meta', array( __CLASS__, 'wpseo_taxonomy_meta' ), 10, 2 );
 		// add setting to be able to disable yoast on GD pages
-		add_filter( 'geodir_seo_options', array( __CLASS__, 'wpseo_disable' ), 10 );
 		add_filter( 'Yoast\WP\SEO\prominent_words_post_types', array( __CLASS__, 'wpseo_prominent_words_post_types' ), 20, 1 );
 		add_filter( 'rank_math/opengraph/url', array( __CLASS__, 'rank_math_location_url_callback' ), 10 );
 		add_action( 'rank_math/opengraph/facebook/add_additional_images', array( __CLASS__, 'rank_math_cat_image' ), 10 );
@@ -36,9 +35,11 @@ class GeoDir_Compatibility {
 		Rank Math SEO
 		######################################################*/
 		// add setting to be able to disable Rank Math on GD pages
-		add_filter( 'geodir_seo_options', array( __CLASS__, 'rank_math_disable' ), 10 );
 		add_filter( 'rank_math/sitemap/urlimages', array( __CLASS__, 'rank_math_add_images_to_sitemap' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_rank_math_disable' ), 20 );
+
+		// SEO Plugin Options
+		add_filter( 'geodir_seo_options', array( __CLASS__, 'seo_plugin_options' ), 10, 1 );
 
 		/*######################################################
 		Disqus (comments system) :: If Disqus plugin is active, do some fixes to show on blogs but no on GD post types
@@ -205,6 +206,89 @@ class GeoDir_Compatibility {
 
 		// Register scripts on block theme.
 		add_action( 'wp_super_duper_widget_init', array( __CLASS__, 'block_theme_load_scripts' ), 5, 2 );
+	}
+
+	/**
+	 * Add options to manage overwrite titles & meta by SEO plugins.
+	 *
+	 * @since 2.2.7
+	 *
+	 * @param array $options SEO settings.
+	 * @return array SEO settings.
+	 */
+	public static function seo_plugin_options( $options ) {
+		// Yoast SEO
+		if ( defined( 'WPSEO_VERSION' ) ) {
+			$new_options = array(
+				array(
+					'title' => __( 'Yoast SEO detected', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => geodir_notification( array( 'info' => __( 'The Yoast SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta)', 'geodirectory' ) ) ),
+					'id'    => 'yoast_detected',
+					//'desc_tip' => true,
+				),
+				array(
+					'name'    => __( 'Disable Yoast', 'geodirectory' ),
+					'desc'    => __( 'Disable overwrite by Yoast SEO titles & metas on GD pages?', 'geodirectory' ),
+					'id'      => 'wpseo_disable',
+					'type'    => 'checkbox',
+					'default' => '0',
+				),
+				array( 'type' => 'sectionend', 'id' => 'yoast_detected' )
+			);
+
+			array_splice( $options, 2, 0, $new_options );
+		}
+
+		// Rank Math SEO
+		if ( defined( 'RANK_MATH_VERSION' ) ) {
+			$new_options = array(
+				array(
+					'title' => __( 'Rank Math SEO detected', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => geodir_notification( array( 'info' => __( 'The Rank Math SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta)', 'geodirectory' ) ) ),
+					'id'    => 'rank_math_detected',
+					//'desc_tip' => true,
+				),
+				array(
+					'name'    => __( 'Disable Rank Math', 'geodirectory' ),
+					'desc'    => __( 'Disable overwrite by Rank Math titles & metas on GD pages?', 'geodirectory' ),
+					'id'      => 'rank_math_disable',
+					'type'    => 'checkbox',
+					'default' => '0',
+				),
+				array( 'type' => 'sectionend', 'id' => 'rank_math_detected' )
+			);
+
+			array_splice( $options, 2, 0, $new_options ); // splice in at position 1
+		}
+
+		// SEOPress
+		if ( function_exists( 'seopress_activation' ) ) {
+			$new_options = array(
+				array(
+					'id' => 'seopress_detected',
+					'type' => 'title',
+					'title' => __( 'SEOPress SEO Detected', 'geodirectory' ),
+					'desc' => geodir_notification( array( 'info' => __( 'The SEOPress SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta)', 'geodirectory' ) ) ),
+				),
+				array(
+					'id' => 'seopress_disable',
+					'type' => 'checkbox',
+					'name' => __( 'Disable SEOPress', 'geodirectory' ),
+					'desc' => __( 'Disable overwrite by SEOPress titles & metas on GD pages?', 'geodirectory' ),
+					'default' => '0',
+				),
+				array( 
+					'id' => 'seopress_detected',
+					'type' => 'sectionend'
+				)
+			);
+
+			array_splice( $options, 2, 0, $new_options );
+		}
+
+		return $options;
 	}
 
 	/**
@@ -886,6 +970,9 @@ class GeoDir_Compatibility {
 					// Don't overwrite Rank Math SEO meta for the individual post.
 					$reserve_post_meta = defined( 'RANK_MATH_VERSION' ) && ! geodir_get_option( 'rank_math_disable' ) && geodir_is_page( 'detail' ) ? true : $reserve_post_meta;
 
+					// Don't overwrite SEOPress SEO meta for the individual post.
+					$reserve_post_meta = function_exists( 'seopress_activation' ) && ! geodir_get_option( 'seopress_disable' ) && geodir_is_page( 'detail' ) ? true : $reserve_post_meta;
+
 					if ( $reserve_post_meta ) {
 						global $gd_post_metadata;
 						if ( $gd_post_metadata ) {
@@ -902,7 +989,7 @@ class GeoDir_Compatibility {
 					if ( $reserve_post_meta ) {
 						if ( ! empty( $reserve_meta ) ) {
 							foreach ( $reserve_meta as $key => $meta ) {
-								if ( strpos( $key, '_yoast_wpseo_' ) === 0 ) {
+								if ( strpos( $key, '_yoast_wpseo_' ) === 0 || strpos( $key, 'seopress_' ) === 0 ) {
 									$metadata[ $key ] = $meta;
 								}
 							}
@@ -1176,34 +1263,6 @@ class GeoDir_Compatibility {
 		return $wrap;
 	}
 
-	public static function rank_math_disable( $options ) {
-
-		if ( defined( 'RANK_MATH_VERSION' ) ) {
-			$new_options = array(
-				array(
-					'title' => __( 'Rank Math SEO detected', 'geodirectory' ),
-					'type'  => 'title',
-					'desc'  => geodir_notification( array( 'rank_math_detected' => __( 'The Rank Math SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta)', 'geodirectory' ) ) ),
-					'id'    => 'rank_math_detected',
-					//'desc_tip' => true,
-				),
-				array(
-					'name'    => __( 'Disable Rank Math', 'geodirectory' ),
-					'desc'    => __( 'Disable overwrite by Rank Math titles & metas on GD pages?', 'geodirectory' ),
-					'id'      => 'rank_math_disable',
-					'type'    => 'checkbox',
-					'default' => '0',
-				),
-				array( 'type' => 'sectionend', 'id' => 'rank_math_detected' )
-			);
-
-			array_splice( $options, 1, 0, $new_options ); // splice in at position 1
-		}
-
-
-		return $options;
-	}
-
 	/**
 	 * This method enqueues the code required to make Rank Math recognize our fields
 	 */
@@ -1353,34 +1412,6 @@ class GeoDir_Compatibility {
 		}
 
 		return $images;
-	}
-
-	public static function wpseo_disable( $options ) {
-
-		if ( defined( 'WPSEO_VERSION' ) ) {
-			$new_options = array(
-				array(
-					'title' => __( 'Yoast SEO detected', 'geodirectory' ),
-					'type'  => 'title',
-					'desc'  => geodir_notification( array( 'yoast_detected' => __( 'The Yoast SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta)', 'geodirectory' ) ) ),
-					'id'    => 'yoast_detected',
-					//'desc_tip' => true,
-				),
-				array(
-					'name'    => __( 'Disable Yoast', 'geodirectory' ),
-					'desc'    => __( 'Disable overwrite by Yoast SEO titles & metas on GD pages?', 'geodirectory' ),
-					'id'      => 'wpseo_disable',
-					'type'    => 'checkbox',
-					'default' => '0',
-				),
-				array( 'type' => 'sectionend', 'id' => 'yoast_detected' )
-			);
-
-			array_splice( $options, 1, 0, $new_options ); // splice in at position 1
-		}
-
-
-		return $options;
 	}
 
 	/**
@@ -1680,6 +1711,11 @@ class GeoDir_Compatibility {
 
 			// Fix Divi builder GD pages header
 			self::et_builder_divi_fix_stylesheet();
+
+			// SEOPress
+			if ( GeoDir_SEO::seopress_enabled() ) {
+				add_filter( 'seopress_titles_the_title_priority', array( __CLASS__, 'seopress_titles_the_title_priority' ), 10, 1 );
+			}
 		} else {
 			// SEOPress
 			if ( function_exists( 'seopress_activation' ) ) {
