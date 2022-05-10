@@ -1,5 +1,6 @@
 = 2.2.7 =
 * SEO title conflicts with SEOPress - FIXED
+* Category radio field is not working properly - FIXED
 
 = 2.2.6 =
 * Float value parsing shows comma with pl_PL locale - FIXED

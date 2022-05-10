@@ -1017,7 +1017,7 @@ function geodirSelect2TemplateSelection($el, data, main) {
         rEl = '<span class="select2-selection_gd_custom">';
           rEl += '<span class="select2-selection_gd_text">' + data.text + '</span>';
           rEl += '<span class="select2-selection_gd_field">';
-            rEl += '<input type="radio" title="'+geodir_params.i18n_set_as_default+'" class="select2-selection_gd_v_' + (data.id != 'undefined' ? data.id : '') + '" onchange="jQuery(this).closest(\'form\').find(\'input[name=' + $el.data('cmultiselect') + ']\').val(jQuery(this).val());" value="' + (data.id != 'undefined' ? data.id : '') + '" name="' + $el.data('cmultiselect') + '_radio">';
+            rEl += '<input type="radio" title="'+geodir_params.i18n_set_as_default+'" class="select2-selection_gd_v_' + (data.id != 'undefined' ? data.id : '') + '" onchange="jQuery(this).closest(\'form\').find(\'select[name=' + $el.data('cmultiselect') + ']\').val(jQuery(this).val()).trigger(\'change\');" value="' + (data.id != 'undefined' ? data.id : '') + '" name="' + $el.data('cmultiselect') + '_radio">';
           rEl += '</span>';
         rEl += '</span>';
         return jQuery(rEl);
