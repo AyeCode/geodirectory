@@ -76,35 +76,46 @@ class GeoDir_SEO {
 		}
 	}
 
-	public static function yoast_enabled(){
+	public static function yoast_enabled() {
 		global $geodir_options;
-		return defined( 'WPSEO_VERSION')
-		       && ( !isset($geodir_options['wpseo_disable'] ) || ( isset($geodir_options['wpseo_disable']) && $geodir_options['wpseo_disable']=='0' ) )   ? true : false;
-		//return ( defined( 'WPSEO_VERSION')  )  ? true : false;
+
+		return defined( 'WPSEO_VERSION' ) && ( ! isset( $geodir_options['wpseo_disable'] ) || ( isset( $geodir_options['wpseo_disable'] ) && $geodir_options['wpseo_disable'] == '0' ) ) ? true : false;
 	}
 
-	public static function rank_math_enabled(){
+	public static function rank_math_enabled() {
 		global $geodir_options;
-		return defined( 'RANK_MATH_VERSION')
-		       && ( !isset($geodir_options['rank_math_disable'] ) || ( isset($geodir_options['rank_math_disable']) && $geodir_options['rank_math_disable']=='0' ) )   ? true : false;
+
+		return defined( 'RANK_MATH_VERSION' ) && ( ! isset( $geodir_options['rank_math_disable'] ) || ( isset( $geodir_options['rank_math_disable'] ) && $geodir_options['rank_math_disable'] == '0' ) ) ? true : false;
 	}
 
+	/**
+	 * Check SEOPress options enabled or not.
+	 *
+	 * @since 2.2.7
+	 *
+	 * @return bool True if SEOPress is enabled else False.
+	 */
+	public static function seopress_enabled(){
+		global $geodir_options;
 
-	public static function maybe_run(){
+		return function_exists( 'seopress_activation' ) && ( ! isset( $geodir_options['seopress_disable'] ) || ( isset( $geodir_options['seopress_disable'] ) && $geodir_options['seopress_disable'] == '0' ) ) ? true : false;
+	}
 
-		// bail if we have a SEO plugin installed.
-		if(
-			self::yoast_enabled() // don't run if active and not set to be disabled
-				|| self::rank_math_enabled() // don't run if active and not set to be disabled
-		    || class_exists( 'All_in_One_SEO_Pack' )  // don't run if active
-		    || is_admin()  // no need to run in wp-admin
-		){
+	public static function maybe_run() {
+		// Bail if we have a SEO plugin installed.
+		if (
+			self::yoast_enabled() // Don't run if active and not set to be disabled 
+			|| self::rank_math_enabled() // Don't run if active and not set to be disabled 
+			|| self::seopress_enabled() // SEOPress
+			|| class_exists( 'All_in_One_SEO_Pack' )  // don't run if active 
+			|| is_admin()  // No need to run in wp-admin
+		) {
+			// Even if disabled we still need to replace title vars
+			if ( ! is_admin() ) {
+				// Set a global so we don't change the menu items titles
+				add_filter( 'pre_wp_nav_menu', array( __CLASS__, 'set_menu_global' ), 10, 2 );
+				add_filter( 'wp_nav_menu', array( __CLASS__, 'unset_menu_global' ) );
 
-			// even if disabled we still need to replace title vars
-			if(!is_admin()){
-				// set a global so we don't change the menu items titles
-				add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
-				add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
 				// YOOtheme renders own menuwalker.
 				if ( class_exists( 'YOOtheme\\Theme' ) ) {
 					add_filter( 'wp_nav_menu_items',array( __CLASS__, 'unset_menu_global' ), 999, 1 );
@@ -128,7 +139,7 @@ class GeoDir_SEO {
 				add_filter('get_the_archive_title',array(__CLASS__,'output_title'),10);
 
 				// setup vars
-				add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
+				add_action( 'pre_get_document_title', array( __CLASS__, 'set_meta' ), 9 );
 			}
 
 			if ( defined( 'RANK_MATH_VERSION' ) ) {
@@ -138,9 +149,10 @@ class GeoDir_SEO {
 			return;
 		}
 
-		// set a global so we don't change the menu items titles
-		add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
-		add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
+		// Set a global so we don't change the menu items titles
+		add_filter( 'pre_wp_nav_menu', array( __CLASS__, 'set_menu_global' ), 10, 2 );
+		add_filter( 'wp_nav_menu', array( __CLASS__, 'unset_menu_global' ) );
+
 		// YOOtheme renders own menuwalker.
 		if ( class_exists( 'YOOtheme\\Theme' ) ) {
 			add_filter( 'wp_nav_menu_items',array( __CLASS__, 'unset_menu_global' ), 999, 1 );
@@ -180,8 +192,6 @@ class GeoDir_SEO {
 			add_action( 'wp_head', array( __CLASS__, 'output_description' ) );
 		}
 	}
-
-
 
 	/**
 	 * Set the global var when a menu is being output.
