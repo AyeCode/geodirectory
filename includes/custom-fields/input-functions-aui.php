@@ -1760,7 +1760,7 @@ function geodir_cfi_taxonomy($html,$cf){
                         $default_field = '';
                         if ($cat_display == 'multiselect') {
                             $multiple = 'multiple="multiple"';
-                            $default_field = 'data-cmultiselect="default_category"';
+                            $default_field = 'data-aui-cmultiselect="default_category"';
                         } else {
                             $default_field = 'data-cselect="default_category"';
                         }
@@ -1905,7 +1905,7 @@ function geodir_cfi_categories($html,$cf){
                         $default_field = '';
                         if ($cat_display == 'multiselect') {
                             $multiple = 'multiple="multiple"';
-                            $default_field = 'data-cmultiselect="default_category"';
+                            $default_field = 'data-aui-cmultiselect="default_category"';
                         } else {
                             $default_field = 'data-cselect="default_category"';
                         }
