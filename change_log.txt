@@ -3,6 +3,7 @@
 * GD > Loop option added to choose Elementor skin - ADDED
 * Category field shows legacy radio input to set default category - FIXED
 * Non GD pages shows blank meta description tag - FIXED
+* GD > Post Badge don't shows values in site date time format - FIXED
 
 = 2.2.6 =
 * Float value parsing shows comma with pl_PL locale - FIXED

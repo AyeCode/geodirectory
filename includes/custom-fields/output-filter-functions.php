@@ -150,6 +150,7 @@ add_filter( 'geodir_custom_field_output_text_key_distanceto', 'geodir_predefined
  */
 function geodir_post_badge_match_value( $match_value, $match_field, $args, $find_post, $field ) {
 	if ( $match_field ) {
+		// Post Dates
 		if ( in_array( $match_field, array( 'post_date', 'post_modified', 'post_date_gmt', 'post_modified_gmt' ) ) ) {
 			$date_format = geodir_date_time_format();
 			$date_format = apply_filters( 'geodir_post_badge_date_time_format', $date_format, $match_field, $args, $find_post, $field );
@@ -157,6 +158,34 @@ function geodir_post_badge_match_value( $match_value, $match_field, $args, $find
 			if ( $date_format ) {
 				$match_value = ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ? date_i18n( $date_format, strtotime( $match_value ) ) : '';
 			}
+		}
+
+		// Date Fields
+		if ( ! empty( $field ) && ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) {
+			$date_format = geodir_date_format();
+
+			if ( ! empty( $field['extra_fields'] ) ) {
+				$_date_format = stripslashes_deep( maybe_unserialize( $field['extra_fields'] ) );
+				if ( ! empty( $_date_format['date_format'] ) ) {
+					$date_format = $_date_format['date_format'];
+				}
+			}
+
+			return ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ? date_i18n( $date_format, strtotime( $match_value ) ) : $match_value;
+		}
+
+		// Time Fields
+		if ( ! empty( $field ) && ! empty( $field['type'] ) && $field['type'] == 'time' ) {
+			$time_format = geodir_time_format();
+
+			if ( ! empty( $field['extra_fields'] ) ) {
+				$_time_format = stripslashes_deep( maybe_unserialize( $field['extra_fields'] ) );
+				if ( ! empty( $_time_format['time_format'] ) ) {
+					$time_format = $_time_format['time_format'];
+				}
+			}
+
+			return $match_value != '' ? date_i18n( $time_format, strtotime( $match_value ) ) : $match_value;
 		}
 
 		// Featured image
