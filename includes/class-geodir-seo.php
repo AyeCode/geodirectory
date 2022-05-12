@@ -372,12 +372,19 @@ class GeoDir_SEO {
 
 	/**
 	 * Output a page meta description.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 */
-	public static function output_description(){
+	public static function output_description() {
+		if ( ! geodir_is_geodir_page() ) {
+			return;
+		}
+
 		$description = self::get_description();
-		echo '<meta name="description" content="' . $description . '" />';
+
+		if ( $description != '' ) {
+			echo '<meta name="description" content="' . esc_attr( $description ) . '" />';
+		}
 	}
 
 	/**
