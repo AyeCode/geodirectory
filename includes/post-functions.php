@@ -1130,6 +1130,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				}
 
 				if ( $is_date && ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ) {
+					$match_value   = date_i18n( get_option( 'date_format' ), strtotime( $match_value ) );
 					$args['datetime'] = mysql2date( 'c', $match_value, false );
 				}
 
