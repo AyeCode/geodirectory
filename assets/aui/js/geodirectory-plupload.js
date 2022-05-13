@@ -73,6 +73,11 @@ jQuery(document).ready(function($) {
                         target.removeClass("dragover");
                     });
                 }
+
+                /* Fix: iPhone(iOS Safari) don't triggers upload on hidden element */
+                if ($this.find('.moxie-shim').length) {
+                    $this.find('.moxie-shim').css({'position':'initial'});
+                }
             });
 
             uploader.init();
