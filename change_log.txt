@@ -5,6 +5,7 @@
 * Non GD pages shows blank meta description tag - FIXED
 * GD > Post Badge don't shows values in site date time format - FIXED
 * Add listing file upload is not working on iOS Safari browser - FIXED
+* No way to undo Classifieds/Real-Estate Sold status - FIXED
 
 = 2.2.6 =
 * Float value parsing shows comma with pl_PL locale - FIXED
