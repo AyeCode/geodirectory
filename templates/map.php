@@ -868,7 +868,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             });
 
             var maxMap = document.getElementById('<?php echo $prefix;?>triggermap');
-            google.maps.event.addDomListener(maxMap, 'click', gdMaxMap);
+            maxMap.addEventListener('click', gdMaxMap);
 
             <?php if ($is_map_restrict) { ?>
             var CITY_ADDRESS = '<?php echo addslashes_gpc($city).','.addslashes_gpc($region).','.addslashes_gpc($country);?>';

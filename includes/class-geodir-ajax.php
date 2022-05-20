@@ -20,8 +20,8 @@ class GeoDir_AJAX {
 	 * Hook in ajax handlers.
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'define_ajax' ), 0 );
-		add_action( 'template_redirect', array( __CLASS__, 'do_gd_ajax' ), 0 );
+		//add_action( 'init', array( __CLASS__, 'define_ajax' ), 0 );
+		//add_action( 'template_redirect', array( __CLASS__, 'do_gd_ajax' ), 0 );
 		self::add_ajax_events();
 	}
 	
@@ -82,10 +82,10 @@ class GeoDir_AJAX {
 
 			if ( $nopriv ) {
 				add_action( 'wp_ajax_nopriv_geodir_' . $ajax_event, array( __CLASS__, $ajax_event ) );
-
-				// GeoDir AJAX can be used for frontend ajax requests.
-				add_action( 'gd_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
+
+			// GeoDir AJAX can be used for frontend ajax requests.
+			add_action( 'geodir_ajax_geodir_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 		}
 	}
 

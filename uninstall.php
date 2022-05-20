@@ -99,3 +99,8 @@ if ( geodir_get_option( 'admin_uninstall' ) ) {
 	// Clear any cached data that has been removed.
 	wp_cache_flush();
 }
+
+// Delete Fast AJAX mu-plugin file.
+if ( defined( 'WPMU_PLUGIN_DIR' ) && is_file( WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php' ) && file_exists( WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php' ) ) {
+	unlink( WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php' );
+}

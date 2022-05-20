@@ -102,16 +102,18 @@ class GeoDir_SEO {
 	}
 
 	public static function maybe_run() {
+		$ajax_search = ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'geodir_ajax_search' && ! empty( $_REQUEST['geodir_search'] ) && wp_doing_ajax() ? true : false;
+
 		// Bail if we have a SEO plugin installed.
 		if (
 			self::yoast_enabled() // Don't run if active and not set to be disabled 
 			|| self::rank_math_enabled() // Don't run if active and not set to be disabled 
 			|| self::seopress_enabled() // SEOPress
 			|| class_exists( 'All_in_One_SEO_Pack' )  // don't run if active 
-			|| is_admin()  // No need to run in wp-admin
+			|| ( is_admin() && ! $ajax_search ) // No need to run in wp-admin
 		) {
 			// Even if disabled we still need to replace title vars
-			if ( ! is_admin() ) {
+			if ( ! is_admin() || $ajax_search ) {
 				// Set a global so we don't change the menu items titles
 				add_filter( 'pre_wp_nav_menu', array( __CLASS__, 'set_menu_global' ), 10, 2 );
 				add_filter( 'wp_nav_menu', array( __CLASS__, 'unset_menu_global' ) );
@@ -155,19 +157,19 @@ class GeoDir_SEO {
 
 		// YOOtheme renders own menuwalker.
 		if ( class_exists( 'YOOtheme\\Theme' ) ) {
-			add_filter( 'wp_nav_menu_items',array( __CLASS__, 'unset_menu_global' ), 999, 1 );
+			add_filter( 'wp_nav_menu_items', array( __CLASS__, 'unset_menu_global' ), 999, 1 );
 		}
 
-		// meta title
-		add_filter('wp_title', array(__CLASS__,'output_meta_title'),1000,2);
-		add_filter('pre_get_document_title', array(__CLASS__,'output_meta_title'), 1000);
+		// Meta title
+		add_filter( 'wp_title', array( __CLASS__, 'output_meta_title' ), 1000 , 2 );
+		add_filter( 'pre_get_document_title', array( __CLASS__, 'output_meta_title' ), 1000 );
 
 		// page title
-		add_filter('the_title',array(__CLASS__,'output_title'),10,2);
-		add_filter('get_the_archive_title',array(__CLASS__,'output_title'),10);
+		add_filter( 'the_title', array( __CLASS__, 'output_title' ), 10, 2 );
+		add_filter( 'get_the_archive_title', array( __CLASS__, 'output_title' ), 10 );
 
 		// setup vars
-		add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
+		add_action( 'pre_get_document_title', array( __CLASS__, 'set_meta' ), 9 );
 
 		// Meta title & meta description
 		if ( self::has_yoast() ) {
@@ -240,20 +242,28 @@ class GeoDir_SEO {
 	 * @return string $title.
 	 */
 	public static function output_title( $title = '', $id = 0 ) {
-		global $wp_query,$gdecs_render_loop;
+		global $wp_query, $gdecs_render_loop, $geodir_query_object_id;
 
-		// In some themes the object id is missing so we fix it
-		$query_object_id = '';
-
-		if ( $id && isset( $wp_query->post->ID ) && geodir_is_geodir_page_id( $id ) ) {
-			$query_object_id = $wp_query->post->ID;
-		} elseif ( ! is_null( $wp_query ) ) {
-			$query_object_id = get_queried_object_id();
+		if ( ! empty( $geodir_query_object_id ) ) {
+			$query_object_id = $geodir_query_object_id;
+		} else {
+			// In some themes the object id is missing so we fix it
+			if ( $id && isset( $wp_query->post->ID ) && geodir_is_geodir_page_id( $id ) ) {
+				$query_object_id = $wp_query->post->ID;
+			} elseif ( ! is_null( $wp_query ) ) {
+				$query_object_id = get_queried_object_id();
+			} else {
+				$query_object_id = '';
+			}
 		}
 
+		$normalize = false;
+
 		if ( self::$title && empty( $id ) && ! self::$doing_menu ) {
+			$normalize = true;
 			$title = self::$title;
-		} elseif ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu && !$gdecs_render_loop) {
+		} elseif ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu && ! $gdecs_render_loop ) {
+			$normalize = true;
 			$title = self::$title;
 			/**
 			 * Filter page title to replace variables.
@@ -265,7 +275,7 @@ class GeoDir_SEO {
 		}
 
 		// Strip duplicate whitespace.
-		if ( $title != '' ) {
+		if ( $title != '' && $normalize ) {
 			$title = normalize_whitespace( $title );
 		}
 

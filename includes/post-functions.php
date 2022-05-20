@@ -998,7 +998,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		'shadow'=> '', // AUI only
 		'preview'=> '', // AUI only
 	);
-	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
+
+	$args = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
 	$match_field = $_match_field = $args['key'];
 	if ( $match_field == 'address' ) {
@@ -1007,9 +1008,15 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		$match_field = 'featured_image';
 	}
 
-	$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
+	$find_post = ( ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ) ? $gd_post : geodir_get_post_info( $post_id );
+	$find_post_keys = ! empty( $find_post ) ? array_keys( (array) $find_post ) : array();
 
-	if ($match_field === '' || ( ! empty( $find_post ) && ( isset( $find_post->{$match_field} ) || isset( $find_post->{$_match_field} ) ) ) ) {
+	if ( ! empty( $find_post->ID ) && ! in_array( 'post_category', $find_post_keys ) ) {
+		$find_post = geodir_get_post_info( (int) $find_post->ID );
+		$find_post_keys = ! empty( $find_post ) ? array_keys( (array) $find_post ) : array();
+	}
+
+	if ( $match_field === '' || ( ! empty( $find_post_keys ) && ( in_array( $match_field, $find_post_keys ) || in_array( $_match_field, $find_post_keys ) ) ) ) {
 		$field = array();
 		$badge = $args['badge'];
 

@@ -287,7 +287,6 @@ final class GeoDirectory {
             if ( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow || ( defined( 'DOING_AJAX' ) && DOING_AJAX && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'inline-save' ) ) {
                 GeoDir_Admin_Post_View::init();
             }
-
         }
 
         if ( $this->is_request( 'frontend' ) ) {
@@ -302,22 +301,68 @@ final class GeoDirectory {
 	    // @todo not ready for production yet
 	    //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-fse.php' );
 
-
         $this->query = new GeoDir_Query();
 		$this->api   = new GeoDir_API();
-
     }
 
-    /**
-     * Hook into actions and filters.
-     * @since  2.3
-     */
-    private function init_hooks() {
-	    add_action( 'init', array( $this, 'init' ), 0 );
-    }
+	/**
+	 * Hook into actions and filters.
+	 * @since  2.3
+	 */
+	private function init_hooks() {
+		register_activation_hook( __FILE__, array( $this, 'on_activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'on_deactivate' ) );
 
-	public function init_location(){
+		add_action( 'init', array( $this, 'init' ), 0 );
+	}
 
+	/**
+	 * Handle plugin activate action.
+	 *
+	 * @since 2.2.7
+	 *
+	 * @param bool $network_wide Optional. Whether to enable the plugin for all sites in the network
+	 *                             or just the current site. Multisite only. Default false.
+	 */
+	public function on_activate( $network_wide = false ) {
+		if ( ! defined( 'GEODIR_ACTIVATING' ) ) {
+			define( 'GEODIR_ACTIVATING', true );
+		}
+
+		/**
+		 * Fired on plugin activated.
+		 *
+		 * @param bool $network_wide Whether to enable the plugin for all sites in the network
+		 *                             or just the current site. Multisite only. Default false.
+		 */
+		do_action( 'geodir_on_activate_core_plugin', $network_wide );
+	}
+
+	/**
+	 * Handle plugin deactivate action.
+	 *
+	 * @since 2.2.7
+	 *
+	 * @param bool $network_wide Optional. Whether to enable the plugin for all sites in the network
+	 *                             or just the current site. Multisite only. Default false.
+	 */
+	public function on_deactivate( $network_wide = false ) {
+		if ( ! defined( 'GEODIR_DEACTIVATING' ) ) {
+			define( 'GEODIR_DEACTIVATING', true );
+		}
+
+		// Delete Fast AJAX mu-plugin file.
+		if ( is_file( WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php' ) && file_exists( WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php' ) ) {
+			unlink( WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php' );
+		}
+
+		/**
+		 * Fired on plugin deactivated.
+		 *
+		 * @param bool $network_wide Whether to enable the plugin for all sites in the network
+		 *                             or just the current site. Multisite only. Default false.
+		 */
+		do_action( 'geodir_on_deactivate_core_plugin', $network_wide );
 	}
 
     /**

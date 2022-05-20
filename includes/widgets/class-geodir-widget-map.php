@@ -1042,6 +1042,14 @@ jQuery(function ($) {
 		add_action( 'geodir_map_custom_content', array( __CLASS__, 'custom_content' ), 10 );
 		add_action( 'geodir_map_custom_script', array( __CLASS__, 'custom_script' ), 10 );
 
+		$markers_url = geodir_rest_markers_url();
+		$markers_ajax_url = $markers_url;
+		$url_params = '';
+		if ( defined( 'GEODIR_FAST_AJAX' ) && geodir_get_option( 'fast_ajax' ) ) {
+			$markers_ajax_url = add_query_arg( array( 'gd-ajax' => 1 ), $markers_ajax_url );
+			$url_params = '&gd-ajax=1';
+		}
+
 		$defaults    = array(
 			'scrollwheel'              => true,
 			'streetViewControl'        => true,
@@ -1053,12 +1061,14 @@ jQuery(function ($) {
 				'position' => 'TOP_LEFT',
 				'style'    => 'ZOOM_PAN'
 			),
-			'map_ajax_url'             => geodir_rest_markers_url(),
-			'wrap_class'   => ''
+			'map_ajax_url'             => $markers_url,
+			'map_markers_ajax_url'     => $markers_ajax_url,
+			'map_terms_ajax_url'       => $markers_ajax_url,
+			'map_marker_ajax_url'      => $markers_url,
+			'map_marker_url_params'    => $url_params,
+			'wrap_class'               => ''
 		);
 		$map_options = wp_parse_args( $params, $defaults );
-
-//		$map_options['sticky'] = 1;
 
 		$map_options['map_canvas'] = isset($gd_maps_canvas[ $map_options['map_canvas'] ]) ?  $map_options['map_canvas']  . count($gd_maps_canvas) : $map_options['map_canvas'];
 

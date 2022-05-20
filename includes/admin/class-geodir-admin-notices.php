@@ -57,12 +57,13 @@ class GeoDir_Admin_Notices {
 	}
 
 	/**
-	 * Set dmin notices.
+	 * Set admin notices.
 	 *
 	 * @since 2.1.0.10
 	 */
 	public static function set_admin_notices() {
 		$page = ! empty( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+		$section = ! empty( $_GET['section'] ) ? sanitize_text_field( $_GET['section'] ) : '';
 
 		/**
 		 * Regenerate Thumbnails
@@ -70,7 +71,12 @@ class GeoDir_Admin_Notices {
 		 * Perfect Images + Retina
 		 */
 		if ( ( $page == 'regenerate-thumbnails' && class_exists( 'RegenerateThumbnails' ) ) || ( $page == 'rta_generate_thumbnails' && defined( 'RTA_PLUGIN_VERSION' ) ) || ( $page == 'wr2x_dashboard' && defined( 'WR2X_VERSION' ) ) ) {
-			echo '<div class="notice notice-warning is-dismissible"><p>' . wp_sprintf( __( 'GeoDirectory\'s images are not supported by this tool, please use our tool %1$shere%2$s to regenerate them.', 'geodirectory' ), '<a href="' . esc_url( admin_url( 'admin.php?page=gd-status&tab=tools#geodir_tool_generate_thumbnails' ) ) . '">', '</a>' ) . '</p></div>';
+			echo '<div class="notice notice-warning is-dismissible"><p class="my-2">' . wp_sprintf( __( 'GeoDirectory\'s images are not supported by this tool, please use our tool %1$shere%2$s to regenerate them.', 'geodirectory' ), '<a href="' . esc_url( admin_url( 'admin.php?page=gd-status&tab=tools#geodir_tool_generate_thumbnails' ) ) . '">', '</a>' ) . '</p></div>';
+		}
+
+		// Show notice for Fast AJAX mu-plugin file.
+		if ( $page == 'gd-settings' && $section != 'developer' && geodir_get_option( 'fast_ajax' ) && ! file_exists( geodir_fast_ajax_plugin_file() ) ) {
+			echo '<div class="notice notice-warning is-dismissible"><p class="my-2">' . wp_sprintf( __( 'GeoDirectory Fast AJAX must-use plugin(mu-plugin) is missing. %1$sFast AJAX%2$s f will not work properly.', 'geodirectory' ), '<a href="' . esc_url( admin_url( 'admin.php?page=gd-settings&tab=general&section=developer#mainform' ) ) . '">', '</a>' ) . '</p></div>';
 		}
 	}
 
@@ -142,7 +148,7 @@ class GeoDir_Admin_Notices {
 			}
 
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( __( 'Cheatin&#8217; huh?', 'geodirectory' ) );
+				wp_die( __( 'Cheating&#8217; huh?', 'geodirectory' ) );
 			}
 
 			$hide_notice = sanitize_text_field( $_GET['gd-hide-notice'] );
@@ -244,7 +250,7 @@ class GeoDir_Admin_Notices {
 	}
 
 	/**
-	 * Meybe show a notice to try AUI.
+	 * Maybe show a notice to try AUI.
 	 */
 	public static function try_aui_notice() {
 		if(is_admin() && current_user_can( 'manage_options' )  && isset($_REQUEST['page']) && $_REQUEST['page']=='gd-settings' && !empty($_REQUEST['try-bootstrap']) ){
