@@ -7,6 +7,8 @@
 * Add listing file upload is not working on iOS Safari browser - FIXED
 * No way to undo Classifieds/Real-Estate Sold status - FIXED
 * Fast AJAX feature to speedup AJAX requests - ADDED
+* Import address geocode not using set language - FIXED
+* Better Messages plugin can cause PHP error if buddypress not installed - FIXED
 
 = 2.2.6 =
 * Float value parsing shows comma with pl_PL locale - FIXED

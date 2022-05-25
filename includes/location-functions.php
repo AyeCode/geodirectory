@@ -108,6 +108,12 @@ function geodir_get_address_by_lat_lan($lat, $lng)
 {
     $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng). GeoDir_Maps::google_geocode_api_key(true) ;
 
+	// maybe add language.
+	$lang = GeoDir_Maps::map_language();
+	if ( $lang && 'en' !== $lang ) {
+		$url .= '&language=' . esc_attr( $lang );
+	}
+
     $response = wp_remote_get($url);
     if ( is_wp_error( $response ) ) {
         return false;
@@ -764,6 +770,12 @@ function geodir_google_get_gps_from_address( $address, $wp_error = false ) {
 	$google_api_key = GeoDir_Maps::google_geocode_api_key();
 	if ( $google_api_key ) {
 		$request_url .= '&key=' . $google_api_key;
+	}
+
+	// maybe add language.
+	$lang = GeoDir_Maps::map_language();
+	if ( $lang && 'en' !== $lang ) {
+		$request_url .= '&language=' . esc_attr( $lang );
 	}
 
 	$request_url = apply_filters( 'geodir_google_gps_from_address_request_url', $request_url, $address );
