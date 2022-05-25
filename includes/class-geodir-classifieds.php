@@ -37,6 +37,9 @@ class GeoDir_Classifieds {
 		add_filter( 'geodir_post_author_action_sale-agreed', array( __CLASS__, 'post_author_action' ), 10, 3 );
 		add_filter( 'geodir_post_author_action_under-offer', array( __CLASS__, 'post_author_action' ), 10, 3 );
 		add_filter( 'geodir_post_author_action_sold', array( __CLASS__, 'post_author_action' ), 10, 3 );
+		add_filter( 'geodir_post_author_action_undo-sale-agreed', array( __CLASS__, 'post_author_action_undo' ), 10, 3 );
+		add_filter( 'geodir_post_author_action_undo-under-offer', array( __CLASS__, 'post_author_action_undo' ), 10, 3 );
+		add_filter( 'geodir_post_author_action_undo-sold', array( __CLASS__, 'post_author_action_undo' ), 10, 3 );
 		add_filter( 'geodir_post_status_author_page', array( __CLASS__, 'author_post_status_title' ), 10, 3 );
 		add_filter( 'geodir_post_status_icon_author_page', array( __CLASS__, 'author_post_status_icon' ), 10, 3 );
 		add_filter( 'geodir_ajax_update_post_data', array( __CLASS__, 'ajax_update_post_data' ), 10, 2 );
@@ -212,31 +215,61 @@ class GeoDir_Classifieds {
 			$features = geodir_classified_active_statuses( get_post_type( $post_id ) );
 
 			if ( ! empty( $features ) ) {
-				if ( in_array( 'gd-sale-agreed', $features ) && $post_status != 'gd-sale-agreed' ) {
-					$author_actions['sale-agreed'] = array(
-						'icon' => 'fas fa-square',
-						'title' => __( 'Mark as Sale Agreed', 'geodirectory' ),
-						'url' => 'javascript:void(0);',
-						'onclick' => 'geodir_post_author_action(this, ' . absint( $post_id ) . ', \'sale-agreed\');'
-					);
+				if ( in_array( 'gd-sale-agreed', $features ) ) {
+					if ( $post_status != 'gd-sale-agreed' ) {
+						$author_actions['sale-agreed'] = array(
+							'icon' => 'fas fa-square',
+							'title' => __( 'Mark as Sale Agreed', 'geodirectory' ),
+							'url' => 'javascript:void(0);',
+							'onclick' => 'geodir_post_author_action(this, ' . absint( $post_id ) . ', \'sale-agreed\');'
+						);
+					} else {
+						$author_actions['undo-sale-agreed'] = array(
+							'icon' => 'fas fa-undo',
+							'title' => __( 'Undo Sale Agreed', 'geodirectory' ),
+							'url' => 'javascript:void(0);',
+							'onclick' => 'geodir_post_author_action(this, ' . absint( $post_id ) . ', \'undo-sale-agreed\');',
+							'color' => 'warning'
+						);
+					}
 				}
 
-				if ( in_array( 'gd-under-offer', $features ) && $post_status != 'gd-under-offer' ) {
-					$author_actions['under-offer'] = array(
-						'icon' => 'fas fa-square',
-						'title' => __( 'Mark as Under Offer', 'geodirectory' ),
-						'url' => 'javascript:void(0);',
-						'onclick' => 'geodir_post_author_action(this, ' . absint( $post_id ) . ', \'under-offer\');'
-					);
+				if ( in_array( 'gd-under-offer', $features ) ) {
+					if ( $post_status != 'gd-under-offer' ) {
+						$author_actions['under-offer'] = array(
+							'icon' => 'fas fa-square',
+							'title' => __( 'Mark as Under Offer', 'geodirectory' ),
+							'url' => 'javascript:void(0);',
+							'onclick' => 'geodir_post_author_action(this, ' . absint( $post_id ) . ', \'under-offer\');'
+						);
+					} else {
+						$author_actions['undo-under-offer'] = array(
+							'icon' => 'fas fa-undo',
+							'title' => __( 'Undo Under Offer', 'geodirectory' ),
+							'url' => 'javascript:void(0);',
+							'onclick' => 'geodir_post_author_action(this, ' . absint( $post_id ) . ', \'undo-under-offer\');',
+							'color' => 'warning'
+						);
+					}
 				}
 
-				if ( in_array( 'gd-sold', $features ) && $post_status != 'gd-sold' ) {
-					$author_actions['sold'] = array(
-						'icon' => 'fas fa-square',
-						'title' => __( 'Mark as Sold', 'geodirectory' ),
-						'url' => 'javascript:void(0);',
-						'onclick' => 'geodir_post_author_action(this, ' . absint( $post_id ) . ', \'sold\');'
-					);
+				if ( in_array( 'gd-sold', $features ) ) {
+					if ( $post_status != 'gd-sold' ) {
+						$author_actions['sold'] = array(
+							'icon' => 'fas fa-square',
+							'title' => __( 'Mark as Sold', 'geodirectory' ),
+							'url' => 'javascript:void(0);',
+							'onclick' => 'geodir_post_author_action(this, ' . absint( $post_id ) . ', \'sold\');'
+						);
+					} else {
+						$author_actions['undo-sold'] = array(
+							'icon' => 'fas fa-undo',
+							'title' => __( 'Undo Sold', 'geodirectory' ),
+							'url' => 'javascript:void(0);',
+							'onclick' => 'geodir_post_author_action(this, ' . absint( $post_id ) . ', \'undo-sold\');',
+							'color' => 'warning'
+						);
+					}
 				}
 			}
 		}
@@ -315,6 +348,53 @@ class GeoDir_Classifieds {
 		return $result;
 	}
 
+	public static function post_author_action_undo( $data, $action, $gd_post ) {
+		if ( ! geodir_listing_belong_to_current_user( $gd_post->ID ) ) {
+			return new WP_Error( 'geodir-post-action-failed', __( 'You do not have permission to perform this action.', 'geodirectory' ) );
+		}
+
+		switch ( $action ) {
+			case 'undo-sale-agreed':
+				$result = self::undo_post_status( $gd_post, 'gd-sale-agreed' );
+
+				if ( $result === false ) {
+					$result = new WP_Error( 'geodir-post-action-failed', __( 'Failed to perform action "Undo Sale Agreed".', 'geodirectory' ) );
+				} else {
+					$result = array(
+						'message' => __( 'Undo Sale Agreed is successful & post is marked as live.', 'geodirectory' ),
+						'redirect_to' => true
+					);
+				}
+				break;
+			case 'undo-under-offer':
+				$result = self::undo_post_status( $gd_post, 'gd-under-offer' );
+
+				if ( $result === false ) {
+					$result = new WP_Error( 'geodir-post-action-failed', __( 'Failed to perform action "Undo Under Offer".', 'geodirectory' ) );
+				} else {
+					$result = array(
+						'message' => __( 'Undo Under Offer is successful & post is marked as live.', 'geodirectory' ),
+						'redirect_to' => true
+					);
+				}
+				break;
+			case 'undo-sold':
+				$result = self::undo_post_status( $gd_post, 'gd-sold' );
+
+				if ( $result === false ) {
+					$result = new WP_Error( 'geodir-post-action-failed', __( 'Failed to perform action "Undo Sold".', 'geodirectory' ) );
+				} else {
+					$result = array(
+						'message' => __( 'Undo Sold is successful & post is marked as live.', 'geodirectory' ),
+						'redirect_to' => true
+					);
+				}
+				break;
+		}
+
+		return $result;
+	}
+
 	public static function set_post_status( $gd_post, $post_status ) {
 		if ( ! empty( $gd_post ) && ! is_object( $gd_post ) ) {
 			$gd_post = geodir_get_post_info( $gd_post );
@@ -356,6 +436,51 @@ class GeoDir_Classifieds {
 		}
 
 		return false;
+	}
+
+	public static function undo_post_status( $gd_post, $post_status ) {
+		if ( ! empty( $gd_post ) && ! is_object( $gd_post ) ) {
+			$gd_post = geodir_get_post_info( $gd_post );
+		}
+
+		if ( empty( $gd_post ) ) {
+			return false;
+		}
+
+		// Check for revision post.
+		if ( ! ( ! empty( $gd_post->post_type ) && geodir_is_gd_post_type( $gd_post->post_type ) ) ) {
+			return false;
+		}
+
+		// Check the current post status.
+		if ( $post_status != $gd_post->post_status ) {
+			return false;
+		}
+
+		$features = geodir_classified_active_statuses( get_post_type( $gd_post->ID ) );
+
+		if ( ! ( ! empty( $features ) && in_array( $post_status, $features ) ) ) {
+			return false;
+		}
+
+		if ( apply_filters( 'geodir_skip_classified_undo_status', false, $gd_post, $post_status ) ) {
+			return false;
+		}
+
+		do_action( 'geodir_skip_classified_before_undo_status', $gd_post, $post_status );
+
+		$post_data = array();
+		$post_data['ID'] = $gd_post->ID;
+		$post_data['post_status'] = 'publish';
+		$post_data['_from_post_status'] = $post_status;
+
+		$post_data = apply_filters( 'geodir_skip_classified_undo_status_data', $post_data, $gd_post, $post_status );
+
+		wp_update_post( $post_data );
+
+		do_action( 'geodir_skip_classified_after_undo_status', $gd_post, $post_status );
+
+		return true;
 	}
 
 	public static function author_post_status_title( $status, $real_status, $post_ID ) {
@@ -644,26 +769,54 @@ class GeoDir_Classifieds {
 	}
 
 	public static function ajax_update_post_data( $post_data, $update = false ) {
-		if ( ! empty( $_POST['sale_status'] ) ) {
-			if ( isset( $post_data['post_status'] ) && $post_data['post_status'] == $_POST['sale_status'] ) {
-				return $post_data;
-			}
+		if ( isset( $_POST['sale_status'] ) ) {
+			if ( ! empty( $_POST['sale_status'] ) ) {
+				if ( isset( $post_data['post_status'] ) && $post_data['post_status'] == $_POST['sale_status'] ) {
+					return $post_data;
+				}
 
-			if ( ! empty( $_POST['post_parent'] ) && ! empty( $post_data['post_parent'] ) && $_POST['post_parent'] == $post_data['post_parent'] ) {
-				$post_type = get_post_type( absint( $_POST['post_parent'] ) );
-			} elseif ( ! empty( $_POST['ID'] ) && ! empty( $post_data['ID'] ) && $_POST['ID'] == $post_data['ID'] ) {
-				$post_type = get_post_type( absint( $_POST['post_parent'] ) );
-			} else {
-				$post_type = '';
-			}
+				if ( ! empty( $_POST['post_parent'] ) && ! empty( $post_data['post_parent'] ) && $_POST['post_parent'] == $post_data['post_parent'] ) {
+					$post_type = get_post_type( absint( $_POST['post_parent'] ) );
+				} elseif ( ! empty( $_POST['ID'] ) && ! empty( $post_data['ID'] ) && $_POST['ID'] == $post_data['ID'] ) {
+					$post_type = get_post_type( absint( $_POST['ID'] ) );
+				} else {
+					$post_type = '';
+				}
 
-			if ( $post_type && ( $active_features = geodir_classified_active_statuses( $post_type ) ) ) {
-				if ( in_array( $_POST['sale_status'], $active_features ) ) {
-					if ( isset( $post_data['post_status'] ) ) {
-						$post_data['_from_post_status'] = $post_data['post_status'];
+				if ( $post_type && ( $active_features = geodir_classified_active_statuses( $post_type ) ) ) {
+					if ( in_array( $_POST['sale_status'], $active_features ) ) {
+						if ( isset( $post_data['post_status'] ) ) {
+							$post_data['_from_post_status'] = $post_data['post_status'];
+						}
+
+						$post_data['post_status'] = sanitize_text_field( $_POST['sale_status'] );
 					}
+				}
+			} else {
+				// Undo Classifieds/Real-Estate Sold status
+				if ( ! $update ) {
+					return $post_data;
+				}
 
-					$post_data['post_status'] = sanitize_text_field( $_POST['sale_status'] );
+				if ( ! empty( $_POST['post_parent'] ) && ! empty( $post_data['post_parent'] ) && $_POST['post_parent'] == $post_data['post_parent'] ) {
+					$post_type = get_post_type( absint( $_POST['post_parent'] ) );
+					$post_status = get_post_status( absint( $_POST['post_parent'] ) );
+				} elseif ( ! empty( $_POST['ID'] ) && ! empty( $post_data['ID'] ) && $_POST['ID'] == $post_data['ID'] ) {
+					$post_type = get_post_type( absint( $_POST['ID'] ) );
+					$post_status = get_post_status( absint( $_POST['ID'] ) );
+				} else {
+					$post_type = '';
+					$post_status = '';
+				}
+
+				if ( $post_type && $post_status && ( $active_features = geodir_classified_active_statuses( $post_type ) ) ) {
+					if ( in_array( $post_status, $active_features ) ) {
+						if ( isset( $post_data['post_status'] ) ) {
+							$post_data['_from_post_status'] = $post_data['post_status'];
+						}
+
+						$post_data['post_status'] = 'publish';
+					}
 				}
 			}
 		}

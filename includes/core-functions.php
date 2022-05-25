@@ -225,17 +225,7 @@ function geodir_get_search_default_button_text() {
  * @since 1.0.0
  * @package GeoDirectory
  */
-function geodir_params() {// check_ajax_referer function is used to make sure no files are uploaded remotely but it will fail if used between https and non https so we do the check below of the urls
-	if ( str_replace( "https", "http", admin_url( 'admin-ajax.php' ) ) && ! empty( $_SERVER['HTTPS'] ) ) {
-		$ajax_url = admin_url( 'admin-ajax.php' );
-	} elseif ( ! str_replace( "https", "http", admin_url( 'admin-ajax.php' ) ) && empty( $_SERVER['HTTPS'] ) ) {
-		$ajax_url = admin_url( 'admin-ajax.php' );
-	} elseif ( str_replace( "https", "http", admin_url( 'admin-ajax.php' ) ) && empty( $_SERVER['HTTPS'] ) ) {
-		$ajax_url = str_replace( "https", "http", admin_url( 'admin-ajax.php' ) );
-	} elseif ( ! str_replace( "https", "http", admin_url( 'admin-ajax.php' ) ) && ! empty( $_SERVER['HTTPS'] ) ) {
-		$ajax_url = str_replace( "http", "https", admin_url( 'admin-ajax.php' ) );
-	}
-
+function geodir_params() {
 	/**
 	 * Filter the allowed image type extensions for post images.
 	 *
@@ -252,7 +242,9 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 
 	$arr_alert_msg = array(
 		'plugin_url'                                   => geodir_plugin_url(),
-		'ajax_url'                                     => $ajax_url,
+		'ajax_url'                                     => geodir_ajax_url(),
+		'gd_ajax_url'                                  => geodir_ajax_url( true ),
+		'has_gd_ajax'                                  => ( defined( 'GEODIR_FAST_AJAX' ) && geodir_get_option( 'fast_ajax' ) ? 1 : 0 ),
 		'api_url'                                      => geodir_rest_url(),
 		'location_base_url'                            => trailingslashit( geodir_get_location_link('base') ),
 		'location_url'                                 => geodir_get_location_link('current'),
@@ -1541,3 +1533,93 @@ function geodir_output_auth_footer() {
 
 add_action( 'geodir_auth_page_footer', 'geodir_output_auth_footer', 10 );
 
+/**
+ * Get the AJAX url.
+ *
+ * @since 2.2.7
+ *
+ * @param bool $fast_ajax Check and return fast AJAX parameter.
+ * @return string AJAX url.
+ */
+function geodir_ajax_url( $fast_ajax = false ) {
+	// Check_ajax_referer function is used to make sure no files are uploaded remotely but it will fail if used between https and non https so we do the check below of the urls
+	if ( str_replace( "https", "http", admin_url( 'admin-ajax.php' ) ) && ! empty( $_SERVER['HTTPS'] ) ) {
+		$ajax_url = admin_url( 'admin-ajax.php' );
+	} elseif ( ! str_replace( "https", "http", admin_url( 'admin-ajax.php' ) ) && empty( $_SERVER['HTTPS'] ) ) {
+		$ajax_url = admin_url( 'admin-ajax.php' );
+	} elseif ( str_replace( "https", "http", admin_url( 'admin-ajax.php' ) ) && empty( $_SERVER['HTTPS'] ) ) {
+		$ajax_url = str_replace( "https", "http", admin_url( 'admin-ajax.php' ) );
+	} elseif ( ! str_replace( "https", "http", admin_url( 'admin-ajax.php' ) ) && ! empty( $_SERVER['HTTPS'] ) ) {
+		$ajax_url = str_replace( "http", "https", admin_url( 'admin-ajax.php' ) );
+	} else {
+		$ajax_url = admin_url( 'admin-ajax.php' );
+	}
+
+	if ( $fast_ajax && defined( 'GEODIR_FAST_AJAX' ) && geodir_get_option( 'fast_ajax' ) ) {
+		$ajax_url = add_query_arg( array( 'gd-ajax' => 1 ), $ajax_url );
+	}
+
+	return $ajax_url;
+}
+
+function geodir_fast_ajax_source_file() {
+	return GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/geodir-fast-ajax.php';
+}
+
+function geodir_fast_ajax_plugin_file() {
+	return WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php';
+}
+
+function geodir_fast_ajax_copy_file() {
+	$wp_filesystem = geodir_init_filesystem();
+
+	if ( ! empty( $wp_filesystem ) && isset( $wp_filesystem->errors ) && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
+		return new WP_Error( 'geodir-fast-ajax', __( "Filesystem ERROR during mu-plugin file copy: " . $wp_filesystem->errors->get_error_message(), "geodirectory" ) );
+	} elseif ( ! $wp_filesystem ) {
+		return new WP_Error( 'geodir-fast-ajax', __( "There was a problem accessing the filesystem during copy Fast AJAX mu-plugin file to mu-plugins folder.", "geodirectory" ) );
+	}
+
+	$source_file = geodir_fast_ajax_source_file();
+	$plugin_file = geodir_fast_ajax_plugin_file();
+	$plugin_path = dirname( $plugin_file );
+
+	if ( ! is_dir( $plugin_path ) && ! wp_mkdir_p( $plugin_path ) ) {
+		return new WP_Error( 'geodir-fast-ajax', wp_sprintf( __( 'Unable to create directory %s. Make sure its parent directory writable by the server.', 'geodirectory' ), $plugin_path ) );
+	}
+
+	if ( is_dir( $plugin_path ) && ! wp_is_writable( $plugin_path ) ) {
+		return new WP_Error( 'geodir-fast-ajax', wp_sprintf( __( 'Must-plugin directory %s is not writable by the server.', 'geodirectory' ), $plugin_path ) );
+	}
+
+	$result = $wp_filesystem->copy( $source_file, $plugin_file, true );
+
+	if ( $result ) {
+		$return = true;
+	} else {
+		$return = new WP_Error( 'geodir-fast-ajax', __( "There was a problem in copy Fast AJAX mu-plugin file to mu-plugins folder.", "geodirectory" ) );
+	}
+
+	return $return;
+}
+
+function geodir_check_fast_ajax_file( $active = 0, $force_copy = false ) {
+	$plugin_file = geodir_fast_ajax_plugin_file();
+
+	if ( ! empty( $active ) ) {
+		// Check & copy Fast AJAX mu-plugin file.
+		if ( $force_copy || ! file_exists( $plugin_file ) ) {
+			$return = geodir_fast_ajax_copy_file();
+		} else {
+			$return = true;
+		}
+	} else {
+		// Delete Fast AJAX mu-plugin file.
+		if ( is_file( $plugin_file ) && file_exists( $plugin_file ) ) {
+			$return = unlink( $plugin_file );
+		} else {
+			$return = false;
+		}
+	}
+
+	return $return;
+}

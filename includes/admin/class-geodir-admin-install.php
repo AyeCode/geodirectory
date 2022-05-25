@@ -62,8 +62,11 @@ class GeoDir_Admin_Install {
 
 		add_filter('upgrader_package_options',array( __CLASS__, 'maybe_downgrade_v1'));
 
-		// schedule rewrite rules
-		add_action( 'geodirectory_installed', array( __CLASS__, 'schedule_rewrite_rules' ), 99 );
+		// Actions on plugin activated.
+		add_action( 'geodir_on_activate_core_plugin', array( __CLASS__, 'plugin_activated' ), 99 );
+
+		// Actions on plugin installed.
+		add_action( 'geodirectory_installed', array( __CLASS__, 'plugin_installed' ), 99 );
 	}
 
 	/**
@@ -73,17 +76,14 @@ class GeoDir_Admin_Install {
 	 *
 	 * @return mixed
 	 */
-	public static function maybe_downgrade_v1($options){
-
-		if(
+	public static function maybe_downgrade_v1( $options ) {
+		if (
 			!empty($_REQUEST['geodir_downgrade'])
 			&& !empty($options['package'])
 			&& strpos( $options['package'], "https://downloads.wordpress.org/plugin/geodirectory." ) === 0
-//			&& strpos( $options['package'], "https://downloads.wordpress.org/plugin/advanced-cron-manager." ) === 0 //@todo remove after testing
+//			&& strpos( $options['package'], "https://downloads.wordpress.org/plugin/advanced-cron-manager." ) === 0 // @todo remove after testing
 			&& version_compare( get_option( 'geodirectory_db_version' ), '2.0.0.0', '<' )
-		){
-
-//			print_r($options);exit;
+		) {
 			$options['package'] = "https://downloads.wordpress.org/plugin/geodirectory.1.6.38.zip";
 //			$options['package'] = "https://downloads.wordpress.org/plugin/advanced-cron-manager.2.2.2.zip"; //@todo remove after testing
 			$options['abort_if_destination_exists'] = false;
@@ -155,7 +155,6 @@ class GeoDir_Admin_Install {
 		// Ensure needed classes are loaded
 		//include_once( dirname( __FILE__ ) . '/class-geodir-admin-notices.php' );
 
-
 		self::upgrades(); // do any db upgrades
 		self::remove_admin_notices();
 		self::create_tables();
@@ -163,7 +162,6 @@ class GeoDir_Admin_Install {
 		self::insert_default_fields();
 		self::insert_default_tabs();
 		self::create_pages();
-
 
 		// Register post types
 		GeoDir_Post_types::register_post_types();
@@ -460,7 +458,6 @@ class GeoDir_Admin_Install {
 		wp_schedule_event( time(), apply_filters( 'geodirectory_tracker_event_recurrence', 'daily' ), 'geodirectory_tracker_send_event' );
 	}
 
-
 	/**
 	 * Create pages that the plugin relies on, storing page IDs in variables.
      *
@@ -528,8 +525,9 @@ class GeoDir_Admin_Install {
 		$post_types = geodir_get_posttypes();
 		if(!empty($post_types)){
 			foreach($post_types as $post_type){
-				$taxonomy = $post_type.'category';
-				if(!get_option($taxonomy.'_installed',false)){
+				$taxonomy = $post_type . 'category';
+
+				if ( ! get_option( $taxonomy . '_installed', false ) ) {
 					$dummy_categories['uncategorized'] = array(
 						'name'        => 'Uncategorized',
 						'icon'        => GEODIRECTORY_PLUGIN_URL . '/assets/images/pin.png',
@@ -538,10 +536,8 @@ class GeoDir_Admin_Install {
 					GeoDir_Admin_Dummy_Data::create_taxonomies( $post_type, $dummy_categories );
 					update_option($taxonomy.'_installed',true);
 				}
-
 			}
 		}
-
 	}
 
 	/**
@@ -1120,7 +1116,6 @@ class GeoDir_Admin_Install {
 		}
 	}
 
-
 	/**
 	 * Get the Custom Post Type database default fields.
 	 *
@@ -1196,7 +1191,6 @@ class GeoDir_Admin_Install {
 			$keys['city'] = "KEY city (city(50))";
 		}
 
-
 		return apply_filters('geodir_db_cpt_default_keys',$keys,$cpt,$post_type);
 	}
 
@@ -1207,28 +1201,43 @@ class GeoDir_Admin_Install {
      *
      * @global object $wpdb WordPress Database object.
      */
-	public static function upgrades(){
+	public static function upgrades() {
 		/**
 		 * DB type change for post_images
 		 */
-		if (get_option( 'geodirectory_version' ) && version_compare(get_option( 'geodirectory_version' ), '2.0.0.13-beta', '<=')) {
+		if ( get_option( 'geodirectory_version' ) && version_compare( get_option( 'geodirectory_version' ), '2.0.0.13-beta', '<=' ) ) {
 			global $wpdb;
 			$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
 		}
 	}
 
 	/**
-	 * Check & schedule flush rewrite rules.
+	 * Executed after plugin activated.
+	 *
+	 * @since 2.2.7
+	 *
+	 * @return void
+	 */
+	public static function plugin_activated() {
+		// Check mu-plugins.
+		self::check_mu_plugins();
+	}
+
+	/**
+	 * Executed after plugin installed.
 	 *
 	 * @since 2.0.0.92
 	 *
 	 * @return void
 	 */
-	public static function schedule_rewrite_rules() {
+	public static function plugin_installed() {
 		// Rank Math schedule flush rewrite rules.
 		if ( class_exists( 'RankMath\\Helper' ) ) {
 			update_option( 'geodir_rank_math_flush_rewrite', 1 );
 		}
+
+		// Check mu-plugins.
+		self::check_mu_plugins();
 	}
 
 	/**
@@ -1262,6 +1271,16 @@ class GeoDir_Admin_Install {
 			}
 		}
 	}
+
+	/**
+	 * Check and copy mu-plugins files.
+	 *
+	 * @since 2.2.7
+	 **/
+	public static function check_mu_plugins() {
+		// Fast AJAX file check.
+		if ( geodir_get_option( 'fast_ajax' ) ) {
+			geodir_check_fast_ajax_file( true );
+		}
+	}
 }
-
-

@@ -23,9 +23,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	 * Constructor.
 	 */
 	public function __construct() {
-
-
-
 		$this->id    = 'general';
 		$this->label = __( 'General', 'geodirectory' );
 
@@ -34,9 +31,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 //		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
 		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 		add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
-
-
-
 	}
 
 	/**
@@ -103,10 +97,19 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	 * Save settings.
 	 */
 	public function save() {
-		global $current_section;
+		global $current_section, $geodir_fajax_error;
 
 		$settings = $this->get_settings( $current_section );
 		GeoDir_Admin_Settings::save_fields( $settings );
+
+		// Check & copy / remove Faxt AJAX mu-plugin.
+		if ( $current_section == 'developer' && isset( $_REQUEST['fast_ajax'] ) ) {
+			$response = geodir_check_fast_ajax_file( ! empty( $_REQUEST['fast_ajax'] ) );
+
+			if ( ! empty( $response ) && is_wp_error( $response ) ) {
+				$geodir_fajax_error = $response->get_error_message();
+			}
+		}
 	}
 
 	/**
@@ -115,8 +118,22 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	 * @return array
 	 */
 	public function get_settings( $current_section = '' ) {
+		global $geodir_fajax_error, $geodir_fajax_check;
 
 		if ( 'developer' == $current_section ) {
+			// Fast AJAX file check.
+			if ( empty( $geodir_fajax_check ) && empty( $geodir_fajax_error ) && ! isset( $_REQUEST['fast_ajax'] ) && geodir_get_option( 'fast_ajax' ) ) {
+				$geodir_fajax_check = true;
+				$response = geodir_check_fast_ajax_file( true );
+
+				if ( ! empty( $response ) && is_wp_error( $response ) ) {
+					$geodir_fajax_error = $response->get_error_message();
+				}
+			}
+
+			if ( $geodir_fajax_error ) {
+				$geodir_fajax_error = '<br><div class="font-weight-bold text-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> ' . strip_tags( $geodir_fajax_error ) . '</div>';
+			}
 
 			/**
 			 * Filter GD general settings array.
@@ -131,6 +148,14 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc'  => '',
 					'id'    => 'developer_options',
 					//'desc_tip' => true,
+				),
+
+				array(
+					'id' => 'fast_ajax',
+					'type' => 'checkbox',
+					'name' => __( 'Enable Fast AJAX', 'geodirectory' ),
+					'desc' => __( 'This will speed up AJAX requests to improve AJAX performance within GeoDirectory plugins by using MU plugin.', 'geodirectory' ) . $geodir_fajax_error,
+					'default' => '1',
 				),
 
 				array(

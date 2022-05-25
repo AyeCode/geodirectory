@@ -40,7 +40,6 @@ function initMap(map_options) {
     var enable_map_direction = options.enable_map_direction;
     var enable_cat_filters = options.enable_cat_filters;
     var marker_cluster = options.marker_cluster;
-    var map_ajax_url = options.map_ajax_url;
     options.token = '68f48005e256696074e1da9bf9f67f06';
     options.navigationControlOptions = {
         position: 'TOP_LEFT',
@@ -101,7 +100,7 @@ function initMap(map_options) {
     var maxMap = document.getElementById(map_canvas + '_triggermap');
     if (!jQuery(maxMap).hasClass('gd-triggered-map')) { // skip multiple click listener after reload map via ajax
         jQuery(maxMap).addClass('gd-triggered-map');
-        google.maps.event.addDomListener(maxMap, 'click', gdMaxMap);
+        maxMap.addEventListener('click', gdMaxMap);
     }
 
     function gdMaxMap() {
@@ -451,7 +450,7 @@ function map_ajax_search(map_canvas_var, query_string, marker_jason, hide_loadin
         jQuery('#' + map_canvas_var + '_loading_div').hide();
         return;
     }
-    var query_url = eval(map_canvas_var).map_ajax_url;
+    var query_url = eval(map_canvas_var).map_markers_ajax_url;
     if (query_string) {
         u = query_url.indexOf('?') === -1 ? '?' : '&';
         query_url += u + query_string;
@@ -698,7 +697,7 @@ function create_marker(item, map_canvas) {
         bounds.extend(latlng);
         // Adding a click event to the marker
         google.maps.event.addListener(marker, 'spider_click', function() { // 'click' => normal, 'spider_click' => Overlapping Marker Spiderfier
-            var marker_url = map_options.map_ajax_url;
+            var marker_url = map_options.map_marker_ajax_url;
             is_zooming = true;
             jQuery("#" + map_canvas).goMap();
             var preview_query_str = '';
@@ -710,6 +709,9 @@ function create_marker(item, map_canvas) {
             post_data += '_wpnonce=' + map_options._wpnonce;
             if (map_options.bubble_size) {
                 post_data += '&small=1';
+            }
+            if (map_options.map_marker_url_params) {
+                post_data += map_options.map_marker_url_params;
             }
             var loading = '<div id="map_loading" class="p-2 text-center"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></div>';
             gd_infowindow.open(jQuery.goMap.map, marker);
@@ -1431,7 +1433,7 @@ function create_marker_osm(item, map_canvas) {
         }
         // Adding a click event to the marker
         L.DomEvent.addListener(marker, 'click', function() {
-            var marker_url = options.map_ajax_url;
+            var marker_url = options.map_marker_ajax_url;
             if (marker.options.clustered) {
                 jQuery("#" + map_canvas).goMap();
                 marker.closePopup().unbindPopup();
@@ -1468,6 +1470,9 @@ function create_marker_osm(item, map_canvas) {
             post_data += '_wpnonce=' + options._wpnonce;
             if (options.bubble_size) {
                 post_data += '&small=1';
+            }
+            if (map_options.map_marker_url_params) {
+                post_data += map_options.map_marker_url_params;
             }
             var loading = '<div id="map_loading" class="p-2 text-center"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></div>';
             var maxH = jQuery("#" + map_canvas).height();
@@ -1584,7 +1589,7 @@ function geodir_map_directions_init(map_canvas) {
 
 function geodir_map_post_type_terms(options, post_type, query_string) {
     var terms_query_url, map_canvas, tick_terms;
-    terms_query_url = options.map_ajax_url;
+    terms_query_url = options.map_terms_ajax_url;
     map_canvas = options.map_canvas;
 
     jQuery('#' + map_canvas + '_posttype_menu li').removeClass('gd-map-search-pt');

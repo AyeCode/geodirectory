@@ -403,11 +403,6 @@ function geodir_rest_validate_value_from_schema( $value, $args, $param = '' ) {
         return new WP_Error( 'rest_invalid_param', sprintf( __( '%1$s is not of type %2$s.' ), $param, $args['type'] ) );
     }
 
-    if ( 'integer' === $args['type'] && round( geodir_sanitize_float( $value ) ) !== geodir_sanitize_float( $value ) ) {
-        /* translators: 1: parameter, 2: type name */
-        return new WP_Error( 'rest_invalid_param', sprintf( __( '%1$s is not of type %2$s.' ), $param, 'integer' ) );
-    }
-
     if ( 'boolean' === $args['type'] && ! rest_is_boolean( $value ) ) {
         /* translators: 1: parameter, 2: type name */
         return new WP_Error( 'rest_invalid_param', sprintf( __( '%1$s is not of type %2$s.' ), $value, 'boolean' ) );
@@ -431,14 +426,17 @@ function geodir_rest_validate_value_from_schema( $value, $args, $param = '' ) {
                     }
                 }
                 break;
-
             case 'email' :
                 // is_email() checks for 3 characters (a@b), but
                 // wp_handle_comment_submission() requires 6 characters (a@b.co)
                 //
                 // https://core.trac.wordpress.org/ticket/38506
-                if ( ! is_email( $value ) || strlen( $value ) < 6 ) {
-                    return new WP_Error( 'rest_invalid_email', __( 'Invalid email address.' ) );
+                if ( ( $value === '' || $value === null ) && empty( $args[ 'required' ] ) ) {
+                    // Bail when empty and not required.
+                } else {
+                    if ( ! is_email( $value ) || strlen( $value ) < 6 ) {
+                        return new WP_Error( 'rest_invalid_email', __( 'Invalid email address.' ) );
+                    }
                 }
                 break;
             case 'ip' :
