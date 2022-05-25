@@ -5,7 +5,7 @@
  *
  * @author   AyeCode
  * @category Admin
- * @package  GeoDirectoru/Admin
+ * @package  GeoDirectory/Admin
  * @version  2.0.0
  * @info     Derived from GeoDir_Admin_Addons
  */

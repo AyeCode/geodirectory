@@ -359,7 +359,7 @@ function geodir_check_page( $gdpage = '' ) {
 				return true;
 			}
 
-			if ( function_exists( 'bp_loggedin_user_id' ) && function_exists( 'bp_displayed_user_id' ) && $my_id = (int) bp_loggedin_user_id() ) {
+			if ( function_exists( 'bp_loggedin_user_id' ) && function_exists( 'bp_displayed_user_id' ) && function_exists('bp_is_current_component') && $my_id = (int) bp_loggedin_user_id() ) {
 				if ( ( (bool) bp_is_current_component( 'listings' ) || (bool) bp_is_current_component( 'favorites' ) ) && $my_id > 0 && $my_id == (int) bp_displayed_user_id() ) {
 					return true;
 				}
