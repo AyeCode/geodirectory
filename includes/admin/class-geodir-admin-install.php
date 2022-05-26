@@ -1263,11 +1263,18 @@ class GeoDir_Admin_Install {
 		if ( self::is_new_install() ) {
 			// New installs should be set to use it by default.
 		} else {
-			if ( get_option( 'geodirectory_version' ) && version_compare( get_option( 'geodirectory_version' ), '2.0.9.0', '<' ) && ! geodir_get_option( 'design_style' ) ) {
-				// Update blank to set default.
-				geodir_update_option( 'design_style', '' );
+			if ( ( $geodirectory_version = get_option( 'geodirectory_version' ) ) ) {
+				// Update blank to set default value for design_style.
+				if ( version_compare( $geodirectory_version, '2.0.9.0', '<' ) && ! geodir_get_option( 'design_style' ) ) {
+					geodir_update_option( 'design_style', '' );
 
-				GeoDir_Admin_Notices::add_notice( 'try_aui' );
+					GeoDir_Admin_Notices::add_notice( 'try_aui' );
+				}
+
+				// Update blank to set default value for fast_ajax.
+				if ( version_compare( $geodirectory_version, '2.2.7', '<' ) && ! geodir_get_option( 'fast_ajax' ) ) {
+					geodir_update_option( 'fast_ajax', '' );
+				}
 			}
 		}
 	}

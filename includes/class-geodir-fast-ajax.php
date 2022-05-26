@@ -114,8 +114,9 @@ class GeoDir_Fast_AJAX {
 			return $geodir_ajax_allowed_plugins;
 		}
 
-		$not_allowed_plugins = array(
-			'geodir_ajax_duplicate_alert/geodir_ajax_duplicate_alert.php',
+		$action = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
+
+		$not_allowed = array(
 			'geodir_recaptcha/geodir_recaptcha.php',
 			'geodir_social_importer/geodir_social_importer.php',
 			'geodir-converter/geodir-converter.php',
@@ -123,14 +124,58 @@ class GeoDir_Fast_AJAX {
 			'geodir-wp-all-import/geodir-wp-all-import.php'
 		);
 
+		if ( $action != 'geodir_duplicate_alert_action' ) {
+			$not_allowed[] = 'geodir_ajax_duplicate_alert/geodir_ajax_duplicate_alert.php';
+		}
+
+		$elementor = true; 
+
+		if ( in_array( $action, array( 'geodir_user_add_fav', 'geodir_json_search_users', 'geodir_order_custom_fields', 'geodir_order_custom_sort_fields', 'geodir_save_tabs_order', 'geodir_timezone_data', 'geodir_set_region_on_map', 'geodir_delete_tab', 'geodir_duplicate_alert_action', 'geodir_fill_location_on_add_listing', 'geodir_json_search_cities', 'geodir_json_search_regions', 'geodir_ajax_calendar', 'geodir_reviewrating_ajax' ) ) ) {
+			$elementor = false;
+
+			if ( $action != 'geodir_ajax_calendar' ) {
+				$not_allowed[] = 'geodir_advance_search_filters/geodir_advance_search_filters.php';
+				$not_allowed[] = 'geodir_payment_manager/geodir_payment_manager.php';
+			}
+
+			$not_allowed[] = 'geodir-compare/geodir-compare.php.php';
+			$not_allowed[] = 'geodir-embed/geodir-embed.php.php';
+			$not_allowed[] = 'geodir-tickets/geodir-tickets.php';
+			$not_allowed[] = 'geodir_buddypress/geodir_buddypress.php';
+			$not_allowed[] = 'geodir_claim_listing/geodir_claim_listing.php';
+			$not_allowed[] = 'geodir_custom_google_maps/geodir_custom_google_maps.php';
+			$not_allowed[] = 'geodir_franchise/geodir_franchise.php';
+			$not_allowed[] = 'geodir_marker_cluster/geodir_marker_cluster.php';
+
+			if ( $action != 'geodir_reviewrating_ajax' ) {
+				$not_allowed[] = 'geodir_review_rating_manager/geodir_review_rating_manager.php';
+			}
+
+			if ( ! in_array( $action, array( 'geodir_fill_location_on_add_listing', 'geodir_json_search_cities', 'geodir_json_search_regions', 'geodir_set_region_on_map', 'geodir_ajax_calendar' ) ) ) {
+				$not_allowed[] = 'geodir_location_manager/geodir_location_manager.php';
+			}
+
+			if ( in_array( $action, array( 'geodir_timezone_data' ) ) ) {
+				$not_allowed[] = 'events-for-geodirectory/events-for-geodirectory.php';
+				$not_allowed[] = 'geodir_custom_posts/geodir_custom_posts.php';
+			}
+		}
+
 		$allowed_plugins = array();
 		foreach ( $plugins as $plugin ) {
 			// Skip not allowed plugins 
-			if ( in_array( $plugin, $not_allowed_plugins ) ) {
+			if ( in_array( $plugin, $not_allowed ) ) {
 				continue;
 			}
 
-			if ( strpos( $plugin, 'geodir' ) === 0 || strpos( $plugin, 'geodirectory' ) !== false || strpos( $plugin, 'elementor' ) !== false ) {
+			// GD plugins
+			if ( strpos( $plugin, 'geodir' ) === 0 || strpos( $plugin, 'geodirectory' ) !== false ) {
+				$allowed_plugins[] = $plugin;
+				continue;
+			}
+
+			// Non GD plugins
+			if ( strpos( $plugin, 'sitepress-multilingual-cms' ) !== false || strpos( $plugin, 'wpml-' ) === 0 || ( $elementor && strpos( $plugin, 'elementor' ) !== false ) ) {
 				$allowed_plugins[] = $plugin;
 			}
 		}
@@ -184,7 +229,7 @@ class GeoDir_Fast_AJAX {
 
 		$rest_prefix = trailingslashit( rest_get_url_prefix() );
 
-		return ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix . 'geodir/' ) );
+		return ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix . 'geodir/v' ) );
 	}
 }
 

@@ -814,7 +814,7 @@ jQuery(function($) {
 						return m;
 					},
 					ajax: {
-						url: geodir_params.ajax_url,
+						url: geodir_params.gd_ajax_url,
 						dataType: 'json',
 						delay: 1000,
 						data: function(params) {
@@ -1312,7 +1312,7 @@ function geodir_fill_timezone(prefix) {
 	lng = lng ? lng.trim() : '';
 	if (lat && lng) {
 		jQuery.ajax({
-			url: geodir_params.ajax_url,
+			url: geodir_params.gd_ajax_url,
 			type: 'POST',
 			dataType: 'json',
 			data: {

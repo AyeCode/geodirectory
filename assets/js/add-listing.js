@@ -649,7 +649,7 @@ var GeoDir_Business_Hours = {
         lng = lng ? lng.trim() : '';
         if (lat && lng) {
             jQuery.ajax({
-                url: geodir_params.ajax_url,
+                url: geodir_params.gd_ajax_url,
                 type: 'POST',
                 dataType: 'json',
                 data: {
