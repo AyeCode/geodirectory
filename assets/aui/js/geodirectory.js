@@ -981,7 +981,7 @@ function gd_fav_save(post_id) {
         ajax_action = 'add';
     }
     jQuery.ajax({
-        url: geodir_params.ajax_url,
+        url: geodir_params.gd_ajax_url,
         type: 'GET',
         dataType: 'json',
         data: {

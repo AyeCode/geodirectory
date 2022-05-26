@@ -669,7 +669,7 @@ function create_marker(item, map_canvas) {
                 post_data += '&small=1';
             }
             if (map_options.map_marker_url_params) {
-                post_data += map_marker_url_params;
+                post_data += map_options.map_marker_url_params;
             }
             var loading = '<div id="map_loading"></div>';
             gd_infowindow.open(jQuery.goMap.map, marker);
@@ -1364,8 +1364,8 @@ function create_marker_osm(item, map_canvas) {
             if (options.bubble_size) {
                 post_data += '&small=1';
             }
-            if (map_options.map_marker_url_params) {
-                post_data += map_options.map_marker_url_params;
+            if (options.map_marker_url_params) {
+                post_data += options.map_marker_url_params;
             }
             var loading = '<div id="map_loading"></div>';
             var maxH = jQuery("#" + map_canvas).height();

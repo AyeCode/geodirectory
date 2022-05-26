@@ -2424,11 +2424,12 @@ function geodir_cfi_files( $html, $cf ) {
         $show_image_input_box = apply_filters( 'geodir_file_uploader_on_add_listing', $show_image_input_box, $cf['post_type'] );
 
         if ( $show_image_input_box ) {
+            $frontend_title = __( $cf['frontend_title'], 'geodirectory' );
             $extra_attributes = array();
             if ( ! empty( $cf['is_required'] ) ) {
                 $extra_attributes['required'] = 'required';
                 $extra_attributes['style'] = 'height:0!important;padding:0!important;margin:0!important;font-size:0!important;line-height:0!important;border:0!important;outline:none!important;position:absolute!important;top:80px!important';
-                $extra_attributes['aria-label'] = esc_html__( $cf['frontend_title'], 'geodirectory' );
+                $extra_attributes['aria-label'] = esc_html( $frontend_title );
             }
 
             $validation_text = '';
@@ -2442,10 +2443,14 @@ function geodir_cfi_files( $html, $cf ) {
                 $validation_text = __( $cf['validation_msg'], 'geodirectory' );
             }
 
+            if ( ! empty( $cf['is_required'] ) && empty( $validation_text ) ) {
+                $validation_text = wp_sprintf( __( '%s is a required field.', 'geodirectory' ), $frontend_title );
+            }
+
             // Set validation message
-            if ( ! empty( $validation_text ) ) {
-                $extra_attributes['oninvalid'] = 'try{this.setCustomValidity(\'' . esc_attr( addslashes( $validation_text ) ) . '\')}catch(e){}';
-                $extra_attributes['onchange'] = 'try{this.setCustomValidity(\'\')}catch(e){}';
+           if ( ! empty( $validation_text ) ) {
+                $extra_attributes['oninvalid'] = 'try{jQuery(this).closest(".geodir-files-dropbox").find(".geodir-req-err").remove();jQuery(this).closest(".geodir-files-dropbox").append(\'<div class="alert alert-danger geodir-req-err mb-0 mt-1" role="alert">' . esc_attr( addslashes( $validation_text ) ) . '</div>\');this.setCustomValidity(\'' . esc_attr( addslashes( $validation_text ) ) . '\')}catch(e){}';
+                $extra_attributes['onchange'] = 'try{jQuery(this).closest(".geodir-files-dropbox").find(".geodir-req-err").remove();if(!this.value){jQuery(this).closest(".geodir-files-dropbox").append(\'<div class="alert alert-danger geodir-req-err mb-0 mt-1" role="alert">' . esc_attr( addslashes( $validation_text ) ) . '</div>\');}this.setCustomValidity(\'\')}catch(e){}';
             }
 
             $extra_attributes = class_exists( "AUI_Component_Helper" ) ? AUI_Component_Helper::extra_attributes( $extra_attributes ) : '';
@@ -2456,8 +2461,8 @@ function geodir_cfi_files( $html, $cf ) {
             ?>
             <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row"<?php echo $conditional_attrs; ?>>
                 <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
-                    <?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
-                    echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
+                    <?php
+                    echo ( trim( $frontend_title ) ) ? esc_html( $frontend_title ) : '&nbsp;'; echo $admin_only;?>
                     <?php if ( $cf['is_required'] ) {
                         echo '<span>*</span>';
                     } ?>

@@ -252,9 +252,9 @@ function gd_show_hide_radio(id, sh, cl) {
  */
 function gd_order_custom_fields(order) {
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
-    order = order + "&security=" + gd_nonce;
+    order = order + "&action=geodir_order_custom_fields&security=" + gd_nonce;
     jQuery.ajax({
-        'url': ajaxurl + '?action=geodir_order_custom_fields',
+        'url': geodir_params.gd_ajax_url,
         'type': 'POST',
         'data': order,
         'success': function(result) {
@@ -647,7 +647,7 @@ function gd_tabs_delete_tab($this) {
                 'tab_id': $tab_id
             };
             jQuery.ajax({
-                'url': ajaxurl,
+                'url': geodir_params.gd_ajax_url,
                 'type': 'POST',
                 'data': data,
                 'success': function(result) {
@@ -690,7 +690,7 @@ function gd_tabs_save_order($action, $hide_success) {
         'tabs': $order
     };
     jQuery.ajax({
-        'url': ajaxurl,
+        'url': geodir_params.gd_ajax_url,
         'type': 'POST',
         'data': data,
         'success': function(result) {
