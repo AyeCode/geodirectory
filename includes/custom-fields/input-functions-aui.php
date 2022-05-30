@@ -1107,21 +1107,22 @@ function geodir_cfi_datepicker($html,$cf){
         $date_format = ! empty( $extra_fields['date_format'] ) ? $extra_fields['date_format'] : 'yy-mm-dd';
         $jquery_date_format = $date_format;
 
-        // check if we need to change the format or not
-        $date_format_len = strlen(str_replace(' ', '', $date_format));
-        if($date_format_len>5){// if greater then 5 then it's the old style format.
+        // Check if we need to change the format or not
+        $date_format_len = strlen( str_replace( ' ', '', $date_format ) );
 
-            $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
-            $replace = array('d','j','l','m','n','F','Y');//PHP date format
+        // If greater then 5 then it's the old style format.
+        if ( $date_format_len > 5 ) {
+            $search = array( 'dd', 'd', 'DD', 'mm', 'm', 'MM', 'yy' ); // jQuery UI datepicker format.
+            $replace = array( 'd', 'j', 'l', 'm', 'n', 'F', 'Y' ); // PHP date format
 
-            $date_format = str_replace($search, $replace, $date_format);
-        }else{
+            $date_format = str_replace( $search, $replace, $date_format );
+        } else {
             $jquery_date_format = geodir_date_format_php_to_aui( $jquery_date_format );
         }
 
-        if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
-
-        $value = geodir_date($value, 'Y-m-d', $date_format);
+        if ( $value == '0000-00-00' ) {
+            $value = ''; // If date not set, then mark it empty.
+        }
 
         //validation
         if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
