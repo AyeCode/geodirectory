@@ -1,5 +1,6 @@
 = 2.2.8 =
 * Some timezone shows difference of day in a date for custom date format - FIXED
+* Old Elementor image setting shows error - FIXED
 
 = 2.2.7 =
 * SEO title conflicts with SEOPress - FIXED
