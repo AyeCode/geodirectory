@@ -1505,7 +1505,10 @@ function geodir_sort_by_count( $a, $b ) {
  * @return bool
  */
 function geodir_sort_by_count_obj( $a, $b ) {
-	return $a->count < $b->count;
+	if ( $a->count == $b->count ) {
+		return 0;
+	}
+	return ( $a->count < $b->count ) ? 1 : -1;
 }
 
 /**
@@ -1520,9 +1523,11 @@ function geodir_sort_by_count_obj( $a, $b ) {
  * @return bool
  */
 function geodir_sort_by_review_count_obj( $a, $b ) {
-	return $a->review_count < $b->review_count;
+	if ( $a->review_count == $b->review_count ) {
+		return 0;
+	}
+	return ( $a->review_count < $b->review_count ) ? 1 : -1;
 }
-
 
 /**
  * Retrieve list of mime types and file extensions allowed for file upload.
@@ -2262,7 +2267,7 @@ function geodir_is_cpt_template_page( $id, $page = '' ) {
 }
 
 /**
- * Get CPT templage page ids.
+ * Get CPT template page ids.
  *
  * @since   2.0.0.28
  * @since   2.0.0.97 Added $page parameter.
