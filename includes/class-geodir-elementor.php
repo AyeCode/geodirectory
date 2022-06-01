@@ -867,8 +867,8 @@ class GeoDir_Elementor {
 			$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $image_key, 1 );
 
 			if ( ! empty( $post_images ) ) {
-				$image   = $post_images[0];
-				$size    = $settings['image_size'];
+				$image = $post_images[0];
+				$size = isset( $settings[ $image_size_key . '_size' ] ) ? $settings[ $image_size_key . '_size' ] : $settings['image_size'];
 				$img_src = geodir_get_image_src( $image, $size );
 
 				// replace image

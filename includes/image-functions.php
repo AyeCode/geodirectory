@@ -41,39 +41,45 @@ function geodir_image_tag_ajaxify($img_tag,$lazy_load = true){
  * @param string $size Optional. Set image size. Default medium.
  * @return string $img_src Image path.
  */
-function geodir_get_image_src($image, $size = 'medium'){
-    $img_src = '';
+function geodir_get_image_src( $image, $size = 'medium' ) {
+	$img_src = '';
 
-    $meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
-    $upload_dir = wp_upload_dir();
+	$meta = isset( $image->metadata ) ? maybe_unserialize( $image->metadata ) : '';
+	$upload_dir = wp_upload_dir();
 
-	// base url
+	// Base url
 	$base_url = $upload_dir['baseurl'];
 
-    if(isset($meta['sizes']) && $size){
-        $img_url_basename = wp_basename($base_url.$image->file);
-        if($img_url_basename && isset($meta['sizes'][$size]) && isset($meta['sizes'][$size]['file']) && $meta['sizes'][$size]['file']){
-	        if(substr( $image->file, 0, 4 ) === "http"){
-		        $img_url = esc_url_raw( $image->file );
-	        }else{
-		        $img_url = $base_url.$image->file;
-	        }
-            $img_src = str_replace($img_url_basename, wp_basename($meta['sizes'][$size]['file']), $img_url);
-        }
-    }
+	if ( isset( $meta['sizes'] ) && $size ) {
+		if ( is_array( $size ) ) {
+			$size = 'medium';
+		}
 
-    // no sizes just return full size
-    if(!$img_src){
-        if(isset($image->file)){
-	        if(substr( $image->file, 0, 4 ) === "http"){
-		        $img_src = esc_url_raw( $image->file );
-	        }else{
-		        $img_src = $base_url.$image->file;
-	        }
-        }
-    }
+		$img_url_basename = wp_basename( $base_url . $image->file );
 
-    return $img_src;
+		if ( $img_url_basename && isset( $meta['sizes'][ $size ] ) && isset( $meta['sizes'][ $size ]['file'] ) && $meta['sizes'][ $size ]['file'] ) {
+			if ( substr( $image->file, 0, 4 ) === "http" ) {
+				$img_url = esc_url_raw( $image->file );
+			} else {
+				$img_url = $base_url . $image->file;
+			}
+
+			$img_src = str_replace( $img_url_basename, wp_basename( $meta['sizes'][ $size ]['file'] ), $img_url );
+		}
+	}
+
+	// No sizes just return full size.
+	if ( ! $img_src ) {
+		if ( isset( $image->file ) ) {
+			if ( substr( $image->file, 0, 4 ) === "http" ) {
+				$img_src = esc_url_raw( $image->file );
+			} else {
+				$img_src = $base_url . $image->file;
+			}
+		}
+	}
+
+	return $img_src;
 }
 
 /**
