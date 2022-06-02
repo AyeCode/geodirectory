@@ -1533,8 +1533,28 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
 
     // If not html then we run the standard output.
     if ( empty( $html ) ) {
+        $post_id = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
+
         $design_style = geodir_design_style();
-        $files = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $html_var );
+        $extra_fields = ! empty( $cf['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
+        $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? absint( $extra_fields['file_limit'] ) : 0;
+        $file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
+        $revision_id = '';
+        $file_status = '1';
+
+        // Preview
+        if ( is_preview() ) {
+            if ( ! empty( $post_id ) ) {
+                $revision_id = $post_id;
+            }
+
+            // Show files with all statuses to admin & post author.
+            if ( geodir_listing_belong_to_current_user( $post_id ) ) {
+                $file_status = '';
+            }
+        }
+
+        $files = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $html_var, $file_limit, $revision_id, '', $file_status );
 
         if ( ! empty( $files ) ) {
             $output = geodir_field_output_process( $output );
@@ -1544,7 +1564,6 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
                 return ( isset( $gd_post->{$html_var} ) ? stripslashes_deep( $gd_post->{$html_var} ) : '' );
             }
 
-            $extra_fields = ! empty( $cf['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
             $allowed_file_types = ! empty( $extra_fields['gd_file_types'] ) && is_array( $extra_fields['gd_file_types'] ) && ! in_array( "*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
 
             $upload_dir = wp_upload_dir();
