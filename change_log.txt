@@ -2,6 +2,7 @@
 * Some timezone shows difference of day in a date for custom date format - FIXED
 * Old Elementor image setting shows error - FIXED
 * File limit not applied to GD > Post Meta when showing files - FIXED
+* Re-order post images don't detach previous featured post thumbnail - FIXED
 
 = 2.2.7 =
 * SEO title conflicts with SEOPress - FIXED
