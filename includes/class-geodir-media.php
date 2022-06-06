@@ -526,6 +526,9 @@ class GeoDir_Media {
 			$featured_img_url = get_the_post_thumbnail_url( $post_id, 'full' );
 
 			if ( $featured_img_url != $file_url && ! geodir_is_full_url( $file ) ) {
+				// Delete existing featured attachment post on re-order.
+				$wpdb->delete( $wpdb->posts, array( 'post_parent' => (int) $post_id, 'post_type' => 'attachment', 'post_status' => 'inherit' ) );
+
 				$file = wp_check_filetype( basename( $file_url ) );
 				$attachment = array(
 					'guid'           => $file_url,
