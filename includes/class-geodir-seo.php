@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_SEO {
 
-	// some global values
+	// Some global values.
 	public static $title = '';
 	public static $meta_title = '';
 	public static $meta_description = '';
@@ -24,19 +24,18 @@ class GeoDir_SEO {
 	public static $gd_page = '';
 	public static $doing_menu = false;
 
-
 	/**
 	 * Initiate the class.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 */
 	public static function init() {
 		add_action( 'init',array(__CLASS__,'maybe_run') );
 
-		// maybe noindex empty archive pages
+		// Maybe noindex empty archive pages.
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
 		add_filter( 'wpseo_frontend_presentation', array( __CLASS__, 'wpseo_frontend_presentation' ), 11, 2 );
-		add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
+		//add_filter( 'wpseo_breadcrumb_links', array( __CLASS__, 'breadcrumb_links' ) ); // Since Yoast v16.2 causes error in breadcrumb schema.
 		add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
 		add_filter( 'get_post_metadata', array( __CLASS__, 'filter_post_metadata' ), 99, 5 );
 		add_filter( 'rank_math/frontend/breadcrumb/settings', array( __CLASS__, 'rank_math_frontend_breadcrumb_settings' ), 20, 1 );
