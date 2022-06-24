@@ -4,6 +4,7 @@
 * File limit not applied to GD > Post Meta when showing files - FIXED
 * Re-order post images don't detach previous featured post thumbnail - FIXED
 * Schema validator shows error for Yoast SEO breadcrumb attribute - FIXED
+* Generate Google API Key is no longer working - FIXED
 
 = 2.2.7 =
 * SEO title conflicts with SEOPress - FIXED
