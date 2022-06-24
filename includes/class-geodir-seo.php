@@ -62,6 +62,12 @@ class GeoDir_SEO {
 				remove_filter( 'wpseo_frontend_page_type_simple_page_id', array( __CLASS__ , 'wpseo_frontend_page_type_simple_page_id' ), 10, 1 );
 			}
 		}, 99 );
+
+		// The SEO Framework
+		if ( defined( 'THE_SEO_FRAMEWORK_VERSION' ) ) {
+			add_filter( 'the_seo_framework_sitemap_hpt_query_args', array( __CLASS__ , 'the_seo_framework_sitemap_exclude_posts' ), 20, 1 );
+			add_filter( 'the_seo_framework_sitemap_nhpt_query_args', array( __CLASS__ , 'the_seo_framework_sitemap_exclude_posts' ), 20, 1 );
+		}
 	}
 
 	/**
@@ -628,8 +634,11 @@ class GeoDir_SEO {
 
 		$search_near_term = '';
 		$search_near = '';
-		if ( isset( $_REQUEST['snear'] ) ) {
+		if ( isset( $_REQUEST['snear'] ) || isset( $_REQUEST['near'] ) ) {
 			$search_near_term = esc_attr( $_REQUEST['snear'] );
+			if ( empty( $search_near_term ) && ! empty( $_REQUEST['near'] ) && $_REQUEST['near'] == 'me' ) {
+				$search_near_term = __( 'My Location', 'geodirectory' );
+			}
 			$search_near_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_near_term ); // apple suck
 			$search_near_term = trim( stripslashes( $search_near_term ) );
 
@@ -1713,5 +1722,35 @@ class GeoDir_SEO {
 		$var = strpos( $var, '_gd_' ) === 0 ? substr( $var, 4 ) : $var;
 
 		return self::replace_variable( '%%' . $var . '%%', self::$gd_page );
+	}
+
+	/**
+	 * The SEO Framework: Exclude GD templates pages from XML sitemap.
+	 *
+	 * @since 2.2.8
+	 *
+	 * @param array $query_args The query args.
+	 * @return array Filtered query args.
+	 */
+	public static function the_seo_framework_sitemap_exclude_posts( $query_args ) {
+		$exclude_ids = self::get_noindex_page_ids();
+
+		if ( ! empty( $exclude_ids ) && is_array( $exclude_ids ) ) {
+			if ( ! empty( $query_args['post__not_in'] ) ) {
+				$post__not_in = $query_args['post__not_in'];
+
+				if ( ! is_array( $post__not_in ) ) {
+					$post__not_in = explode( ",", $post__not_in );
+				}
+
+				$post__not_in = array_merge( $post__not_in, $exclude_ids );
+			} else {
+				$post__not_in = $exclude_ids;
+			}
+
+			$query_args['post__not_in'] = $post__not_in;
+		}
+
+		return $query_args;
 	}
 }
