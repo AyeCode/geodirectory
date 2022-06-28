@@ -295,41 +295,21 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			echo aui()->select(
 				array(
-					'id'                => 'thousand_separator',
-					'name'              => 'extra[thousand_separator]',
-					'label_type'        => 'top',
-					'multiple'   => false,
-					'class'             => ' mw-100',
-					'options'       => array(
-						'comma'   => __( ', (comma)', 'geodirectory' ),
-						'slash'   => __( '\ (slash)', 'geodirectory' ),
-						'period'   => __( '. (period)', 'geodirectory' ),
-						'space'   => __( ' (space)', 'geodirectory' ),
+					'id'               => 'thousand_separator',
+					'name'             => 'extra[thousand_separator]',
+					'label_type'       => 'top',
+					'multiple'         => false,
+					'class'            => ' mw-100',
+					'options'          => array(
+						'comma'  => __( ', (comma)', 'geodirectory' ),
+						'slash'  => __( '\ (slash)', 'geodirectory' ),
+						'period' => __( '. (period)', 'geodirectory' ),
+						'space'  => __( ' (space)', 'geodirectory' ),
 						'none'   => __( '(none)', 'geodirectory' ),
 					),
-					'label'              => __('Thousand separator','geodirectory') . geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' )),
-					'value'         => $thousand_separator,
-					'element_require'   => '[%is_price%:checked]'
-				)
-			);
-
-			echo aui()->select(
-				array(
-					'id'                => 'thousand_separator',
-					'name'              => 'extra[thousand_separator]',
-					'label_type'        => 'top',
-					'multiple'   => false,
-					'class'             => ' mw-100',
-					'options'       => array(
-						'comma'   => __( ', (comma)', 'geodirectory' ),
-						'slash'   => __( '\ (slash)', 'geodirectory' ),
-						'period'   => __( '. (period)', 'geodirectory' ),
-						'space'   => __( ' (space)', 'geodirectory' ),
-						'none'   => __( '(none)', 'geodirectory' ),
-					),
-					'label'              => __('Thousand separator','geodirectory') . geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' )),
-					'value'         => $thousand_separator,
-					'element_require'   => '[%data_type%] == "INT" || [%data_type%] == "DECIMAL"'
+					'label'           => __( 'Thousand separator', 'geodirectory' ) . geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' ) ),
+					'value'           => $thousand_separator,
+					'element_require' => '([%is_price%:checked] || [%data_type%] == "INT" || [%data_type%] == "DECIMAL")'
 				)
 			);
 
