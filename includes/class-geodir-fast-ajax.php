@@ -128,11 +128,7 @@ class GeoDir_Fast_AJAX {
 			$not_allowed[] = 'geodir_ajax_duplicate_alert/geodir_ajax_duplicate_alert.php';
 		}
 
-		$elementor = true; 
-
 		if ( in_array( $action, array( 'geodir_user_add_fav', 'geodir_json_search_users', 'geodir_order_custom_fields', 'geodir_order_custom_sort_fields', 'geodir_save_tabs_order', 'geodir_timezone_data', 'geodir_set_region_on_map', 'geodir_delete_tab', 'geodir_duplicate_alert_action', 'geodir_fill_location_on_add_listing', 'geodir_json_search_cities', 'geodir_json_search_regions', 'geodir_ajax_calendar', 'geodir_reviewrating_ajax' ) ) ) {
-			$elementor = false;
-
 			if ( $action != 'geodir_ajax_calendar' ) {
 				$not_allowed[] = 'geodir_advance_search_filters/geodir_advance_search_filters.php';
 				$not_allowed[] = 'geodir_payment_manager/geodir_payment_manager.php';
@@ -175,8 +171,15 @@ class GeoDir_Fast_AJAX {
 			}
 
 			// Non GD plugins
-			if ( strpos( $plugin, 'sitepress-multilingual-cms' ) !== false || strpos( $plugin, 'wpml-' ) === 0 || ( $elementor && strpos( $plugin, 'elementor' ) !== false ) ) {
+			if ( strpos( $plugin, 'sitepress-multilingual-cms' ) !== false || strpos( $plugin, 'wpml-' ) === 0 ) {
 				$allowed_plugins[] = $plugin;
+				continue;
+			}
+
+			// Page builder plugins
+			if ( in_array( $action, array( 'geodir_ajax_search' ) ) && ( strpos( $plugin, 'elementor' ) !== false || strpos( $plugin, 'kadence' ) !== false || strpos( $plugin, 'bb-custom-attributes' ) !== false || strpos( $plugin, 'bb-plugin' ) !== false || strpos( $plugin, 'bb-theme-builder' ) !== false || strpos( $plugin, 'userswp' ) !== false ) ) {
+				$allowed_plugins[] = $plugin;
+				continue;
 			}
 		}
 
