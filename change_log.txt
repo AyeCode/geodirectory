@@ -7,6 +7,7 @@
 * Generate Google API Key is no longer working - FIXED
 * Exclude GD templates from The SEO Framework XML sitemap - FIXED
 * Price field settings shows multiple thousand separator option - FIXED
+* Yoast SEO noindex option is not working on single listing page - FIXED
 
 = 2.2.7 =
 * SEO title conflicts with SEOPress - FIXED
