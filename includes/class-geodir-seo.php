@@ -1352,13 +1352,35 @@ class GeoDir_SEO {
 	 * @return array The meta robots array.
 	 */
 	public static function wpseo_robots_array( $robots, $presentation ) {
-		// Force to index single listing.
-		if ( ! empty( $robots ) && geodir_is_page( 'single' ) ) {
-			$robots['index'] = 'index';
-			$robots['follow'] = 'follow';
+		if ( ! empty( $robots ) && ! empty( $presentation ) && ! empty( $presentation->model->object_id ) && geodir_is_page( 'single' ) ) {
+			if ( self::wpseo_is_indexable( (int) $presentation->model->object_id ) ) {
+				$robots['index'] = 'index';
+			} else {
+				$robots['index'] = 'noindex';
+			}
+
+			if ( empty( $robots['follow'] ) ) {
+				$robots['follow'] = WPSEO_Meta::get_value( 'meta-robots-nofollow', (int) $presentation->model->object_id );
+			}
 		}
 
 		return $robots;
+	}
+
+	/**
+	 * Yoast SEO: Determines whether a particular post_id is of an indexable post type.
+	 *
+	 * @since 2.2.8
+	 *
+	 * @param string $post_id The post ID to check.
+	 * @return bool Whether or not it is indexable.
+	 */
+	public static function wpseo_is_indexable( $post_id ) {
+		if ( ! empty( $post_id ) && WPSEO_Meta::get_value( 'meta-robots-noindex', $post_id ) !== '0' ) {
+			return WPSEO_Meta::get_value( 'meta-robots-noindex', $post_id ) === '2';
+		}
+
+		return WPSEO_Options::get( 'noindex-' . get_post_type( $post_id ), false ) === false;
 	}
 
 	/**
