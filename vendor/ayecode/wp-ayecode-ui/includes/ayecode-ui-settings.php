@@ -2426,7 +2426,7 @@ function aui_cf_field_init_rules($) {
     if (!$('[data-has-rule]').length) {
         return;
     }
-
+    $('input.select2-search__field').attr('data-ignore-rule','');
     $('[data-rule-key]').on('change keypress keyup', 'input, textarea', function() {
         aui_cf_field_apply_rules($(this));
     });
@@ -2641,8 +2641,7 @@ function aui_cf_field_apply_rules($el) {
  * Get the field element.
  */
 function aui_cf_field_get_element($el) {
-    var el = $el.find('input,textarea,select'),
-        type = aui_cf_field_get_type($el);
+    var el = $el.find('input:not("[data-ignore-rule]"),textarea,select'), type = aui_cf_field_get_type($el);
     if (type && window._aui_cf_field_elements && typeof window._aui_cf_field_elements == 'object' && typeof window._aui_cf_field_elements[type] != 'undefined') {
         el = window._aui_cf_field_elements[type];
     }
