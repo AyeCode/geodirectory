@@ -227,32 +227,38 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				} elseif ( isset( $cf['defaults']['is_active'] ) && $cf['defaults']['is_active'] ) {
 					$value = $cf['defaults']['is_active'];
 				}
+
+				// Prevent is_active option for default fields.
+				if ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, array( 'post_title', 'post_content', 'post_category', 'post_tags' ) ) ) {
+					$value = '1';
+					$wrap_class = 'd-none';
+				} else {
+					$wrap_class = '';
+				}
+
 				echo aui()->input(
 					array(
-						'id'                => 'is_active',
-						'name'              => 'is_active',
-						'label_type'        => 'horizontal',
-						'label_col'        => '4',
-						'label'              => __('Is active','geodirectory') ,
-						'type'              =>   'checkbox',
+						'id' => 'is_active',
+						'name' => 'is_active',
+						'type' => 'checkbox',
+						'label_type' => 'horizontal',
+						'label_col' => '4',
+						'label' => __( 'Is active', 'geodirectory' ) ,
 						'checked' => $value,
 						'value' => '1',
-						'switch'    => 'md',
-						'label_force_left'  => true,
-						'help_text' => geodir_help_tip( __( 'If no is selected then the field will not be displayed anywhere.', 'geodirectory' ))
+						'switch' => 'md',
+						'label_force_left' => true,
+						'help_text' => geodir_help_tip( __( 'If no is selected then the field will not be displayed anywhere.', 'geodirectory' ) ),
+						'wrap_class' => $wrap_class
 					)
 				);
-
 			}
-
 
 			// for_admin_use only
 			do_action( "geodir_cfa_before_for_admin_use_{$field->field_type}", $cf, $field);
 
 			if ( has_filter( "geodir_cfa_for_admin_use_{$field->field_type}" ) ) {
-
 				echo apply_filters( "geodir_cfa_for_admin_use_{$field->field_type}", '', $field->id, $cf, $field );
-
 			} else {
 				$value = '';
 				if ( isset( $field->for_admin_use ) ) {
@@ -260,24 +266,32 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				} elseif ( isset( $cf['defaults']['for_admin_use'] ) && $cf['defaults']['for_admin_use'] ) {
 					$value = $cf['defaults']['for_admin_use'];
 				}
+
+				// Prevent for_admin_use option for default fields.
+				if ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, array( 'post_title', 'post_content', 'post_category' ) ) ) {
+					$value = '';
+					$wrap_class = 'd-none';
+				} else {
+					$wrap_class = '';
+				}
+
 				echo aui()->input(
 					array(
-						'id'                => 'for_admin_use',
-						'name'              => 'for_admin_use',
-						'label_type'        => 'horizontal',
-						'label_col'        => '4',
-						'label'              => __('Admin edit only','geodirectory') ,
-						'type'              =>   'checkbox',
+						'id' => 'for_admin_use',
+						'name' => 'for_admin_use',
+						'type' => 'checkbox',
+						'label_type' => 'horizontal',
+						'label_col' => '4',
+						'label' => __( 'Admin edit only','geodirectory' ) ,
 						'checked' => $value,
 						'value' => '1',
-						'switch'    => 'md',
-						'label_force_left'  => true,
-						'help_text' => geodir_help_tip( __( 'If yes is selected then only site admin can see and edit this field on the add listing page.', 'geodirectory' ))
+						'switch' => 'md',
+						'label_force_left' => true,
+						'help_text' => geodir_help_tip( __( 'If yes is selected then only site admin can see and edit this field on the add listing page.', 'geodirectory' ) ),
+						'wrap_class' => $wrap_class
 					)
 				);
-				
 			}
-
 
 			// default_value
 			do_action( "geodir_cfa_before_default_value_{$field->field_type}", $cf, $field);
