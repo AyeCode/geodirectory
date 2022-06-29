@@ -297,6 +297,7 @@ function geodir_params() {
 		'txt_form_wait'                                => __( 'Wait...', 'geodirectory' ),
 		'txt_form_searching'                           => __( 'Searching...', 'geodirectory' ),
 		'txt_form_my_location'                           => __( 'My Location', 'geodirectory' ),
+		'txt_near_my_location'                         => addslashes( __( 'Near:', 'geodirectory' ) . ' ' . __( 'My Location', 'geodirectory' ) ),
 		'rating_type'                                  => geodir_get_option( 'rating_type' ) && geodir_get_option( 'rating_type' ) =='image' ? 'image' : 'fa',
 		'reviewrating'                                 => defined( 'GEODIR_REVIEWRATING_VERSION' ) ? 1 : '',
 		'multirating'                                  => defined( 'GEODIR_REVIEWRATING_VERSION' ) && geodir_get_option( 'rr_enable_rating' ) ? true : false,
