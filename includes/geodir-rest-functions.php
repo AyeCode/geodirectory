@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return bool $api_enabled.
  */
 function geodir_api_enabled() {
-	$api_enabled = geodir_get_option( 'rest_api_enabled' ) ? true : false;
+	$api_enabled = ! geodir_has_request_uri( '/wp-json/geodir/v2/markers' ) && geodir_get_option( 'rest_api_enabled' ) ? true : false;
 	return apply_filters( 'geodir_api_enabled', $api_enabled );
 }
 
