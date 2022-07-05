@@ -69,9 +69,9 @@ function geodirGoMapInit() {
     $.osmMapBase = {
         defaults: {
             address: '', // Street, City, Country
-            latitude: 56.9,
-            longitude: 24.1,
-            zoom: 4,
+            latitude: window.gdBaseLat ? window.gdBaseLat : 56.9,
+            longitude: window.gdBaseLng ? window.gdBaseLng : 24.1,
+            zoom: parseInt(window.gdBaseZoom) > 0 ? parseInt(window.gdBaseZoom) : 4,
             delay: 200,
             hideByClick: true,
             oneInfoWindow: true,
@@ -727,9 +727,9 @@ function geodirGoMapInit() {
     $.goMapBase = {
         defaults: {
             address: '', // Street, City, Country
-            latitude: 56.9,
-            longitude: 24.1,
-            zoom: 4,
+            latitude: window.gdBaseLat ? window.gdBaseLat : 56.9,
+            longitude: window.gdBaseLng ? window.gdBaseLng : 24.1,
+            zoom: parseInt(window.gdBaseZoom) > 0 ? parseInt(window.gdBaseZoom) : 4,
             delay: 200,
             hideByClick: true,
             oneInfoWindow: true,
