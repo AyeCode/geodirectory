@@ -113,6 +113,7 @@ class AUI_Component_Input {
 			} elseif ( $type == 'datepicker' || $type == 'timepicker' ) {
 				$type = 'text';
 				$args['class'] .= ' bg-initial '; // @todo not sure why we have this?
+				$clear_function .= "jQuery(this).parent().parent().find('input[name=\'" . esc_attr( $args['name'] ) . "\']').trigger('change');";
 
 				$args['extra_attributes']['data-aui-init'] = 'flatpickr';
 

@@ -1,5 +1,6 @@
 = 0.1.73 =
 * Conditional field multiselect field don't match for specific option - FIXED
+* Allow to run conditionl fields on custom event trigger - ADDED
 
 = 0.1.72 =
 * Input now has "size" option: sm, small, lg, large - ADDED
