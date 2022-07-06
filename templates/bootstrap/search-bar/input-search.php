@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.6
+ * @version    2.2.8
  *
  * Variables.
  *
@@ -23,7 +23,7 @@
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<div class='gd-search-field-search col-auto flex-fill<?php echo $input_wrap_class; ?>' style="flex-grow:9999 !important;">
+<div class='gd-search-field-search col-auto flex-fill<?php echo $input_wrap_class; ?>' style="flex-grow:9999 !important;" <?php echo geodir_conditional_field_attrs( array( 'type' => 'text' ), 's', 'text' ); ?>>
 	<?php
 	do_action('geodir_before_search_for_input');
 
