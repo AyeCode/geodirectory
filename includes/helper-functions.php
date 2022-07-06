@@ -1999,3 +1999,19 @@ function geodir_is_full_url( $url ) {
 
 	return false;
 }
+
+/**
+ * Check current request contains requested uri.
+ *
+ * @since 2.2.8
+ *
+ * @param string $match Matched requested uri.
+ * @return bool True on match else false.
+ */
+function geodir_has_request_uri( $match ) {
+	if ( $match && ! empty( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], $match ) !== false ) {
+		return true;
+	}
+
+	return false;
+}

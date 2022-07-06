@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.6
+ * @version    2.2.8
  *
  * Variables.
  *
@@ -24,7 +24,7 @@
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<div class='gd-search-field-near col-auto flex-fill <?php echo $near_class;?>' style="flex-grow:9999 !important;">
+<div class='gd-search-field-near col-auto flex-fill <?php echo $near_class;?>' style="flex-grow:9999 !important;" <?php echo geodir_conditional_field_attrs( array( 'type' => 'text' ), 'near', 'text' ); ?>>
 	<?php
 	do_action( 'geodir_before_search_near_input' );
 

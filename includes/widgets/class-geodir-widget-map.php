@@ -159,7 +159,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 
 
 
-		// its best to show a text input for not until Gutneberg can support dynamic selects
+		// its best to show a text input for not until Gutenberg can support dynamic selects
 		//@todo it would be preferable to use <optgroup> here but Gutenberg does not support it yet: https://github.com/WordPress/gutenberg/issues/8426
 		//$post_types = geodir_get_posttypes();
 		//if(count($post_types)>1){
@@ -690,7 +690,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			foreach ( $post_types as $post_type => $name ) {
 
 				if($hide_empty){
-					$post_counts = wp_count_posts($post_type, 'readable'); // let WP handel the caching
+					$post_counts = wp_count_posts($post_type, 'readable'); // let WP handle the caching
 					if(isset($post_counts->publish) && $post_counts->publish==0){
 						continue;
 					}
@@ -728,9 +728,43 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	public static function custom_script( $map_options ) {
 		$map_canvas = $map_options['map_canvas'];
 		$load_terms = ! empty( $map_options['cat_filter'] ) && geodir_lazy_load_map() ? 'true' : 'false';
+
+		// Base map latitude/longitude/zoom.
+		$base_latitude = '';
+		$base_longitude = '';
+		$base_zoom = '';
+
+		if ( geodir_is_page( 'search' ) ) {
+			if ( ! empty( $map_options['base_lat'] ) && ! empty( $map_options['base_lon'] ) ) {
+				$base_latitude = $map_options['base_lat'];
+				$base_longitude = $map_options['base_lon'];
+			} else if ( ! empty( $map_options['lat'] ) && ! empty( $map_options['lon'] ) ) {
+				$base_latitude = $map_options['lat'];
+				$base_longitude = $map_options['lon'];
+			} else if ( ! empty( $_REQUEST['sgeo_lat'] ) && ! empty( $_REQUEST['sgeo_lon'] ) ) {
+				$base_latitude = sanitize_text_field( $_REQUEST['sgeo_lat'] );
+				$base_longitude = sanitize_text_field( $_REQUEST['sgeo_lon'] );
+			} else if ( ! empty( $map_options['default_lat'] ) && ! empty( $map_options['default_lng'] ) ) {
+				$base_latitude = $map_options['default_lat'];
+				$base_longitude = $map_options['default_lng'];
+			}
+
+			if ( ! empty( $map_options['base_zoom'] ) && absint( $map_options['base_zoom'] ) > 0 ) {
+				$base_zoom = $map_options['base_zoom'];
+			} else if ( ! empty( $map_options['zoom'] ) && absint( $map_options['zoom'] ) > 0 ) {
+				$base_zoom = $map_options['zoom'];
+			} else if ( ! empty( $map_options['nomap_zoom'] ) && absint( $map_options['nomap_zoom'] ) > 0 ) {
+				$base_zoom = $map_options['nomap_zoom'];
+			} else {
+				$base_zoom = 11;
+			}
+		}
 ?>
 <style>.geodir_map_container .poi-info-window .full-width{width:180px;position:relative;margin-left:inherit;left:inherit;}</style>
 <script type="text/javascript">
+window.gdBaseLat = <?php echo geodir_sanitize_float( $base_latitude ); ?>;
+window.gdBaseLng = <?php echo geodir_sanitize_float( $base_longitude ); ?>;
+window.gdBaseZoom = <?php echo absint( $base_zoom ); ?>;
 jQuery(function ($) {
 	<?php if ( geodir_lazy_load_map() ) { ?>
 	jQuery('#<?php echo $map_canvas; ?>').geodirLoadMap({

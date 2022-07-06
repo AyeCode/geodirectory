@@ -258,6 +258,16 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 }
             }
 
+            /**
+             * Fires before the loop is rendered.
+             *
+             * @since 2.2.8
+             *
+             * @param array $widget_args Widget args.
+             * @param object $this Current widget class.
+             */
+            do_action( 'geodir_widget_loop_before', $widget_args, $this );
+
             // Check if we have listings or if we are faking it
             if ( $wp_query->post_count == 1 && empty( $wp_query->posts ) ) {
                 geodir_no_listings_found();
@@ -339,6 +349,16 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                     $wp_query->current_post = $wp_query->post_count;
                 }
             }
+
+            /**
+             * Fires after the loop is rendered.
+             *
+             * @since 2.2.8
+             *
+             * @param array $widget_args Widget args.
+             * @param object $this Current widget class.
+             */
+            do_action( 'geodir_widget_loop_after', $widget_args, $this );
         } else {
             geodir_no_listings_found();
         }

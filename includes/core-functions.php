@@ -1093,13 +1093,18 @@ function geodir_search_form_post_type_input() {
 		}
 
 		if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 && $show_select) {
-
 			$design_style = geodir_design_style();
 
 			$new_style = geodir_get_option( 'geodir_show_search_old_search_from' ) ? false : true;
 			if ( $new_style ) {
-				$wrap_class = $design_style ? " col-auto flex-fill" : '';
-				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class'>";
+				if ( $design_style ) {
+					$wrap_class = " col-auto flex-fill";
+					$attrs = geodir_conditional_field_attrs( array( 'type' => 'select' ), 'type', 'select' );
+				} else {
+					$wrap_class = '';
+					$attrs = '';
+				}
+				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class'" . $attrs . ">";
 			}
 
 			$select_class = $design_style ? " form-control custom-select" : '';

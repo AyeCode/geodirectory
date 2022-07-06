@@ -133,23 +133,26 @@ class GeoDir_API {
 		// Authentication.
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-authentication.php' );
 
-		// Abstract controllers.
-		include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-controller.php' );
-		include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-terms-controller.php' );
+		// Don't load on markers request to speedup.
+		if ( ! geodir_has_request_uri( '/wp-json/geodir/v2/markers' ) ) {
+			// Abstract controllers.
+			include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-controller.php' );
+			include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-terms-controller.php' );
 
-		// REST API v2 controllers.
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-taxonomies-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-types-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-categories-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-tags-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-posts-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-reviews-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-fields-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-settings-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-setting-options-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-tools-controller.php' );
-		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-countries-controller.php' );
+			// REST API v2 controllers.
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-taxonomies-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-types-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-categories-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-tags-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-posts-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-reviews-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-fields-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-settings-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-setting-options-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-tools-controller.php' );
+			include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-countries-controller.php' );
+		}
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-markers-controller.php' );
 
 		// Load show/hide widget on block widgets page.

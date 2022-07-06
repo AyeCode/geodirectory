@@ -2427,11 +2427,11 @@ function aui_cf_field_init_rules($) {
         return;
     }
     $('input.select2-search__field').attr('data-ignore-rule','');
-    $('[data-rule-key]').on('change keypress keyup', 'input, textarea', function() {
+    $('[data-rule-key]').on('change keypress keyup gdclear', 'input, textarea', function() {
         aui_cf_field_apply_rules($(this));
     });
 
-    $('[data-rule-key]').on('change', 'select', function() {
+    $('[data-rule-key]').on('change gdclear', 'select', function() {
         aui_cf_field_apply_rules($(this));
     });
 
