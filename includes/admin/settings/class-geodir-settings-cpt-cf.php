@@ -2147,13 +2147,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 								$op_size = $op_max;
 							}
 						}
-					} elseif (isset($field->option_values) && $field->option_values && $field->field_type == 'multiselect') {
-						if (strlen($field->option_values)) {
-							$op_size =  strlen($field->option_values);
-						}
 					}
 
-					if ( $field->data_type == 'TEXT' ) {
+					if ( $field->data_type == 'TEXT' || $field->field_type == 'multiselect' ) {
+						// Set TEXT data type to prevent row size database error.
+						if ( $field->field_type == 'multiselect' ) {
+							$column_attr = "TEXT";
+						}
 						$column_attr .= " NULL ";
 					} else {
 						$column_attr .= "( $op_size ) NULL ";
@@ -2162,10 +2162,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					// Update the field size to new max
 					if ( $exists ) {
 						$meta_field_add = "ALTER TABLE {$table} CHANGE `" . $field->htmlvar_name . "` `" . $field->htmlvar_name . "` {$column_attr}";
-						$alter_result   = $wpdb->query( $meta_field_add );
+						$alter_result = $wpdb->query( $meta_field_add );
 
 						if ( $alter_result === false ) {
-							return new WP_Error( 'failed', __( "Column change failed, you may have too many columns.", "geodirectory" ) );
+							if ( ! empty( $wpdb->last_error ) ) {
+								$db_error = '[' . $table . '] ' . $wpdb->last_error;
+							} else {
+								$db_error = __( "Column change failed, you may have too many columns.", "geodirectory" );
+							}
+
+							return new WP_Error( 'failed', $db_error );
 						}
 					}
 

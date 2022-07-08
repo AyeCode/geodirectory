@@ -1,3 +1,6 @@
+= 2.2.9 =
+* Show actual DB error on custom field creation fail - CHANGED
+
 = 2.2.8 =
 * Some timezone shows difference of day in a date for custom date format - FIXED
 * Old Elementor image setting shows error - FIXED
