@@ -1202,23 +1202,25 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				}
 
 				//link url, replace vars
+				$badge_link = ! empty( $args['link'] ) ? $args['link'] : '';
+
 				// default_category
 				if ( ! empty( $find_post->default_category ) ) {
-					if ( ! empty( $args['link'] ) && $match_field == 'default_category' && strpos( $args['link'], "%%input%%" ) !== false ) {
+					if ( ! empty( $$badge_link ) && $match_field == 'default_category' && strpos( $$badge_link, "%%input%%" ) !== false ) {
 						$term_link = get_term_link( absint( $find_post->default_category ), $post_type . 'category' );
 
 						if ( ! is_wp_error( $term_link ) ) {
-							$args['link'] = str_replace( "%%input%%", $term_link, $args['link'] );
+							$$badge_link = str_replace( "%%input%%", $term_link, $$badge_link );
 						}
 					}
 
 					// cat_url
-					if ( strpos( $badge, "%%cat_url%%" ) !== false || strpos( $args['link'], "%%cat_url%%" ) !== false ) {
+					if ( strpos( $badge, "%%cat_url%%" ) !== false || strpos( $badge_link, "%%cat_url%%" ) !== false ) {
 						$term_link = get_term_link( absint( $find_post->default_category ), $post_type . 'category' );
 
 						if ( ! is_wp_error( $term_link ) ) {
 							$badge = str_replace( "%%cat_url%%", $term_link, $badge );
-							$args['link'] = str_replace( "%%cat_url%%", $term_link, $args['link'] );
+							$badge_link = str_replace( "%%cat_url%%", $term_link, $badge_link );
 						}
 					}
 
@@ -1228,15 +1230,32 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 				}
 
-				if( !empty( $args['link'] ) && $args['link'] = str_replace("%%input%%",$match_value,$args['link']) ){
+				if ( ! empty( $badge_link ) && ( $badge_link = str_replace( "%%input%%", $match_value, $badge_link ) ) ) {
 					// will be replace in condition check
 				}
-				if( !empty( $args['link'] ) && $post_id && $args['link'] = str_replace("%%post_url%%",get_permalink($post_id),$args['link']) ){
+
+				if ( ! empty( $badge_link ) && $post_id && ( $badge_link = str_replace( "%%post_url%%", get_permalink( $post_id ), $badge_link ) ) ) {
 					// will be replace in condition check
 				}
-				if ( ! empty( $args['link'] ) ) {
-					$args['link'] = geodir_replace_variables($args['link']);
+
+				/**
+				 * Filters badge link.
+				 *
+				 * @since 2.2.9
+				 *
+				 * @param string $link Badge link.
+				 * @param string $match_field Match field.
+				 * @param array $args The badge parameters.
+				 * @param array $find_post Post object.
+				 * @param array $field The custom field array.
+				 */
+				$badge_link = apply_filters( 'geodir_post_badge_link', $badge_link, $match_field, $args, $find_post, $field );
+
+				if ( ! empty( $badge_link ) ) {
+					$badge_link = geodir_replace_variables( $badge_link );
 				}
+
+				$args['link'] = $badge_link;
 
 				if ( empty( $badge ) ) {
 					if ( empty( $badge ) && $match_field == 'post_date' ) {
