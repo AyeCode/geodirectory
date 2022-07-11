@@ -232,6 +232,39 @@ function geodir_post_badge_match_value( $match_value, $match_field, $args, $find
 }
 add_filter( 'geodir_post_badge_match_value', 'geodir_post_badge_match_value', 10, 5 );
 
+/**
+ * Filter the badge link.
+ *
+ * @since 2.2.9
+ *
+ * @param string $link Badge link.
+ * @param string $match_field Match field.
+ * @param array $args The badge parameters.
+ * @param array $find_post Post object.
+ * @param array $field The custom field array.
+ * @return string Filtered badge link.
+ */
+function geodir_post_badge_link( $link, $match_field, $args, $find_post, $field ) {
+	if ( $match_field ) {
+		// File
+		if ( ! empty( $field['type'] ) && $field['type'] == 'file' && ! empty( $args['link'] ) && strpos( $args['link'], '%%input%%' ) !== false ) {
+			$attachments = GeoDir_Media::get_attachments_by_type( $find_post->ID, $match_field, 1 );
+
+			if ( ! empty( $attachments ) ) {
+				$upload_dir = wp_upload_dir();
+				$upload_baseurl = $upload_dir['baseurl'];
+
+				if ( ! empty( $attachments[0]->file ) ) {
+					$link = str_replace( array( '%%input%%' ), array( $upload_baseurl . $attachments[0]->file ), $args['link'] );
+				}
+			}
+		}
+	}
+
+	return $link;
+}
+add_filter( 'geodir_post_badge_link', 'geodir_post_badge_link', 10, 5 );
+
 function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
 	// check we have the post value
 	if ( is_numeric( $p ) ) {
