@@ -1,5 +1,6 @@
 = 2.2.9 =
 * Show actual DB error on custom field creation fail - CHANGED
+* Add address fields support to gd_post_badge & gd_dynamic_content shortcodes - ADDED
 
 = 2.2.8 =
 * Some timezone shows difference of day in a date for custom date format - FIXED

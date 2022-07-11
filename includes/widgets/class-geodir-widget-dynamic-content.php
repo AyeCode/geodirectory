@@ -158,6 +158,10 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			$html = geodir_unwptexturize( $html );
 		}
 
+		if ( $args['key'] == 'street' ) {
+			$args['key'] = 'address';
+		}
+
 		$match_field = $_match_field = $args['key'];
 		if ( $match_field == 'address' ) {
 			$match_field = 'street';
@@ -168,10 +172,11 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 
 		if ($match_field === '' || ( ! empty( $find_post ) && ( isset( $find_post->{$match_field} ) || isset( $find_post->{$_match_field} ) ) ) ) {
+			$address_fields = array( 'street2', 'neighbourhood', 'city', 'region', 'country', 'zip', 'latitude', 'longitude' ); // Address fields
 			$field = array();
 			$search = $args['search'];
 
-			if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' && $match_field !== 'post_id' && $match_field !== 'post_status' ) {
+			if ( $match_field && ! in_array( $match_field, array( 'post_date', 'post_modified', 'default_category', 'post_id', 'post_status' ) ) && ! in_array( $match_field, $address_fields ) ) {
 				$package_id = geodir_get_post_package_id( $post_id, $post_type );
 				$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
@@ -187,6 +192,13 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 
 				if ( empty( $field ) ) {
 					return $output; // Field not allowed.
+				}
+			}
+
+			// Address fields.
+			if ( in_array( $match_field, $address_fields ) && ( $address_fields = geodir_post_meta_address_fields( '' ) ) ) {
+				if ( ! empty( $address_fields[ $match_field ] ) ) {
+					$field = $address_fields[ $match_field ];
 				}
 			}
 
@@ -353,21 +365,33 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
 
 		$keys = array();
-		if ( !empty( $fields ) ) {
+		if ( ! empty( $fields ) ) {
 			foreach( $fields as $field ) {
 				if ( apply_filters( 'geodir_badge_field_skip_key', false, $field ) ) {
 					continue;
 				}
 				$keys[ $field['htmlvar_name'] ] = $field['htmlvar_name'] . ' ( ' . __( $field['admin_title'], 'geodirectory' ) . ' )';
+
+				if ( $field['htmlvar_name'] == 'post_category' ) {
+					$keys['default_category'] = 'default_category ( ' . __( 'Default Category', 'geodirectory' ) . ' )';
+				} else if ( $field['htmlvar_name'] == 'address' && ( $address_fields = geodir_post_meta_address_fields( '' ) ) ) {
+					foreach ( $address_fields as $_field => $args ) {
+						if ( $_field != 'map_directions' && $_field != 'street' ) {
+							$keys[ $_field ] = $_field . ' ( ' . $args['frontend_title'] . ' )';
+						}
+					}
+				}
 			}
 		}
+
 		$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
 		$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
 		$keys['post_id'] = 'post_id ( ' . __( 'post id', 'geodirectory' ) . ' )';
 		$keys['post_status'] = 'post_status ( ' . __( 'Post Status', 'geodirectory' ) . ' )';
+
 		return apply_filters( 'geodir_badge_field_keys', $keys );
 	}
-	
+
 	/**
 	 * Gets an array of badge field conditions.
 	 *
@@ -387,5 +411,4 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 
 		return apply_filters( 'geodir_badge_conditions', $conditions );
 	}
-	
 }

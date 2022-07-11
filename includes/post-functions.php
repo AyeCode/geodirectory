@@ -951,7 +951,6 @@ function geodir_setup_postdata( $the_post ) {
  */
 function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	global $gd_post;
-//	print_r( $args );
 
 	$output = '';
 	if ( empty( $post_id ) ) {
@@ -1001,6 +1000,10 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 	$args = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
+	if ( $args['key'] == 'street' ) {
+		$args['key'] = 'address';
+	}
+
 	$match_field = $_match_field = $args['key'];
 	if ( $match_field == 'address' ) {
 		$match_field = 'street';
@@ -1017,6 +1020,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	}
 
 	if ( $match_field === '' || ( ! empty( $find_post_keys ) && ( in_array( $match_field, $find_post_keys ) || in_array( $_match_field, $find_post_keys ) ) ) ) {
+		$address_fields = array( 'street2', 'neighbourhood', 'city', 'region', 'country', 'zip', 'latitude', 'longitude' ); // Address fields
 		$field = array();
 		$badge = $args['badge'];
 
@@ -1025,7 +1029,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$output = apply_filters( 'geodir_output_badge_field_key_' . $match_field, $output, $find_post, $args );
 		}
 
-		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' && $match_field !== 'post_id' && $match_field !== 'post_status' ) {
+		if ( $match_field && ! in_array( $match_field, array( 'post_date', 'post_modified', 'default_category', 'post_id', 'post_status' ) ) && ! in_array( $match_field, $address_fields ) ) {
 			$package_id = geodir_get_post_package_id( $post_id, $post_type );
 			$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
@@ -1057,6 +1061,13 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		// If not then we run the standard output.
 		if ( empty( $output ) ) {
 			$search = $args['search'];
+
+			// Address fields.
+			if ( in_array( $match_field, $address_fields ) && ( $address_fields = geodir_post_meta_address_fields( '' ) ) ) {
+				if ( ! empty( $address_fields[ $match_field ] ) ) {
+					$field = $address_fields[ $match_field ];
+				}
+			}
 
 			$is_date = ( ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) || in_array( $match_field, array( 'post_date', 'post_modified' ) ) ? true : false;
 			/**
@@ -1350,24 +1361,18 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				 */
 				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $match_value, $match_field, $args, $find_post, $field );
 
-				if ( ! empty( $badge ) && $match_field == 'street' ) {
+				if ( ! empty( $badge ) && ( $match_field == 'street' || in_array( $match_field, $address_fields ) ) ) {
 					$badge = geodir_post_address( $badge, 'post_badge_street', $find_post );
 				}
 
-				if($design_style){
-//					print_r( $args );
-
-//					$btn_class = ' align-middle gd-badge';
+				if ( $design_style ) {
 					$btn_class = ' gd-badge';
 					// color
 					$color_custom = true;
 					$badge_color = '';
-					if( !empty( $args['color'] ) ) {
-//						$btn_class .= ' badge-' . sanitize_html_class($args['color']);
-						$badge_color = sanitize_html_class($args['color']);
+					if ( ! empty( $args['color'] ) ) {
+						$badge_color = sanitize_html_class( $args['color'] );
 						$color_custom = false;
-					}else{
-						//$btn_class .= ' badge-primary'; // custom colors will override this anyway.
 					}
 
 					// shadow
@@ -1396,7 +1401,6 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					elseif($args['alignment']=='left'){$btn_class .= " float-left mr-2 ";}
 					elseif($args['alignment']=='right'){$btn_class .= " float-right ml-2 ";}
 					elseif($args['alignment']=='center'){$btn_class .= " mw-100 d-block mx-auto ";}
-
 
 					if ( ! empty( $args['css_class'] ) ) {
 						// replace some old classes
