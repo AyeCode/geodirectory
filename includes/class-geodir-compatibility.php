@@ -607,6 +607,7 @@ class GeoDir_Compatibility {
 		$actions[] = 'geodir_recently_viewed_listings';
 		$actions[] = 'geodir_widget_listings';
 		$actions[] = 'geodir_bestof';
+		$actions[] = 'geodir_ajax_search';
 
 		return $actions;
 	}
