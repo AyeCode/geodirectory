@@ -263,6 +263,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 					$args['tooltip_text'] = __( "Distance from the current listing, click for directions.", "geodirectory" );
 				} else {
 					$args['link'] = $block_preview ? '#link_to_directions' : 'https://maps.google.com/?daddr=' . esc_attr( $gd_post->latitude ) . ',' . esc_attr( $gd_post->longitude );
+					$args['tooltip_text'] = __( "View Directions on Google Map", "geodirectory" );
 					$args['new_window'] = true;
 
 					if ( $block_preview ) {

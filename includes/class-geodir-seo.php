@@ -416,19 +416,19 @@ class GeoDir_SEO {
 			$post_type_info = get_post_type_object( $post_type );
 
 			if ( isset( $post_type_info->seo['title'] ) && ! empty( $post_type_info->seo['title'] ) ) {
-				self::$title = $post_type_info->seo['title'];
+				self::$title = __( $post_type_info->seo['title'], 'geodirectory' );
 			} else {
 				self::$title = ! empty( $gd_settings['seo_cpt_title'] ) ? $gd_settings['seo_cpt_title'] : GeoDir_Defaults::seo_cpt_title();
 			}
 
 			if ( isset( $post_type_info->seo['meta_title'] ) && ! empty( $post_type_info->seo['meta_title'] ) ) {
-				self::$meta_title = $post_type_info->seo['meta_title'];
+				self::$meta_title = __( $post_type_info->seo['meta_title'], 'geodirectory' );
 			} else {
 				self::$meta_title = ! empty( $gd_settings['seo_cpt_meta_title'] ) ? $gd_settings['seo_cpt_meta_title'] : GeoDir_Defaults::seo_cpt_meta_title();
 			}
 
 			if ( isset( $post_type_info->seo['meta_description'] ) && ! empty( $post_type_info->seo['meta_description'] ) ) {
-				self::$meta_description = $post_type_info->seo['meta_description'];
+				self::$meta_description = __( $post_type_info->seo['meta_description'], 'geodirectory' );
 			} else {
 				self::$meta_description = ! empty( $gd_settings['seo_cpt_meta_description'] ) ? $gd_settings['seo_cpt_meta_description'] : GeoDir_Defaults::seo_cpt_meta_description();
 			}

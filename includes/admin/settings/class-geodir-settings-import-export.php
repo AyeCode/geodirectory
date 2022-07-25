@@ -419,13 +419,12 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					});
 				}
 
-
 				function gd_imex_log_errors(errors){
-						jQuery.each(errors, function( index, value ) {
-							jQuery( "#gd-csv-errors" ).append( "<p>"+value+"</p>" );
-							jQuery( "#gd-csv-errors" ).addClass('error');
-							jQuery( "#gd-import-errors" ).show();
-						});
+					jQuery.each(errors, function( index, value ) {
+						jQuery( "#gd-csv-errors" ).append( "<p class='m-0 p-0 small'>"+value+"</p>" );
+						jQuery( "#gd-csv-errors" ).addClass('show error py-2');
+						jQuery( "#gd-import-errors" ).show();
+					});
 				}
 
 				function gd_imex_TerminateImport(el, type) {
