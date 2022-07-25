@@ -264,6 +264,7 @@ class GeoDir_Admin_Import_Export {
 			$errors          = array();
 
 			$update_or_skip = isset( $_POST['_ch'] ) && $_POST['_ch'] == 'update' ? 'update' : 'skip';
+			$log_error = __( 'GD IMPORT LISTING [ROW %d]:', 'geodirectory' );
 
 			foreach ( $rows as $post_info ) {
 				$csv_row++;
@@ -271,6 +272,7 @@ class GeoDir_Admin_Import_Export {
 					$skipped ++;
 					continue;
 				}
+				$line_error = wp_sprintf( $log_error, $csv_row );
 
 				$temp_title = isset($post_info['post_title']) ? esc_attr($post_info['post_title']) :'' ;
 
@@ -280,7 +282,6 @@ class GeoDir_Admin_Import_Export {
 				if ( isset( $post_info['_post_images_to_upload'] ) && $post_info['_post_images_to_upload'] ) {
 					$images = $images + $post_info['_post_images_to_upload'];
 				}
-
 
 				if ( is_array($post_info) ) {
 					/**
@@ -298,6 +299,7 @@ class GeoDir_Admin_Import_Export {
 						} else {
 							$invalid ++;
 							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($result->get_error_message()) );
+							geodir_error_log( $line_error . ' ' . $result->get_error_message() );
 						}
 
 						// insert
@@ -308,6 +310,7 @@ class GeoDir_Admin_Import_Export {
 						} else {
 							$invalid ++;
 							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($result->get_error_message()) );
+							geodir_error_log( $line_error . ' ' . $result->get_error_message() );
 						}
 					}
 					
@@ -320,11 +323,7 @@ class GeoDir_Admin_Import_Export {
 					$invalid ++;
 					$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($post_info) );
 				}
-
-				//$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr("invalid title") );
-
 			}
-
 		} else {
 			return new WP_Error( 'gd-csv-empty', __( "No data found in csv file.", "geodirectory" ) );
 		}
