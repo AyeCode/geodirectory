@@ -497,7 +497,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 						var invalid_addr = parseInt(jQuery('#gd_invalid_addr', cont).val());
 					}
 
-					var gdMsg = '<p></p>';
+					var gdMsg = '';
 					if ( processed > 0 ) {
 						var msgParse = '<p><?php echo addslashes( sprintf( __( 'Total %s item(s) found.', 'geodirectory' ), '%s' ) );?></p>';
 						msgParse = msgParse.replace("%s", processed);
@@ -551,7 +551,6 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					if ( ( updated > 0 || created > 0 ) && type=='post' ) {
 						gdMsg += '<p><i class="fas fa-info-circle" aria-hidden="true"></i> <?php echo addslashes( sprintf( __( 'Visit GeoDirectory -> Status -> Tools -> Term counts. Run that tool to update term counts after your import. Check more at %shere%s.', 'geodirectory' ), '<a href="https://docs.wpgeodirectory.com/article/367-settings-overview-for-gd-status-tools" target="_blank">', '</a>' ) ); ?></p>';
 					}
-					gdMsg += '<p></p>';
 					jQuery('#gd-import-msg', cont).find('#message').removeClass('error').addClass('updated').html(gdMsg);
 					jQuery('#gd-import-msg', cont).show();
 					return;
@@ -854,10 +853,21 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 						}
 						vSec = 1;
 						jQuery('[name^="gd_imex["]', $parent).each(function() {
-							v = $(this).val();
-							v = typeof v == 'string' && v !== '' ? v.trim() : '';
-							if (v != 'undefined') {
-								fields += '&' + $(this).prop('name') + '=' + v;
+							v = $(this).val(), name=$(this).prop('name');
+							if ($(this).is(':checkbox')) {
+								if (!$(this).is(':checked')) {
+									return true;
+								}
+							}
+							if (v && (typeof v == 'object' || typeof v == 'array')) {
+								jQuery.each(v, function(_i, _v) {
+									fields += '&' + name + '=' + (_v !== '' ? _v.trim() : '');
+								});
+							} else {
+								v = typeof v == 'string' && v !== '' ? v.trim() : '';
+								if (v != 'undefined') {
+									fields += '&' + name + '=' + v;
+								}
 							}
 						});
 						$this.prop('disabled', true);
