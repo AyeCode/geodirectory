@@ -152,52 +152,58 @@ function geodir_post_custom_fields( $package_id = '', $default = 'all', $post_ty
  * @return mixed|void
  */
 function geodir_get_cf_value( $cf ) {
-    global $post, $gd_post;
-    $value = '';
-    if ( is_admin() ) {
-        global $post;
+	global $post, $gd_post;
 
-        if ( isset( $_REQUEST['post'] ) ) {
-            $_REQUEST['pid'] = (int)$_REQUEST['post'];
-        }
-    } elseif ( ! empty( $gd_post ) ) {
+	$value = '';
+	if ( is_admin() ) {
+		global $post;
 
-    }
+		if ( isset( $_REQUEST['post'] ) ) {
+			$_REQUEST['pid'] = (int)$_REQUEST['post'];
+		}
 
-    if ( empty( $gd_post ) && ! empty( $post ) ) {
-        $gd_post = geodir_get_post_info( $post->ID );
-    }
+		// Clear cache to prevent mis-match when loaded from cache.
+		if ( ! empty( $gd_post ) && ! empty( $post ) && (int) $gd_post->ID != (int) $post->ID ) {
+			$gd_post = array();
+		}
+	} elseif ( ! empty( $gd_post ) ) {
 
-    // check if post content
-    if ( $cf['name'] == 'post_content' ) {
-        $value = get_post_field( 'post_content', $gd_post->ID );
-    } elseif ( $cf['name'] == 'post_date' ) {
-        $value = get_post_field( 'post_date', $gd_post->ID );
-    } elseif ( $cf['name'] == 'address' ) {
-        $value = geodir_get_post_meta( $gd_post->ID, 'street', true );
-    } else {
-        $value = geodir_get_post_meta( $gd_post->ID, $cf['name'], true );
-    }
+	}
 
-    // Set defaults
-    if ( ( $value == '' || $cf['type'] == 'checkbox' ) && $gd_post->post_status == 'auto-draft' ) {
-        $value = $cf['default'];
-    }
+	if ( empty( $gd_post ) && ! empty( $post ) ) {
+		$gd_post = geodir_get_post_info( $post->ID );
+	}
 
-    // Blank title for auto drafts
-    if ( $cf['name'] == 'post_title' && $value == __( "Auto Draft" ) ) { // no text domain used here on purpose as we are matching a core WP text.
-        $value = "";
-    }
+	// check if post content
+	if ( $cf['name'] == 'post_content' ) {
+		$value = get_post_field( 'post_content', $gd_post->ID );
+	} elseif ( $cf['name'] == 'post_date' ) {
+		$value = get_post_field( 'post_date', $gd_post->ID );
+	} elseif ( $cf['name'] == 'address' ) {
+		$value = geodir_get_post_meta( $gd_post->ID, 'street', true );
+	} else {
+		$value = geodir_get_post_meta( $gd_post->ID, $cf['name'], true );
+	}
 
-    /**
-     * Filter the custom field value.
-     *
-     * @since 1.6.20
-     * 
-     * @param mixed $value Custom field value.
-     * @param array $cf Custom field info.
-     */
-    return apply_filters( 'geodir_get_cf_value', $value, $cf );
+	// Set defaults
+	if ( ( $value == '' || $cf['type'] == 'checkbox' ) && $gd_post->post_status == 'auto-draft' ) {
+		$value = $cf['default'];
+	}
+
+	// Blank title for auto drafts
+	if ( $cf['name'] == 'post_title' && $value == __( "Auto Draft" ) ) { // no text domain used here on purpose as we are matching a core WP text.
+		$value = "";
+	}
+
+	/**
+	 * Filter the custom field value.
+	 *
+	 * @since 1.6.20
+	 * 
+	 * @param mixed $value Custom field value.
+	 * @param array $cf Custom field info.
+	 */
+	return apply_filters( 'geodir_get_cf_value', $value, $cf );
 }
 
 /**
@@ -206,32 +212,38 @@ function geodir_get_cf_value( $cf ) {
  * @return mixed|void
  */
 function geodir_get_cf_default_category_value() {
-    global $post,$gd_post;
-    if (is_admin()) {
-        global $post;
+	global $post, $gd_post;
 
-        if (isset($_REQUEST['post'])) {
-            $_REQUEST['pid'] = (int)$_REQUEST['post'];
-        }
-    }elseif(!empty($gd_post)){
+	$value = '';
+	if ( is_admin() ) {
+		global $post;
 
-    }
+		if ( isset( $_REQUEST['post'] ) ) {
+			$_REQUEST['pid'] = (int)$_REQUEST['post'];
+		}
 
-    if(empty($gd_post) && !empty($post)){
-        $gd_post = geodir_get_post_info($post->ID);
-    }
+		// Clear cache to prevent mis-match when loaded from cache.
+		if ( ! empty( $gd_post ) && ! empty( $post ) && (int) $gd_post->ID != (int) $post->ID ) {
+			$gd_post = array();
+		}
+	} elseif ( ! empty( $gd_post ) ) {
 
+	}
 
-    $value = geodir_get_post_meta($gd_post->ID, 'default_category', true);
+	if ( empty( $gd_post ) && ! empty( $post ) ) {
+		$gd_post = geodir_get_post_info( $post->ID );
+	}
 
-    /**
-     * Filter the default category field value.
-     *
-     * @since 2.0.0
-     * 
-     * @param mixed $value Custom field value.
-     */
-    return apply_filters( 'geodir_get_cf_default_category_value', $value );
+	$value = geodir_get_post_meta( (int) $gd_post->ID, 'default_category', true );
+
+	/**
+	 * Filter the default category field value.
+	 *
+	 * @since 2.0.0
+	 * 
+	 * @param mixed $value Custom field value.
+	 */
+	return apply_filters( 'geodir_get_cf_default_category_value', $value );
 }
 
 /**
