@@ -4,6 +4,7 @@
 * Use file src url as a badge link for file fields - CHANGED
 * Meta from CPT settings are not translated with WPML - FIXED
 * Backend edit listing form loads values from other post due to cache issue - FIXED
+* Elementor module shows icon for empty GD field value - FIXED
 
 = 2.2.8 =
 * Some timezone shows difference of day in a date for custom date format - FIXED

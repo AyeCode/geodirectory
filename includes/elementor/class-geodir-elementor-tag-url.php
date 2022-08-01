@@ -73,24 +73,29 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 						}
 					}
 				} else {
-					$cf = geodir_get_field_infoby('htmlvar_name', $key, $gd_post->post_type);
-					$field_type = !empty($cf['field_type']) ? esc_attr($cf['field_type']) : '';
-					$field_value = $gd_post->{$key};
-					// maybe add special url types
-					if($field_type == 'phone'){
+					$cf = geodir_get_field_infoby( 'htmlvar_name', $key, $gd_post->post_type );
+					$field_type = ! empty( $cf['field_type'] ) ? esc_attr( $cf['field_type'] ) : '';
+					$field_value = trim( stripslashes( $gd_post->{$key} ) );
+
+					// Maybe add special url types.
+					if ( $field_type == 'phone' ) {
 						$value .= "tel:";
-					}elseif($field_type == 'email'){
+					} else if ( $field_type == 'email' ) {
 						$value .= "mailto:";
-					}elseif($field_type == 'file'){
-						$parts = explode("|",$field_value);
-						if(!empty($parts[0])){
-							$field_value = $parts[0];
+					} else if ( $field_type == 'file' ) {
+						$parts = explode( "|", $field_value );
+
+						if ( ! empty( $parts[0] ) ) {
+							$field_value = trim( $parts[0] );
 						}
 					}
-					$value = esc_url_raw($value . $field_value);
+
+					if ( $field_value != '' ) {
+						$value = esc_url_raw( $value . $field_value );
+					} else {
+						$value = '';
+					}
 				}
-
-
 			}elseif($key == 'post_images'){
 				$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key, 1 );
 				if(!empty($post_images)){
@@ -124,7 +129,7 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 				$value = esc_url_raw($fallback);
 			}
 
-			echo  $value ;
+			echo $value;
 		}
 	}
 
