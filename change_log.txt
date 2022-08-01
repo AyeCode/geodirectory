@@ -3,6 +3,7 @@
 * Add address fields support to gd_post_badge & gd_dynamic_content shortcodes - ADDED
 * Use file src url as a badge link for file fields - CHANGED
 * Meta from CPT settings are not translated with WPML - FIXED
+* Backend edit listing form loads values from other post due to cache issue - FIXED
 
 = 2.2.8 =
 * Some timezone shows difference of day in a date for custom date format - FIXED
