@@ -1352,15 +1352,23 @@ class GeoDir_SEO {
 	 * @return array The meta robots array.
 	 */
 	public static function wpseo_robots_array( $robots, $presentation ) {
-		if ( ! empty( $robots ) && ! empty( $presentation ) && ! empty( $presentation->model->object_id ) && geodir_is_page( 'single' ) ) {
-			if ( self::wpseo_is_indexable( (int) $presentation->model->object_id ) ) {
+		if ( ! empty( $robots ) && geodir_is_page( 'single' ) ) {
+			if ( ! empty( $presentation ) && ! empty( $presentation->model->object_id ) ) {
+				$indexable = (bool) self::wpseo_is_indexable( (int) $presentation->model->object_id );
+
+				if ( empty( $robots['follow'] ) ) {
+					$robots['follow'] = WPSEO_Meta::get_value( 'meta-robots-nofollow', (int) $presentation->model->object_id );
+				}
+			} else if ( $post_type = geodir_get_current_posttype() ) {
+				$indexable = WPSEO_Options::get( 'noindex-' . $post_type, false ) === false ? true : false;
+			} else {
+				return $robots;
+			}
+
+			if ( $indexable ) {
 				$robots['index'] = 'index';
 			} else {
 				$robots['index'] = 'noindex';
-			}
-
-			if ( empty( $robots['follow'] ) ) {
-				$robots['follow'] = WPSEO_Meta::get_value( 'meta-robots-nofollow', (int) $presentation->model->object_id );
 			}
 		}
 
