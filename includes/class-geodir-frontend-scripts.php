@@ -117,6 +117,38 @@ class GeoDir_Frontend_Scripts {
 		$default_search_for_text = addslashes(stripslashes($default_search_for_text));
 		$default_near_text = addslashes(stripslashes($default_near_text));
 		$city = !empty($search_location) ? addslashes(stripslashes($search_location->city)) : '';
+
+		/**
+		 * Google Geocoder restrict country.
+		 *
+		 * @since 2.2.9
+		 *
+		 * @params string $restrict_country Country name or country code.
+		 */
+		$restrict_country = apply_filters( 'geodir_google_geocode_restrict_country', '' );
+
+		$_properties = array();
+		if ( ! empty( $restrict_country ) && is_scalar( $restrict_country ) ) {
+			$_properties['componentRestrictions'] = array( 'country' => esc_attr( $restrict_country ) );
+		}
+
+		if ( ! empty( $_properties ) ) {
+			$properties = wp_json_encode( $_properties );
+			$properties = substr( $properties, 1, -1 );
+		} else {
+			$properties = '';
+		}
+
+		/**
+		 * Google Geocoder properties.
+		 *
+		 * @since 2.2.9
+		 *
+		 * @params string $properties The geocoder properties.
+		 */
+		$properties = apply_filters( 'geodir_google_geocode_properties', $properties );
+
+		$google_geocode_properties = ! empty( $properties ) ? ',' . ltrim( $properties, ',' ) : '';
 		?>
 		<script type="text/javascript">
 			var default_location = '<?php echo $city ;?>';
@@ -273,7 +305,7 @@ class GeoDir_Frontend_Scripts {
 						?>
 						var search_address = address<?php echo ( $near_add ? '+", ' . $near_add . '"' : '' ) . $near_add2; ?>;
 						if (window.gdMaps === 'google') {
-							Sgeocoder.geocode({'address': search_address},
+							Sgeocoder.geocode({'address': search_address<?php echo $google_geocode_properties; ?>},
 								function (results, status) {
 									if (status == google.maps.GeocoderStatus.OK) {
 										updateSearchPosition(results[0].geometry.location, $form);
