@@ -1206,11 +1206,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 				// default_category
 				if ( ! empty( $find_post->default_category ) ) {
-					if ( ! empty( $$badge_link ) && $match_field == 'default_category' && strpos( $$badge_link, "%%input%%" ) !== false ) {
+					if ( ! empty( $badge_link ) && $match_field == 'default_category' && strpos( $badge_link, "%%input%%" ) !== false ) {
 						$term_link = get_term_link( absint( $find_post->default_category ), $post_type . 'category' );
 
 						if ( ! is_wp_error( $term_link ) ) {
-							$$badge_link = str_replace( "%%input%%", $term_link, $$badge_link );
+							$badge_link = str_replace( "%%input%%", $term_link, $badge_link );
 						}
 					}
 
