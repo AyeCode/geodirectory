@@ -160,21 +160,20 @@ class GeoDir_Comments {
 
 		return $comments_link;
 	}
-	
+
 	/**
 	 * Update post overall rating and rating count.
 	 *
-     * @since 2.0.0
-     *
+	 * @since 2.0.0
+	 *
 	 * @global object $wpdb WordPress Database object.
-	 * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 *
 	 * @param int $post_id The post ID.
 	 * @param string $post_type The post type.
 	 * @param bool $delete Depreciated since ver 1.3.6.
 	 */
 	public static function update_post_rating( $post_id = 0, $post_type = '', $delete = false ) {
-		global $wpdb, $plugin_prefix, $comment;
+		global $wpdb, $comment;
 		if ( ! $post_type ) {
 			$post_type = get_post_type( $post_id );
 		}
@@ -182,7 +181,7 @@ class GeoDir_Comments {
 		if ( ! geodir_is_gd_post_type( $post_type ) ) {
 			return;
 		}
-		$detail_table         = $plugin_prefix . $post_type . '_detail';
+		$detail_table         = geodir_db_cpt_table( $post_type );
 		$post_newrating       = geodir_get_post_rating( $post_id, 1 );
 		$post_newrating_count = (int) geodir_get_review_count_total( $post_id, 1 );
 
@@ -194,6 +193,10 @@ class GeoDir_Comments {
 		// Clear the post cache
 		wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
 
+		// Clear transients.
+		delete_transient( 'gd_avg_num_votes_' . $detail_table );
+		delete_transient( 'gd_avg_rating_' . $detail_table );
+
 		/**
 		 * Called after Updating post overall rating and rating count.
 		 *
@@ -204,7 +207,6 @@ class GeoDir_Comments {
 		 * @param int $post_id The post ID.
 		 */
 		do_action( 'geodir_update_post_rating', $post_id );
-
 	}
 
 	/**

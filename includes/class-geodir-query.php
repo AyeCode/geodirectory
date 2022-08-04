@@ -1052,28 +1052,32 @@ class GeoDir_Query {
 
 				$rating_order = $sort_by == 'rating_asc' ? "ASC" : "DESC";
 				$use_bayesian = apply_filters( 'geodir_use_bayesian', true, $table );
-				$avg_rating = 0;
 
 				if ( $use_bayesian ) {
-					$avg_num_votes = get_transient( 'gd_avg_num_votes_'.$table );
+					$avg_num_votes = get_transient( 'gd_avg_num_votes_' . $table );
 
-					if ( ! $avg_num_votes ) {
-						$avg_num_votes = $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table}" );
+					if ( $avg_num_votes === false ) {
+						$avg_num_votes = (int) $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table}" );
+						$avg_rating = false;
 
-						if ( $avg_num_votes ) {
-							$avg_rating = get_transient( 'gd_avg_rating_' . $table );
-
-							if ( ! $avg_rating ) {
-								$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table}") / $avg_num_votes;
-							}
-
-							set_transient( 'gd_avg_num_votes_'.$table, $avg_num_votes, 12 * HOUR_IN_SECONDS );
-							set_transient( 'gd_avg_rating_'.$table, $avg_rating , 12 * HOUR_IN_SECONDS );
-						}
+						// Save transient for rating count.
+						set_transient( 'gd_avg_num_votes_' . $table, $avg_num_votes, 12 * HOUR_IN_SECONDS );
+					} else {
+						$avg_num_votes = (int) $avg_num_votes;
+						$avg_rating = get_transient( 'gd_avg_rating_' . $table );
 					}
 
-					if ( ! $avg_num_votes ) {
-						$avg_num_votes = 0;
+					if ( $avg_rating === false ) {
+						if ( $avg_num_votes > 0 ) {
+							$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table}" ) / $avg_num_votes;
+						} else {
+							$avg_rating = 0;
+						}
+
+						// Save transient for average rating.
+						set_transient( 'gd_avg_rating_' . $table, $avg_rating , 12 * HOUR_IN_SECONDS );
+					} else {
+						$avg_rating = geodir_sanitize_float( $avg_rating );
 					}
 
 					$order_by_parts[] = " ( ( $avg_num_votes * $avg_rating ) + ( " . $table . ".rating_count * " . $table . ".overall_rating ) )  / ( $avg_num_votes + " . $table . ".rating_count ) $rating_order";
@@ -1171,28 +1175,31 @@ class GeoDir_Query {
 						break;
 					case 'overall_rating':
 						$use_bayesian = apply_filters( 'geodir_use_bayesian', true, $table );
-						$avg_rating = 0;
-
 						if ( $use_bayesian ) {
 							$avg_num_votes = get_transient( 'gd_avg_num_votes_' . $table );
 
-							if ( ! $avg_num_votes ) {
-								$avg_num_votes = $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table}" );
+							if ( $avg_num_votes === false ) {
+								$avg_num_votes = (int) $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table}" );
+								$avg_rating = false;
 
-								if ( $avg_num_votes ) {
-									$avg_rating = get_transient( 'gd_avg_rating_' . $table );
-
-									if ( ! $avg_rating ) {
-										$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table}" ) / $avg_num_votes;
-									}
-
-									set_transient( 'gd_avg_num_votes_' . $table, $avg_num_votes, 12 * HOUR_IN_SECONDS );
-									set_transient( 'gd_avg_rating_' . $table, $avg_rating , 12 * HOUR_IN_SECONDS );
-								}
+								// Save transient for rating count.
+								set_transient( 'gd_avg_num_votes_' . $table, $avg_num_votes, 12 * HOUR_IN_SECONDS );
+							} else {
+								$avg_num_votes = (int) $avg_num_votes;
+								$avg_rating = get_transient( 'gd_avg_rating_' . $table );
 							}
 
-							if ( ! $avg_num_votes ) {
-								$avg_num_votes = 0;
+							if ( $avg_rating === false ) {
+								if ( $avg_num_votes > 0 ) {
+									$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table}" ) / $avg_num_votes;
+								} else {
+									$avg_rating = 0;
+								}
+
+								// Save transient for average rating.
+								set_transient( 'gd_avg_rating_' . $table, $avg_rating , 12 * HOUR_IN_SECONDS );
+							} else {
+								$avg_rating = geodir_sanitize_float( $avg_rating );
 							}
 
 							$orderby = " ( ( $avg_num_votes * $avg_rating ) + ( " . $table . ".rating_count * " . $table . ".overall_rating ) )  / ( $avg_num_votes + " . $table . ".rating_count ) $order";
