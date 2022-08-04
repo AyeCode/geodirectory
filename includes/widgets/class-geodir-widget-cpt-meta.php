@@ -124,9 +124,16 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => true,
 				),
+				'cpt_only'  => array(
+					'type' => 'checkbox',
+					'title' => __( 'Hide On Non Post Type Archive Pages', 'geodirectory' ),
+					'value' => '1',
+					'default' => '0',
+					'desc_tip' => true,
+					'advanced' => false
+				)
 			)
 		);
-
 
 		$design_style = geodir_design_style();
 
@@ -185,6 +192,7 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 				'alignment' => '',
 				'text_alignment' => '',
 				'css_class' => '',
+				'cpt_only' => '',
 				'bg'    => '',
 				'mt'    => '',
 				'mb'    => '3',
@@ -202,20 +210,26 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 			$instance, 
 			'gd_cpt_meta' 
 		);
+
 		if ( empty( $instance['image_size'] ) ) {
 			$instance['image_size'] = 'thumbnail';
 		}
 
-		$post_type = !empty($instance['post_type']) ? esc_attr($instance['post_type']) : geodir_get_current_posttype();
+		$post_type = ! empty( $instance['post_type'] ) ? esc_attr( $instance['post_type'] ) : geodir_get_current_posttype();
 
 		$output = '';
-		if ( $this->is_preview() && !$post_type ) {
+		if ( $this->is_preview() && ! $post_type ) {
 			$post_type = 'gd_place';
 		}
 
-
-		if(!geodir_is_gd_post_type($post_type)){
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
 			return $output;
+		}
+
+		if ( ! empty( $instance['cpt_only'] ) && ! $this->is_preview() ) {
+			if ( ! geodir_is_page( 'post_type' ) ) {
+				return;
+			}
 		}
 
 		$post_type_obj = $post_type ? get_post_type_object( $post_type ) : array();
