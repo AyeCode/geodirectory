@@ -6,6 +6,7 @@
 * Backend edit listing form loads values from other post due to cache issue - FIXED
 * Elementor module shows icon for empty GD field value - FIXED
 * Bayesian rating sorting uses wrong average rating - FIXED
+* GD > CPT Meta: option added to hide on non post type archive pages - ADDED
 
 = 2.2.8 =
 * Some timezone shows difference of day in a date for custom date format - FIXED
