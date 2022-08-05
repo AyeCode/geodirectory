@@ -436,7 +436,7 @@ class GeoDir_Admin_Import_Export {
 			return esc_attr__('Title missing','geodirectory');
 		}
 
-		// Connvert date in mysql format
+		// Convert date in mysql format
 		if ( ! empty( $post_info['post_date'] ) && strpos( $post_info['post_date'], '/' ) !== false ) {
 			$post_info['post_date'] = geodir_date( $post_info['post_date'], 'Y-m-d H:i:s' );
 		}
@@ -656,7 +656,7 @@ class GeoDir_Admin_Import_Export {
 		do_action( 'geodir_export_posts_set_globals', $post_type );
 
 		if ( $post_type == 'gd_event' ) {
-			//add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 ); // @todo this shoudl be done from events plugin
+			//add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 ); // @todo this should be done from events plugin
 		}
 		$filters = ! empty( $_REQUEST['gd_imex'] ) && is_array( $_REQUEST['gd_imex'] ) ? $_REQUEST['gd_imex'] : null;
 
@@ -1577,9 +1577,12 @@ class GeoDir_Admin_Import_Export {
 	 */
 	public static function import_settings() {
 		$json_file = isset( $_POST['_file'] ) ? $_POST['_file'] : null;
+
 		$settings  = self::validate_json( $json_file );
 
-		//print_r($settings);exit;
+		if ( is_wp_error( $settings ) ) {
+			return $settings;
+		}
 
 		if ( $settings === false ) {
 			return new WP_Error( 'gd-invalid-json', __( "json file is not valid.", "geodirectory" ) );
@@ -1598,7 +1601,6 @@ class GeoDir_Admin_Import_Export {
 			'updated' => $i,
 			'data'    => __( 'Settings updated.', 'geodirectory' )
 		);
-
 	}
 
 	/**
@@ -1609,11 +1611,13 @@ class GeoDir_Admin_Import_Export {
 	public static function validate_json( $json_file ) {
 		global $wp_filesystem;
 
-		$json        = array();
-		$uploads     = wp_upload_dir();
-		$uploads_dir = $uploads['basedir'];
+		if ( is_wp_error( $json_file ) ) {
+			return $json_file;
+		}
 
-
+		$json          = array();
+		$uploads       = wp_upload_dir();
+		$uploads_dir   = $uploads['basedir'];
 		$json_file_arr = explode( '/', $json_file );
 		$json_filename = end( $json_file_arr );
 		$target_path   = $uploads_dir . '/geodir_temp/' . $json_filename;
@@ -1639,7 +1643,6 @@ class GeoDir_Admin_Import_Export {
 						return $json;
 					}
 				}
-
 			}
 		}
 
@@ -1647,7 +1650,7 @@ class GeoDir_Admin_Import_Export {
 	}
 
 	/**
-	 * Adds the .json fiel extension to the WP allowed file types on the fly.
+	 * Adds the .json file extension to the WP allowed file types on the fly.
 	 *
 	 * @param array $mimes The currently allowed file mime types.
 	 *

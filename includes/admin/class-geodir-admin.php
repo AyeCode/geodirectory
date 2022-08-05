@@ -51,6 +51,7 @@ class GeoDir_Admin {
 		}
 
 		if ( ! empty( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'geodir_post_attachment_upload', 'geodir_import_export' ) ) ) {
+			add_filter( 'upload_mimes', array( $this, 'upload_mimes' ), 11, 2 );
 			add_filter( 'wp_check_filetype_and_ext', array( $this, 'wp_check_filetype_and_ext' ), 10, 5 );
 		}
 
@@ -445,6 +446,22 @@ class GeoDir_Admin {
 	}
 
 	/**
+	 * Filter mime types to allow json file type for import settings.
+	 *
+	 * @since 2.2.9
+	 *
+	 * @param array            $mimes Mime types keyed by the file extension regex corresponding to those types.
+	 * @param int|WP_User|null $user User ID, User object or null if not provided (indicates current user).
+	 */
+	public function upload_mimes( $mimes, $user ) {
+		if ( empty( $mimes['json'] ) && ! empty( $_POST['imgid'] ) && $_POST['imgid'] == 'gd_im_settings' && ! empty( $_POST['name'] ) && strtolower( substr( strrchr( $_POST['name'], '.' ), 1 ) ) == 'json' && current_user_can( 'manage_options' ) ) {
+			$mimes['json'] = 'application/json';
+		}
+
+		return $mimes;
+	}
+
+	/**
 	 * Filter the "real" file type of the CSV file during import.
 	 *
 	 * @since 2.1.0.5
@@ -456,7 +473,9 @@ class GeoDir_Admin {
 	 * @param string|bool $real_mime The actual mime type or false if the type cannot be determined.
 	 */
 	public function wp_check_filetype_and_ext( $data, $file, $filename, $mimes, $real_mime = '' ) {
-		if ( ( ( ! empty( $_REQUEST['imgid'] ) && strpos( $_REQUEST['imgid'], 'gd_im_' ) === 0 && ! empty( $_REQUEST['name'] ) ) || defined( 'GEODIR_DOING_IMPORT' ) ) && current_user_can( 'manage_options' ) && strtolower( substr( strrchr( $filename, '.' ), 1 ) ) == 'csv' ) {
+		$imgid = ! empty( $_REQUEST['imgid'] ) ? sanitize_text_field( $_REQUEST['imgid'] ) : '';
+
+		if ( ( ( strpos( $imgid, 'gd_im_' ) === 0 && ! empty( $_REQUEST['name'] ) ) || defined( 'GEODIR_DOING_IMPORT' ) ) && current_user_can( 'manage_options' ) && ( strtolower( substr( strrchr( $filename, '.' ), 1 ) ) == 'csv' || ( $imgid == 'gd_im_settings' && strtolower( substr( strrchr( $filename, '.' ), 1 ) ) == 'json' ) ) ) {
 			$wp_filetype = wp_check_filetype( $filename, $mimes );
 
 			$ext = $wp_filetype['ext'];
