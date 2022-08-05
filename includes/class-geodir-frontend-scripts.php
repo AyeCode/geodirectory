@@ -229,7 +229,7 @@ class GeoDir_Frontend_Scripts {
 						|| (jQuery(".snear", $form).val() != '' && jQuery(".snear", $form).val() != '<?php echo $default_near_text;?>' && !jQuery('.geodir-location-search-type', $form).val() )
 					) {
 
-						// OSM can't handel post code with no space so we test for it and add one if needed
+						// OSM can't handle post code with no space so we test for it and add one if needed
 						if(window.gdMaps === 'osm'){
 							var $near_val = jQuery(".snear", $form).val();
 							var $is_post_code = $near_val.match("^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]??[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$");
@@ -276,7 +276,7 @@ class GeoDir_Frontend_Scripts {
 					jQuery('.sgeo_lat').val(latLng.lat);
 					jQuery('.sgeo_lon').val(latLng.lon);
 				}
-				jQuery($form).trigger("submit"); // submit form after insering the lat long positions
+				jQuery($form).trigger("submit"); // submit form after inserting the lat long positions
 			}
 
 			function geocodeAddress($form) {
@@ -302,8 +302,19 @@ class GeoDir_Frontend_Scripts {
 						 * @since 1.0.0
 						 */
 						$near_add2 = apply_filters('geodir_search_near_addition', '');
+						$near_address = ( $near_add ? '+", ' . $near_add . '"' : '' ) . $near_add2;
 						?>
-						var search_address = address<?php echo ( $near_add ? '+", ' . $near_add . '"' : '' ) . $near_add2; ?>;
+						var search_address = address<?php echo $near_address; ?>;
+						<?php
+						/**
+						 * Add script before geocode address search.
+						 *
+						 * @since 2.2.9
+						 *
+						 * @param string $near_address Nearest address filter.
+						 */
+						do_action( 'geodir_geocode_address_search_script', $near_address );
+						?>
 						if (window.gdMaps === 'google') {
 							Sgeocoder.geocode({'address': search_address<?php echo $google_geocode_properties; ?>},
 								function (results, status) {
