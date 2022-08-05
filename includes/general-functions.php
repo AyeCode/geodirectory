@@ -940,6 +940,14 @@ function geodir_widget_listings_get_order( $deprecated = '') {
 	$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
 	$orderby = GeoDir_Query::sort_by_children( $orderby, $sort_by, $post_type );
 
+	// Add secondary sort for nearest filter.
+	if ( ! empty( $query_args['nearby_gps'] ) && strpos( $orderby, 'distance ' ) === false ) {
+		if ( ! empty( $orderby ) ) {
+			$orderby .= ", ";
+		}
+		$orderby .= "distance ASC";
+	}
+
 	return $orderby;
 }
 
@@ -967,9 +975,9 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$table     = geodir_db_cpt_table( $post_type );
 
 	// check if this is a GPS filtered query
-	$support_location = $post_type  && GeoDir_Post_types::supports( $post_type , 'location' );
-	if ( $support_location && $latlon = $geodirectory->location->get_latlon() && ! empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' )  ) {
-		// set the order_by
+	$query_args['supports_location'] = $post_type  && GeoDir_Post_types::supports( $post_type , 'location' );
+
+	if ( ! empty( $query_args['supports_location'] ) && ( $latlon = $geodirectory->location->get_latlon() ) && ! empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' )  ) {
 		$query_args['is_gps_query'] = true;
 		$query_args['order_by'] = 'distance_asc';
 	}
@@ -1081,11 +1089,12 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		 * @param string $post_type The post type.
 		 */
 		$sql = apply_filters( 'geodir_filter_widget_listings_count_sql', $sql, $post_type );
+		$sql = str_replace( "WHERE 1=1 AND ", "WHERE ", $sql );
 
 		$rows = (int) $wpdb->get_var( $sql );
 	} else {
 		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
-		if ( ! empty( $query_args['is_gps_query'] ) ) {
+		if ( ! empty( $query_args['is_gps_query'] ) || ! empty( $query_args['nearby_gps'] ) ) {
 			/*
 			 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
 			 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
@@ -1160,6 +1169,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		 * @param string $post_type The post type.
 		 */
 		$sql = apply_filters( 'geodir_filter_widget_listings_sql', $sql, $post_type );
+		$sql = str_replace( "WHERE 1=1 AND ", "WHERE ", $sql );
 
 		$rows = $wpdb->get_results( $sql );
 	}
@@ -1185,17 +1195,31 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
  * @return string Modified fields SQL.
  */
 function geodir_function_widget_listings_fields( $fields, $table, $post_type ) {
-	global $wpdb, $plugin_prefix, $gd_query_args_widgets, $gd_post;
+	global $wpdb, $geodirectory, $gd_query_args_widgets, $gd_post;
 
 	$query_args = $gd_query_args_widgets;
-	if ( empty( $query_args ) || empty( $query_args['is_geodir_loop'] ) ) {
+
+	if ( empty( $query_args ) || empty( $query_args['is_geodir_loop'] ) || ! empty( $query_args['count_only'] ) ) {
 		return $fields;
 	}
 
 	if ( ! empty( $query_args['distance_to_post'] ) && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
-		$radius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
+		$latitude = $gd_post->latitude;
+		$longitude = $gd_post->longitude;
+	} else if ( ! empty( $query_args['supports_location'] ) && ( ! empty( $query_args['is_gps_query'] ) || empty( $query_args['nearby_gps'] ) ) && ( $latlon = $geodirectory->location->get_latlon() ) ) {
+		$latitude = $latlon['lat'];
+		$longitude = $latlon['lon'];
+	} else if ( ! empty( $query_args['nearby_gps'] ) && ! empty( $query_args['nearby_gps']['latitude'] ) && ! empty( $query_args['nearby_gps']['longitude'] ) ) {
+		$latitude = geodir_sanitize_float( $query_args['nearby_gps']['latitude'] );
+		$longitude = geodir_sanitize_float( $query_args['nearby_gps']['longitude'] );
+		$fields .= ", '" . $latitude . "' AS gps_latitude, '" . $longitude . "' AS gps_longitude";
+	} else {
+		$latitude = '';
+		$longitude = '';
+	}
 
-		$fields .= ", ( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ABS( {$gd_post->latitude} ) - ABS( {$table}.latitude ) ) * PI() / 180 / 2 ), 2 ) + COS( ABS( {$gd_post->latitude} ) * PI() / 180 ) * COS( ABS( {$table}.latitude ) * PI() / 180 ) * POWER( SIN( ( {$gd_post->longitude} - {$table}.longitude ) * PI() / 180 / 2 ), 2 ) ) ) ) AS distance";
+	if ( $query_part = geodir_gps_query_part( $latitude, $longitude, $table ) ) {
+		$fields .= ", " . $query_part . " AS distance";
 	}
 
 	return $fields;
@@ -1203,6 +1227,33 @@ function geodir_function_widget_listings_fields( $fields, $table, $post_type ) {
 
 add_filter( 'geodir_filter_widget_listings_fields', 'geodir_function_widget_listings_fields', 10, 3 );
 
+/**
+ * Get the GPS query part.
+ *
+ * @since 2.2.9
+ *
+ * @param string $latitude Latitude.
+ * @param string $longitude Longitude.
+ * @param string $table Detail database table name.
+ * @param string $radius Distance radius.
+ *
+ * @return string Modified join clause SQL.
+ */
+function geodir_gps_query_part( $latitude, $longitude, $table = '', $radius = '' ) {
+	if ( empty( $latitude ) || empty( $longitude ) ) {
+		return "";
+	}
+
+	if ( empty( $radius ) ) {
+		$radius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
+	}
+
+	$prefix = $table ? $table . '.' : '';
+
+	$query = "( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ABS( {$latitude} ) - ABS( {$prefix}`latitude` ) ) * PI() / 180 / 2 ), 2 ) + COS( ABS( {$latitude} ) * PI() / 180 ) * COS( ABS( {$prefix}`latitude` ) * PI() / 180 ) * POWER( SIN( ( {$longitude} - {$prefix}`longitude` ) * PI() / 180 / 2 ), 2 ) ) ) )";
+
+	return $query;
+}
 
 /**
  * Listing query join clause SQL part for widgets.
@@ -1259,7 +1310,7 @@ add_filter( 'geodir_filter_widget_listings_join', 'geodir_function_widget_listin
  * @return string Modified where clause SQL.
  */
 function geodir_function_widget_listings_where( $where ) {
-	global $wpdb, $geodirectory, $gd_query_args_widgets;
+	global $wp, $wpdb, $geodirectory, $gd_query_args_widgets, $gd_post;
 
 	$query_args = $gd_query_args_widgets;
 	if ( empty( $query_args ) || empty( $query_args['is_geodir_loop'] ) ) {
@@ -1273,9 +1324,44 @@ function geodir_function_widget_listings_where( $where ) {
 			$where = geodir_default_location_where( $where, $table );
 		}
 
-		// Private address filter
-		if ( $geodirectory->location->get_latlon() && GeoDir_Post_types::supports( $post_type, 'location' ) && GeoDir_Post_types::supports( $post_type, 'private_address' ) ) {
-			$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
+		if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+			// Private address filter
+			if ( $geodirectory->location->get_latlon() && GeoDir_Post_types::supports( $post_type, 'private_address' ) ) {
+				$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
+			}
+
+			if ( ! empty( $query_args['count_only'] ) ) {
+				if ( ! empty( $query_args['distance_to_post'] ) && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
+					$latitude = $gd_post->latitude;
+					$longitude = $gd_post->longitude;
+				} else if ( empty( $query_args['is_gps_query'] ) && ! empty( $query_args['nearby_gps'] ) && ! empty( $query_args['nearby_gps']['latitude'] ) && ! empty( $query_args['nearby_gps']['longitude'] ) ) {
+					$latitude = $query_args['nearby_gps']['latitude'];
+					$longitude = $query_args['nearby_gps']['longitude'];
+				} else {
+					$latitude = '';
+					$longitude = '';
+				}
+
+				if ( $query_part = geodir_gps_query_part( $latitude, $longitude, $table ) ) {
+					$where .= " AND " . $query_part . " <= ";
+
+					if ( GeoDir_Post_types::supports( $post_type, 'service_distance' ) ) {
+						$where .= "`service_distance`";
+					} else {
+						if ( $_dist = get_query_var( 'dist' ) ) {
+							$dist = geodir_sanitize_float( $_dist );
+						} else {
+							$dist = geodir_get_option( 'search_radius', 5 );
+						}
+
+						if ( wp_doing_ajax() && ! empty( $wp->query_vars['dist'] ) ) {
+							$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
+						}
+
+						$where .= $wpdb->prepare( "%f", $dist );
+					}
+				}
+			}
 		}
 
 		if ( ! empty( $query_args['post_author'] ) ) {
