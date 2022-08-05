@@ -824,7 +824,9 @@ function geodir_max_upload_size() {
  */
 function geodir_custom_posts_body_class( $classes ) {
 	global $wpdb, $wp, $wp_query, $gd_post;
+
 	$post_types = geodir_get_posttypes( 'object' );
+
 	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
 		$classes[] = 'geodir_custom_posts';
 	}
@@ -837,15 +839,35 @@ function geodir_custom_posts_body_class( $classes ) {
 		$classes[] = 'geodir-page-cpt-' . $_post_type;
 	}
 
-	if ( geodir_is_page( 'search' ) ) {
+	$is_post_type = geodir_is_page( 'post_type' );
+	$is_search = geodir_is_page( 'search' );
+
+	if ( $is_search ) {
 		$classes[] = 'geodir-page-search';
 	}
 
-	if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) {
+	if ( $is_post_type || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || $is_search ) {
 		$post_type = geodir_get_current_posttype();
+
+		if ( is_tax() ) {
+			$classes[] = 'geodir-page-term';
+
+			if ( $queried_object = get_queried_object() ) {
+				if ( ! empty( $queried_object->term_id ) ) {
+					$classes[] = 'geodir-page-term-' . (int) $queried_object->term_id;
+				}
+
+				if ( ! empty( $queried_object->taxonomy ) ) {
+					$classes[] = 'geodir-page-' . sanitize_html_class( $queried_object->taxonomy );
+				}
+			}
+		} else if ( $is_post_type ) {
+			$classes[] = 'geodir-page-cpt';
+		}
+
 		$classes[] = 'geodir-archive';
 
-		if(isset($post_types->{$post_type}) && isset($post_types->{$post_type}->disable_location) && $post_types->{$post_type}->disable_location){
+		if ( isset( $post_types->{$post_type} ) && isset( $post_types->{$post_type}->disable_location ) && $post_types->{$post_type}->disable_location ) {
 			$classes[] = 'geodir-archive-locationless';
 		}
 
