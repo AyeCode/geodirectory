@@ -32,7 +32,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'block-output'   => array(
 				array(
 					'element' => 'div',
-					'class' => 'bsui',
+					'class'   => 'bsui',
 					'style'   => '{overflow: "hidden",height: \'[%height%]\'}',
 					array(
 						'element' => 'img',
@@ -42,18 +42,16 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						'width'   => '[%width%]',
 						'height'  => '[%height%]',
 						'style'   => '{height: "inherit","object-fit": "cover"}',
-						'class' => 'mb-[%mb%] mt-[%mt%] ml-[%ml%] mr-[%mr%] pb-[%pb%] pt-[%pt%] pl-[%pl%] pr-[%pr%] border border-[%border%] [%rounded%] [%shadow%] rounded-[%rounded_size%] bg-[%bg%]',
+						'class'   => 'mb-[%mb%] mt-[%mt%] ml-[%ml%] mr-[%mr%] pb-[%pb%] pt-[%pt%] pl-[%pl%] pr-[%pr%] border border-[%border%] [%rounded%] [%shadow%] rounded-[%rounded_size%] bg-[%bg%]',
 					)
 				)
 			),
 			'class_name'     => __CLASS__,
-			'base_id'        => 'gd_map',
-			// this us used as the widget id and the shortcode id.
-			'name'           => __( 'GD > Map', 'geodirectory' ),
-			// the name of the widget.
+			'base_id'        => 'gd_map',                                            // this us used as the widget id and the shortcode id.
+			'name'           => __( 'GD > Map', 'geodirectory' ),                    // the name of the widget.
 			'widget_ops'     => array(
-				'classname'    => 'geodir-wgt-map '.geodir_bsui_class(),                                        // widget class
-				'description'  => esc_html__( 'Displays the map.', 'geodirectory' ),        // widget description
+				'classname'    => 'geodir-wgt-map '.geodir_bsui_class(),             // widget class
+				'description'  => esc_html__( 'Displays the map.', 'geodirectory' ), // widget description
 				'geodirectory' => true,
 			)
 		);
@@ -71,7 +69,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	public function set_arguments() {
 		$arguments = array();
 
-		$arguments['title']            = array(
+		$arguments['title'] = array(
 			'type'     => 'text',
 			'title'    => __( 'Title:', 'geodirectory' ),
 			'desc'     => __( 'The widget title.', 'geodirectory' ),
@@ -79,7 +77,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'desc_tip' => true,
 			'advanced' => false
 		);
-		$arguments['width']            = array(
+		$arguments['width'] = array(
 			'type'        => 'text',
 			'title'       => __( 'Width:', 'geodirectory' ),
 			'desc'        => __( 'This is the width of the map, you can use % or px here. (static map requires px value)', 'geodirectory' ),
@@ -88,7 +86,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'default'     => '100%',
 			'advanced'    => false
 		);
-		$arguments['height']           = array(
+		$arguments['height'] = array(
 			'type'        => 'text',
 			'title'       => __( 'Height:', 'geodirectory' ),
 			'desc'        => __( 'This is the height of the map, you can use %, px or vh here. (static map requires px value)', 'geodirectory' ),
@@ -97,7 +95,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'default'     => '425px',
 			'advanced'    => false
 		);
-		$arguments['maptype']          = array(
+		$arguments['maptype'] = array(
 			'type'     => 'select',
 			'title'    => __( 'Mapview:', 'geodirectory' ),
 			'desc'     => __( 'This is the type of map view that will be used by default.', 'geodirectory' ),
@@ -111,7 +109,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'default'  => 'ROADMAP',
 			'advanced' => true
 		);
-		$arguments['zoom']             = array(
+		$arguments['zoom'] = array(
 			'type'        => 'select',
 			'title'       => __( 'Zoom level:', 'geodirectory' ),
 			'desc'        => __( 'This is the zoom level of the map, `auto` is recommended.', 'geodirectory' ),
@@ -121,7 +119,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'default'     => '0',
 			'advanced'    => true
 		);
-		$arguments['map_type']         = array(
+		$arguments['map_type'] = array(
 			'type'     => 'select',
 			'title'    => __( 'Map type:', 'geodirectory' ),
 			'desc'     => __( 'Select map type.', 'geodirectory' ),
@@ -135,7 +133,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'default'  => 'auto',
 			'advanced' => false
 		);
-		$arguments['post_settings']    = array(
+		$arguments['post_settings'] = array(
 			'type'            => 'checkbox',
 			'title'           => __( 'Use post map zoom and type?', 'geodirectory' ),
 			'desc'            => __( 'This will use the zoom level and map type set in the post over the settings in the widget.', 'geodirectory' ),
@@ -146,7 +144,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'advanced'        => true,
 			'element_require' => '[%map_type%]=="post"',
 		);
-		$arguments['post_type']        = array(
+		$arguments['post_type'] = array(
 			'type'            => 'select',
 			'title'           => __( 'Default Post Type:', 'geodirectory' ),
 			'desc'            => __( 'The custom post type to show by default.', 'geodirectory' ),
@@ -157,14 +155,12 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'element_require' => '([%map_type%]=="directory" || [%map_type%]=="archive")',
 		);
 
-
-
 		// its best to show a text input for not until Gutenberg can support dynamic selects
 		//@todo it would be preferable to use <optgroup> here but Gutenberg does not support it yet: https://github.com/WordPress/gutenberg/issues/8426
 		//$post_types = geodir_get_posttypes();
 		//if(count($post_types)>1){
-		if(1==1){
-			$arguments['terms']            = array(
+		if ( 1 == 1 ) {
+			$arguments['terms'] = array(
 				'type'            => 'text',
 				'title'           => __( 'Category restrictions:', 'geodirectory' ),
 				'desc'            => __( 'Enter a comma separated list of category ids (1,2,3) to limit the listing to these categories only, or a negative list (-1,-2,-3) to exclude those categories.', 'geodirectory' ),
@@ -184,8 +180,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'placeholder'     => "2,3 (default: empty)",
 				'element_require' => '([%map_type%]=="directory" || [%map_type%]=="archive")',
 			);
-		}else{
-//			$arguments['terms']            = array(
+		} else {
+//			$arguments['terms'] = array(
 //				'type'            => 'select',
 //				'title'           => __( 'Categories:', 'geodirectory' ),
 //				'desc'            => __( 'Displays the posts on map for selected categories.', 'geodirectory' ),
@@ -198,7 +194,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 //			);
 		}
 
-		$arguments['tags']  = array(
+		$arguments['tags'] = array(
 			'type' => 'text',
 			'title' => __( 'Filter by tags:', 'geodirectory' ),
 			'desc' => __( 'Insert separate tags with commas to filter listings by tags. On non GD pages use css .geodir-listings or id(ex: #gd_listings-2) of the listings widget/shortcode to show markers on map.', 'geodirectory' ),
@@ -209,7 +205,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'element_require' => '[%map_type%]!="post"',
 		);
 
-		$arguments['all_posts']        = array(
+		$arguments['all_posts'] = array(
 			'type'            => 'checkbox',
 			'title'           => __( 'Show all posts?', 'geodirectory' ),
 			'desc'            => __( 'This displays all posts on map from archive page.', 'geodirectory' ),
@@ -220,7 +216,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'advanced'        => false,
 			'element_require' => '[%map_type%]=="archive"',
 		);
-		$arguments['post_id']          = array(
+		$arguments['post_id'] = array(
 			'type'            => 'text',
 			'title'           => __( 'Post ID:', 'geodirectory' ),
 			'desc'            => __( 'Map post id.', 'geodirectory' ),
@@ -229,7 +225,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'advanced'        => false,
 			'element_require' => '[%map_type%]=="post"',
 		);
-		$arguments['search_filter']    = array(
+		$arguments['search_filter'] = array(
 			'type'            => 'checkbox',
 			'title'           => __( 'Enable search filter?', 'geodirectory' ),
 			'desc'            => __( 'This enables search filter on map.', 'geodirectory' ),
@@ -251,7 +247,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'advanced'        => false,
 			'element_require' => '[%map_type%]=="directory"',
 		);
-		$arguments['cat_filter']       = array(
+		$arguments['cat_filter'] = array(
 			'type'            => 'checkbox',
 			'title'           => __( 'Enable category filter?', 'geodirectory' ),
 			'desc'            => __( 'This enables categories filter on map.', 'geodirectory' ),
@@ -262,7 +258,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'advanced'        => false,
 			'element_require' => '[%map_type%]=="directory"',
 		);
-		$arguments['child_collapse']   = array(
+		$arguments['child_collapse'] = array(
 			'type'            => 'checkbox',
 			'title'           => __( 'Collapse sub categories?', 'geodirectory' ),
 			'desc'            => __( 'This will hide the sub-categories under the parent, requiring a click to show.', 'geodirectory' ),
@@ -273,7 +269,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'advanced'        => false,
 			'element_require' => '[%map_type%]=="directory"',
 		);
-		$arguments['map_directions']   = array(
+		$arguments['map_directions'] = array(
 			'type'            => 'checkbox',
 			'title'           => __( 'Enable map directions?', 'geodirectory' ),
 			'desc'            => __( 'Displays post directions for single post map.', 'geodirectory' ),
@@ -284,7 +280,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'advanced'        => false,
 			'element_require' => '[%map_type%]=="post"',
 		);
-		$arguments['scrollwheel']      = array(
+		$arguments['scrollwheel'] = array(
 			'type'        => 'checkbox',
 			'title'       => __( 'Enable mouse scroll zoom?', 'geodirectory' ),
 			'desc'        => __( 'Lets the map be scrolled with the mouse scroll wheel.', 'geodirectory' ),
@@ -294,7 +290,27 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'default'     => '0',
 			'advanced'    => true,
 		);
-		$arguments['sticky']      = array(
+		$arguments['hide_zoom_control'] = array(
+			'type'        => 'checkbox',
+			'title'       => __( 'Hide Zoom Control?', 'geodirectory' ),
+			'desc'        => __( 'Hide zoom control "+" and "-" buttons for changing the zoom level of the map.', 'geodirectory' ),
+			'placeholder' => '',
+			'value'       => '1',
+			'default'     => '0',
+			'desc_tip'    => true,
+			'advanced'    => true,
+		);
+		$arguments['hide_street_control'] = array(
+			'type'        => 'checkbox',
+			'title'       => __( 'Hide Street View Control?', 'geodirectory' ),
+			'desc'        => __( 'Hide street view control on the Google map.', 'geodirectory' ),
+			'placeholder' => '',
+			'value'       => '1',
+			'default'     => '0',
+			'desc_tip'    => true,
+			'advanced'    => true,
+		);
+		$arguments['sticky'] = array(
 			'type'        => 'checkbox',
 			'title'       => __( 'Enable sticky map?', 'geodirectory' ),
 			'desc'        => __( 'When in the sidebar this will attempt to make it stick when scrolling on desktop.', 'geodirectory' ),
@@ -304,7 +320,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'default'     => '0',
 			'advanced'    => true,
 		);
-		$arguments['static']      = array(
+		$arguments['static'] = array(
 			'type'        => 'checkbox',
 			'title'       => __( 'Enable static map?', 'geodirectory' ),
 			'desc'        => __( 'FOR POST MAP ONLY When enabled this will try to load a static map image.', 'geodirectory' ),
@@ -331,8 +347,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 
 		$design_style = geodir_design_style();
 
-		if($design_style) {
-
+		if ( $design_style ) {
 			// background
 			$arguments['bg']  = geodir_get_sd_background_input('mt');
 			
@@ -347,15 +362,14 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$arguments['pr']  = geodir_get_sd_padding_input('pr');
 			$arguments['pb']  = geodir_get_sd_padding_input('pb');
 			$arguments['pl']  = geodir_get_sd_padding_input('pl');
-			
+
 			// border
 			$arguments['border']  = geodir_get_sd_border_input('border');
 			$arguments['rounded']  = geodir_get_sd_border_input('rounded');
 			$arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
-			
+
 			// shadow
 			$arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
-			
 		}
 
 		return $arguments;
@@ -380,6 +394,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'height'           => '425px',
 			'maptype'          => 'ROADMAP',
 			'zoom'             => '0',
+			'hide_zoom_control'=> false,
+			'hide_street_control'=> false,
 			'post_type'        => 'gd_place',
 			'terms'            => array(), // can be string or array
 			'tick_terms'       => '',
@@ -408,10 +424,10 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'pb'    => '',
 			'pr'    => '',
 			'pl'    => '',
-			'border'    => '',
-			'rounded'    => '',
-			'rounded_size'    => '',
-			'shadow'    => '',
+			'border' => '',
+			'rounded' => '',
+			'rounded_size' => '',
+			'shadow' => '',
 		);
 
 		$map_args = wp_parse_args( $args, $defaults );
@@ -480,7 +496,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 									$map_args['terms'] = array( absint( $_REQUEST['spost_category'] ) );
 								}
 							} else {
-
 								if ( geodir_is_page( 'pt' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) {
 									// if post type page and set to show all then don't add a posts param
 								} else {
@@ -492,7 +507,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 										$map_args['posts'] = array( '-1' ); // No results
 									}
 								}
-
 							}
 						}
 					}
@@ -618,6 +632,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$design_style = geodir_design_style();
 		$map_post_types = array();
 		$map_canvas = $map_options['map_canvas'];
+
 		if ( ! empty( $map_options['map_directions'] ) ) {
 			$distance_unit = geodir_get_option( 'search_distance_long' );
 
@@ -629,7 +644,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'distance_unit'  => $distance_unit,
 			);
 			echo geodir_get_template_html( $template, $args );
-			
 		}
 
 		if ( ! empty( $map_options['post_type_filter'] ) ) {
@@ -652,7 +666,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'map_post_types'  => $map_post_types,
 			);
 			echo geodir_get_template_html( $template, $args );
-
 		}
 
 		// old design shows on bottom
@@ -913,6 +926,8 @@ jQuery(function ($) {
 			'width'          => '100%',
 			'height'         => '425px',
 			'maptype'        => 'ROADMAP',
+			'hide_zoom_control'   => false,
+			'hide_street_control' => false,
 			'zoom'           => '0',
 			'autozoom'       => true,
 			'post_type'      => 'gd_place',
@@ -970,6 +985,14 @@ jQuery(function ($) {
 		// maptype
 		if ( empty( $params['maptype'] ) ) {
 			$params['maptype'] = 'ROADMAP';
+		}
+		// zoomControl
+		if ( ! empty( $params['hide_zoom_control'] ) ) {
+			$params['zoomControl'] = 0;
+		}
+		// streetViewControl
+		if ( ! empty( $params['hide_street_control'] ) ) {
+			$params['streetViewControl'] = 0;
 		}
 		// zoom
 		$params['zoom'] = absint( $params['zoom'] );
@@ -1042,7 +1065,6 @@ jQuery(function ($) {
 		}
 
 		// wrap class
-
 		$params['wrap_class'] = geodir_build_aui_class($params);
 
 		ob_start();
@@ -1084,7 +1106,7 @@ jQuery(function ($) {
 			$url_params = '&gd-ajax=1';
 		}
 
-		$defaults    = array(
+		$defaults = array(
 			'scrollwheel'              => true,
 			'streetViewControl'        => true,
 			'fullscreenControl'        => false,
