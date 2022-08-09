@@ -1340,6 +1340,22 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * @return string
 		 */
 		public function get_url() {
+			$content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
+			$content_url = untrailingslashit( WP_CONTENT_URL );
+
+			// Check if we are inside a plugin
+			$file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
+			$url = str_replace( $content_dir, $content_url, $file_dir );
+
+			return trailingslashit( $url );
+		}
+
+		/**
+		 * Get the url path to the current folder.
+		 *
+		 * @return string
+		 */
+		public function get_url_old() {
 
 			$url = '';
 			// check if we are inside a plugin
