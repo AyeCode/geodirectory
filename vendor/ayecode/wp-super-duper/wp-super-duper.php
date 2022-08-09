@@ -1558,7 +1558,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			$show      = false;
 			$arguments = $this->get_arguments();
-
+			
 			if ( ! empty( $arguments ) ) {
 				foreach ( $arguments as $argument ) {
 					if ( isset( $argument['advanced'] ) && $argument['advanced'] ) {
@@ -1577,6 +1577,28 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @return string
 		 */
 		public function get_url() {
+			$url = $this->url;
+
+			if ( ! $url ) {
+				$content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
+				$content_url = untrailingslashit( WP_CONTENT_URL );
+
+				// Check if we are inside a plugin
+				$file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
+				$url = str_replace( $content_dir, $content_url, $file_dir );
+				$url = trailingslashit( $url );
+				$this->url = $url;
+			}
+
+			return $url;
+		}
+
+		/**
+		 * Get the url path to the current folder.
+		 *
+		 * @return string
+		 */
+		public function get_url_old() {
 
 			$url = $this->url;
 

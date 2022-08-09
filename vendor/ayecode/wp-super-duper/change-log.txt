@@ -1,3 +1,6 @@
+= 0.1.30 =
+* Block icon not loading when WordPress installed on sub-directory - FIXED
+
 = 1.0.29 =
 * Shortcode button not working in editor on Divi theme builder - FIXED
 
