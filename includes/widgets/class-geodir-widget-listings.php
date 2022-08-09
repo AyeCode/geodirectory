@@ -875,7 +875,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				$viewall_url = add_query_arg( array( 's' . $post_type . 'category' => $category ), $viewall_url );
 			}
 		} else if ( $location_allowed && ! empty( $instance['nearby_gps'] ) && ( $ip = geodir_get_ip() ) && ( $geo = geodir_geo_by_ip( $ip ) ) ) {
-			$nearby_gps = $geo;
+			if ( $this->is_preview() && ! empty( $geodirectory->location ) && ( $default_location = $geodirectory->location->get_default_location() ) ) {
+				$nearby_gps = array(
+					'latitude' => $default_location->latitude,
+					'longitude' => $default_location->longitude
+				);
+			} else {
+				$nearby_gps = $geo;
+			}
 
 			$viewall_url = add_query_arg( array(
 				'geodir_search' => 1,
