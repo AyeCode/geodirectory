@@ -1,3 +1,6 @@
+= 2.2.10 =
+* Report post popup don't open on 2nd click once closed - FIXED
+
 = 2.2.9 =
 * Show actual DB error on custom field creation fail - CHANGED
 * Add address fields support to gd_post_badge & gd_dynamic_content shortcodes - ADDED
