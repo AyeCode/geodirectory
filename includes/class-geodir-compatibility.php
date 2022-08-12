@@ -1890,7 +1890,11 @@ class GeoDir_Compatibility {
 		}
 
 		if ( ! empty( $template_page_id ) ) {
-			$widgets = get_post_meta( $template_page_id, '_generate-footer-widget-meta', true );
+			$widgets_meta = get_post_meta( (int) $template_page_id, '_generate-footer-widget-meta', true );
+
+			if ( $widgets_meta || '0' === $widgets_meta ) {
+				$widgets = $widgets_meta;
+			}
 		}
 
 		return $widgets;
