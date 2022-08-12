@@ -2017,7 +2017,7 @@ function geodir_aui_ajax_modal(action, nonce, post_id, extra) {
 
 		/* Close any instance of the popup */
 		if ( geodir_params.addPopup ) {
-			geodir_params.addPopup.close();
+			geodir_params.addPopup.remove();
 		}
 
 		/* Show loading screen */
