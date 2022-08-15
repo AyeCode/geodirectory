@@ -116,6 +116,7 @@ class GeoDir_Frontend_Scripts {
 
 		$default_search_for_text = addslashes(stripslashes($default_search_for_text));
 		$default_near_text = addslashes(stripslashes($default_near_text));
+		$near_my_location_text = addslashes( stripslashes( strip_tags( __( 'Near:', 'geodirectory' ) . ' ' . __( 'My Location', 'geodirectory' ) ) ) );
 		$city = !empty($search_location) ? addslashes(stripslashes($search_location->city)) : '';
 
 		/**
@@ -229,9 +230,10 @@ class GeoDir_Frontend_Scripts {
 						|| (jQuery(".snear", $form).val() != '' && jQuery(".snear", $form).val() != '<?php echo $default_near_text;?>' && !jQuery('.geodir-location-search-type', $form).val() )
 					) {
 
-						// OSM can't handle post code with no space so we test for it and add one if needed
+						var vNear = jQuery(".snear", $form).val();
+						/* OSM can't handle post code with no space so we test for it and add one if needed */
 						if(window.gdMaps === 'osm'){
-							var $near_val = jQuery(".snear", $form).val();
+							var $near_val = vNear;
 							var $is_post_code = $near_val.match("^([A-Za-z][A-Ha-hJ-Yj-y]?[0-9][A-Za-z0-9]??[0-9][A-Za-z]{2}|[Gg][Ii][Rr] ?0[Aa]{2})$");
 							if($is_post_code){
 								$near_val = $near_val.replace(/.{3}$/,' $&');
@@ -291,8 +293,10 @@ class GeoDir_Frontend_Scripts {
 				} else {
 					var address = jQuery(".snear", $form).val();
 
-					if (jQuery('.snear', $form).val() == '<?php echo $default_near_text;?>') {
+					if (address && address.trim() == '<?php echo $default_near_text;?>') {
 						initialise2();
+					} else if(address && address.trim() == '<?php echo $near_my_location_text; ?>') {
+						jQuery($form).trigger("submit");
 					} else {
 						<?php
 						$near_add = geodir_get_option('search_near_addition');
