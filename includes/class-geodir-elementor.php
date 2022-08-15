@@ -35,8 +35,14 @@ class GeoDir_Elementor {
 		// add templates
 		add_action( 'option_elementor_remote_info_library', array( __CLASS__, 'add_gd_templates' ), 10, 2 );
 
-		// Dynamic content
-		add_action( 'elementor/dynamic_tags/register_tags', array( __CLASS__, 'register_dynamic_content_tags' ) );
+		// Since Elementor v3.5.0 elementor/dynamic_tags/register_tags is replaced with elementor/dynamic_tags/register.
+		if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '<' ) ) {
+			// Dynamic content
+			add_action( 'elementor/dynamic_tags/register_tags', array( __CLASS__, 'register_dynamic_content_tags' ), 10, 1 );
+		} else {
+			// Register dynamic tags.
+			add_action( 'elementor/dynamic_tags/register', array( __CLASS__, 'register_dynamic_content_tags' ), 10, 1 );
+		}
 
 		// fix image sizes
 		add_filter( 'elementor/image_size/get_attachment_image_html', array(
@@ -59,18 +65,23 @@ class GeoDir_Elementor {
 		/*
 		 * Elementor Pro features below here
 		 */
-		if(defined( 'ELEMENTOR_PRO_VERSION' )){
+		if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
 			// doc template types
 			add_action( 'elementor/documents/register', array( __CLASS__, 'register_template_types' ) );
 
 			// register template conditions
 			add_action( 'elementor/theme/register_conditions', array( __CLASS__, 'register_template_conditions' ) );
 
-			// register skins
-			add_action('elementor/widgets/widgets_registered',array( __CLASS__,'add_archive_item_skins'));
+			// Since Elementor v3.5.0 elementor/widgets/widgets_registered is replaced with elementor/widgets/register.
+			if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '<' ) ) {
+				// Register skins
+				add_action( 'elementor/widgets/widgets_registered', array( __CLASS__, 'add_archive_item_skins' ), 10, 1 );
+			} else {
+				// Register custom skins.
+				add_action( 'elementor/widgets/register', array( __CLASS__, 'add_archive_item_skins' ), 10, 1 );
+			}
 
 			add_action( 'elementor_pro/init', array( __CLASS__,'register_pro_form_actions'));
-
 		}
 
 		// Elementor 3
@@ -97,12 +108,10 @@ class GeoDir_Elementor {
 				if(substr( $key, 0, 13 ) === "wp-widget-gd_" || substr( $key, 0, 17 ) === "wp-widget-geodir_" ){
 					$config['initial_document']['widgets'][$key]['categories'][] = 'geodirectory';
 					$config['initial_document']['widgets'][$key]['hide_on_search'] = false;
-					$config['initial_document']['widgets'][$key]['icon'] = 'eicon-globe'; //@todo if no icons use on page then font-awesome is not loaded, wif we can fifure out how to force load we can use icons. <i class="fas fa-globe-americas"></i><i class="fa-solid fa-earth-americas"></i>
+					$config['initial_document']['widgets'][$key]['icon'] = 'eicon-globe'; //@todo if no icons use on page then font-awesome is not loaded, if we can figure out how to force load we can use icons. <i class="fas fa-globe-americas"></i><i class="fa-solid fa-earth-americas"></i>
 				}
 			}
 		}
-
-
 
 		return $config;
 	}
@@ -113,7 +122,6 @@ class GeoDir_Elementor {
 	 * @param $elements_manager
 	 */
 	public static function add_elementor_widget_categories( $elements_manager ) {
-
 		$elements_manager->add_category(
 			'geodirectory',
 			[
@@ -121,9 +129,7 @@ class GeoDir_Elementor {
 				'icon' => 'fa fa-plug',
 			]
 		);
-
 	}
-
 
 	/**
 	 * Clear any caches we use on post save hook.
@@ -161,7 +167,6 @@ class GeoDir_Elementor {
 		return $should_render;
 	}
 
-
 	/**
 	 * Register the form action for emailing the listing email.
 	 */
@@ -169,14 +174,27 @@ class GeoDir_Elementor {
 		// Instantiate the action class
 		$contact_action = new GeoDir_Elementor_Form_Contact();
 
-		// Register the action with form widget
-		\ElementorPro\Plugin::instance()->modules_manager->get_modules( 'forms' )->add_form_action( $contact_action->get_name(), $contact_action );
+		// Since Elementor v3.5.0 add_form_action() is replaced with actions_manager->register().
+		if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '<' ) ) {
+			// Register the action with form widget
+			\ElementorPro\Plugin::instance()->modules_manager->get_modules( 'forms' )->add_form_action( $contact_action->get_name(), $contact_action );
+		} else {
+			// Register form action.
+			$actions_registrar = new ElementorPro\Modules\Forms\Registrars\Form_Actions_Registrar();
+			$actions_registrar->register( $contact_action, $contact_action->get_name() );
+		}
 	}
 
-	public static function add_archive_item_skins(){
-
+	/**
+	 * Register custom skins after Elementor widgets are registered.
+	 *
+	 * @since 2.0.0
+	 * @since 2.2.10 $widgets_manager parameter introduced.
+	 *
+	 * @param Widgets_Manager $widgets_manager The widgets manager.
+	 */
+	public static function add_archive_item_skins( $widgets_manager = array() ) {
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/elementor/class-geodir-elementor-skin-custom.php' );
-
 	}
 
 	/**
@@ -223,7 +241,7 @@ class GeoDir_Elementor {
 	 * @param string      $html The html content of the widget.
 	 * @param Widget_Base $widget The widget.
 	 *
-	 * @return mixed Filterd the html content.
+	 * @return mixed Filters the html content.
 	 */
 	public static function maybe_add_image_caption( $html, $widget ) {
 		if ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) ) {
@@ -916,7 +934,7 @@ class GeoDir_Elementor {
 	/**
 	 * Register dynamic content tags to use in elementor fields.
 	 *
-	 * @param $dynamic_tags
+	 * @param object $dynamic_tags Dynamic tags manager.
 	 */
 	public static function register_dynamic_content_tags( $dynamic_tags ) {
 		// In our Dynamic Tag we use a group named request-variables so we need
@@ -935,13 +953,19 @@ class GeoDir_Elementor {
 			'GeoDir_Elementor_Tag_CSS_Class',
 		);
 
-		// Finally register the tag
-		foreach ( $tag_classes as $tag_class ) {
-			$dynamic_tags->register_tag( $tag_class );
+		// Since Elementor v3.5.0 register_tag() is replaced with register().
+		if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '<' ) ) {
+			// Finally register the tag
+			foreach ( $tag_classes as $tag_class ) {
+				$dynamic_tags->register_tag( $tag_class );
+			}
+		} else {
+			// Register dynamic tags.
+			foreach ( $tag_classes as $tag_class ) {
+				$dynamic_tags->register( new $tag_class() );
+			}
 		}
-
 	}
-
 
 	/**
 	 * Add GD template options to Elementor template directory.
