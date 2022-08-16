@@ -177,7 +177,7 @@ class GeoDir_Fast_AJAX {
 			}
 
 			// Page builder plugins
-			if ( in_array( $action, array( 'geodir_ajax_search' ) ) && ( strpos( $plugin, 'elementor' ) !== false || strpos( $plugin, 'kadence' ) !== false || strpos( $plugin, 'bb-custom-attributes' ) !== false || strpos( $plugin, 'bb-plugin' ) !== false || strpos( $plugin, 'bb-theme-builder' ) !== false || strpos( $plugin, 'userswp' ) !== false ) ) {
+			if ( in_array( $action, array( 'geodir_ajax_search' ) ) && ( strpos( $plugin, 'elementor' ) !== false || strpos( $plugin, 'kadence' ) !== false || strpos( $plugin, 'bb-custom-attributes' ) !== false || strpos( $plugin, 'bb-plugin' ) !== false || strpos( $plugin, 'bb-theme-builder' ) !== false || strpos( $plugin, 'buddyboss-platform' ) !== false || strpos( $plugin, 'userswp' ) !== false ) ) {
 				$allowed_plugins[] = $plugin;
 				continue;
 			}

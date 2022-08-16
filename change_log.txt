@@ -1,6 +1,7 @@
 = 2.2.10 =
 * Report post popup don't open on 2nd click once closed - FIXED
 * GeneratePress layout default setting not working on GD pages - FIXED
+* Elementor v3.5 deprecated actions breaks template loading - FIXED
 
 = 2.2.9 =
 * Show actual DB error on custom field creation fail - CHANGED
