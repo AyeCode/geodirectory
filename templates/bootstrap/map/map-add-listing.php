@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.6
+ * @version    2.2.10
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -860,10 +860,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 				}
                 updateMapZoom($.goMap.map.zoom);
             });
-
-            //var maxMap = document.getElementById('<?php echo $prefix;?>triggermap');
-            //maxMap.addEventListener('click', gdMaxMap);
-
+<?php if ( ! empty( $geodir_manual_map ) ) { /* iPhone mobile shows map as a grey background */ ?>
+if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").height())+1;setTimeout(function(){if(mH>5){$("#<?php echo $prefix . 'map'; ?>").css("height",mH);}google.maps.event.trigger($addressMap,'resize');},1500);}
+<?php } ?>
             <?php if ($is_map_restrict) { ?>
             var CITY_ADDRESS = '<?php echo addslashes_gpc($city).','.addslashes_gpc($region).','.addslashes_gpc($country);?>';
             geocoder.geocode({'address': CITY_ADDRESS},
