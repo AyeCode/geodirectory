@@ -3,6 +3,7 @@
 * GeneratePress layout default setting not working on GD pages - FIXED
 * Elementor v3.5 deprecated actions breaks template loading - FIXED
 * Manual user location selection shows grey map on iPhone mobile - FIXED
+* Beaver Builder on archive item template causes infinite loop - FIXED
 
 = 2.2.9 =
 * Show actual DB error on custom field creation fail - CHANGED

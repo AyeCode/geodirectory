@@ -72,6 +72,7 @@ class GeoDir_Compatibility {
 		if(class_exists( 'FLBuilderLoader' )){
 			add_action('wp_footer', array( __CLASS__, 'beaver_builder_template_warning' ) );
 			add_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'beaver_archive_item_template_content' ), 10, 3 );
+			add_filter( 'fl_builder_do_render_content', array( __CLASS__, 'beaver_builder_do_render_content' ), 20, 2 );
 		}
 
 		/*######################################################
@@ -2440,6 +2441,29 @@ class GeoDir_Compatibility {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Filter beaver builder render content.
+	 *
+	 * @since 2.2.10
+	 *
+	 * @global bool $gd_skip_the_content True when GD loop is active.
+	 *
+	 * @param bool $render True to render content, else False.
+	 * @param int  $post_id Current template post ID.
+	 *
+	 * @return bool True to render content, else False.
+	 */
+	public static function beaver_builder_do_render_content( $render, $post_id = 0 ) {
+		global $gd_skip_the_content;
+
+		// Skip render content on GD post content output.
+		if ( ! empty( $gd_skip_the_content ) ) {
+			$render = false;
+		}
+
+		return $render;
 	}
 
 	/**
