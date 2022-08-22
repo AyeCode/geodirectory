@@ -2055,14 +2055,27 @@ function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
  *
  * @since 2.0.0.86
  *
+ * @global array $geodir_post_meta_fields Cached fields.
+ *
  * $param string $post_type The post type. 
  * @return array Address fields.
  */
 function geodir_post_meta_address_fields( $post_type = 'gd_place' ) {
+	global $geodir_post_meta_fields;
+
 	if ( empty( $post_type ) ) {
 		$post_type = 'gd_place';
-	} elseif( ! GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+	} else if ( ! GeoDir_Post_types::supports( $post_type, 'location' ) ) {
 		return array();
+	}
+
+	if ( empty( $geodir_post_meta_fields ) ) {
+		$geodir_post_meta_fields = array();
+	}
+
+	// Return cached fields.
+	if ( ! empty( $geodir_post_meta_fields[ $post_type ] ) ) {
+		return $geodir_post_meta_fields[ $post_type ];
 	}
 
 	$field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type );
@@ -2170,5 +2183,9 @@ function geodir_post_meta_address_fields( $post_type = 'gd_place' ) {
 		'extra_fields' => ''
 	);
 
-	return apply_filters( 'geodir_post_meta_address_fields', $fields, $post_type );
+	$fields = apply_filters( 'geodir_post_meta_address_fields', $fields, $post_type );
+
+	$geodir_post_meta_fields[ $post_type ] = $fields;
+
+	return $fields;
 }

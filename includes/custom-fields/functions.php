@@ -348,46 +348,47 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
 }
 
+if ( ! function_exists( 'geodir_get_field_infoby' ) ) {
+	/**
+	 * Get custom field using key and value.
+	 *
+	 * @since 1.0.0
+	 * @since 2.0.0 Returns array instead of object.
+	 * @package GeoDirectory
+	 * @global object $wpdb WordPress Database object.
+	 * @param string $key The key you want to look for.
+	 * @param string $value The value of the key you want to look for.
+	 * @param string $post_type The post type.
+	 * @return bool|mixed Returns field info when available. otherwise returns false.
+	 */
+	function geodir_get_field_infoby( $key = '', $value = '', $post_type = '' ) {
+		global $wpdb, $geodir_field_infoby;
 
-if (!function_exists('geodir_get_field_infoby')) {
-    /**
-     * Get custom field using key and value.
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Returns array instead of object.
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @param string $key The key you want to look for.
-     * @param string $value The value of the key you want to look for.
-     * @param string $geodir_post_type The post type.
-     * @return bool|mixed Returns field info when available. otherwise returns false.
-     */
-    function geodir_get_field_infoby($key = '', $value = '', $geodir_post_type = '')
-    {
-
-        global $wpdb;
-
-        $filter = $wpdb->get_row(
-            $wpdb->prepare(
-                "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND " . $key . "='" . $value . "'",
-                array($geodir_post_type)
-            ),
-            ARRAY_A
-        );
-
-		if ( ! empty( $filter ) ) {
-			$filter = stripslashes_deep( $filter );
+		if ( empty( $geodir_field_infoby ) ) {
+			$geodir_field_infoby = array();
 		}
 
-        if ($filter) {
-            return $filter;
-        } else {
-            return false;
-        }
+		$cache_key = $key . '::' . $value . '::' . $post_type;
 
-    }
+		// Return cached field data.
+		if ( isset( $geodir_field_infoby[ $cache_key ] ) ) {
+			return $geodir_field_infoby[ $cache_key ];
+		}
+
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND " . $key . "='" . $value . "'", array( $post_type ) ), ARRAY_A );
+
+		if ( ! empty( $row ) ) {
+			$row = stripslashes_deep( $row );
+		} else {
+			$row = false;
+		}
+
+		// Cache the field data.
+		$geodir_field_infoby[ $cache_key ] = $row;
+
+		return $row;
+	}
 }
-
 
 /**
  * Process the field icon to html.

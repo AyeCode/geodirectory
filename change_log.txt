@@ -4,6 +4,7 @@
 * Elementor v3.5 deprecated actions breaks template loading - FIXED
 * Manual user location selection shows grey map on iPhone mobile - FIXED
 * Beaver Builder on archive item template causes infinite loop - FIXED
+* Allow to enter HEX color code in admin settings color options - CHANGED
 
 = 2.2.9 =
 * Show actual DB error on custom field creation fail - CHANGED
