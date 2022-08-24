@@ -216,7 +216,9 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		$table = geodir_db_cpt_table( $request['post_type'] );
 
 		$fields = "p.ID, p.post_title, pd.default_category, pd.latitude, pd.longitude";
-
+		if ( GeoDir_Post_types::supports( $request['post_type'], 'service_distance' ) ) {
+			$fields .= ", pd.service_distance";
+		}
 		if ( $latitude && $longitude ) {
 			$radius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
 			$fields .= ", ( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ABS( {$latitude} ) - ABS( pd.latitude ) ) * PI() / 180 / 2 ), 2 ) + COS( ABS( {$latitude} ) * PI() / 180 ) * COS( ABS( pd.latitude ) * PI() / 180 ) * POWER( SIN( ( {$longitude} - pd.longitude ) * PI() / 180 / 2 ), 2 ) ) ) ) AS distance ";
