@@ -2224,7 +2224,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					$column_format .= $db_default;
 
 					// Update field data type if changed
-					if ( $exists && ! empty( $old_field ) && ! empty( $field->data_type ) && ( ( ! empty( $old_field->data_type ) && $field->data_type != $old_field->data_type ) || ( $field->data_type == "FLOAT" || $field->data_type == "DECIMAL" || $field->data_type == "INT" ) ) ) {
+					if ( $exists && ! empty( $old_field ) && ! empty( $field->data_type ) && ( ( ! empty( $old_field->data_type ) && $field->data_type != $old_field->data_type ) || ( $field->data_type == "FLOAT" || $field->data_type == "DECIMAL" || $field->data_type == "INT" ) || ( $field->field_type == 'text' && ! empty( $old_field['data_type'] ) && $old_field['data_type'] != $field->data_type ) ) ) {
 						$wpdb->query( "ALTER TABLE {$table} CHANGE `" . $field->htmlvar_name . "` `" . $field->htmlvar_name . "` " . trim( $column_format ) );
 					}
 				break;
