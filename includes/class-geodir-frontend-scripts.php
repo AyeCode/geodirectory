@@ -322,6 +322,16 @@ class GeoDir_Frontend_Scripts {
 						if (window.gdMaps === 'google') {
 							Sgeocoder.geocode({'address': search_address<?php echo $google_geocode_properties; ?>},
 								function (results, status) {
+									<?php
+									/**
+									 * Add script after Google geocode address search.
+									 *
+									 * @since 2.2.10
+									 *
+									 * @param string $near_address Nearest address filter.
+									 */
+									do_action( 'geodir_google_geocode_results_script', $near_address );
+									?>
 									if (status == google.maps.GeocoderStatus.OK) {
 										updateSearchPosition(results[0].geometry.location, $form);
 									} else {
@@ -331,6 +341,16 @@ class GeoDir_Frontend_Scripts {
 						} else if (window.gdMaps === 'osm') {
 							geocodePositionOSM(false, search_address, false, false,
 								function(geo) {
+									<?php
+									/**
+									 * Add script after OpenStreetMaps geocode address search.
+									 *
+									 * @since 2.2.10
+									 *
+									 * @param string $near_address Nearest address filter.
+									 */
+									do_action( 'geodir_osm_geocode_results_script', $near_address );
+									?>
 									if (typeof geo !== 'undefined' && geo.lat && geo.lon) {
 										updateSearchPosition(geo, $form);
 									} else {
