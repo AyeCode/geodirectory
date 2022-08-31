@@ -1054,10 +1054,18 @@ class GeoDir_Query {
 				$use_bayesian = apply_filters( 'geodir_use_bayesian', true, $table );
 
 				if ( $use_bayesian ) {
+					$statuses = geodir_get_post_stati( 'public', array( 'post_type' => $post_type ) );
+
+					if ( count( $statuses ) > 1 ) {
+						$post_status_where = "WHERE post_status IN( '" . implode( "', '", $statuses ) . "' )";
+					} else {
+						$post_status_where = "WHERE post_status = '{$statuses[0]}'";
+					}
+
 					$avg_num_votes = get_transient( 'gd_avg_num_votes_' . $table );
 
 					if ( $avg_num_votes === false ) {
-						$avg_num_votes = (int) $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table}" );
+						$avg_num_votes = (int) $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table} {$post_status_where}" );
 						$avg_rating = false;
 
 						// Save transient for rating count.
@@ -1069,7 +1077,7 @@ class GeoDir_Query {
 
 					if ( $avg_rating === false ) {
 						if ( $avg_num_votes > 0 ) {
-							$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table}" ) / $avg_num_votes;
+							$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table} {$post_status_where}" ) / $avg_num_votes;
 						} else {
 							$avg_rating = 0;
 						}
@@ -1080,7 +1088,7 @@ class GeoDir_Query {
 						$avg_rating = geodir_sanitize_float( $avg_rating );
 					}
 
-					$order_by_parts[] = " ( ( $avg_num_votes * $avg_rating ) + ( " . $table . ".rating_count * " . $table . ".overall_rating ) )  / ( $avg_num_votes + " . $table . ".rating_count ) $rating_order";
+					$order_by_parts[] = " ( ( ( $avg_num_votes * $avg_rating ) + ( " . $table . ".rating_count * " . $table . ".overall_rating ) )  / ( $avg_num_votes + " . $table . ".rating_count ) ) $rating_order, " . $table . ".overall_rating $rating_order";
 				}else{
 					$order_by_parts[] = $table . ".overall_rating $rating_order";
 					$order_by_parts[] = $table . ".rating_count $rating_order";
@@ -1176,10 +1184,18 @@ class GeoDir_Query {
 					case 'overall_rating':
 						$use_bayesian = apply_filters( 'geodir_use_bayesian', true, $table );
 						if ( $use_bayesian ) {
+							$statuses = geodir_get_post_stati( 'public', array( 'post_type' => $post_type ) );
+
+							if ( count( $statuses ) > 1 ) {
+								$post_status_where = "WHERE post_status IN( '" . implode( "', '", $statuses ) . "' )";
+							} else {
+								$post_status_where = "WHERE post_status = '{$statuses[0]}'";
+							}
+
 							$avg_num_votes = get_transient( 'gd_avg_num_votes_' . $table );
 
 							if ( $avg_num_votes === false ) {
-								$avg_num_votes = (int) $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table}" );
+								$avg_num_votes = (int) $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table} {$post_status_where}" );
 								$avg_rating = false;
 
 								// Save transient for rating count.
@@ -1191,7 +1207,7 @@ class GeoDir_Query {
 
 							if ( $avg_rating === false ) {
 								if ( $avg_num_votes > 0 ) {
-									$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table}" ) / $avg_num_votes;
+									$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table} {$post_status_where}" ) / $avg_num_votes;
 								} else {
 									$avg_rating = 0;
 								}
@@ -1202,7 +1218,7 @@ class GeoDir_Query {
 								$avg_rating = geodir_sanitize_float( $avg_rating );
 							}
 
-							$orderby = " ( ( $avg_num_votes * $avg_rating ) + ( " . $table . ".rating_count * " . $table . ".overall_rating ) )  / ( $avg_num_votes + " . $table . ".rating_count ) $order";
+							$orderby = " ( ( ( $avg_num_votes * $avg_rating ) + ( " . $table . ".rating_count * " . $table . ".overall_rating ) )  / ( $avg_num_votes + " . $table . ".rating_count ) ) $order, " . $table . ".overall_rating $order";
 						} else {
 							$orderby = " " . $table . "." . $sort_by . "  " . $order . ", " . $table . ".rating_count " . $order;
 						}
