@@ -82,6 +82,8 @@ class GeoDir_Elementor {
 			}
 
 			add_action( 'elementor_pro/init', array( __CLASS__,'register_pro_form_actions'));
+
+			add_filter( 'elementor/theme/posts_archive/query_posts/query_vars', array( __CLASS__, 'query_posts_query_vars' ), 20, 1 );
 		}
 
 		// Elementor 3
@@ -1387,5 +1389,21 @@ class GeoDir_Elementor {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Filters the post query variables when the theme loads the Elementor posts archive page.
+	 *
+	 * @since 2.2.10
+	 *
+	 * @param array $query_vars The query variables for the `WP_Query`.
+	 * @return array Filtered query variables.
+	 */
+	public static function query_posts_query_vars( $query_vars ) {
+		if ( ! empty( $query_vars['gd_is_geodir_page'] ) && ! empty( $query_vars['term'] ) && ! empty( $query_vars['taxonomy'] ) ) {
+			$query_vars['gd_taxonomy'] = $query_vars['taxonomy'];
+		}
+
+		return $query_vars;
 	}
 }
