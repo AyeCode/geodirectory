@@ -8,7 +8,6 @@
  */
 class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
-
 	public $arguments;
 	/**
 	 * Sets up the widgets name etc
@@ -19,122 +18,122 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'location-alt',
 			'block-category'=> 'geodirectory',
-			'block-keywords'=> "['geo','geodirectory','geodir']",
+			'block-keywords'=> "['geo', 'geodirectory', 'geodir']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_meta', // this us used as the widget id and the shortcode id.
-			'name'          => __('GD > Post Meta','geodirectory'), // the name of the widget.
+			'name'          => __( 'GD > Post Meta', 'geodirectory' ), // the name of the widget.
 			'widget_ops'    => array(
 				'classname'   => 'geodir-post-meta-container '.geodir_bsui_class(), // widget class
-				'description' => esc_html__('This shows a post single post meta.','geodirectory'), // widget description
+				'description' => esc_html__( 'This shows a post single post meta.', 'geodirectory' ), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,
 				'gd_wgt_showhide' => 'show_on',
 				'gd_wgt_restrict' => array( 'gd-detail' ), //@todo implement this on all other widgets
 			),
-			'arguments'     => array(
-				'title'  => array(
-					'title' => __('Title:', 'geodirectory'),
-					'desc' => __('Extra main title if needed.', 'geodirectory'),
+			'arguments' => array(
+				'title' => array(
+					'title' => __( 'Title:', 'geodirectory' ),
+					'desc' => __( 'Extra main title if needed.', 'geodirectory' ),
 					'type' => 'text',
 					'placeholder' => __( 'Extra main title if needed.', 'geodirectory' ),
-					'default'  => '',
+					'default' => '',
 					'desc_tip' => true,
 					'advanced' => true
 				),
-				'id'  => array(
-					'title' => __('Post ID:', 'geodirectory'),
-					'desc' => __('Leave blank to use current post id.', 'geodirectory'),
+				'id' => array(
+					'title' => __( 'Post ID:', 'geodirectory' ),
+					'desc' => __( 'Leave blank to use current post id.', 'geodirectory' ),
 					'type' => 'number',
 					'placeholder' => 'Leave blank to use current post id.',
 					'desc_tip' => true,
-					'default'  => '',
+					'default' => '',
 					'advanced' => false
 				),
-				'key'  => array(
-					'title' => __('Key:', 'geodirectory'),
-					'desc' => __('This is the custom field key.', 'geodirectory'),
+				'key' => array(
+					'title' => __( 'Key:', 'geodirectory' ),
+					'desc' => __( 'This is the custom field key.', 'geodirectory' ),
 					'type' => 'select',
 					'placeholder' => 'website',
-					'options'   => $this->get_custom_field_keys(),
+					'options' => $this->get_custom_field_keys(),
 					'desc_tip' => true,
-					'default'  => '',
+					'default' => '',
 					'advanced' => false
 				),
-				'show'  => array(
-					'title' => __('Show:', 'geodirectory'),
-					'desc' => __('What part of the post meta to show.', 'geodirectory'),
+				'show' => array(
+					'title' => __( 'Show:', 'geodirectory' ),
+					'desc' => __( 'What part of the post meta to show.', 'geodirectory' ),
 					'type' => 'select',
-					'options'   =>  array(
-						"" => __('icon + label + value', 'geodirectory'),
-						"icon-value" => __('icon + value', 'geodirectory'),
-						"label-value" => __('label + value', 'geodirectory'),
-						"icon" => __('icon', 'geodirectory'),
-						"label" => __('label', 'geodirectory'),
-						"value" => __('value', 'geodirectory'),
-						"value-strip" => __('value (strip_tags)', 'geodirectory'),
-						"value-raw" => __('value (saved in database)', 'geodirectory'),
+					'options' => array(
+						"" => __( 'icon + label + value', 'geodirectory' ),
+						"icon-value" => __( 'icon + value', 'geodirectory' ),
+						"label-value" => __( 'label + value', 'geodirectory' ),
+						"icon" => __( 'icon', 'geodirectory' ),
+						"label" => __( 'label', 'geodirectory' ),
+						"value" => __( 'value', 'geodirectory' ),
+						"value-strip" => __( 'value (strip_tags)', 'geodirectory' ),
+						"value-raw" => __( 'value (saved in database)', 'geodirectory' ),
 					),
 					'desc_tip' => true,
 					'advanced' => false
 				),
-				'no_wrap'  => array(
-					'title' => __('No Wrap:', 'geodirectory'),
-					'desc' => __('Remove wrapping div.', 'geodirectory'),
+				'no_wrap' => array(
+					'title' => __( 'No Wrap:', 'geodirectory' ),
+					'desc' => __( 'Remove wrapping div.', 'geodirectory' ),
 					'type' => 'checkbox',
-					'default'  => '0',
+					'default' => '0',
 					'element_require' => '( [%show%]=="value-strip" || [%show%]=="value-raw" )',
 				),
-				'alignment'  => array(
-					'title' => __('Alignment:', 'geodirectory'),
-					'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
+				'alignment' => array(
+					'title' => __( 'Alignment:', 'geodirectory' ),
+					'desc' => __( 'How the item should be positioned on the page.', 'geodirectory' ),
 					'type' => 'select',
-					'options'   =>  array(
-						"" => __('None', 'geodirectory'),
-						"block" => __('Block', 'geodirectory'),
-						"left" => __('Left', 'geodirectory'),
-						"center" => __('Center', 'geodirectory'),
-						"right" => __('Right', 'geodirectory'),
+					'options' => array(
+						"" => __( 'None', 'geodirectory' ),
+						"block" => __( 'Block', 'geodirectory' ),
+						"left" => __( 'Left', 'geodirectory' ),
+						"center" => __( 'Center', 'geodirectory' ),
+						"right" => __( 'Right', 'geodirectory' ),
 					),
 					'desc_tip' => true,
 					'advanced' => false
 				),
-				'text_alignment'  => array(
-					'title' => __('Text Align:', 'geodirectory'),
-					'desc' => __('How the text should be aligned.', 'geodirectory'),
+				'text_alignment' => array(
+					'title' => __( 'Text Align:', 'geodirectory' ),
+					'desc' => __( 'How the text should be aligned.', 'geodirectory' ),
 					'type' => 'select',
-					'options'   =>  array(
-						"" => __('None', 'geodirectory'),
-						"left" => __('Left', 'geodirectory'),
-						"center" => __('Center', 'geodirectory'),
-						"right" => __('Right', 'geodirectory'),
+					'options' => array(
+						"" => __( 'None', 'geodirectory' ),
+						"left" => __( 'Left', 'geodirectory' ),
+						"center" => __( 'Center', 'geodirectory' ),
+						"right" => __( 'Right', 'geodirectory' ),
 					),
 					'desc_tip' => true,
 					'advanced' => false
 				),
-				'list_hide'  => array(
-					'title' => __('Hide item on view:', 'geodirectory'),
-					'desc' => __('You can set at what view the item will become hidden.', 'geodirectory'),
+				'list_hide' => array(
+					'title' => __( 'Hide item on view:', 'geodirectory' ),
+					'desc' => __( 'You can set at what view the item will become hidden.', 'geodirectory' ),
 					'type' => 'select',
-					'options'   =>  array(
-						"" => __('None', 'geodirectory'),
-						"2" => __('Grid view 2', 'geodirectory'),
-						"3" => __('Grid view 3', 'geodirectory'),
-						"4" => __('Grid view 4', 'geodirectory'),
-						"5" => __('Grid view 5', 'geodirectory'),
+					'options' => array(
+						"" => __( 'None', 'geodirectory' ),
+						"2" => __( 'Grid view 2', 'geodirectory' ),
+						"3" => __( 'Grid view 3', 'geodirectory' ),
+						"4" => __( 'Grid view 4', 'geodirectory' ),
+						"5" => __( 'Grid view 5', 'geodirectory' ),
 					),
 					'desc_tip' => true,
 					'advanced' => true
 				),
-				'list_hide_secondary'  => array(
-					'title' => __('Hide secondary info on view', 'geodirectory'),
-					'desc' => __('You can set at what view the secondary info such as label will become hidden.', 'geodirectory'),
+				'list_hide_secondary' => array(
+					'title' => __( 'Hide secondary info on view', 'geodirectory' ),
+					'desc' => __( 'You can set at what view the secondary info such as label will become hidden.', 'geodirectory' ),
 					'type' => 'select',
-					'options'   =>  array(
-						"" => __('None', 'geodirectory'),
-						"2" => __('Grid view 2', 'geodirectory'),
-						"3" => __('Grid view 3', 'geodirectory'),
-						"4" => __('Grid view 4', 'geodirectory'),
-						"5" => __('Grid view 5', 'geodirectory'),
+					'options' => array(
+						"" => __( 'None', 'geodirectory' ),
+						"2" => __( 'Grid view 2', 'geodirectory' ),
+						"3" => __( 'Grid view 3', 'geodirectory' ),
+						"4" => __( 'Grid view 4', 'geodirectory' ),
+						"5" => __( 'Grid view 5', 'geodirectory' ),
 					),
 					'desc_tip' => true,
 					'advanced' => true
@@ -147,10 +146,10 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
                     'desc_tip' => true,
                     'advanced' => false
                 ),
-				'css_class'  => array(
+				'css_class' => array(
 					'type' => 'text',
-					'title' => __('Extra class:', 'geodirectory'),
-					'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'geodirectory'),
+					'title' => __( 'Extra class:', 'geodirectory' ),
+					'desc' => __( 'Give the wrapper an extra class so you can style things as you want.', 'geodirectory' ),
 					'placeholder' => '',
 					'default' => '',
 					'desc_tip' => true,
@@ -161,28 +160,22 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 		$design_style = geodir_design_style();
 
-		if($design_style){
+		if ( $design_style) {
 			// margins
-			$options['arguments']['mt']  = geodir_get_sd_margin_input('mt');
-			$options['arguments']['mr']  = geodir_get_sd_margin_input('mr');
-			$options['arguments']['mb']  = geodir_get_sd_margin_input('mb');
-			$options['arguments']['ml']  = geodir_get_sd_margin_input('ml');
+			$options['arguments']['mt']  = geodir_get_sd_margin_input( 'mt' );
+			$options['arguments']['mr']  = geodir_get_sd_margin_input( 'mr' );
+			$options['arguments']['mb']  = geodir_get_sd_margin_input( 'mb' );
+			$options['arguments']['ml']  = geodir_get_sd_margin_input( 'ml' );
 
 			// padding
-			$options['arguments']['pt']  = geodir_get_sd_padding_input('pt');
-			$options['arguments']['pr']  = geodir_get_sd_padding_input('pr');
-			$options['arguments']['pb']  = geodir_get_sd_padding_input('pb');
-			$options['arguments']['pl']  = geodir_get_sd_padding_input('pl');
-
+			$options['arguments']['pt']  = geodir_get_sd_padding_input( 'pt' );
+			$options['arguments']['pr']  = geodir_get_sd_padding_input( 'pr' );
+			$options['arguments']['pb']  = geodir_get_sd_padding_input( 'pb' );
+			$options['arguments']['pl']  = geodir_get_sd_padding_input( 'pl' );
 		}
 
-
 		parent::__construct( $options );
-
-
 	}
-
-	//gd_wgt_showhide
 
 	/**
 	 * The Super block output function.
@@ -193,75 +186,71 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 	 *
 	 * @return mixed|string|void
 	 */
-	public function output($args = array(), $widget_args = array(),$content = ''){
-
+	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		/**
 		 * @var int    $ID Optional. The current post ID if empty.
 		 * @var string $key The meta key : email
-		 * @var string $show Optional. What to show, 'title','value' or 'all'. Default 'all'.
+		 * @var string $show Optional. What to show, 'title', 'value' or 'all'. Default 'all'.
 		 * @var string $align left,right,center or blank.. Default ''
 		 * @var string $location The show in what location key. Default 'none'
 		 */
-		extract($args, EXTR_SKIP);
+		extract( $args, EXTR_SKIP );
 
-		global $post,$gd_post;
+		global $post, $gd_post;
 
-		$original_id = isset($args['id']) ? $args['id'] : '';
-		$args['location'] = !empty($args['location']) ? $args['location'] : 'none';
-		$output = '';
+		$args['location'] = ! empty( $args['location'] ) ? $args['location'] : 'none';
+
 		$args = shortcode_atts( array(
-			'id'    => isset($gd_post->ID) ? $gd_post->ID : 0,
-			'key'    => '', // the meta key : email
-			'show'    => '', // title,value (default blank, all)
-			'list_hide'    => '',
-			'list_hide_secondary'    => '',
+			'id' => ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0,
+			'key' => '', // the meta key : email
+			'show' => '', // title,value (default blank, all)
+			'list_hide' => '',
+			'list_hide_secondary' => '',
 			'css_class' => '',
-			'alignment'    => '', // left,right,center
-			'text_alignment'    => '', // left,right,center
-			'location'  => 'none',
-			'no_wrap'  => '',
-			'mt'    => '',
-			'mb'    => '',
-			'mr'    => '',
-			'ml'    => '',
-			'pt'    => '',
-			'pb'    => '',
-			'pr'    => '',
-			'pl'    => '',
+			'alignment' => '', // left,right,center
+			'text_alignment' => '', // left,right,center
+			'location' => 'none',
+			'no_wrap' => '',
+			'mt' => '',
+			'mb' => '',
+			'mr' => '',
+			'ml' => '',
+			'pt' => '',
+			'pb' => '',
+			'pr' => '',
+			'pl' => '',
 		), $args, 'gd_post_meta' );
 
-		if(empty($args['id'])){
-			$args['id'] =  isset($gd_post->ID) ? $gd_post->ID : 0;
+		if ( empty( $args['id'] ) ) {
+			$args['id'] = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
 		}
 
 		// maybe no wrap
-		if($args['show']=='value-strip'){
+		if ( $args['show'] == 'value-strip' ) {
 			$args['no_wrap'] = true;
 		}
 
 		$design_style = geodir_design_style();
 		$block_preview = $this->is_block_content_call();
 
-		if(empty($gd_post->ID) && $block_preview && !empty($args['key'])){
-			$args['id'] = geodir_get_post_id_with_content($args['key']);
+		if ( empty( $gd_post->ID ) && $block_preview && ! empty( $args['key'] ) ) {
+			$args['id'] = geodir_get_post_id_with_content( $args['key'] );
 		}
-		
-		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
 
+		$post_type = ! empty( $args['id'] ) ? get_post_type( $args['id'] ) : ( ! empty( $post->post_type ) ? $post->post_type : '' );
 
-		// print_r($args);
 		// error checks
 		$errors = array();
-		if(empty($args['key'])){$errors[] = __('key is missing','geodirectory');}
-//		if(empty($args['id'])){$errors[] = __('id is missing','geodirectory');}
-		if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
+		if ( empty( $args['key'] ) ) { $errors[] = __( 'key is missing', 'geodirectory' ); }
+		if ( empty( $post_type ) ) { $errors[] = __( 'invalid post type', 'geodirectory' ); }
 
-		if(!empty($errors)){
-			$output .= implode(", ",$errors);
+		$output = '';
+		if ( ! empty( $errors ) ) {
+			$output .= implode( ", ", $errors );
 		}
 
 		// check if its demo content
-		if($post_type == 'page' && !empty($args['id']) && geodir_is_block_demo()){
+		if ( $post_type == 'page' && ! empty( $args['id'] ) && geodir_is_block_demo() ) {
 			$post_type = 'gd_place';
 		}
 
@@ -273,81 +262,74 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 			$fields = $fields + geodir_post_meta_advance_fields( $post_type );
 
-			if(!empty($fields)){
+			if ( ! empty( $fields ) ) {
 				$field = array();
-				foreach($fields as $field_info){
-					if($args['key']==$field_info['htmlvar_name']){
+				foreach ( $fields as $field_info ) {
+					if ( $args['key'] == $field_info['htmlvar_name'] ) {
 						$field = $field_info;
 					}
 				}
-				if(!empty($field)){
+
+				if ( ! empty( $field ) ) {
 					$field = stripslashes_deep( $field );
 
 					// apply standard css
-					if(!empty($args['css_class'])){
+					if ( ! empty( $args['css_class'] ) ) {
 						$field['css_class'] .=" ".$args['css_class']." ";
 					}
 
-					$design_style = geodir_design_style();
-					
 					// set text alignment class
 					if ( $args['text_alignment'] != '' ) {
 						$field['css_class'] .= $design_style ? " text-".sanitize_html_class( $args['text_alignment'] ) : " geodir-text-align" . sanitize_html_class( $args['text_alignment'] );
 					}
+
 					// set alignment class
 					if ( $args['alignment'] != '' ) {
-						if($design_style){
-							if($args['alignment']=='block'){$field['css_class'] .= " d-block ";}
-							elseif($args['alignment']=='left'){$field['css_class'] .= " float-left mr-2 ";}
-							elseif($args['alignment']=='right'){$field['css_class'] .= " float-right ml-2 ";}
-							elseif($args['alignment']=='center'){$field['css_class'] .= " mw-100 d-block mx-auto ";}
-							else{$field['css_class'] .= " clear-both ";}
-						}else{
-							$field['css_class'] .= $args['alignment']=='block' ? " gd-d-block gd-clear-both " : " geodir-align" . sanitize_html_class( $args['alignment'] );
+						if ( $design_style ) {
+							if ( $args['alignment'] == 'block' ) { $field['css_class'] .= " d-block "; }
+							else if ( $args['alignment'] == 'left' ) { $field['css_class'] .= " float-left mr-2 "; }
+							else if ( $args['alignment'] == 'right' ) { $field['css_class'] .= " float-right ml-2 "; }
+							else if ( $args['alignment'] == 'center' ) { $field['css_class'] .= " mw-100 d-block mx-auto "; }
+							else { $field['css_class'] .= " clear-both "; }
+						} else {
+							$field['css_class'] .= $args['alignment'] == 'block' ? " gd-d-block gd-clear-both " : " geodir-align" . sanitize_html_class( $args['alignment'] );
 						}
-					}elseif($design_style){
+					} else if ( $design_style ) {
 						$field['css_class'] .= " clear-both ";
 					}
 
 					// set list_hide class
-					if($args['list_hide']=='2'){$field['css_class'] .= $design_style ? " gv-hide-2 " : " gd-lv-2 ";}
-					if($args['list_hide']=='3'){$field['css_class'] .= $design_style ? " gv-hide-3 " : " gd-lv-3 ";}
-					if($args['list_hide']=='4'){$field['css_class'] .= $design_style ? " gv-hide-4 " : " gd-lv-4 ";}
-					if($args['list_hide']=='5'){$field['css_class'] .= $design_style ? " gv-hide-5 " : " gd-lv-5 ";}
+					if ( $args['list_hide'] == '2' ) { $field['css_class'] .= $design_style ? " gv-hide-2 " : " gd-lv-2 "; }
+					if ( $args['list_hide'] == '3' ) { $field['css_class'] .= $design_style ? " gv-hide-3 " : " gd-lv-3 "; }
+					if ( $args['list_hide'] == '4' ) { $field['css_class'] .= $design_style ? " gv-hide-4 " : " gd-lv-4 "; }
+					if ( $args['list_hide'] == '5' ) { $field['css_class'] .= $design_style ? " gv-hide-5 " : " gd-lv-5 "; }
 
 					// set list_hide_secondary class
-					if($args['list_hide_secondary']=='2'){$field['css_class'] .= $design_style ? " gv-hide-s-2 " : " gd-lv-s-2 ";}
-					if($args['list_hide_secondary']=='3'){$field['css_class'] .= $design_style ? " gv-hide-s-3 " : " gd-lv-s-3 ";}
-					if($args['list_hide_secondary']=='4'){$field['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
-					if($args['list_hide_secondary']=='5'){$field['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
+					if ( $args['list_hide_secondary'] == '2' ) { $field['css_class'] .= $design_style ? " gv-hide-s-2 " : " gd-lv-s-2 "; }
+					if ( $args['list_hide_secondary'] == '3' ) { $field['css_class'] .= $design_style ? " gv-hide-s-3 " : " gd-lv-s-3 "; }
+					if ( $args['list_hide_secondary'] == '4' ) { $field['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 "; }
+					if ( $args['list_hide_secondary'] == '5' ) { $field['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 "; }
 
 					// wrapper class
-					$wrap_class = geodir_build_aui_class($args);
+					$wrap_class = geodir_build_aui_class( $args );
 					$field['css_class'] .= " ".$wrap_class;
-					
-					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
+
+					$output = apply_filters( "geodir_custom_field_output_{$field['type']}", '', $args['location'], $field,$args['id'], $args['show'] );
 
 					// Return clean striped value.
 					if ( $args['show'] == 'value-strip' && $output != '' ) {
 						$output = wp_strip_all_tags( $output );
 					}
-
-					if($field['name']=='post_content'){
-						//$output = wp_strip_all_tags($output);
-					}
-
-				}else{
-					//$output = __('Key does not exist','geodirectory');
+				} else {
+					//$output = __( 'Key does not exist', 'geodirectory' );
 				}
-			}else{
-
+			} else {
 			}
 
 			$args['id'] = apply_filters( 'geodir_widget_post_meta_reset_id', $args['id'], $args );
 		}
 
 		return $output;
-
 	}
 
 	/**
@@ -358,7 +340,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 	public function get_custom_field_keys() {
 		$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
 		$keys = array();
-		$keys[] = __('Select Key','geodirectory');
+		$keys[] = __( 'Select Key', 'geodirectory' );
 		if ( ! empty( $fields ) ) {
 			$address = array();
 			foreach( $fields as $field ) {
@@ -386,8 +368,8 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 	 */
 	public function show_in_locations() {
 		$locations = geodir_show_in_locations();
-
 		$show_in_locations = array( '' => __( 'Auto', 'geodirectory' ) );
+
 		foreach ( $locations as $value => $label ) {
 			$value = str_replace( array( '[', ']' ), '', $value );
 			$show_in_locations[ $value ] = $label;
@@ -396,4 +378,3 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		return $show_in_locations;
 	}
 }
-
