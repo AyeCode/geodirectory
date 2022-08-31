@@ -490,8 +490,8 @@ function gd_tabs_item_settings($this) {
     $settings = jQuery($this).parent().find('.dd-setting').first().html();
     $settings = jQuery('<div class="dd-setting">' + $settings + '</div>');
     $settings.removeClass('d-none');
-    $id = $settings.find('[name=id').val();
-    $type = $settings.find('[name=tab_type').val();
+    $id = $settings.find('[name="id"]').val();
+    $type = $settings.find('[name="tab_type"]').val();
     if (jQuery($this).closest('ul').hasClass('dd-list') || $type == 'fieldset') {
         $settings.find('.alert-info').addClass('d-none');
     } else {
@@ -580,7 +580,7 @@ function gd_tabs_add_tab($this) {
 
 function gd_tabs_save_tab($this, ev) {
     var $form = jQuery($this).closest("#geodir-field-settings");
-    var $id = jQuery($form).find("input[name=id]").val();
+    var $id = jQuery($form).find("input[name='id']").val();
     console.log($form.find("select, textarea, input").serialize());
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
     var data = $form.find("select, textarea, input").serialize() + "&security=" + gd_nonce + "&action=geodir_save_tab_item";
@@ -599,7 +599,7 @@ function gd_tabs_save_tab($this, ev) {
                 if (gd_doing_field_auto_save || (ev && ev.currentTarget)) {
                     gd_doing_field_auto_save = false;
                     if ($id == '') {
-                        jQuery('#geodir-field-settings [name=id]').val(new_id);
+                        jQuery('#geodir-field-settings [name="id"]').val(new_id);
                         // var new_nonce = jQuery(result).data('field-nonce');
                         // jQuery('#geodir-field-settings [name="_wpnonce"]').val(new_nonce);
                     }
@@ -622,7 +622,7 @@ function gd_tabs_close_settings($this) {
     jQuery('#gd-fields-tab').tab('show');
     jQuery('#geodir-selected-fields .dd-form').removeClass('border-width-2 border-primary');
     // if not saved then remove
-    $id = jQuery('#geodir-field-settings').find('[name=id],[name=field_id]').val();
+    $id = jQuery('#geodir-field-settings').find('[name="id"],[name="field_id"]').val();
     if (!$id || $id == 'new-1') {
         jQuery('#setName_,#setName_new-1').remove();
     }
