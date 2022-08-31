@@ -1,4 +1,4 @@
-=== GeoDirectory - Business Directory &  Plugin  ===
+=== GeoDirectory - Business Directory & Plugin ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: directory plugin, business directory, listing, job board, classifieds ads
