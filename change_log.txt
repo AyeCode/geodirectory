@@ -8,6 +8,7 @@
 * The map shows no result when service_distance field is active - FIXED
 * Some jQuery version shows JS error on edit custom field - FIXED
 * Hook added to filter map geocode address search results - ADDED
+* TEXT field DB column data type not changes when data type changed in field settings - FIXED
 
 = 2.2.9 =
 * Show actual DB error on custom field creation fail - CHANGED
