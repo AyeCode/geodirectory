@@ -1,4 +1,4 @@
-=== GeoDirectory - Business Directory & Plugin ===
+=== Business Directory WordPress Plugin – GeoDirectory ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: directory plugin, business directory, listing, job board, classifieds ads
@@ -21,25 +21,25 @@ Do it all stress-free and in style with 100% compatible WordPress page builders 
 
 [youtube https://www.youtube.com/watch?v=fEdOOucOtUg]
 
-= Be the go-to guiding hand for professionals: Say Hello to the world's best WordPress directory plugin. =
+= BE THE GO-TO GUIDING HAND FOR PROFESSIONALS: SAY HELLO TO THE WORLD'S BEST WORDPRESS DIRECTORY PLUGIN =
 
 Our dedicated team continuously refines every point of the search process (since 2011!), so your visitors walk away with a productive session on GeoDirectory every time.
 
-= Scale your directory with a reliable, proficient database. =
+= SCALE YOUR DIRECTORY WITH A RELIABLE, PROFICIENT DATABASE =
 
 Got millions of listings? Massive traffic? Skip the bugs, lags, and crashes with GeoDirectory – the only WordPress business directory plugin capable of taking you to the global scale without friction. Our unparalleled, highly-optimized database structure and queries can handle any scale you throw at it.
 
-= Ask, and you shall receive – Deliver speedy results. =
+= ASK, AND YOU SHALL RECEIVE – DELIVER SPEEDY RESULTS =
 
 Get free and paid listings (with the Price Manager add-on) in front of visitors within seconds with our rocket-fast search engine that finds local business listings on demand. With the attractive, easy-to-use user interface and slick back-end configurations, you can make your directory website the staple for high-end results and performance.
 
-= Developer-friendly + countless of directory themes =
+= DEVELOPER-FRIENDLY + COUNTLESS OF DIRECTORY THEMES =
 
 The design of your online directory is limitless with a wide array of themes and handy page-builder integrations. Need to add that personal touch? Developers can build on GeoDirectory freely using hooks (actions and filters).
 
-= How it works - Set up our free WordPress plugin in no time. =
+= HOW IT WORKS - SET UP OUR FREE WORDPRESS BUSINESS DIRECTORY PLUGIN IN NO TIME =
 
-As one of the top wordpress directory plugins, GeoDirectory is armed with a well-thought-out arsenal of features to make the setup process for your directory site easy as possible.
+As one of the top wordpress business directory plugins, GeoDirectory is armed with a well-thought-out arsenal of features to make the setup process for your directory site easy as possible.
 
 1. **Create your local directory**. Build your directory website easily using the best WordPress page builders like Gutenberg. Focus on local businesses around a street or in a city with our free version, and gain the ability to *add multiple locations or go global with our premium multi-location add-on*.
 
@@ -53,7 +53,7 @@ As one of the top wordpress directory plugins, GeoDirectory is armed with a well
 
 6. **Moderate your listings with ease**. Keep things tidy by approving or rejecting submissions and managing listing categories with our easy-to-use back-end tools.
 
-= How can I use WordPress business directory plugins? =
+= HOW CAN I USE WORDPRESS BUSINESS DIRECTORY PLUGINS? =
 
 No matter what kind of business you're in, use our free WordPress directory plugin to turn your WordPress site into a powerful search engine for any domain:
 
@@ -109,15 +109,15 @@ Get instant access to Premium Addons that have the power to make your local busi
 
 * [Compare Listings]( https://wpgeodirectory.com/downloads/compare-listings/ "Compare Listings") - Let your users compare listings side by side and compare vital info about the listings.
 
-= Go Pro - Become a member! =
+= GO PRO - BECOME A MEMBER! =
 
 Get your hands on all the premium business directory plugin add-ons and themes. Sign up at [wpgeodirectory.com](https://wpgeodirectory.com/downloads/membership/ "Get GeoDirectory membership.").
 
-= Support =
+= SUPPORT =
 
 Get timely and friendly support for both the Core Business Directory Plugin and add-ons at our [official website](https://wpgeodirectory.com/support).
 
-= What's new in GeoDirectory v2.0? =
+= WHAT'S NEW IN GEODIRECTORY V2.0? =
 
 Your friends at AyeCode work to continuously refine the best business directory plugin in the market to keep customers happy. Here's what's new in the newest version: 
 * Extended Business Hours for listings
@@ -128,7 +128,7 @@ Your friends at AyeCode work to continuously refine the best business directory 
 * Guest Frontend Add Listing
 * Improved SEO permalink settings.
 
-== Installation ==
+== installation ==
 
 = Minimum Requirements =
 
@@ -136,17 +136,17 @@ Your friends at AyeCode work to continuously refine the best business directory 
 * PHP version 5.6 or greater
 * MySQL version 5.0 or greater
 
-= Automatic installation =
+= AUTOMATIC INSTALLATION =
 
 Automatic installation is the easiest option. To do an automatic install of GeoDirectory, log in to your WordPress dashboard, navigate the Plugins menu, and click Add New.
 
 In the search field, type GeoDirectory, and click Search Plugins. Once you've found our business directory plugin, you install it by simply clicking Install Now. [GeoDirectory basic installation](https://docs.wpgeodirectory.com/category/7-installation)
 
-= Manual installation =
+= MANUAL INSTALLATION =
 
 The manual installation method involves downloading our Directory plugin and uploading it to your webserver via your favorite FTP application. The WordPress codex will tell you more [here](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation). [GeoDirectory basic installation](https://docs.wpgeodirectory.com/category/7-installation)
 
-= Updating =
+= UPDATING =
 
 Automatic updates should seamlessly work. We always suggest you backup up your website before performing any automated update to avoid unforeseen problems.
 
