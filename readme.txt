@@ -1,7 +1,7 @@
 === Business Directory WordPress Plugin – GeoDirectory ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
-Tags: directory plugin, business directory, listing, job board, classifieds ads
+Tags: directory plugin, business directory, listing, job board, classified ads
 Requires at least: 4.5
 Tested up to: 6.0
 Stable tag: 2.2.9
