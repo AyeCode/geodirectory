@@ -34,7 +34,7 @@ I switched from another directory listing plugin to GeoDirectory a couple of wee
 The support has been fantastic so far. The support team is very responsive and they really try to resolve any issues. They were already helpful answering support tickets that I raised even before I bought my GD membership.
 
 = Great plugin, wonderful add-ons and fantastic support!! =
-isla2 (@isla2)
+💁 isla2 (@isla2)
 ⭐⭐⭐⭐⭐
 Like many others I tried other plugins and even a listing theme, none gave me the options, flexibility and seamless integration with Elementor that GeoDirectory did. I worked with the free core GeoDirectory plugin for awhile (which did everything I needed it to) before I finally pulled the trigger and bought the membership giving me full access to all their add-ons and I'm so very happy I did! The add-ons will take your site to a whole new level.
 
@@ -43,7 +43,7 @@ Support is simply the best. Fast, friendly and totally clear. You will never hav
 GeoDirectory is absolutely brilliant!!
 
 = Amazing Directory Plugin =
-dimal (@dimalifragis)
+💁 dimal (@dimalifragis)
 ⭐⭐⭐⭐⭐
 This is a truly amazing directory plugin. Very solid and extremely configurable. And the most important of all, it works with all themes with minimal css changes (or no changes at all).
 
@@ -103,7 +103,7 @@ No matter what kind of business you're in, use our free WordPress business direc
 
 * **Hotels** – Use GeoDirectory to list and manage information about hotels, resorts, bed & breakfasts, and other types of accommodation.
 
-== Take your business directory to new heights with premium add-ons. ==
+== ⚡ Take your business directory to new heights with premium add-ons. ==
 
 Get instant access to Premium Addons that have the power to make your local business directory into a money-making global directory toolkit.
 
@@ -147,7 +147,7 @@ Get instant access to Premium Addons that have the power to make your local busi
 
 Get your hands on all the premium business directory plugin add-ons and themes. Sign up at [wpgeodirectory.com](https://wpgeodirectory.com/downloads/membership/ "Get GeoDirectory membership.").
 
-== SUPPORT ==
+== ⚡ SUPPORT ==
 
 Get timely and friendly support for both the Core Business Directory Plugin and add-ons at our [official website](https://wpgeodirectory.com/support).
 
