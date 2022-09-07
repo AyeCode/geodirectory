@@ -1583,6 +1583,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
 				$content_url = untrailingslashit( WP_CONTENT_URL );
 
+				// Replace http:// to https://.
+				if ( strpos( $content_url, 'http://' ) === 0 && strpos( plugins_url(), 'https://' ) === 0 ) {
+					$content_url = str_replace( 'http://', 'https://', $content_url );
+				}
+
 				// Check if we are inside a plugin
 				$file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
 				$url = str_replace( $content_dir, $content_url, $file_dir );
