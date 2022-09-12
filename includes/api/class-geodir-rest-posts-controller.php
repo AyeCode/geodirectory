@@ -2333,7 +2333,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     $args['type']   = geodir_rest_data_type_to_field_type( $data_type );
                     break;
                 case 'datepicker':
-                    $args['type']       = 'object';
+                    $args['type']       = 'string';
                     $args['format']     = 'date-time';
                     $args['properties'] = array(
                         'raw' => array(
@@ -2348,9 +2348,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'readonly'    => true,
                         ),
                     );
-                    if ( !empty( $extra_fields['date_format'] ) ) {
-                        $arg_options['date_format'] = $extra_fields['date_format'];
-                    }
+                    $arg_options['date_format'] = 'Y-m-d';
                     break;
                 case 'email':
                     $args['format'] = 'email';
@@ -2805,7 +2803,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						$date_format = ! empty( $extra_fields['date_format'] ) ? $extra_fields['date_format'] : geodir_date_format();
 						$data[ $field_name ] = array(
 							'raw'		=> $field_value,
-							'rendered' 	=> geodir_date( $field_value, 'Y-m-d', $date_format )
+							'rendered' 	=> date_i18n( $date_format, strtotime( $field_value ) )
 						);
 					} else {
 						$data[ $field_name ] = NULL;
@@ -2874,7 +2872,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						$time_format = ! empty( $extra_fields['time_format'] ) ? $extra_fields['time_format'] : geodir_time_format();
 						$data[ $field_name ] = array(
 							'raw'		=> $field_value,
-							'rendered' 	=> date_i18n( 'H:i:s', strtotime( $field_value ) )
+							'rendered' 	=> date_i18n( $time_format, strtotime( $field_value ) )
 						);
 					} else {
 						$data[ $field_name ] = NULL;

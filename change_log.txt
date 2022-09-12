@@ -1,3 +1,7 @@
+= 2.2.11 =
+* Custom date is not saved with REST API when uses custom format - FIXED
+* Add route in REST API to add/update category & tag - ADDED
+
 = 2.2.10 =
 * Report post popup don't open on 2nd click once closed - FIXED
 * GeneratePress layout default setting not working on GD pages - FIXED
