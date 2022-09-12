@@ -47,7 +47,7 @@ class GeoDir_Elementor_Form_Contact extends \ElementorPro\Modules\Forms\Classes\
 		];
 
 		foreach ( $fields as $key => $default ) {
-			$setting = trim( $settings[ "geodir_" . $key ] );
+			$setting = isset( $settings[ "geodir_" . $key ] ) ? trim( $settings[ "geodir_" . $key ] ) : ( isset( $settings[ $key ] ) ? trim( $settings[ $key ] ) : '' );
 			$setting = $record->replace_setting_shortcodes( $setting );
 			if ( $key == 'email_to' ) {
 				$fields[ $key ] = $default;
