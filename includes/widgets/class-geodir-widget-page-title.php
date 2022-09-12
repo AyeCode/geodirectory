@@ -185,7 +185,7 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 	public function output( $instance = array(), $args = array(), $content = '' ) {
 		global $geodirectory, $post, $gd_post;
 
-		$instance = shortcode_atts( 
+		$instance = shortcode_atts(
 			array(
 				'tag' => 'h1',
 				'no_wrap' => '',
@@ -205,9 +205,9 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 				'pb'    => '',
 				'pr'    => '',
 				'pl'    => '',
-			), 
-			$instance, 
-			'gd_page_title' 
+			),
+			$instance,
+			'gd_page_title'
 		);
 		if ( empty( $instance['tag'] ) ) {
 			$instance['tag'] = 'h1';
@@ -220,9 +220,9 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 		$design_style = geodir_design_style();
 		$block_preview = $this->is_block_content_call();
 		$output = '';
-		if ( $this->is_preview() ) {
-			return $output;
-		}
+//		if ( $this->is_preview() ) {
+//			return $output;
+//		}
 
 		// No GD page
 //		if ( ! geodir_is_geodir_page() && !$block_preview ) {
@@ -237,7 +237,7 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 		// wrapper class
 		$wrap_class = geodir_build_aui_class($instance);
 		$container_class .= " ".$wrap_class;
-		
+
 		if ( $instance['container_class'] != '' ) {
 			$container_class .= ' ' . esc_attr( $instance['container_class'] );
 		}

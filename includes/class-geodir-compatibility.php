@@ -280,7 +280,7 @@ class GeoDir_Compatibility {
 					'desc' => __( 'Disable overwrite by SEOPress titles & metas on GD pages?', 'geodirectory' ),
 					'default' => '0',
 				),
-				array( 
+				array(
 					'id' => 'seopress_detected',
 					'type' => 'sectionend'
 				)
@@ -323,7 +323,7 @@ class GeoDir_Compatibility {
 				$settings_link = admin_url("admin.php?page=gd-settings&tab=general&section=developer");
 				$aui_disabled_notice = sprintf( __("Listimia theme works best with GeoDirectory legacy styles, please set legacy styles %shere%s","geodirectory"),"<a href='$settings_link'>","</a>");
 			}
-		} 
+		}
 	}
 
 	/**
@@ -371,7 +371,7 @@ class GeoDir_Compatibility {
 
 	/**
 	 * Rank Math Category image
-	 * 
+	 *
 	 * @param object $this_var rankmath class object
 	 */
 	public static function rank_math_cat_image( $this_var ) {
@@ -386,7 +386,7 @@ class GeoDir_Compatibility {
 	}
 
 	/**
-	 * Setup functions on plugins loaded. 
+	 * Setup functions on plugins loaded.
 	 *
 	 * @since 2.0.0.81
 	 */
@@ -685,8 +685,8 @@ class GeoDir_Compatibility {
 			     || defined( 'TD_THEME_VERSION' )
 				 || function_exists( 'pi_elv_include_scripts' )
 				 || ( ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) )
-				 || function_exists( 'mgm_setup' ) 
-				 || function_exists( 'genesis_theme_support' ) 
+				 || function_exists( 'mgm_setup' )
+				 || function_exists( 'genesis_theme_support' )
 				 || function_exists( 'ffmp_setup' ) // ffmp theme
 		     )
 		) {
@@ -764,7 +764,7 @@ class GeoDir_Compatibility {
 				// Remove existing notice.
 				if ( GeoDir_Admin_Notices::has_notice( 'buddypress_search_slug_error' ) ) {
 					GeoDir_Admin_Notices::remove_notice( 'buddypress_search_slug_error' );
-				} 
+				}
 				return;
 			}
 
@@ -1294,27 +1294,27 @@ class GeoDir_Compatibility {
 			   this.init()
 			   this.hooks()
 		   }
-	   
+
 		   /**
 			* Init the plugin
 			*/
 		   RankMathIntegration.prototype.init = function () {
 			   this.pluginName = 'geodirectory'
 		   }
-	   
+
 		   /**
 			* Hook into Rank Math App eco-system
 			*/
 		   RankMathIntegration.prototype.hooks = function () {
 			   var self = this
-	   
+
 			   RankMathApp.registerPlugin(this.pluginName)
 			   wp.hooks.addFilter('rank_math_content', this.pluginName, $.proxy(this.filterContent, this))
 			   window.setInterval(function () {
 				   RankMathApp.reloadPlugin(self.pluginName)
 			   }, 2000);
 		   }
-	   
+
 		   /**
 			* Gather ge specific field data for analysis
 			*
@@ -1322,14 +1322,14 @@ class GeoDir_Compatibility {
 			*/
 		   RankMathIntegration.prototype.getContent = function () {
 			   var content = ''
-	   
+
 			   //Add images
 			   $('.plupload-thumbs img').each(function () {
 				   var img = $(this).clone()
 				   img.attr('alt', img.data('title'))
 				   content += '<p>' + img[0].outerHTML + '.</p>'
 			   })
-	   
+
 			   //Add textarea fields
 			   $('.gd-fieldset-details textarea').each(function () {
 				   var val = $(this).val()
@@ -1337,26 +1337,26 @@ class GeoDir_Compatibility {
 					   content += '<p>' + val + '</p>'
 				   }
 			   })
-	   
+
 			   //Finally, input fields
 			   $('input.geodir_textfield').each(function () {
 				   var val = $(this).val()
 				   var label = $(this).closest('.gd-fieldset-details').find('label').text() + ' - ' + val
-	   
+
 				   if ('url' == $(this).attr('type') && val.length) {
 					   label = '<a href="' + val + '">' + label + '</a>'
 				   }
-	   
+
 				   if (val.length) {
 					   content += '<p>' + label + '.</p>'
 				   }
 			   })
 
 			return content
-	   
+
 		   }
-	   
-	   
+
+
 		   /**
 			* Filters rankmat content
 			*
@@ -1367,15 +1367,15 @@ class GeoDir_Compatibility {
 		   RankMathIntegration.prototype.filterContent = function (content) {
 			   return content + this.getContent()
 		   }
-	   
-	   
+
+
 		   /**
 			* Start Analysing our Fields.
 			*/
 		   $(document).on('ready', function () {
 			   new RankMathIntegration()
 		   })
-	   
+
 	   })(jQuery)
 	</script>
 	   <?php
@@ -2743,8 +2743,8 @@ class GeoDir_Compatibility {
 	public static function fl_theme_builder_page_options( $options ) {
 		global $wpdb;
 
-		$layouts = array( 
-			'0' => __( 'Select Themer Layout', 'geodirectory' ) 
+		$layouts = array(
+			'0' => __( 'Select Themer Layout', 'geodirectory' )
 		);
 
 		$results = $wpdb->get_results( "SELECT p.ID, p.post_title FROM {$wpdb->postmeta} as pm INNER JOIN {$wpdb->posts} as p ON pm.post_id = p.ID WHERE p.post_type = 'fl-theme-layout' AND p.post_status = 'publish' AND pm.meta_key = '_fl_theme_builder_locations' AND ( pm.meta_value LIKE 'a:0:{}' OR pm.meta_value = '' ) ORDER BY `p`.`post_title` ASC" );
@@ -2771,9 +2771,9 @@ class GeoDir_Compatibility {
 			'options' => $layouts,
 			'desc_tip' => true,
 		);
-		$options[] = array( 
-			'type' => 'sectionend', 
-			'id' => 'fl_theme_builder_settings' 
+		$options[] = array(
+			'type' => 'sectionend',
+			'id' => 'fl_theme_builder_settings'
 		);
 
 		return $options;

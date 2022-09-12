@@ -455,7 +455,7 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		$icon_class = !empty($args['icon']) ? esc_attr($args['icon']) : $favourite_icon;
 		$icon_style .= $icon_color_on ? "color:$icon_color_on;" : '';
 		$text = $unfavourite_text;
-		
+
 	} else {
 
 		if ( ! isset( $current_user->data->ID ) || $current_user->data->ID == '' ) {
@@ -494,7 +494,7 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		}elseif( !empty($args['bg_color']) && $args['type']!='link'){
 			$link_style .= "background:".esc_attr($args['bg_color']).";";
 		}
-		
+
 		// text color
 		if( !empty($args['txt_color'])){
 			$text_style .= "color:".esc_attr($args['txt_color']).";";
@@ -963,7 +963,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	if ($post_type &&  $post_type == 'page' && geodir_is_block_demo() ) {
 		$post_type = 'gd_place';
 	}
-	
+
 	if ($post_type &&  ! geodir_is_gd_post_type( $post_type ) ) {
 		return $output;
 	}
@@ -1298,9 +1298,9 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 					if ( ! empty( $args['alignment'] ) ) {
 						$class .= ' gd-badge-align' . sanitize_title($args['alignment']);
-					}	
+					}
 				}
-				
+
 				if ( ! empty( $args['css_class'] ) ) {
 					$class .= ' ' . esc_attr($args['css_class']);
 				}
@@ -1508,7 +1508,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					if(!empty($args['size'])){$output .= '</span>';}
 					$output .= '</span>';
 
-					
+
 				}else{
 					$post_id = isset( $find_post->ID ) ? absint( $find_post->ID ) : '';
 					$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
@@ -1668,7 +1668,7 @@ function geodir_get_no_replace_fields(){
 
 /**
  * Replace custom variables in text.
- * 
+ *
  * @param $text
  * @param string $post_id
  *
@@ -1704,9 +1704,9 @@ function geodir_replace_variables( $text, $post_id = '' ) {
 
 /**
  * Filter post badge match value.
- * 
+ *
  * @since 2.0.0.67
- * 
+ *
  * @param bool $match_found True if match found else False.
  * @param array $args Badge arguments.
  * @param object $gd_post The GD post object.
@@ -1884,7 +1884,7 @@ add_filter( 'geodir_custom_field_value_textarea', 'geodir_validate_custom_field_
  *
  * @since 2.0.0.86
  *
- * $param string $post_type The post type. 
+ * $param string $post_type The post type.
  * @return array Standard fields.
  */
 function geodir_post_meta_advance_fields( $post_type = 'gd_place' ) {
@@ -1915,7 +1915,7 @@ function geodir_post_meta_advance_fields( $post_type = 'gd_place' ) {
  *
  * @since 2.0.0.86
  *
- * $param string $post_type The post type. 
+ * $param string $post_type The post type.
  * @return array Standard fields.
  */
 function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
@@ -2057,7 +2057,7 @@ function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
  *
  * @global array $geodir_post_meta_fields Cached fields.
  *
- * $param string $post_type The post type. 
+ * $param string $post_type The post type.
  * @return array Address fields.
  */
 function geodir_post_meta_address_fields( $post_type = 'gd_place' ) {

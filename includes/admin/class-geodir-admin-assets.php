@@ -41,7 +41,7 @@ class GeoDir_Admin_Assets {
 		if ( defined( 'WPSEO_VERSION' ) && wp_script_is( 'geodir-admin-script', 'enqueued' ) && wp_style_is( 'yoast-seo-select2', 'enqueued' ) && wp_style_is( 'yoast-seo-monorepo', 'enqueued' ) ) {
 			wp_deregister_style( 'yoast-seo-select2' );
 
-			// Yoast SEO metabox CSS dependent on yoast-seo-select2. 
+			// Yoast SEO metabox CSS dependent on yoast-seo-select2.
 			if ( wp_style_is( 'yoast-seo-metabox-css', 'registered' ) ) {
 				wp_register_style( 'yoast-seo-select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION );
 			}
@@ -73,11 +73,11 @@ class GeoDir_Admin_Assets {
 //			'script' => 'geodir-auto-block-recover', // do we need block scripts?
 //			'editor_style'  => 'geodir-fse',
 //		) );
-//		
+//
 //		// for FSE iframe
 //		wp_register_style('geodir-fse', geodir_plugin_url() . '/assets/css/admin.css', array('font-awesome','ayecode-ui'), GEODIRECTORY_VERSION);
 
-		
+
 		wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-admin-css', geodir_plugin_url() . '/assets/css/admin.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-jquery-ui-timepicker-css', geodir_plugin_url() . '/assets/css/jquery.ui.timepicker.css', array(), GEODIRECTORY_VERSION);
@@ -157,7 +157,7 @@ class GeoDir_Admin_Assets {
 		}elseif($geodir_map_name == 'osm'){
 			$map_require = array('geodir-leaflet-script','geodir-leaflet-geo-script','geodir-o-overlappingmarker-script');
 		}
-		
+
 
 		// Register scripts
 		if ( wp_script_is( 'select2', 'registered' ) ) {
@@ -192,7 +192,7 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_script( 'geodir-admin-dashboard' );
 		}
 
-		
+
 		// load rating scripts on comments pages
 		if($screen_id=='comment'){
 			wp_enqueue_script( 'geodir-admin-script' );
@@ -209,7 +209,7 @@ class GeoDir_Admin_Assets {
 
 			// timepicker
 			wp_enqueue_script( 'geodir-jquery-ui-timepicker' );
-			
+
 			// should prob only be loaded on details page
 			wp_enqueue_script('geodir-plupload');
 			if ( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow ) {
@@ -228,7 +228,7 @@ class GeoDir_Admin_Assets {
 					}
 				}
 			}
-			
+
 			$load_gomap_script = apply_filters( 'geodir_load_gomap_script', false );
 			// only load maps when needed
 			if(
@@ -244,7 +244,7 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_script( 'geodir-custom-fields-script' );
 			wp_enqueue_script( 'geodir-nestable-script' );
 
-			
+
 
 			// place js config array for plupload
 			$plupload_init = array(
@@ -317,7 +317,7 @@ class GeoDir_Admin_Assets {
 				)
 			);
 		}
-		
+
 		// API keys.
 		if ( $gd_screen_id . '_page_gd-settings' === $screen_id ) {
 			wp_register_script( 'qrcode', geodir_plugin_url() . '/assets/js/jquery.qrcode' . $suffix . '.js', array( 'jquery' ), GEODIRECTORY_VERSION );

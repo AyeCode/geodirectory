@@ -74,7 +74,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 ?>
 <script type="text/javascript">
     /* <![CDATA[ */
-    <?php 
+    <?php
 	/**
 	 * Fires at the start of the add javascript on the add listings map.
 	 *
@@ -91,7 +91,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         gdMaps = null;
     }
     window.gdMaps = window.gdMaps || gdMaps;
-    
+
     user_address = false;
     jQuery('#<?php echo $prefix.'street';?>').on("keypress",function () {
         user_address = true;
@@ -124,7 +124,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             geocodeResponse(responses);
         });
     }
-    
+
     function geocodeResponse(responses) {
         console.log(responses);//keep this for debugging
         if (responses && responses.length > 0) {
@@ -235,7 +235,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 }
                 if (responses[0].formatted_address != '') {
                     address_array = responses[0].formatted_address.split(",", 2);
-                    
+
                     if (address_array.length > 1) {
                         if (!(typeof(street_number.long_name) == 'undefined' || street_number.long_name == null) && street_number.long_name.toLowerCase() == address_array[0].toLowerCase().trim()) {
                             getAddress = street_number.long_name + ', ' + address_array[1];
@@ -417,11 +417,11 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 }
             }
 
-            //getCountry 
+            //getCountry
             if (country.long_name) {
                 getCountry = country.long_name;
             }
-            //getZip 
+            //getZip
             if (postal_code.long_name) {
                 getZip = postal_code.long_name;
             }
@@ -435,14 +435,14 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 _formatted_address = '';
                 if (getCity && formatted_address.indexOf(getCity) !== -1) {
                     _formatted_address = formatted_address.split(getCity);
-                    
+
                 } else if (getState && formatted_address.indexOf(getState) !== -1) {
                     _formatted_address = formatted_address.split(getState);
                 }
                 getAddress = _formatted_address.length > 1 ? _formatted_address[((_formatted_address.length)-1)] : formatted_address;
             }
             console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
-            <?php 
+            <?php
             /**
              * Fires to add javascript variable to use in google map.
              *
@@ -463,7 +463,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             <?php } ?>
             updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2);
         } else {
-            <?php 
+            <?php
             /**
              * Fires to add javascript variable to use in google map.
              *
@@ -595,7 +595,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         if (ISO2 == '--') {
             ISO2 = '';
         }
-        
+
         if (typeof zip == "undefined") {
             zip = '';
         }
@@ -672,7 +672,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     var nAddress = address.toLowerCase().lastIndexOf(searchZip.toLowerCase());
                     address = address.slice(0, nAddress) + address.slice(nAddress).replace(new RegExp(searchZip, 'i'), "");
                 }
-				<?php 
+				<?php
 				/**
 				 * Fires before set geocode position.
 				 *
@@ -693,7 +693,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                         jQuery.goMap.map.setCenter(results[0].geometry.location);
                         updateMarkerPosition(baseMarker.getPosition());
                         //if(set_on_map && is_restrict) {
-                        <?php 
+                        <?php
                         /**
                          * Fires before set geocode position.
                          *
@@ -726,7 +726,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             } else if (window.gdMaps == 'osm') {
                 jQuery.goMap.map.invalidateSize();
                 jQuery.goMap.map._onResize();
-            }                
+            }
         }, 100);
     }
 
@@ -743,7 +743,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 
         return $street2;
     }
-    
+
     function geocodeResponseOSM(response, updateMap) {
         console.log(response);
         if (response.display_address) {
@@ -754,6 +754,12 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             var getState = response.state;
             var getCountry = response.country;
             getCountryISO = response.country_code;
+
+			// small US cities fix
+			if(!response.address.city && response.address.village){
+				getCity = response.address.village;
+			}
+
             console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
             if (updateMap && response.lat && response.lon) {
                 var newLatLng = new L.latLng(response.lat, response.lon);
@@ -781,7 +787,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             <?php } ?>
             updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry,getAddress2);
         } else {
-            <?php 
+            <?php
             /**
              * Fires to add javascript variable to use in google map.
              *
@@ -828,12 +834,12 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             jQuery('#<?php echo $prefix.'advmap_nofound';?>').hide();
             jQuery('#<?php echo $prefix.'advmap_notloaded';?>').show();
         }
-        
+
         $("#<?php echo $prefix;?>set_address_button").on("click",function () {
             var set_on_map = true;
             geodir_codeAddress(set_on_map);
         });
-        
+
         if (window.gdMaps == 'google') {
             // Add dragging event listeners.
             google.maps.event.addListener(baseMarker, 'dragstart', function () {

@@ -63,7 +63,7 @@ if ( ! empty( $tabs_array ) ) {
 			}
 
 			// `list-unstyled` class added for some themes like Kadence that will prevent scroll when used as list
-			echo '<li class="nav-item list-unstyled"><a class="nav-link text-nowrap scroll-ignore '.$active.'" '.$pill_js.' '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';
+			echo '<li class="nav-item list-unstyled mb-0"><a class="nav-link text-nowrap scroll-ignore '.$active.'" '.$pill_js.' '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';
 
 			$count++;
 		}
