@@ -5,6 +5,7 @@ function gd_auto_recover_blocks(){
         const recursivelyRecoverBlocks = willRecoverBlocks => {
             willRecoverBlocks.forEach( _block => {
                 if ( isInvalid( _block ) ) {
+					console.log('invalid block found');
                     recoveryCalled = true
                     const newBlock = recoverBlock( _block )
                     for ( const key in newBlock ) {
@@ -27,6 +28,7 @@ function gd_auto_recover_blocks(){
 
     var recoverBlocks = blocks => {
         return blocks.map( _block => {
+			console.log('maybe block');
             const block = _block
 
             // If the block is a reusable block, recover the Stackable blocks inside it.
@@ -70,8 +72,11 @@ function gd_auto_recover_blocks(){
 
 // Recover all the blocks that we can find.
     var mainBlocks = recoverBlocks( wp.data.select( 'core/editor' ).getEditorBlocks() )
+
+	console.log(mainBlocks);
 // Replace the recovered blocks with the new ones.
     mainBlocks.forEach( block => {
+		console.log('block');
         if ( block.isReusable && block.ref ) {
             // Update the reusable blocks.
             wp.data.dispatch( 'core' ).editEntityRecord( 'postType', 'wp_block', block.ref, { content: wp.blocks.serialize( block.blocks ) } ).then( () => {
@@ -96,13 +101,13 @@ function inIframe () {
 }
 
 jQuery(function() {
-    if(inIframe){
-        alert('i');
-    }else{
-        alert('ni');
-    }
+    // if(inIframe){
+    //     alert('i');
+    // }else{
+    //     alert('ni');
+    // }
 
-   // gd_auto_recover_blocks();
+   gd_auto_recover_blocks();
 
     // document.querySelector(".block-editor-warning__action button").click();
     // jQuery('#id-8p330q-6 .block-editor-block-preview__container').click();
@@ -121,10 +126,12 @@ jQuery(function() {
     //     alert(5);
     // });
 
-    // setTimeout(function(){
-    //     jQuery('.block-editor-warning__action button').click();
-    //     console.log('click');
-    // }, 2000);
+    setTimeout(function(){
+		console.log('start block recovery');
+		gd_auto_recover_blocks();
+        jQuery('.block-editor-warning__action button').click();
+        // console.log('click');
+    }, 10000);
 });
 
 

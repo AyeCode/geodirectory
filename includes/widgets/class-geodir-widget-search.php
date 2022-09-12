@@ -126,7 +126,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 	 * The Super block output function.
 	 *
 	 * @param array $instance Settings for the widget instance.
-	 * @param array $widget_args Display arguments including 'before_title', 'after_title', 
+	 * @param array $widget_args Display arguments including 'before_title', 'after_title',
 	 *                           'before_widget', and 'after_widget'.
 	 * @param string $content
 	 *

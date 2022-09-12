@@ -146,6 +146,8 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 			'pl'    => '',
 		);
 
+		$block_preview = $this->is_block_content_call();
+
 		$backup_post = $post;
 
 		if ( empty( $post ) && ! empty( $gd_post ) ) {
@@ -187,10 +189,14 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 			if ( !empty( $instance['text_color'] ) ) { $link_class .= "text-".sanitize_html_class($instance['text_color']); }
 		}
 
+		$title = get_the_title();
+		if(empty($title) && $block_preview ){$title = "Demo title preview";}
+		$title = apply_filters( 'geodir_widget_post_title', $title, $instance, $args, $content );
+
 		ob_start();
 		?>
 		<<?php echo esc_attr($title_tag);?> class="geodir-entry-title <?php echo $classes;?>">
-			<a href="<?php the_permalink(); ?>" class="<?php echo esc_attr( $link_class );?>" title="<?php echo esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), stripslashes( the_title_attribute( array( 'echo' => false ) ) ) ) ); ?>"><?php echo trim( esc_html( strip_tags( stripslashes( get_the_title() ) ) ) ); ?></a>
+			<a href="<?php the_permalink(); ?>" class="<?php echo esc_attr( $link_class );?>" title="<?php echo esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), stripslashes( the_title_attribute( array( 'echo' => false ) ) ) ) ); ?>"><?php echo trim( esc_html( strip_tags( stripslashes( $title ) ) ) ); ?></a>
 		</<?php echo esc_attr($title_tag);?>>
 		<?php
 		$output = ob_get_clean();

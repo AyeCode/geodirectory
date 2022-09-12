@@ -118,7 +118,9 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
         global $preview, $post, $gd_post, $gd_single_tabs_array;
 
-        if ( ! isset( $post->ID ) ) {
+	    $is_preview = $this->is_preview();
+
+        if ( ! isset( $post->ID ) && !$is_preview ) {
             return '';
         }
 
@@ -402,12 +404,12 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             $tab->tab_icon = $dummy_tab;
             $tab->tab_key = 'dummy_'.$count;
             $tab->tab_content = sprintf( __( 'Demo tab content %d.', 'geodirectory' ),$count)." ".str_repeat($text,5);
-            
+
             $tabs[] = $tab;
             $count++;
         }
 
         return $tabs;
     }
-    
+
 }

@@ -739,6 +739,7 @@ class GeoDir_Frontend_Scripts {
 
 		$map_api = GeoDir_Maps::active_map();
 		wp_add_inline_script( 'jquery', "window.gdSetMap = window.gdSetMap || '" . $map_api . "';window.gdLoadMap = window.gdLoadMap || '" . geodir_lazy_load_map() . "';");
+		wp_add_inline_script( 'jquery-core', "window.gdSetMap = window.gdSetMap || '" . $map_api . "';window.gdLoadMap = window.gdLoadMap || '" . geodir_lazy_load_map() . "';");// wp.com page optimizer plugins breaks if just jquery used here.
 
 		// Maps
 		if ( geodir_lazy_load_map() ) {
