@@ -372,7 +372,7 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
                 }
             }
 
-            $location_name = trim( $location_name );
+            $location_name = $location_name ? trim( $location_name ) : '';
 
 			// Private address
 			if ( $check_address && ! empty( $location_name ) ) {
