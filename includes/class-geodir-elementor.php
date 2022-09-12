@@ -40,6 +40,8 @@ class GeoDir_Elementor {
 			// Dynamic content
 			add_action( 'elementor/dynamic_tags/register_tags', array( __CLASS__, 'register_dynamic_content_tags' ), 10, 1 );
 		} else {
+			// Register form actions.
+			add_action( 'elementor_pro/forms/actions/register', array( __CLASS__, 'register_forms_actions_register' ), 30, 1 );
 			// Register dynamic tags.
 			add_action( 'elementor/dynamic_tags/register', array( __CLASS__, 'register_dynamic_content_tags' ), 10, 1 );
 		}
@@ -173,18 +175,30 @@ class GeoDir_Elementor {
 	 * Register the form action for emailing the listing email.
 	 */
 	public static function register_pro_form_actions(){
-		// Instantiate the action class
-		$contact_action = new GeoDir_Elementor_Form_Contact();
 
 		// Since Elementor v3.5.0 add_form_action() is replaced with actions_manager->register().
 		if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '<' ) ) {
+			// Instantiate the action class
+			$contact_action = new GeoDir_Elementor_Form_Contact();
+
 			// Register the action with form widget
 			\ElementorPro\Plugin::instance()->modules_manager->get_modules( 'forms' )->add_form_action( $contact_action->get_name(), $contact_action );
-		} else {
-			// Register form action.
-			$actions_registrar = new ElementorPro\Modules\Forms\Registrars\Form_Actions_Registrar();
-			$actions_registrar->register( $contact_action, $contact_action->get_name() );
 		}
+	}
+
+	/**
+	 * Elementor Pro form actions integration with GD Listing.
+	 *
+	 * @since 2.2.11
+	 *
+	 * @param Form_Actions_Registrar $this An instance of form actions registrar.
+	 */
+	public static function register_forms_actions_register( $actions_registrar ) {
+		// Instantiate the action class
+		$contact_action = new GeoDir_Elementor_Form_Contact();
+
+		// Register form action.
+		$actions_registrar->register( $contact_action, $contact_action->get_name() );
 	}
 
 	/**
