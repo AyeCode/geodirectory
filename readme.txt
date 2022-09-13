@@ -9,7 +9,7 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Business Directory plugin made right. Build a City Business directory, real estate, job board, classified ads, and more.
+WordPress Business Directory plugin to easily build a City Directory, Real Estate Directory, Job Board Directory, Classified Ads, Member Directory.
 
 == Description ==
 
