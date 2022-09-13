@@ -1,4 +1,4 @@
-=== GeoDirectory - Business Directory, Classified Ads, Job listing & Real Estate Listing ===
+=== WordPress Business Directory, Classified Ads, Job listing & Real Estate Listing plugin - GeoDirectory ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: directory plugin, business directory, listing, real-estate, classified ads, job board  
