@@ -1,7 +1,7 @@
-=== Business Directory WordPress Plugin – GeoDirectory ===
+=== GeoDirectory - Business Directory, Classified Ads, Job listing & Real Estate Listing ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
-Tags: directory plugin, business directory, listing, job board, classified ads
+Tags: directory plugin, business directory, listing, real-estate, classified ads, job board  
 Requires at least: 4.5
 Tested up to: 6.0
 Stable tag: 2.2.11
@@ -9,17 +9,19 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Business Directory plugin made right. Build a City Business directory, real estate, job board, classifieds ads, and more.
+Business Directory plugin made right. Build a City Business directory, real estate, job board, classified ads, and more.
 
 == Description ==
 
-Harness the leading Business Directory Plugin for WordPress to help businesses everywhere get found by the right people. GeoDirectory turns any WordPress theme into a powerful search network for users. Add all your business listings at once and tap into an impressive set of shortcodes, blocks, and widgets to set up intuitive, location-based website directories. 
+Harness the leading Business Directory Plugin for WordPress to help listings everywhere get found by the right people. No matter what you need to build, be it a Business Directory, a Job Board, a Real Estate Listings website or a Classifieds Website, GeoDirectory turns any WordPress theme into a powerful search network for users. Add all your business listings at once and tap into an impressive set of shortcodes, blocks, and widgets to set up intuitive, location-based website directories. 
  
 Do it all stress-free and in style with 100% compatible WordPress page builders like Gutenberg, Elementor, Beaver Builder, Divi, and Oxygen!
 
 ✅ [Addons](https://wpgeodirectory.com/downloads/category/addons/) ✅ [Themes](https://wpgeodirectory.com/downloads/category/themes/) ✅ [Demos](https://demos.ayecode.io/) ✅ [Docs](https://docs.wpgeodirectory.com/) ✅ [Showcase](https://wpgeodirectory.com/category/showcase/)
 
-== ⚡ TESTIMONIALS | TOP RATED BUSINESS DIRECTORY PLUGIN WITH +450 ⭐⭐⭐⭐⭐ REVIEWS ==
+== ⚡ TOP RATED BUSINESS DIRECTORY PLUGIN WITH +450 5 STARS REVIEWS ==
+
+= READ WHAT USERS SAY ABOUT GEODIRECTORY =
 
 >👉 __Fantastic Plugin w/ An Awesome Team Behind It__
 >⭐⭐⭐⭐⭐
