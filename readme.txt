@@ -13,7 +13,7 @@ Business Directory plugin made right. Build a City Business directory, real esta
 
 == Description ==
 
-Help businesses everywhere get found by the right people with our leading business directory plugin that turns any WordPress theme into a powerful search network for users. Add all your listings at once and tap into an impressive set of shortcodes, blocks, and widgets to set up intuitive, location-based website directories. 
+Harness the leading Business Directory Plugin for WordPress to help businesses everywhere get found by the right people. GeoDirectory turns any WordPress theme into a powerful search network for users. Add all your business listings at once and tap into an impressive set of shortcodes, blocks, and widgets to set up intuitive, location-based website directories. 
  
 Do it all stress-free and in style with 100% compatible WordPress page builders like Gutenberg, Elementor, Beaver Builder, Divi, and Oxygen!
 
