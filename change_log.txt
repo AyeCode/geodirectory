@@ -1,3 +1,6 @@
+= 2.2.12 =
+* Business Hours post meta shows incorrect hours for today - FIXED
+
 = 2.2.11 =
 * Custom date is not saved with REST API when uses custom format - FIXED
 * Add route in REST API to add/update category & tag - ADDED

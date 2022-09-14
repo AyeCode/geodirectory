@@ -360,26 +360,17 @@ jQuery(function($) {
         );
     }
 
-    // $(document).on('click', '.gd-bh-show-field .gd-bh-expand-range', function(e){
-    //     var $wrap = $(this).closest('.geodir_post_meta')
-    //     var $hours = $wrap.find('.gd-bh-open-hours')
-    //     if($hours.is(':visible')){
-    //         $hours.slideUp(100);
-    //         $wrap.removeClass('gd-bh-expanded').addClass('gd-bh-toggled');
-    //     } else {
-    //         $hours.slideDown(100);
-    //         $wrap.removeClass('gd-bh-toggled').addClass('gd-bh-expanded');
-    //     }
-    // });
     if ($('.gd-bh-show-field').length) {
         setInterval(function(e) {
             geodir_refresh_business_hours();
         }, 60000);
         geodir_refresh_business_hours();
+    } else {
+        geodir_refresh_business_hours_today();
     }
     $('body').on('geodir_map_infowindow_open', function(e, data) {
         /* Render business hours */
-        if (data.content && $(data.content).find('.gd-bh-show-field').length) {
+        if (data.content && ($(data.content).find('.gd-bh-show-field').length || $(data.content).find('.gd-bh-stoday').length)) {
             geodir_refresh_business_hours();
         }
         geodir_init_lazy_load();
@@ -1033,9 +1024,15 @@ function gd_fav_save(post_id) {
 }
 
 function geodir_refresh_business_hours() {
-    jQuery('.gd-bh-show-field').each(function() {
-        geodir_refresh_business_hour(jQuery(this));
-    });
+    if (jQuery('.gd-bh-show-field').length) {
+        jQuery('.gd-bh-show-field').each(function() {
+            geodir_refresh_business_hour(jQuery(this));
+        });
+    }
+
+    if(jQuery('.gd-bh-stoday').length) {
+        geodir_refresh_business_hours_today();
+    }
 }
 
 function geodir_refresh_business_hour($this) {
@@ -1138,6 +1135,49 @@ function geodir_refresh_business_hour($this) {
         $this.addClass('gd-bh-close').find('.geodir-i-business_hours').addClass('text-danger');
     }
     jQuery('.geodir-i-biz-hours font', $this).html(label);
+}
+
+function geodir_refresh_business_hours_today() {
+    var d = new Date(),ids = new Array(),iId, iDay, sDate;
+    jQuery('.gd-bh-stoday').each(function() {
+        if (!jQuery(this).hasClass('gd-bh-done')) {
+            iId = parseInt(jQuery(this).data('bhs-id'));
+            iDay = parseInt(jQuery(this).data('bhs-day'));
+            if (iId > 0 && iDay > 0 && iDay != parseInt(d.getDate())) {
+                ids.push(iId);
+            }
+            jQuery(this).addClass('gd-bh-done');
+        }
+    });
+
+    if (ids.length) {
+        const bhUnique = (v, i, s) => { return s.indexOf(v) === i; }
+        sDate = d.getFullYear() + '-' + (("0" + (d.getMonth() + 1)).slice(-2)) + '-' + (("0" + (d.getDate())).slice(-2)) + ' ' + (("0" + (d.getHours())).slice(-2)) + ':' + (("0" + (d.getMinutes())).slice(-2)) + ':00';
+
+        jQuery.ajax({
+            url: geodir_params.gd_ajax_url,
+            type: 'POST',
+            data: {
+                action: 'geodir_business_hours_post_meta',
+                post_id: ids.filter(bhUnique),
+                date: sDate,
+                security: geodir_params.basic_nonce
+            },
+            dataType: 'json',
+            beforeSend: function(xhr, obj) {}
+        }).done(function(res, textStatus, jqXHR) {
+            if (typeof res == 'object' && res.data.slots && typeof res.data.slots == 'object') {
+                jQuery.each(res.data.slots, function(p, r) {
+                    if (jQuery('.gd-bh-stoday[data-bhs-id="' + p + '"]').length && r.slot) {
+                        jQuery('.gd-bh-stoday[data-bhs-id="' + p + '"]').each(function() {
+                            jQuery(this).closest('.gd-bh-day-hours').removeClass('gd-bh-open-today gd-bh-days-closed').addClass(r.css_class);
+                            jQuery(this).replaceWith(r.slot);
+                        });
+                    }
+                });
+            }
+        }).always(function(data, textStatus, jqXHR) {});
+    }
 }
 
 /**

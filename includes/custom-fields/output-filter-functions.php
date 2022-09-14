@@ -700,7 +700,8 @@ function geodir_custom_field_output_business_hours_day( $html, $location, $cf, $
 			$css_class .= ' gd-bh-days-closed';
 		}
 
-		$slots_class = '';
+		$slots_attr = 'data-bhs-day="' . (int) date( 'd' ) . '" data-bhs-id="' . (int) $gd_post->ID . '"';
+		$slots_class = ' gd-bh-s' . sanitize_html_class( $cf['extra_fields']['day'] );
 		if ( $design_style ) {
 			$class .= ' d-inline-block mr-1 align-top';
 			$slots_class .= ' d-inline-block';
@@ -720,7 +721,7 @@ function geodir_custom_field_output_business_hours_day( $html, $location, $cf, $
 			$slots .= '<div class="gd-bh-slot' . $slot_class . '"><div class="gd-bh-slot-r">' . $slot['range'] . '</div></div>';
 		}
 
-		$value = '<div class="gd-bh-slots' . $slots_class . '">';
+		$value = '<div class="gd-bh-slots' . $slots_class . '" ' . $slots_attr . '>';
 		$value .= $slots;
 		$value .= '</div>';
 		if ( ! empty( $has_open ) ) {

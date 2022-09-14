@@ -2070,3 +2070,69 @@ function geodir_post_meta_business_hours_days( $fields, $post_type ) {
 	return $fields;
 }
 add_filter( 'geodir_post_meta_advance_fields', 'geodir_post_meta_business_hours_days', 50, 2 );
+
+function geodir_business_hours_post_meta( $request ) {
+	$design_style = geodir_design_style();
+	$post_ids = ! empty( $request['post_id'] ) ? geodir_clean( $request['post_id'] ) : 0;
+	$date = ! empty( $request['date'] ) ? geodir_clean( $request['date'] ) : 0;
+
+	$response = array();
+
+	if ( ! empty( $post_ids ) && is_array( $post_ids ) ) {
+		$day_nos = geodir_day_short_names();
+		$day = $day_nos[ date( 'N', strtotime( $date ) ) ];
+
+		foreach ( $post_ids as $post_id ) {
+			$gd_post = geodir_get_post_info( (int) $post_id );
+
+			if ( ! ( ! empty( $gd_post ) && ! empty( $gd_post->business_hours ) && geodir_check_field_visibility( $gd_post->package_id, 'business_hours', $gd_post->post_type ) ) ) {
+				continue;
+			}
+
+			$business_hours = geodir_get_business_hours( stripslashes_deep( $gd_post->business_hours ), ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
+
+			if ( ! ( ! empty( $business_hours['days'] ) && ! empty( $business_hours['days'][ $day ] ) ) ) {
+				continue;
+			}
+			$hours = $business_hours['days'][ $day ];
+
+			$has_open = false;
+			if ( ! empty( $hours['open'] ) ) {
+				$has_open = true;
+			}
+
+			$slots_class = ' gd-bh-stoday gd-bh-done';
+			if ( $design_style ) {
+				$slots_class .= ' d-inline-block';
+			}
+			$slots_attr = 'data-bhs-day="' . (int) date( 'd', strtotime( $date ) ) . '" data-bhs-id="' . (int) $gd_post->ID . '"';
+
+			$slots = '<div class="gd-bh-slots' . $slots_class . '" ' . $slots_attr . '>';
+			foreach ( $hours['slots'] as $i => $slot ) {
+				$slot_class = '';
+				if ( ! empty( $slot['open'] ) ) {
+					$slot_class .= ' gd-bh-open-now';
+
+					if ( ! $has_open ) {
+						$has_open = true;
+					}
+				}
+				$slots .= '<div class="gd-bh-slot' . $slot_class . '"><div class="gd-bh-slot-r">' . $slot['range'] . '</div></div>';
+			}
+			$slots .= '</div>';
+
+			$css_class = '';
+			if ( ! empty( $has_open ) ) {
+				$css_class .= ' gd-bh-open-today';
+			}
+
+			if ( ! empty( $hours['closed'] ) ) {
+				$css_class .= ' gd-bh-days-closed';
+			}
+
+			$response['slots'][ (int) $post_id ] = array( 'slot' => $slots, 'css_class' => trim( $css_class ) );
+		}
+	}
+
+	return $response;
+}

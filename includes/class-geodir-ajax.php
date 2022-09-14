@@ -75,6 +75,7 @@ class GeoDir_AJAX {
 			'report_post_form' => true,
 			'submit_report_post' => true,
 			'new_wp_template' => true,
+			'business_hours_post_meta' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -1571,6 +1572,24 @@ class GeoDir_AJAX {
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
 		GeoDir_Block_Theme::handle_new_template_request( $_POST );
+
+		wp_die();
+	}
+
+	/**
+	 * Handle business hours today post meta.
+	 *
+	 * @since 2.2.12
+	 *
+	 * @return mixed
+	 */
+	public static function business_hours_post_meta() {
+		// Security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		$data = geodir_business_hours_post_meta( $_POST );
+
+		wp_send_json_success( $data );
 
 		wp_die();
 	}
