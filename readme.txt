@@ -1,4 +1,4 @@
-=== GeoDirectory - WordPress Business Directory, Classified Ads & Listing Directory plugin ===
+=== GeoDirectory -  WordPress Business Directory Plugin + Classified Ads Listings ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: directory plugin, business directory, listing, real-estate, classified ads, job board, Directory  
@@ -9,7 +9,7 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Top Buisiness Directory plugin for WordPress. Build a City Business Directory, Real Estate Directory, Job Board Directory, Classified Ads, Member Directory
+Top Business Directory plugin for WordPress. Build a City Business Directory, Classified Ads, Real Estate Directory, Job Board Directory, Member Directory
 
 == Description ==
 
@@ -153,6 +153,22 @@ Your friends at AyeCode work to continuously refine the best business directory 
 * Custom Email Templates
 * Guest Frontend Add Listing
 * Improved SEO permalink settings.
+
+== ⚡ CHECK OUT OUR DIRECTORY THEMES ==
+
+* [Whoop! A Free Yelp Clone](https://wpgeodirectory.com/downloads/whoop/ "Free Yelp Clone business directory theme")
+* [Directory Starter - Free Directory Starter Theme](https://wpgeodirectory.com/downloads/directory-starter/ "A Free Starter Theme for custom designed directories")
+* [Supreme Directory - A beautiful city directory](https://wpgeodirectory.com/downloads/supreme-directory/ "A Free Directory Theme for city and local directories")
+* [Listimia - 3rd party premium Business Directory Theme](https://wpgeodirectory.com/downloads/listimia/ "3rd party premium Business Directory Theme")
+
+== ⚡ FREE ELEMENTOR DIRECTORY TEMPLATES ==
+* [GeoEvents - Events Directory with ticket marketplace](https://demos.ayecode.io/elementor-events-directory "Events Directory with ticket marketplace")
+* [Restaurants - Restaurant Directory Elementor Template](https://demos.ayecode.io/elementor-restaurants-directory "Restaurant Directory Elementor Template")
+* [Yoga Studios - Elementor PRO Yoga Studios directory](https://demos.ayecode.io/elementor-yoga-studio-directory "Elementor PRO Yoga Studios directory")
+* [GeoHomes - Elementor PRO Real Estate Directory Theme](https://demos.ayecode.io/elementor-real-estate-directory/ "Elementor PRO Real Estate Directory Theme")
+* [GeoJobs - Elementor PRO Job Board Theme](https://demos.ayecode.io/elementor-jobs-directory "Elementor PRO Job Board Theme")
+
+The same templates are available for the Kadence Theme with Gutenberg and the Kadence Block Plugin. 
 
 == Installation ==
 
