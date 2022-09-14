@@ -1,7 +1,7 @@
-=== WordPress Business Directory, Classified Ads, Job listing & Real Estate Listing plugin - GeoDirectory ===
+=== GeoDirectory - WordPress Business Directory, Classified Ads & Listing Directory plugin ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
-Tags: directory plugin, business directory, listing, real-estate, classified ads, job board  
+Tags: directory plugin, business directory, listing, real-estate, classified ads, job board, Directory  
 Requires at least: 4.5
 Tested up to: 6.0
 Stable tag: 2.2.11
@@ -9,7 +9,7 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-WordPress Business Directory plugin to easily build a City Directory, Real Estate Directory, Job Board Directory, Classified Ads, Member Directory.
+Top Buisiness Directory plugin for WordPress. Build a City Business Directory, Real Estate Directory, Job Board Directory, Classified Ads, Member Directory
 
 == Description ==
 
