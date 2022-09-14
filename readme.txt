@@ -1,7 +1,7 @@
-=== GeoDirectory -  WordPress Business Directory Plugin + Classified Ads Listings ===
+=== GeoDirectory -  WordPress Business Directory Plugin and Classified Ads Listings ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
-Tags: directory plugin, business directory, listing, real-estate, classified ads, job board, Directory  
+Tags: business directory, listings, directory plugin, classifieds, member directory, real-estate, job board, Directory, classified ads, staff directory, company directory, team directory, chamber of commerce business directory, church directory, address book, contact directory, local business directory, listings directory, link directory
 Requires at least: 4.5
 Tested up to: 6.0
 Stable tag: 2.2.11
@@ -9,7 +9,7 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Top Business Directory plugin for WordPress. Build a City Business Directory, Classified Ads, Real Estate Directory, Job Board Directory, Member Directory
+Top Business Directory plugin for WordPress. Build a City Directory, Classified Ads, Real Estate Directory, Job Board Directory, Member Directory
 
 == Description ==
 
@@ -53,7 +53,7 @@ Our dedicated team continuously refines every point of the search process (since
 
 == ⚡ SCALE YOUR DIRECTORY WITH A RELIABLE, PROFICIENT DATABASE ==
 
-Got millions of listings? Massive traffic? Skip the bugs, lags, and crashes with GeoDirectory – the only WordPress business directory plugin capable of taking you to the global scale without friction. Our unparalleled, highly-optimized database structure and queries can handle any scale you throw at it. ALL OTHER DIRECTORY PLUGINS WILL FAIL AT THIS, GUARANTEEED.
+Got millions of listings? Massive traffic? Skip the bugs, lags, and crashes with GeoDirectory – the only WordPress directory plugin capable of taking you to the global scale without friction. Our unparalleled, highly-optimized database structure and queries can handle any scale you throw at it. ALL OTHER DIRECTORY PLUGINS WILL FAIL AT THIS, GUARANTEED.
 
 == ⚡ ASK, AND YOU SHALL RECEIVE – DELIVER SPEEDY RESULTS ==
 
@@ -61,7 +61,7 @@ Get free and paid listings (with the Price Manager add-on) in front of visitors 
 
 == ⚡ DEVELOPER-FRIENDLY + COUNTLESS OF DIRECTORY THEMES ==
 
-The design of your online business directory is limitless with a wide array of themes and handy page-builder integrations. Need to add that personal touch? Developers can build on GeoDirectory freely using hooks (actions and filters).
+The design of your online directory website is limitless with a wide array of themes and handy page-builder integrations. Need to add that personal touch? Developers can build on GeoDirectory freely using hooks (actions and filters).
 
 == ⚡ HOW IT WORKS - SET UP OUR FREE WORDPRESS BUSINESS DIRECTORY PLUGIN IN NO TIME ==
 
@@ -216,6 +216,7 @@ Service providers Directory
 Events Directory
 Yellow Pages
 Hiking Trails Directory
+City Business Directory
 And so much more.
 
 But because GeoDirectory allows you to create any listing's type, each with unique custom fields, you can use GeoDirectory as an Event Calendar plugin, Real Estate Plugin, Job Board Plugin, Classified Ads plugin and much more.
@@ -226,7 +227,7 @@ Yes, but you'll need our Location Manager add-on.
 
 = Can users add and edit their listings via the front end? =
 
-Absolutely yes, Users can submit their listings from the front end and also edit them unlimited times.
+Absolutely yes, Users can submit their listings from the front end of your business directory and also edit them unlimited times.
 
 = Which theme is compatible with GeoDirectory? =
 
@@ -246,13 +247,13 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 == Screenshots ==
 
-1. GD Home Page.
-2. GD Listings Page.
-3. GD Listing Detail Page.
-4. GD Search Page.
-5. GD Front End Signup Page.
-6. GD Front End Listing Submission Page.
-7. GD WordPress Admin Page.
+1. Business Directory Home Page.
+2. Business Directory Listings Page.
+3. Business Directory Listing Detail Page.
+4. Business Directory Search Page.
+5. Business Directory Front End Signup Page.
+6. Business Directory Front End Listing Submission Page.
+7. Business Directory WordPress Admin Page.
 
 == Changelog ==
 
