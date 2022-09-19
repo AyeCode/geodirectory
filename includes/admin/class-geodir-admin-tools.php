@@ -327,7 +327,7 @@ class GeoDir_Admin_Tools {
 		global $wpdb;
 
 		// Custom fields table
-		$sql  = "SELECT admin_title, frontend_desc, frontend_title, clabels, required_msg, placeholder_value, default_value, option_values, validation_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
+		$sql  = "SELECT htmlvar_name, admin_title, frontend_desc, frontend_title, clabels, required_msg, placeholder_value, default_value, option_values, validation_msg, extra_fields FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
 		$rows = $wpdb->get_results( $sql );
 
 		if ( ! empty( $rows ) ) {
@@ -372,6 +372,16 @@ class GeoDir_Admin_Tools {
 							if ( ! empty( $option_value['label'] ) ) {
 								$translation_texts[] = $option_value['label'];
 							}
+						}
+					}
+				}
+
+				if ( $row->htmlvar_name == 'address' && ! empty( $row->extra_fields ) && ( $extra_fields = maybe_unserialize( $row->extra_fields ) ) ) {
+					$address_labels = array( 'city_lable', 'region_lable', 'country_lable', 'neighbourhood_lable', 'street2_lable', 'zip_lable', 'map_lable', 'mapview_lable' );
+
+					foreach ( $address_labels as $label ) {
+						if ( ! empty( $extra_fields[ $label ] ) ) {
+							$translation_texts[] = stripslashes( $extra_fields[ $label ] );
 						}
 					}
 				}
