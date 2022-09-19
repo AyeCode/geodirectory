@@ -1,9 +1,10 @@
 = 0.1.74 =
 * Style is not loading when WordPress installed on sub-directory - FIXED
+* FontAwesome iconpicker is not working in CPT settings - FIXED
 
 = 0.1.73 =
 * Conditional field multiselect field don't match for specific option - FIXED
-* Allow to run conditionl fields on custom event trigger - ADDED
+* Allow to run conditional fields on custom event trigger - ADDED
 
 = 0.1.72 =
 * Input now has "size" option: sm, small, lg, large - ADDED
