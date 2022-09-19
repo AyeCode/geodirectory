@@ -626,7 +626,7 @@
 			var a = this;
 			var t = ".iconpicker.inst" + this._id;
 			c(window).on("resize.iconpicker" + t + " orientationchange.iconpicker" + t, function(e) {
-				if (a.popover.hasClass("in")) {
+				if (a.popover.hasClass("show")) {
 					a.updatePlacement();
 				}
 			});
@@ -959,7 +959,7 @@
 			}
 		},
 		show: function() {
-			if (this.popover.hasClass("in")) {
+			if (this.popover.hasClass("show")) {
 				return false;
 			}
 			c.iconpicker.batch(c(".iconpicker-popover.in:not(.inline)").not(this.popover), "hide");
@@ -967,7 +967,7 @@
 				iconpickerValue: this.iconpickerValue
 			});
 			this.updatePlacement();
-			this.popover.addClass("in");
+			this.popover.addClass("show");
 			setTimeout(c.proxy(function() {
 				this.popover.css("display", this.isInline() ? "" : "block");
 				this._trigger("iconpickerShown", {
@@ -976,13 +976,13 @@
 			}, this), this.options.animation ? 300 : 1);
 		},
 		hide: function() {
-			if (!this.popover.hasClass("in")) {
+			if (!this.popover.hasClass("show")) {
 				return false;
 			}
 			this._trigger("iconpickerHide", {
 				iconpickerValue: this.iconpickerValue
 			});
-			this.popover.removeClass("in");
+			this.popover.removeClass("show");
 			setTimeout(c.proxy(function() {
 				this.popover.css("display", "none");
 				this.getSearchInput().val("");
@@ -1073,9 +1073,6 @@
 		}, {
 			title: "fab fa-accusoft",
 			searchTerms: []
-		}, {
-			title: "fab fa-acquisitions-incorporated",
-			searchTerms: [ "Dungeons & Dragons", "d&d", "dnd", "fantasy", "game", "gaming", "tabletop" ]
 		}, {
 			title: "fas fa-ad",
 			searchTerms: []
@@ -3864,9 +3861,6 @@
 			title: "fas fa-pencil-ruler",
 			searchTerms: []
 		}, {
-			title: "fab fa-penny-arcade",
-			searchTerms: [ "Dungeons & Dragons", "d&d", "dnd", "fantasy", "game", "gaming", "pax", "tabletop" ]
-		}, {
 			title: "fas fa-people-carry",
 			searchTerms: [ "movers" ]
 		}, {
@@ -4867,9 +4861,6 @@
 			searchTerms: [ "bark", "fall", "flora", "forest", "nature", "plant", "seasonal" ]
 		}, {
 			title: "fab fa-trello",
-			searchTerms: []
-		}, {
-			title: "fab fa-tripadvisor",
 			searchTerms: []
 		}, {
 			title: "fas fa-trophy",
