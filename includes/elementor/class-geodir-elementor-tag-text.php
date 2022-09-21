@@ -129,50 +129,51 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 	 *
 	 * @return mixed|string|void
 	 */
-	public function get_category_meta($key,$show){
+	public function get_category_meta( $key, $show ) {
 		global $gd_post;
+
 		$value = '';
 		$term_id = '';
-		if( geodir_is_page('archive') ){
+
+		if ( geodir_is_page( 'archive' ) ) {
 			$current_category = get_queried_object();
-			$term_id = isset($current_category->term_id) ?  absint($current_category->term_id) : '';
-		}elseif(geodir_is_page('single')){
-			$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
+			$term_id = isset( $current_category->term_id ) ?  absint( $current_category->term_id ) : '';
+		} else if ( geodir_is_page( 'single' ) ) {
+			$term_id = isset( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
 		}
 
-
-		if($term_id) {
-
-			if($key == 'category_top_description'){
-				$cat_desc = do_shortcode("[gd_category_description]");
+		if ( $term_id ) {
+			if ( $key == 'category_top_description' ) {
+				$cat_desc = do_shortcode( "[gd_category_description]" );
 				$value = $cat_desc;
-			}elseif($key == 'category_icon'){
+			} else if ( $key == 'category_icon' ) {
 				$value = get_term_meta( $term_id, 'ct_cat_font_icon', true );
-				if($show =='value'){
-					$value = "<i class='".esc_attr($value)."'></i>";
+
+				if ( $show == 'value' ) {
+					$value = "<i class='" . esc_attr( $value ) . "'></i>";
 				}
-			}elseif($key == 'category_map_icon'){
+			} else if ( $key == 'category_map_icon' ) {
 				$value = esc_url_raw( geodir_get_term_icon( $term_id ) );
-				if($show =='value'){
-					$value = "<img src='".esc_attr($value)."' />";
+
+				if ( $show == 'value' ) {
+					$value = "<img src='" . esc_attr( $value ) . "' />";
 				}
-			}elseif($key == 'category_color'){
+			} else if ( $key == 'category_color' ) {
 				$value = get_term_meta( $term_id, 'ct_cat_color', true );
-			}elseif($key == 'category_schema'){
+			} else if ( $key == 'category_schema' ) {
 				$value = get_term_meta( $term_id, 'ct_cat_schema', true );
-			}elseif($key == 'category_image'){
+			} else if ( $key == 'category_image' ) {
 				$value = esc_url_raw( geodir_get_cat_image( $term_id, true ) );
-				if($show =='value'){
-					$value = "<img src='".esc_attr($value)."' />";
+
+				if ( $show == 'value' ) {
+					$value = "<img src='" . esc_attr( $value ) . "' />";
 				}
 			}
 		}
-		
-		if($value && ( $show =='value-raw' ||   $show == 'value-strip') ){
-			$value = wp_strip_all_tags($value);
+
+		if ( $value && ( $show =='value-raw' || $show == 'value-strip' ) ) {
+			$value = wp_strip_all_tags( $value );
 		}
-
-
 
 		return $value;
 	}
@@ -189,14 +190,12 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 	 * Register controls for the tag.
 	 */
 	protected function register_controls() {
-
 		$this->add_control(
 			'key',
 			[
 				'label' => __( 'Key', 'elementor-pro' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
-				'groups' => $this->get_custom_field_group_options(),
-//				'options' => $this->get_custom_field_options(),
+				'groups' => $this->get_custom_field_group_options()
 			]
 		);
 
@@ -228,18 +227,19 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 		$groups = array();
 
 		// Fields
-		$fields = geodir_post_custom_fields('', 'all', 'all' ,'none');
+		$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
+
 		$keys = array();
-//		$keys[] = __('Select Key','geodirectory');
-		if(!empty($fields)){
-			foreach($fields as $field){
-				$keys[$field['htmlvar_name']] = $field['htmlvar_name'];
+
+		if ( ! empty( $fields ) ) {
+			foreach ( $fields as $field ) {
+				$keys[ $field['htmlvar_name'] ] = $field['htmlvar_name'];
 			}
 		}
 
 		$groups[] = array(
-			'label' => __("Custom Fields","geodirectory"),
-			'options'   => $keys
+			'label' => __( "Custom Fields", "geodirectory" ),
+			'options' => $keys
 		);
 
 		// Raw values
@@ -265,8 +265,8 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 		$raw_keys['mapzoom'] = 'mapzoom';
 
 		$groups[] = array(
-			'label' => __("Raw Values","geodirectory"),
-			'options'   => $raw_keys
+			'label' => __( "Raw Values", "geodirectory" ),
+			'options' => $raw_keys
 		);
 
 		// category keys
@@ -278,14 +278,22 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 		$cat_keys['category_image'] = 'category_image';
 		$cat_keys['category_schema'] = 'category_schema';
 		$groups[] = array(
-			'label' => __("Category meta","geodirectory"),
-			'options'   => $cat_keys
+			'label' => __( "Category meta", "geodirectory" ),
+			'options' => $cat_keys
 		);
 
+		/*
+		 * Filter text custom fields.
+		 *
+		 * @since 2.2.12
+		 *
+		 * @param array  $groups Field groups.
+		 * @param object $this Tag object.
+		 */
+		$groups = apply_filters( 'geodir_elementor_tag_text_fields', $groups, $this );
 
 		return $groups;
 	}
-
 
 	/**
 	 * Get what fields are supported for this tag type.

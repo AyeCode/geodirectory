@@ -1,5 +1,6 @@
 = 2.2.12 =
 * Business Hours post meta shows incorrect hours for today - FIXED
+* Yoast SEO open graph image use category or post type default image as when no post image found - CHANGED
 
 = 2.2.11 =
 * Custom date is not saved with REST API when uses custom format - FIXED

@@ -1276,6 +1276,8 @@ class GeoDir_SEO {
 	}
 
 	public static function wpseo_opengraph_image( $image_container ) {
+		global $gd_post;
+
 		if ( ! geodir_is_geodir_page() ) {
 			return;
 		}
@@ -1293,12 +1295,75 @@ class GeoDir_SEO {
 				}
 			}
 		} elseif ( geodir_is_page( 'archive' ) ) {
+			$image_id = 0;
 			$term = get_queried_object();
 
 			if ( ! empty( $term->term_id ) && ( $image = get_term_meta( $term->term_id, 'ct_cat_default_img', true ) ) ) {
 				if ( ! empty( $image['id'] ) ) {
-					$image_container->add_image_by_id( $image['id'] );
+					$image_id = (int) $image['id'];
 				}
+			}
+
+			if ( empty( $image_id ) ) {
+				// Post type default image.
+				$post_type = geodir_get_current_posttype();
+
+				if ( $post_type && ( $post_type_obj = geodir_post_type_object( $post_type ) ) ) {
+					if ( ! empty( $post_type_obj->default_image ) ) {
+						$image_id = (int) $post_type_obj->default_image;
+					}
+				}
+			}
+
+			if ( $image_id > 0 ) {
+				$image_container->add_image_by_id( $image_id );
+			}
+		} elseif ( geodir_is_page( 'single' ) ) {
+			$image_id = 0;
+			$post_image = ! empty( $gd_post->ID ) ? geodir_get_images( (int) $gd_post->ID, 1, false, 0, array( 'post_images' ), array( 'post_images' ) ) : array();
+
+			if ( ! empty( $post_image ) && ! empty( $post_image[0] ) ) {
+				$post_image = $post_image[0];
+
+				if ( ! empty( $post_image->metadata ) ) {
+					$post_image->metadata = maybe_unserialize( $post_image->metadata );
+				}
+
+				$image = array(
+					'url' => geodir_get_image_src( $post_image, 'original' )
+				);
+
+				if ( ! empty( $post_image->metadata['width'] ) && ! empty( $post_image->metadata['height'] ) ) {
+					$image['width'] = (int) $post_image->metadata['width'];
+					$image['height'] = (int) $post_image->metadata['height'];
+				}
+
+				if ( ! empty( $image['url'] ) ) {
+					$image_container->add_image( $image );
+					return;
+				}
+			}
+
+			// Default category image.
+			if ( ! empty( $gd_post->default_category ) && ( $image = get_term_meta( (int) $gd_post->default_category, 'ct_cat_default_img', true ) ) ) {
+				if ( ! empty( $image['id'] ) ) {
+					$image_id = (int) $image['id'];
+				}
+			}
+
+			if ( empty( $image_id ) ) {
+				// Post type default image.
+				$post_type = ! empty( $gd_post->post_type ) ? $gd_post->post_type : geodir_get_current_posttype();
+
+				if ( $post_type && ( $post_type_obj = geodir_post_type_object( $post_type ) ) ) {
+					if ( ! empty( $post_type_obj->default_image ) ) {
+						$image_id = (int) $post_type_obj->default_image;
+					}
+				}
+			}
+
+			if ( $image_id > 0 ) {
+				$image_container->add_image_by_id( $image_id );
 			}
 		}
 	}
