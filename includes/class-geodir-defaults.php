@@ -162,69 +162,9 @@ class GeoDir_Defaults {
 	public static function page_archive_item_content($no_filter = false, $blocks = false){
 
 		if($blocks){
-			$content = "<!-- wp:geodirectory/geodir-widget-archive-item-section {\"content\":\"\"} -->
-[gd_archive_item_section type='open'  position='left' ]
-<!-- /wp:geodirectory/geodir-widget-archive-item-section -->
-
-<!-- wp:geodirectory/geodir-widget-post-badge {\"key\":\"featured\",\"condition\":\"is_not_empty\",\"badge\":\"Featured\",\"bg_color\":\"#fd4700\",\"position\":\"ab-top-left-angle\",\"content\":\"\"} -->
-[gd_post_badge id=''  key='featured'  condition='is_not_empty'  search=''  icon_class=''  badge='Featured'  link=''  new_window='false'  popover_title=''  popover_text=''  cta=''  tooltip_text=''  hover_content=''  hover_icon=''  type=''  shadow=''  color=''  bg_color='#fd4700'  txt_color='#ffffff'  size=''  alignment=''  position='ab-top-left-angle'  mt=''  mr=''  mb=''  ml=''  list_hide=''  list_hide_secondary=''  css_class='' ]
-<!-- /wp:geodirectory/geodir-widget-post-badge -->
-
-<!-- wp:geodirectory/geodir-widget-post-badge {\"key\":\"post_date\",\"condition\":\"is_less_than\",\"search\":\"+30\",\"badge\":\"New\",\"bg_color\":\"#ff0000\",\"position\":\"ab-top-right\",\"mt\":\"1\",\"mr\":\"1\",\"content\":\"\"} -->
-[gd_post_badge id=''  key='post_date'  condition='is_less_than'  search='+30'  icon_class=''  badge='New'  link=''  new_window='false'  popover_title=''  popover_text=''  cta=''  tooltip_text=''  hover_content=''  hover_icon=''  type=''  shadow=''  color=''  bg_color='#ff0000'  txt_color='#ffffff'  size=''  alignment=''  position='ab-top-right'  mt='1'  mr='1'  mb=''  ml=''  list_hide=''  list_hide_secondary=''  css_class='' ]
-<!-- /wp:geodirectory/geodir-widget-post-badge -->
-
-<!-- wp:geodirectory/geodir-widget-post-badge {\"key\":\"default_category\",\"condition\":\"is_not_empty\",\"badge\":\"%%input%%\",\"link\":\"%%input%%\",\"cta\":\"0\",\"bg_color\":\"rgba(0,0,0,0.5)\",\"position\":\"ab-bottom-left\",\"ml\":\"1\",\"content\":\"\"} -->
-[gd_post_badge id=''  key='default_category'  condition='is_not_empty'  search=''  icon_class=''  badge='%%input%%'  link='%%input%%'  new_window='false'  popover_title=''  popover_text=''  cta='0'  tooltip_text=''  hover_content=''  hover_icon=''  type=''  shadow=''  color=''  bg_color='rgba(0,0,0,0.5)'  txt_color='#ffffff'  size=''  alignment=''  position='ab-bottom-left'  mt=''  mr=''  mb=''  ml='1'  list_hide=''  list_hide_secondary=''  css_class='' ]
-<!-- /wp:geodirectory/geodir-widget-post-badge -->
-
-<!-- wp:geodirectory/geodir-widget-post-fav {\"show_advanced\":true,\"show\":\"icon\",\"icon_color_off\":\"rgba(223,223,223,0.8)\",\"icon_color_on\":\"#ff0000\",\"type\":\"link\",\"position\":\"ab-bottom-right\",\"mr\":\"1\",\"mb\":\"n1\",\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-post-fav\">[gd_post_fav show='icon'  icon=''  icon_color_off='rgba(223,223,223,0.8)'  icon_color_on='#ff0000'  type='link'  shadow=''  color=''  bg_color=''  txt_color=''  size='h5'  alignment=''  position='ab-bottom-right'  mt=''  mr='1'  mb='n1'  ml=''  list_hide=''  list_hide_secondary='' ]</div>
-<!-- /wp:geodirectory/geodir-widget-post-fav -->
-
-<!-- wp:geodirectory/geodir-widget-post-images {\"show_advanced\":true,\"show_title\":false,\"link_to\":\"post\",\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-post-images\">[gd_post_images title=''  types=''  fallback_types=''  ajax_load='true'  limit=''  limit_show=''  css_class=''  type='image'  slideshow='true'  controlnav='1'  animation='slide'  show_title='false'  show_caption='false'  image_size=''  aspect=''  cover=''  link_to='post'  link_screenshot_to=''  bg=''  mt=''  mr=''  mb=''  ml=''  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]</div>
-<!-- /wp:geodirectory/geodir-widget-post-images -->
-
-<!-- wp:geodirectory/geodir-widget-archive-item-section {\"type\":\"close\",\"content\":\"\"} -->
-[gd_archive_item_section type='close'  position='left' ]
-<!-- /wp:geodirectory/geodir-widget-archive-item-section -->
-
-<!-- wp:geodirectory/geodir-widget-archive-item-section {\"position\":\"right\",\"content\":\"\"} -->
-[gd_archive_item_section type='open'  position='right' ]
-<!-- /wp:geodirectory/geodir-widget-archive-item-section -->
-
-<!-- wp:geodirectory/geodir-widget-post-title {\"overflow\":\"ellipsis\",\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-post-title\">[gd_post_title tag='h2'  font_size_class='h5'  overflow='ellipsis' ]</div>
-<!-- /wp:geodirectory/geodir-widget-post-title -->
-
-<!-- wp:geodirectory/geodir-widget-output-location {\"location\":\"listing\",\"list_style\":\"wrap\",\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-output-location\">[gd_output_location location='listing'  list_style='wrap' ]</div>
-<!-- /wp:geodirectory/geodir-widget-output-location -->
-
-<!-- wp:geodirectory/geodir-widget-post-content {\"show_advanced\":true,\"limit\":20,\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-post-content\">[gd_post_content title=''  id=''  key='post_content'  show=''  limit='20'  max_height=''  read_more=''  alignment=''  strip_tags='false' ]</div>
-<!-- /wp:geodirectory/geodir-widget-post-content -->
-
-<!-- wp:geodirectory/geodir-widget-archive-item-section {\"type\":\"close\",\"position\":\"right\",\"content\":\"\"} -->
-[gd_archive_item_section type='close'  position='right' ]
-<!-- /wp:geodirectory/geodir-widget-archive-item-section -->
-
-<!-- wp:geodirectory/geodir-widget-archive-item-section {\"position\":\"footer\",\"content\":\"\"} -->
-[gd_archive_item_section type='open'  position='footer' ]
-<!-- /wp:geodirectory/geodir-widget-archive-item-section -->
-
-<!-- wp:geodirectory/geodir-widget-post-rating {\"show\":\"stars\",\"alignment\":\"left\",\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-post-rating\">[gd_post_rating show='stars'  size=''  alignment='left'  list_hide=''  list_hide_secondary='' ]</div>
-<!-- /wp:geodirectory/geodir-widget-post-rating -->
-
-<!-- wp:geodirectory/geodir-widget-post-meta {\"show_advanced\":true,\"key\":\"business_hours\",\"alignment\":\"right\",\"list_hide_secondary\":\"2\",\"content\":\"\"} -->
-[gd_post_meta title=''  id=''  key='business_hours'  show=''  no_wrap='false'  alignment='right'  text_alignment=''  list_hide=''  list_hide_secondary='2'  location=''  css_class='' ]
-<!-- /wp:geodirectory/geodir-widget-post-meta -->
-
-<!-- wp:geodirectory/geodir-widget-archive-item-section {\"type\":\"close\",\"position\":\"footer\",\"content\":\"\"} -->
-[gd_archive_item_section type='close'  position='footer' ]
-<!-- /wp:geodirectory/geodir-widget-archive-item-section -->";
+			$content = "<!-- wp:geodirectory/geodir-widget-simple-archive-item {\"content\":\"\"} -->
+[gd_simple_archive_item preview_type='grid'  image_type='image'  image_link='post'  top_left_badge_preset='featured'  top_left_badge_key=''  top_left_badge_condition='is_equal'  top_left_badge_search=''  top_left_badge_icon_class=''  top_left_badge_badge=''  top_left_badge_link=''  top_left_badge_type=''  top_left_badge_color=''  top_left_badge_bg_color='#0073aa'  top_left_badge_txt_color='#ffffff'  top_right_badge_preset='new'  top_right_badge_key=''  top_right_badge_condition='is_equal'  top_right_badge_search=''  top_right_badge_icon_class=''  top_right_badge_badge=''  top_right_badge_link=''  top_right_badge_type=''  top_right_badge_color=''  top_right_badge_bg_color='#0073aa'  top_right_badge_txt_color='#ffffff'  bottom_left_badge_preset='category'  bottom_left_badge_key=''  bottom_left_badge_condition='is_equal'  bottom_left_badge_search=''  bottom_left_badge_icon_class=''  bottom_left_badge_badge=''  bottom_left_badge_link=''  bottom_left_badge_type=''  bottom_left_badge_color=''  bottom_left_badge_bg_color='#0073aa'  bottom_left_badge_txt_color='#ffffff'  bottom_right_badge_preset='favorite'  bottom_right_badge_key=''  bottom_right_badge_condition='is_equal'  bottom_right_badge_search=''  bottom_right_badge_icon_class=''  bottom_right_badge_badge=''  bottom_right_badge_link=''  bottom_right_badge_type=''  bottom_right_badge_color=''  bottom_right_badge_bg_color='#0073aa'  bottom_right_badge_txt_color='#ffffff'  body_bg_color=''  body_pt=''  body_pr=''  body_pb=''  body_pl=''  circle_image_type='author'  circle_image_align='center'  title_font_size=''  title_text_align=''  title_text_color=''  title_pt=''  title_pb=''  limit='20'  read_more='0'  desc_text_color=''  desc_text_align='justify'  desc_pt=''  desc_pb='1'  list_style='none'  item_py='1'  list_text_align=''  list_pt=''  list_pb=''  footer_items='2'  footer_item_1='rating'  footer_item_1_show=''  footer_item_2='business_hours'  footer_item_2_show=''  footer_item_3='business_hours'  footer_item_3_show=''  footer_item_4='business_hours'  footer_item_4_show=''  footer_item_5='business_hours'  footer_item_5_show=''  footer_bg_color=''  footer_border=''  footer_font_size=''  footer_pt=''  footer_pr=''  footer_pb=''  footer_pl='' ]
+<!-- /wp:geodirectory/geodir-widget-simple-archive-item -->";
 		}else{
 			$content = "[gd_archive_item_section type='open' position='left']
 [gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-top-left-angle gd-badge-shadow']

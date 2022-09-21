@@ -226,7 +226,7 @@ class GeoDir_Widget_Report_Post extends WP_Super_Duper {
 		$is_preview = $this->is_preview();
 		$block_preview = $this->is_block_content_call();
 
-		if ( empty( $gd_post ) ) {
+		if ( empty( $gd_post ) || empty( $gd_post->ID ) ) {
 			return false;
 		}
 

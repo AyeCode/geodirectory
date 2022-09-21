@@ -174,7 +174,7 @@ class GeoDir_Admin_Settings {
 
 		// Get tabs for the settings page
 		$tabs = apply_filters( 'geodir_settings_tabs_array', array() );
-		
+
 //		print_r($tabs);exit;
 
 		include( dirname( __FILE__ ) . '/views/html-admin-settings.php' );
@@ -560,7 +560,7 @@ class GeoDir_Admin_Settings {
 									id="<?php echo esc_attr( $value['id'] ); ?>"
 									style="<?php echo esc_attr( $value['css'] ); ?>"
 									class="large-text <?php echo esc_attr( $value['class'] ); ?>"
-									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>" 
+									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 									rows="<?php echo $rows; ?>"
 									<?php echo implode( ' ', $custom_attributes ); ?>
 									><?php echo esc_textarea( stripslashes( $option_value ) );  ?></textarea>
@@ -585,7 +585,7 @@ class GeoDir_Admin_Settings {
 
 					$select2 = strpos($value['class'], 'geodir-select') !== false ? true : false;
 //				$value['class'] = str_replace('geodir-select')
-					
+
 				echo aui()->select(
 					array(
 						'id'                => $value['id'],
@@ -643,7 +643,7 @@ class GeoDir_Admin_Settings {
 					);
 
 					echo $html;
-					
+
 					break;
 
 				// Checkbox input
@@ -658,7 +658,7 @@ class GeoDir_Admin_Settings {
 					$description .= $tooltip_html;
 
 //					echo '###'. $option_value;
-					
+
 					echo aui()->input(
 					array(
 						'id'                => $value['id'],
@@ -683,7 +683,7 @@ class GeoDir_Admin_Settings {
 				);
 
 					break;
-				
+
 				// Checkbox input
 				case 'multicheckbox' :
 
@@ -701,11 +701,11 @@ class GeoDir_Admin_Settings {
 						</th>
 						<td class="forminp forminp-checkbox">
 							<div class="geodir-mcheck-rows geodir-mcheck-<?php echo sanitize_key( $value['id'] ); ?>">
-								<?php foreach( $value['options'] as $key => $title ) { 
-								if ( ! empty( $option_value ) && is_array( $option_value ) && in_array( $key, $option_value ) ) { 
+								<?php foreach( $value['options'] as $key => $title ) {
+								if ( ! empty( $option_value ) && is_array( $option_value ) && in_array( $key, $option_value ) ) {
 									$checked = true;
-								} else { 
-									$checked = false; 
+								} else {
+									$checked = false;
 								}
 								?>
 								<div class="geodir-mcheck-row">
@@ -849,24 +849,25 @@ class GeoDir_Admin_Settings {
 
 								$raw_default_content = '';
 								$default_method = $value['id'].'_content';
+								$gutenberg = geodir_is_gutenberg();
 
 								// check if the default content has been filtered
 								if(method_exists('GeoDir_Defaults', $default_method) && GeoDir_Defaults::$default_method(true) != $value['default_content']){
-									$raw_default_content = GeoDir_Defaults::$default_method(true);
+									$raw_default_content = GeoDir_Defaults::$default_method(true, $gutenberg);
 								}
 								$buttons_links["#TB_inline?&width=650&height=350&inlineId=gd_default_content_".esc_attr($value['id'])] = __('View Default Content','geodirectory');
 								?>
 								<div id="gd_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;display:none;" class="lity-hidex gd-notification ">
 									<?php
 									$height = "50";
-									if($raw_default_content){
+									if($raw_default_content && $raw_default_content !== $value['default_content']){
 										echo geodir_notification( array('gd-warn'=>__('Default content has been modified by a plugin or theme.','geodirectory')) );
 										$height = "25";
 									}
 									?>
 									<textarea style="min-width: calc(50vw - 32px);min-height: <?php echo $height;?>vh; display:block;"><?php echo $value['default_content'];?></textarea>
 									<?php
-									if($raw_default_content){
+									if($raw_default_content && $raw_default_content !== $value['default_content']){
 										echo geodir_notification( array('gd-info'=>__('Original content below.','geodirectory')) );
 										?>
 										<textarea style="min-width: 50vw;min-height: <?php echo $height;?>vh;display:block;"><?php echo $raw_default_content;?></textarea>
@@ -1040,24 +1041,24 @@ class GeoDir_Admin_Settings {
 					if ( ! empty( $value['default_content'] ) ) {
 						$raw_default_content = '';
 						$default_method = $value['id'].'_content';
-
+						$gutenberg = geodir_is_gutenberg();
 						// Check if the default content has been filtered.
 						if ( method_exists( 'GeoDir_Defaults', $default_method ) && GeoDir_Defaults::$default_method( true ) != $value['default_content'] ) {
-							$raw_default_content = GeoDir_Defaults::$default_method( true );
+							$raw_default_content = GeoDir_Defaults::$default_method( true, $gutenberg );
 						}
 						$buttons_links[ "#TB_inline?&width=650&height=350&inlineId=gd_default_content_".esc_attr( $value['id'] ) ] = __( 'View Default Content', 'geodirectory' );
 						?>
 						<div id="gd_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;display:none;" class="lity-hidex gd-notification ">
 							<?php
 							$height = "50";
-							if($raw_default_content){
+							if($raw_default_content && $raw_default_content !== $value['default_content']){
 								echo geodir_notification( array('gd-warn'=>__('Default content has been modified by a plugin or theme.','geodirectory')) );
 								$height = "25";
 							}
 							?>
 							<textarea style="min-width: calc(50vw - 32px);min-height: <?php echo $height;?>vh; display:block;"><?php echo $value['default_content'];?></textarea>
 							<?php
-							if ( $raw_default_content ) {
+							if ( $raw_default_content && $raw_default_content !== $value['default_content']) {
 								echo geodir_notification( array('gd-info'=>__('Original content below.','geodirectory')) );
 								?>
 								<textarea style="min-width: 50vw;min-height: <?php echo $height;?>vh;display:block;"><?php echo $raw_default_content;?></textarea>
@@ -1175,7 +1176,7 @@ class GeoDir_Admin_Settings {
 							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
 						)
 					);
-					
+
 					break;
 
 				// Country multiselects
@@ -1252,7 +1253,7 @@ class GeoDir_Admin_Settings {
 					<?php
 
 					break;
-					
+
 				// Import/Export Reviews
 				case 'import_export_reviews' :
 					?>
@@ -1292,7 +1293,7 @@ class GeoDir_Admin_Settings {
 					<?php
 
 					break;
-					
+
 					// map
 				case 'default_location_map' :
 					// used by included file do not remove.
@@ -1321,7 +1322,7 @@ class GeoDir_Admin_Settings {
 
 				case 'dummy_installer':
 
-					
+
 
 					GeoDir_Admin_Dummy_Data::dummy_data_ui();
 					//geodir_autoinstall_admin_header($post_type);

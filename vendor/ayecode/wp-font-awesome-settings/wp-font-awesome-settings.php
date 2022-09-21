@@ -679,4 +679,3 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 */
 	WP_Font_Awesome_Settings::instance();
 }
-

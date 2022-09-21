@@ -23,16 +23,16 @@ function geodir_is_block_demo(){
     // WP Core
     if(empty($_POST['attributes']['id'])
        && isset($_POST['action'])
-       && $_POST['action'] == 'super_duper_output_shortcode' 
+       && $_POST['action'] == 'super_duper_output_shortcode'
        && wp_doing_ajax()
-       && ( $post_id == geodir_details_page_id() || $post_id == geodir_archive_item_page_id() )
+     //  && ( $post_id == geodir_details_page_id() || $post_id == geodir_archive_item_page_id() )
     ){
         return true;
     }elseif(
         isset($_POST['fl_builder_data']['fl_action'])
         && $_POST['fl_builder_data']['fl_action']=='save_settings'
         && isset($_POST['fl_builder_data']['post_id'])
-        && ( $_POST['fl_builder_data']['post_id'] == geodir_details_page_id() || $_POST['fl_builder_data']['post_id'] == geodir_archive_item_page_id() )
+       // && ( $_POST['fl_builder_data']['post_id'] == geodir_details_page_id() || $_POST['fl_builder_data']['post_id'] == geodir_archive_item_page_id() )
     ){
         return true;
     }elseif(
@@ -123,7 +123,7 @@ function geodir_post_custom_fields( $package_id = '', $default = 'all', $post_ty
         set_transient('geodir_post_custom_fields',$geodir_post_custom_fields_cache, DAY_IN_SECONDS);
 
     }
-    
+
 
     if ( has_filter('geodir_filter_geodir_post_custom_fields' ) ) {
         /**
@@ -146,7 +146,7 @@ function geodir_post_custom_fields( $package_id = '', $default = 'all', $post_ty
 
 /**
  * Get the value of a custom field for a current post.
- * 
+ *
  * @param $cf
  *
  * @return mixed|void
@@ -199,7 +199,7 @@ function geodir_get_cf_value( $cf ) {
 	 * Filter the custom field value.
 	 *
 	 * @since 1.6.20
-	 * 
+	 *
 	 * @param mixed $value Custom field value.
 	 * @param array $cf Custom field info.
 	 */
@@ -240,7 +240,7 @@ function geodir_get_cf_default_category_value() {
 	 * Filter the default category field value.
 	 *
 	 * @since 2.0.0
-	 * 
+	 *
 	 * @param mixed $value Custom field value.
 	 */
 	return apply_filters( 'geodir_get_cf_default_category_value', $value );
@@ -466,7 +466,7 @@ if (!function_exists('geodir_show_listing_info')) {
 
         if (!empty($fields_info)) {
             $post = stripslashes_deep($post); // strip slashes
-            
+
             global $field_set_start;
             $field_set_start = 0;
 
@@ -568,7 +568,7 @@ if (!function_exists('geodir_show_listing_info')) {
         }
 
         $html = ''; // we need to rest the html var
-        
+
         // loop the output_arr
         if(!empty($output_arr)){
             foreach($output_arr as $key => $output){
@@ -711,8 +711,8 @@ function godir_set_sort_field_order($field_ids = array())
 
             $post_meta_info = $wpdb->query(
                 $wpdb->prepare(
-                    "update " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " set 
-															sort_order=%d 
+                    "update " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " set
+															sort_order=%d
 															where id= %d",
                     array($count, $cf)
                 )
@@ -744,7 +744,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
      */
     function geodir_custom_sort_field_adminhtml($field_type, $result_str, $field_ins_upd = '', $field_type_key='')
     {
-        
+
 
     }
 }
