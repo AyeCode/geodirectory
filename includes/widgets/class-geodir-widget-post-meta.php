@@ -257,7 +257,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		if ( geodir_is_gd_post_type( $post_type ) ) {
 			$args['id'] = apply_filters( 'geodir_widget_post_meta_set_id', $args['id'], $args );
 
-			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
+			$package_id = $this->is_preview() ? 0 : geodir_get_post_package_id( $args['id'], $post_type );
 			$fields = geodir_post_custom_fields( $package_id,  'all', $post_type , 'none' );
 
 			$fields = $fields + geodir_post_meta_advance_fields( $post_type );
@@ -316,6 +316,10 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 					$output = apply_filters( "geodir_custom_field_output_{$field['type']}", '', $args['location'], $field,$args['id'], $args['show'] );
 
+					if ( ! $output && $this->is_preview() ) {
+						$output = $this->get_field_preview( $args );
+					}
+
 					// Return clean striped value.
 					if ( $args['show'] == 'value-strip' && $output != '' ) {
 						$output = wp_strip_all_tags( $output );
@@ -326,10 +330,53 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			} else {
 			}
 
+			if ( ! $output && $this->is_preview() ) {
+				$output = $this->get_field_preview( $args );
+			}
+
 			$args['id'] = apply_filters( 'geodir_widget_post_meta_reset_id', $args['id'], $args );
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Get a field preview if empty.
+	 *
+	 * @param $field
+	 * @param $key
+	 *
+	 * @return string
+	 */
+	public function get_field_preview( $args ) {
+		$html = '';
+
+		if ( ! empty( $args ) ) {
+			$title  = esc_attr( ucwords( str_replace( "_", " ", $args['key'] ) ) );
+			$value  = __( 'Placeholder', 'geodirectory' );
+			$icon   = '<i class="fas fa-tools"></i> ';
+			$view   = ! empty( $args['show'] ) ? esc_attr( $args['show'] ) : '';
+			$output = geodir_field_output_process( $view );
+
+			$html = '<div class="geodir_post_meta  geodir-field-preview">';
+
+			if ( $output == '' || isset( $output['icon'] ) ) {
+				$html .= '<span class="geodir_post_meta_placeholder" >' . $icon;
+			}
+			if ( $output == '' || isset( $output['label'] ) ) {
+				$html .= '<span class="geodir_post_meta_title " >' . $title . ': ' . '</span>';
+			}
+			if ( $output == '' || isset( $output['icon'] ) ) {
+				$html .= '</span>';
+			}
+			if ( $output == '' || isset( $output['value'] ) ) {
+				$html .= $value;
+			}
+
+
+		}
+
+		return $html;
 	}
 
 	/**

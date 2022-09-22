@@ -104,12 +104,16 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $post,$gd_post;
 
-		if ( $this->is_preview() ) {
-			return '';
-		}
+		$is_preview = $this->is_preview();
+		$block_preview = $this->is_block_content_call();
 
 		$post_id 	= ! empty( $args['id'] ) ? $args['id'] : ( ! empty( $post->ID ) ? $post->ID : 0 );
 		$post_type 	= $post_id ? get_post_type( $post_id ) : '';
+
+		if(empty($args['id']) && $is_preview ){
+			$post_id  = geodir_get_post_id_with_content( $args['key'] );
+			$post_type = 'gd_place';
+		}
 
 		$args['id'] = $post_id;
 
@@ -121,6 +125,8 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			'search' => '',
 			'html' => '',
 		);
+
+
 
 		/**
 		 * Parse incoming $args into an array and merge it with $defaults
@@ -171,13 +177,15 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 
 		$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 
+//		print_r($find_post );echo '###'.$post_id;print_r($args);
+
 		if ($match_field === '' || ( ! empty( $find_post ) && ( isset( $find_post->{$match_field} ) || isset( $find_post->{$_match_field} ) ) ) ) {
 			$address_fields = array( 'street2', 'neighbourhood', 'city', 'region', 'country', 'zip', 'latitude', 'longitude' ); // Address fields
 			$field = array();
 			$search = $args['search'];
 
 			if ( $match_field && ! in_array( $match_field, array( 'post_date', 'post_modified', 'default_category', 'post_id', 'post_status' ) ) && ! in_array( $match_field, $address_fields ) ) {
-				$package_id = geodir_get_post_package_id( $post_id, $post_type );
+				$package_id = $is_preview ? 0 : geodir_get_post_package_id( $post_id, $post_type );
 				$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
 				foreach ( $fields as $field_info ) {
@@ -342,6 +350,10 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 					}
 				}
 
+				if ( empty( $output ) && $is_preview && $args['html'] ) {
+					$output = $args['html'];
+				}
+
 				// replace other post variables
 				if ( ! empty( $html ) ) {
 					$html = geodir_replace_variables( $html );
@@ -351,6 +363,10 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 					}
 				}
 			}
+		}
+
+		if ( empty( $output ) && $is_preview && $args['html'] ) {
+			$output = $args['html'];
 		}
 
 		return $output;

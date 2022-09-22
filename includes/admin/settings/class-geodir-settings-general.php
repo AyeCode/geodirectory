@@ -271,6 +271,9 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			));
 		}
 		else if ( 'pages' == $current_section ) {
+
+			$gutenberg = geodir_is_gutenberg();
+
 			/**
 			 * Filter GD general settings array.
 			 *
@@ -292,7 +295,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type'     => 'single_select_page',
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
-					'default_content' => GeoDir_Defaults::page_location_content(),
+					'default_content' => GeoDir_Defaults::page_location_content( false, $gutenberg ),
 				),
 				array(
 					'name'     => __( 'Add listing page', 'geodirectory' ),
@@ -301,7 +304,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type'     => 'single_select_page',
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
-					'default_content' => GeoDir_Defaults::page_add_content(),
+					'default_content' => GeoDir_Defaults::page_add_content( false, $gutenberg ),
 				),
 				array(
 					'name'     => __( 'Search Page', 'geodirectory' ),
@@ -310,7 +313,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type'     => 'single_select_page',
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
-					'default_content' => GeoDir_Defaults::page_search_content(),
+					'default_content' => GeoDir_Defaults::page_search_content( false, $gutenberg ),
 				),
 				array(
 					'name'     => __( 'Terms and Conditions page', 'geodirectory' ),
@@ -339,7 +342,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'is_template_page'     => true,
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
-					'default_content' => GeoDir_Defaults::page_details_content(),
+					'default_content' => GeoDir_Defaults::page_details_content(false, $gutenberg ),
 				),
 				array(
 					'name'     => __( 'Archive page', 'geodirectory' ),
@@ -349,7 +352,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'is_template_page'     => true,
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
-					'default_content' => GeoDir_Defaults::page_archive_content(),
+					'default_content' => GeoDir_Defaults::page_archive_content(false, $gutenberg ),
 				),
 				array(
 					'name'     => __( 'Archive item page', 'geodirectory' ),
@@ -359,7 +362,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'is_template_page'     => true,
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
-					'default_content' => GeoDir_Defaults::page_archive_item_content(),
+					'default_content' => GeoDir_Defaults::page_archive_item_content( false, $gutenberg ),
 				),
 
 
@@ -1053,7 +1056,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				self::get_google_maps_api_key_setting(),
-	
+
 				self::get_google_geocode_api_key_setting(),
 
 				self::get_maps_api_setting(),

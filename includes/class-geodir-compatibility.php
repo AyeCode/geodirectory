@@ -836,7 +836,7 @@ class GeoDir_Compatibility {
 		$object_post_type = get_post_type( (int) $object_id );
 
 		// Bail when non related post type.
-		if ( in_array( $object_post_type, array( 'attachment', 'nav_menu_item', 'card_templates', 'advanced_ads' ) ) ) {
+		if ( in_array( $object_post_type, array( 'attachment', 'nav_menu_item', 'card_templates', 'advanced_ads','product' ) ) ) {
 			return $metadata;
 		}
 

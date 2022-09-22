@@ -182,7 +182,7 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 	public function output( $instance = array(), $args = array(), $content = '' ) {
 		global $geodirectory, $post, $gd_post;
 
-		$instance = shortcode_atts( 
+		$instance = shortcode_atts(
 			array(
 				'title' => '',
 				'post_type' => '',
@@ -206,9 +206,9 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 				'rounded'    => '',
 				'rounded_size'    => '',
 				'shadow'    => '',
-			), 
-			$instance, 
-			'gd_cpt_meta' 
+			),
+			$instance,
+			'gd_cpt_meta'
 		);
 
 		if ( empty( $instance['image_size'] ) ) {
@@ -322,7 +322,7 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 	}
 
 	public static function get_image_sizes() {
-		$image_sizes = array( 
+		$image_sizes = array(
 			'' => 'default (thumbnail)'
 		);
 
