@@ -335,22 +335,23 @@ class GeoDir_Post_Data {
 						$featured_image = $file['file'];
 					}
 				}
-
 			}
 
+			// During import it don't deletes previous attachment when adding the new attachment.
+			$delete_previous = empty( $file_ids ) && defined( 'GEODIR_DOING_IMPORT' ) ? true : false;
+
 			// Check if there are any missing file ids we need to delete
-			if ( ! empty( $current_files ) && ! empty( $files ) && ! empty( $file_ids ) ) {
+			if ( ! empty( $current_files ) && ! empty( $files ) && ( ! empty( $file_ids ) || $delete_previous ) ) {
 				$current_files_arr = explode( "::", $current_files );
 
 				foreach ( $current_files_arr as $current_file ) {
 					$current_file_arr = explode( "|", $current_file );
-					if ( isset( $current_file_arr[1] ) && $current_file_arr[1] && ! in_array( $current_file_arr[1], $file_ids ) ) {
-						GeoDir_Media::delete_attachment( $current_file_arr[1], $post_id );
+
+					if ( ! empty( $current_file_arr[1] ) && ( ! in_array( $current_file_arr[1], $file_ids ) || $delete_previous ) ) {
+						GeoDir_Media::delete_attachment( (int) $current_file_arr[1], $post_id );
 					}
 				}
 			}
-
-
 		}
 
 		return $featured_image;
@@ -793,7 +794,7 @@ class GeoDir_Post_Data {
 	 * @global object $current_user Current user object.
 	 * @global object $post The current post object.
 	 * @global object $post_images Image objects of current post if available.
-	 * @todo make the form work in sections with fieldsets, all collapsed apart from the one ur on.
+	 * @todo make the form work in sections with fieldsets, all collapsed apart from the one our on.
 	 */
 	public static function add_listing_form( $params = array() ) {
 

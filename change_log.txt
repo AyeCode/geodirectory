@@ -1,3 +1,6 @@
+= 2.2.13 =
+* During import it don't deletes previous attachment when adding the new attachment - FIXED
+
 = 2.2.12 =
 * Business Hours post meta shows incorrect hours for today - FIXED
 * Yoast SEO open graph image use category or post type default image as when no post image found - CHANGED
