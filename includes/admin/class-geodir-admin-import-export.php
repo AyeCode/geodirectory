@@ -218,7 +218,7 @@ class GeoDir_Admin_Import_Export {
 				setlocale( LC_ALL, 'en_US.UTF-8' );
 				if ( ( $handle = fopen( $target_path, "r" ) ) !== false ) {
 					while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== false ) {
-						if ( ! empty( $data ) ) {
+						if ( ! empty( $data ) && count( $data ) > 1 ) {
 							$file[] = $data;
 						}
 					}
@@ -294,7 +294,7 @@ class GeoDir_Admin_Import_Export {
 					// Update
 					if ( ! empty( $post_info['ID'] ) ) {
 						$result = wp_update_post( $post_info, true ); // we hook into the save_post hook
-						if ( $result ) {
+						if ( $result && ! is_wp_error( $result ) ) {
 							$updated ++;
 						} else {
 							$invalid ++;
@@ -305,7 +305,7 @@ class GeoDir_Admin_Import_Export {
 						// insert
 					} else {
 						$result = wp_insert_post( $post_info, true ); // we hook into the save_post hook
-						if ( $result ) {
+						if ( $result && ! is_wp_error( $result ) ) {
 							$created ++;
 						} else {
 							$invalid ++;
