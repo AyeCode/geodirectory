@@ -1149,8 +1149,9 @@ class GeoDir_Elementor {
 	 * @return mixed
 	 */
 	public static function archive_item_template_content( $content, $original_content, $page_id ) {
+		$_original_content = trim( strip_tags( $original_content ) );
 
-		if ( ! $original_content && $page_id && self::is_elementor( $page_id ) ) {
+		if ( ! $_original_content && $page_id && self::is_elementor( $page_id ) ) {
 			$original_content = $content = \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $page_id );
 		} else {
 			$original_content = $content;
