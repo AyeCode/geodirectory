@@ -1,5 +1,6 @@
 = 2.2.13 =
 * During import it don't deletes previous attachment when adding the new attachment - FIXED
+* Elementor Archive Item not rendered properly on best of listings widget - FIXED
 
 = 2.2.12 =
 * Business Hours post meta shows incorrect hours for today - FIXED
