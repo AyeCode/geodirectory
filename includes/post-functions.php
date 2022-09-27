@@ -1426,14 +1426,19 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$user_classes = str_replace(array("gd-ab-","gd-badge-shadow"),array("ab-","shadow"),esc_attr($args['css_class']));
 						$btn_class .= ' ' .$user_classes ;
 					}
+
+					// Set CSS class for AUI modal
+					if ( ! empty( $args['link'] ) && strpos( $btn_class, 'gd-lity' ) !== false && strpos( $btn_class, 'aui-has-embed' ) === false ) {
+						$btn_class .= ' aui-has-embed';
+					}
+
 					$btn_args = array(
 						'data-id' => $post_id,
 						'class' => normalize_whitespace( $btn_class ),
 						'content' => $badge,
 						'style' => $color_custom ? 'background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';' : '',
-						'data-badge'    => esc_attr($match_field),
-//						'data-trigger'    => 'focus', // this could mess with any html inside the popover
-						'data-badge-condition'  => esc_attr($args['condition']),
+						'data-badge' => esc_attr($match_field),
+						'data-badge-condition' => esc_attr($args['condition']),
 					);
 
 					// extra attributes
@@ -1444,6 +1449,19 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						// onclick
 					if(!empty($args['onclick'])){
 						$btn_args['onclick'] = esc_attr($args['onclick']);
+					}
+
+					// AUI modal
+					if ( ! empty( $args['link'] ) && strpos( $btn_class, 'aui-has-embed' ) !== false ) {
+						$embed_url = geodir_parse_embed_url( $args['link'], array( 'post' => $find_post, 'args' => $args ) );
+
+						if ( $embed_url ) {
+							$btn_args['data-embed-url'] = esc_url( $embed_url );
+							$btn_args['data-aui-embed'] = 'iframe';
+							if ( empty( $args['popover_title'] ) && empty( $args['popover_text'] ) && empty( $args['tooltip_text'] ) ) {
+								$args['tooltip_text'] = __( 'Watch Video', 'geodirectory' );
+							}
+						}
 					}
 
 					// CTA

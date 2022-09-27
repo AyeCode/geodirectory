@@ -433,9 +433,9 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		if($args['list_hide_secondary']=='4'){$args['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
 		if($args['list_hide_secondary']=='5'){$args['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
-		// set positioning class
-		if(!empty($args['position'])){
-			$args['css_class'] .= sanitize_html_class( $args['position'] );
+		// Set positioning class
+		if ( ! empty( $args['position'] ) ) {
+			$args['css_class'] .= " " . sanitize_html_class( $args['position'] );
 		}
 
 		// margins
