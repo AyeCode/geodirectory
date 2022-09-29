@@ -351,10 +351,10 @@ function geodir_parse_custom_field_url($url, $formatted = true) {
  * @package GeoDirectory
  *
  * @param int|array $term_ids Term id or Terms array.
- * @param string $taxomony Category taxonomy of post type.
+ * @param string $taxonomy Category taxonomy of post type.
  * @return array Modified term ids.
  */
-function geodir_add_parent_terms($term_ids, $taxomony) {	
+function geodir_add_parent_terms($term_ids, $taxonomy) {
 	if (is_int($term_ids)) {
 		$term_ids = array($term_ids);
 	}
@@ -363,7 +363,7 @@ function geodir_add_parent_terms($term_ids, $taxomony) {
 	
 	foreach ($term_ids as $term_id) {
 		$parent_terms[] = $term_id;
-		$term_parents = geodir_get_category_parents($term_id, $taxomony, $parent_terms);
+		$term_parents = geodir_get_category_parents($term_id, $taxonomy, $parent_terms);
 		
 		if (!empty($term_parents)) {
 			$parent_terms = array_merge($parent_terms, $term_parents);
@@ -380,13 +380,13 @@ function geodir_add_parent_terms($term_ids, $taxomony) {
  * @package GeoDirectory
  *
  * @param int $id Category id.
- * @param string $taxomony Category taxonomy of post type.
+ * @param string $taxonomy Category taxonomy of post type.
  * @param array $visited Array of category ids already included.
  * @param array $parents Array of category ids.
  * @return array Category ids.
  */
-function geodir_get_category_parents($id, $taxomony, $visited = array(), $parents = array()) {
-	$parent = get_term($id, $taxomony);
+function geodir_get_category_parents($id, $taxonomy, $visited = array(), $parents = array()) {
+	$parent = get_term($id, $taxonomy);
 	if (is_wp_error($parent)) {
 		return $parents;
 	}
@@ -394,7 +394,7 @@ function geodir_get_category_parents($id, $taxomony, $visited = array(), $parent
 	if (isset($parent->parent) && $parent->parent && ($parent->parent != $parent->term_id) && !in_array($parent->parent, $visited)) {
 		$visited[] = $parent->parent;
 		$parents[] = $parent->parent;
-		$parents = geodir_get_category_parents($parent->parent, $taxomony, $visited, $parents);
+		$parents = geodir_get_category_parents($parent->parent, $taxonomy, $visited, $parents);
 	}
 
 	return $parents;
@@ -2014,4 +2014,122 @@ function geodir_has_request_uri( $match ) {
 	}
 
 	return false;
+}
+
+/**
+ * Parse the video data like id & provider from url.
+ *
+ * @since 2.2.13
+ *
+ * @param string $url Requested video url.
+ * @param array  $args Extra arguments.
+ * @return array Video data.
+ */
+function geodir_parse_video_data( $url, $args = array() ) {
+	$video_id = '';
+	$video_type = '';
+
+	if ( ! empty( $url ) ) {
+		if ( ( false !== strpos( $url, 'youtube' ) || false !== strpos( $url, 'youtu.be' ) ) && preg_match( '%(?:youtube(?:-nocookie)?.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu.be/)([^"&?/ ]{11})%i', $url, $matches ) ) {
+			// Youtube
+			$video_type = 'youtube';
+			$video_id = $matches[1];
+		}else if ( false !== strpos( $url, 'vimeo.com' ) && preg_match( '#(?:https?://)?(?:www.)?(?:player.)?vimeo.com/(?:[a-z]*/)*([0-9]{6,11})[?]?.*#', $url, $matches ) ) {
+			// Vimeo
+			$video_type = 'vimeo';
+			$video_id = $matches[1];
+		} else if ( preg_match( '!^.+dailymotion\.com/(video|hub)/([^_]+)[^#]*(#video=([^_&]+))?|(dai\.ly/([^_]+))!', $url, $matches ) ) {
+			// Dailymotion
+			if ( ! empty( $matches[6] ) ) {
+				$video_id = $matches[6];
+			} else if ( ! empty( $matches[4] ) ) {
+				$video_id = $matches[4];
+			} else if ( ! empty( $matches[2] ) ) {
+				$video_id = $matches[2];
+			}
+
+			if ( $video_id ) {
+				$video_type = 'dailymotion';
+			}
+		} else if ( preg_match( '#https?:.*?.(mp4|mov)#s', $url, $matches ) ) {
+			// mp4/mov
+			$video_type = 'mp4';
+			$video_id = $matches[0];
+		} else if ( ( false !== strpos( $url, 'facebook.com' ) || false !== strpos( $url, 'fb.com' ) ) && preg_match( '/videos\/(\d+)+|v=(\d+)|vb.\d+\/(\d+)/', $url, $matches ) ) {
+			// Facebook
+			if ( ! empty( $matches[2] ) ) {
+				$video_id = $matches[2];
+			} else if ( ! empty( $matches[1] ) ) {
+				$video_id = $matches[1];
+			}
+
+			if ( $video_id ) {
+				$video_type = 'facebook';
+			}
+		}
+	}
+
+	$data = array(
+		'video_type' => $video_type,
+		'video_id' => ( ! empty( $video_id ) ? urlencode( $video_id ) : '' )
+	);
+
+	/**
+	 * Filter the video data.
+	 *
+	 * @since 2.2.13
+	 *
+	 * @param array  $data Video data.
+	 * @param string $url Requested video url.
+	 * @param array  $args Extra arguments.
+	 */
+	return apply_filters( 'geodir_parse_video_data', $data, $url, $args );
+}
+
+/**
+ * Get the video embed url.
+ *
+ * @since 2.2.13
+ *
+ * @param string $url Requested video url.
+ * @param array  $args Extra arguments.
+ */
+function geodir_parse_embed_url( $url, $args = array() ) {
+	$data = geodir_parse_video_data( $url, $args );
+
+	$embed_url = $url;
+
+	if ( ! empty( $data['video_id'] ) ) {
+		$video_id = $data['video_id'];
+		$provider = ! empty( $data['video_type'] ) ? $data['video_type'] : '';
+
+		switch ( $provider ) {
+			case 'youtube':
+				$embed_url = 'https://www.youtube.com/embed/' . $video_id . '?autoplay=1';
+				break;
+			case 'vimeo':
+				$embed_url = 'https://player.vimeo.com/video/' . $video_id . '?autoplay=1';
+				break;
+			case 'dailymotion':
+				$embed_url = 'https://www.dailymotion.com/embed/video/' . $video_id . '?autoplay=1';
+				break;
+			case 'mp4':
+				$embed_url = $url;
+				break;
+			case 'facebook':
+				$embed_url = 'https://www.facebook.com/plugins/video.php?href=' . urlencode( $url ) . '&autoplay=1';
+				break;
+		}
+	}
+	/**
+	 * Filter the video embed url.
+	 *
+	 * @since 2.2.13
+	 *
+	 * @param string $embed_url Embed video url.
+	 * @param string $url Requested video url.
+	 * @param array  $data Video data.
+	 * @param array  $args Extra arguments.
+	 */
+	return apply_filters( 'geodir_parse_embed_url', $embed_url, $url, $data, $args );
 }

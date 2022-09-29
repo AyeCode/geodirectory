@@ -624,10 +624,23 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					$aui_doing_init_iconpicker= false;
 				}
 
-				function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class){
+				function aui_modal_iframe($title,$url,$footer,$dismissible,$class,$dialog_class,$body_class,responsive){
 					if(!$body_class){$body_class = 'p-0';}
-					var $body = '<div class="ac-preview-loading text-center position-absolute w-100 text-dark vh-100 overlay overlay-white p-0 m-0 d-none d-flex justify-content-center align-items-center"><div class="spinner-border" role="status"></div></div>';
-					$body += '<iframe id="embedModal-iframe" class="w-100 vh-100 p-0 m-0" src="" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>';
+					var wClass = 'text-center position-absolute w-100 text-dark overlay overlay-white p-0 m-0 d-none d-flex justify-content-center align-items-center';
+					var $body = "", sClass = "w-100 p-0 m-0";
+					if (responsive) {
+						$body += '<div class="embed-responsive embed-responsive-16by9">';
+						wClass += ' h-100';
+						sClass += ' embed-responsive-item';
+					} else {
+						wClass += ' vh-100';
+						sClass += ' vh-100';
+					}
+					$body += '<div class="ac-preview-loading ' + wClass + '" style="left:0;top:0"><div class="spinner-border" role="status"></div></div>';
+					$body += '<iframe id="embedModal-iframe" class="' + sClass + '" src="" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>';
+					if (responsive) {
+						$body += '</div>';
+					}
 
 					$m = aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class,$body_class);
 					jQuery( $m ).on( 'shown.bs.modal', function ( e ) {
@@ -1030,6 +1043,22 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				}
 
 				/**
+				 * Init modal iframe.
+				 */
+				function aui_init_modal_iframe() {
+					jQuery('.aui-has-embed, [data-aui-embed="iframe"]').each(function(e){
+						if (!jQuery(this).hasClass('aui-modal-iframed') && jQuery(this).data('embed-url')) {
+							jQuery(this).addClass('aui-modal-iframed');
+
+							jQuery(this).on("click",function(e1) {
+								aui_modal_iframe('',jQuery(this).data('embed-url'),'',true,'','modal-lg','aui-modal-iframe p-0',true);
+								return false;
+							});
+						}
+					});
+				}
+
+				/**
 				 * Show a toast.
 				 */
 				$aui_doing_toast = false;
@@ -1189,6 +1218,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					
 					// init lightbox embeds
 					aui_init_lightbox_embed();
+
+					/* Init modal iframe */
+					aui_init_modal_iframe();
 				}
 
 				// run on window loaded
