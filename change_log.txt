@@ -1,3 +1,6 @@
+= 2.2.14 =
+* Use WP function to avoid php compatibility issue - ADDED
+
 = 2.2.13 =
 * During import it don't deletes previous attachment when adding the new attachment - FIXED
 * Elementor Archive Item not rendered properly on best of listings widget - FIXED
