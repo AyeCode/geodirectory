@@ -1,5 +1,6 @@
 = 2.2.14 =
 * Use WP function to avoid php compatibility issue - ADDED
+* Option added to split UK into England, Northern Ireland, Scotland & Wales - ADDED
 
 = 2.2.13 =
 * During import it don't deletes previous attachment when adding the new attachment - FIXED
