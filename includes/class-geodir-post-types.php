@@ -46,7 +46,7 @@ class GeoDir_Post_types {
 
 	/**
 	 * Disable Gutenberg for GD CPTs.
-	 * 
+	 *
 	 * @param $is_enabled
 	 * @param $post_type
 	 *
@@ -170,7 +170,7 @@ class GeoDir_Post_types {
 			geodir_update_option( 'post_types', $post_types );
 
 		}
-		
+
 		return $post_types;
 
 	}
@@ -272,31 +272,31 @@ class GeoDir_Post_types {
 				$singular_name = isset($post_types[$taxonomy['object_type']]['labels']['singular_name']) ? $post_types[$taxonomy['object_type']]['labels']['singular_name'] : 'Place';
 				if(stripos(strrev($key), "sgat_") === 0){ // its a tag
 					$taxonomies[$key]['args']['labels'] = array(
-						'name' => sprintf( __('%s Tags', 'geodirectory'), $singular_name ),
-						'singular_name' => sprintf( __('%s Tag', 'geodirectory'), $singular_name ),
-						'search_items' => sprintf( __('Search %s Tags', 'geodirectory'), $singular_name ),
-						'popular_items' => sprintf( __('Popular %s Tags', 'geodirectory'), $singular_name ),
-						'all_items' => sprintf( __('All %s Tags', 'geodirectory'), $singular_name ),
-						'edit_item' => sprintf( __('Edit %s Tag', 'geodirectory'), $singular_name ),
-						'update_item' => sprintf( __('Update %s Tag', 'geodirectory'), $singular_name ),
-						'add_new_item' => sprintf( __('Add New %s Tag', 'geodirectory'), $singular_name ),
-						'new_item_name' => sprintf( __('New %s Tag Name', 'geodirectory'), $singular_name ),
-						'add_or_remove_items' => sprintf( __('Add or remove %s tags', 'geodirectory'), $singular_name ),
-						'choose_from_most_used' => sprintf( __('Choose from the most used %s tags', 'geodirectory'), $singular_name ),
-						'separate_items_with_commas' => sprintf( __('Separate %s tags with commas', 'geodirectory'), $singular_name ),
+						'name' => wp_sprintf( __('%s Tags', 'geodirectory'), $singular_name ),
+						'singular_name' => wp_sprintf( __('%s Tag', 'geodirectory'), $singular_name ),
+						'search_items' => wp_sprintf( __('Search %s Tags', 'geodirectory'), $singular_name ),
+						'popular_items' => wp_sprintf( __('Popular %s Tags', 'geodirectory'), $singular_name ),
+						'all_items' => wp_sprintf( __('All %s Tags', 'geodirectory'), $singular_name ),
+						'edit_item' => wp_sprintf( __('Edit %s Tag', 'geodirectory'), $singular_name ),
+						'update_item' => wp_sprintf( __('Update %s Tag', 'geodirectory'), $singular_name ),
+						'add_new_item' => wp_sprintf( __('Add New %s Tag', 'geodirectory'), $singular_name ),
+						'new_item_name' => wp_sprintf( __('New %s Tag Name', 'geodirectory'), $singular_name ),
+						'add_or_remove_items' => wp_sprintf( __('Add or remove %s tags', 'geodirectory'), $singular_name ),
+						'choose_from_most_used' => wp_sprintf( __('Choose from the most used %s tags', 'geodirectory'), $singular_name ),
+						'separate_items_with_commas' => wp_sprintf( __('Separate %s tags with commas', 'geodirectory'), $singular_name ),
 					);
 				}else{// its a category
 					$taxonomies[$key]['args']['labels'] = array(
-						'name' => sprintf( __('%s Categories', 'geodirectory'), $singular_name ),
-						'singular_name' => sprintf( __('%s Category', 'geodirectory'), $singular_name ),
-						'search_items' => sprintf( __('Search %s Categories', 'geodirectory'), $singular_name ),
-						'popular_items' => sprintf( __('Popular %s Categories', 'geodirectory'), $singular_name ),
-						'all_items' => sprintf( __('All %s Categories', 'geodirectory'), $singular_name ),
-						'edit_item' => sprintf( __('Edit %s Category', 'geodirectory'), $singular_name ),
-						'update_item' => sprintf( __('Update %s Category', 'geodirectory'), $singular_name ),
-						'add_new_item' => sprintf( __('Add New %s Category', 'geodirectory'), $singular_name ),
-						'new_item_name' => sprintf( __('New %s Category', 'geodirectory'), $singular_name ),
-						'add_or_remove_items' => sprintf( __('Add or remove %s categories', 'geodirectory'), $singular_name ),
+						'name' => wp_sprintf( __('%s Categories', 'geodirectory'), $singular_name ),
+						'singular_name' => wp_sprintf( __('%s Category', 'geodirectory'), $singular_name ),
+						'search_items' => wp_sprintf( __('Search %s Categories', 'geodirectory'), $singular_name ),
+						'popular_items' => wp_sprintf( __('Popular %s Categories', 'geodirectory'), $singular_name ),
+						'all_items' => wp_sprintf( __('All %s Categories', 'geodirectory'), $singular_name ),
+						'edit_item' => wp_sprintf( __('Edit %s Category', 'geodirectory'), $singular_name ),
+						'update_item' => wp_sprintf( __('Update %s Category', 'geodirectory'), $singular_name ),
+						'add_new_item' => wp_sprintf( __('Add New %s Category', 'geodirectory'), $singular_name ),
+						'new_item_name' => wp_sprintf( __('New %s Category', 'geodirectory'), $singular_name ),
+						'add_or_remove_items' => wp_sprintf( __('Add or remove %s categories', 'geodirectory'), $singular_name ),
 					);
 				}
 
@@ -390,7 +390,7 @@ class GeoDir_Post_types {
 
 		do_action( 'geodirectory_after_register_post_type' );
 	}
-	
+
 	/**
 	 * Register our custom post statuses, used for listing status.
      *
