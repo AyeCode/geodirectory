@@ -94,6 +94,17 @@ class GeoDir_Post_types {
 					}
 				}
 
+				/**
+				 * Filter taxonomy args.
+				 *
+				 * @since @todo
+				 * @param string $args Taxonomy args.
+				 * @param string $taxonomy The taxonomy name.
+				 * @param string[] $object_type Array of names of object types for the taxonomy.
+				 */
+				$args = apply_filters('geodir_taxonomy_args', $args, $taxonomy, $args['object_type'] );
+
+
 				//print_r($args['args']);
 
 				register_taxonomy($taxonomy, $args['object_type'], $args['args']);
