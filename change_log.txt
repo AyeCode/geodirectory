@@ -3,6 +3,7 @@
 * Option added to split UK into England, Northern Ireland, Scotland & Wales - ADDED
 * Business Hours preview in GD Listings block looks broken - FIXED
 * Classifieds feature post notification is not translatable - FIXED
+* SD and AUI packages updated to latest - UPDATED
 
 = 2.2.13 =
 * During import it don't deletes previous attachment when adding the new attachment - FIXED
