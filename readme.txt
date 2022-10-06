@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, member directory, real-estate, job board, Directory, classified ads, staff directory, company directory, team directory, chamber of commerce directory, church directory, address book, contact directory, local business directory, listings directory, link directory
 Requires at least: 4.5
 Tested up to: 6.0
-Stable tag: 2.2.13
+Stable tag: 2.2.14
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -258,6 +258,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 == Changelog ==
 
 __WARNING: GDv2 is a significant update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always, we recommend to try this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
+
+= 2.2.14 =
+[GeoDirectory changelog for version 2.2.14](https://wpgeodirectory.com/change-logs-v2/#v2.2.14).
 
 = 2.2.13 =
 [GeoDirectory changelog for version 2.2.13](https://wpgeodirectory.com/change-logs-v2/#v2.2.13).
