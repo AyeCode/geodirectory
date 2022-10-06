@@ -22,7 +22,7 @@
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
  */
-global $mapzoom, $geodir_manual_map;
+global $mapzoom, $geodir_manual_map, $gd_move_inline_script;
 
 /**
  * Filter the map restriction for specific address only
@@ -71,10 +71,12 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
 $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
 $marker_icon = GeoDir_Maps::default_marker_icon( true );
 $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
-?>
+
+if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 <script type="text/javascript">
     /* <![CDATA[ */
-    <?php
+<?php
+}
 	/**
 	 * Fires at the start of the add javascript on the add listings map.
 	 *
@@ -110,9 +112,11 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     var oldstr_zip;
     var strictBounds;
     var doingGeocode = false;
+    var postal_town;
+    var locality;
     function geocodePosition(latLon, address) {
         console.log(address);
-        if (address && (address.locality || address.postal_town) && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
+        if (address && (locality || postal_town) && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
             doGeoCode = address;
         } else {
             doGeoCode = {
@@ -235,6 +239,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     postal_code = postal_code_prefix;
                 }
                 if (responses[0].formatted_address != '') {
+                    if (formatted_address == '') {
+                        formatted_address = responses[0].formatted_address;
+                    }
                     address_array = responses[0].formatted_address.split(",", 2);
 
                     if (address_array.length > 1) {
@@ -435,6 +442,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if (postal_code.long_name) {
                 getZip = postal_code.long_name;
             }
+
             // Adjust Japanese street address.
             if (getCountryISO == 'JP' && formatted_address != '' && !getAddress && mapLang == 'ja') {
                 formatted_address = formatted_address.replace(getCountry + "、", "");
@@ -593,7 +601,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if ( ! defined( 'GEODIRLOCATION_TEXTDOMAIN' ) ) {
                 $location_result = $geodirectory->location->get_default_location();
 
-                if( ! empty( $location_result ) ) {
+                if ( ! empty( $location_result ) ) {
                     $ISO2 = $geodirectory->location->get_country_iso2( $location_result->country );
                     echo "ISO2 = '$ISO2';";
                 }
@@ -947,14 +955,18 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     $.goMap.map.setZoom(minZoomLevel);
                 }
             });
-        }<?php if ( geodir_lazy_load_map() ) { ?>
+        }
+		<?php if ( geodir_lazy_load_map() ) { ?>
 		}
 	});<?php } ?>
-    });
-    <?php }?>
+});
+<?php } 
+	if ( ! empty( $gd_move_inline_script ) ) { 
+		$inline_script = ob_get_clean(); wp_add_inline_script( 'geodir-add-listing', trim( $inline_script ) ); 
+	} else { ?>
     /* ]]> */
 </script>
-<?php
+<?php }
 $set_button_class = 'geodir_button';
 if (is_admin())
     $set_button_class = 'btn btn-primary collapse';

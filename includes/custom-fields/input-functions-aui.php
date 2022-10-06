@@ -1292,6 +1292,7 @@ add_filter('geodir_custom_field_input_time','geodir_cfi_time',10,2);
  * Get the html input for the custom field: address
  *
  * @global null|int $mapzoom Map zoom level.
+ * @global bool $gd_move_inline_script Move JavaScript to inline script.
  *
  * @param string $html The html to be filtered.
  * @param array $cf The custom field array details.
@@ -1300,7 +1301,7 @@ add_filter('geodir_custom_field_input_time','geodir_cfi_time',10,2);
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_address( $html, $cf ) {
-    global $mapzoom;
+    global $mapzoom, $gd_move_inline_script;
 
     $html_var = $cf['htmlvar_name'];
 
@@ -1317,14 +1318,12 @@ function geodir_cfi_address( $html, $cf ) {
     }
 
     // If no html then we run the standard output.
-    if(empty($html)) {
+    if ( empty( $html ) ) {
+        global $post, $gd_post, $geodirectory, $geodir_label_type;
 
-        global $post,$gd_post,$geodirectory,$geodir_label_type;
-
-        if(empty($gd_post)){
-            $gd_post = geodir_get_post_info($post->ID);
+        if ( empty( $gd_post ) ) {
+            $gd_post = geodir_get_post_info( $post->ID );
         }
-
 
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
@@ -1518,12 +1517,20 @@ function geodir_cfi_address( $html, $cf ) {
         } ?>
 
         <?php  if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
-
             <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details"<?php echo geodir_conditional_field_attrs( $cf, 'map', 'fieldset' ); ?>>
                 <?php
                 if ( geodir_core_multi_city() ) {
                     add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
                 }
+
+				/**
+				 * Move add listing JavaScript to inline script.
+				 *
+				 * @since 2.2.14
+				 *
+				 * @param bool $gd_move_inline_script Whether to move inline .
+				 */
+				$gd_move_inline_script = apply_filters( 'geodir_add_listing_move_inline_script', ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) );
 
                 /**
                  * Contains add listing page map functions.
@@ -1648,8 +1655,6 @@ function geodir_cfi_address( $html, $cf ) {
     return $html;
 }
 add_filter('geodir_custom_field_input_address','geodir_cfi_address',10,2);
-
-
 
 /**
  * Get the html input for the custom field: taxonomy

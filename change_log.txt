@@ -4,6 +4,7 @@
 * Business Hours preview in GD Listings block looks broken - FIXED
 * Classifieds feature post notification is not translatable - FIXED
 * SD and AUI packages updated to latest - UPDATED
+* Add Listing page shows JS error on block theme - FIXED
 
 = 2.2.13 =
 * During import it don't deletes previous attachment when adding the new attachment - FIXED

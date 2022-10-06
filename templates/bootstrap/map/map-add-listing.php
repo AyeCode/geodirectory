@@ -20,7 +20,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-global $mapzoom, $geodir_manual_map, $geodir_label_type;
+global $mapzoom, $geodir_manual_map, $geodir_label_type, $gd_move_inline_script;
 
 /**
  * Filter the map restriction for specific address only
@@ -69,15 +69,17 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
 $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
 $marker_icon = GeoDir_Maps::default_marker_icon( true );
 $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
-?>
+
+if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 <script type="text/javascript">
     /* <![CDATA[ */
-    <?php
+<?php
+}
 	/**
 	 * Fires at the start of the add javascript on the add listings map.
 	 *
 	 * @since 1.0.0
-     * @param string $prefix The prefix for all elements.
+	 * @param string $prefix The prefix for all elements.
 	 */
 	do_action('geodir_add_listing_js_start', $prefix);
 	?>
@@ -158,7 +160,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             // get the proper response as sometimes the GPS results will return names in English when they should not.
             responses.forEach(function(response) {
                 if(response.types[0] == "locality"){
-
                     for (var i = 0; i < response.address_components.length; i++) {
                         var addr = response.address_components[i];
                         if (addr.types[0] == 'administrative_area_level_1') {
@@ -318,7 +319,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 
             //$country_arr = ["US", "CA", "IN","DE","NL"];
             // fix for regions in GB
-
             $country_arr = <?php
             /**
              * Filter the regions array that uses administrative_area_level_2 instead of administrative_area_level_1.
@@ -399,7 +399,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     getCity = administrative_area_level_1.long_name;
                 }
             }else if(rr=="FR") {
-
                 if (administrative_area_level_2.long_name=='Paris') {
                     getCity = administrative_area_level_2.long_name;
                 }else{
@@ -939,12 +938,14 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
 		<?php if ( geodir_lazy_load_map() ) { ?>
 		}
 	});<?php } ?>
-    });
-    <?php }?>
+});
+<?php } 
+	if ( ! empty( $gd_move_inline_script ) ) { 
+		$inline_script = ob_get_clean(); wp_add_inline_script( 'geodir-add-listing', trim( $inline_script ) ); 
+	} else { ?>
     /* ]]> */
 </script>
-
-<?php if(!wp_doing_ajax()){?>
+<?php } if ( ! wp_doing_ajax() ) { ?>
 <div class="form-group <?php if($geodir_label_type=='horizontal'){ echo "row";}?>">
     <?php if($geodir_label_type=='horizontal'  ){ ?>
     <div class="col-sm-2 col-form-label"></div>
