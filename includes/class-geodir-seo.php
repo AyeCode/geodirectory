@@ -675,6 +675,16 @@ class GeoDir_SEO {
 			$string     = str_replace( "%%postcount%%", $postcount, $string );
 		}
 
+		// Replace _post_images & _featured_image.
+		if ( ( strpos( $string, '%%_featured_image%%' ) !== false || strpos( $string, '%%_post_images%%' ) !== false ) && ! empty( $gd_post->ID ) ) {
+			$post_image = geodir_get_images( (int) $gd_post->ID, 1, false, 0, array( 'post_images' ), array( 'post_images' ) );
+
+			$post_image_src = ! empty( $post_image ) && ! empty( $post_image[0] ) ? geodir_get_image_src( $post_image[0], 'original' ) : '';
+
+			$string = str_replace( "%%_featured_image%%", $post_image_src, $string );
+			$string = str_replace( "%%_post_images%%", $post_image_src, $string );
+		}
+
 		// let custom fields be used
 		if ( strpos( $string, '%%_' ) !== false ) {
 			$address_fields = geodir_post_meta_address_fields( $post_type );

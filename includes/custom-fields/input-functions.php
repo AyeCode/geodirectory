@@ -1055,6 +1055,7 @@ add_filter('geodir_custom_field_input_time','geodir_cfi_time',10,2);
  * Get the html input for the custom field: address
  *
  * @global null|int $mapzoom Map zoom level.
+ * @global bool $gd_move_inline_script Move JavaScript to inline script.
  *
  * @param string $html The html to be filtered.
  * @param array $cf The custom field array details.
@@ -1063,7 +1064,7 @@ add_filter('geodir_custom_field_input_time','geodir_cfi_time',10,2);
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_address( $html, $cf ) {
-    global $mapzoom;
+    global $mapzoom, $gd_move_inline_script;
 
     $html_var = $cf['htmlvar_name'];
 
@@ -1080,15 +1081,13 @@ function geodir_cfi_address( $html, $cf ) {
     }
 
     // If no html then we run the standard output.
-    if(empty($html)) {
+    if ( empty( $html ) ) {
+        global $post, $gd_post, $geodirectory;
 
-        global $post,$gd_post,$geodirectory;
-
-        if(empty($gd_post)){
-            $gd_post = geodir_get_post_info($post->ID);
+        if ( empty( $gd_post ) ) {
+            $gd_post = geodir_get_post_info( $post->ID );
         }
-//echo '###';
-        //print_r($gd_post);
+
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
         $name = $cf['name'];
@@ -1197,9 +1196,7 @@ function geodir_cfi_address( $html, $cf ) {
                 <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
             <?php } ?>
         </div>
-        
         <?php
-
         if (isset($extra_fields['show_street2']) && $extra_fields['show_street2']) { ?>
             <div id="geodir_<?php echo $prefix . 'street2'; ?>_row"
                  class="geodir_form_row clearfix gd-fieldset-details">
@@ -1230,21 +1227,27 @@ function geodir_cfi_address( $html, $cf ) {
                 <label for="<?php echo esc_attr( $prefix . 'zip' ); ?>">
                     <?php _e($zip_title, 'geodirectory'); ?> <?php echo ( ! empty( $extra_fields['zip_required'] ) ? '<span>*</span>' : '' ); ?>
                 </label>
-                <input type="text" field_type="<?php echo $type; ?>" name="<?php echo 'zip'; ?>"
-                       id="<?php echo $prefix . 'zip'; ?>" class="geodir_textfield autofill"
-                       value="<?php echo esc_attr(stripslashes($zip)); ?>"/>
+                <input type="text" field_type="<?php echo $type; ?>" name="<?php echo 'zip'; ?>" id="<?php echo $prefix . 'zip'; ?>" class="geodir_textfield autofill" value="<?php echo esc_attr(stripslashes($zip)); ?>"/>
                 <span class="geodir_message_note"><?php echo sprintf( __('Please enter listing %s', 'geodirectory'), __($zip_title, 'geodirectory') );?></span>
                 <?php echo ( ! empty( $extra_fields['zip_required'] ) ? '<span class="geodir_message_error">' . __( 'Zip/Post Code is required!', 'geodirectory' ) . '</span>' : '' ); ?>
             </div>
         <?php } ?>
 
         <?php  if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
-
             <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
                 <?php
                 if ( geodir_core_multi_city() ) {
                     add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
                 }
+
+				/**
+				 * Move add listing JavaScript to inline script.
+				 *
+				 * @since 2.2.14
+				 *
+				 * @param bool $gd_move_inline_script Whether to move inline .
+				 */
+				$gd_move_inline_script = apply_filters( 'geodir_add_listing_move_inline_script', ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) );
 
                 /**
                  * Contains add listing page map functions.
@@ -1268,12 +1271,7 @@ function geodir_cfi_address( $html, $cf ) {
                     <?php _e( 'Address Latitude', 'geodirectory' ); ?>
                     <?php if ($is_required) echo '<span>*</span>'; ?>
                 </label>
-                <input type="number" field_type="<?php echo $type; ?>" name="<?php echo 'latitude'; ?>"
-                       id="<?php echo $prefix . 'latitude'; ?>" class="geodir_textfield"
-                       value="<?php echo esc_attr(stripslashes($lat)); ?>" size="25"
-                       min="-90" max="90" step="any" lang='EN'
-
-                />
+                <input type="number" field_type="<?php echo $type; ?>" name="<?php echo 'latitude'; ?>" id="<?php echo $prefix . 'latitude'; ?>" class="geodir_textfield" value="<?php echo esc_attr(stripslashes($lat)); ?>" size="25" min="-90" max="90" step="any" lang='EN' />
                 <span class="geodir_message_note"><?php _e( 'Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory' ); ?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
@@ -1301,7 +1299,6 @@ function geodir_cfi_address( $html, $cf ) {
         <?php if (isset($extra_fields['show_mapview']) && $extra_fields['show_mapview']) { ?>
             <div id="geodir_<?php echo $prefix . 'mapview'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
                 <label for="<?php echo esc_attr( $prefix . 'mapview' ); ?>"><?php _e($mapview_title, 'geodirectory'); ?></label>
-
                 <select  name="<?php echo 'mapview'; ?>" id="<?php echo $prefix . 'mapview'; ?>" class="geodir-select">
                     <?php
                     $mapview_options = array(
@@ -1331,8 +1328,6 @@ function geodir_cfi_address( $html, $cf ) {
     return $html;
 }
 add_filter('geodir_custom_field_input_address','geodir_cfi_address',10,2);
-
-
 
 /**
  * Get the html input for the custom field: taxonomy
