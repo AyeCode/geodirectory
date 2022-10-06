@@ -310,7 +310,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                 'content'=> __("This is a simple preview for the add listing form.","geodirectory")
             )
         );
-        
+
         $output .= aui()->input(
             array(
                 'name'              => 'demo-title',

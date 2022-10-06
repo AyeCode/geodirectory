@@ -1,5 +1,6 @@
 = 2.2.14 =
 * Use WP function to avoid php compatibility issue - ADDED
+* SD and AUI packages updated to latest - UPDATED
 
 = 2.2.13 =
 * During import it don't deletes previous attachment when adding the new attachment - FIXED
