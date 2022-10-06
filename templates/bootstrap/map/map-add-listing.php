@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.10
+ * @version    2.2.14
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -134,6 +134,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             var getCity = '';
             var getState = '';
             var getCountry = '';
+            var baseCountry = '';
 
             getCountryISO = '';
 
@@ -187,9 +188,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     }
                 }
             });
-
-
-
 
             for (var i = 0; i < responses[0].address_components.length; i++) {
                 var addr = responses[0].address_components[i];
@@ -317,6 +315,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if (country.short_name) {
                 rr = country.short_name;
             }
+
             //$country_arr = ["US", "CA", "IN","DE","NL"];
             // fix for regions in GB
 
@@ -358,6 +357,11 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 getState = "Singapore";
             } else if(getCountryISO == 'GR' && !getState && administrative_area_level_3.long_name) {
                 getState = administrative_area_level_3.long_name;
+            }
+
+            /* Fix region name for ‎Belgium */
+            if (getState == 'Brussels Hoofdstedelijk Gewest') {
+                getState = 'Brussels';
             }
 
             //getCity
@@ -432,6 +436,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if (country.long_name) {
                 getCountry = country.long_name;
             }
+<?php if ( geodir_split_uk() ) { ?> if (getCountryISO=='GB' && administrative_area_level_1.long_name && jQuery.inArray(administrative_area_level_1.long_name, ["England", "Northern Ireland", "Scotland", "Wales"]) !== -1){ baseCountry = getCountry; getCountry = administrative_area_level_1.long_name; } <?php } ?>
             //getZip
             if (postal_code.long_name) {
                 getZip = postal_code.long_name;
@@ -473,7 +478,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 setTimeout(function(){jQuery('#address_street,#address_zip').val('');}, 100);
             }
             <?php } ?>
-            updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2);
+            updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2, baseCountry);
         } else {
             <?php
             /**
@@ -516,7 +521,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         jQuery('#<?php echo $prefix.'latitude';?>').val(markerlatLng.lat).trigger('change');
         jQuery('#<?php echo $prefix.'longitude';?>').val(markerlatLng.lng).trigger('change');
     }
-    function updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2) {
+    function updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2, baseCountry) {
         var set_map_val_in_fields = '<?php echo addslashes_gpc($auto_change_map_fields);?>';
         <?php ob_start();?>
         var old_country = jQuery("#<?php echo $prefix.'country';?>").val();
@@ -549,7 +554,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         }
         if (set_map_val_in_fields) {
             if (getCountry) {
-               setCountry = jQuery('#<?php echo $prefix . 'country'; ?> option[data-country_code="' + getCountryISO + '"]').val();
+               setCountry = !baseCountry && jQuery('#<?php echo $prefix . 'country'; ?> option[data-country_code="' + getCountryISO + '"]').val();
                if (!setCountry) {
                    setCountry = getCountry;
                } else {
@@ -592,16 +597,14 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         }
         if(!ISO2){
             <?php
-            if(!defined('GEODIRLOCATION_TEXTDOMAIN')){
-                global $wpdb;
+            if ( ! defined( 'GEODIRLOCATION_TEXTDOMAIN' ) ) {
                 $location_result = $geodirectory->location->get_default_location();
-                if(!empty($location_result)){
-                    $ISO2 = wp_country_database()->get_country_iso2($location_result->country);
+
+                if ( ! empty( $location_result ) ) {
+                    $ISO2 = $geodirectory->location->get_country_iso2( $location_result->country );
                     echo "ISO2 = '$ISO2';";
                 }
             }
-
-
             ?>
         }
         if (ISO2 == '--') {
@@ -745,13 +748,16 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             var getCity = response.city;
             var getState = response.state;
             var getCountry = response.country;
+            var baseCountry = '';
             getCountryISO = response.country_code;
+<?php if ( geodir_split_uk() ) { ?> if (response.gb_country && jQuery.inArray(response.gb_country, ["England", "Northern Ireland", "Scotland", "Wales"]) !== -1){ baseCountry = getCountry; getCountry = response.gb_country; } <?php } ?>
 
 			// small US cities fix
 			if(!response.address.city && response.address.village){
 				getCity = response.address.village;
 			}
 
+            console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
             if (updateMap && response.lat && response.lon) {
                 var newLatLng = new L.latLng(response.lat, response.lon);
                 baseMarker.setLatLng(newLatLng);
@@ -776,7 +782,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 geocodePositionOSM(baseMarker.getLatLng());
             }
             <?php } ?>
-            updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry,getAddress2);
+            updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry,getAddress2, baseCountry);
         } else {
             <?php
             /**

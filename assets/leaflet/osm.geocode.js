@@ -357,6 +357,12 @@ function gd_osm_parse_item(item) {
         }
 
         if (address.country_code == 'gb') {
+            if (address.state) {
+                item.gb_country = address.state;
+                if (geodir_params.splitUK) {
+                    formated = gd_osm_parse_name(formated, item.gb_country);
+                }
+            }
             if (address.county) {
                 address.state = address.county;
             } else if (address.state_district) {
@@ -399,7 +405,9 @@ function gd_osm_parse_item(item) {
             item.city = address.town;
             formated = gd_osm_parse_name(formated, address.town);
         }
-        
+        if (address.country_code == 'gb' && item.city) {
+            item.city = item.city.replace("City of ", ""); 
+        }
         if (address.country_code) {
             item.country_code = address.country_code.toUpperCase();
         }

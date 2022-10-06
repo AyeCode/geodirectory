@@ -381,6 +381,7 @@ function geodir_params() {
 		'button_set'                                   => __( 'Set', 'geodirectory' ),
 		'BH_altTimeFormat'                             => geodir_bh_input_time_format( true ),
 		'basic_nonce'                                  => wp_create_nonce( 'geodir_basic_nonce' ),
+		'splitUK'                                      => geodir_split_uk() ? 1 : 0,
 		'time_ago'                                     => array(
 			'prefix_ago' => '',
 			'suffix_ago' => ' ' . _x( 'ago', 'time ago', 'geodirectory' ),

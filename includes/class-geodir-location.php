@@ -228,10 +228,14 @@ class GeoDir_Location {
 	 * @param string $country The country name.
 	 * @return string Country ISO2 code.
 	 */
-	function get_country_iso2($country) {
+	function get_country_iso2( $country ) {
 		global $wp_country_database;
 
-		if ($result = $wp_country_database->get_country_iso2($country)) {
+		if ( in_array( strtolower( $country ), array( "england", "northern ireland", "scotland", "wales" ) ) ) {
+			$country = 'United Kingdom';
+		}
+
+		if ( $result = $wp_country_database->get_country_iso2( $country ) ) {
 			return $result;
 		}
 
@@ -246,16 +250,19 @@ class GeoDir_Location {
 	 * @param string $country The country name.
 	 * @return string Country ISO2 code.
 	 */
-	function get_country_iso3($country) {
+	function get_country_iso3( $country ) {
 		global $wp_country_database;
 
-		if ($result = $wp_country_database->get_country_iso3($country)) {
+		if ( in_array( strtolower( $country ), array( "england", "northern ireland", "scotland", "wales" ) ) ) {
+			$country = 'United Kingdom';
+		}
+
+		if ( $result = $wp_country_database->get_country_iso3( $country ) ) {
 			return $result;
 		}
 
 		return $country;
 	}
-
 
 	/**
 	 * Get the lat and lon from the query var

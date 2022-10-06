@@ -359,7 +359,6 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			$output = geodir_field_output_process( $view );
 
 			$html = '<div class="geodir_post_meta  geodir-field-preview">';
-
 			if ( $output == '' || isset( $output['icon'] ) ) {
 				$html .= '<span class="geodir_post_meta_placeholder" >' . $icon;
 			}
@@ -372,8 +371,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			if ( $output == '' || isset( $output['value'] ) ) {
 				$html .= $value;
 			}
-
-
+			$html .= '</div>';
 		}
 
 		return $html;

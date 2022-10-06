@@ -20,7 +20,7 @@ function geodir_register_classified_statuses() {
 			'show_in_admin_all_list'    => true,
 			'show_in_admin_status_list' => true,
 			'label_count'               => _n_noop( 'Sale Agreed <span class="count">(%s)</span>', 'Sale Agreed <span class="count">(%s)</span>', 'geodirectory' ),
-			'notification'              => 'The sale of this %s has been agreed and is being finalized.',
+			'notification'              => __( 'The sale of this %s has been agreed and is being finalized.', 'geodirectory' ),
 			'icon'                      => 'fas fa-lock'
 		),
 		'gd-under-offer' => array(
@@ -30,7 +30,7 @@ function geodir_register_classified_statuses() {
 			'show_in_admin_all_list'    => true,
 			'show_in_admin_status_list' => true,
 			'label_count'               => _n_noop( 'Under Offer <span class="count">(%s)</span>', 'Under Offer <span class="count">(%s)</span>', 'geodirectory' ),
-			'notification'              => 'An Offer has been made on this %s and is being considered.',
+			'notification'              => __( 'An Offer has been made on this %s and is being considered.', 'geodirectory' ),
 			'icon'                      => 'fas fa-lock'
 		),
 		'gd-sold' => array(
@@ -40,7 +40,7 @@ function geodir_register_classified_statuses() {
 			'show_in_admin_all_list'    => true,
 			'show_in_admin_status_list' => true,
 			'label_count'               => _n_noop( 'Sold <span class="count">(%s)</span>', 'Sold <span class="count">(%s)</span>', 'geodirectory' ),
-			'notification'              => 'This %s has sold and is no longer available for purchase.',
+			'notification'              => __( 'This %s has sold and is no longer available for purchase.', 'geodirectory' ),
 			'icon'                      => 'fas fa-lock'
 		)
 	);

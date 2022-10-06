@@ -444,6 +444,10 @@ __('Uganda', 'geodirectory');
 __('Ukraine', 'geodirectory');
 __('United Arab Emirates', 'geodirectory');
 __('United Kingdom', 'geodirectory');
+__('England', 'geodirectory');
+__('Northern Ireland', 'geodirectory');
+__('Scotland', 'geodirectory');
+__('Wales', 'geodirectory');
 __('United States', 'geodirectory');
 __('United States Minor Outlying Islands', 'geodirectory');
 __('Uruguay', 'geodirectory');
@@ -452,8 +456,6 @@ __('Vanuatu', 'geodirectory');
 __('Venezuela', 'geodirectory');
 __('Vietnam', 'geodirectory');
 __('Virgin Islands', 'geodirectory');
-//__('Virgin Islands (UK)','geodirectory'); // duplicate removed
-//__('Virgin Islands (US)','geodirectory'); // duplicate removed
 __('Wake Island', 'geodirectory');
 __('Wallis and Futuna', 'geodirectory');
 __('West Bank', 'geodirectory');

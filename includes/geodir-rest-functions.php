@@ -200,33 +200,30 @@ function geodir_rest_check_manager_permissions( $object, $context = 'read' ) {
  * @todo kiran, please check this, i implemented new country class
  */
 function geodir_rest_get_countries( $params = array() ) {
-    global $wpdb;
-    
-    $defaults = array(
-	    'fields'        => array(),
-	    'where'        => array(),
-	    'like'        => array(),
-        'translated'    => true,
-        'order'         => 'name',
-        'orderby'       => 'ASC',
-		'limit'			=> '' // All
-    );
-    
-    $args = wp_parse_args( $params, $defaults );
-	
-	$items = wp_country_database()->get_countries($args);
+	$defaults = array(
+		'fields'       => array(),
+		'where'        => array(),
+		'like'         => array(),
+		'translated'   => true,
+		'order'        => 'name',
+		'orderby'      => 'ASC',
+		'limit'        => '' // All
+	);
 
-    if ( empty( $args['translated'] ) ) {
-        return $items;
-    }
-    
-    if ( !empty( $items ) ) {
-        foreach ( $items as $key => $item ) {
-            $items[ $key ]->title = __( $item->name, 'geodirectory' ); // translate
-        }
-    }
-    
-    return $items;
+	$args = wp_parse_args( $params, $defaults );
+	$items = geodir_wp_countries( $args );
+
+	if ( empty( $args['translated'] ) ) {
+		return $items;
+	}
+
+	if ( ! empty( $items ) ) {
+		foreach ( $items as $key => $item ) {
+			$items[ $key ]->title = __( $item->name, 'geodirectory' ); // translate
+		}
+	}
+
+	return $items;
 }
 
 /**

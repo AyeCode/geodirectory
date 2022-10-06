@@ -28,7 +28,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 		add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 		add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
-//		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
 		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 		add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
 	}
@@ -92,7 +91,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 		}
 	}
 
-
 	/**
 	 * Save settings.
 	 */
@@ -102,7 +100,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 		$settings = $this->get_settings( $current_section );
 		GeoDir_Admin_Settings::save_fields( $settings );
 
-		// Check & copy / remove Faxt AJAX mu-plugin.
+		// Check & copy / remove Fast AJAX mu-plugin.
 		if ( $current_section == 'developer' && isset( $_REQUEST['fast_ajax'] ) ) {
 			$response = geodir_check_fast_ajax_file( ! empty( $_REQUEST['fast_ajax'] ) );
 
@@ -203,8 +201,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc_tip' => false,
 					'default' => 'bootstrap',
 				),
-
-
 				array( 'type' => 'sectionend', 'id' => 'developer_options' ),
 			));
 		}elseif ( 'uninstall' == $current_section ) {
@@ -220,22 +216,15 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'title' => __( 'Uninstall Settings', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => '<b>' . __( 'NOTE: Addons should be deleted before core to ensure complete uninstall.', 'geodirectory' ) . '</b>',
-					'id'    => 'uninstall_options',
-					//'desc_tip' => true,
+					'id'    => 'uninstall_options'
 				),
 
 				array(
 					'name'     => __( 'Remove Data on Uninstall?', 'geodirectory' ),
 					'desc'     => __( 'Check this box if you would like GeoDirectory to completely remove all of its data when the plugin is deleted.', 'geodirectory' ),
 					'id'       => 'admin_uninstall',
-					'type'     => 'checkbox',
-					//'desc_tip' => true,
-					//'advanced' => true
+					'type'     => 'checkbox'
 				),
-
-
-
-
 				array( 'type' => 'sectionend', 'id' => 'uninstall_options' ),
 			));
 		}
@@ -252,8 +241,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'title' => __( 'Dummy data installer', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => '*Hint*: Installing our Advanced Search addon FIRST will add extra search fields to non-default data types.',
-					'id'    => 'dummy_data',
-					//'desc_tip' => true,
+					'id'    => 'dummy_data'
 				),
 
 				array(
@@ -264,9 +252,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'css' => 'min-width:300px;',
 					'std' => '40'
 				),
-
-
-
 				array( 'type' => 'sectionend', 'id' => 'dummy_data' ),
 			));
 		}
@@ -364,10 +349,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc_tip' => true,
 					'default_content' => GeoDir_Defaults::page_archive_item_content( false, $gutenberg ),
 				),
-
-
-
-
 
 				array( 'type' => 'sectionend', 'id' => 'page_template_options' ),
 			));
@@ -589,7 +570,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 				array( 'type' => 'sectionend', 'id' => 'seo_location' ),
 
-
 				// search page
 				array(
 					'title' => __( 'Search page', 'geodirectory' ),
@@ -683,11 +663,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				array( 'type' => 'sectionend', 'id' => 'seo_add_listing' ),
-
-
-
-
-
 			));
 		}
 
@@ -735,7 +710,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'default'  => '',
 					'advanced' => true
 				),
-
 
 				array( 'type' => 'sectionend', 'id' => 'search_options' ),
 
@@ -815,8 +789,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				array( 'type' => 'sectionend', 'id' => 'search_results_options' ),
-
-
 			));
 		}
 		else if ( 'location' == $current_section ) {
@@ -831,8 +803,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'title' => __( 'Set default location', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => 'Drag the map or the marker to set the city/town you wish to use as the default location, then click save changes.',
-					'id'    => 'default_location',
-					//'desc_tip' => true,
+					'id'    => 'default_location'
 				),
 
 				array(
@@ -866,7 +837,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'class'      => 'geodir-select',
 					'default'  => 'United States',
 					'options'    => geodir_get_countries()
-
 				),
 
 				array(
@@ -963,11 +933,8 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type'       => 'multiselect',
 					'class'      => 'geodir-select',
 					'options'    => geodir_user_roles(array('administrator')),
-					'desc_tip'   => true,
-					//'docs'       => "https://docs.wpgeodirectory.com/",
-					//'advanced' => true
+					'desc_tip'   => true
 				),
-
 
 				array( 'type' => 'sectionend', 'id' => 'general_options' ),
 
@@ -978,14 +945,12 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'    => 'general_options_add'
 				),
 
-
 				array(
 					'name' => __( 'User deleted posts', 'geodirectory' ),
 					'desc' => __( 'If checked a user deleted post will go to trash, otherwise it will be permanently deleted', 'geodirectory' ),
 					'id'   => 'user_trash_posts',
 					'type' => 'checkbox',
-					'default'  => '1',
-					//'docs'       => "https://docs.wpgeodirectory.com/",
+					'default'  => '1'
 
 				),
 				array(
@@ -994,14 +959,12 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'         => 'default_status',
 					'default'    => 'pending',
 					'type'       => 'select',
-//					'class'      => 'geodir-select',
 					'options' => array_unique(array(
 						'pending' => __('Pending Review', 'geodirectory'),
 						'publish' => __('Publish', 'geodirectory'),
 
 					)),
-					'desc_tip' => true,
-					//'advanced' => true
+					'desc_tip' => true
 				),
 				array(
 					'name' => __( 'Allow posting without logging in?', 'geodirectory' ),
@@ -1076,6 +1039,16 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				array(
+					'id' => 'split_uk',
+					'type' => 'checkbox',
+					'name' => __( 'Split United Kingdom', 'geodirectory' ),
+					'desc' => __( 'Split the United Kingdom into England, Northern Ireland, Scotland & Wales. <span style="color:red;">(NOTE: If enabled then existing records will need to be updated manually or via import/export.)</span>', 'geodirectory' ),
+					'default' => '0',
+					'desc_tip' => false,
+					'advanced' => true
+				),
+
+				array(
 					'name' => __('Enable map cache', 'geodirectory'), // @todo we need to port this over from GDv1
 					'desc' => __('This will cache the map JSON for 24 hours or until a GD listing is saved.', 'geodirectory'),
 					'id' => 'map_cache',
@@ -1104,12 +1077,11 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'advanced' => true
 				),
 
-					array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
+				array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
 
 				) );/* General Options End*/
 			}
 		}
-
 
 		return apply_filters( 'geodir_get_settings_' . $this->id, $settings );
 	}
@@ -1313,8 +1285,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'zh-TW' => __('CHINESE (TRADITIONAL)', 'geodirectory'),
 		);
 	}
-
-
 }
 
 endif;
