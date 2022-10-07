@@ -35,7 +35,7 @@ class GeoDir_SEO {
 		// Maybe noindex empty archive pages.
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
 		add_filter( 'wpseo_frontend_presentation', array( __CLASS__, 'wpseo_frontend_presentation' ), 11, 2 );
-		//add_filter( 'wpseo_breadcrumb_links', array( __CLASS__, 'breadcrumb_links' ) ); // Since Yoast v16.2 causes error in breadcrumb schema.
+		add_filter( 'wpseo_breadcrumb_links', array( __CLASS__, 'breadcrumb_links' ) ); // Since Yoast v16.2 causes error in breadcrumb schema.
 		add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
 		add_filter( 'get_post_metadata', array( __CLASS__, 'filter_post_metadata' ), 99, 5 );
 		add_filter( 'rank_math/frontend/breadcrumb/settings', array( __CLASS__, 'rank_math_frontend_breadcrumb_settings' ), 20, 1 );
@@ -831,33 +831,37 @@ class GeoDir_SEO {
 	 *
 	 * @return mixed
 	 */
-    public static function breadcrumb_links($crumbs){
+	public static function breadcrumb_links( $crumbs ) {
+		global $gd_post;
 
-	    // maybe add category link to single page
+		if ( ! empty( $crumbs ) && ! empty( $gd_post->default_category ) && geodir_is_page( 'single' ) ) {
+			$term = get_term( (int) $gd_post->default_category, $gd_post->post_type . 'category' );
+			$term_added = false;
 
-        if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
-	        global $wp_query;
-	        $breadcrumb = array();
-	        $post_type   = geodir_get_current_posttype();
-	        $category = !empty($wp_query->query_vars[$post_type."category"]) ? $wp_query->query_vars[$post_type."category"] : '';
-	        if($category){
-		        $term  = get_term_by( 'slug', $category, $post_type."category");
-		        if(!empty($term)){
-			        $breadcrumb[]['term'] = $term;
-		        }
-	        }
+			$_crumbs = array();
 
-	        $offset = apply_filters('wpseo_breadcrumb_links_offset', 2, $breadcrumb, $crumbs);
-	        $length = apply_filters('wpseo_breadcrumb_links_length', 0, $breadcrumb, $crumbs);
+			if ( ! empty( $term->term_id ) ) {
+				foreach ( $crumbs as $key => $crumb ) {
+					if ( ! empty( $crumb['term_id'] ) ) {
+						if ( ! $term_added ) {
+							$_crumbs[] = array(
+								'url' => get_term_link( $term->term_id, $term->taxonomy ),
+								'text' => $term->name,
+								'term_id' => $term->term_id
+							);
+							$term_added = true;
+						}
+					} else {
+						$_crumbs[] = $crumb;
+					}
+				}
 
-	        if(!empty($breadcrumb) && count($breadcrumb) > 0 ){
-		        array_splice( $crumbs, $offset, $length, $breadcrumb );
-	        }
+				$crumbs = $_crumbs;
+			}
+		}
 
-        }
-
-        return $crumbs;
-    }
+		return $crumbs;
+	}
 
 	/**
 	 * Filter Rank Math breadcrumbs settings to hide ancestors.
