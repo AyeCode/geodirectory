@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
+	define( 'SUPER_DUPER_VER', '1.1.4' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -17,7 +18,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.1.1";
+		public $version = SUPER_DUPER_VER;
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1159,11 +1160,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				/**
 				 * Initialise a individual widget.
 				 */
-				function sd_init_widget($this, $selector) {
+				function sd_init_widget($this, $selector, $form) {
 					if (!$selector) {
 						$selector = 'form';
 					}
-					// only run once.
+					// Only run once.
 					if (jQuery($this).data('sd-widget-enabled')) {
 						return;
 					} else {
@@ -1171,28 +1172,25 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 
 					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" style="line-height: 28px;" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><span class="dashicons dashicons-admin-settings" style="width: 28px;font-size: 28px;"></span></button>';
-					var form = jQuery($this).parents('' + $selector + '');
+					var form = $form ? $form : jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
 						console.log('add advanced button');
-						if(jQuery(form).find('.widget-control-save').length > 0){
+						if (jQuery(form).find('.widget-control-save').length > 0) {
 							jQuery(form).find('.widget-control-save').after($button);
-						}else{
+						} else {
 							jQuery(form).find('.sd-show-advanced').after($button);
 						}
 					} else {
-						console.log('no advanced button');
-						console.log(jQuery($this).val());
-						console.log(jQuery(form).find('.sd-advanced-button').length);
-
+						console.log('no advanced button, ' + jQuery($this).val() + ', ' + jQuery(form).find('.sd-advanced-button').length);
 					}
 
-					// show hide on form change
-					jQuery(form).on("change", function () {
+					/* Show hide on form change */
+					jQuery(form).on("change", function() {
 						sd_show_hide(form);
 					});
 
-					// show hide on load
+					/* Show hide on load */
 					sd_show_hide(form);
 				}
 
@@ -1222,29 +1220,28 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						sd_init_widgets("form");
 					}
 
-					// init on widget added
+					/* Init on widget added */
 					jQuery(document).on('widget-added', function (e, widget) {
-						console.log('widget added');
-						// is it a SD widget?
+						/* Is it a SD widget? */
 						if (jQuery(widget).find('.sd-show-advanced').length) {
-							// init the widget
-							sd_init_widget(jQuery(widget).find('.sd-show-advanced'), "form");
+							var widgetId = jQuery(widget).find('[name="widget-id"]').length ? ': ' + jQuery(widget).find('[name="widget-id"]').val() : '';
+							console.log('widget added' + widgetId);
+							/* Init the widget */
+							sd_init_widget(jQuery(widget).find('.sd-show-advanced'), "form", jQuery(widget).find('.sd-show-advanced').closest('form'));
 						}
 					});
 
-					// init on widget updated
+					/* Init on widget updated */
 					jQuery(document).on('widget-updated', function (e, widget) {
-						console.log('widget updated');
-
-						// is it a SD widget?
+						/* Is it a SD widget? */
 						if (jQuery(widget).find('.sd-show-advanced').length) {
-							// init the widget
-							sd_init_widget(jQuery(widget).find('.sd-show-advanced'), "form");
+							var widgetId = jQuery(widget).find('[name="widget-id"]').length ? ': ' + jQuery(widget).find('[name="widget-id"]').val() : '';
+							console.log('widget updated' + widgetId);
+							/* Init the widget */
+							sd_init_widget(jQuery(widget).find('.sd-show-advanced'), "form", jQuery(widget).find('.sd-show-advanced').closest('form'));
 						}
 					});
-
 				});
-
 
 				/**
 				 * We need to run this before jQuery is ready
@@ -2054,15 +2051,30 @@ new MutationObserver(() => {
 				// bgtus - background transparent until scroll
                 if ( $args['bgtus'] !== undefined && $args['bgtus'] ) { $classes.push("bg-transparent-until-scroll"); }
 
+				// hover animations
+                if ( $args['hover_animations'] !== undefined && $args['hover_animations'] ) { $classes.push($args['hover_animations'].replace(',',' ')); }
 
 				// build classes from build keys
 				$build_keys = sd_get_class_build_keys();
 				if ( $build_keys.length ) {
 					$build_keys.forEach($key => {
-						if ( $key == 'font_size' && $args[ $key ] == 'custom' ) {
+
+						if($key.endsWith("-MTD")){
+
+							$k = $key.replace("-MTD","");
+
+							// Mobile, Tablet, Desktop
+							if ( $args[$k] !== undefined && $args[$k] !== '' ) { $classes.push( $args[$k] );  $v = $args[$k]; }else{$v = null;}
+							if ( $args[$k + '_md'] !== undefined && $args[$k + '_md'] !== '' ) { $classes.push( $args[$k + '_md'] );  $v_md = $args[$k + '_md']; }else{$v_md = null;}
+							if ( $args[$k + '_lg'] !== undefined && $args[$k + '_lg'] !== '' ) { if($v == null && $v_md == null){ $classes.push( $args[$k + '_lg'].replace('-lg','') ); }else{$classes.push( $args[$k + '_lg'] ); } }
+
+						}else{
+							if ( $key == 'font_size' && $args[ $key ] == 'custom' ) {
 							 return;
+							}
+							if ( $args[$key] !== undefined && $args[$key] !== '' ) { $classes.push($args[$key]); }
 						}
-						if ( $args[$key] !== undefined && $args[$key] !== '' ) { $classes.push($args[$key]); }
+
 					});
 				}
 
@@ -3328,7 +3340,7 @@ if (confirmed) {
 					}
 				}
 				if ( isset( $args['multiple'] ) && $args['multiple'] ) { //@todo multiselect does not work at the moment: https://github.com/WordPress/gutenberg/issues/5550
-					$extra .= ' multiple:true,style:{height:"auto",paddingRight:"8px"}, ';
+					$extra .= ' multiple:true,style:{height:"auto",paddingRight:"8px","overflow-y":"auto"}, ';
 				}
 			} elseif ( $args['type'] == 'tagselect' ) {
 //				$type = 'FormTokenField';
