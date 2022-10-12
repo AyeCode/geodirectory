@@ -1,5 +1,6 @@
 = 2.2.15 =
 * Yoast SEO breadcrumbs is not showing default post category - FIXED
+* Drag post images is not working on Safari browser - FIXED
 
 = 2.2.14 =
 * Use WP function to avoid php compatibility issue - ADDED

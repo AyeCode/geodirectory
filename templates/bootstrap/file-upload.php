@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.4
+ * @version    2.2.15
  *
  * @var string $id The input id string.
  * @var bool $is_required If the item is required or not.
@@ -37,7 +37,7 @@ if ( $multiple ) {
 	$file_limit_message = '';
 }
 ?>
-<div class="geodir-add-files w-100 m-0 mb-3 p-0 bg-light text-center container" style="border: 4px dashed #ccc;">
+<div class="geodir-add-files w-100 m-0 mb-3 p-0 bg-light text-center container overflow-hidden" style="border:4px dashed #ccc">
 	<div class="geodir_form_row clearfix geodir-files-dropbox position-relative p-3" id="<?php echo esc_attr( $id ); ?>dropbox" >
 		<input type="<?php echo ( ! empty( $is_required ) ? 'text' : "hidden" ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $files ); ?>" class="<?php if ( $is_required ) { echo 'gd_image_required_field'; } ?>" <?php echo ( ! empty( $extra_attributes ) ? $extra_attributes : "" ); ?>/>
 		<input type="hidden" name="<?php echo esc_attr( $id ); ?>image_limit" id="<?php echo esc_attr( $id ); ?>image_limit" value="<?php echo esc_attr( $image_limit ); ?>"/>
