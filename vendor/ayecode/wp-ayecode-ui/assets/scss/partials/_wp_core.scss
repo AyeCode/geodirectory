@@ -52,3 +52,6 @@ html[data-scroll='0'],html:not([data-scroll]){
     display: block;
   }
 }
+
+/* Fix conflicts calendar year selector */
+body>.flatpickr-calendar .flatpickr-month .flatpickr-current-month>*{display:inline-block}

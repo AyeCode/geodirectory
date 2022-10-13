@@ -1,5 +1,6 @@
 = 1.1.5 =
 * Customize > Widgets section don't show advanced settings toggle button - FIXED
+* Flex positioning helper functions - ADDED
 
 = 1.1.4 =
 * Hover animations helper functions - ADDED
