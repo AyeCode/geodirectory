@@ -232,9 +232,9 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 	} else {
 		$defaults['title']   = __( 'Border color' );
 		$defaults['options'] = array(
-			''  => __( 'Default', 'super-duper' ),
-			'0' => __( 'None', 'super-duper' ),
-		) + sd_aui_colors();
+			                       ''  => __( 'Default', 'super-duper' ),
+			                       '0' => __( 'None', 'super-duper' ),
+		                       ) + sd_aui_colors();
 	}
 
 	$input = wp_parse_args( $overwrite, $defaults );
@@ -282,9 +282,9 @@ function sd_get_shadow_input( $type = 'shadow', $overwrite = array() ) {
  */
 function sd_get_background_input( $type = 'bg', $overwrite = array() ) {
 	$options = array(
-		''            => __( 'None', 'super-duper' ),
-		'transparent' => __( 'Transparent', 'super-duper' ),
-	) + sd_aui_colors();
+		           ''            => __( 'None', 'super-duper' ),
+		           'transparent' => __( 'Transparent', 'super-duper' ),
+	           ) + sd_aui_colors();
 
 	$defaults = array(
 		'type'     => 'select',
@@ -310,13 +310,13 @@ function sd_get_background_input( $type = 'bg', $overwrite = array() ) {
  */
 function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrite_color = array(), $overwrite_gradient = array(), $overwrite_image = array() ) {
 	$options = array(
-		''            => __( 'None', 'super-duper' ),
-		'transparent' => __( 'Transparent', 'super-duper' ),
-	) + sd_aui_colors()
-			   + array(
-				   'custom-color'    => __( 'Custom Color', 'super-duper' ),
-				   'custom-gradient' => __( 'Custom Gradient', 'super-duper' ),
-			   );
+		           ''            => __( 'None', 'super-duper' ),
+		           'transparent' => __( 'Transparent', 'super-duper' ),
+	           ) + sd_aui_colors()
+	           + array(
+		           'custom-color'    => __( 'Custom Color', 'super-duper' ),
+		           'custom-gradient' => __( 'Custom Gradient', 'super-duper' ),
+	           );
 
 	$defaults = array(
 		'type'     => 'select',
@@ -392,7 +392,7 @@ function sd_get_background_inputs( $type = 'bg', $overwrite = array(), $overwrit
 				'default'     => '',
 				'desc_tip'    => true,
 				'group'       => __( 'Background', 'super-duper' ),
-			//          'element_require' => ' ![%' . $type . '_image_use_featured%] '
+				//          'element_require' => ' ![%' . $type . '_image_use_featured%] '
 			)
 		);
 
@@ -490,12 +490,12 @@ function sd_get_shape_divider_inputs( $type = 'sd', $overwrite = array(), $overw
 	);
 
 	$options = array(
-		''            => __( 'None', 'super-duper' ),
-		'transparent' => __( 'Transparent', 'super-duper' ),
-	) + sd_aui_colors()
-			   + array(
-				   'custom-color' => __( 'Custom Color', 'super-duper' ),
-			   );
+		           ''            => __( 'None', 'super-duper' ),
+		           'transparent' => __( 'Transparent', 'super-duper' ),
+	           ) + sd_aui_colors()
+	           + array(
+		           'custom-color' => __( 'Custom Color', 'super-duper' ),
+	           );
 
 	$input[ $type . '_color' ] = wp_parse_args(
 		$overwrite_color,
@@ -642,8 +642,8 @@ function sd_get_element_require_string( $args, $key, $type ) {
  */
 function sd_get_text_color_input( $type = 'text_color', $overwrite = array(), $has_custom = false ) {
 	$options = array(
-		'' => __( 'None', 'super-duper' ),
-	) + sd_aui_colors();
+		           '' => __( 'None', 'super-duper' ),
+	           ) + sd_aui_colors();
 
 	if ( $has_custom ) {
 		$options['custom'] = __( 'Custom color', 'super-duper' );
@@ -1174,6 +1174,35 @@ function sd_get_font_custom_size_input( $type = 'font_size_custom', $overwrite =
 	if ( $parent_type ) {
 		$defaults['element_require'] = '[%' . $parent_type . '%]=="custom"';
 	}
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+	return $input;
+}
+
+/**
+ * A helper function for custom font size.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function sd_get_font_line_height_input( $type = 'font_line_height', $overwrite = array() ) {
+
+	$defaults = array(
+		'type'              => 'number',
+		'title'             => __( 'Font Line Height', 'super-duper' ),
+		'default'           => '',
+		'placeholder'       => '1.75',
+		'custom_attributes' => array(
+			'step' => '0.1',
+			'min'  => '0',
+			'max'  => '100',
+		),
+		'desc_tip'          => true,
+		'group'             => __( 'Typography', 'super-duper' ),
+	);
 
 	$input = wp_parse_args( $overwrite, $defaults );
 
@@ -2025,6 +2054,11 @@ function sd_build_aui_styles( $args ) {
 	// font color
 	if ( ! empty( $args['text_color_custom'] ) && $args['text_color_custom'] !== '' ) {
 		$styles['color'] = esc_attr( $args['text_color_custom'] );
+	}
+
+	// font line height
+	if ( ! empty( $args['font_line_height'] ) && $args['font_line_height'] !== '' ) {
+		$styles['line-height'] = esc_attr( $args['font_line_height'] );
 	}
 
 	$style_string = '';

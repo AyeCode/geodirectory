@@ -31,7 +31,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'block-keywords' => "['geo','google','map']",
 			'block-output'   => array(
 				array(
-					'element' => 'div',
+					'element'	=> 'BlocksProps',
+					'inner_element' => 'div',
 					'class'   => 'bsui',
 					'style'   => '{overflow: "hidden",height: \'[%height%]\'}',
 					array(
@@ -350,7 +351,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		if ( $design_style ) {
 			// background
 			$arguments['bg']  = geodir_get_sd_background_input('mt');
-			
+
 			// margins
 			$arguments['mt']  = geodir_get_sd_margin_input('mt');
 			$arguments['mr']  = geodir_get_sd_margin_input('mr');
@@ -680,7 +681,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 					'map_post_types'  => $map_post_types,
 				);
 				echo geodir_get_template_html( $template, $args );
-				
+
 			}
 		}
 	}
@@ -1166,7 +1167,7 @@ jQuery(function ($) {
 			'extra_attribs' => $map_canvas_attribs
 		);
 		echo geodir_get_template_html( $template, $args );
-		
+
 	}
 
 	/**
