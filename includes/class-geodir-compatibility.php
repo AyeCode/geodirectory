@@ -207,6 +207,11 @@ class GeoDir_Compatibility {
 
 		// Register scripts on block theme.
 		add_action( 'wp_super_duper_widget_init', array( __CLASS__, 'block_theme_load_scripts' ), 5, 2 );
+
+		// Astra Pro
+		if ( defined( 'ASTRA_EXT_VER' ) ) {
+			add_filter( 'post_class', array( __CLASS__, 'astra_pro_post_class' ), 99, 3 );
+		}
 	}
 
 	/**
@@ -1114,21 +1119,19 @@ class GeoDir_Compatibility {
 	/**
 	 * Get the Astra page content setting for archives.
 	 *
-	 * @param $layout
+	 * @param $layout Content layout.
 	 *
 	 * @return mixed
 	 */
 	public static function astra_get_content_layout( $layout ) {
-		global $wp_query;
+		if ( $page_id = self::gd_page_id() ) {
+			$content_layout = get_post_meta( $page_id, 'site-content-layout', true );
 
-		$page_id = isset( $wp_query->post->ID ) ? $wp_query->post->ID : '';
-
-		if ( $page_id && ( geodir_archive_page_id() == $page_id || geodir_archive_page_id( geodir_get_current_posttype() ) == $page_id ) ) {
-			$page_layout = get_post_meta( $page_id, 'site-content-layout', true );
-
-			if ( $page_layout != '' ) {
-				$layout = $page_layout;
+			if ( 'default' == $content_layout || empty( $content_layout ) ) {
+				$content_layout = 'boxed-container';
 			}
+
+			$layout = $content_layout;
 		}
 
 		return $layout;
@@ -1137,24 +1140,51 @@ class GeoDir_Compatibility {
 	/**
 	 * Get the Astra page sidebar setting for archives.
 	 *
-	 * @param $layout
+	 * @param $layout Page layout.
 	 *
 	 * @return mixed
 	 */
 	public static function astra_page_layout( $layout ) {
-		global $wp_query;
-
-		$page_id = isset( $wp_query->post->ID ) ? $wp_query->post->ID : '';
-
-		if ( $page_id && ( geodir_archive_page_id() == $page_id || geodir_archive_page_id( geodir_get_current_posttype() ) == $page_id || geodir_search_page_id() == $page_id ) ) {
+		if ( $page_id = self::gd_page_id() ) {
 			$page_layout = get_post_meta( $page_id, 'site-sidebar-layout', true );
 
-			if ( $page_layout != '' ) {
-				$layout = $page_layout;
+			if ( 'default' == $page_layout || empty( $page_layout ) ) {
+				$page_layout = 'no-sidebar';
 			}
+
+			$layout = $page_layout;
 		}
 
 		return $layout;
+	}
+
+	/**
+	 * Manage post CSS class names for the GD post.
+	 *
+	 * @since 2.2.16
+	 *
+	 * @param array $classes An array of post class names.
+	 * @param array $class   An array of additional class names added to the post.
+	 * @param int   $post_id The post ID.
+	 * @return array Post classes.
+	 */
+	public static function astra_pro_post_class( $classes, $class, $post_id = 0 ) {
+		$post_type = $post_id ? get_post_type( (int) $post_id ) : '';
+
+		if ( $post_type && ( geodir_is_gd_post_type( $post_type ) || ( $post_type == 'page' && ( geodir_is_page( 'search' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) ) ) ) {
+			$_classes = $classes;
+			$classes = array();
+
+			foreach ( $_classes as $_class ) {
+				if ( $_class == 'ast-article-single' && is_singular( $post_type ) ) {
+					$classes[] = $_class;
+				} else if ( strpos( $_class, "ast-" ) !== 0 ) {
+					$classes[] = $_class;
+				}
+			}
+		}
+
+		return $classes;
 	}
 
 	/**
