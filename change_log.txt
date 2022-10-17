@@ -1,5 +1,6 @@
 = 2.2.16 =
 * Astra Pro page layout setting is not working for search page - FIXED
+*  Archive item Top and Bottom badge is not supporting custom badge - FIXED
 
 = 2.2.15 =
 * Yoast SEO breadcrumbs is not showing default post category - FIXED
