@@ -513,7 +513,7 @@ class GeoDir_Comments {
 		if ( ! is_admin() || strpos( $_SERVER['REQUEST_URI'], 'admin-ajax.php' ) ) {
 			$post_types = geodir_get_posttypes();
 			$post_type = get_post_type( $post_id );
-			if ( in_array( $post_type , $post_types ) && ! geodir_cpt_has_rating_disabled( $post_type) ) {
+			if ( in_array( $post_type , $post_types ) && ! geodir_cpt_has_rating_disabled( $post_type ) ) {
 				$review_count = self::get_post_review_count_total( $post_id );
 
 				return $review_count;
@@ -588,7 +588,7 @@ class GeoDir_Comments {
 	 * @return string The comment content.
 	 */
 	public static function wrap_comment_text( $content, $comment = '' ) {
-		if ( ! empty( $comment->comment_post_ID ) && geodir_cpt_has_rating_disabled( (int) $comment->comment_post_ID ) ) {
+		if ( ! empty( $comment->comment_post_ID ) && geodir_cpt_has_rating_disabled( get_post_type( (int) $comment->comment_post_ID ) ) ) {
 			if ( ! is_admin() ) {
 				return '<div class="description">' . $content . '</div>';
 			} else {
