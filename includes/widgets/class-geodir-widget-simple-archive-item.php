@@ -644,8 +644,6 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		// preview wrapper open
 		$content .= $is_preview ? '<div class="bsui"><div class="row row-cols-1 row-cols-sm-2 '.$preview_type_class.' " ><div class="col mx-auto " '.$preview_type_style.'><div class="card p-0 mw-100">' : '';
 
-
-
 		// image
 		if ( $instance['image_type'] != 'none' ) {
 
@@ -656,13 +654,13 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			$content .= $instance['top_left_badge_preset']=='custom' ? $this->get_custom_badge('top_left', $instance ) : self::get_badge_type( $instance['top_left_badge_preset'], array('position' => 'top-left' ) );
 
 			// top right badge
-			$content .= self::get_badge_type( $instance['top_right_badge_preset'], array('position' => 'top-right' )  );
+			$content .= $instance['top_right_badge_preset']=='custom' ? $this->get_custom_badge('top_right', $instance ) : self::get_badge_type( $instance['top_right_badge_preset'], array('position' => 'top-right' )  );
 
 			// bottom left badge
-			$content .= self::get_badge_type( $instance['bottom_left_badge_preset'], array('position' => 'bottom-left' )  );
+			$content .= $instance['bottom_left_badge_preset']=='custom' ? $this->get_custom_badge('bottom_left', $instance ) : self::get_badge_type( $instance['bottom_left_badge_preset'], array('position' => 'bottom-left' )  );
 
 			// bottom right badge
-			$content .= self::get_badge_type( $instance['bottom_right_badge_preset'], array('position' => 'bottom-right' )  );
+			$content .= $instance['bottom_right_badge_preset']=='custom' ? $this->get_custom_badge('bottom_right', $instance ) : self::get_badge_type( $instance['bottom_right_badge_preset'], array('position' => 'bottom-right' )  );
 
 			$image_type     = esc_attr( $instance['image_type'] );
 			$image_link     = $instance['image_link'] == 'none' ? '' : esc_attr( $instance['image_link'] );
@@ -838,7 +836,7 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			// Close Footer
 			$content .= $is_preview ? '</div>' : "[gd_archive_item_section type='close' position='footer']";
 		}
-		
+
 		// preview wrapper close
 		$content .= $is_preview ? '</div></div></div></div>' : '';
 
