@@ -75,7 +75,7 @@ function geodir_comments_number( $post = 0 ) {
  * @return string Rating HTML.
  */
 function geodir_get_rating_stars( $rating = '', $post_id = 0, $label = '' ) {
-	if ( ! empty( $post_id ) && geodir_cpt_has_rating_disabled( (int) $post_id ) ) {
+	if ( ! empty( $post_id ) && geodir_cpt_has_rating_disabled( get_post_type( (int) $post_id ) ) ) {
 		return null;
 	}
 
