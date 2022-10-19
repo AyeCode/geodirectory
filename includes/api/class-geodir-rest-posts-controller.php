@@ -2377,7 +2377,8 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     }
                     break;
                 case 'html':
-                    $args['type']       = 'object';
+                    $args['type']       = 'string';
+                    $args['format']     = 'html-field';
                     $args['properties'] = array(
                         'raw' => array(
                             'description' => __( 'Content for the object, as it exists in the database.' ),
@@ -2391,6 +2392,10 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'readonly'    => true,
                         ),
                     );
+
+					$arg_options        = array( 
+						'sanitize_callback' => 'geodir_rest_sanitize_request_arg' 
+					);
                     break;
 				case 'images' :
 					$args['type']       = 'strings';
@@ -2415,7 +2420,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     $arg_options['display_type']        = !empty( $extra_fields ) ? $extra_fields : 'select';
                     break;
                 case 'radio':
-                    $args['type']           = 'object';
+                    $args['type']           = 'string';
                     $args['enum']           = $enum;
                     $args['items']          = array( 'type' => 'string' );
                     break;
@@ -2491,6 +2496,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						$name 		= 'content';
 					}
 					$args['type']   = 'string';
+					$args['format'] = 'textarea-field';
                     break;
                 case 'time':
                     $args['type']   = 'string';
@@ -2831,18 +2837,23 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 					break;
 				case 'radio':
 					$rendered_value = $field_value;
+					$_rendered_value = NULL;
 
-					if ( $rendered_value == 'f' || $rendered_value == '0' ) {
-						$rendered_value = __( 'No', 'geodirectory' );
-					} else if ( $rendered_value == 't' || $rendered_value == '1' ) {
-						$rendered_value = __( 'Yes', 'geodirectory' );
-					} else {
-						if ( ! empty( $option_values ) ) {
-							foreach ( $option_values as $option_value ) {
-								if ( isset ( $option_value['value'] ) && $option_value['value'] == $rendered_value ) {
-									$rendered_value = $option_value['label'];
-								}
+					if ( ! empty( $option_values ) ) {
+						foreach ( $option_values as $option_value ) {
+							if ( isset ( $option_value['value'] ) && $option_value['value'] == $rendered_value ) {
+								$_rendered_value = $option_value['label'];
 							}
+						}
+					}
+
+					if ( $_rendered_value != NULL ) {
+						$rendered_value = $_rendered_value;
+					} else {
+						if ( $rendered_value == 'f' || $rendered_value == '0' ) {
+							$rendered_value = __( 'No', 'geodirectory' );
+						} else if ( $rendered_value == 't' || $rendered_value == '1' ) {
+							$rendered_value = __( 'Yes', 'geodirectory' );
 						}
 					}
 

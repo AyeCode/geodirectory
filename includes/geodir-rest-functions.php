@@ -590,3 +590,31 @@ function geodir_rest_post_sort_options( $post_type ) {
 
     return apply_filters( 'geodir_rest_post_sort_options', $options, $post_type );
 }
+
+/**
+ * Sanitize a request argument based on details registered to the route.
+ *
+ * @since 2.2.16
+ *
+ * @param mixed           $value
+ * @param WP_REST_Request $request
+ * @param string          $param
+ * @return mixed
+ */
+function geodir_rest_sanitize_request_arg( $value, $request, $param ) {
+	$attributes = $request->get_attributes();
+	if ( ! isset( $attributes['args'][ $param ] ) || ! is_array( $attributes['args'][ $param ] ) ) {
+		return $value;
+	}
+	$args = $attributes['args'][ $param ];
+
+	if ( ! empty( $value ) && ! empty( $args['format'] ) ) {
+		if ( $args['format'] == 'textarea-field' ) {
+			return geodir_sanitize_textarea_field( $value );
+		} else if ( $args['format'] == 'html-field' ) {
+			return geodir_sanitize_html_field( $value );
+		}
+	}
+
+	return rest_sanitize_request_arg( $value, $request, $param );
+}
