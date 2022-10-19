@@ -13,7 +13,11 @@ Create Business Directory, Classified Ads, Job Listings, and Member Directories 
 
 == Description ==
 
-Harness the leading Business Directory Plugin for WordPress to help listings everywhere get found by the right people. No matter what you need to build, be it a City Directory, a Job Board, a Real Estate Listings website, or a Classifieds Website, GeoDirectory turns any WordPress theme into a robust search network for users. Add all your business listings at once and tap into an impressive set of shortcodes, blocks, and widgets to set up intuitive, location-based website directories. 
+GeoDirectory is the leading Business Directory Plugin for WordPress. Help businesses everywhere get found through their listings by your directory website visitors. 
+
+No matter what you need to build, be it a City Directory, a Job Board, a Real Estate Listings Directory, or a Classifieds Website, GeoDirectory turns any WordPress theme into a robust search network for users. 
+
+Add all your business listings at once and tap into an impressive set of blocks, shortcodes and widgets to set up intuitive, location-based website directories. 
  
 Do it all stress-free and in style with 100% compatible WordPress page builders like Gutenberg, Elementor, Beaver Builder, Divi, and Oxygen!
 
@@ -21,7 +25,7 @@ Do it all stress-free and in style with 100% compatible WordPress page builders 
 
 == ⚡ TOP RATED BUSINESS DIRECTORY PLUGIN WITH +450 5 STARS REVIEWS ==
 
-= READ WHAT USERS SAY ABOUT GEODIRECTORY =
+= READ WHAT USERS SAY ABOUT OUR BUSINESS DIRECTORY PLUGIN =
 
 >👉 __Fantastic Plugin w/ An Awesome Team Behind It__
 >⭐⭐⭐⭐⭐
@@ -43,7 +47,11 @@ Do it all stress-free and in style with 100% compatible WordPress page builders 
 >This is a truly amazing directory plugin. Very solid and extremely configurable. And the most important of all, it works with all themes with minimal css changes (or no changes at all). The free support offered here is fast and acccurate. From the 4 plugins i tried, this is the only one that fulfilled my needs.
 >💁 dimal (@dimalifragis)
 
-== 🔥 OUTSTANDING ELEMENTOR INTEGRATION 🔥 ==
+== 🔥 OUTSTANDING ELEMENTOR DIRECTORY PLUGIN INTEGRATION 🔥 ==
+
+GeoDirectory is the best Directory Plugin for Elementor. We integrate with the free Elementor Plugin, where you can use our widgets as Elementor Elements. On top of that, we created a super-tight integration with Elementor PRO. 
+
+Each GeoDirectory Template is available to customize through the Elementor PRO theme builder. Also, you can feed GeoDirectory Data to Elementor Elements through their Dynamic Data feature. Check the following video to appreciate how easy it is to customize your next business directory templates with GeoDirectory, the best Elementor Directory Plugin.
 
 [youtube https://www.youtube.com/watch?v=fEdOOucOtUg]
 
@@ -83,17 +91,36 @@ As one of the top wordpress directory plugins, GeoDirectory is armed with a well
 
 No matter what kind of business you're in, use our free WordPress directory plugin to turn your WordPress site into a powerful search engine for any domain:
 
-* **Events** GeoDirectory makes an excellent WordPress event calendar plugin by allowing people to submit listings of upcoming and ongoing events around the city in your directory theme.
+* **Events Directory** GeoDirectory makes an excellent WordPress event calendar plugin by allowing people to submit listings of upcoming and ongoing events around the city in your directory theme.
 
-* **Real Estate** Have a real estate agency or website? Use one of the best real estate plugins to showcase your listings of houses, apartments, flats, and more. Manage agent profiles and property stats and display listings with beautiful image galleries.
+* **Real Estate Directory** Have a real estate agency or website? Use one of the best real estate dirctory plugins to showcase your listings of houses, apartments, condos, and more. Manage agent profiles and property stats and display listings with beautiful image galleries.
 
-* **Classifieds** Create a marketplace for classified ads with GeoDirectory. Let people submit ads to sell cars, find a job, or promote a service.
+* **Classifieds Ads Directory** Create a marketplace for classified ads with GeoDirectory. Let people submit ads to sell cars, find a job, or promote a service.
 
-* **Jobs** Use GeoDirectory to build a job board where businesses can post open positions, and people can search for employment.
+* **Jobs Directory** Use GeoDirectory to build a job board where businesses can post open positions, and people can search for employment.
 
-* **Restaurants** Create an online food directory highlighting the best restaurants around town and detailed menus and visitor reviews.
+* **Restaurants Directory** Create an online food directory highlighting the best restaurants around town and detailed menus and visitor reviews.
 
-* **Hotels** Use GeoDirectory to list and manage information about hotels, resorts, bed & breakfasts, and other types of accommodation.
+* **Hotels Directory** Use GeoDirectory to list and manage information about hotels, resorts, bed & breakfasts, and other types of accommodation.
+
+* **Doctors Directory** Listing professionals with GeoDirectory is very easy. Create a directory of doctors and allow users to search them by speciality and proximity.  
+
+* **Therapists Directory** Just like doctors, you can easily create a directory of Therapists. No matter if they are massage therapists or psychologists.  
+
+* **Pets Directory** The pet industry is growing at unprecedented speed. Users need a directory to locate veterinarians, pet shops, pet groomers, pet parks and more.  
+* **Church Directory** You can list churches, temples, religious retreats and events. Or create a directory of your church members.
+
+* **Service Directory** A directory of freelancers for digital services similar to Fiverr or one for home service professionals like Angi.co or Homeadvisor.com
+
+* **Travel Directory** If you live in a touristic area, list every attraction that a traveller could visit around your area and provide curated experiences.   
+
+* **Hiking Trails Directory** This is a subset of a travel directory, but it can also attract local traffic. If hicking is your thing, consider becoming the online expert for this niche. 
+
+* **Bars & Nightlife Directory** Another directory niche that can be very profitable and with very high traffic. Listing bars, clubs and discos in your local area can lead to sell tickets for happy hours, concerts, Dj Sets and much more. 
+
+* **Software review sites** When the market leader becomes too big, they will be unbundled. Airbnb took over a Craiglist category with short term rentals. Capterra and Trustpilot are becoming huge and soon we will see more specialized software reviews directories. Why not starting yours? 
+
+Because GeoDirectory allows you to create any listing's type, each with unique custom fields, you can use GeoDirectory for virtually any kind of directory.
 
 == ⚡ TAKE YOUR BUSINESS DIRECTORY TO NEW HEIGHTS WITH PREMIUM ADD-ONS. ==
 
