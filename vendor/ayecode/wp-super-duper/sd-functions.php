@@ -1483,7 +1483,7 @@ function sd_get_flex_justify_content_input( $type = 'flex_justify_content', $ove
 		'justify-content' . $device_size . '-start'    => 'justify-content-start',
 		'justify-content' . $device_size . '-end'      => 'justify-content-end',
 		'justify-content' . $device_size . '-center'   => 'justify-content-center',
-		'justify-content' . $device_size . '-baseline' => 'justify-content-between',
+		'justify-content' . $device_size . '-between' => 'justify-content-between',
 		'justify-content' . $device_size . '-stretch'  => 'justify-content-around',
 	);
 

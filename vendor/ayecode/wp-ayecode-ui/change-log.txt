@@ -1,3 +1,6 @@
+= 0.1.81 =
+* Tweaks for FSE - ADDED
+
 = 0.1.80 =
 * Flatpickr CSS conflict fix - FIXED
 * Tweaks for FSE - ADDED

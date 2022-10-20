@@ -1,3 +1,7 @@
+= 1.1.8 =
+* prevent JS error that breaks the GD block - FIXED
+* bug with justify content between helper function - FIXED
+
 = 1.1.5 =
 * Customize > Widgets section don't show advanced settings toggle button - FIXED
 * Flex positioning helper functions - ADDED
