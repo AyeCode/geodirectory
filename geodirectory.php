@@ -10,9 +10,9 @@
  * @wordpress-plugin
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
- * Description: GeoDirectory plugin for WordPress.
+ * Description: GeoDirectory - Business Directory Plugin for WordPress.
  * Version: 2.2.15
- * Author: AyeCode Ltd
+ * Author: AyeCode - WordPress Business Directory Plugins
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
  * Domain Path: /languages
