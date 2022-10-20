@@ -9,7 +9,7 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Create Business Directory, Classified Ads, Job Listings, and Member Directories with the highest-rated WordPress Business Directory plugin.
+Create a Business Directory, Classified Ads Directory, Job Listings Directory, or Member Directory with the best WordPress Business Directory plugin.
 
 == Description ==
 
