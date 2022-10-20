@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.5' );
+	define( 'SUPER_DUPER_VER', '1.1.8' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2465,15 +2465,21 @@ const parentBlocks = wp.data.select('core/block-editor').getBlocksByClientId(par
 
 								}
 							}
-							<?php }?>
-// Get device type const.
-const { deviceType } = wp.data.useSelect( select => {
-        const { __experimentalGetPreviewDeviceType } = select( 'core/edit-site' ) ? select( 'core/edit-site' ) : select( 'core/edit-post' ) ; // for sie editor https://github.com/WordPress/gutenberg/issues/39248
-
-        return {
-            deviceType: __experimentalGetPreviewDeviceType(),
-        }
-    }, [] );
+							<?php } ?>
+<?php
+$current_screen = function_exists('get_current_screen') ? get_current_screen() : '';
+if(!empty($current_screen->base) && $current_screen->base==='widgets'){
+	echo 'const { deviceType } = "";';
+}else{
+?>
+/** Get device type const. */
+const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(select => {
+	const { __experimentalGetPreviewDeviceType } = select('core/edit-site') ? select('core/edit-site') : select('core/edit-post') ? select('core/edit-post') : ''; // For sie editor https://github.com/WordPress/gutenberg/issues/39248
+	return {
+		deviceType: __experimentalGetPreviewDeviceType(),
+	}
+}, []) : '';
+<?php } ?>
 							var content = props.attributes.content;
 
 							function onChangeContent($type) {
