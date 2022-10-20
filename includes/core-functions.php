@@ -704,11 +704,8 @@ function geodir_widget_pages_options() {
  */
 function geodir_detail_page_widget_id_bases() {
 	$id_bases = array(
-		'detail_user_actions',
-		'detail_social_sharing',
-		'detail_sidebar',
-		'detail_sidebar_info',
-		'detail_rating_stars',
+		'gd_author_actions',
+		'gd_output_location'
 	);
 
 	return apply_filters( 'geodir_detail_page_widget_id_bases', $id_bases );
@@ -836,7 +833,7 @@ function geodir_widget_display_callback( $instance, $widget, $args ) {
 				$display_type = '';
 				$pages = ! empty( $block['attrs']['gd_wgt_restrict'] ) && is_array( $block['attrs']['gd_wgt_restrict'] ) ? $block['attrs']['gd_wgt_restrict'] : array();
 
-				if ( strpos( $block['innerHTML'], "gd_wgt_showhide='show'" ) || strpos( $block['innerHTML'], 'gd_wgt_showhide="show"' ) ) {
+				if ( strpos( $block['innerHTML'], "gd_wgt_showhide='show'" ) || strpos( $block['innerHTML'], 'gd_wgt_showhide="show"' ) || strpos( $block['innerHTML'], "gd_wgt_showhide=''" ) || strpos( $block['innerHTML'], 'gd_wgt_showhide=""' ) ) {
 					$display_type = 'show';
 				} elseif ( strpos( $block['innerHTML'], "gd_wgt_showhide='gd'" ) || strpos( $block['innerHTML'], 'gd_wgt_showhide="gd"' ) ) {
 					$display_type = 'gd';
