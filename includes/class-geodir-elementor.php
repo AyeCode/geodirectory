@@ -23,10 +23,8 @@ class GeoDir_Elementor {
 	public static function init() {
 		// add any extra scripts
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ), 11 );
-		add_filter( 'geodir_bypass_archive_item_template_content', array(
-			__CLASS__,
-			'archive_item_template_content'
-		), 10, 3 );
+		add_filter( 'geodir_overwrite_archive_template_content', array( __CLASS__, 'overwrite_archive_template_content' ), 10, 3 );
+		add_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'archive_item_template_content' ), 10, 3 );
 		add_filter( 'elementor/utils/get_the_archive_title', array( __CLASS__, 'get_page_title' ), 10, 1 );
 
 		// ajax
@@ -1140,6 +1138,24 @@ class GeoDir_Elementor {
 	}
 
 	/**
+	 * Overwrite archive template content for the elementor builder page.
+	 *
+	 * @since 2.2.17
+	 *
+	 * @param string $content          Overwrite content. Default empty.
+	 * @param string $original_content Archive template content.
+	 * @param string $archive_page_id  Archive template ID.
+	 * @return string Filtered content.
+	 */
+	public static function overwrite_archive_template_content( $content, $original_content, $page_id ) {
+		if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) && $page_id && self::is_elementor( $page_id ) ) {
+			$content = \Elementor\Plugin::$instance->frontend->get_builder_content( $page_id, true );
+		}
+
+		return $content;
+	}
+
+	/**
 	 * Allow to filter the archive item template content if being edited by elementor.
 	 *
 	 * @param $content
@@ -1166,7 +1182,13 @@ class GeoDir_Elementor {
 	 * @return bool
 	 */
 	public static function is_elementor( $post_id ) {
-		return \Elementor\Plugin::$instance->db->is_built_with_elementor( $post_id );
+		$document = \Elementor\Plugin::$instance->documents->get( $post_id );
+
+		if ( empty( $document ) ) {
+			return false;
+		}
+
+		return $document->is_built_with_elementor();
 	}
 
 	/**

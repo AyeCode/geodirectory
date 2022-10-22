@@ -290,7 +290,7 @@ class GeoDir_Template_Loader {
     }
 
     /**
-     * Check if we are dealing with archive page onctent.
+     * Check if we are dealing with archive page content.
      * 
      * @return bool
      */
@@ -312,93 +312,106 @@ class GeoDir_Template_Loader {
         return $result;
     }
 
-    /**
-     * Setup the GD Archive page content.
-     *
-     * @since 2.0.0
-     *
-     * @global bool $gd_skip_the_content Prevent looping for the_content from listing post_content.
-     *
-     * @return string The filtered content.
-     */
-    public static function setup_archive_page_content($content){
-        global $wp_query, $post, $gd_done_archive_loop, $gd_skip_the_content;
+	/**
+	 * Setup the GD Archive page content.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @global bool $gd_skip_the_content Prevent looping for the_content from listing post_content.
+	 *
+	 * @return string The filtered content.
+	 */
+	public static function setup_archive_page_content( $content ) {
+		global $wp_query, $post, $gd_done_archive_loop, $gd_skip_the_content;
 
-        // if we are not filtering the archive page content then bail.
-        if ( $gd_skip_the_content || ! self::is_archive_page_content() ) {
-            return $content;
-        }
+		// If we are not filtering the archive page content then bail.
+		if ( $gd_skip_the_content || ! self::is_archive_page_content() ) {
+			return $content;
+		}
 
-        // if its outside the loop then bail so we don't set the current_post number and cause have_posts() to return false.
-        if ( ! in_the_loop() ) {
-            if ( current_filter() == 'the_excerpt' && $gd_done_archive_loop ) {
-                // we might be inside a "the_excerpt" filter which might be outside the loop so we don't return.
-            } else {
-                return;;
-            }
-        }
+		// If its outside the loop then bail so we don't set the current_post number and cause have_posts() to return false.
+		if ( ! in_the_loop() ) {
+			if ( current_filter() == 'the_excerpt' && $gd_done_archive_loop ) {
+				// We might be inside a "the_excerpt" filter which might be outside the loop so we don't return.
+			} else {
+				return;
+			}
+		}
 
-		// Backpup post.
+		// Backup post.
 		$gd_backup_post = $post;
 
-        // remove our filter so we don't get stuck in a loop
-        remove_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
-        remove_filter( 'the_excerpt', array( __CLASS__, 'setup_archive_page_content' ) );
+		// Remove our filter so we don't get stuck in a loop
+		remove_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
+		remove_filter( 'the_excerpt', array( __CLASS__, 'setup_archive_page_content' ) );
 
-        // reset the query count so the correct number of listings are output.
-        if ( ! empty( $wp_query->posts ) ) {
+		// Reset the query count so the correct number of listings are output.
+		if ( ! empty( $wp_query->posts ) ) {
 			rewind_posts();
 		}
 
-        // reset the proper loop content
-        global $wp_query,$gd_temp_wp_query;
-        $wp_query->posts = $gd_temp_wp_query;
+		// Reset the proper loop content
+		global $wp_query,$gd_temp_wp_query;
+		$wp_query->posts = $gd_temp_wp_query;
 
-        // stop any GD archive pages outputing the comments section
-        global $gd_is_comment_template_set;
-        $gd_is_comment_template_set = true;
+		// Stop any GD archive pages outputting the comments section
+		global $gd_is_comment_template_set;
+		$gd_is_comment_template_set = true;
 
-        // get the archive template page content
-        if(geodir_is_page('search')){
-            $archive_page_id = geodir_search_page_id();
-        }else{
-            $post_type = geodir_get_current_posttype();
-			$archive_page_id = geodir_archive_page_id($post_type);
-        }
-        $content = get_post_field('post_content', $archive_page_id  );
+		// Get the archive template page content
+		if ( geodir_is_page( 'search' ) ) {
+			$archive_page_id = geodir_search_page_id();
+		} else {
+			$post_type = geodir_get_current_posttype();
+			$archive_page_id = geodir_archive_page_id( $post_type );
+		}
 
-        // if the content is blank then just add the main loop
-        if($content==''){
-            $content = GeoDir_Defaults::page_archive_content();
-        }
+		$content = get_post_field( 'post_content', $archive_page_id  );
 
-        //$content = wpautop($content);// add double line breaks
-        // run the shortcodes on the content
-        $content = do_shortcode($content);
+		/**
+		 * Overwrite the archive template content.
+		 *
+		 * @since 2.2.17
+		 *
+		 * @param string $overwrite_content Overwrite content. Default empty.
+		 * @param string $content           Archive template content.
+		 * @param string $archive_page_id   Archive template ID.
+		 */
+		$overwrite_content = apply_filters( 'geodir_overwrite_archive_template_content', '', $content, $archive_page_id );
+		if ( $overwrite_content ) {
+			$content = $overwrite_content;
+		} else {
+			// If the content is blank then just add the main loop
+			if ( $content == '' ) {
+				$content = GeoDir_Defaults::page_archive_content();
+			}
 
-        // run block content if its available
-        if(function_exists('do_blocks')){
-            $content = do_blocks( $content );
-        }
+			// Run the shortcodes on the content
+			$content = do_shortcode( $content );
 
-        // add our filter back, not sure we even need to add it back if we are only running it once.
-        add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
-        add_filter( 'the_excerpt', array( __CLASS__, 'setup_archive_page_content' ) );
+			// Run block content if its available
+			if ( function_exists( 'do_blocks' ) ) {
+				$content = do_blocks( $content );
+			}
+		}
 
-        // fake the has_posts() to false so it will not loop any more.
-        $wp_query->current_post  = $wp_query->post_count;
+		// Add our filter back, not sure we even need to add it back if we are only running it once.
+		add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
+		add_filter( 'the_excerpt', array( __CLASS__, 'setup_archive_page_content' ) );
+
+		// Fake the has_posts() to false so it will not loop any more.
+		$wp_query->current_post  = $wp_query->post_count;
 
 		// Set original post.
 		if ( ! empty( $gd_backup_post ) ) {
 			$post = $gd_backup_post;
 		}
 
+		// Set that the gd archive loop has run.
+		$gd_done_archive_loop = true;
 
-        // set that the gd archive loop has run.
-        $gd_done_archive_loop = true;
-
-        return $content;
-    }
+		return $content;
+	}
 
     /**
      * Setup the GD archive loop content.
