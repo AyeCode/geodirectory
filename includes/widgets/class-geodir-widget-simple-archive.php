@@ -350,7 +350,7 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 		}
 		$map = "[gd_map title=''  width='100%'  height='" . esc_attr( $args['height'] ) . "'  maptype='" . esc_attr( $args['maptype'] ) . "'  zoom='0'  map_type='auto'  post_settings='true'  post_type=''  terms=''  tick_terms=''  tags=''  all_posts='" . esc_attr( $args['all_posts'] ) . "'  post_id=''  search_filter='false'  post_type_filter='false'  cat_filter='false'  child_collapse='false'  map_directions='false'  scrollwheel='false'  hide_zoom_control='false'  hide_street_control='false'  sticky='" . esc_attr( $args['sticky'] ) . "'  static='false'  bg=''  mt=''  mr=''  mb=''  ml=''  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' $marker_cluster]";
 		if ( $is_preview ) {
-			$map = '<div style="background-image:url(' . geodir_plugin_url() . '/assets/images/block-placeholder-map.png);width:100%;height:'.esc_attr( $args['height'] ).'" />';
+			$map = '<div style="background-image:url(' . geodir_plugin_url() . '/assets/images/block-placeholder-map.png);width:100%;height:' . esc_attr( $args['height'] ) . '" />';
 		}
 
 		$map = "<div class='$sticky_map'>$map</div>";
@@ -381,12 +381,25 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 		// open wrappers
 		$content = '<div class="bsui"><div class="container-fluid full-widthx"><div class="row">';
 
+		// buttons
+		$responsive_buttons = '';
 		if ( empty( $instance['output'] ) ) {
-			$content .= '<div class="col ' . $listing_ratio . '">';
+			$responsive_buttons .= '<div class="d-lg-none mb-3">';
+			$responsive_buttons .= '<button class="btn btn-primary  gd-sa-button-map" onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' ); if (window.gdMaps == \'osm\') {jQuery.goMap.map._onResize();}else{jQuery(window).trigger(\'resize\'); }"> ' . __( 'Show Map', 'geodirectory' ) . ' <i class="fas fa-map-marked ml-2"></i></button>';
+			$responsive_buttons .= '<button class="btn btn-primary gd-sa-button-list d-none"  onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' ); if (window.gdMaps == \'osm\') {jQuery.goMap.map._onResize();}else{jQuery(window).trigger(\'resize\'); }">' . __( 'Show Listings', 'geodirectory' ) . ' <i class="fas fa-th-list ml-2"></i></button>';
+			$responsive_buttons .= '</div>';
+		}
+
+		if ( empty( $instance['output'] ) ) {
+
+			// responsive buttons
+			$content .= '<div class="col col-12 gd-sa-buttons">' . $responsive_buttons . '</div>';
+
+			$content .= '<div class="col ' . $listing_ratio . '  gd-sa-list">';
 			$content .= $listings;
 			$content .= '</div>';
 
-			$content .= '<div class="col ' . $map_ratio . '">';
+			$content .= '<div class="col ' . $map_ratio . ' d-none d-lg-block gd-sa-map">';
 			$content .= $map;
 			$content .= '</div>';
 		} elseif ( 'listings' === $instance['output'] ) {
