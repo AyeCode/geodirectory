@@ -62,6 +62,9 @@ class GeoDir_Elementor {
 		add_filter('elementor/frontend/section/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
 		add_filter('elementor/frontend/widget/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
 
+		// archive pages can be broken if full-width or canvas page template used
+		add_action('get_header', array( __CLASS__, 'maybe_filter_archive_content' ), 11 );
+
 		/*
 		 * Elementor Pro features below here
 		 */
@@ -93,6 +96,21 @@ class GeoDir_Elementor {
 			add_action( 'elementor/frontend/widget/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
 			add_filter( 'elementor/elements/categories_registered', array( __CLASS__,'add_elementor_widget_categories' ), 1, 1  );
 			add_filter( 'elementor/editor/localize_settings', array( __CLASS__,'alter_widget_config' ), 5, 1  );
+		}
+	}
+
+	/**
+	 * Remove content filters if elementor archive page is using full width or canvas page template.
+	 *
+	 * @return void
+	 */
+	public static function maybe_filter_archive_content() {
+		if ( geodir_is_page( 'search' ) ) {
+			$page_id       = geodir_get_page_id( 'search' );
+			$page_template = get_post_meta( $page_id, '_wp_page_template', true );
+			if ( 'elementor_header_footer' === $page_template || 'elementor_canvas' === $page_template ) {
+				remove_filter( 'the_content', array( 'GeoDir_Template_Loader', 'setup_archive_page_content' ) );
+			}
 		}
 	}
 

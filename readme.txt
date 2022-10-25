@@ -289,7 +289,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory Business Directory Plugin v2.2.17 - 2022-UPDATE =
 * Tweak to permalinks order to fix some obscure 404 conditions - FIXED
 * `Simple Archive` widget/block added for quick and easy setups - ADDED
-* Editing search page via Elementor (non-pro) can cause errors - FIXED
+* Editing search page via Elementor (free) can cause errors - FIXED
+* Archive pages can be blank if Elementor (free) page template set to full width or canvas - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.16 - 2022-10-20 =
 * Astra Pro page layout setting is not working for search page - FIXED
