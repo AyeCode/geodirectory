@@ -2903,11 +2903,11 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
                 $device_type_require = ! empty( $args['device_type'] ) ? " deviceType == '" . esc_attr($device_type) . "' && " : '';
                 $device_type_icon = '';
                 if($device_type=='Desktop'){
-                    $device_type_icon = '<span class="dashicons dashicons-desktop" style="font-size: 18px;"></span>';
+                    $device_type_icon = '<span class="dashicons dashicons-desktop" style="font-size: 18px;" onclick="sd_show_view_options(this);"></span>';
                 }elseif($device_type=='Tablet'){
-                    $device_type_icon = '<span class="dashicons dashicons-tablet" style="font-size: 18px;"></span>';
+                    $device_type_icon = '<span class="dashicons dashicons-tablet" style="font-size: 18px;" onclick="sd_show_view_options(this);"></span>';
                 }elseif($device_type=='Mobile'){
-                    $device_type_icon = '<span class="dashicons dashicons-smartphone" style="font-size: 18px;"></span>';
+                    $device_type_icon = '<span class="dashicons dashicons-smartphone" style="font-size: 18px;" onclick="sd_show_view_options(this);"></span>';
                 }
 				echo $element_require;
                 echo $device_type_require;
@@ -2923,7 +2923,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 								},
 								el('span',{dangerouslySetInnerHTML: {__html: '<?php echo addslashes( $args['row']['title'] ) ?>'}}),
 								<?php if($device_type_icon){ ?>
-                                    deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {float:"right",color:"var(--wp-admin-theme-color)"}})
+                                    deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {right:"0",position:"absolute",color:"var(--wp-admin-theme-color)"}})
 								<?php
                                 }
                                 ?>

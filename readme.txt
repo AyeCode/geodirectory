@@ -9,11 +9,11 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Create Business Directory, Classified Ads, Job Listings, and Member Directories with the highest-rated WordPress Business Directory plugin.
+Create a Business Directory, Classified Ads Directory, Job Listings Directory, or Member Directory with the best WordPress Business Directory plugin.
 
 == Description ==
 
-GeoDirectory is the leading Business Directory Plugin for WordPress. Help businesses everywhere get found through their listings by your directory website visitors. 
+GeoDirectory is the leading Business Directory Plugin for WordPress. Help businesses everywhere get found through their listings by your Geo directory website visitors. 
 
 No matter what you need to build, be it a City Directory, a Job Board, a Real Estate Listings Directory, or a Classifieds Website, GeoDirectory turns any WordPress theme into a robust search network for users. 
 
@@ -132,11 +132,11 @@ Get instant access to Premium Addons that have the power to make your local dire
 
 * [Purpose your directory with Custom Post Types](https://wpgeodirectory.com/downloads/custom-post-types/ "Allows to extend your directory categorization") - Create additional content types like events, coupons, and offers to supplement multiple directories and help businesses get noticed. Offer the "locationless" option to filter for online businesses and websites.
 
-* [Add events as a business listing option (NOW FREE)](https://wordpress.org/plugins/events-for-geodirectory/advanced/ "Adds an events manager to your directory") - Have people submit events and turn your GeoDirectory into a WordPress event calendar plugin. With CPT add-on installed, create as many events post types as needed.
+* [Add events as a business listing option (NOW FREE)](https://wordpress.org/plugins/events-for-geodirectory/ "Adds an events manager to your directory") - Have people submit events and turn your GeoDirectory into a WordPress event calendar plugin. With CPT add-on installed, create as many events post types as needed.
 
 * [Give viewers a run-down on a company's performance with MultiRatings and Reviews](https://wpgeodirectory.com/downloads/multiratings-and-reviews/ "Allows you to extend your rating and reviews categorization") - Extend the review system allowing multiple rating categories (e.g., service, quality, price), add images to reviews and other cool features.
 
-* [Enhance search with advanced search filters](https://wpgeodirectory.com/downloads/advanced-search-filters/ "Allows you to extend the search with custom filters") -Turn any custom field into an advanced filter of the search widget for more accurate listings search. Adds AJAX search, smart autocompletes, geolocation, and much more.
+* [Enhance search with advanced search filters](https://wpgeodirectory.com/downloads/advanced-search-filters/ "Allows you to extend the search with custom filters") -Turn any custom field into an advanced filter of the search widget for more accurate listings search. Adds AJAX search, smart autocompletes, geo location, and much more.
 
 * [Build up a priceless community with the Buddypress Integration](https://wpgeodirectory.com/downloads/buddypress-integration/ "integrates Buddypress with GeoDirectory") - Engage users and form a community around your niche and listings with seamless integration with Buddypress (open-source social networking software package).
 
@@ -164,7 +164,7 @@ Get instant access to Premium Addons that have the power to make your local dire
 
 == ⚡ GO PRO - BECOME A MEMBER! ==
 
-Get your hands on all the premium add-ons and themes. Sign up at [wpgeodirectory.com](https://wpgeodirectory.com/downloads/membership/ "Get GeoDirectory membership.").
+Get your hands on all the premium add-ons and themes and create an advanced Geo Directory. Sign up at [wpgeodirectory.com](https://wpgeodirectory.com/downloads/membership/ "Get GeoDirectory membership.").
 
 == ⚡ SUPPORT ==
 
@@ -285,6 +285,12 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 == Changelog ==
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
+
+= GeoDirectory Business Directory Plugin v2.2.17 - 2022-UPDATE =
+* Tweak to permalinks order to fix some obscure 404 conditions - FIXED
+* `Simple Archive` widget/block added for quick and easy setups - ADDED
+* Editing search page via Elementor (free) can cause errors - FIXED
+* Archive pages can be blank if Elementor (free) page template set to full width or canvas - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.16 - 2022-10-20 =
 * Astra Pro page layout setting is not working for search page - FIXED

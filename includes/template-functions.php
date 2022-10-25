@@ -210,7 +210,7 @@ function geodir_no_listings_found() {
 	if($design_style){
 		geodir_get_template( $design_style.'/loop/no-listings-found.php' );
 	}else{
-		geodir_get_template( 'loop/no-listings-found.php' );	
+		geodir_get_template( 'loop/no-listings-found.php' );
 	}
 }
 
@@ -241,7 +241,7 @@ if ( $wp_query->max_num_pages <= 1 && empty($args['preview']) ) {
 
 	$args = wp_parse_args( $args, $defaults );
 
-	$gd_advanced_pagination = !empty($args['show_advanced']) ? esc_attr($args['show_advanced']) : ''; 
+	$gd_advanced_pagination = !empty($args['show_advanced']) ? esc_attr($args['show_advanced']) : '';
 	$pagination_info = '';
 	$design_style = geodir_design_style();
 	if ($gd_advanced_pagination != '') {
@@ -688,7 +688,7 @@ function geodir_template_redirect() {
 	}
 
 	// Redirect default CPT search
-	if ( geodir_is_page( 'search' ) ) {
+	if ( geodir_is_page( 'search' ) && ! isset( $_REQUEST['elementor-preview'] ) ) {
 		$args = array();
 
 		if ( empty( $_REQUEST['geodir_search'] ) ) {

@@ -62,6 +62,9 @@ class GeoDir_Elementor {
 		add_filter('elementor/frontend/section/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
 		add_filter('elementor/frontend/widget/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
 
+		// archive pages can be broken if full-width or canvas page template used
+		add_action('get_header', array( __CLASS__, 'maybe_filter_archive_content' ), 11 );
+
 		/*
 		 * Elementor Pro features below here
 		 */
@@ -97,8 +100,23 @@ class GeoDir_Elementor {
 	}
 
 	/**
+	 * Remove content filters if elementor archive page is using full width or canvas page template.
+	 *
+	 * @return void
+	 */
+	public static function maybe_filter_archive_content() {
+		if ( geodir_is_page( 'search' ) ) {
+			$page_id       = geodir_get_page_id( 'search' );
+			$page_template = get_post_meta( $page_id, '_wp_page_template', true );
+			if ( 'elementor_header_footer' === $page_template || 'elementor_canvas' === $page_template ) {
+				remove_filter( 'the_content', array( 'GeoDir_Template_Loader', 'setup_archive_page_content' ) );
+			}
+		}
+	}
+
+	/**
 	 * Force our widget to show for search and to be in our own category.
-	 * 
+	 *
 	 * @param $config
 	 *
 	 * @return mixed
@@ -1309,7 +1327,7 @@ class GeoDir_Elementor {
 
 	/**
 	 * Get the list of GD Archive item template skins.
-	 * 
+	 *
 	 * @return array|bool|mixed
 	 */
 	public static function get_elementor_pro_skins(){
@@ -1324,7 +1342,7 @@ class GeoDir_Elementor {
 			"SELECT $wpdb->term_relationships.object_id as ID, $wpdb->posts.post_title as post_title FROM $wpdb->term_relationships
 						INNER JOIN $wpdb->term_taxonomy ON
 							$wpdb->term_relationships.term_taxonomy_id=$wpdb->term_taxonomy.term_taxonomy_id
-						INNER JOIN $wpdb->terms ON 
+						INNER JOIN $wpdb->terms ON
 							$wpdb->term_taxonomy.term_id=$wpdb->terms.term_id AND $wpdb->terms.slug='geodirectory-archive-item'
 						INNER JOIN $wpdb->posts ON
 							$wpdb->term_relationships.object_id=$wpdb->posts.ID

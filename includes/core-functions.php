@@ -467,7 +467,7 @@ function geodir_notification( $user_notes ) {
 				elseif($type=='success'){$icon = '<i class="fas fa-check-circle"></i>';}
 				elseif($type=='info'){$icon = '<i class="fas fa-info-circle"></i>';}
 			}
-			
+
 			if($design_style){
 				$notes .= aui()->alert(array(
 						'type'=> $type ? $type : 'info',
@@ -565,7 +565,7 @@ function geodir_column_exist( $db, $column ) {
  * @since 2.1.1.0 Conditionally load widget code on the backend to reduce memory usage.
  */
 function goedir_register_widgets() {
-	
+
 	if ( get_option( 'geodirectory_version' ) ) {
 		global $pagenow;
 
@@ -574,10 +574,10 @@ function goedir_register_widgets() {
 		if ( is_admin() && $pagenow && in_array($pagenow, $block_widget_init_screens)) {
 			// don't initiate in these conditions.
 		}else{
-			
+
 			$exclude = function_exists('sd_widget_exclude') ? sd_widget_exclude() : array();
 			$widgets = geodir_get_widgets();
-			
+
 			if( !empty($widgets) ){
 				foreach ( $widgets as $widget ) {
 					if(!in_array($widget,$exclude)){
@@ -609,7 +609,7 @@ add_action( 'widgets_init', 'goedir_register_widgets' );
  * @return mixed|void
  */
 function geodir_get_widgets(){
-	
+
 	$widgets = array(
 		'GeoDir_Widget_Search',
 		'GeoDir_Widget_Best_Of',
@@ -646,7 +646,8 @@ function geodir_get_widgets(){
 		'GeoDir_Widget_Post_Distance',
 		'GeoDir_Widget_Map_Pinpoint',
 		'GeoDir_Widget_Page_Title',
-		'GeoDir_Widget_Simple_Archive_Item'
+		'GeoDir_Widget_Simple_Archive_Item',
+		'GeoDir_Widget_Simple_Archive',
 	);
 
 	if ( geodir_design_style() ) {
@@ -657,7 +658,7 @@ function geodir_get_widgets(){
 	if ( class_exists( 'Ninja_Forms' ) && class_exists( 'NF_Abstracts_MergeTags' ) ) {
 		$widgets[] = 'GeoDir_Widget_Ninja_Forms';
 	}
-	
+
 	return apply_filters('geodir_get_widgets', $widgets );
 }
 

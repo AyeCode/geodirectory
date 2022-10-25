@@ -231,7 +231,7 @@ function geodir_get_weeks() {
  * Check that page is.
  *
  * @since 1.0.0
- * 
+ *
  * @global object $wp_query WordPress Query object.
  * @global object $gd_loop_wp_query WordPress Query object from GD loop.
  *
@@ -276,7 +276,7 @@ function geodir_check_page( $gdpage = '' ) {
 	if ( empty( $wp_query ) ) {
 		return false;
 	}
-	
+
 	//if(!is_admin()):
 	$page_id = '';// get_query_var( 'page_id' ) ? get_query_var( 'page_id' ) : '';
 
@@ -2001,7 +2001,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	// %%for_search_term%%
 	if ( strpos( $title, '%%for_search_term%%' ) !== false ) {
 		$for_search_term = $search_term != '' ? wp_sprintf( __( 'for %s', 'geodirectory' ), $search_term ) : '';
-	
+
 		$title = str_replace( "%%for_search_term%%", $for_search_term, $title );
 	}
 
@@ -2552,7 +2552,7 @@ function geodir_localize_jquery_ui_timepicker() {
 	if ( empty( $timepicker_defaults ) ) {
 		return;
 	}
-	
+
 	wp_add_inline_script( 'geodir-jquery-ui-timepicker', 'jQuery(function($){$.timepicker.setDefaults(' . $timepicker_defaults . ');});' );
 }
 
@@ -2586,7 +2586,7 @@ function geodir_get_layout_options($frontend = false){
 
 /**
  * If hints are active and shouled be shown.
- * 
+ *
  * @return bool
  */
 function geodir_show_hints(){
@@ -2720,11 +2720,11 @@ function geodir_show_distance( $distance, $short_unit = '' ) {
 		$_distance =  round( $distance, 2 );
 	}
 
-	/** 
-	* Filter to change format of distance. 
+	/**
+	* Filter to change format of distance.
 	*
-	* @param $_distance distance value 
-	* @param $_unit unit of distance. 
+	* @param $_distance distance value
+	* @param $_unit unit of distance.
 	*/
 	$content = apply_filters( 'geodir_show_distance', $_distance . ' ' .  $_unit, $_distance, $_unit );
 

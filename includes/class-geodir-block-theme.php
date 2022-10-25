@@ -71,9 +71,9 @@ class GeoDir_Block_Theme {
 		}
 
 		register_block_type(
-			'geodirectory/fse-styles', 
+			'geodirectory/fse-styles',
 			array(
-				'editor_style' => 'geodir-fse' 
+				'editor_style' => 'geodir-fse'
 			)
 		);
 	}
@@ -125,7 +125,7 @@ class GeoDir_Block_Theme {
 					'option_none_value' => '0',
 					'sort_column' => 'post_title',
 				),
-				'view_page_args' => array( 
+				'view_page_args' => array(
 					'listing_type' => $default_post_type
 				)
 			),
@@ -144,7 +144,7 @@ class GeoDir_Block_Theme {
 					'option_none_value' => '0',
 					'sort_column' => 'post_title',
 				),
-				'view_page_args' => array( 
+				'view_page_args' => array(
 					'geodir_search' => 1,
 					'stype' => $default_post_type,
 					's' => ''
@@ -274,7 +274,7 @@ class GeoDir_Block_Theme {
 				'create_template' => true,
 				'page_option' => 'page_add',
 				'page_cpt' => $post_type,
-				'view_page_args' => array( 
+				'view_page_args' => array(
 					'listing_type' => $post_type
 				),
 				'args' => array(
@@ -1253,7 +1253,7 @@ class GeoDir_Block_Theme {
 
 		if ( file_exists( $template_path ) ) {
 			$content = @file_get_contents( $template_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-			
+
 			if ( $content ) {
 				$content = _inject_theme_attribute_in_block_template_content( $content );
 			}
