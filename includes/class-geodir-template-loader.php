@@ -55,7 +55,7 @@ class GeoDir_Template_Loader {
 
     /**
      * If saving a page that contains the [gd_loop] shortcode then we set a flag to blank the localStorage for the admin so they see the change instantly.
-     * 
+     *
      * @param $post_ID
      * @param $post_after
      * @param $post_before
@@ -291,7 +291,7 @@ class GeoDir_Template_Loader {
 
     /**
      * Check if we are dealing with archive page content.
-     * 
+     *
      * @return bool
      */
     public static function is_archive_page_content(){
@@ -474,7 +474,7 @@ class GeoDir_Template_Loader {
      * @since 2.0.0
      */
     public static function setup_singular_page($content){
-        
+
 
         // @todo this is Kiran's solution, lets keep an eye out and report any situations where this does not work out.
         global $post,$wp_query;
@@ -492,7 +492,7 @@ class GeoDir_Template_Loader {
         if(apply_filters('geodir_bypass_setup_singular_page',false)){
             return $content;
         }
-        
+
         // remove our filter so we don't get stuck in a loop
         remove_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
 
@@ -580,7 +580,7 @@ class GeoDir_Template_Loader {
      * Filter the post_meta _thumbnail_id
      *
      * @since 2.0.0
-     * 
+     *
      * @param bool $metadata metadata.
      * @param int $object_id object id.
      * @param string $meta_key meta key.
@@ -614,13 +614,13 @@ class GeoDir_Template_Loader {
      */
     public static function map_popup_template_content() {
         global $gd_post;
-        
+
         $design_style = geodir_design_style();
 
         $template = $design_style ? $design_style."/map/map-popup.php" : "map-popup.php";
 
         $content = geodir_get_template_html( $template  );
-        
+
         if ( ! empty( $content ) ) {
             // Run the shortcodes on the content
             $content = do_shortcode( $content );
@@ -649,10 +649,10 @@ class GeoDir_Template_Loader {
                 return; // Bail for add listing page.
             }
 
-            if ( $post->ID == geodir_get_option( 'page_details' ) 
-                || $post->ID == geodir_get_option( 'page_archive' ) 
-                || $post->ID == geodir_get_option( 'page_archive_item' ) 
-                || geodir_is_cpt_template_page( $post->ID ) 
+            if ( $post->ID == geodir_get_option( 'page_details' )
+                || $post->ID == geodir_get_option( 'page_archive' )
+                || $post->ID == geodir_get_option( 'page_archive_item' )
+                || geodir_is_cpt_template_page( $post->ID )
             ) {
                 wp_redirect( home_url(), 301 );
                 exit;

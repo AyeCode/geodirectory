@@ -98,7 +98,7 @@ class GeoDir_Elementor {
 
 	/**
 	 * Force our widget to show for search and to be in our own category.
-	 * 
+	 *
 	 * @param $config
 	 *
 	 * @return mixed
@@ -1309,7 +1309,7 @@ class GeoDir_Elementor {
 
 	/**
 	 * Get the list of GD Archive item template skins.
-	 * 
+	 *
 	 * @return array|bool|mixed
 	 */
 	public static function get_elementor_pro_skins(){
@@ -1324,7 +1324,7 @@ class GeoDir_Elementor {
 			"SELECT $wpdb->term_relationships.object_id as ID, $wpdb->posts.post_title as post_title FROM $wpdb->term_relationships
 						INNER JOIN $wpdb->term_taxonomy ON
 							$wpdb->term_relationships.term_taxonomy_id=$wpdb->term_taxonomy.term_taxonomy_id
-						INNER JOIN $wpdb->terms ON 
+						INNER JOIN $wpdb->terms ON
 							$wpdb->term_taxonomy.term_id=$wpdb->terms.term_id AND $wpdb->terms.slug='geodirectory-archive-item'
 						INNER JOIN $wpdb->posts ON
 							$wpdb->term_relationships.object_id=$wpdb->posts.ID

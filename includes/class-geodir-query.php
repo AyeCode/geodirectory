@@ -174,7 +174,7 @@ class GeoDir_Query {
 
 		} elseif ( geodir_is_page( 'search' ) ) {
 			// Some page builders breaks editor.
-			if ( 
+			if (
 				( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) // Divi
 				|| (
 					class_exists( 'Brizy_Editor' ) &&
@@ -184,7 +184,7 @@ class GeoDir_Query {
 					)
 				) // Brizy
 			) {
-			} else {
+			} elseif ( ! isset( $_REQUEST['elementor-preview'] ) ) {
 				$q->is_page = false;
 				$q->is_singular = false;
 			}
@@ -192,7 +192,7 @@ class GeoDir_Query {
 			$q->is_archive = true;
 			//$q->is_post_type_archive = true;
 			$q->is_paged = true;
-//			$q->in_the_loop = true; // this breaks elementor template 
+//			$q->in_the_loop = true; // this breaks elementor template
 
 			//$q->set('is_page',false);
 			//$q->set('is_search',true);
@@ -221,7 +221,7 @@ class GeoDir_Query {
 			} else {
 				$dist = 25000;
 			} //  Distance
-			
+
 
 			if (isset($_REQUEST['snear'])) {
 				$snear = trim(esc_attr($_REQUEST['snear']));
@@ -294,8 +294,8 @@ class GeoDir_Query {
 			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 
 			if ( $support_location && ( $latlon = $geodirectory->location->get_latlon() ) ) {
-				/* 
-				 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition. 
+				/*
+				 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
 				 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
 				 */
 				if ( strpos( $clauses['where'], ' HAVING ') === false && strpos( $clauses['groupby'], ' HAVING ') === false ) {
@@ -645,11 +645,11 @@ class GeoDir_Query {
 				if ( $s != '' ) {
 					// get term sql
 					$term_sql = "SELECT $wpdb->term_taxonomy.term_id,$wpdb->terms.name,$wpdb->term_taxonomy.taxonomy
-					FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
-					WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id 
-					AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id 
-					AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} ) 
-					$terms_where 
+					FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships
+					WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id
+					AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id
+					AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} )
+					$terms_where
 					GROUP BY $wpdb->term_taxonomy.term_id";
 
 					$term_results = $wpdb->get_results( $term_sql );

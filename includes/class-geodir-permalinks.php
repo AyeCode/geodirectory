@@ -83,7 +83,7 @@ class GeoDir_Permalinks {
 
 		if(geodir_is_page('single')){
 			global $gd_post,$geodirectory;
-			
+
 			$should_404 = false;
 			$post_type = isset($wp_query->query_vars['post_type']) ? $wp_query->query_vars['post_type'] : '';
 			$post_locations = $geodirectory->location->get_post_location($gd_post);
@@ -173,7 +173,7 @@ class GeoDir_Permalinks {
 					}
 				}
 			}
-			
+
 			if (in_array($post_type, geodir_get_posttypes())) {
 				$has_location = false;
 				if ( ! empty( $geodirectory->location ) && ( $location = $geodirectory->location ) ) {
@@ -258,7 +258,7 @@ class GeoDir_Permalinks {
 
 	/**
 	 * Remove the parent slug from the term link.
-	 * 
+	 *
 	 * @param $termlink
 	 * @param $term
 	 * @param $taxonomy
@@ -371,11 +371,11 @@ class GeoDir_Permalinks {
 			}
 		}
 
-		$count = ( 10 * count( explode( "/", str_replace( array( '([^/]+)','([^/]*)' ), '', $regex ) ) ) ) - 
-		         ( substr_count( $regex, '([^/]+)' ) + substr_count( $regex,'([^/]*)' ) ) + 
-				 ( $static_sections * 11 ) + 
+		$count = ( 10 * count( explode( "/", str_replace( array( '([^/]+)','([^/]*)' ), '', $regex ) ) ) ) -
+		         ( substr_count( $regex, '([^/]+)' ) + substr_count( $regex,'([^/]*)' ) ) +
+				 ( $static_sections * 11 ) +
 				 ( substr( $regex, -3 ) == '/?$' ? 1 : 0 ); // High priority to "^places/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?$" than "^places/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?" to fix cpt + neighbourhood urls
-	
+
 		$this->rewrite_rules[$regex] = array(
 			'regex'     => $regex,
 			'redirect'  => $redirect,
@@ -386,9 +386,9 @@ class GeoDir_Permalinks {
 			//'countx'     => explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex))
 		);
 	}
-	
 
-	
+
+
 
 	/**
 	 * Add the locations page rewrite rules.
@@ -876,11 +876,14 @@ class GeoDir_Permalinks {
 
 		$_rules = $rules;
 		foreach ( $rules as $regex => $query ) {
+
+			// skip api rules
 			if ( isset( $_rules[ $regex ] ) && strpos( $query, '&geodir-api=' ) !== false ) {
 				unset( $_rules[ $regex ] );
 				continue;
 			}
 
+			// replace CPT name with CPT slug
 			foreach ( $post_type_slugs as $key => $slug ) {
 				if ( isset( $_rules[ $regex ] ) && ( strpos( $regex, '^' . $slug . '/' ) === 0 || strpos( $regex, $slug . '/' ) === 0 ) && ( strpos( $query, '?attachment=' ) !== false || strpos( $query, '&attachment=' ) !== false || strpos( $query, '&tb=1' ) !== false || strpos( $query, '&embed=true' ) !== false ) ) {
 					if ( strpos( $query, '&' . $_post_type_slugs[ $slug ] . '=' ) === false && strpos( $query, '?' . $_post_type_slugs[ $slug ] . '=' ) === false ) {
@@ -890,7 +893,19 @@ class GeoDir_Permalinks {
 			}
 		}
 
-		$rules = $_rules;
+		// force static starting structures first.
+		$ordered_rules_first  = array();
+		$ordered_rules_second = array();
+		foreach ( $_rules as $key => $value ) {
+			$parts = explode( '/', $key );
+			if(strpos($parts[0], '.') === false && strpos($parts[0], '[') === false && strpos($parts[1], '[') === false && strpos($parts[1], '?') === false ){
+				$ordered_rules_first[$key] = $value;
+			}else{
+				$ordered_rules_second[$key] = $value;
+			}
+		}
+
+		$rules = $ordered_rules_first + $ordered_rules_second;
 
 		return $rules;
 	}
