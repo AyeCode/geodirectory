@@ -15,9 +15,9 @@ class GeoDir_BlockStrap {
 
 
 	public static function init() {
-		add_filter( 'bs_pattern_page_content_gd_archive_default', array( __CLASS__, 'archive_template' ), 10, 1 );
-		add_filter( 'bs_pattern_page_content_gd_search_default', array( __CLASS__, 'search_template' ), 10, 1 );
-		add_filter( 'bs_pattern_page_content_gd_single_default', array( __CLASS__, 'single_template' ), 10, 1 );
+		add_filter( 'blockstrap_pattern_page_content_gd_archive_default', array( __CLASS__, 'archive_template' ), 10, 1 );
+		add_filter( 'blockstrap_pattern_page_content_gd_search_default', array( __CLASS__, 'search_template' ), 10, 1 );
+		add_filter( 'blockstrap_pattern_page_content_gd_single_default', array( __CLASS__, 'single_template' ), 10, 1 );
 
 	}
 
