@@ -659,7 +659,8 @@ class GeoDir_SEO {
 
 		// page numbers
 		if ( strpos( $string, '%%page%%' ) !== false ) {
-			$page  = geodir_title_meta_page( self::separator() );
+			$page = geodir_title_meta_page( self::separator() );
+			$page = $page ? $page : '';
 			$string = str_replace( "%%page%%", $page, $string );
 		}
 		if ( strpos( $string, '%%pagenumber%%' ) !== false ) {

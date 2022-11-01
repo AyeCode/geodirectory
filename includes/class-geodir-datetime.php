@@ -36,7 +36,7 @@ class GeoDir_DateTime extends DateTime {
 	/**
 	 * Set UTC offset - this is a fixed offset instead of a timezone.
 	 *
-	 * @param int $offset
+	 * @param int $offset Offset.
 	 */
 	public function set_utc_offset( $offset ) {
 		$this->utc_offset = intval( $offset );
@@ -45,6 +45,7 @@ class GeoDir_DateTime extends DateTime {
 	/**
 	 * Get UTC offset if set, or default to the DateTime object's offset.
 	 */
+	#[\ReturnTypeWillChange]
 	public function getOffset() {
 		if ( $this->utc_offset ) {
 			return $this->utc_offset;
@@ -56,10 +57,11 @@ class GeoDir_DateTime extends DateTime {
 	/**
 	 * Set timezone.
 	 *
-	 * @param DateTimeZone $timezone
+	 * @param DateTimeZone $timezone DateTimeZone instance.
 	 *
 	 * @return DateTime
 	 */
+	#[\ReturnTypeWillChange]
 	public function setTimezone( $timezone ) {
 		$this->utc_offset = 0;
 		return parent::setTimezone( $timezone );
@@ -71,6 +73,7 @@ class GeoDir_DateTime extends DateTime {
 	 * @since  3.0.0
 	 * @return int
 	 */
+	#[\ReturnTypeWillChange]
 	public function getTimestamp() {
 		return method_exists( 'DateTime', 'getTimestamp' ) ? parent::getTimestamp() : $this->format( 'U' );
 	}
@@ -89,7 +92,7 @@ class GeoDir_DateTime extends DateTime {
 	 * Format a date based on the offset timestamp.
 	 *
 	 * @since  3.0.0
-	 * @param  string $format
+	 * @param  string $format Date format.
 	 * @return string
 	 */
 	public function date( $format ) {
@@ -100,7 +103,7 @@ class GeoDir_DateTime extends DateTime {
 	 * Return a localised date based on offset timestamp. Wrapper for date_i18n function.
 	 *
 	 * @since  3.0.0
-	 * @param  string $format
+	 * @param  string $format Date format.
 	 * @return string
 	 */
 	public function date_i18n( $format = 'Y-m-d' ) {
