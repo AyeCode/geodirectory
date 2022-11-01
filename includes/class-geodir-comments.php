@@ -101,7 +101,7 @@ class GeoDir_Comments {
 					'required'          => true,
 					'label'              => esc_html__( "Website", 'geodirectory'),
 					'type'              => 'url',
-					'placeholder'       => esc_html__( "Website (required)" , 'geodirectory'),
+					'placeholder'       => esc_html__( "Website" , 'geodirectory'),
 					'extra_attributes'  => array(
 						'maxlength' => "200"
 					)
@@ -298,12 +298,12 @@ class GeoDir_Comments {
 		if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
 			if ( !empty( $old_rating ) ) {
 				$sqlqry = $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET
-					rating = %f 
-					WHERE comment_id = %d ", 
+					rating = %f
+					WHERE comment_id = %d ",
 					array(
 						$rating,
 						$comment_id
-					) 
+					)
 				);
 
 				// clear cache
@@ -354,12 +354,12 @@ class GeoDir_Comments {
 
 			if ( isset( $old_rating ) ) {
 				$sqlqry = $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET
-					rating = %f 
-					WHERE comment_id = %d ", 
+					rating = %f
+					WHERE comment_id = %d ",
 					array(
 						$rating,
 						$comment_id
-					) 
+					)
 				);
 
 				// clear cache
@@ -385,7 +385,7 @@ class GeoDir_Comments {
 	 */
 	public static function save_rating( $comment = 0 ) {
 		global $wpdb, $user_ID;
-		
+
 		if ( ! isset( $_REQUEST['geodir_overallrating'] ) ) {
 			return;
 		}
@@ -411,8 +411,8 @@ class GeoDir_Comments {
 				user_id		= %d,
 				comment_id	= %d,
 				rating 		= %f,
-				city		= %s, 
-				region		= %s, 
+				city		= %s,
+				region		= %s,
 				country		= %s,
 				longitude	= %s,
 				latitude	= %s
@@ -664,7 +664,7 @@ class GeoDir_Comments {
 					'rating' => self::get_comment_rating( $comment->comment_ID )
 				);
 				echo geodir_get_template_html( $template, $vars );
-				
+
 				break;
 		endswitch; // end comment_type check
 	}
@@ -960,7 +960,7 @@ class GeoDir_Comments {
 			4 => geodir_get_option( 'rating_text_4' ) ? __( geodir_get_option( 'rating_text_4' ), 'geodirectory' ) : $defaults[4],
 			5 => geodir_get_option( 'rating_text_5' ) ? __( geodir_get_option( 'rating_text_5' ), 'geodirectory' ) : $defaults[5],
 		);
-		
+
 		return apply_filters( 'geodir_rating_texts', $texts );
 	}
 
@@ -1131,7 +1131,7 @@ class GeoDir_Comments {
 
 		if ( empty( $user_id ) ) {
 			if ( empty( $author_email ) ) {
-				$user_id = (int) get_current_user_id(); 
+				$user_id = (int) get_current_user_id();
 
 				if ( empty( $user_id ) ) {
 					$commenter = wp_get_current_commenter();
