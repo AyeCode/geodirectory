@@ -223,6 +223,10 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 		if ( empty( $args['id'] ) ) {
 			$args['id'] = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
+
+			if ( ! empty( $args['id'] ) && (int) wp_is_post_revision( $args['id'] ) ) {
+				$args['id'] = (int) wp_get_post_parent_id( $args['id'] );
+			}
 		}
 
 		// maybe no wrap

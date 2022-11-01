@@ -2043,33 +2043,39 @@ add_filter('geodir_custom_field_output_html','geodir_cf_html',10,5);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_taxonomy($html,$location,$cf,$p='',$output=''){
+function geodir_cf_taxonomy( $html, $location, $cf, $p = '', $output = '' ) {
+	// Check we have the post value.
+	if ( is_numeric( $p ) ) {
+		$gd_post = geodir_get_post_info( $p );
+	} else {
+		global $gd_post;
+	}
 
-    // check we have the post value
-    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
-    else{ global $gd_post;}
+	if ( ! is_array( $cf ) && $cf != '' ) {
+		$cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
 
-    if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
-        if(!$cf){return NULL;}
-    }
+		if ( ! $cf ) {
+			return NULL;
+		}
+	}
 
     // Block demo content
-    if( geodir_is_block_demo() ){
-        if($cf['htmlvar_name']=='post_category'){
+    if ( geodir_is_block_demo() ) {
+        if ( $cf['htmlvar_name'] == 'post_category' ) {
             $demo_tax = 'gd_placecategory';
-        }elseif($cf['htmlvar_name']=='post_tags'){
+        } else if ( $cf['htmlvar_name'] == 'post_tags' ) {
             $demo_tax = 'gd_place_tags';
         }
+
         $demoterms = get_terms( array(
             'taxonomy' => $demo_tax,
             'hide_empty' => false,
             'number'    => 2
         ) );
         $demo_terms = '';
-        if(!empty($demoterms)){
-            foreach($demoterms as $demoterm){
-                $demo_terms .= $demoterm->term_id.",";
+        if ( ! empty( $demoterms ) ) {
+            foreach( $demoterms as $demoterm ) {
+                $demo_terms .= $demoterm->term_id . ",";
             }
         }
         $gd_post->{$cf['htmlvar_name']} = $demo_terms;
@@ -2124,11 +2130,16 @@ function geodir_cf_taxonomy($html,$location,$cf,$p='',$output=''){
 
     // If not html then we run the standard output.
     if(empty($html)){
+		$post_id = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
+        if ( $post_id && wp_is_post_revision( $post_id ) ) {
+            $post_id = wp_get_post_parent_id( $post_id );
+        }
+        $post_type = $post_id ? get_post_type( $post_id ) : 'gd_place';
 
         if($html_var=='post_category'){
-            $post_taxonomy = $gd_post->post_type . 'category';
+            $post_taxonomy = $post_type . 'category';
         }elseif($html_var == 'post_tags'){
-            $post_taxonomy = $gd_post->post_type . '_tags';
+            $post_taxonomy = $post_type . '_tags';
         }else{
             $post_taxonomy = '';
         }
