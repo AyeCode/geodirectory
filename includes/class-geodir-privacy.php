@@ -62,7 +62,7 @@ class GeoDir_Privacy extends GeoDir_Abstract_Privacy {
 		}
 
 		add_filter( 'geodir_privacy_export_post_personal_data', array( 'GeoDir_Privacy_Exporters', 'export_post_custom_fields' ), 10, 2 );
-		add_filter( 'geodir_privacy_export_post_personal_data', array( 'GeoDir_Privacy_Exporters', 'export_post_rating' ), 10.5, 2 );
+		add_filter( 'geodir_privacy_export_post_personal_data', array( 'GeoDir_Privacy_Exporters', 'export_post_rating' ), 15, 2 );
 	}
 
 	/**

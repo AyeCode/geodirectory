@@ -1488,7 +1488,7 @@ function geodir_googlemap_script_extra_details_page( $extra ) {
 		$add_google_places_api = true;
 	}
 	$add_google_places_api = true; // @todo New maps may require places libraries on non details pages as well for map_type = post widgets.
-	if ( ! str_replace( 'libraries=places', '', $extra ) && ( geodir_is_page( 'detail' ) || $add_google_places_api ) ) {
+	if ( ( ( $extra && ! str_replace( 'libraries=places', '', $extra ) ) || ! $extra ) && ( geodir_is_page( 'detail' ) || $add_google_places_api ) ) {
 		$extra .= "&amp;libraries=places";
 	}
 
