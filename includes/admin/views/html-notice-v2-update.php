@@ -156,7 +156,6 @@ if ( isset( $all_plugins[ 'geodir_franchise/geodir_franchise.php' ] ) && $db_ver
 
 $action = 'install-plugin';
 $slug = 'geodirectory';
-//$slug = 'advanced-cron-manager'; //@todo remove after testing
 $install_url = wp_nonce_url(
 	add_query_arg(
 		array(
