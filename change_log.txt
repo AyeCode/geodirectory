@@ -2,6 +2,7 @@
 * GD Search page is not working when built with Elementor Free version- FIXED
 * Logged out comments, website field should not be marked `required` - FIXED
 * Published listing preview is not showing updated data - FIXED
+* GD > Post Meta breaks output when showing stripped value for empty multiselect value - FIXED
 
 = 2.2.16 =
 * Astra Pro page layout setting is not working for search page - FIXED
