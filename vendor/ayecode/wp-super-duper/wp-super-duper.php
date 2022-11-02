@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.8' );
+	define( 'SUPER_DUPER_VER', '1.1.10' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2918,7 +2918,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 							},
 							<?php if(!empty($args['row']['title'])){ ?>
 							el('label', {
-									className: 'components-base-control__label',
+									className: 'components-base-control__label position-relative',
 									style: {width:"100%"}
 								},
 								el('span',{dangerouslySetInnerHTML: {__html: '<?php echo addslashes( $args['row']['title'] ) ?>'}}),
@@ -3057,6 +3057,7 @@ el('div',{className: 'bsui'},
 			$extra             = '';
 			$require           = '';
             $inside_elements   = '';
+			$after_elements	   = '';
 
 			// `content` is a protected and special argument
 			if ( $key == 'content' ) {
@@ -3341,6 +3342,7 @@ if (confirmed) {
 				$onchange = "props.setAttributes({ $key: ! props.attributes.$key } )";
 			} elseif ( $args['type'] == 'textarea' ) {
 				$type = 'TextareaControl';
+
 			} elseif ( $args['type'] == 'select' || $args['type'] == 'multiselect' ) {
 				$type = 'SelectControl';
 
@@ -3360,6 +3362,20 @@ if (confirmed) {
 				}
 				if ( isset( $args['multiple'] ) && $args['multiple'] ) { //@todo multiselect does not work at the moment: https://github.com/WordPress/gutenberg/issues/5550
 					$extra .= ' multiple:true,style:{height:"auto",paddingRight:"8px","overflow-y":"auto"}, ';
+				}
+
+				if($args['type'] == 'multiselect' ||  ( isset( $args['multiple'] ) && $args['multiple'] ) ){
+					$after_elements	 .= "props.attributes.$key && el( wp.components.Button, {
+                                      className: 'components-button components-circular-option-picker__clear is-secondary is-small',
+                                      style: {margin:'-8px 0 8px 0',display: 'block'},
+                                      onClick: function(){
+                                              return props.setAttributes({
+                                                  $key: '',
+                                                });
+                                    }
+                                    },
+                                    'Clear'
+                            ),";
 				}
 			} elseif ( $args['type'] == 'tagselect' ) {
 //				$type = 'FormTokenField';
@@ -3471,7 +3487,7 @@ if (confirmed) {
 			<?php }?>
 			} <?php echo $inside_elements; ?> ),
 			<?php
-
+			echo $after_elements;
 
 		}
 
