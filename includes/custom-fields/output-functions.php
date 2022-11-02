@@ -1252,7 +1252,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
 
             // Stripped value.
             if ( ! empty( $output ) && isset( $output['strip'] ) ) {
-                return ( ! empty( $option_values ) ? stripslashes( implode( ', ', $option_values ) ) : $option_values );
+                return ( ! empty( $option_values ) ? stripslashes( implode( ', ', $option_values ) ) : '' );
             }
 
             $field_value = '';
