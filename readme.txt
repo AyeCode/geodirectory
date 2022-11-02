@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, member directory
 Requires at least: 4.5
 Tested up to: 6.1
-Stable tag: 2.2.16
+Stable tag: 2.2.17
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -286,11 +286,15 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory Business Directory Plugin v2.2.17 - 2022-UPDATE =
+= GeoDirectory Business Directory Plugin v2.2.17 - 2022-11-02 =
 * Tweak to permalinks order to fix some obscure 404 conditions - FIXED
 * `Simple Archive` widget/block added for quick and easy setups - ADDED
 * Editing search page via Elementor (free) can cause errors - FIXED
 * Archive pages can be blank if Elementor (free) page template set to full width or canvas - FIXED
+* GD Search page is not working when built with Elementor Free version- FIXED
+* Logged out comments, website field should not be marked `required` - FIXED
+* Published listing preview is not showing updated data - FIXED
+* GD > Post Meta breaks output when showing stripped value for empty multiselect value - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.16 - 2022-10-20 =
 * Astra Pro page layout setting is not working for search page - FIXED
