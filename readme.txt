@@ -44,7 +44,7 @@ Do it all stress-free and in style with 100% compatible WordPress page builders 
 
 >👉 __Amazing Directory Plugin__
 >⭐⭐⭐⭐⭐
->This is a truly amazing directory plugin. Very solid and extremely configurable. And the most important of all, it works with all themes with minimal css changes (or no changes at all). The free support offered here is fast and acccurate. From the 4 plugins i tried, this is the only one that fulfilled my needs.
+>This is a truly amazing directory plugin. Very solid and extremely configurable. And the most important of all, it works with all themes with minimal css changes (or no changes at all). The free support offered here is fast and accurate. From the 4 plugins i tried, this is the only one that fulfilled my needs.
 >💁 dimal (@dimalifragis)
 
 == 🔥 OUTSTANDING ELEMENTOR DIRECTORY PLUGIN INTEGRATION 🔥 ==
@@ -93,7 +93,7 @@ No matter what kind of business you're in, use our free WordPress directory plug
 
 * **Events Directory** GeoDirectory makes an excellent WordPress event calendar plugin by allowing people to submit listings of upcoming and ongoing events around the city in your directory theme.
 
-* **Real Estate Directory** Have a real estate agency or website? Use one of the best real estate dirctory plugins to showcase your listings of houses, apartments, condos, and more. Manage agent profiles and property stats and display listings with beautiful image galleries.
+* **Real Estate Directory** Have a real estate agency or website? Use one of the best real estate directory plugins to showcase your listings of houses, apartments, condos, and more. Manage agent profiles and property stats and display listings with beautiful image galleries.
 
 * **Classifieds Ads Directory** Create a marketplace for classified ads with GeoDirectory. Let people submit ads to sell cars, find a job, or promote a service.
 
@@ -285,6 +285,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 == Changelog ==
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
+
+= GeoDirectory Business Directory Plugin v2.2.18 =
+* GD Single should show blank content when assigned empty elementor template - CHANGED
 
 = GeoDirectory Business Directory Plugin v2.2.17 - 2022-11-02 =
 * Tweak to permalinks order to fix some obscure 404 conditions - FIXED
@@ -563,7 +566,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * [gd_post_images] option added to show images for specific post – ADDED
 * AUI: unable to save empty value for multiselect/multicheckbox fields – FIXED
 * Category image not added in Yoast SEO meta – FIXED
-* Sometime ninja form dodn’t send notification to listing email – FIXED
+* Sometime ninja form don’t send notification to listing email – FIXED
 * Disable beta addons setting on upgrade – CHANGED
 * Map CPT filter only visible when search filter is active – FIXED
 * Checkbox field description is not wrapped in a container ( Legacy design ) – FIXED
@@ -618,7 +621,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Some database with pxc_strict_mode prevents insert review without primary key – FIXED
 * Tabs list with kadence theme might not scroll on first click – FIXED
 * Tabs list as pills does not switch active class – FIXED
-* Custom field price options are working preperly – FIXED
+* Custom field price options are working properly – FIXED
 
 = GeoDirectory Business Directory Plugin v2.1.0.10 - 2021-03-03 =
 * Show x stars back instead of rating type name on hover of ratings – CHANGED
@@ -1209,7 +1212,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * CPT tabs shortcode section can now accept post variables like [my_custom_shortcode id=”%%facebook_id%%” ] – ADDED
 * Post badge widget can now use any custom field in the badge text – ADDED
 * CSS changes to try and better embed videos responsively – CHANGED
-* Add listing widget now has param to set the container it will repalce after submit – ADDED
+* Add listing widget now has param to set the container it will replace after submit – ADDED
 * Divi builder shortcodes not rendered via some ajax calls – FIXED
 * Elementor theme template not working correctly on GD search archive – FIXED
 * HTML field script contend can be broken due to wpautop running after do_shortcode – FIXED

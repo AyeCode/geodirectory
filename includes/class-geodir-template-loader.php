@@ -468,65 +468,73 @@ class GeoDir_Template_Loader {
 
     }
 
-    /**
-     * Setup the GD archive loop content.
-     *
-     * @since 2.0.0
-     */
-    public static function setup_singular_page($content){
+	/**
+	 * Setup the GD archive loop content.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function setup_singular_page( $content ) {
+		// @todo this is Kiran's solution, lets keep an eye out and report any situations where this does not work out.
+		global $post, $wp_query;
 
+		if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
+			return $content;
+		}
 
-        // @todo this is Kiran's solution, lets keep an eye out and report any situations where this does not work out.
-        global $post,$wp_query;
+		if ( post_password_required() ) {
+			return $content;
+		}
 
-        if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
-            return $content;
-        }
+		/*
+		 * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
+		 */
+		if ( apply_filters( 'geodir_bypass_setup_singular_page', false ) ) {
+			return $content;
+		}
 
-        if(post_password_required()){
-            return $content;
-        }
-        /*
-         * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
-         */
-        if(apply_filters('geodir_bypass_setup_singular_page',false)){
-            return $content;
-        }
+		// Remove our filter so we don't get stuck in a loop.
+		remove_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
 
-        // remove our filter so we don't get stuck in a loop
-        remove_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
+		if ( in_the_loop() ) {
+			// Get the archive template page content
+			$post_type = geodir_get_current_posttype();
+			$page_id = geodir_details_page_id( $post_type );
+			$content = get_post_field( 'post_content', $page_id );
 
-        if(in_the_loop()) {
+			/**
+			 * Overwrite the single template content.
+			 *
+			 * @since 2.2.18
+			 *
+			 * @param string $overwrite_content Overwrite content. Default empty.
+			 * @param string $content           Single template content.
+			 * @param string $page_id           Single template ID.
+			 */
+			$overwrite_content = apply_filters( 'geodir_overwrite_single_template_content', '', $content, $page_id );
 
-            // get the archive template page content
-            $post_type = geodir_get_current_posttype();
-			$page_id = geodir_details_page_id($post_type);
-            $content = get_post_field( 'post_content', $page_id );
+			if ( $overwrite_content ) {
+				$content = $overwrite_content;
+			} else {
+				// If the content is blank then just add the main loop.
+				if ( $content == '' ) {
+					$content = GeoDir_Defaults::page_details_content();
+				}
 
-            // if the content is blank then just add the main loop
-            if ( $content == '' ) {
-                $content = GeoDir_Defaults::page_details_content();
-            }
+				// Run the shortcodes on the content.
+				$content = do_shortcode( $content );
 
-            // run the shortcodes on the content
-            $content = do_shortcode( $content );
+				// Run block content if its available.
+				if ( function_exists( 'do_blocks' ) ) {
+					$content = do_blocks( $content );
+				}
+			}
+		}
 
-            // run block content if its available
-            if(function_exists('do_blocks')){
-                $content = do_blocks( $content );
-            }
-        }
+		// Add our filter back.
+		add_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
 
-        // add our filter back
-        add_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
-
-
-        return $content;
-
-    }
-
-
-
+		return $content;
+	}
 
     /**
      * Setup the GD Archive item page content.
