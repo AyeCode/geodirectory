@@ -52,6 +52,9 @@ class GeoDir_Comments {
 		$design_style = geodir_design_style();
 
 		if ( $design_style && geodir_is_page( 'single' ) ) {
+			// Gets current commenter's name, email, and URL.
+			$commenter = wp_get_current_commenter();
+
 			// comment field
 			$defaults['comment_field'] = aui()->textarea(array(
 				'name'       => 'comment',
@@ -72,6 +75,7 @@ class GeoDir_Comments {
 					'label'              => esc_html__( "Name", 'geodirectory'),
 					'type'              => 'text',
 					'placeholder'       => esc_html__( "Name (required)" , 'geodirectory'),
+					'value'             => ! empty( $commenter['comment_author'] ) ? $commenter['comment_author'] : '',
 					'extra_attributes'  => array(
 						'maxlength' => "245"
 					)
@@ -87,6 +91,7 @@ class GeoDir_Comments {
 					'label'              => esc_html__( "Email", 'geodirectory'),
 					'type'              => 'email',
 					'placeholder'       => esc_html__( "Email (required)" , 'geodirectory'),
+					'value'             => ! empty( $commenter['comment_author_email'] ) ? $commenter['comment_author_email'] : '',
 					'extra_attributes'  => array(
 						'maxlength' => "100"
 					)
@@ -102,23 +107,27 @@ class GeoDir_Comments {
 					'label'              => esc_html__( "Website", 'geodirectory'),
 					'type'              => 'url',
 					'placeholder'       => esc_html__( "Website" , 'geodirectory'),
+					'value'             => ! empty( $commenter['comment_author_url'] ) ? $commenter['comment_author_url'] : '',
 					'extra_attributes'  => array(
 						'maxlength' => "200"
 					)
 				)
 			);
 
-			// website url
-			$defaults['fields']['cookies'] = aui()->input(
-				array(
-					'id'                => 'wp-comment-cookies-consent',
-					'name'              => 'wp-comment-cookies-consent',
-					'required'          => true,
-					'value'             => 'yes',
-					'label'              => esc_html__( "Save my name, email, and website in this browser for the next time I comment.", 'geodirectory'),
-					'type'              => 'checkbox',
-				)
-			);
+			if ( has_action( 'set_comment_cookies', 'wp_set_comment_cookies' ) && get_option( 'show_comments_cookies_opt_in' ) ) {
+				// website url
+				$defaults['fields']['cookies'] = aui()->input(
+					array(
+						'id'                => 'wp-comment-cookies-consent',
+						'name'              => 'wp-comment-cookies-consent',
+						'required'          => true,
+						'value'             => 'yes',
+						'label'             => esc_html__( "Save my name, email, and website in this browser for the next time I comment.", 'geodirectory'),
+						'type'              => 'checkbox',
+						'checked'           => ! empty( $commenter['comment_author_email'] ) ? true : false
+					)
+				);
+			}
 
 			// logged in as
 			$defaults['logged_in_as'] = str_replace("logged-in-as","logged-in-as mb-3",$defaults['logged_in_as'] );

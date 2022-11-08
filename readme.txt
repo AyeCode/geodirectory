@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.2.18 =
 * GD Single should show blank content when assigned empty elementor template - CHANGED
+* Allowing to set comment author cookies option not working with reviews - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.17 - 2022-11-02 =
 * Tweak to permalinks order to fix some obscure 404 conditions - FIXED
