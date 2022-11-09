@@ -1354,6 +1354,8 @@ function geodir_get_search_post_type($pt=''){
  * @since 2.0.0
  */
 function geodir_search_form() {
+	global $geodir_search_post_type_hide, $geodir_hide_search_input, $geodir_hide_near_input;
+
 	geodir_get_search_post_type();
 
 	$design_style = geodir_design_style();
@@ -1389,6 +1391,18 @@ function geodir_search_form() {
 	 * @param string $wrap_class The wrapper class for styles.
 	 */
 	$form_class = apply_filters( 'geodir_search_form_class', $form_class, $instance );
+
+	if ( ! empty( $instance['post_type_hide'] ) ) {
+		$geodir_search_post_type_hide = true;
+	}
+
+	if ( ! empty( $instance['hide_search_input'] ) ) {
+		$geodir_hide_search_input = true;
+	}
+
+	if ( ! empty( $instance['hide_near_input'] ) ) {
+		$geodir_hide_near_input = true;
+	}
 
 	$tmpl_args = array(
 		'wrap_class' => geodir_build_aui_class( $instance ),
