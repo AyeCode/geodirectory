@@ -53,8 +53,8 @@
     },
     {
         "name": "ayecode/wp-ayecode-ui",
-        "version": "0.1.84",
-        "version_normalized": "0.1.84.0",
+        "version": "0.1.85",
+        "version_normalized": "0.1.85.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-ayecode-ui.git",

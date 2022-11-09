@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.2.17\n"
+"Project-Id-Version: GeoDirectory 2.2.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-02 17:17+0530\n"
-"PO-Revision-Date: 2022-11-02 17:17+0530\n"
+"POT-Creation-Date: 2022-11-09 20:49+0530\n"
+"PO-Revision-Date: 2022-11-09 20:49+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -416,7 +416,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-assets.php:120
 #: includes/admin/class-geodir-admin-blocks.php:231
 #: includes/admin/class-geodir-admin-menus.php:108
-#: includes/class-geodir-elementor.php:148 includes/class-geodir-privacy.php:24
+#: includes/class-geodir-elementor.php:149 includes/class-geodir-privacy.php:24
 #: includes/core-functions.php:940
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
 msgid "GeoDirectory"
@@ -1457,7 +1457,7 @@ msgstr ""
 #: includes/admin/dummy-data/freelancer.php:750
 #: includes/admin/dummy-data/freelancer.php:756
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:408
-#: includes/class-geodir-comments.php:87
+#: includes/class-geodir-comments.php:91
 #: includes/class-geodir-post-data.php:962
 #: includes/class-geodir-post-data.php:983
 #: includes/widgets/class-geodir-widget-ninja-forms.php:428 language.php:35
@@ -1475,8 +1475,8 @@ msgstr ""
 #: includes/admin/dummy-data/freelancer.php:766
 #: includes/admin/dummy-data/freelancer.php:767
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:610
-#: includes/class-geodir-comments.php:102
-#: includes/class-geodir-comments.php:104 language.php:56 language.php:125
+#: includes/class-geodir-comments.php:107
+#: includes/class-geodir-comments.php:109 language.php:56 language.php:125
 msgid "Website"
 msgstr ""
 
@@ -5704,7 +5704,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt.php:475
 #: includes/admin/views/html-admin-page-status-report.php:578
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:25
-#: includes/class-geodir-comments.php:72
+#: includes/class-geodir-comments.php:75
 #: includes/class-geodir-post-data.php:948
 #: includes/class-geodir-post-data.php:976 language.php:33 language.php:123
 msgid "Name"
@@ -10785,81 +10785,81 @@ msgstr ""
 msgid "Adds a select input to set a sale status of the listing."
 msgstr ""
 
-#: includes/class-geodir-comments.php:60
+#: includes/class-geodir-comments.php:63
 msgid "Enter your review comments here (required)..."
 msgstr ""
 
-#: includes/class-geodir-comments.php:62 includes/core-functions.php:288
+#: includes/class-geodir-comments.php:65 includes/core-functions.php:288
 #: includes/core-functions.php:334 templates/reviews.php:115
 msgid "Review text"
 msgstr ""
 
-#: includes/class-geodir-comments.php:74
+#: includes/class-geodir-comments.php:77
 msgid "Name (required)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:89
+#: includes/class-geodir-comments.php:93
 msgid "Email (required)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:118
+#: includes/class-geodir-comments.php:125
 msgid ""
 "Save my name, email, and website in this browser for the next time I comment."
 msgstr ""
 
-#: includes/class-geodir-comments.php:129
+#: includes/class-geodir-comments.php:138
 msgid "Your email address will not be published."
 msgstr ""
 
-#: includes/class-geodir-comments.php:133 includes/core-functions.php:331
+#: includes/class-geodir-comments.php:142 includes/core-functions.php:331
 #: templates/reviews.php:113
 msgid "Leave a Review"
 msgstr ""
 
-#: includes/class-geodir-comments.php:137 includes/core-functions.php:287
+#: includes/class-geodir-comments.php:146 includes/core-functions.php:287
 #: includes/core-functions.php:329 templates/reviews.php:114
 msgid "Post Review"
 msgstr ""
 
-#: includes/class-geodir-comments.php:649
+#: includes/class-geodir-comments.php:658
 msgid "Pingback:"
 msgstr ""
 
-#: includes/class-geodir-comments.php:649
+#: includes/class-geodir-comments.php:658
 msgid "(Edit)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:804
+#: includes/class-geodir-comments.php:813
 #, php-format
 msgid "%d star rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:807
+#: includes/class-geodir-comments.php:816
 msgid "No rating yet!"
 msgstr ""
 
-#: includes/class-geodir-comments.php:867
-#: includes/class-geodir-comments.php:900
+#: includes/class-geodir-comments.php:876
+#: includes/class-geodir-comments.php:909
 msgid "Select a rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:936
+#: includes/class-geodir-comments.php:945
 msgid "Terrible"
 msgstr ""
 
-#: includes/class-geodir-comments.php:937
+#: includes/class-geodir-comments.php:946
 msgid "Poor"
 msgstr ""
 
-#: includes/class-geodir-comments.php:938
+#: includes/class-geodir-comments.php:947
 msgid "Average"
 msgstr ""
 
-#: includes/class-geodir-comments.php:939
+#: includes/class-geodir-comments.php:948
 msgid "Very Good"
 msgstr ""
 
-#: includes/class-geodir-comments.php:940
+#: includes/class-geodir-comments.php:949
 msgid "Excellent"
 msgstr ""
 
@@ -11265,21 +11265,21 @@ msgstr ""
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:456 includes/core-functions.php:344
+#: includes/class-geodir-elementor.php:457 includes/core-functions.php:344
 #: includes/widgets/class-geodir-widget-single-next-prev.php:94
 #: templates/bootstrap/images/images.php:236
 #: templates/legacy/single/next-prev.php:12
 msgid "Previous"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:460 includes/core-functions.php:345
+#: includes/class-geodir-elementor.php:461 includes/core-functions.php:345
 #: includes/widgets/class-geodir-widget-single-next-prev.php:95
 #: templates/bootstrap/images/images.php:240
 #: templates/legacy/single/next-prev.php:13
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:1129
+#: includes/class-geodir-elementor.php:1130
 msgid "Could not retrieve template."
 msgstr ""
 
@@ -13078,29 +13078,29 @@ msgstr ""
 msgid "Clear field"
 msgstr ""
 
-#: includes/core-functions.php:1582
+#: includes/core-functions.php:1596
 msgid "Filesystem ERROR during mu-plugin file copy: "
 msgstr ""
 
-#: includes/core-functions.php:1584
+#: includes/core-functions.php:1598
 msgid ""
 "There was a problem accessing the filesystem during copy Fast AJAX mu-plugin "
 "file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1592
+#: includes/core-functions.php:1606
 #, php-format
 msgid ""
 "Unable to create directory %s. Make sure its parent directory writable by "
 "the server."
 msgstr ""
 
-#: includes/core-functions.php:1596
+#: includes/core-functions.php:1610
 #, php-format
 msgid "Must-plugin directory %s is not writable by the server."
 msgstr ""
 
-#: includes/core-functions.php:1604
+#: includes/core-functions.php:1618
 msgid ""
 "There was a problem in copy Fast AJAX mu-plugin file to mu-plugins folder."
 msgstr ""
