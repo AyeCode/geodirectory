@@ -893,15 +893,17 @@ class GeoDir_Permalinks {
 			}
 		}
 
-		// force static starting structures first.
+		// Force static starting structures first.
 		$ordered_rules_first  = array();
 		$ordered_rules_second = array();
+
 		foreach ( $_rules as $key => $value ) {
 			$parts = explode( '/', $key );
-			if(strpos($parts[0], '.') === false && strpos($parts[0], '[') === false && strpos($parts[1], '[') === false && strpos($parts[1], '?') === false ){
-				$ordered_rules_first[$key] = $value;
-			}else{
-				$ordered_rules_second[$key] = $value;
+
+			if ( count( $parts ) > 1 && strpos( $parts[0], '.' ) === false && strpos( $parts[0], '[' ) === false && strpos( $parts[1], '[' ) === false && strpos( $parts[1], '?' ) === false ) {
+				$ordered_rules_first[ $key ] = $value;
+			} else {
+				$ordered_rules_second[ $key ] = $value;
 			}
 		}
 
