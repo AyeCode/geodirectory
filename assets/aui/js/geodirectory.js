@@ -1780,19 +1780,20 @@ function gd_manually_set_user_position($msg){
 }
 
 function gd_set_get_directions($lat,$lon){
-    if(jQuery('#gd_map_canvas_post_fromAddress').length){
-        var $map = jQuery("#gd_map_canvas_post_fromAddress").closest('.geodir-map-wrap');
+    if(jQuery('.geodir-map-directions-wrap input[name="from"]').length){
+        var $el = jQuery('.geodir-map-directions-wrap input[name="from"]:visible').length ? jQuery('.geodir-map-directions-wrap input[name="from"]:visible:first') : jQuery('.geodir-map-directions-wrap input[name="from"]:first');
+        var $map = $el.closest('.geodir-map-wrap');
         jQuery('#gd-single-tabs a[href="#post_map"]').tab('show');
         setTimeout(function(){
             jQuery('html, body').animate({
-                scrollTop: $map.offset().top
+                scrollTop: $map.offset().top-20
             }, 1000);
         }, 300);
-        jQuery('#gd_map_canvas_post_fromAddress').val($lat+","+$lon);
+        $el.val($lat+","+$lon);
         if($map.find('.leaflet-routing-geocoder').length) {
             jQuery('.leaflet-routing-geocoder:last input', $map).val($lat+","+$lon).trigger('focus');
         }
-        jQuery('.geodir-map-directions-wrap button').trigger('click');
+        jQuery('.geodir-map-directions-wrap button', $map).trigger('click');
     }
 }
 
