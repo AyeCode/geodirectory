@@ -28,7 +28,7 @@ $user_string    = sprintf(
 				array(
 					'label_col'        => '3',
 					'type'      => 'text',
-					'label_class'=> 'font-weight-bold',
+					'label_class'=> 'font-weight-bold fw-bold',
 					'label_type'        => 'horizontal',
 					'label'       => __( 'Description', 'geodirectory' ) . geodir_help_tip( __( 'Friendly name for identifying this key.', 'geodirectory' )),
 					'class'     => 'mw-100',
@@ -47,8 +47,8 @@ $user_string    = sprintf(
 
 			?>
 
-			<div class="form-group row">
-				<label for="key_user" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('User', 'geodirectory'); ?></label>
+			<div class="form-group row mb-3">
+				<label for="key_user" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('User', 'geodirectory'); ?></label>
 				<div class="col-sm-9">
 					<?php
 
@@ -68,7 +68,7 @@ $user_string    = sprintf(
 				echo aui()->select(
 					array(
 						'label_col'        => '3',
-						'label_class'=> 'font-weight-bold',
+						'label_class'=> 'font-weight-bold fw-bold',
 						'label_type'        => 'horizontal',
 						'label'       => __( 'Permissions', 'geodirectory' ) . geodir_help_tip( __( 'Select the access type of these keys', 'geodirectory' )),
 						'class'     => 'mw-100',
@@ -87,15 +87,15 @@ $user_string    = sprintf(
 
 
 			<?php if ( 0 !== $key_id ) : ?>
-				<div class="form-group row">
-					<label for="key_user" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Consumer key ending in', 'geodirectory'); ?></label>
+				<div class="form-group row mb-3">
+					<label for="key_user" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Consumer key ending in', 'geodirectory'); ?></label>
 					<div class="col-sm-9">
 						<div class="mt-2"><code>&hellip;<?php echo esc_html( $key_data['truncated_key'] ); ?></code></div>
 					</div>
 				</div>
 
-				<div class="form-group row">
-					<label for="key_user" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Last access', 'geodirectory'); ?></label>
+				<div class="form-group row mb-3">
+					<label for="key_user" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Last access', 'geodirectory'); ?></label>
 					<div class="col-sm-9">
 						<div class="mt-2"><?php
 						if ( ! empty( $key_data['last_access'] ) ) {
@@ -159,7 +159,7 @@ $user_string    = sprintf(
 			'label_type'        => 'horizontal',
 			'label_col'         => '3',
 			'class'             => '',
-			'label_class'       => 'font-weight-bold',
+			'label_class'       => 'font-weight-bold fw-bold',
 			'wrap_class'        => '',
 			'label'             => __( 'Consumer key', 'geodirectory' ),
 			'type'              => 'text',
@@ -178,7 +178,7 @@ $user_string    = sprintf(
 			'label_type'        => 'horizontal',
 			'label_col'         => '3',
 			'class'             => '',
-			'label_class'       => 'font-weight-bold',
+			'label_class'       => 'font-weight-bold fw-bold',
 			'wrap_class'        => '',
 			'label'             => __( 'Consumer secret', 'geodirectory' ),
 			'type'              => 'text',
@@ -190,8 +190,8 @@ $user_string    = sprintf(
 		)
 	);
 	?>
-	<div data-argument="keys-qrcode" class="form-group row">
-		<label for="keys-qrcode" class="font-weight-bold  col-sm-3 col-form-label"><?php _e( 'QRCode', 'geodirectory' ); ?></label>
+	<div data-argument="keys-qrcode" class="form-group row mb-3">
+		<label for="keys-qrcode" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e( 'QRCode', 'geodirectory' ); ?></label>
 		<div class="col-sm-9"><div class="input-group"><div id="keys-qrcode"></div></div>
 	</div>
 </script>

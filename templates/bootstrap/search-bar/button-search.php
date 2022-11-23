@@ -3,6 +3,9 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+global $aui_bs5;
+
 /**
  * Variables.
  *
@@ -10,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var boolean $fa_class If a font awesome class is being used as the button text.
  */
 ?>
-<div class='gd-search-field-search col-auto flex-grow-1'>
+<div class='gd-search-field-search col-auto flex-grow-1 <?php echo $aui_bs5 ? 'px-0' : ''; ?>'>
 	<div class='form-group'>
 		<?php
 		echo aui()->button(

@@ -245,11 +245,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
 					<div class="field_row_main">
 						<div class="dd gd-tabs-layout" >
-							
+
 							<?php
 
 
-							echo '<ul class="dd-list gd-tabs-sortable gd-tabs-layout-sortable">';
+							echo '<ul class="dd-list gd-tabs-sortable gd-tabs-layout-sortable ps-0 list-group">';
 
 							if ( ! empty( $tabs ) ) {
 
@@ -266,7 +266,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 					</div>
 				</div>
 			</div>
-					
+
 			<?php
 		}
 
@@ -281,7 +281,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 			if(!empty($tabs)){
 				foreach($tabs as $key => $tab){
-					
+
 					if($tab_id && $tab->id!=$tab_id){
 						continue;
 					}elseif($tab_id && $tab->id==$tab_id && $tab->tab_level > 0){
@@ -375,6 +375,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		 * @param $cfs
 		 */
 		public function output_fields($cfs) {
+			global $aui_bs5;
 			if ( ! empty( $cfs ) ) {
 				echo '<ul class="row row-cols-2 px-2">';
 				foreach ( $cfs as $id => $cf ) {
@@ -393,7 +394,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 					?>
 					<li class="col px-1">
 						<a id="gd-<?php echo esc_attr($cf['tab_key']); ?>"
-						   class="gd-draggable-form-items gd-fieldset  btn btn-sm d-block m-0 btn-outline-gray text-dark text-left"
+						   class="gd-draggable-form-items gd-fieldset  btn btn-sm d-block m-0 btn-outline-gray text-dark <?php echo $aui_bs5 ? 'text-start' : 'text-left';?>"
 						   href="javascript:void(0);"
 						   data-tab_layout="post"
 						   data-tab_type="<?php echo esc_attr($cf['tab_type']); ?>"
@@ -590,7 +591,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 				'tab_icon'   => 'fas fa-cubes',
 				'tab_key'    => '',
 				'tab_content'=> ''
-				
+
 			);
 
 			return apply_filters( 'geodir_cpt_settings_tabs_custom_fields', $fields, $post_type );

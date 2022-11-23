@@ -26,7 +26,7 @@
 //
 //$indents = $depth > 2 ? implode("", array_fill( 0,$depth - 2, "- " ) ) : '';
 //
-//$link_class = $depth ? 'h6' : 'font-weight-bold h5';
+//$link_class = $depth ? 'h6' : 'font-weight-bold fw-bold h5';
 //$cpt_row .= '<div class="gd-cptcat-cat-right   text-uppercase text-truncate">';
 //$cpt_row .= '<a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '" class="text-lightx text-reset stretched-link   '.$link_class.'">';
 //$cpt_row .= $indents;
@@ -78,7 +78,7 @@ if(!$hide_icon){
 	<div class="card-body text-center btn btn-<?php echo $card_color;?> p-1 py-<?php echo $card_padding_inside;?>">
 		<?php echo $icon; ?>
 		<div class="gd-cptcat-cat-right text-uppercase text-truncate">
-			<a href="<?php echo esc_url($term_link);?>" class="text-reset stretched-link font-weight-bold h6">
+			<a href="<?php echo esc_url($term_link);?>" class="text-reset stretched-link font-weight-bold fw-bold h6">
 				<?php echo esc_attr( $cat_name );?>
 			</a>
 			<?php echo $count;?>

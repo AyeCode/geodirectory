@@ -32,7 +32,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 
 			// remove the default category selector
 			add_action('admin_menu', array( __CLASS__,'remove_cat_meta_box'));
-			
+
 			add_action('admin_footer-edit.php', array( __CLASS__,'posts_footer'));
 			add_action('admin_footer-post.php', array( __CLASS__,'post_form_footer'));
 			add_action('admin_footer-post-new.php', array( __CLASS__,'post_form_footer'));
@@ -327,7 +327,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 * @global int $post_id The post ID.
 		 */
 		public static function attachment_settings() {
-			global $post, $post_id;
+			global $post, $post_id, $aui_bs5;
 
 			wp_nonce_field( plugin_basename( __FILE__ ), 'geodir_post_attachments_noncename' );
 
@@ -388,11 +388,16 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title"><?php _e('Set Image Texts','geodirectory'); ?></h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
+								<?php if( $aui_bs5 ){ ?>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+									</button>
+								<?php }else{ ?>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								<?php } ?>
 							</div>
-							<div class="modal-body text-left"></div>
+							<div class="modal-body <?php echo $aui_bs5 ? 'text-start' : 'text-left';?>"></div>
 							<div class="modal-footer"></div>
 						</div>
 					</div>
@@ -468,7 +473,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		public static function posts_footer() {
 			$screen		= get_current_screen();
 			$screen_id	= $screen ? $screen->id : '';
-		
+
 			if ( ! ( $screen_id && in_array( $screen_id, geodir_get_screen_ids() ) ) ) {
 				return;
 			}
@@ -500,7 +505,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			if ( !( ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) ) {
 				return;
 			}
-			 
+
 			$statuses = geodir_get_custom_statuses( $post->post_type );
 			$status_list = '';
 			$current_label = '';

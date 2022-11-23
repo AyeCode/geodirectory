@@ -78,8 +78,8 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 
 					?>
 
-					<div data-argument="gd_im_choicepost" class="form-group row">
-						<label for="gd_im_choicepost" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
+					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
 						<div class="col-sm-9">
 							<?php
 							echo aui()->button(
@@ -174,9 +174,9 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 					<div class="inside">
 
 						<?php
-						
+
 						$cpt_with_count = array();
-						
+
 						foreach($gd_posttypes as $cpt => $name){
 							$cpt_with_count[] = array(
 								'value' => $cpt,
@@ -190,7 +190,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						echo aui()->select(
 							array(
 								'label_col'        => '3',
-								'label_class'=> 'font-weight-bold',
+								'label_class'=> 'font-weight-bold fw-bold',
 								'label_type'        => 'horizontal',
 								'label'       => __( 'Post Type', 'geodirectory' ),
 								'class'     => 'mw-100',
@@ -209,7 +209,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						echo aui()->select(
 							array(
 								'label_col'        => '3',
-								'label_class'=> 'font-weight-bold',
+								'label_class'=> 'font-weight-bold fw-bold',
 								'label_type'        => 'horizontal',
 								'label'       => __( 'Max entries per csv file', 'geodirectory' ) . geodir_help_tip( __( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' )),
 								'class'     => 'mw-100',
@@ -225,8 +225,8 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						);
 						?>
 
-						<div data-argument="gd_im_choicepost" class="form-group row">
-							<label for="gd_im_choicepost" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Filter published dates', 'geodirectory'); echo geodir_help_tip( __( 'Export listings based on the published date', 'geodirectory' ));?></label>
+						<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+							<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Filter published dates', 'geodirectory'); echo geodir_help_tip( __( 'Export listings based on the published date', 'geodirectory' ));?></label>
 							<div class="col-sm-9 d-flex flex-row">
 								<?php
 								echo aui()->input(
@@ -245,7 +245,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 										'name'              => 'gd_imex[end_date]',
 										'type'              => 'datepicker',
 										'placeholder'       => esc_html__( 'End date', 'geodirectory'),
-										'class'             => 'w-100 ml-2',
+										'class'             => 'w-100 ml-2 ms-2',
 										'no_wrap'           => true,
 									)
 								);

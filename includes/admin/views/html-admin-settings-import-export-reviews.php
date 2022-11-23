@@ -88,8 +88,8 @@ foreach ($gd_chunksize_options as $value => $title) {
 
 					?>
 
-					<div data-argument="gd_im_choicepost" class="form-group row">
-						<label for="gd_im_choicepost" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
+					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
 						<div class="col-sm-9">
 							<?php
 							echo aui()->button(
@@ -186,7 +186,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 					echo aui()->select(
 						array(
 							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold',
+							'label_class'=> 'font-weight-bold fw-bold',
 							'label_type'        => 'horizontal',
 							'label'       => __( 'Post Type', 'geodirectory' ),
 							'class'     => 'mw-100',
@@ -205,7 +205,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 					echo aui()->select(
 						array(
 							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold',
+							'label_class'=> 'font-weight-bold fw-bold',
 							'label_type'        => 'horizontal',
 							'label'       => __( 'Max entries per csv file', 'geodirectory' ) . geodir_help_tip( __( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' )),
 							'class'     => 'mw-100',
@@ -221,9 +221,9 @@ foreach ($gd_chunksize_options as $value => $title) {
 					);
 					?>
 
-					<div data-argument="gd_im_choicepost" class="form-group row">
-						<label for="gd_im_choicepost" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Filter published dates', 'geodirectory'); echo geodir_help_tip( __( 'Export listings based on the published date', 'geodirectory' ));?></label>
-						<div class="col-sm-9 d-flex flex-row">
+					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Filter published dates', 'geodirectory'); echo geodir_help_tip( __( 'Export listings based on the published date', 'geodirectory' ));?></label>
+						<div class="col-sm-9 d-flex flex-row gap-2">
 							<?php
 							echo aui()->input(
 								array(
@@ -249,15 +249,15 @@ foreach ($gd_chunksize_options as $value => $title) {
 						</div>
 					</div>
 
-					<div data-argument="gd_im_choicepost" class="form-group row">
-						<label for="gd_im_choicepost" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Rating', 'geodirectory'); echo geodir_help_tip( __( 'Min & max rating star range of which the reviews are to be exported', 'geodirectory' ));?></label>
+					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Rating', 'geodirectory'); echo geodir_help_tip( __( 'Min & max rating star range of which the reviews are to be exported', 'geodirectory' ));?></label>
 						<div class="col-sm-9 d-flex flex-row">
 							<?php
 							echo aui()->select(
 								array(
 									'id'                => 'gd_imex_min_rating',
 									'name'              => 'gd_imex[min_rating]',
-									'class'             => 'w-100',
+									'class'             => 'w-100 mw-100',
 									'no_wrap'           => true,
 									'options'           => array(
 										''  => __( 'Any', 'geodirectory' ),
@@ -273,7 +273,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 								array(
 									'id'                => 'gd_imex_max_rating',
 									'name'              => 'gd_imex[max_rating]',
-									'class'             => 'w-100 ml-2',
+									'class'             => 'w-100 ml-2 ms-2 mw-100',
 									'no_wrap'           => true,
 									'options'           => array(
 										''  => __( 'Any', 'geodirectory' ),
@@ -293,7 +293,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 					echo aui()->select(
 						array(
 							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold',
+							'label_class'=> 'font-weight-bold fw-bold',
 							'label_type'        => 'horizontal',
 							'label'       => __( 'Status', 'geodirectory' ) . geodir_help_tip(__( 'Select the status of the reviews to export', 'geodirectory' )),
 							'class'     => 'mw-100',

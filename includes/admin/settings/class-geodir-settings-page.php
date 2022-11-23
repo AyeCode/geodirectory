@@ -167,12 +167,12 @@ abstract class GeoDir_Settings_Page {
      *
      * @since 2.0.0
      */
-	public static function toggle_advanced_button($btn_class = 'btn btn-sm btn-primary ml-auto gd-advanced-toggle',$init = true){
+	public static function toggle_advanced_button($btn_class = 'btn btn-sm btn-primary ms-auto ml-auto gd-advanced-toggle',$init = true){
 
 		$show = geodir_get_option( 'admin_disable_advanced', false );
 
 		if($show){return;} // don't show advanced toggle
-		
+
 		$text_show = __("Show Advanced","geodirectory");
 		$text_hide = __("Hide Advanced","geodirectory");
 
