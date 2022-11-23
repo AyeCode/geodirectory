@@ -151,6 +151,7 @@ class GeoDir_SEO {
 
 			if ( defined( 'RANK_MATH_VERSION' ) ) {
 				add_action( 'rank_math/vars/register_extra_replacements', array( __CLASS__, 'rank_math_vars_register_extra_replacements' ), 20 );
+				add_filter( 'rank_math/frontend/description', array( __CLASS__, 'rank_math_frontend_description_replace_vars' ), 9, 1 );
 			}
 
 			return;
@@ -1832,6 +1833,22 @@ class GeoDir_SEO {
 		$var = strpos( $var, '_gd_' ) === 0 ? substr( $var, 4 ) : $var;
 
 		return self::replace_variable( '%%' . $var . '%%', self::$gd_page );
+	}
+
+	/**
+	* Meta description replace vars.
+	*
+	* @since 2.2.19
+	*
+	* @param string $description The description sentence.
+	* @return string Filtered description.
+	*/
+	public static function rank_math_frontend_description_replace_vars( $description ) {
+		if ( empty( $description ) ) {
+			return $description;
+		}
+
+		return self::replace_variable( $description, self::$gd_page );
 	}
 
 	/**
