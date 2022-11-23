@@ -88,8 +88,8 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 
 					?>
 
-					<div data-argument="gd_im_choicepost" class="form-group row">
-						<label for="gd_im_choicepost" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
+					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
 						<div class="col-sm-9">
 							<?php
 							echo aui()->button(
@@ -208,7 +208,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						echo aui()->select(
 							array(
 								'label_col'        => '3',
-								'label_class'=> 'font-weight-bold',
+								'label_class'=> 'font-weight-bold fw-bold',
 								'label_type'        => 'horizontal',
 								'label'       => __( 'Post Type', 'geodirectory' ),
 								'class'     => 'mw-100',
@@ -227,7 +227,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						echo aui()->select(
 							array(
 								'label_col'        => '3',
-								'label_class'=> 'font-weight-bold',
+								'label_class'=> 'font-weight-bold fw-bold',
 								'label_type'        => 'horizontal',
 								'label'       => __( 'Max entries per csv file', 'geodirectory' ) . geodir_help_tip( __( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' )),
 								'class'     => 'mw-100',

@@ -80,7 +80,7 @@ global $gd_post;
 			$limit_show = $image_total;
 		}
 		?>
-		<div class="geodir-images geodir-images-n-<?php echo $image_total; ?> geodir-images-<?php echo $type . " " .$inner_wrapper_class ; ?> "><?php
+		<div class="geodir-images aui-gallery geodir-images-n-<?php echo $image_total; ?> geodir-images-<?php echo $type . " " .$inner_wrapper_class ; ?> "><?php
 			$image_count = 0;
 			$max_width_percent = $limit_show ? 100 / absint( $limit_show ) : '';
 
@@ -127,7 +127,7 @@ global $gd_post;
 				if($link_to=='lightbox'){
 					$link = geodir_get_image_src($image, 'large');
 				}
-								
+
 
 				// check if screenshot link is different
 				if($link_screenshot_to!='' && $link_screenshot_to!=$link_to && !$image->ID && stripos(strrev($image->type), "tohsneercs_") === 0){
@@ -139,8 +139,8 @@ global $gd_post;
 						$link_tag_close_ss = "</a>";
 					}elseif($link_screenshot_to=='lightbox'){
 						$link = geodir_get_image_src($image, 'large');
-						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image $responsive_image_class' {$lightbox_attrs}>";
-						$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
+						$link_tag_open_ss = "<a href='%s' class='aui-lightbox-image $responsive_image_class' {$lightbox_attrs}>";
+						$link_tag_close_ss = "<i class=\"fas fa-search-plus  w-auto h-auto\" aria-hidden=\"true\"></i></a>";
 					}elseif($link_screenshot_to=='lightbox_url'){
 						$field_key = str_replace("_screenshot","",$image->type);
 						$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
@@ -156,14 +156,14 @@ global $gd_post;
 						}
 
 						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-iframe $responsive_image_class' >";
-						$link_tag_close_ss = "<i class=\"$fa_icon\" aria-hidden=\"true\"></i></a>";
+						$link_tag_close_ss = "<i class=\"$fa_icon w-auto h-auto\" aria-hidden=\"true\"></i></a>";
 					}elseif($link_screenshot_to=='url' || $link_screenshot_to=='url_same'){
 						$field_key = str_replace("_screenshot","",$image->type);
 						$target = $link_screenshot_to=='url' ? "target='_blank'" : '';
 						$link_icon = $link_screenshot_to=='url' ? "fas fa-external-link-alt" : 'fas fa-link';
 						$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
 						$link_tag_open_ss = "<a href='%s' $target class=' $responsive_image_class' rel='nofollow noopener noreferrer'>";
-						$link_tag_close_ss = "<i class=\"$link_icon\" aria-hidden=\"true\"></i></a>";
+						$link_tag_close_ss = "<i class=\"$link_icon w-auto h-auto\" aria-hidden=\"true\"></i></a>";
 					}
 
 				}
@@ -213,7 +213,7 @@ global $gd_post;
 				if($title || $caption){
 					?>
 					<div class="carousel-caption d-none d-md-block p-0 m-0 py-1 w-100 rounded-bottom <?php if($type=='gallery'){echo 'sr-only';}?>" style="bottom: 0;left:0;background: #00000060">
-						<h5 class="m-0 p-0 h6 font-weight-bold text-white"><?php echo $title;?></h5>
+						<h5 class="m-0 p-0 h6 font-weight-bold fw-bold text-white"><?php echo $title;?></h5>
 						<p class="m-0 p-0 h6 text-white"><?php echo $caption;?></p>
 					</div>
 					<?php

@@ -34,7 +34,7 @@ $cat_color = $cat_color ? ' style="color:' . sanitize_hex_color( $cat_color ) . 
 $icon = ! $hide_icon ? "<span class='gd-cptcat-icon mr-1" . $icon_color_class . "'" . $cat_color . ">$cat_icon</span>" : '';
 
 ?>
-<div class="list-group-item list-group-item-action" >
+<div class="dropdown-item" >
 	<div class="gd-cptcat-cat-right text-uppercase text-truncate">
 		<a href="<?php echo esc_url($term_link);?>" class="text-reset stretched-link h6">
 			<?php echo $indents . $icon . esc_attr( $cat_name ) . $count;?>

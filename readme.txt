@@ -290,6 +290,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Map directions link from listings is not working when multiple post map on the page - FIXED
 * Move add listing JS in footer in backend - CHANGED
 * Rank Math description meta snippet not replaces location vars - FIXED
+* Changes for AUI Bootstrap 5 compatibility - ADDED
 
 = GeoDirectory Business Directory Plugin v2.2.18 - 2022-11-09 =
 * GD Single should show blank content when assigned empty elementor template - CHANGED

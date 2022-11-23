@@ -25,9 +25,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-global $geodirectory;
+global $geodirectory, $aui_bs5;
 ?>
-<div class="geodir-search-form-wrapper <?php echo esc_attr( $wrap_class ); ?>">
+<div class="geodir-search-form-wrapper <?php echo esc_attr( $wrap_class ); echo $aui_bs5 ? ' container' : '';?>">
 	<form class="w-100 d-block <?php echo esc_attr( $form_class ); ?>" data-show="<?php echo esc_attr( $show ); ?>" name="geodir-listing-search" action="<?php echo geodir_search_page_base_url(); ?>" method="get" style="box-sizing:content-box;">
 		<input type="hidden" name="geodir_search" value="1" />
 		<?php
@@ -38,7 +38,7 @@ global $geodirectory;
 		 */
 		do_action( 'geodir_before_search_form', $instance ); ?>
 
-		<div class="geodir-search form-row align-items-center">
+		<div class="geodir-search <?php echo $aui_bs5 ? 'row gap-2' : 'form-row'; ?> align-items-center">
 				<?php
 				/**
 				 * Adds the input fields to the search form.

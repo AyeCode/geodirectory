@@ -133,7 +133,7 @@ class GeoDir_Admin_Setup_Wizard {
 		$aui_settings = AyeCode_UI_Settings::instance();
 		$aui_settings->enqueue_scripts();
 		$aui_settings->enqueue_style();
-		
+
 
 		// load OSM styles if needed.
 		if ( $geodir_map_name == 'osm' ) {
@@ -201,7 +201,7 @@ class GeoDir_Admin_Setup_Wizard {
 		$osm_extra = GeoDir_Maps::footer_script();
 		wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '" . GeoDir_Maps::active_map() . "';" . $osm_extra, 'before' );
 		$required_scripts[] = 'geodir-goMap';
-		
+
 		// demo import
 		if ( defined( 'AYECODE_CONNECT_VERSION' ) ) {
 			global $ayecode_connect;
@@ -265,6 +265,9 @@ class GeoDir_Admin_Setup_Wizard {
 	 * @since 2.0.0
 	 */
 public function setup_wizard_header() {
+	global $aui_bs5;
+
+	$bs_prefix = $aui_bs5 ? 'bs-' : '';
 	?>
 	<!DOCTYPE html>
 	<html <?php language_attributes(); ?> class="bsui">
@@ -289,11 +292,11 @@ public function setup_wizard_header() {
 		</style>
 	</head>
 	<body class="modal-open " style="background: #f1f1f1;">
-	
+
 
 	<div id="gd-setup-container" class="gd-setup wp-core-ui bg-whitex mx-auto mt-4x modal fade show overflow-auto"  style="display: block;z-index: inherit;">
 
-		<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+		<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm <?php echo $aui_bs5 ? 'px-3' : '';?>">
 			<a class="navbar-brand" href="#">
 				<h1 class="h5 p-0 m-0">
 					<i class="fas fa-globe-americas text-primary bg-white rounded-circle" style="color:#ff8333 !important;"></i>
@@ -302,7 +305,7 @@ public function setup_wizard_header() {
 							</span>
 				</h1>
 			</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler" type="button" data-<?php echo $bs_prefix;?>toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
@@ -341,7 +344,7 @@ public function setup_wizard_header() {
 		$ouput_steps = $this->steps;
 		array_shift( $ouput_steps );
 		/*?>
-		<ol class="gd-setup-steps mb-0 pb-4 text-uppercase font-weight-bold small">
+		<ol class="gd-setup-steps mb-0 pb-4 text-uppercase font-weight-bold fw-bold small">
 			<?php foreach ( $ouput_steps as $step_key => $step ) : ?>
 				<li class="<?php
 				if ( $step_key === $this->step ) {
@@ -357,16 +360,18 @@ public function setup_wizard_header() {
 
 		$tick_class = 'text-black-50';
 		?>
-		<ol class="nav nav-pills nav-fill w-100 text-uppercase font-weight-bold small text-muted">
+		<ol class="nav nav-pills nav-fill w-100 text-uppercase font-weight-bold fw-bold small text-muted">
 			<?php foreach ( $ouput_steps as $step_key => $step ) : ?>
 				<li class="nav-link border-0 d-flex align-content-center justify-content-center <?php
 				if ( $step_key === $this->step ) {
-					echo 'active';
+					echo 'active text-white';
 					$tick_class = '';
 				} elseif ( array_search( $this->step, array_keys( $this->steps ) ) > array_search( $step_key, array_keys( $this->steps ) ) ) {
 					$tick_class = 'text-primary';
+				}else{
+					echo 'text-muted';
 				}
-				?>"><span class="h5 p-0 m-0"><i class="fas fa-check-circle <?php echo $tick_class;?>"></i></span> <span class="pl-1 align-self-center"><?php echo esc_html( $step['name'] ); ?></span>
+				?>"><span class="h5 p-0 m-0"><i class="fas fa-check-circle <?php echo $tick_class;?>"></i></span> <span class="pl-1 ps-1 align-self-center"><?php echo esc_html( $step['name'] ); ?></span>
 
 				</li>
 			<?php endforeach; ?>
@@ -412,14 +417,17 @@ public function setup_wizard_header() {
 	 * @since 2.0.0
 	 */
 	public function setup_introduction() {
+		global $aui_bs5;
+
+		$bs_prefix = $aui_bs5 ? 'bs-' : '';
 		?>
 
-		<div class="modal-content border-0 shadow mb-4 collapse show gd-setup-welcome" data-toggle="collapse">
+		<div class="modal-content border-0 shadow mb-4 collapse show gd-setup-welcome" data-<?php echo $bs_prefix;?>toggle="collapse">
 			<div class="modal-body p-5">
 				<div class="gd-setup-content">
 					<h1 class="h3"><?php esc_html_e( 'Welcome to the world of GeoDirectory!', 'geodirectory' ); ?></h1>
 					<p class="mt-3"><?php _e( "This quick setup wizard will help you <b>configure your directory</b>. It's <b>completely optional</b> and shouldn't take longer than <b>five minutes<b/>.", 'geodirectory' ); ?></p>
-					<p class="gd-setup-actions step text-right">
+					<p class="gd-setup-actions step text-right text-end">
 						<a href="<?php echo esc_url( admin_url() ); ?>"
 						   class="btn btn-link text-muted "><?php esc_html_e( 'Not right now', 'geodirectory' ); ?></a>
 						<a href="#" onclick="jQuery('.gd-setup-welcome').collapse('hide');return false;"
@@ -516,6 +524,10 @@ public function setup_wizard_header() {
 
 	public function setup_features() {
 
+		global $aui_bs5;
+
+		$bs_prefix = $aui_bs5 ? 'bs-' : '';
+
 //		print_r(get_plugins());exit;
 
 //		print_r( get_option( 'active_plugins', array() )); exit;
@@ -540,7 +552,7 @@ public function setup_wizard_header() {
 		</div>
 
 		<div class="list-group mb-5" >
-			
+
 			<?php
 
 			$installed_text = "<i class=\"fas fa-check-circle\" aria-hidden=\"true\"></i> " . __( 'Installed', 'geodirectory' );
@@ -565,7 +577,7 @@ public function setup_wizard_header() {
 				$url           = isset( $status['url'] ) ? $status['url'] : '';
 
 				$nonce = wp_create_nonce( 'updates' );
-				
+
 				$active = false;
 				$active_badge = '';
 				$activate_url = wp_nonce_url(admin_url('plugins.php?action=activate&plugin='.$file), 'activate-plugin_' . $file);
@@ -580,7 +592,7 @@ public function setup_wizard_header() {
 					$checked        = "checked";
 					$disabled       = $active ? "disabled" : '';
 					$checkbox_class = $active ? "" : 'gd_install_plugins';
-					$active_badge = $active ? '<span class="badge badge-pill badge-success">'.__("Active","geodirectory").'</span> ' : '';
+					$active_badge = $active ? '<span class="badge badge-pill badge-success bg-success">'.__("Active","geodirectory").'</span> ' : '';
 
 				}
 
@@ -589,7 +601,7 @@ public function setup_wizard_header() {
 				<div class="list-group-item gd-addon list-group-item-action <?php echo $slug;?> <?php echo $selected ? 'active' : '';?>">
 					<div class="d-flex w-100 justify-content-between">
 						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input <?php echo $checkbox_class;?>" id="<?php echo $slug;?>" <?php echo $checked;?> <?php echo $disabled;?> 
+							<input type="checkbox" class="custom-control-input <?php echo $checkbox_class;?>" id="<?php echo $slug;?>" <?php echo $checked;?> <?php echo $disabled;?>
 							       data-status="<?php echo esc_attr($plugin_status);?>"
 							       data-slug="<?php echo esc_attr($slug);?>"
 							       data-activateurl="<?php echo esc_attr($activate_url);?>"
@@ -599,7 +611,7 @@ public function setup_wizard_header() {
 						<small class="">
 							<span class="badge badge-pill badge-secondary gd-plugin-status d-none"><?php _e( "Installing", "geodirectory" ); ?></span>
 							<?php echo $active_badge;?>
-							<span class="badge badge-pill badge-success"><?php _e("Free","geodirectory");?></span>
+							<span class="badge badge-pill badge-success bg-success"><?php _e("Free","geodirectory");?></span>
 						</small>
 					</div>
 				</div>
@@ -770,7 +782,7 @@ public function setup_wizard_header() {
 								$checked        = "checked";
 								$disabled       = $active ? "disabled" : '';
 								$checkbox_class = $active ? "" : 'gd_install_plugins';
-								$active_badge = $active ? '<small><span class="badge badge-pill badge-success">'.__("Active","geodirectory").'</span></small> ' : '';
+								$active_badge = $active ? '<small><span class="badge badge-pill badge-success bg-success">'.__("Active","geodirectory").'</span></small> ' : '';
 							}
 							?>
 							<div
@@ -796,7 +808,7 @@ public function setup_wizard_header() {
 										?>
 										<small class="gd-addon-valid">
 											<span class="badge badge-pill badge-secondary gd-plugin-status d-none"><?php _e( "Installing", "geodirectory" ); ?></span>
-											<span class="badge badge-pill badge-success"><?php _e( "Valid", "geodirectory" ); ?></span>
+											<span class="badge badge-pill badge-success bg-success"><?php _e( "Valid", "geodirectory" ); ?></span>
 										</small>
 										<?php
 									}else{
@@ -821,7 +833,7 @@ public function setup_wizard_header() {
 
 						?>
 						<a href="#" class="list-group-item gd-addon list-group-item-action gd-addons-show-more"
-						   data-toggle="collapse" role="button" aria-expanded="false"
+						   data-<?php echo $bs_prefix;?>toggle="collapse" role="button" aria-expanded="false"
 						   data-target=".gd-paid-product-collapse"
 						   onclick="jQuery(this).find('span').toggleClass('d-none');">
 							<div class=" w-100  text-center">
@@ -877,7 +889,7 @@ public function setup_wizard_header() {
 			</div>
 
 
-			<p class="gd-setup-actions step text-right mt-4">
+			<p class="gd-setup-actions step text-right text-end mt-4">
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
 				   class="btn btn-link text-muted gd-install-skip"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
 				<?php wp_nonce_field( 'gd-setup' ); ?>
@@ -936,6 +948,9 @@ public function setup_wizard_header() {
 	}
 
 	public function setup_type() {
+		global $aui_bs5;
+
+		$bs_prefix = $aui_bs5 ? 'bs-' : '';
 
 		$types = array(
 			'standard_places'   => __("General Business","geodirectory"),
@@ -990,7 +1005,7 @@ public function setup_wizard_header() {
 				<div class="col">
 					<div class="custom-control custom-radio border <?php if($selected)echo 'border-primary'; ?> rounded-sm px-3 pl-5 py-2  mb-3 <?php if($disabled)echo 'bg-light'; ?>"
 						<?php if(!$disabled){ echo 'onclick="gd_setup_set_types(this);"';}?>
-						<?php if($disabled){ echo 'data-toggle="tooltip" data-placement="top" title="'. __("Enable our Events addon to be able to use events","geodirectory").'"'; ?>>
+						<?php if($disabled){ echo 'data-' . $bs_prefix . 'toggle="tooltip" data-placement="top" title="'. __("Enable our Events addon to be able to use events","geodirectory").'"'; ?>>
 						<input <?php if($selected)echo 'checked' ?> type="radio" class="custom-control-input" name="<?php echo esc_attr($key);?>" id="<?php echo esc_attr($key);}?>"
 							<?php echo $disabled;?> >
 						<label class="custom-control-label c-pointer w-100" for="<?php echo esc_attr($key);?>" <?php if(!$disabled){ echo 'onclick="jQuery(this).parent().toggleClass(\'border-primary\');"';}?>><?php echo esc_attr($type);?></label>
@@ -1019,7 +1034,7 @@ public function setup_wizard_header() {
 			</div>
 
 
-			<p class="gd-setup-actions step text-right mt-4">
+			<p class="gd-setup-actions step text-right text-end mt-4">
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
 				   class="btn btn-link text-muted"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
 				<?php wp_nonce_field( 'gd-setup' ); ?>
@@ -1073,7 +1088,7 @@ public function setup_wizard_header() {
 			<div class="col">
 				<div class="gd-wiz-map-google rounded overflow-hidden position-relative  hover-shadow <?php if($active_map=='google') echo $active_class;?>" onclick="gd_setup_wiz_map_select('google');">
 					<img class="img-fluid hover-zoom c-pointer" src="<?php echo geodir_plugin_url() . '/assets/images/google-maps.jpg'; ?>" >
-					<h5 class="ab-top-right"><span class="badge badge-warning text-whitex shadow"><?php _e("Requires API key","geodirectory");?></span> <span class="badge badge-success shadow">Free Quota</span></h5>
+					<h5 class="ab-top-right"><span class="badge badge-warning bg-warning text-dark shadow"><?php _e("Requires API key","geodirectory");?></span> <span class="badge badge-success bg-success shadow">Free Quota</span></h5>
 
 				</div>
 				<h5 class="text-center pt-3"><?php _e("Google Maps","geodirectory");?></h5>
@@ -1081,7 +1096,7 @@ public function setup_wizard_header() {
 			<div class="col">
 				<div class="gd-wiz-map-osm rounded overflow-hidden position-relative  hover-shadow <?php if($active_map=='osm') echo $active_class;?>" onclick="gd_setup_wiz_map_select('osm');">
 					<img class="img-fluid hover-zoom c-pointer" src="<?php echo geodir_plugin_url() . '/assets/images/osm.jpg'; ?>" >
-					<h5 class="ab-top-right"><span class="badge badge-success shadow">Free</span></h5>
+					<h5 class="ab-top-right"><span class="badge badge-success bg-success shadow">Free</span></h5>
 				</div>
 				<h5 class="text-center pt-3"><?php _e("Open Street Maps","geodirectory");?></h5>
 			</div>
@@ -1128,7 +1143,7 @@ public function setup_wizard_header() {
 			</div>
 
 
-			<p class="gd-setup-actions step text-right mt-4">
+			<p class="gd-setup-actions step text-right text-end mt-4">
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
 				   class="btn btn-link text-muted"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
 				<?php wp_nonce_field( 'gd-setup' ); ?>
@@ -1227,7 +1242,7 @@ public function setup_wizard_header() {
 
 
 			?>
-			<div class="gd-setup-actions step text-right d-flex justify-content-between mt-4">
+			<div class="gd-setup-actions step text-right text-end d-flex justify-content-between mt-4">
 				<div>
 					<?php $generalSettings->output_toggle_advanced(); ?>
 				</div>
@@ -1312,6 +1327,9 @@ public function setup_wizard_header() {
 	 * @since 2.0.0
 	 */
 	public function setup_content() {
+		global $aui_bs5;
+
+		$bs_prefix = $aui_bs5 ? 'bs-' : '';
 
 		$wizard_content = array(
 			'dummy_data' => __( "Dummy Data", "geodirectory" ),
@@ -1326,8 +1344,8 @@ public function setup_wizard_header() {
 		?>
 
 		<div class="list-group list-group-horizontal-sm mb-4 text-center" id="gd-import-tabs" role="tablist">
-			<a class="list-group-item w-50 <?php if($active_tab=='full'){echo 'active';} ?>" data-toggle="tab" href="#gd-import-site" role="tab" aria-controls="gd-import-site"><i class="fas fa-cloud-download-alt"></i> <?php _e( "Import full demo site", "geodirectory" ); ?></a>
-			<a class="list-group-item w-50 <?php if($active_tab=='add'){echo 'active';} ?>" data-toggle="tab" href="#gd-import-bits" role="tab" aria-controls="gd-import-bits"><i class="fas fa-plus"></i> <?php _e( "Add to existing site", "geodirectory" ); ?></a>
+			<a class="list-group-item w-50 <?php if($active_tab=='full'){echo 'active';} ?>" data-<?php echo $bs_prefix;?>toggle="tab" href="#gd-import-site" role="tab" aria-controls="gd-import-site"><i class="fas fa-cloud-download-alt"></i> <?php _e( "Import full demo site", "geodirectory" ); ?></a>
+			<a class="list-group-item w-50 <?php if($active_tab=='add'){echo 'active';} ?>" data-<?php echo $bs_prefix;?>toggle="tab" href="#gd-import-bits" role="tab" aria-controls="gd-import-bits"><i class="fas fa-plus"></i> <?php _e( "Add to existing site", "geodirectory" ); ?></a>
 		</div>
 
 		<div class="tab-content" id="myTabContent">
@@ -1371,7 +1389,7 @@ public function setup_wizard_header() {
 
 							if ( defined( 'AYECODE_CONNECT_PLUGIN_DIR' ) ) {
 								require_once AYECODE_CONNECT_PLUGIN_DIR . '/includes/class-ayecode-demo-content.php';
-								
+
 								$demo_content = AyeCode_Demo_Content::instance();
 								$demo_content->scripts();
 								ob_start();
@@ -1400,7 +1418,7 @@ public function setup_wizard_header() {
 							}
 
 
-							
+
 						}else{
 							?>
 							<div class="text-center pb-5">
@@ -1419,7 +1437,7 @@ public function setup_wizard_header() {
 
 
 		<form method="post">
-		<p class="gd-setup-actions step text-right mt-4">
+		<p class="gd-setup-actions step text-right text-end mt-4">
 			<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
 			   class="btn btn-link text-muted"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
 			<?php wp_nonce_field( 'gd-setup' ); ?>
@@ -1596,7 +1614,7 @@ public function setup_wizard_header() {
 
 			</div>
 
-			<p class="gd-setup-actions step text-right mt-4">
+			<p class="gd-setup-actions step text-right text-end mt-4">
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
 				   class="btn btn-link text-muted"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
 				<?php wp_nonce_field( 'gd-setup' ); ?>
@@ -1753,7 +1771,7 @@ public function setup_wizard_header() {
 			<div class="form-table gd-dummy-table gd-dummy-widgets">
 				<div class="d-flex justify-content-between">
 					<div class="pb-1 flex-fill">
-						<div class="form-group">
+						<div class="form-group mb-3">
 							<label for="geodir-wizard-widgets-top"><?php _e( "Select the theme top sidebar", "geodirectory" ); ?></label>
 							<select id='geodir-wizard-widgets-top' class="geodir-select form-control form-control-sm w-100 mw-100 ">
 								<?php
@@ -1807,7 +1825,7 @@ public function setup_wizard_header() {
 						</div>
 					</div>
 					<div class="pl-2 pb-1">
-						<div class="form-group text-right">
+						<div class="form-group mb-3 text-right">
 							<label
 								for="geodir-wizard-widgets-top-submit" class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
 							<input type="button" id="geodir-wizard-widgets-top-submit"
@@ -1829,7 +1847,7 @@ public function setup_wizard_header() {
 		<div class="form-table gd-dummy-table gd-dummy-widgets">
 			<div class="d-flex justify-content-between">
 				<div class="pb-1 flex-fill">
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="geodir-wizard-widgets"><?php _e( "Select the theme sidebar", "geodirectory" ); ?></label>
 						<select id='geodir-wizard-widgets' class="geodir-select form-control form-control-sm w-100 mw-100">
 							<?php
@@ -1884,7 +1902,7 @@ public function setup_wizard_header() {
 					</div>
 				</div>
 				<div class="pl-2 pb-1">
-					<div class="form-group text-right">
+					<div class="form-group mb-3 text-right">
 						<label
 							for="geodir-wizard-widgets-top-submit" class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
 						<input type="button" id="geodir-wizard-widgets-submit" value="<?php _e( "Insert widgets", "geodirectory" ); ?>"
@@ -1907,7 +1925,7 @@ public function setup_wizard_header() {
 		<div class="form-table gd-dummy-table gd-dummy-widgets gd-dummy-posts">
 			<div class="d-flex justify-content-between">
 				<div class="pb-1 flex-fill">
-					<div class="form-group">
+					<div class="form-group mb-3">
 						<label for="geodir-wizard-menus"><?php _e( "Select the theme main menu", "geodirectory" ); ?></label>
 						<?php
 
@@ -1982,7 +2000,7 @@ public function setup_wizard_header() {
 					</div>
 				</div>
 				<div class="pl-2 pb-1">
-					<div class="form-group text-right">
+					<div class="form-group mb-3 text-right">
 						<label
 							for="geodir-wizard-menu-submit"
 							class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
