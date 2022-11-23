@@ -2004,7 +2004,14 @@ class GeoDir_Compatibility {
 		}
 
 		if ( 'file' == $geodir_gb_enqueue_css->mode() ) {
-			wp_enqueue_style( 'generateblocks', esc_url( $geodir_gb_enqueue_css->file( 'uri' ) ), array(), null );
+			$option = get_option( 'generateblocks_dynamic_css_posts', array() );
+
+			if ( ! ( is_array( $option ) && ! empty( $option[ $page_id ] ) ) ) {
+				// Store our block IDs based on the content we find.
+				generateblocks_get_dynamic_css( '', true );
+			}
+
+			wp_enqueue_style( 'geodir-generateblocks', esc_url( $geodir_gb_enqueue_css->file( 'uri' ) ), array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		}
 	}
 
@@ -2021,6 +2028,10 @@ class GeoDir_Compatibility {
 
 		$page_id = self::gd_page_id();
 
+		if ( empty( $page_id ) ) {
+			return;
+		}
+
 		$the_post = $post;
 
 		// Backup post;
@@ -2031,12 +2042,19 @@ class GeoDir_Compatibility {
 		}
 
 		if ( 'inline' === $geodir_gb_enqueue_css->mode() || ! wp_style_is( 'generateblocks', 'enqueued' ) ) {
+			// Build our CSS based on the content we find.
+			generateblocks_get_dynamic_css();
+
 			$css = generateblocks_get_frontend_block_css();
 
 			if ( ! empty( $css ) ) {
-				printf(
-					'<style id="generateblocks-css">%s</style>',
-					wp_strip_all_tags( $css )
+				// Add a "dummy" handle we can add inline styles to.
+				wp_register_style( 'geodir-generateblocks', false ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+				wp_enqueue_style( 'geodir-generateblocks' );
+
+				wp_add_inline_style(
+					'geodir-generateblocks',
+					wp_strip_all_tags( $css ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				);
 			}
 		}
