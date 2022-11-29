@@ -936,7 +936,7 @@ class GeoDir_Post_Data {
 
 				if($design_style ){
 
-					echo '<fieldset class="form-group" id="geodir_fieldset_your_details">';
+					echo '<fieldset class="form-group mb-3" id="geodir_fieldset_your_details">';
 					echo '<h3 class="h3">'.__( "Your Details", "geodirectory" ).'</h3>';
 					echo '</fieldset>';
 
@@ -1015,7 +1015,7 @@ class GeoDir_Post_Data {
 				if($design_style ) {
 					$conditional_attrs = geodir_conditional_field_attrs( array( 'type' => 'fieldset' ), 'details', 'fieldset' );
 
-					echo '<fieldset class="form-group" id="geodir_fieldset_details"' . $conditional_attrs . '>';
+					echo '<fieldset class="form-group mb-3" id="geodir_fieldset_details"' . $conditional_attrs . '>';
 					echo '<h3 class="h3">' . $details_header . '</h3>';
 					echo '</fieldset>';
 				}else {

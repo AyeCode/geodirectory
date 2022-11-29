@@ -142,7 +142,7 @@ class GeoDir_Comments {
 			$reply_text = __( "Leave a Review", "geodirectory" );
 
 			$defaults['class_submit'] .= " btn btn-primary form-control text-white";
-			$defaults['submit_field'] = '<div class="form-submit form-group">%1$s %2$s</div>';
+			$defaults['submit_field'] = '<div class="form-submit form-group mb-3">%1$s %2$s</div>';
 			$defaults['label_submit'] = esc_html__( "Post Review" , 'geodirectory');
 			$defaults['title_reply'] = '<span class="gd-comment-review-title h4" data-review-text="' . esc_attr( $reply_text ) . '" data-reply-text="' . esc_attr( $defaults['title_reply'] ) . '">' . $reply_text . '</span>';
 		}
@@ -711,7 +711,7 @@ class GeoDir_Comments {
 			$design_style = geodir_design_style();
 
 			if($design_style){
-				echo '<div class="form-group form-control h-auto rounded px-3 pt-3 pb-3  gd-rating-input-group ">';
+				echo '<div class="form-group mb-3 form-control h-auto rounded px-3 pt-3 pb-3 gd-rating-input-group ">';
 			}
 
 			echo self::rating_input_html( $rating );

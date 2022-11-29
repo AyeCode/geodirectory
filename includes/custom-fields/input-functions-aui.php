@@ -41,7 +41,7 @@ function geodir_cfi_fieldset($html,$cf){
 
         ob_start(); // Start  buffering;
         ?>
-        <fieldset class="form-group" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>"<?php echo $conditional_attrs; ?>>
+        <fieldset class="form-group mb-3" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>"<?php echo $conditional_attrs; ?>>
             <h3 class="h3"><?php echo __( $cf['frontend_title'], 'geodirectory' ); ?></h3>
             <?php if ( $cf['desc'] != '' ) {
                 echo '<small class="text-muted">( ' . __( $cf['desc'], 'geodirectory' ) . ' )</small>';
@@ -1855,7 +1855,7 @@ function geodir_cfi_categories($html,$cf){
         } ?>
 
         <div id="<?php echo $taxonomy;?>_row"
-             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>"<?php echo $conditional_attrs; ?>>
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group mb-3 <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>"<?php echo $conditional_attrs; ?>>
             <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : ''; echo $geodir_label_type == 'hidden' || $geodir_label_type=='floating' ? ' sr-only ' : '';?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; echo $admin_only;?>

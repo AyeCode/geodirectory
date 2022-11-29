@@ -946,7 +946,7 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
     /* ]]> */
 </script>
 <?php } if ( ! wp_doing_ajax() ) { ?>
-<div class="form-group <?php if($geodir_label_type=='horizontal'){ echo "row";}?>">
+<div class="form-group mb-3 <?php if($geodir_label_type=='horizontal'){ echo "row";}?>">
     <?php if($geodir_label_type=='horizontal'  ){ ?>
     <div class="col-sm-2 col-form-label"></div>
     <div class="col-sm-10">

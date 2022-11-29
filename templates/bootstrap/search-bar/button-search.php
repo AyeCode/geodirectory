@@ -14,7 +14,7 @@ global $aui_bs5;
  */
 ?>
 <div class='gd-search-field-search col-auto flex-grow-1 <?php echo $aui_bs5 ? 'px-0' : ''; ?>'>
-	<div class='form-group'>
+	<div class='form-group mb-3'>
 		<?php
 		echo aui()->button(
 			array(

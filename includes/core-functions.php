@@ -1111,7 +1111,7 @@ function geodir_search_form_post_type_input() {
 
 			$select_class = $design_style ? " form-control custom-select" : '';
 
-			echo $design_style ? '<div class="form-group">' : '';
+			echo $design_style ? '<div class="form-group mb-3">' : '';
 			echo $design_style ? '<label class="sr-only sr-only ">'.__("Select search type","geodirectory").'</label>' : '';
 
 			?>
