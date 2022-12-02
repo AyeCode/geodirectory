@@ -205,7 +205,10 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 
 			if ( $key == 'category_top_description' ) {
 				$cat_desc = do_shortcode( "[gd_category_description]" );
-				$value    = $cat_desc;
+				$value    = $cat_desc ? trim( $cat_desc ) : '';
+			} elseif ( $key == 'category_bottom_description' ) {
+				$cat_desc = do_shortcode( "[gd_category_description type='bottom']" );
+				$value    = $cat_desc ? trim( $cat_desc ) : '';
 			} elseif ( $key == 'category_icon' ) {
 				$value = get_term_meta( $term_id, 'ct_cat_font_icon', true );
 			} elseif ( $key == 'category_map_icon' ) {
@@ -346,6 +349,7 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 		// category keys
 		$cat_keys                             = array();
 		$cat_keys['category_top_description'] = 'category_top_description';
+		$cat_keys['category_bottom_description'] = 'category_bottom_description';
 		$cat_keys['category_icon']            = 'category_icon';
 		$cat_keys['category_map_icon']        = 'category_map_icon';
 		$cat_keys['category_color']           = 'category_color';

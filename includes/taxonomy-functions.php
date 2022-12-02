@@ -649,6 +649,17 @@ function geodir_get_cat_top_description( $term_id ) {
 }
 
 /**
+ * Get the category description html.
+ *
+ * @param int    $term_id The term ID.
+ * @param string $type Description type.
+ * @return mixed|void
+ */
+function geodir_category_description( $term_id, $type = 'top' ) {
+    return GeoDir_Admin_Taxonomies::get_category_description( $term_id, $type );
+}
+
+/**
  * Get the taxonomy schemas.
  *
  * @return mixed|void
