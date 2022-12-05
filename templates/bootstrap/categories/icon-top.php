@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.1.1.4
+ * @version    2.2.19
  */
 
 //$cpt_row = $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
@@ -53,8 +53,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var int $depth The count of the depth of the sub category.
  * @var array $args All the raw widget arguments.
  */
+global $aui_bs5;
 
-$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
+$count = !$hide_count ? ' <span class="gd-cptcat-count badge ' . ( $aui_bs5 ? 'text-bg-light ms-2' : 'badge-light ml-2' ) . '">' . $cat_count . '</span>' : '';
 $card_color = !empty($args['card_color']) ? sanitize_html_class($args['card_color']) : 'outline-primary';
 $card_padding_inside = !empty($args['card_padding_inside']) ? absint($args['card_padding_inside']) : '4';
 $icon = '';

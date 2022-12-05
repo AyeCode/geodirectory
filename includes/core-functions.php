@@ -1109,10 +1109,10 @@ function geodir_search_form_post_type_input() {
 				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class'" . $attrs . ">";
 			}
 
-			$select_class = $design_style ? " form-control custom-select" : '';
+			$select_class = $design_style ? " form-control " . ( $aui_bs5 ? 'form-select' : 'custom-select' ) : '';
 
 			echo $design_style ? '<div class="form-group mb-3">' : '';
-			echo $design_style ? '<label class="sr-only sr-only ">'.__("Select search type","geodirectory").'</label>' : '';
+			echo $design_style ? '<label class="sr-only visually-hidden">'.__("Select search type","geodirectory").'</label>' : '';
 
 			?>
 			<select name="stype" class="search_by_post <?php echo $select_class;?>" aria-label="<?php esc_attr_e( 'Post Type', 'geodirectory' ); ?>">

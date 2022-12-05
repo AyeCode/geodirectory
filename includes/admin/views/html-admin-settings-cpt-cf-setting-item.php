@@ -735,23 +735,16 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					 */
 					do_action( 'geodir_advance_custom_fields', $field, $cf ); ?>
 
-
 				<?php endswitch;
-
-
 			// action before save button
 			do_action( "geodir_cfa_before_save", self::$post_type, $field, $cf );
 			do_action( "geodir_cfa_before_save_{$field->field_type}", $cf, $field);
 
 			?>
-
-
 			<div class="gd-tab-actions mb-0" data-setting="save_button">
-
-				<span class="lext-left float-left float-start">
-					<?php GeoDir_Settings_Page::toggle_advanced_button('btn btn-outline-primary text-left gd-advanced-toggle-field',false);?>
+				<span class="text-left text-start float-left float-start">
+					<?php GeoDir_Settings_Page::toggle_advanced_button('btn btn-outline-primary text-left text-start gd-advanced-toggle-field',false);?>
 				</span>
-
 
 				<a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="gd_tabs_close_settings(this); return false;"><?php _e("Close","geodirectory");?></a>
 				<button type="button" class="btn btn-primary" name="save" id="save" data-save-text="<?php _e("Save","geodirectory");?>"  onclick="gd_save_custom_field('<?php echo esc_attr( $field->id ); ?>',event);jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'geodirectory' ); ?>').addClass('disabled');return false;">

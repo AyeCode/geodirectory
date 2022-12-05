@@ -20,7 +20,7 @@ global $aui_bs5;
 			array(
 				'type'       => 'button',
 				'class'      => 'geodir_submit_search btn btn-primary w-100 ',
-				'content'    => $fa_class ? '<i class="fas ' . esc_attr( $default_search_button_label ) . '" aria-hidden="true"></i><span class="sr-only">' . __( 'Search', 'geodirectory' ) . '</span>' : __( $default_search_button_label, 'geodirectory' ) . '<span class="sr-only">' . $default_search_button_label . '</span>',
+				'content'    => $fa_class ? '<i class="fas ' . esc_attr( $default_search_button_label ) . '" aria-hidden="true"></i><span class="sr-only visually-hidden">' . __( 'Search', 'geodirectory' ) . '</span>' : __( $default_search_button_label, 'geodirectory' ) . '<span class="sr-only visually-hidden">' . $default_search_button_label . '</span>',
 				'data-title' => esc_attr__( $default_search_button_label, 'geodirectory' ),
 				'aria-label' => $fa_class ? __( 'Search', 'geodirectory' ) : esc_attr__( $default_search_button_label, 'geodirectory' ),
 			)

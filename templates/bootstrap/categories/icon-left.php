@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.1.1.4
+ * @version    2.2.19
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var array $args All the raw widget arguments.
  */
 
-$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
+global $aui_bs5;
+
+$count = !$hide_count ? ' <span class="gd-cptcat-count badge ' . ( $aui_bs5 ? 'text-bg-light ms-2' : 'badge-light ml-2' ) . '">' . $cat_count . '</span>' : '';
 $card_color = !empty($args['card_color']) ? sanitize_html_class($args['card_color']) : 'outline-primary';
 $card_padding_inside = !empty($args['card_padding_inside']) ? absint($args['card_padding_inside']) : '4';
 $icon = '';
@@ -33,7 +35,7 @@ if(!$hide_icon){
 	if($icon_size_class=='box-large'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconlarge';}
 	if($icon_size_class=='box-medium'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconmedium';}
 	if($icon_size_class=='box-small'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconsmall';}
-	$icon_size_class .= ' d-inline-block mr-1 align-middle';
+	$icon_size_class .= ' d-inline-block mr-1 me-1 align-middle';
 	$img_class =  $icon_size_class;
 	$icon_color_class = '';
 	$icon_color =  !empty($args['icon_color']) ? sanitize_html_class($args['icon_color']) : '';

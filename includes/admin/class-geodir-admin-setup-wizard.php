@@ -523,60 +523,38 @@ public function setup_wizard_header() {
 	}
 
 	public function setup_features() {
-
 		global $aui_bs5;
 
 		$bs_prefix = $aui_bs5 ? 'bs-' : '';
 
-//		print_r(get_plugins());exit;
-
-//		print_r( get_option( 'active_plugins', array() )); exit;
-
 		include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
 
 		$recommend_wp_plugins = GeoDir_Admin_Addons::get_recommend_wp_plugins();
-
-//		print_r(GeoDir_Admin_Addons::get_wizard_paid_addons_html());
-
-
 		$paid_types = GeoDir_Admin_Addons::get_wizard_paid_addons();
-
-
 		?>
-
-
-
 		<div class="text-center mb-4">
 			<h1 class="h3"><?php _e("What Directory features do you need?","geodirectory");?></h1>
 			<small class="text-muted"><?php _e("Select any that apply","geodirectory");?></small>
 		</div>
 
 		<div class="list-group mb-5" >
-
 			<?php
-
 			$installed_text = "<i class=\"fas fa-check-circle\" aria-hidden=\"true\"></i> " . __( 'Installed', 'geodirectory' );
 			echo "<input type='hidden' id='gd-installing-text' value='<i class=\"fas fa-sync fa-spin\" aria-hidden=\"true\"></i> " . __( 'Installing', 'geodirectory' ) . "' >";
 			echo "<input type='hidden' id='gd-installed-text' value='$installed_text' >";
 
 			// recommended
 			foreach ( $recommend_wp_plugins as $product ) {
-
 				$nonce = wp_create_nonce( 'updates' );
-
 				$title = esc_attr($product['name']);
 				$slug = esc_attr($product['slug']);
 				$file = esc_attr($product['file']);
-				$selected = false;//!empty($type['selected']) ? true : false;
+				$selected = false;
 				$info_url = admin_url( "plugin-install.php?gd_wizard_recommend=true&tab=plugin-information&plugin=" . $slug );
-
 				$status = install_plugin_install_status( array( "slug" => $slug, "version" => "" ) );
-				//print_r($status);
 
 				$plugin_status = isset( $status['status'] ) ? $status['status'] : '';
 				$url           = isset( $status['url'] ) ? $status['url'] : '';
-
-				$nonce = wp_create_nonce( 'updates' );
 
 				$active = false;
 				$active_badge = '';
@@ -586,42 +564,30 @@ public function setup_wizard_header() {
 				if ( $plugin_status == 'install' ) {// required installation
 					$checked        = "checked";
 					$disabled       = "";
-					$checkbox_class = "gd_install_plugins";
+					$checkbox_class = " gd_install_plugins";
 				} else {
 					$active = is_plugin_active( $file );
 					$checked        = "checked";
 					$disabled       = $active ? "disabled" : '';
-					$checkbox_class = $active ? "" : 'gd_install_plugins';
-					$active_badge = $active ? '<span class="badge badge-pill badge-success bg-success">'.__("Active","geodirectory").'</span> ' : '';
-
+					$checkbox_class = $active ? "" : ' gd_install_plugins';
+					$active_badge = $active ? '<span class="badge ' . ( $aui_bs5 ? 'rounded-pill bg-success' : 'badge-pill badge-success' ) . '">'.__("Active","geodirectory").'</span> ' : '';
 				}
-
-
 				?>
 				<div class="list-group-item gd-addon list-group-item-action <?php echo $slug;?> <?php echo $selected ? 'active' : '';?>">
 					<div class="d-flex w-100 justify-content-between">
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input <?php echo $checkbox_class;?>" id="<?php echo $slug;?>" <?php echo $checked;?> <?php echo $disabled;?>
-							       data-status="<?php echo esc_attr($plugin_status);?>"
-							       data-slug="<?php echo esc_attr($slug);?>"
-							       data-activateurl="<?php echo esc_attr($activate_url);?>"
-							>
-							<label class="custom-control-label" for="<?php echo $slug;?>"><?php echo $title.$more_info;?></label>
+						<div class="<?php echo ( $aui_bs5 ? 'form-check' : 'custom-control custom-checkbox' ); ?>">
+							<input type="checkbox" class="<?php echo ( $aui_bs5 ? 'form-check-input' : 'custom-control-input' ); ?><?php echo $checkbox_class;?>" id="<?php echo $slug;?>" <?php echo $checked;?> <?php echo $disabled;?> data-status="<?php echo esc_attr($plugin_status);?>" data-slug="<?php echo esc_attr($slug);?>" data-activateurl="<?php echo esc_attr($activate_url);?>">
+							<label class="<?php echo ( $aui_bs5 ? 'form-check-label' : 'custom-control-label' ); ?>" for="<?php echo $slug;?>"><?php echo $title.$more_info;?></label>
 						</div>
 						<small class="">
-							<span class="badge badge-pill badge-secondary gd-plugin-status d-none"><?php _e( "Installing", "geodirectory" ); ?></span>
+							<span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-secondary' : 'badge-pill badge-secondary' ); ?> gd-plugin-status d-none"><?php _e( "Installing", "geodirectory" ); ?></span>
 							<?php echo $active_badge;?>
-							<span class="badge badge-pill badge-success bg-success"><?php _e("Free","geodirectory");?></span>
+							<span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-success' : 'badge-pill badge-success' ); ?>"><?php _e("Free","geodirectory");?></span>
 						</small>
 					</div>
 				</div>
-				<?php
-			}
-
-			?>
-
+			<?php } ?>
 		</div>
-
 		<?php
 
 		$ach = self::get_ach();
@@ -631,11 +597,11 @@ public function setup_wizard_header() {
 
 		$is_local = $ach->is_localhost();
 
-		if(!$is_local) {
+		if ( ! $is_local ) {
 			$connected = false;
 			$all_licences    = get_option( "ayecode_connect_licences" );
 			$actual_licences = get_option( "exup_keys" );
-//			print_r($all_licences);exit;
+
 			$membership_status = false;
 			if ( isset( $actual_licences['wpgeodirectory.com']->status ) && $actual_licences['wpgeodirectory.com']->status == 'active' ) {
 				$membership_status = 'active';
@@ -643,13 +609,12 @@ public function setup_wizard_header() {
 			if ( defined( 'AYECODE_CONNECT_VERSION' ) ) {
 				global $ayecode_connect;
 
-
 				if($ayecode_connect->is_registered()){
 					$connected = true;
 				}else{
 					?>
 					<div class="text-center pb-5">
-						<button class="btn btn-primary" data-connecting="<?php echo esc_attr( $strings['connecting_button'] ); ?>" onclick="ayecode_connect_helper(this);">
+						<button class="btn btn-primary" data-connecting="<?php echo esc_attr( $ach->strings['connecting_button'] ); ?>" onclick="ayecode_connect_helper(this);">
 							<i class="fas fa-plug"></i> <?php _e( "Connect Site for more free and premium features", "geodirectory" ); ?>
 						</button>
 					</div>
@@ -657,8 +622,6 @@ public function setup_wizard_header() {
 				}
 			}
 			?>
-
-
 
 			<?php
 			$blur_class = $connected ? '' : 'gd-blur';
@@ -680,7 +643,7 @@ public function setup_wizard_header() {
 
 						//@todo we can't iframe this until we update our PHP version ont he server so we can allow CORS cookies.
 						//$buy_now = '<span class="badge badge-pill badge-primary" onclick="aui_modal_iframe(\''.__("Buy membership","geodirectory").'\',\''.$info_url.'\',\'\',true,\'\',\'modal-lg\')">'.__("Buy now","geodirectory").'</span>';
-						$buy_now = '<a class="" href="'.$info_url.'" target="_blank"><span class="badge badge-pill badge-primary" href="'.$info_url.'" target="_blank">'.__("Buy now","geodirectory").'</span></a>';
+						$buy_now = '<a class="" href="'.$info_url.'" target="_blank"><span class="badge ' . ( $aui_bs5 ? 'rounded-pill bg-primary' : 'badge-pill badge-primary' ) . '" href="'.$info_url.'" target="_blank">'.__("Buy now","geodirectory").'</span></a>';
 						?>
 						<script>
 							function gd_ayecode_connect_licences($input){
@@ -709,31 +672,21 @@ public function setup_wizard_header() {
 						</script>
 						<span  class="list-group-item list-group-item-action bg-light border-primary ">
 							<div class="d-flex w-100 justify-content-between <?php echo $blur_class; ?>">
-								<div class="custom-control custom-checkbox c-pointer">
-									<input type="checkbox" class="custom-control-input"
-									       id="membership" <?php echo $disabled; ?>>
-									<label class="custom-control-label"
-									       for="membership"><?php _e( "Membership (includes all extensions on unlimited sites)", "geodirectory" ); ?>
-									<small class="d-block text-info"><?php _e( "Recent purchase?", "geodirectory" ); ?> <span class="badge badge-pill badge-primary c-pointer" onclick="gd_ayecode_connect_licences(this);"><?php _e( "Refresh Licenses", "geodirectory" ); ?></span></small>
-									</label>
+								<div class="<?php echo ( $aui_bs5 ? 'form-check' : 'custom-control custom-checkbox' ); ?> c-pointer">
+									<input type="checkbox" class="<?php echo ( $aui_bs5 ? 'form-check-input' : 'custom-control-input' ); ?>" id="membership" <?php echo $disabled; ?>>
+									<label class="<?php echo ( $aui_bs5 ? 'form-check-label' : 'custom-control-label' ); ?>" for="membership"><?php _e( "Membership (includes all extensions on unlimited sites)", "geodirectory" ); ?> <small class="d-block text-info"><?php _e( "Recent purchase?", "geodirectory" ); ?> <span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-primary' : 'badge-pill badge-primary' ); ?> c-pointer" onclick="gd_ayecode_connect_licences(this);"><?php _e( "Refresh Licenses", "geodirectory" ); ?></span></small></label>
 								</div>
-								<small class="gd-price-year d-none"><?php echo $buy_now;?> <span class="badge badge-pill badge-secondary">$199 / year</span>
-								</small>
-								<small class="gd-price-month"><?php echo $buy_now;?> <span
-										class="badge badge-pill badge-secondary">$16.59 / month</span></small>
+								<small class="gd-price-year d-none"><?php echo $buy_now;?> <span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-secondary' : 'badge-pill badge-secondary' ); ?>">$199 / year</span></small>
+								<small class="gd-price-month"><?php echo $buy_now;?> <span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-secondary' : 'badge-pill badge-secondary' ); ?>">$16.59 / month</span></small>
 							</div>
 						</span>
-
 						<?php
 					}
 
 					if ( ! empty( $paid_types ) ) {
-//						print_r( $paid_types );exit;
-
 						$count = 1;
 
 						foreach ( $paid_types as $product ) {
-
 							// skip free
 							if ( empty( $product->pricing->singlesite ) ) {
 								continue;
@@ -782,23 +735,15 @@ public function setup_wizard_header() {
 								$checked        = "checked";
 								$disabled       = $active ? "disabled" : '';
 								$checkbox_class = $active ? "" : 'gd_install_plugins';
-								$active_badge = $active ? '<small><span class="badge badge-pill badge-success bg-success">'.__("Active","geodirectory").'</span></small> ' : '';
+								$active_badge = $active ? '<small><span class="badge ' . ( $aui_bs5 ? 'rounded-pill bg-success' : 'badge-pill badge-success' ) . '">'.__("Active","geodirectory").'</span></small> ' : '';
 							}
 							?>
 							<div
 							   class="list-group-item gd-addon list-group-item-action <?php echo $slug;?> <?php echo $hidden_class; ?> ">
 								<div class="d-flex w-100 justify-content-between <?php echo $blur_class; ?>">
-									<div class="custom-control custom-checkbox c-pointer">
-										<input type="checkbox" class="custom-control-input <?php echo $checkbox_class;?>" id="<?php echo $slug; ?>"  <?php echo $disabled;?>
-										       data-status="<?php echo esc_attr($plugin_status);?>"
-										       data-slug="<?php echo esc_attr($slug);?>"
-										       data-activateurl="<?php echo esc_attr($activate_url);?>"
-										       data-id="<?php echo absint($id);?>"
-										       data-update_url="https://wpgeodirectory.com/"
-										       data-key="<?php echo esc_attr($has_license);?>"
-										>
-										<label class="custom-control-label"
-										       for="<?php echo $slug; ?>"><?php echo $title.$more_info; ?></label>
+									<div class="<?php echo ( $aui_bs5 ? 'form-check' : 'custom-control custom-checkbox' ); ?> c-pointer">
+										<input type="checkbox" class="<?php echo ( $aui_bs5 ? 'form-check-input' : 'custom-control-input' ); ?> <?php echo $checkbox_class;?>" id="<?php echo $slug; ?>"  <?php echo $disabled;?> data-status="<?php echo esc_attr($plugin_status);?>" data-slug="<?php echo esc_attr($slug);?>" data-activateurl="<?php echo esc_attr($activate_url);?>" data-id="<?php echo absint($id);?>" data-update_url="https://wpgeodirectory.com/" data-key="<?php echo esc_attr($has_license);?>">
+										<label class="<?php echo ( $aui_bs5 ? 'form-check-label' : 'custom-control-label' ); ?>" for="<?php echo $slug; ?>"><?php echo $title.$more_info; ?></label>
 									</div>
 
 									<?php
@@ -807,20 +752,20 @@ public function setup_wizard_header() {
 									}elseif( $membership_status == 'active' || $has_license) {
 										?>
 										<small class="gd-addon-valid">
-											<span class="badge badge-pill badge-secondary gd-plugin-status d-none"><?php _e( "Installing", "geodirectory" ); ?></span>
-											<span class="badge badge-pill badge-success bg-success"><?php _e( "Valid", "geodirectory" ); ?></span>
+											<span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-secondary' : 'badge-pill badge-secondary' ); ?> gd-plugin-status d-none"><?php _e( "Installing", "geodirectory" ); ?></span>
+											<span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-success' : 'badge-pill badge-success' ); ?>"><?php _e( "Valid", "geodirectory" ); ?></span>
 										</small>
 										<?php
 									}else{
 									?>
 									<small class="gd-price-year d-none"><span
-											class="badge badge-pill badge-secondary"><?php echo sprintf( __( '$%s / year', 'geodirectory' ), $price_single ); ?></span>
+											class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-secondary' : 'badge-pill badge-secondary' ); ?>"><?php echo sprintf( __( '$%s / year', 'geodirectory' ), $price_single ); ?></span>
 									</small>
 									<small class="gd-price-month"><span
-											class="badge badge-pill badge-secondary"><?php echo sprintf( __( '$%s / month', 'geodirectory' ), $price_monthly ); ?></span>
+											class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-secondary' : 'badge-pill badge-secondary' ); ?>"><?php echo sprintf( __( '$%s / month', 'geodirectory' ), $price_monthly ); ?></span>
 									</small>
 									<small class="gd-price-included d-none"><span
-											class="badge badge-pill badge-secondary"><?php _e( "Included", "geodirectory" ); ?></span>
+											class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-secondary' : 'badge-pill badge-secondary' ); ?>"><?php _e( "Included", "geodirectory" ); ?></span>
 									</small>
 									<?php
 									}
@@ -830,45 +775,30 @@ public function setup_wizard_header() {
 							<?php
 							$count ++;
 						}
-
 						?>
-						<a href="#" class="list-group-item gd-addon list-group-item-action gd-addons-show-more"
-						   data-<?php echo $bs_prefix;?>toggle="collapse" role="button" aria-expanded="false"
-						   data-target=".gd-paid-product-collapse"
-						   onclick="jQuery(this).find('span').toggleClass('d-none');">
+						<a href="#" class="list-group-item gd-addon list-group-item-action gd-addons-show-more" data-<?php echo $bs_prefix;?>toggle="collapse" role="button" aria-expanded="false" data-target=".gd-paid-product-collapse" onclick="jQuery(this).find('span').toggleClass('d-none');">
 							<div class=" w-100  text-center">
-								<span class="gd-show-more"><?php _e( 'Show more', 'geodirectory' ); ?> <i
-										class="fas fa-angle-down"></i></span>
-								<span class="gd-show-less d-none"><?php _e( 'Show less', 'geodirectory' ); ?> <i
-										class="fas fa-angle-up"></i></span>
+								<span class="gd-show-more"><?php _e( 'Show more', 'geodirectory' ); ?> <i class="fas fa-angle-down"></i></span>
+								<span class="gd-show-less d-none"><?php _e( 'Show less', 'geodirectory' ); ?> <i class="fas fa-angle-up"></i></span>
 							</div>
 						</a>
 						<?php
-
 					}
-
 					?>
-
 				</div>
-
 				<?php
 				if($membership_status != 'active') {
 					?>
-
 					<div class="text-center" onclick="gd_price_display()">
-						<div class="custom-control custom-switch custom-switch-md ">
-							<input type="checkbox" class="custom-control-input" id="gd-price-show-month" checked>
-							<label class="custom-control-label c-pointer"
-							       for="gd-price-show-month"><?php _e( 'Display monthly prices', 'geodirectory' ); ?></label>
+						<div class="<?php echo ( $aui_bs5 ? 'form-check form-switch' : 'custom-control custom-switch' ); ?> custom-switch-md ">
+							<input type="checkbox" class="<?php echo ( $aui_bs5 ? 'form-check-input' : 'custom-control-input' ); ?>" id="gd-price-show-month" checked>
+							<label class="<?php echo ( $aui_bs5 ? 'form-check-label' : 'custom-control-label' ); ?> c-pointer" for="gd-price-show-month"><?php _e( 'Display monthly prices', 'geodirectory' ); ?></label>
 						</div>
 					</div>
 					<?php
 				}
 				?>
-
-
 			</div>
-
 			<?php
 		}
 		?>
@@ -881,14 +811,7 @@ public function setup_wizard_header() {
 			//					)
 			//				);
 			?>
-
-
-			<div class="gd-setup-maps w-100 <?php // if($active_map=='osm') echo 'collapse';?>">
-
-
-			</div>
-
-
+			<div class="gd-setup-maps w-100 <?php // if($active_map=='osm') echo 'collapse';?>"></div>
 			<p class="gd-setup-actions step text-right text-end mt-4">
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
 				   class="btn btn-link text-muted gd-install-skip"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
@@ -1003,12 +926,12 @@ public function setup_wizard_header() {
 				$disabled = $key=='events' && !defined('GEODIR_EVENT_VERSION') ? 'disabled' : '';
 				?>
 				<div class="col">
-					<div class="custom-control custom-radio border <?php if($selected)echo 'border-primary'; ?> rounded-sm px-3 pl-5 py-2  mb-3 <?php if($disabled)echo 'bg-light'; ?>"
+					<div class="<?php echo ( $aui_bs5 ? 'form-check' : 'custom-control custom-radio' ); ?> border <?php if($selected)echo 'border-primary'; ?> rounded-sm rounded-1 px-3 pl-5 ps-5 py-2  mb-3 <?php if($disabled)echo 'bg-light'; ?>"
 						<?php if(!$disabled){ echo 'onclick="gd_setup_set_types(this);"';}?>
 						<?php if($disabled){ echo 'data-' . $bs_prefix . 'toggle="tooltip" data-placement="top" title="'. __("Enable our Events addon to be able to use events","geodirectory").'"'; ?>>
-						<input <?php if($selected)echo 'checked' ?> type="radio" class="custom-control-input" name="<?php echo esc_attr($key);?>" id="<?php echo esc_attr($key);}?>"
+						<input <?php if($selected)echo 'checked' ?> type="radio" class="<?php echo ( $aui_bs5 ? 'form-check-input' : 'custom-control-input' ); ?>" name="<?php echo esc_attr($key);?>" id="<?php echo esc_attr($key);}?>"
 							<?php echo $disabled;?> >
-						<label class="custom-control-label c-pointer w-100" for="<?php echo esc_attr($key);?>" <?php if(!$disabled){ echo 'onclick="jQuery(this).parent().toggleClass(\'border-primary\');"';}?>><?php echo esc_attr($type);?></label>
+						<label class="<?php echo ( $aui_bs5 ? 'form-check-label' : 'custom-control-label' ); ?> c-pointer w-100" for="<?php echo esc_attr($key);?>" <?php if(!$disabled){ echo 'onclick="jQuery(this).parent().toggleClass(\'border-primary\');"';}?>><?php echo esc_attr($type);?></label>
 					</div>
 				</div>
 				<?php
@@ -1088,7 +1011,7 @@ public function setup_wizard_header() {
 			<div class="col">
 				<div class="gd-wiz-map-google rounded overflow-hidden position-relative  hover-shadow <?php if($active_map=='google') echo $active_class;?>" onclick="gd_setup_wiz_map_select('google');">
 					<img class="img-fluid hover-zoom c-pointer" src="<?php echo geodir_plugin_url() . '/assets/images/google-maps.jpg'; ?>" >
-					<h5 class="ab-top-right"><span class="badge badge-warning bg-warning text-dark shadow"><?php _e("Requires API key","geodirectory");?></span> <span class="badge badge-success bg-success shadow">Free Quota</span></h5>
+					<h5 class="ab-top-right"><span class="badge <?php echo ( $aui_bs5 ? 'bg-warning' : 'badge-warning' ); ?> text-dark shadow"><?php _e("Requires API key","geodirectory");?></span> <span class="badge <?php echo ( $aui_bs5 ? 'bg-success' : 'badge-success' ); ?> shadow">Free Quota</span></h5>
 
 				</div>
 				<h5 class="text-center pt-3"><?php _e("Google Maps","geodirectory");?></h5>
@@ -1096,7 +1019,7 @@ public function setup_wizard_header() {
 			<div class="col">
 				<div class="gd-wiz-map-osm rounded overflow-hidden position-relative  hover-shadow <?php if($active_map=='osm') echo $active_class;?>" onclick="gd_setup_wiz_map_select('osm');">
 					<img class="img-fluid hover-zoom c-pointer" src="<?php echo geodir_plugin_url() . '/assets/images/osm.jpg'; ?>" >
-					<h5 class="ab-top-right"><span class="badge badge-success bg-success shadow">Free</span></h5>
+					<h5 class="ab-top-right"><span class="badge <?php echo ( $aui_bs5 ? 'bg-success' : 'badge-success' ); ?> shadow">Free</span></h5>
 				</div>
 				<h5 class="text-center pt-3"><?php _e("Open Street Maps","geodirectory");?></h5>
 			</div>
@@ -1416,13 +1339,10 @@ public function setup_wizard_header() {
 									)
 								);
 							}
-
-
-
 						}else{
 							?>
 							<div class="text-center pb-5">
-								<button class="btn btn-primary" data-connecting="<?php echo esc_attr( $strings['connecting_button'] ); ?>" onclick="ayecode_connect_helper(this);">
+								<button class="btn btn-primary" data-connecting="<?php echo esc_attr( $ach->strings['connecting_button'] ); ?>" onclick="ayecode_connect_helper(this);">
 									<i class="fas fa-plug"></i> <?php _e( "Connect Site for more free and premium features", "geodirectory" ); ?>
 								</button>
 							</div>
@@ -1824,8 +1744,8 @@ public function setup_wizard_header() {
 							</select>
 						</div>
 					</div>
-					<div class="pl-2 pb-1">
-						<div class="form-group mb-3 text-right">
+					<div class="pl-2 ps-2 pb-1">
+						<div class="form-group mb-3 text-right text-end">
 							<label
 								for="geodir-wizard-widgets-top-submit" class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
 							<input type="button" id="geodir-wizard-widgets-top-submit"
@@ -1902,7 +1822,7 @@ public function setup_wizard_header() {
 					</div>
 				</div>
 				<div class="pl-2 pb-1">
-					<div class="form-group mb-3 text-right">
+					<div class="form-group mb-3 text-right text-end">
 						<label
 							for="geodir-wizard-widgets-top-submit" class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
 						<input type="button" id="geodir-wizard-widgets-submit" value="<?php _e( "Insert widgets", "geodirectory" ); ?>"
@@ -1990,32 +1910,21 @@ public function setup_wizard_header() {
 								echo "</select>";
 
 							}
-
-							//print_r($menus);
 						}
-
 						//					echo geodir_notification( array( 'geodir-wizard-menu-result' => '' ) );
-
 						?>
 					</div>
 				</div>
-				<div class="pl-2 pb-1">
-					<div class="form-group mb-3 text-right">
-						<label
-							for="geodir-wizard-menu-submit"
-							class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
-						<input type="button" id="geodir-wizard-menu-submit" value="<?php _e( "Insert menu items", "geodirectory" ); ?>"
-						       class="btn btn-primary btn-sm geodir_dummy_button d-block"
-						       onclick="gd_wizard_setup_menu('<?php echo wp_create_nonce( "geodir-wizard-setup-menu" ); ?>');return false;">
+				<div class="pl-2 ps-2 pb-1">
+					<div class="form-group mb-3 text-right text-end">
+						<label for="geodir-wizard-menu-submit" class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
+						<input type="button" id="geodir-wizard-menu-submit" value="<?php _e( "Insert menu items", "geodirectory" ); ?>" class="btn btn-primary btn-sm geodir_dummy_button d-block" onclick="gd_wizard_setup_menu('<?php echo wp_create_nonce( "geodir-wizard-setup-menu" ); ?>');return false;">
 					</div>
 				</div>
 			</div>
 			<div class="geodir-wizard-menu-result w-100"></div>
 		</div>
-
-
 		<?php
-
 	}
 
 }

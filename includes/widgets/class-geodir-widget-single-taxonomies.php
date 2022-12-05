@@ -412,6 +412,8 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 	 * @return string
 	 */
 	public function style_tax_link( $type = 'cat', $name = '', $href = '#', $term = array(), $args = array() ) {
+		global $aui_bs5;
+
 		$link         = '';
 		$icon_output  = '';
 		$icon         = $type == 'cat' ? '<i class="fas fa-folder"></i>' : '<i class="fas fa-tag"></i>';
@@ -423,7 +425,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 		if ( $design_style && $args['link_style'] != 'link' ) {
 			$link_class .= 'badge ';
 			if ( $args['link_style'] == 'pill' ) {
-				$link_class .= ' badge-pill  ';
+				$link_class .= ( $aui_bs5 ? ' rounded-pill ' : ' badge-pill ' );
 			}
 		}
 
@@ -436,7 +438,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 				$this->css_rules[] = $css_target . " {{$css_type}: $link_color_custom;color:#fff;}";
 				$this->css_rules[] = $css_target . ":hover {color: #fff;}";
 			} elseif ( empty( $args['link_color'] ) ) {
-				$default_class = ' badge-dark text-light';
+				$default_class = $aui_bs5 ? ' text-bg-dark' : ' badge-dark text-light';
 				if ( $type == 'tag' ) {
 					$link_class .= $default_class;
 				} else {
@@ -457,7 +459,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 				}
 
 			} elseif ( ! empty( $args['link_color'] ) ) {
-				$link_class .= ' badge-' . sanitize_html_class( $args['link_color'] );
+				$link_class .= ( $aui_bs5 ? ' bg-' : ' badge-' ) . sanitize_html_class( $args['link_color'] );
 			}
 
 			// if show icon

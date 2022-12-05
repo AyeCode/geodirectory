@@ -496,13 +496,13 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			if($design_style){
 				$embed_action_class = $options['link_to'] ? 'embed-has-action ' : '';
 				if(!$aspect || $aspect=='16x9'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-16by9';
+					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-16by9 ratio ratio-16x9';
 				}elseif($aspect=='21x9'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-21by9';
+					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-21by9 ratio ratio-21x9';
 				}elseif($aspect=='4x3'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-4by3';
+					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-4by3 ratio ratio-4x3';
 				}elseif($aspect=='1x1'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-1by1';
+					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-1by1 ratio ratio-1x1';
 				}else{
 					$responsive_image_class = $embed_action_class;
 				}

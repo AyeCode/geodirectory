@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.1.0.11
+ * @version    2.2.19
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,14 +24,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var array $args All the raw widget arguments.
  */
 
+global $aui_bs5;
+
 $indents = $depth > 2 ? implode("", array_fill( 0,$depth - 2, "- " ) ) : '';
-$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
+$count = !$hide_count ? ' <span class="gd-cptcat-count badge ' . ( $aui_bs5 ? 'text-bg-light ms-2' : 'badge-light ml-2' ) . '">' . $cat_count . '</span>' : '';
 
 $icon_color_class = '';
 $icon_color =  !empty($args['icon_color']) ? sanitize_html_class($args['icon_color']) : '';
 if($icon_color){$icon_color_class = " text-$icon_color"; $cat_color = '';}
 $cat_color = $cat_color ? ' style="color:' . sanitize_hex_color( $cat_color ) . '"' : '';
-$icon = ! $hide_icon ? "<span class='gd-cptcat-icon mr-1" . $icon_color_class . "'" . $cat_color . ">$cat_icon</span>" : '';
+$icon = ! $hide_icon ? "<span class='gd-cptcat-icon mr-1 me-1" . $icon_color_class . "'" . $cat_color . ">$cat_icon</span>" : '';
 
 ?>
 <div class="dropdown-item" >

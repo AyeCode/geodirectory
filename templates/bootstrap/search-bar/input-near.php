@@ -39,9 +39,9 @@ global $aui_bs5;
 			'value'                   => $near,
 			'name'                    => 'snear',
 			'placeholder'             => esc_html__( $default_near_text, 'geodirectory' ),
-			'class'                   => 'snear pl-4 w-100',
+			'class'                   => 'snear pl-4 ps-4 w-100',
 			'label'                   => esc_html__( $default_near_text, 'geodirectory' ),
-			'label_class'             => 'sr-only',
+			'label_class'             => 'sr-only visually-hidden',
 			'extra_attributes'        => array(
 				'onkeydown'    => 'javascript: if(event.keyCode == 13) geodir_click_search(this);',
 				'onClick'      => 'this.select();',

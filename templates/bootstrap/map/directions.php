@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'placeholder'       => esc_html__( 'Enter your location', 'geodirectory' ),
 						'class'             => '',
 						'label'             => esc_html__( 'Enter your location', 'geodirectory' ),
-						'label_class'       => 'sr-only',
+						'label_class'       => 'sr-only visually-hidden',
 						'extra_attributes'  => array(
 							'autocomplete' => 'off',
 							'onfocus'       => "jQuery('.gd-directions-from-user').tooltip('show');",

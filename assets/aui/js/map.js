@@ -1033,7 +1033,7 @@ function geodirFindRoute(map_canvas) {
 
             var $routing = jQuery('#' + map_canvas + ' .leaflet-routing-geocoders .leaflet-routing-search-info');
             if (!$routing.find('#' + map_canvas + '_mylocation').length) {
-                $routing.append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="' + map_canvas + '_mylocation" class="gd-map-mylocation c-pointer ml-1"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
+                $routing.append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="' + map_canvas + '_mylocation" class="gd-map-mylocation c-pointer ml-1 ms-1"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
             }
         } catch (e) {
             console.log(e.message);

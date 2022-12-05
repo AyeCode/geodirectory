@@ -74,7 +74,7 @@ class GeoDir_Admin_Conditional_Fields {
 		$conditions = geodir_parse_field_conditions( $extra_fields );
 
 		$count = count($conditions);
-		$count_badge = $count ?  '<span class="badge badge-warning ml-2">'.absint($count).'</span>' : '';
+		$count_badge = $count ?  '<span class="badge ' . ( $aui_bs5 ? 'bg-warning ms-2' : 'badge-warning ml-2' ) . '">' . absint( $count ) . '</span>' : '';
 		?>
 		<div class="geodir-con-fields-hidden border-top mt-4 pt-4" data-setting="conditional_fields_heading">
 			<a href="#geodir_conditional_fields" data-<?php echo $aui_bs5 ? 'bs-' : ''; ?>toggle="collapse" class="btn d-block btn-outline-primary"><span class="geodir-show-cf"><i class="fas fa-plus" aria-hidden="true"></i></span><span class="geodir-hide-cf"><i class="fas fa-minus" aria-hidden="true"></i></span> <?php _e( 'Conditional Fields', 'geodirectory' ); echo $count_badge; ?></a>
@@ -92,9 +92,9 @@ class GeoDir_Admin_Conditional_Fields {
 			 * @param array  $data Current field data.
 			 */
 			do_action( 'geodir_cf_show_conditional_fields_setting_desc', $post_type, $field, $data );
-			$rounded_class = $aui_bs5 ? 'rounded-0' : '';
+			$bs5_class = $aui_bs5 ? 'rounded-0 border-start-0' : 'border-left-0';
 
-			$if = '<div class="input-group-prepend"><span class="input-group-text border-left-0 border-start-0 px-2 ' . $rounded_class . '">'.__("if","geodirectory").'</span></div>';
+			$if = '<div class="' . ( $aui_bs5 ? '' : 'input-group-prepend' ) . '"><span class="input-group-text px-2 ' . $bs5_class . '">'.__("if","geodirectory").'</span></div>';
 			?>
 			<div class="geodir-conditional-template">
 				<div class="geodir-conditional-row  input-group input-group-sm mb-2" data-condition-index="TEMP">
@@ -423,11 +423,13 @@ class GeoDir_Admin_Conditional_Fields {
 	 * @return mixed
 	 */
 	public function show_conditional_icon( $field, $cf ) {
+		global $aui_bs5;
+
 		$conditional_attrs = geodir_conditional_field_attrs( $field );
 		$conditional_icon = geodir_conditional_field_icon( $conditional_attrs, $field );
 
 		if ( $conditional_icon ) {
-			echo ' <span class="dd-extra-icon ml-2 mr-0">' . $conditional_icon . '</span> ';
+			echo ' <span class="dd-extra-icon ' . ( $aui_bs5 ? 'ms-2 me-0' : 'ml-2 mr-0' ) . '">' . $conditional_icon . '</span> ';
 		}
 	}
 } }

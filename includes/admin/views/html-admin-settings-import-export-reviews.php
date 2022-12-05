@@ -241,7 +241,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 									'name'              => 'gd_imex[end_date]',
 									'type'              => 'datepicker',
 									'placeholder'       => esc_html__( 'End date', 'geodirectory'),
-									'class'             => 'w-100 ml-2',
+									'class'             => 'w-100 ml-2 ms-2',
 									'no_wrap'           => true,
 								)
 							);

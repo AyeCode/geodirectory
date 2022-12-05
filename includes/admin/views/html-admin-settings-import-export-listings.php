@@ -268,11 +268,8 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 
 						<div class="gd-ie-actions d-flex flex-row align-items-center">
 							<input type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="btn btn-primary" name="gd_ie_exposts_submit" id="gd_ie_exposts_submit">
-							<div id="gd_ie_ex_files" class="gd-ie-files ml-4 mt-2"></div>
+							<div id="gd_ie_ex_files" class="gd-ie-files ml-4 ms-4 mt-2"></div>
 						</div>
-
-
-
 					</div>
 				</div>
 			</div>

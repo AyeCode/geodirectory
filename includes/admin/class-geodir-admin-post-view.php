@@ -387,7 +387,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title"><?php _e('Set Image Texts','geodirectory'); ?></h5>
+								<h5 class="modal-title mt-0"><?php _e('Set Image Texts','geodirectory'); ?></h5>
 								<?php if( $aui_bs5 ){ ?>
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 									</button>

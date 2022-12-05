@@ -820,7 +820,7 @@ class GeoDir_Admin_Taxonomies {
      * @return string Taxonomy walker html.
      */
     public static function taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty = false, $padding = 0 ) {
-        global $cat_display, $post_cat, $exclude_cats;
+        global $aui_bs5, $cat_display, $post_cat, $exclude_cats;
 
         $search_terms = trim( $post_cat, "," );
         $search_terms = explode( ",", $search_terms );
@@ -849,7 +849,7 @@ class GeoDir_Admin_Taxonomies {
                     $list_class = 'sub_list gd-sub-cats-list';
 
                     if ( geodir_design_style() ) {
-                        $list_class .= ' pl-3'; // Left padding for sub-categories.
+                        $list_class .= ' pl-3  ps-3'; // Left padding for sub-categories.
                     }
                 }
             }
@@ -859,7 +859,7 @@ class GeoDir_Admin_Taxonomies {
                 $out = '<div class="' . $list_class . ' gd-cat-row-' . $cat_parent . '" style="margin-left:' . $p . 'px;' . $display . ';">';
 
                 if ( geodir_design_style() ) {
-                    $main_list_class .= ' mr-1';
+                    $main_list_class .= ( $aui_bs5 ? ' me-1' : ' mr-1' );
                 }
             }
 

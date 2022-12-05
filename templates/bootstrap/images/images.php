@@ -212,7 +212,7 @@ global $gd_post;
 
 				if($title || $caption){
 					?>
-					<div class="carousel-caption d-none d-md-block p-0 m-0 py-1 w-100 rounded-bottom <?php if($type=='gallery'){echo 'sr-only';}?>" style="bottom: 0;left:0;background: #00000060">
+					<div class="carousel-caption d-none d-md-block p-0 m-0 py-1 w-100 rounded-bottom <?php if($type=='gallery'){echo 'sr-only visually-hidden';}?>" style="bottom: 0;left:0;background: #00000060">
 						<h5 class="m-0 p-0 h6 font-weight-bold fw-bold text-white"><?php echo $title;?></h5>
 						<p class="m-0 p-0 h6 text-white"><?php echo $caption;?></p>
 					</div>
@@ -233,11 +233,11 @@ global $gd_post;
 			?>
 			<a class="carousel-control-prev" href="#<?php echo $slider_id; ?>" role="button" data-slide="prev">
 				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="sr-only"><?php _e( 'Previous', 'geodirectory' ); ?></span>
+				<span class="sr-only visually-hidden"><?php _e( 'Previous', 'geodirectory' ); ?></span>
 			</a>
 			<a class="carousel-control-next" href="#<?php echo $slider_id; ?>" role="button" data-slide="next">
 				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="sr-only"><?php _e( 'Next', 'geodirectory' ); ?></span>
+				<span class="sr-only visually-hidden"><?php _e( 'Next', 'geodirectory' ); ?></span>
 			</a>
 			<?php
 		}

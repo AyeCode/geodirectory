@@ -12,7 +12,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='random' ? 'mjs-ne
 $tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' ? 'random' : $field->htmlvar_name;
 ?>
 <li class="dd-item mb-0 <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo esc_attr( $field->id );?>" data-field-nonce="<?php echo esc_attr( $nonce ); ?>">
-	<div class="dd-form hover-shadow d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-left bg-light <?php if(empty($field->is_active)){echo 'border-warning';} ?>" onclick="gd_tabs_item_settings(this);">
+	<div class="dd-form hover-shadow d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-left text-start bg-light <?php if(empty($field->is_active)){echo 'border-warning';} ?>" onclick="gd_tabs_item_settings(this);">
 		<div class="  flex-fill font-weight-bold fw-bold">
 			<?php echo $field_icon; ?>
 			<?php echo isset($field->frontend_title) ? geodir_ucwords( ' ' . esc_html( $field->frontend_title ) ) : ''; ?>
@@ -22,7 +22,7 @@ $tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' 
 			<?php
 			if(empty($field->is_active)){
 			?>
-			<i class="fas fa-exclamation-triangle text-warning ml-2" title="<?php _e("Inactive","geodirectory");?>" data-toggle="tooltip"></i>
+			<i class="fas fa-exclamation-triangle text-warning ml-2 ms-2" title="<?php _e("Inactive","geodirectory");?>" data-toggle="tooltip"></i>
 			<?php } ?>
 			<i class="fas fa-check-circle ml-2 ms-2 text-primary gd-is-default <?php if(empty($field->is_default)){echo 'd-none';}?>" title="<?php _e("Default sort option","geodirectory");?>" data-toggle="tooltip"></i>
 			<i class="far fa-trash-alt text-danger ml-2 ms-2" id="delete-16"  onclick="gd_delete_sort_field('<?php echo esc_attr( $field->id ); ?>', '<?php echo esc_attr( $nonce ); ?>', this);event.stopPropagation();return false;"></i>

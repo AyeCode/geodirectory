@@ -1807,7 +1807,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 				<div class="gd-bh-items" style="display:<?php echo $display; ?>" data-12am="<?php echo esc_attr( date_i18n( $time_format, strtotime( '00:00' ) ) ); ?>">
 					<table class="form-table widefat fixed">
 						<thead>
-							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours"><?php _e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
+							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours"><?php _e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only visually-hidden"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
 						</thead>
 						<tbody>
 							<tr style="display:none!important"><td colspan="4" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" readonly> - <input type="text" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" readonly><input id="GD_UNIQUE_ID_oa" type="hidden" data-field="open"><input type="hidden" id="GD_UNIQUE_ID_ca" data-field="close"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span></div></td></tr>

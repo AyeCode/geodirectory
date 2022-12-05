@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.15
+ * @version    2.2.19
  *
  * @var string $id The input id string.
  * @var bool $is_required If the item is required or not.
@@ -65,7 +65,7 @@ if ( $multiple ) {
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title"><?php _e('Set Image Texts','geodirectory'); ?></h5>
+						<h5 class="modal-title mt-0"><?php _e('Set Image Texts','geodirectory'); ?></h5>
 						<?php
 						if ( $aui_bs5 ) {
 						?>
@@ -76,10 +76,8 @@ if ( $multiple ) {
 							</button>
 						<?php } ?>
 					</div>
-					<div class="modal-body text-left">
-					</div>
-					<div class="modal-footer">
-					</div>
+					<div class="modal-body <?php echo ( $aui_bs5 ? 'text-start' : 'text-left' ); ?>"></div>
+					<div class="modal-footer"></div>
 				</div>
 			</div>
 		</div>

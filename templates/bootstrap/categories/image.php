@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.1.1.4
+ * @version    2.2.19
  */
 
 //$cpt_row = $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
@@ -54,10 +54,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var array $args All the raw widget arguments.
  */;
 
-$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
+global $aui_bs5;
+
+$count = !$hide_count ? ' <span class="gd-cptcat-count badge ' . ( $aui_bs5 ? 'text-bg-light ms-2' : 'badge-light ml-2' ) . '">' . $cat_count . '</span>' : '';
 $icon = '';
 if(!$hide_icon){
-	$img_class =  ' d-inline-block mr-1 align-middle h1';
+	$img_class =  ' d-inline-block mr-1 me-1 align-middle h1';
 	$cat_icon = str_replace('<i class="','<i style="opacity:0.8;" class="d-block ', $cat_icon);
 	$icon = "<div class='gd-cptcat-cat-left border-0 m-0 overflow-hidden embed-responsive-item text-center $img_class' >$cat_icon</div>";
 }

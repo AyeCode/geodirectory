@@ -222,7 +222,7 @@ class GeoDir_AJAX {
 		<?php
 		if( $design_style ) {
 			?>
-			<div class="text-right">
+			<div class="text-right text-end">
 			<button type="button" class="btn btn-link" data-dismiss="modal"><?php _e("Cancel","geodirectory");?></button>
 			<button class="btn btn-primary"
 			        onclick="if(jQuery('#<?php echo $prefix . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo $prefix; ?>', [jQuery('#<?php echo $prefix . 'latitude'; ?>').val(), jQuery('#<?php echo $prefix . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>

@@ -36,7 +36,7 @@ if(!empty($sort_options )) {
 
 <div class="btn-group btn-group-sm geodir-sort-by" role="group" aria-label="<?php esc_attr_e("Sort by","geodirectory");?>">
 	<div class="btn-group btn-group-sm" role="group">
-		<button id="geodir-sort-by" type="button" class="btn btn-outline-primary rounded-right <?php echo $aui_bs5 ? 'dropdown-toggle dropdown-toggle-0' : ''; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<button id="geodir-sort-by" type="button" class="btn btn-outline-primary <?php echo $aui_bs5 ? 'rounded-end dropdown-toggle dropdown-toggle-0' : 'rounded-right'; ?>" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<?php echo $button_label;?> <i class="fas fa-sort"></i>
 		</button>
 		<div class="dropdown-menu dropdown-caret-0 my-3 p-0" aria-labelledby="gd-list-view-select-grid">

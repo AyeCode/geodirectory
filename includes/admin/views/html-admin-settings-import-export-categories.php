@@ -169,13 +169,9 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						<input onclick="gd_imex_ContinueImport(this, 'cat')" type="button"
 						       value="<?php _e( "Continue Import Data", 'geodirectory' ); ?>"
 						       id="gd_continue_data" class="btn btn-primary" style="display:none"/>
-						<input type="button"
-						       value="<?php _e( "Terminate Import Data", 'geodirectory' ); ?>"
-						       id="gd_stop_import" class="btn btn-outline-danger" name="gd_stop_import"
-						       style="display:none" onclick="gd_imex_TerminateImport(this, 'cat')"/>
+						<input type="button" value="<?php _e( "Terminate Import Data", 'geodirectory' ); ?>" id="gd_stop_import" class="btn btn-outline-danger" name="gd_stop_import" style="display:none" onclick="gd_imex_TerminateImport(this, 'cat')"/>
 						<div id="gd_process_data" style="display:none">
-											<span class="spinner is-active"
-											      style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e( "Wait, processing import data...", 'geodirectory' ); ?>
+							<span class="spinner is-active float-left float-start" style="display:inline-block;margin:0 5px 0 5px;"></span><?php _e( "Wait, processing import data...", 'geodirectory' ); ?>
 						</div>
 					</div>
 
@@ -255,7 +251,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 
 						<div class="gd-ie-actions d-flex flex-row align-items-center">
 							<input type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="btn btn-primary" name="gd_ie_excats_submit" id="gd_ie_excats_submit">
-							<div id="gd_ie_ex_files" class="gd-ie-files ml-4 mt-2"></div>
+							<div id="gd_ie_ex_files" class="gd-ie-files ml-4 ms-4 mt-2"></div>
 						</div>
 
 

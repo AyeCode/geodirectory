@@ -16,7 +16,8 @@
  * the visitor has not yet entered the password we will
  * return early without loading the comments.
  */
-global $preview;
+global $aui_bs5, $preview;
+
 if (post_password_required() || $preview)
     return;
 ?>
@@ -55,7 +56,7 @@ if (post_password_required() || $preview)
          */
         $overall_label = apply_filters('geodir_overall_rating_label_main','');
         $post_rating = geodir_get_post_rating( $post->ID );
-        echo "<div class='gd-main-overall-rating d-flex align-items-center h4'>" . geodir_get_rating_stars( $post_rating, $post->ID, $overall_label ) . "<span class='ml-2 gd-overall-rating-text badge badge-secondary' >".__("Overall rating","geodirectory")."</span></div>";
+        echo "<div class='gd-main-overall-rating d-flex align-items-center h4'>" . geodir_get_rating_stars( $post_rating, $post->ID, $overall_label ) . "<span class='gd-overall-rating-text badge " . ( $aui_bs5 ? 'bg-secondary ms-2' : 'badge-secondary ml-2' ) . "'>".__("Overall rating","geodirectory")."</span></div>";
         /**
          * Called after displaying review listing title.
          *

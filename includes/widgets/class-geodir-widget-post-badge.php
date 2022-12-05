@@ -355,7 +355,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-		global $post, $gd_post;
+		global $aui_bs5, $post, $gd_post;
 
 		// Default options
 		$defaults = array(
@@ -439,10 +439,10 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		}
 
 		// margins
-		if ( !empty( $args['mt'] ) ) { $args['css_class'] .= " mt-".sanitize_html_class($args['mt'])." "; }
-		if ( !empty( $args['mr'] ) ) { $args['css_class'] .= " mr-".sanitize_html_class($args['mr'])." "; }
-		if ( !empty( $args['mb'] ) ) { $args['css_class'] .= " mb-".sanitize_html_class($args['mb'])." "; }
-		if ( !empty( $args['ml'] ) ) { $args['css_class'] .= " ml-".sanitize_html_class($args['ml'])." "; }
+		if ( ! empty( $args['mt'] ) ) { $args['css_class'] .= " mt-" . sanitize_html_class( $args['mt'] ) . " "; }
+		if ( ! empty( $args['mr'] ) ) { $args['css_class'] .= ( $aui_bs5 ? ' me-' : ' mr-' ) . sanitize_html_class( $args['mr'] ) . " "; }
+		if ( ! empty( $args['mb'] ) ) { $args['css_class'] .= " mb-" . sanitize_html_class( $args['mb'] ) . " "; }
+		if ( ! empty( $args['ml'] ) ) { $args['css_class'] .= ( $aui_bs5 ? ' ms-' : ' ml-' ) . sanitize_html_class( $args['ml'] ) . " "; }
 
 		if(!empty($args['size'])){
 			switch ($args['size']) {

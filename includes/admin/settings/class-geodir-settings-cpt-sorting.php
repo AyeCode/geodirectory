@@ -146,7 +146,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 										} ?>
 										<?php echo esc_attr( $val['frontend_title'] ); ?>
 										<?php if ( ! empty( $val['description'] ) ) { ?>
-										<span class="dashicons dashicons-editor-help text-muted float-right text-end" data-toggle="tooltip"
+										<span class="dashicons dashicons-editor-help text-muted float-right float-end" data-toggle="tooltip"
 										      title="<?php echo esc_attr( $val['description'] ); ?>">
 										<?php } ?>
 								</span>

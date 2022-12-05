@@ -436,8 +436,8 @@ function gd_edit_image_meta(input, order_id) {
     var html = '';
     var button = '';
 
-    html = html + "<div class='form-group mb-3'><label for='gd-image-meta-title' class='text-left'>" + geodir_params.label_title + "</label><input id='gd-image-meta-title' value='" + image_title + "' class='form-control'></div>"; // title value
-    html = html + "<div class='form-group mb-3'><label for='gd-image-meta-caption' class='text-left'>" + geodir_params.label_caption + "</label><input id='gd-image-meta-caption' value='" + image_caption + "' class='form-control'></div>"; // caption value
+    html = html + "<div class='form-group mb-3'><label for='gd-image-meta-title' class='text-left text-start form-label'>" + geodir_params.label_title + "</label><input id='gd-image-meta-title' value='" + image_title + "' class='form-control'></div>"; // title value
+    html = html + "<div class='form-group mb-3'><label for='gd-image-meta-caption' class='text-left text-start form-label'>" + geodir_params.label_caption + "</label><input id='gd-image-meta-caption' value='" + image_caption + "' class='form-control'></div>"; // caption value
     button = "<span class='btn btn-primary c-pointer' onclick='gd_set_image_meta(\"" + input.id + "\"," + order_id + ")'>" + geodir_params.button_set + "</span>"; // set button
     jQuery('#gd-image-meta-input .modal-body').html(html);
     jQuery('#gd-image-meta-input .modal-footer').html(button);

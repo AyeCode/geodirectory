@@ -645,7 +645,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 			// loading class
 			if ( $design_style ) {
-				echo '<div class="text-center"><p id="geodir-bestof-loading" class="geodir-bestof-loading spinner-border" style="display: none;" role="status"><span class="sr-only">'.__("Loading...","geodirectory").'</span></p></div>';
+				echo '<div class="text-center"><p id="geodir-bestof-loading" class="geodir-bestof-loading spinner-border" style="display: none;" role="status"><span class="sr-only visually-hidden">'.__("Loading...","geodirectory").'</span></p></div>';
 			} else {
 				echo '<p id="geodir-bestof-loading" class="geodir-bestof-loading"><i class="fas fa-cog fa-spin" aria-hidden="true"></i></p>';
 			}
