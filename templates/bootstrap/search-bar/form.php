@@ -38,7 +38,7 @@ global $geodirectory, $aui_bs5;
 		 */
 		do_action( 'geodir_before_search_form', $instance ); ?>
 
-		<div class="geodir-search <?php echo $aui_bs5 ? 'row gap-2 px-3' : 'form-row'; ?> align-items-center">
+		<div class="geodir-search <?php echo $aui_bs5 ? 'row gap-2 px-3' : 'form-row'; ?> align-items-center"<?php echo ( $aui_bs5 ? ' style="row-gap:0!important;"' : '' ); ?>>
 				<?php
 				/**
 				 * Adds the input fields to the search form.

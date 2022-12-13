@@ -10,6 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $map_canvas The map canvas string.
  * @var string $distance_unit The distance units setting.
  */
+
+global $aui_bs5;
 ?>
 <div class="geodir-map-directions-wrap mt-3">
 
@@ -42,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div class="row">
 		<div class="col">
-			<div id='directions-options' class="form-row" style="display: none;">
+			<div id='directions-options' class="<?php echo $aui_bs5 ? 'row gap-2' : 'form-row'; ?>" style="display: none;">
 				<div class="col">
 					<?php
 					echo aui()->select( array(

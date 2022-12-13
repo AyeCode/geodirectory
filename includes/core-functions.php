@@ -1073,13 +1073,12 @@ add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5
  * @since 2.0.0
  */
 function geodir_search_form_post_type_input() {
-	global $aui_bs5;
-	global $geodir_search_post_type,$geodir_search_post_type_hide;
+	global $aui_bs5, $geodir_search_post_type, $geodir_search_post_type_hide;
+
 	$post_types     = apply_filters( 'geodir_search_form_post_types', geodir_get_posttypes( 'object' ) );
 	$curr_post_type = $geodir_search_post_type;
 
 	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
-
 		foreach ( $post_types as $post_type => $info ){
 			global $wpdb;
 			$has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
@@ -1089,7 +1088,7 @@ function geodir_search_form_post_type_input() {
 		}
 
 		$show_select = true;
-		if($geodir_search_post_type_hide == true && !isset( $_REQUEST['stype'] ) ){
+		if ( $geodir_search_post_type_hide == true && ! isset( $_REQUEST['stype'] ) ) {
 			$show_select = false;
 		}
 
@@ -1111,7 +1110,7 @@ function geodir_search_form_post_type_input() {
 
 			$select_class = $design_style ? " form-control " . ( $aui_bs5 ? 'form-select' : 'custom-select' ) : '';
 
-			echo $design_style ? '<div class="form-group mb-3">' : '';
+			echo $design_style ? '<div class="' . ( $aui_bs5 ? 'mb-3' : 'form-group' ) . '">' : '';
 			echo $design_style ? '<label class="sr-only visually-hidden">'.__("Select search type","geodirectory").'</label>' : '';
 
 			?>
