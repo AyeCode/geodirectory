@@ -476,7 +476,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 								'value'             => absint( $cat_term->term_id),
 								'label'             => $term_img . esc_attr(geodir_utf8_ucfirst($cat_term->name)),
 								'class'             => $aui_bs5 ? 'group_selector ' . $main_list_class : 'group_selector h-100 ' . $main_list_class,
-								'label_class'       => 'text-light',
+								'label_class'       => 'text-light mb-0',
 								'checked'           => $checked,
 								'no_wrap'            => true,
 								'extra_attributes'  => array(
@@ -582,6 +582,8 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @return array Map params array.
 	 */
 	public static function get_map_params() {
+		global $aui_bs5;
+
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$language = self::map_language();
 		$version_tag = '?ver=' . GEODIRECTORY_VERSION;
@@ -595,7 +597,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			'api' => self::active_map(),
 			'lazyLoad' => self::lazy_load_map(),
 			'language' => $language,
-			'lazyLoadButton' => '<div class="btn btn-light text-center mx-auto align-self-center shadow-lg c-pointer"><i class="far fa-map"></i> ' . __( 'Load Map', 'geodirectory' ) . '</div>',
+			'lazyLoadButton' => '<div class="btn btn-light text-center mx-auto align-self-center shadow-lg c-pointer' . ( $aui_bs5 ? ' w-auto z-index-1' : '' ) . '"><i class="far fa-map"></i> ' . __( 'Load Map', 'geodirectory' ) . '</div>',
 			'lazyLoadPlaceholder' => geodir_plugin_url() . '/assets/images/placeholder.svg',
 			'apis' => array(
 				'google' => apply_filters( 'geodir_map_api_google_data',
