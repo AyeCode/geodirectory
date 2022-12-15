@@ -2284,7 +2284,7 @@ class GeoDir_Compatibility {
 
 	public static function avada_sidebar_context( $c_page_id, $sidebar = 1 ) {
 		$post_type = get_post_type( $c_page_id );
-		$sidebars_option_names = avada_get_sidebar_post_meta_option_names( $post_type );
+		$sidebars_option_names = AWB_Widget_Framework()->get_sidebar_post_meta_option_names( $post_type );
 		$sidebar_1 = (array) fusion_get_option( $sidebars_option_names[0] );
 		$sidebar_2 = (array) fusion_get_option( $sidebars_option_names[1] );
 
@@ -2372,7 +2372,7 @@ class GeoDir_Compatibility {
 					$value = fusion_get_option( 'pages_sidebar', false, $page_id );
 
 					if ( ! is_array( $value ) && $value == 'default_sidebar' ) {
-						$sidebars_option_names = avada_get_sidebar_post_meta_option_names( 'page' );
+						$sidebars_option_names = AWB_Widget_Framework()->get_sidebar_post_meta_option_names( 'page' );
 						$value = Avada()->settings->get( $sidebars_option_names[0] );
 					}
 				}
@@ -2401,7 +2401,7 @@ class GeoDir_Compatibility {
 					$value = fusion_get_option( 'pages_sidebar_2', false, $page_id );
 
 					if ( ! is_array( $value ) && $value == 'default_sidebar' ) {
-						$sidebars_option_names = avada_get_sidebar_post_meta_option_names( 'page' );
+						$sidebars_option_names = AWB_Widget_Framework()->get_sidebar_post_meta_option_names( 'page' );
 						$value = Avada()->settings->get( $sidebars_option_names[1] );
 					}
 				}
