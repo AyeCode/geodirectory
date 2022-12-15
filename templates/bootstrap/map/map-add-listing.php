@@ -939,9 +939,9 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
 		}
 	});<?php } ?>
 });
-<?php }
-	if ( ! empty( $gd_move_inline_script ) ) {
-		$inline_script = ob_get_clean(); wp_add_inline_script( 'geodir-add-listing', trim( $inline_script ) );
+<?php } 
+	if ( ! empty( $gd_move_inline_script ) ) { 
+		$inline_script = ob_get_clean(); wp_add_inline_script( 'geodir-add-listing', trim( $inline_script ) ); 
 	} else { ?>
     /* ]]> */
 </script>
@@ -961,7 +961,7 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
 <?php } ?>
 </div>
 <?php } ?>
-<div class="form-group row mb-3 d-block">
+<div class="form-group rowx">
 
     <?php
     /**

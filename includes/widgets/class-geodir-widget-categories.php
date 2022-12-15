@@ -412,7 +412,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
     public function output($args = array(), $widget_args = array(),$content = ''){
 
 		add_action('wp_footer', array($this, 'add_js'));
-
+		
         ob_start();
         // options
         $defaults = array(
@@ -517,7 +517,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			echo '<div class="gd-cptcats-empty '.$alert_class.'">' . __( 'No categories found','geodirectory' ) . '</div>';
 		}
 	}
-
+	
 	/**
 	 * Adds the javascript in the footer for best of widget.
 	 *
@@ -805,9 +805,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$skip_childs = false;
 
 				$category_args = array(
-					'orderby'    => $orderby,
-					'order'      => $order,
-					'hide_empty' => $hide_empty,
+					'orderby'    => $orderby, 
+					'order'      => $order, 
+					'hide_empty' => $hide_empty, 
 					'number'     => $max_count,
 				);
 
@@ -1108,7 +1108,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'card_class' => $card_class,
 				'args'  =>  $args
 			));
-
+			
 		}else{
 			$cpt_row .= '<li class="gd-cptcat-li '.$li_class.'">';
 			$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $cat_count . '</span>' : '';
@@ -1191,7 +1191,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		if($design_style ){
 			$link_height = !empty($args['card_padding_inside']) && $args['card_padding_inside'] < 3 ? "15px" : "22px";
 			$content = $depth == 1 ? '<div class="gd-cptcat-li gd-cptcat-li-sub-container dropdown w-100 position-absolute" style="bottom: 0;left: 0;height:'.$link_height.';">' : '';
-			$content .= $depth == 1 ? '<a class="btn btn-link z-index-1 p-0 text-reset w-100 align-top position-relative" href="#" id="cat-submenu-'.$parent_id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label><span class="sr-only">' . __( "Expand sub-categories", "geodirectory" ) . '</span><i class="fas fa-chevron-down align-top"></i></a>' : '';
+			$content .= $depth == 1 ? '<a class="btn btn-link z-index-1 p-0 text-reset w-100 align-top" href="#" id="cat-submenu-'.$parent_id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label><span class="sr-only">' . __( "Expand sub-categories", "geodirectory" ) . '</span><i class="fas fa-chevron-down align-top"></i></a>' : '';
 			$content .= $depth == 1 ? '<ul class="p-0 mt-1 gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '  dropdown-menu dropdown-caret-0" aria-labelledby="cat-submenu-'.$parent_id.'">' : '';
 		}else{
 			$content = '<li class="gd-cptcat-li gd-cptcat-li-sub-container"><ul class="gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '">';
@@ -1246,7 +1246,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	 * @return array Image sizes.
 	 */
 	public static function get_image_sizes() {
-		$image_sizes = array(
+		$image_sizes = array( 
 			'' => 'default (medium)'
 		);
 

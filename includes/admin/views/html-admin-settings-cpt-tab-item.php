@@ -1,14 +1,14 @@
-<li class="dd-item mb-0 " data-id="<?php echo esc_attr( $tab->id );?>" id="setName_<?php echo esc_attr( $tab->id );?>" >
+<li class="dd-item " data-id="<?php echo esc_attr( $tab->id );?>" id="setName_<?php echo esc_attr( $tab->id );?>" >
 	<div class="hover-shadow dd-form d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-left bg-light" onclick="gd_tabs_item_settings(this);">
 		<div class="  flex-fill font-weight-bold">
 			<?php echo $tab_icon; ?>
 			<?php echo esc_attr($tab->tab_name);?>
-			<span class="float-right text-right small float-end text-end" title="<?php _e('Open/Close','geodirectory');?>"><?php echo esc_attr($tab->tab_key). ' ('.esc_attr($tab->tab_type).')';?></span>
+			<span class="float-right text-right small" title="<?php _e('Open/Close','geodirectory');?>"><?php echo esc_attr($tab->tab_key). ' ('.esc_attr($tab->tab_type).')';?></span>
 		</div>
 		<div class="dd-handle">
 
-			<i class="far fa-trash-alt text-danger ml-2 ms-2" id="delete-16"  onclick="gd_tabs_delete_tab(this);event.stopPropagation();return false;"></i>
-			<i class="fas fa-grip-vertical text-muted ml-2 ms-2" style="cursor: move" aria-hidden="true" ></i>
+			<i class="far fa-trash-alt text-danger ml-2" id="delete-16"  onclick="gd_tabs_delete_tab(this);event.stopPropagation();return false;"></i>
+			<i class="fas fa-grip-vertical text-muted ml-2" style="cursor: move" aria-hidden="true" ></i>
 
 		</div>
 		<script type="text/template" class="dd-setting <?php echo 'dd-type-'.esc_attr( $tab->tab_type );?> d-none ">
@@ -33,7 +33,7 @@
 					'id'                => 'gd-tab-icon-'.esc_attr( $tab->id ),
 					'name'              => 'tab_icon',
 					'label_type'        => 'top',//'horizontal',
-//				'label_class'=> 'font-weight-bold fw-bold',
+//				'label_class'=> 'font-weight-bold',
 					'placeholder'      => esc_attr__( 'Select icon', 'geodirectory' ),
 					'label'              => __('Icon','geodirectory'),
 					'type'              =>   'iconpicker',

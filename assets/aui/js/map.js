@@ -390,7 +390,7 @@ function geodir_show_sub_cat_collapse_button() {
             if (!(typeof sub_cat_list.attr('class') === 'undefined')) {
 
                 // insert
-                jQuery(sub_cat_list).parent('li').find('> .custom-checkbox label, > .form-check label').after('<span class="gd-map-cat-toggle ml-2 ms-2 c-pointer"><i class="fas fa-caret-down" aria-hidden="true" style="display:none"></i></span>');
+                jQuery(sub_cat_list).parent('li').find('> .custom-checkbox label').after('<span class="gd-map-cat-toggle ml-2 c-pointer"><i class="fas fa-caret-down" aria-hidden="true" style="display:none"></i></span>');
 
                 if (sub_cat_list.is(':visible')) {
                     jQuery(this).find('i,svg').removeClass('fa-caret-down');

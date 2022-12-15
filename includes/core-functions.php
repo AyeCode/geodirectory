@@ -142,15 +142,14 @@ function geodir_is_post_type_archive( $post_types = array() ) {
  * @return string
  */
 function geodir_help_tip( $tip, $allow_html = false ) {
-	global $aui_bs5;
 	if ( $allow_html ) {
 		$tip = geodir_sanitize_tooltip( $tip );
 	} else {
 		$tip = esc_attr( $tip );
 	}
-	$ml = $aui_bs5 ? 'ms-2' : 'ml-2';
-
-	return '<i class="fas fa-question-circle gd-help-tip ' . $ml . ' text-muted" title="' . $tip . '" data-toggle="tooltip" data-html="true"></i>';
+//<i class="fas fa-question-circle"></i>
+	return '<i class="fas fa-question-circle gd-help-tip ml-2 text-muted" title="' . $tip . '" data-toggle="tooltip" data-html="true"></i>';
+//	return '<span class="gd-help-tip dashicons dashicons-editor-help text-muted" title="' . $tip . '" data-toggle="tooltip" data-html="true"></span>';
 }
 
 /**
@@ -1073,7 +1072,6 @@ add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5
  * @since 2.0.0
  */
 function geodir_search_form_post_type_input() {
-	global $aui_bs5;
 	global $geodir_search_post_type,$geodir_search_post_type_hide;
 	$post_types     = apply_filters( 'geodir_search_form_post_types', geodir_get_posttypes( 'object' ) );
 	$curr_post_type = $geodir_search_post_type;
@@ -1099,8 +1097,7 @@ function geodir_search_form_post_type_input() {
 			$new_style = geodir_get_option( 'geodir_show_search_old_search_from' ) ? false : true;
 			if ( $new_style ) {
 				if ( $design_style ) {
-					$wrap_class  = " col-auto flex-fill";
-					$wrap_class .=  $aui_bs5 ? ' px-0' : '';
+					$wrap_class = " col-auto flex-fill";
 					$attrs = geodir_conditional_field_attrs( array( 'type' => 'select' ), 'type', 'select' );
 				} else {
 					$wrap_class = '';

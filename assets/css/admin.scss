@@ -8,10 +8,10 @@
 @import "partials/notifications";
 
 .bsui {
-    .select2-container.select2-container--default .select2-selection--single {
+    .select2-container .select2-selection--single {
         height: calc(1.6em + 1.1rem + 2px) !important;
     }
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
+    .select2-selection--single .select2-selection__rendered {
         line-height: calc(1.5em + 1.2rem);
         padding-left:19px;
     }
@@ -1297,17 +1297,17 @@ table.gd_status_table th.run-tool {
   margin-top: 5px;
 }
 .select2-container.gd-select2-container .select2-selection--multiple .select2-selection__choice,
-.bsui .select2-container.select2-container--default .select2-selection--multiple .select2-selection__choice {
+.bsui .select2-container .select2-selection--multiple .select2-selection__choice {
   margin: 6px 0 0 7px;
   padding: 1px 6px 2px 6px;
   line-height: normal;
 }
 .select2-container.gd-select2-container .select2-selection--multiple .select2-search--inline,
-.bsui .select2-container.select2-container--default .select2-selection--multiple .select2-search--inline {
+.bsui .select2-container .select2-selection--multiple .select2-search--inline {
   margin: 0;
 }
 .select2-container.gd-select2-container .select2-selection--multiple .select2-search--inline .select2-search__field,
-.bsui .select2-container.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field {
+.bsui .select2-container .select2-selection--multiple .select2-search--inline .select2-search__field {
   background: transparent;
   padding: 0 12px;
   height: 34px;
@@ -1319,7 +1319,7 @@ table.gd_status_table th.run-tool {
   box-shadow: inherit;
 }
 .select2-container.gd-select2-container .select2-selection--multiple .select2-selection__choice__remove,
-.bsui .select2-container.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+.bsui .select2-container .select2-selection--multiple .select2-selection__choice__remove {
   color: #999;
   cursor: pointer;
   display: inline-block;

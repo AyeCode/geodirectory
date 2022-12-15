@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var int $depth Depth of comment.
  * @var int $rating The rating number.
  */
-global $post, $aui_bs5;
+global $post;
 ?>
 <li <?php comment_class( 'geodir-comment list-unstyled' ); ?> id="li-comment-<?php comment_ID(); ?>">
 	<div id="comment-<?php comment_ID(); ?>" class="card mt-3 shadow-sm">
-		<div class="card-header border-bottom toast-header <?php echo $aui_bs5 ? 'px-2 py-1 border-bottom border-opacity-25' : ''; ?>">
+		<div class="card-header border-bottom toast-header">
 
 			<?php
 			/**
@@ -91,7 +91,7 @@ global $post, $aui_bs5;
 					</div>
 				</div>
 			</div>
-
+			
 		</div>
 
 
