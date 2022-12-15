@@ -469,7 +469,7 @@ class GeoDir_Post_Data {
 					if ( ! empty( $gd_post_value ) ) {
 						$gd_post_value = stripslashes_deep( $gd_post_value ); // stripslashes
 					}
-
+					
 					$postarr[ $cf->htmlvar_name ] = $gd_post_value;
 				}
 
@@ -1060,7 +1060,7 @@ class GeoDir_Post_Data {
 				       aria-label="<?php esc_attr_e( 'Type 64 into this box', 'geodirectory' ); ?>"/>
 				<!-- end captcha code -->
 			<?php } ?>
-			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both <?php echo $design_style && $horizontal? 'form-group row mb-3' :'';?>"
+			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both <?php echo $design_style && $horizontal? 'form-group row' :'';?>"
 			     style="<?php echo $design_style ? '' :'padding:2px;text-align:center;';?>">
 
 				<?php echo $design_style && $horizontal ? '<label class="  col-sm-2 col-form-label"></label>' :'';?>
@@ -1338,11 +1338,11 @@ class GeoDir_Post_Data {
 		if ( $parent_id ) {
 			global $wpdb;
 			$sql     = "SELECT $wpdb->posts.ID
-					FROM $wpdb->posts
-					WHERE 1=1
-					AND $wpdb->posts.post_parent = %d
+					FROM $wpdb->posts 
+					WHERE 1=1 
+					AND $wpdb->posts.post_parent = %d 
 					AND $wpdb->posts.post_type = 'revision'
-					AND (($wpdb->posts.post_status = 'inherit'))
+					AND (($wpdb->posts.post_status = 'inherit')) 
 					ORDER BY $wpdb->posts.post_date DESC, $wpdb->posts.ID DESC";
 			$post_id = $wpdb->get_var( $wpdb->prepare( $sql, $parent_id ) );
 
@@ -2383,7 +2383,7 @@ class GeoDir_Post_Data {
 	 * @param array  $data Post data.
 	 * @param array  $gd_post GD post array.
 	 * @param object $post The post object.
-	 * @param bool   $update True if post updated.
+	 * @param bool   $update True if post updated. 
 	 */
 	public static function on_gd_post_saved( $data, $gd_post, $post, $update = false ) {
 		global $geodir_post_published;

@@ -420,7 +420,7 @@ function geodir_cfi_radio($html,$cf){
 
         <?php
         $html = ob_get_clean();
-
+            
     }
 
 
@@ -491,7 +491,7 @@ function geodir_cfi_checkbox($html,$cf){
                 echo "<a href='$tc_link' target='_blank'>".__($cf['desc'], 'geodirectory')." <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
             }else{ ?>
                <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-               <?php
+               <?php 
             }
             ?>
             <?php if ($cf['is_required']) { ?>
@@ -565,7 +565,7 @@ function geodir_cfi_textarea($html,$cf){
 
             } else {
 				$attributes = apply_filters( 'geodir_cfi_textarea_attributes', array(), $cf );
-				$attributes = is_array( $attributes ) && ! empty( $attributes ) ? implode( ' ', $attributes ) : '';
+				$attributes = is_array( $attributes ) && ! empty( $attributes ) ? implode( ' ', $attributes ) : ''; 
                 ?><textarea field_type="<?php echo $cf['type'];?>" class="geodir_textarea" name="<?php echo $cf['name'];?>"
                 <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
                             id="<?php echo $cf['name'];?>" <?php echo $attributes; ?>><?php echo stripslashes($value);?></textarea><?php
@@ -744,7 +744,7 @@ function geodir_cfi_multiselect($html,$cf){
                                 if (!is_array($value) && $value != '') {
                                     $value = trim($value);
                                 }
-
+                                
                                 $option_label = isset($option_row['label']) ? $option_row['label'] : '';
                                 $option_value = isset($option_row['value']) ? $option_row['value'] : '';
                                 $selected = $option_value == $value ? 'selected="selected"' : '';
@@ -757,12 +757,12 @@ function geodir_cfi_multiselect($html,$cf){
                                     } else {
                                         $value_array = $value;
                                     }
-
+                                    
                                     $value_array = stripslashes_deep($value_array);
 
                                     if (is_array($value_array)) {
                                         $value_array = array_map('trim', $value_array);
-
+                                        
                                         if (in_array($option_value, $value_array)) {
                                             $selected = 'selected="selected"';
                                             $checked = 'checked="checked"';
@@ -1247,7 +1247,7 @@ function geodir_cfi_address( $html, $cf ) {
 				 *
 				 * @param bool $gd_move_inline_script Whether to move inline .
 				 */
-				$gd_move_inline_script = apply_filters( 'geodir_add_listing_move_inline_script', true );
+				$gd_move_inline_script = apply_filters( 'geodir_add_listing_move_inline_script', ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) );
 
                 /**
                  * Contains add listing page map functions.
@@ -1551,7 +1551,7 @@ function geodir_cfi_categories($html,$cf){
 				}
 
                 $post_cat = geodir_get_cf_value($cf);
-
+                    
 				$category_limit = ! empty( $package ) && isset( $package->category_limit ) ? absint( $package->category_limit ) : 0;
 				$category_limit = (int) apply_filters( 'geodir_cfi_post_categories_limit', $category_limit, $gd_post, $package );
 
@@ -1802,7 +1802,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
         <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row">
             <label for="<?php echo $htmlvar_name; ?>_f_active_1"><?php echo $label; ?></label>
 			<div class="gd-bh-field" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
-				<span class="gd-radios" role="radio"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( ! empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'Yes', 'geodirectory' ); ?>"> <?php _e( 'Yes', 'geodirectory' ); ?></span>
+				<span class="gd-radios" role="radio"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( ! empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'Yes', 'geodirectory' ); ?>"> <?php _e( 'Yes', 'geodirectory' ); ?></span> 
 				<span class="gd-radios" role="radio"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_0" value="0" class="gd-checkbox" field_type="radio" type="radio" <?php checked( empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'No', 'geodirectory' ); ?>"> <?php _e( 'No', 'geodirectory' ); ?></span>
 				<div class="gd-bh-items" style="display:<?php echo $display; ?>" data-12am="<?php echo esc_attr( date_i18n( $time_format, strtotime( '00:00' ) ) ); ?>">
 					<table class="form-table widefat fixed">
@@ -1816,7 +1816,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 								<td class="gd-bh-day"><?php echo $day; ?></td>
 								<td class="gd-bh-24hours"><input type="checkbox" value="1"></td>
 								<td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>]">
-									<?php
+									<?php 
 										if ( ! empty( $hours[ $day_no ] ) ) {
 											$slots = $hours[ $day_no ];
 
@@ -1865,7 +1865,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
         <?php
         $html = ob_get_clean();
     }
-
+	
 	return $html;
 }
 add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hours', 10, 2 );
@@ -1954,7 +1954,7 @@ function geodir_cfi_files( $html, $cf ) {
         $show_image_input_box = apply_filters( 'geodir_file_uploader_on_add_listing', $show_image_input_box, $cf['post_type'] );
 
         if ( $show_image_input_box ) {
-            add_thickbox();
+            add_thickbox();  
             ?>
 
             <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> geodir_form_row clearfix gd-fieldset-details ">

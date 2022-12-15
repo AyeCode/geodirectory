@@ -882,7 +882,7 @@ class GeoDir_Comments {
 
 			if($rating_label){
 				?>
-				<span class="gd-rating-label font-weight-bold fw-bold p-0 m-0"><?php echo esc_attr($rating_label);?></span>
+				<span class="gd-rating-label font-weight-bold p-0 m-0"><?php echo esc_attr($rating_label);?></span>
 				<?php
 			}
 

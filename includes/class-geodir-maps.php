@@ -39,7 +39,7 @@ class GeoDir_Maps {
 		if(($active_map =='google' || $active_map =='auto') && !geodir_get_option( 'google_maps_api_key' )){
 			$active_map = 'osm';
 		}
-
+		
 		if ( ! in_array( $active_map, array( 'none', 'auto', 'google', 'osm' ) ) ) {
 			$active_map = 'auto';
 		}
@@ -172,14 +172,14 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		if ( ! empty( $icon ) && (int) $icon > 0 ) {
 			$icon = wp_get_attachment_url( $icon );
 		}
-
+		
 		if ( ! $icon ) {
 			$icon = geodir_file_relative_url( GEODIRECTORY_PLUGIN_URL . '/assets/images/pin.png' );
 			geodir_update_option( 'map_default_marker_icon', $icon );
 		}
-
+		
 		$icon = geodir_file_relative_url( $icon, $full_path );
-
+		
 		return apply_filters( 'geodir_default_marker_icon', $icon, $full_path );
 	}
 
@@ -301,7 +301,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @return string|void
 	 */
 	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse = false, $terms = '', $hierarchical = false, $tick_terms = '' ) {
-		global $cat_count, $geodir_cat_icons, $aui_bs5;
+		global $cat_count, $geodir_cat_icons;
 
 		$taxonomy = $post_type . 'category';
 
@@ -402,7 +402,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		}
 
 		$cat_terms = get_terms( $term_args );
-
+		
 		if ($hide_empty && ! $hierarchical) {
 			$cat_terms = geodir_filter_empty_terms($cat_terms);
 		}
@@ -475,7 +475,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 								'type'              => "checkbox",
 								'value'             => absint( $cat_term->term_id),
 								'label'             => $term_img . esc_attr(geodir_utf8_ucfirst($cat_term->name)),
-								'class'             => $aui_bs5 ? 'group_selector ' . $main_list_class : 'group_selector h-100 ' . $main_list_class,
+								'class'             => 'group_selector h-100 ' . $main_list_class,
 								'label_class'       => 'text-light',
 								'checked'           => $checked,
 								'no_wrap'            => true,
@@ -588,7 +588,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 		// Google Maps API
 		$google_api_key = self::google_api_key();
-
+		
 		$aui = geodir_design_style() ? '/aui' : '';
 
 		$map_params = array(
@@ -602,23 +602,23 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 					array(
 						'key' => $google_api_key,
 						'scripts' => array(
-							array(
+							array( 
 								'id' => 'geodir-google-maps-script',
 								'src' => 'https://maps.googleapis.com/maps/api/js?key=' . $google_api_key . '&libraries=places&language=' . $language . '&ver=' . GEODIRECTORY_VERSION,
 								'main' => true,
 								'onLoad' => true,
 								'onError' => true,
 							),
-							array(
+							array( 
 								'id' => 'geodir-gomap-script',
 								'src' => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js' . $version_tag,
 							),
-							array(
+							array( 
 								'id' => 'geodir-g-overlappingmarker-script',
 								'src' => geodir_plugin_url() . '/assets/jawj/oms' . $suffix . '.js' . $version_tag,
 								'check' => ! geodir_is_page( 'add-listing' )
 							),
-							array(
+							array( 
 								'id' => 'geodir-map-widget-script',
 								'src' => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js' . $version_tag,
 							)
@@ -628,41 +628,41 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 				'osm' => apply_filters( 'geodir_map_api_osm_data',
 					array(
 						'styles' => array(
-							array(
+							array( 
 								'id' => 'geodir-leaflet-css',
 								'src' => geodir_plugin_url() . '/assets/leaflet/leaflet.css' . $version_tag
 							),
-							array(
+							array( 
 								'id' => 'geodir-leaflet-routing-machine-css',
 								'src' => geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine.css',
 								'check' => ! geodir_is_page( 'add-listing' )
 							),
 						),
 						'scripts' => array(
-							array(
+							array( 
 								'id' => 'geodir-leaflet-script',
 								'src' => geodir_plugin_url() . '/assets/leaflet/leaflet' . $suffix . '.js' . $version_tag,
 								'main' => true,
 							),
-							array(
+							array( 
 								'id' => 'geodir-leaflet-geo-script',
 								'src' => geodir_plugin_url() . '/assets/leaflet/osm.geocode' . $suffix . '.js' . $version_tag
 							),
-							array(
+							array( 
 								'id' => 'leaflet-routing-machine-script',
 								'src' => geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine' . $suffix . '.js' . $version_tag,
 								'check' => ! geodir_is_page( 'add-listing' )
 							),
-							array(
+							array( 
 								'id' => 'geodir-o-overlappingmarker-script',
 								'src' => geodir_plugin_url() . '/assets/jawj/oms-leaflet' . $suffix . '.js' . $version_tag,
 								'check' => ! geodir_is_page( 'add-listing' )
 							),
-							array(
+							array( 
 								'id' => 'geodir-gomap-script',
 								'src' => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js' . $version_tag,
 							),
-							array(
+							array( 
 								'id' => 'geodir-map-widget-script',
 								'src' => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js' . $version_tag,
 							)

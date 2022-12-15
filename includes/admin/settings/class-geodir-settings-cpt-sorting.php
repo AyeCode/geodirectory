@@ -135,7 +135,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 									<a id="gd-<?php echo esc_attr( $val['field_type'] . '-_-' . $val['htmlvar_name'] ); ?>"
 									   data-field-type-key="<?php echo esc_attr( $val['htmlvar_name'] ); ?>"
 									   data-field-type="<?php echo esc_attr( $val['field_type'] ); ?>"
-									   class="gd-draggable-form-items  gd-<?php echo esc_attr( $val['field_type'] ); ?> geodir-sort-<?php echo esc_attr( $val['htmlvar_name'] ); ?> btn btn-sm d-block m-0 btn-outline-gray text-dark text-left text-start"
+									   class="gd-draggable-form-items  gd-<?php echo esc_attr( $val['field_type'] ); ?> geodir-sort-<?php echo esc_attr( $val['htmlvar_name'] ); ?> btn btn-sm d-block m-0 btn-outline-gray text-dark text-left"
 									   href="javascript:void(0);">
 										<?php if ( isset( $val['field_icon'] ) && strpos( $val['field_icon'], 'fa-' ) !== false ) {
 											echo '<i class="fas ' . esc_attr( $val['field_icon'] ) . '" aria-hidden="true"></i>';
@@ -146,7 +146,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 										} ?>
 										<?php echo esc_attr( $val['frontend_title'] ); ?>
 										<?php if ( ! empty( $val['description'] ) ) { ?>
-										<span class="dashicons dashicons-editor-help text-muted float-right text-end" data-toggle="tooltip"
+										<span class="dashicons dashicons-editor-help text-muted float-right" data-toggle="tooltip"
 										      title="<?php echo esc_attr( $val['description'] ); ?>">
 										<?php } ?>
 								</span>
@@ -203,7 +203,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
 					<div class="field_row_main">
 						<div class="dd gd-tabs-layout" >
-							<ul class="dd-list gd-tabs-sortable gd-sortable-sortable ps-0 list-group">
+							<ul class="dd-list gd-tabs-sortable gd-sortable-sortable">
 								<?php
 								global $wpdb;
 
