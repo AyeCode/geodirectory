@@ -291,6 +291,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Move add listing JS in footer in backend - CHANGED
 * Rank Math description meta snippet not replaces location vars - FIXED
 * GeneratePress blocks dynamic css not added on GD archive pages - FIXED
+* Avada v7.9 is breaking the GD pages - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.18 - 2022-11-09 =
 * GD Single should show blank content when assigned empty elementor template - CHANGED
