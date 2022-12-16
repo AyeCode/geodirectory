@@ -404,7 +404,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		if(!empty($options['types'])){
 			$options['types'] = explode(",",$options['types']);
 		}
-		
+
 		// fallback types
 		if(!empty($options['fallback_types'])){
 			$options['fallback_types'] = explode(",",$options['fallback_types']);
@@ -496,13 +496,13 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			if($design_style){
 				$embed_action_class = $options['link_to'] ? 'embed-has-action ' : '';
 				if(!$aspect || $aspect=='16x9'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-16by9';
+					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-16by9 ratio ratio-16x9';
 				}elseif($aspect=='21x9'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-21by9';
+					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-21by9 ratio ratio-21x9';
 				}elseif($aspect=='4x3'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-4by3';
+					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-4by3 ratio ratio-4x3';
 				}elseif($aspect=='1x1'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-1by1';
+					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-1by1 ratio ratio-1x1';
 				}else{
 					$responsive_image_class = $embed_action_class;
 				}
@@ -516,12 +516,12 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			if($options['link_to']=='post'){
 				$link = get_the_permalink($post_id);
 				$link_tag_open = "<a href='%s' class='geodir-link-image $responsive_image_class d-block'>";
-				$link_tag_close = "<i class=\"fas fa-link\" aria-hidden=\"true\"></i></a>";
+				$link_tag_close = "<i class=\"fas fa-link w-auto h-auto\" aria-hidden=\"true\"></i></a>";
 			}elseif($options['link_to']=='lightbox'){
 				$link = '';
 				$lightbox_attrs = apply_filters( 'geodir_link_to_lightbox_attrs', '' );
 				$link_tag_open = "<a href='%s' class='geodir-lightbox-image $responsive_image_class d-block' data-lity {$lightbox_attrs}>";
-				$link_tag_close = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
+				$link_tag_close = "<i class=\"fas fa-search-plus w-auto h-auto\" aria-hidden=\"true\"></i></a>";
 			}elseif($responsive_image_class){
 				$link_tag_open = '<span class="'.$responsive_image_class.'">';
 				$link_tag_close = '</span>';
@@ -570,7 +570,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$output = geodir_get_template_html( $template, $args );
 
 			echo $output;
-			
+
 		}
 
 
@@ -598,7 +598,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 	/**
 	 * Get the available image sizes.
-	 * 
+	 *
 	 * @return array
 	 */
 	public static function get_image_sizes() {

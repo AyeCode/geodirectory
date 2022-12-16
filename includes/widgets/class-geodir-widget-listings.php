@@ -634,7 +634,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @param array|string $instance           The settings for the particular instance of the widget.
      */
     public function output_html( $args = '', $instance = '' ) {
-        global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings, $geodir_carousel_open;
+        global $wp, $aui_bs5, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings, $geodir_carousel_open;
 
 		$is_single = ( geodir_is_page( 'single' ) || ! empty( $instance['set_post'] ) ) && ! empty( $gd_post ) ? true : false;
 
@@ -1190,8 +1190,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			} else {
 				$slide_interval = ! empty( $instance['slide_interval'] ) ? geodir_sanitize_float( $instance['slide_interval'] ) * 1000 : 5000;
 			}
-			$wrapper_attrs .= ' data-interval="' . $slide_interval . '"';
-			$wrapper_attrs .= ' data-ride="' . ( $instance['slide_ride'] == 'click' ? 'false' : 'carousel' ) . '"';
+
+			$bs = $aui_bs5 ? "bs-" : "";
+
+			$wrapper_attrs .= ' data-' . $bs . 'interval="' . $slide_interval . '"';
+			$wrapper_attrs .= ' data-' . $bs . 'ride="' . ( $instance['slide_ride'] == 'click' ? 'false' : 'carousel' ) . '"';
 
 			if ( $carousel_items < 1 ) {
 				$carousel_items = 1;
@@ -1395,7 +1398,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		?>
 		</div>
 		<?php 
-		if ( $design_style && ! empty( $instance['with_carousel'] ) && ! empty( $widget_listings ) ) { ?><style><?php echo $carousel_row; ?>.carousel-item.active,<?php echo $carousel_row; ?>.carousel-item-left,<?php echo $carousel_row; ?>.carousel-item-right{display:flex;}<?php echo $carousel_row; ?>.carousel-item{margin-left:auto;}</style>
+		if ( $design_style && ! empty( $instance['with_carousel'] ) && ! empty( $widget_listings ) ) { ?><style><?php echo $carousel_row; ?>.carousel-item.active,<?php echo $carousel_row; ?>.carousel-item-<?php echo ( $aui_bs5 ? 'start' : 'left' ); ?>,<?php echo $carousel_row; ?>.carousel-item-<?php echo ( $aui_bs5 ? 'end' : 'right' ); ?>{display:flex;}<?php echo $carousel_row; ?>.carousel-item{margin-left:auto;}</style>
 		<?php }
 
 		$geodir_widget_cpt = false;

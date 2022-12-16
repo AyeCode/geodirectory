@@ -159,7 +159,7 @@ function geodir_lightbox_embed($link,ele){
             $carousel  += img;
             // captions
             if(jQuery(a).parent().find('.carousel-caption').length ){
-                $carousel  += jQuery(a).parent().find('.carousel-caption').clone().removeClass('sr-only').get(0).outerHTML;
+                $carousel  += jQuery(a).parent().find('.carousel-caption').clone().removeClass('sr-only visually-hidden').get(0).outerHTML;
             }
             $carousel  += '</div></div>';
             $i++;
@@ -168,7 +168,7 @@ function geodir_lightbox_embed($link,ele){
             var a = this;
 
             $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-            $carousel  += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
+            $carousel  += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9 ratio ratio-16x9">';
 
             // iframe
             var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
@@ -191,7 +191,7 @@ function geodir_lightbox_embed($link,ele){
         }
         $carousel  += '</div>';
 
-        var $close = '<button type="button" class="close text-white text-right position-fixed" style="font-size: 2.5em;right: 20px;top: 10px; z-index: 1055;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+        var $close = '<button type="button" class="close text-white text-right text-end position-fixed" style="font-size: 2.5em;right: 20px;top: 10px; z-index: 1055;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 
         jQuery('.geodir-carousel-modal .modal-content').html($carousel).prepend($close);
 
@@ -2000,11 +2000,15 @@ function geodir_init_listings_carousel(el, index) {
         var slides = Math.ceil(items / pitems);
         var $carousel = $el.parent();
         var cid = $carousel.prop('id');
+        var bsDash = jQuery('body').hasClass('aui_bs5') ? 'bs-' : '';
         if (!cid) {
             cid = $el.prop('id') + '_' + index;
             $carousel.prop('id', cid);
         }
-        $carousel.addClass('carousel slide').addClass('d-block').attr('data-interval', $el.data('interval')).attr('data-ride', $el.data('ride'));
+        $carousel.addClass('carousel slide').addClass('d-block').attr('data-' + bsDash + 'interval', $el.data(bsDash + 'interval')).attr('data-' + bsDash + 'ride', $el.data(bsDash + 'ride'));
+        if (bsDash) {
+            $el.removeAttr('data-' + bsDash + 'interval data-' + bsDash + 'ride').removeClass('carousel slide');
+        }
         $el.addClass('carousel-inner');
         $el.find(wEl).addClass('carousel-item');
         var $content = jQuery($el.html()).empty();
@@ -2024,14 +2028,14 @@ function geodir_init_listings_carousel(el, index) {
             var indicators = '<ol class="carousel-indicators position-relative">';
             for (var i = 0; i < slides; i++) {
                 var cls = i == 0 ? ' active' : '';
-                indicators += '<li data-target="#' + cid + '" data-slide-to="' + i + '" class="bg-dark' + cls + '"></li>';
+                indicators += '<li data-target="#' + cid + '" data-' + bsDash + 'slide-to="' + i + '" class="bg-dark' + cls + '"></li>';
             }
             indicators += '</ol>';
             jQuery(el).after(indicators);
         }
         // Controls
         if ($el.data('with-controls')) {
-            var controls = '<a class="carousel-control-prev text-dark mr-2 ml-n2 w-auto" href="#' + cid + '" role="button" data-slide="prev"><i class="fas fa-chevron-left fa-2x" aria-hidden="true"></i><span class="sr-only">' + geodir_params.txt_previous + '</span></a><a class="carousel-control-next text-dark ml-2 w-auto mr-n2" href="#' + cid + '" role="button" data-slide="next"><i class="fas fa-chevron-right fa-2x" aria-hidden="true"></i><span class="sr-only">' + geodir_params.txt_next + '</span></a>';
+            var controls = '<a class="carousel-control-prev text-dark mr-2 ml-n2 me-2 ms-n2 w-auto" href="#' + cid + '" role="button" data-' + bsDash + 'slide="prev"><i class="fas fa-chevron-left fa-2x" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_previous + '</span></a><a class="carousel-control-next text-dark ml-2 w-auto mr-n2 me-n2 ms-2" href="#' + cid + '" role="button" data-' + bsDash + 'slide="next"><i class="fas fa-chevron-right fa-2x" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_next + '</span></a>';
             jQuery(el).after(controls);
         }
         geodir_ajax_load_slider($el);
@@ -2117,7 +2121,7 @@ function geodir_report_post(el) {
 		beforeSend: function(xhr, obj) {
 			$form.find('.geodir-report-post-msg').remove();
 			$button.parent().find('.fa-spin').remove();
-			$button.prop('disabled', true).after('<i class="fas fa-circle-notch fa-spin ml-2"></i>');
+			$button.prop('disabled', true).after('<i class="fas fa-circle-notch fa-spin ml-2 ms-2"></i>');
 		}
 	})
 	.done(function(res, textStatus, jqXHR) {

@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.15
+ * @version    2.2.19
  *
  * @var string $id The input id string.
  * @var bool $is_required If the item is required or not.
@@ -21,6 +21,8 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+
+global $aui_bs5;
 
 if ( $multiple ) {
 	$drop_file_label = __( 'Drop files here', 'geodirectory' );
@@ -31,7 +33,7 @@ if ( $multiple ) {
 	} else {
 		$file_limit_message = __( '(You can upload unlimited files with this package)', 'geodirectory' );
 	}
-} else { 
+} else {
 	$drop_file_label = __( 'Drop file here', 'geodirectory' );
 	$drop_file_button = __( 'Select File', 'geodirectory' );
 	$file_limit_message = '';
@@ -63,15 +65,19 @@ if ( $multiple ) {
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title"><?php _e('Set Image Texts','geodirectory'); ?></h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
+						<h5 class="modal-title mt-0"><?php _e('Set Image Texts','geodirectory'); ?></h5>
+						<?php
+						if ( $aui_bs5 ) {
+						?>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						<?php }else{ ?>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						<?php } ?>
 					</div>
-					<div class="modal-body text-left">
-					</div>
-					<div class="modal-footer">
-					</div>
+					<div class="modal-body <?php echo ( $aui_bs5 ? 'text-start' : 'text-left' ); ?>"></div>
+					<div class="modal-footer"></div>
 				</div>
 			</div>
 		</div>

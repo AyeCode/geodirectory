@@ -1305,54 +1305,64 @@ function geodir_get_sd_title_inputs(){
  *
  * @return string
  */
-function geodir_build_aui_class($args){
-	$design_style = geodir_design_style();
-	if( !$design_style ){ return ''; }
+function geodir_build_aui_class( $args ) {
+	global $aui_bs5;
+
+	if( ! geodir_design_style() ) {
+		return '';
+	}
+
 	$classes = array();
 
 	// margins
-	if ( !empty( $args['mt'] ) || ( isset( $args['mt'] ) && $args['mt'] == '0' ) ) { $classes[] = "mt-".sanitize_html_class($args['mt']); }
-	if ( !empty( $args['mr'] ) || ( isset( $args['mr'] ) && $args['mr'] == '0' ) ) { $classes[] = "mr-".sanitize_html_class($args['mr']); }
-	if ( !empty( $args['mb'] ) || ( isset( $args['mb'] ) && $args['mb'] == '0' ) ) { $classes[] = "mb-".sanitize_html_class($args['mb']); }
-	if ( !empty( $args['ml'] ) || ( isset( $args['ml'] ) && $args['ml'] == '0' ) ) { $classes[] = "ml-".sanitize_html_class($args['ml']); }
+	if ( ! empty( $args['mt'] ) || ( isset( $args['mt'] ) && $args['mt'] == '0' ) ) { $classes[] = "mt-".sanitize_html_class($args['mt']); }
+	if ( ! empty( $args['mr'] ) || ( isset( $args['mr'] ) && $args['mr'] == '0' ) ) { $classes[] = "mr-".sanitize_html_class($args['mr']); }
+	if ( ! empty( $args['mb'] ) || ( isset( $args['mb'] ) && $args['mb'] == '0' ) ) { $classes[] = "mb-".sanitize_html_class($args['mb']); }
+	if ( ! empty( $args['ml'] ) || ( isset( $args['ml'] ) && $args['ml'] == '0' ) ) { $classes[] = "ml-".sanitize_html_class($args['ml']); }
 
 	// padding
-	if ( !empty( $args['pt'] ) || ( isset( $args['pt'] ) && $args['pt'] == '0' ) ) { $classes[] = "pt-".sanitize_html_class($args['pt']); }
-	if ( !empty( $args['pr'] ) || ( isset( $args['pr'] ) && $args['pr'] == '0' ) ) { $classes[] = "pr-".sanitize_html_class($args['pr']); }
-	if ( !empty( $args['pb'] ) || ( isset( $args['pb'] ) && $args['pb'] == '0' ) ) { $classes[] = "pb-".sanitize_html_class($args['pb']); }
-	if ( !empty( $args['pl'] ) || ( isset( $args['pl'] ) && $args['pl'] == '0' ) ) { $classes[] = "pl-".sanitize_html_class($args['pl']); }
+	if ( ! empty( $args['pt'] ) || ( isset( $args['pt'] ) && $args['pt'] == '0' ) ) { $classes[] = "pt-".sanitize_html_class($args['pt']); }
+	if ( ! empty( $args['pr'] ) || ( isset( $args['pr'] ) && $args['pr'] == '0' ) ) { $classes[] = "pr-".sanitize_html_class($args['pr']); }
+	if ( ! empty( $args['pb'] ) || ( isset( $args['pb'] ) && $args['pb'] == '0' ) ) { $classes[] = "pb-".sanitize_html_class($args['pb']); }
+	if ( ! empty( $args['pl'] ) || ( isset( $args['pl'] ) && $args['pl'] == '0' ) ) { $classes[] = "pl-".sanitize_html_class($args['pl']); }
 
 	// border
-	if ( !empty( $args['border'] ) && ( $args['border']=='none' || $args['border']==='0') ) { $classes[] = "border-0"; }
-	elseif ( !empty( $args['border'] ) ) { $classes[] = "border border-".sanitize_html_class($args['border']); }
+	if ( ! empty( $args['border'] ) && ( $args['border']=='none' || $args['border']==='0') ) { $classes[] = "border-0"; }
+	else if ( !empty( $args['border'] ) ) { $classes[] = "border border-".sanitize_html_class($args['border']); }
 
 	// border radius type
-	if ( !empty( $args['rounded'] ) ) { $classes[] = sanitize_html_class($args['rounded']); }
+	if ( ! empty( $args['rounded'] ) ) { $classes[] = sanitize_html_class($args['rounded']); }
 
 	// border radius size
-	if ( !empty( $args['rounded_size'] ) ) {
-		$classes[] = "rounded-".sanitize_html_class($args['rounded_size']);
+	if ( ! empty( $args['rounded_size'] ) ) {
+		$classes[] = "rounded-" . sanitize_html_class( $args['rounded_size'] );
+
 		// if we set a size then we need to remove "rounded" if set
-		if (($key = array_search("rounded", $classes)) !== false) {
-			unset($classes[$key]);
+		if ( ( $key = array_search( "rounded", $classes ) ) !== false ) {
+			unset( $classes[ $key ] );
 		}
 	}
 
 	// shadow
-	if ( !empty( $args['shadow'] ) ) { $classes[] = sanitize_html_class($args['shadow']); }
+	if ( ! empty( $args['shadow'] ) ) { $classes[] = sanitize_html_class($args['shadow']); }
 
 	// background
-	if ( !empty( $args['bg'] ) ) { $classes[] = "bg-".sanitize_html_class($args['bg']); }
+	if ( ! empty( $args['bg'] ) ) { $classes[] = "bg-".sanitize_html_class($args['bg']); }
 
 	// text_color
-	if ( !empty( $args['text_color'] ) ) { $classes[] = "text-".sanitize_html_class($args['text_color']); }
+	if ( ! empty( $args['text_color'] ) ) { $classes[] = "text-".sanitize_html_class($args['text_color']); }
 
 	// text_align
-	if ( !empty( $args['text_align'] ) ) { $classes[] = sanitize_html_class($args['text_align']); }
+	if ( ! empty( $args['text_align'] ) ) { $classes[] = sanitize_html_class($args['text_align']); }
 
-	return implode(" ",$classes);
+	$classes = implode( " ", $classes );
+
+	if ( ! empty( $classes ) && $aui_bs5 ) {
+		$classes = str_replace( array( '-left', '-right', 'ml-', 'mr-', 'pl-', 'pr-' ), array( '-start', '-end', 'ms-', 'me-', 'ps-', 'pe-' ), $classes );
+	}
+
+	return $classes;
 }
-
 
 /**
  * Check if we are on the archive item edit page.

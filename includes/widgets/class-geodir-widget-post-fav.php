@@ -279,7 +279,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-		global $post;
+		global $aui_bs5, $post;
 
 		$defaults = array(
 			'show'           => '', // icon, text
@@ -319,8 +319,8 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 		if ( $args['alignment'] != '' ) {
 			if($design_style){
 				if($args['alignment']=='block'){$class .= " d-block ";}
-				elseif($args['alignment']=='left'){$class .= " float-left mr-2 ";}
-				elseif($args['alignment']=='right'){$class .= " float-right ml-2 ";}
+				elseif($args['alignment']=='left'){$class .= ( $aui_bs5 ? ' float-start ms-2 ' : ' float-left mr-2 ' );}
+				elseif($args['alignment']=='right'){$class .= ( $aui_bs5 ? ' float-end me-2 ' : ' float-right ml-2 ' );}
 				elseif($args['alignment']=='center'){$class .= " text-center ";}
 			}else{
 				$class .= $args['alignment']=='block' ? " gd-d-block gd-clear-both " : " geodir-align-" . sanitize_html_class( $args['alignment'] );
@@ -369,10 +369,10 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 		}
 
 		// margins
-		if ( !empty( $args['mt'] ) ) { $class .= " mt-".sanitize_html_class($args['mt'])." "; }
-		if ( !empty( $args['mr'] ) ) { $class .= " mr-".sanitize_html_class($args['mr'])." "; }
-		if ( !empty( $args['mb'] ) ) { $class .= " mb-".sanitize_html_class($args['mb'])." "; }
-		if ( !empty( $args['ml'] ) ) { $class .= " ml-".sanitize_html_class($args['ml'])." "; }
+		if ( ! empty( $args['mt'] ) ) { $class .= " mt-" . sanitize_html_class( $args['mt'] ) . " "; }
+		if ( ! empty( $args['mr'] ) ) { $class .= ( $aui_bs5 ? ' me-' : ' mr-' ) . sanitize_html_class( $args['mr'] ) . " "; }
+		if ( ! empty( $args['mb'] ) ) { $class .= " mb-" . sanitize_html_class( $args['mb'] ) . " "; }
+		if ( ! empty( $args['ml'] ) ) { $class .= ( $aui_bs5 ? ' ms-' : ' ml-' ) . sanitize_html_class( $args['ml'] ) . " "; }
 
 		$before = '<div class="geodir_post_meta gd-fav-info-wrap ' . $class . '" >';
 		$after  = '</div>';
