@@ -31,6 +31,8 @@
 
   .placeholder {
     outline: 1px dashed #4183C4;
+	  height: 43px;
+	  background: #fff;
   }
 
   li{
@@ -116,7 +118,7 @@
     }
 
   }
- 
+
   .dd-type-shortcode {
     textarea[name="tab_content"] {
 	  margin: 0px 10px;

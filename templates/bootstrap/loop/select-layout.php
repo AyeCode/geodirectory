@@ -20,6 +20,8 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+
+global $aui_bs5;
 ?>
 <script type="text/javascript">/* <![CDATA[ */
 	<?php
@@ -94,9 +96,9 @@ defined( 'ABSPATH' ) || exit;
 		}
 	}, 10); // we need to give it a very short time so the page loads the actual html
 	/* ]]> */</script>
-<div class="btn-group btn-group-sm gd-list-view-select" role="group" aria-label="<?php esc_attr_e("List View","geodirectory");?>">
+<div class="btn-group btn-group-sm gd-list-view-select" role="group" aria-label="<?php esc_attr_e( 'List View', 'geodirectory' ); ?>">
 	<div class="btn-group btn-group-sm" role="group">
-		<button id="gd-list-view-select-grid" type="button" class="btn btn-outline-primary rounded-right gd-list-view-select-grid" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="<?php esc_attr_e( "Select View", "geodirectory" ); ?>">
+		<button id="gd-list-view-select-grid" type="button" class="btn btn-outline-primary <?php echo $aui_bs5 ? 'dropdown-toggle dropdown-toggle-0 rounded-end' : 'rounded-right'; ?> gd-list-view-select-grid" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="<?php esc_attr_e( 'Select View', 'geodirectory' ); ?>">
 			<i class="fas fa-th"></i>
 		</button>
 		<div class="dropdown-menu dropdown-caret-0 my-3 p-0" aria-labelledby="gd-list-view-select-grid">
@@ -104,9 +106,15 @@ defined( 'ABSPATH' ) || exit;
 			if ( ! empty( $layouts ) ) {
 				foreach ( $layouts as $key => $layout ) {
 					$layout_name = $key ? wp_sprintf( __( 'View: Grid %d', 'geodirectory' ), $key ) : __( 'View: List', 'geodirectory' );
-					?>
-					<button class="dropdown-item" data-gridview="<?php echo absint( $key ); ?>" onclick="geodir_list_view_select(<?php echo absint( $key ); ?>);return false;"><?php echo esc_attr( $layout_name ); ?></button>
-					<?php
+					if ( $aui_bs5 ) {
+						?>
+						<a href="javascript:void(0);" class="dropdown-item" data-gridview="<?php echo absint( $key ); ?>" onclick="geodir_list_view_select(<?php echo absint( $key ); ?>);return false;"><?php echo esc_attr( $layout_name ); ?></a>
+						<?php
+					} else {
+						?>
+						<button class="dropdown-item" data-gridview="<?php echo absint( $key ); ?>" onclick="geodir_list_view_select(<?php echo absint( $key ); ?>);return false;"><?php echo esc_attr( $layout_name ); ?></button>
+						<?php
+					}
 				}
 			}
 			?>

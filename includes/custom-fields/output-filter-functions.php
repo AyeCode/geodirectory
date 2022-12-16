@@ -649,6 +649,8 @@ add_filter( 'geodir_custom_field_output_custom_var_default_category', 'geodir_cu
  * @return string The html to output.
  */
 function geodir_custom_field_output_business_hours_day( $html, $location, $cf, $p = '', $output = '' ) {
+	global $aui_bs5;
+
 	if ( ! empty( $cf['name'] ) && ! empty( $cf['extra_fields'] ) && is_array( $cf['extra_fields'] ) && isset( $cf['extra_fields']['day'] ) && $cf['name'] == 'business_hours_' . $cf['extra_fields']['day'] ) {
 		$htmlvar_name = 'business_hours';
 		$day = $cf['extra_fields']['day'];
@@ -703,7 +705,7 @@ function geodir_custom_field_output_business_hours_day( $html, $location, $cf, $
 		$slots_attr = 'data-bhs-day="' . (int) date( 'd' ) . '" data-bhs-id="' . (int) $gd_post->ID . '"';
 		$slots_class = ' gd-bh-s' . sanitize_html_class( $cf['extra_fields']['day'] );
 		if ( $design_style ) {
-			$class .= ' d-inline-block mr-1 align-top';
+			$class .= ' d-inline-block align-top ' . ( $aui_bs5 ? 'me-1' : 'mr-1' );
 			$slots_class .= ' d-inline-block';
 			$css_class .= ' py-1';
 		}

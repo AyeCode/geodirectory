@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <?php
+global $aui_bs5;
 $user_id        = ! empty( $key_data['user_id'] ) ? absint( $key_data['user_id'] ) : get_current_user_id();
 $user           = get_user_by( 'id', $user_id );
 /* translators: 1: user display name 2: user ID 3: user email */
@@ -20,7 +21,6 @@ $user_string    = sprintf(
 			<h2	class="gd-settings-title h5 mb-0 "><?php echo __( 'Key details', 'geodirectory' ); ?></h2>
 		</div>
 		<div id="gd_ie_imreviews" class="gd-hndle-pbox card-body">
-
 	<input type="hidden" id="key_id" value="<?php echo esc_attr( $key_id ); ?>" />
 
 			<?php
@@ -28,27 +28,18 @@ $user_string    = sprintf(
 				array(
 					'label_col'        => '3',
 					'type'      => 'text',
-					'label_class'=> 'font-weight-bold',
+					'label_class'=> 'font-weight-bold fw-bold',
 					'label_type'        => 'horizontal',
 					'label'       => __( 'Description', 'geodirectory' ) . geodir_help_tip( __( 'Friendly name for identifying this key.', 'geodirectory' )),
 					'class'     => 'mw-100',
-//								'wrap_class'      => count($gd_posttypes) < 2 ? 'd-none' : '',
-//								'desc'       => __( 'If the ID column exists in the CSV, you can either update the listing or it can be skipped', 'geodirectory' ),
 					'id'         => 'key_description',
 					'name'         => 'key_description',
 					'value'    => esc_attr( $key_data['description'] ),
-//					'options' => $gd_chunksize_options,
-//								'desc_tip' => true,
-
 				)
 			);
-
-
-
 			?>
-
-			<div class="form-group row">
-				<label for="key_user" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('User', 'geodirectory'); ?></label>
+			<div class="form-group row mb-3">
+				<label for="key_user" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('User', 'geodirectory'); ?></label>
 				<div class="col-sm-9">
 					<?php
 
@@ -58,7 +49,7 @@ $user_string    = sprintf(
 						'include_selected' => true,
 						'show' => 'name_id_email',
 						'orderby' => 'display_name',
-						'class' => 'gd-user-search aui-select2 custom-select mw-100'
+						'class' => 'gd-user-search aui-select2 mw-100 ' . ( $aui_bs5 ? 'form-select' : 'custom-select' )
 					) );
 					?>
 				</div>
@@ -68,7 +59,7 @@ $user_string    = sprintf(
 				echo aui()->select(
 					array(
 						'label_col'        => '3',
-						'label_class'=> 'font-weight-bold',
+						'label_class'=> 'font-weight-bold fw-bold',
 						'label_type'        => 'horizontal',
 						'label'       => __( 'Permissions', 'geodirectory' ) . geodir_help_tip( __( 'Select the access type of these keys', 'geodirectory' )),
 						'class'     => 'mw-100',
@@ -80,22 +71,19 @@ $user_string    = sprintf(
 							'write'      => __( 'Write', 'geodirectory' ),
 							'read_write' => __( 'Read/Write', 'geodirectory' ),
 						),
-
 					)
 				);
 			?>
-
-
 			<?php if ( 0 !== $key_id ) : ?>
-				<div class="form-group row">
-					<label for="key_user" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Consumer key ending in', 'geodirectory'); ?></label>
+				<div class="form-group row mb-3">
+					<label for="key_user" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Consumer key ending in', 'geodirectory'); ?></label>
 					<div class="col-sm-9">
 						<div class="mt-2"><code>&hellip;<?php echo esc_html( $key_data['truncated_key'] ); ?></code></div>
 					</div>
 				</div>
 
-				<div class="form-group row">
-					<label for="key_user" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Last access', 'geodirectory'); ?></label>
+				<div class="form-group row mb-3">
+					<label for="key_user" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Last access', 'geodirectory'); ?></label>
 					<div class="col-sm-9">
 						<div class="mt-2"><?php
 						if ( ! empty( $key_data['last_access'] ) ) {
@@ -138,7 +126,7 @@ $user_string    = sprintf(
 					'type'      => 'a',
 					'content'   => __('Revoke key', 'geodirectory'),
 					'id'    => 'update_api_key',
-					'class' => 'btn btn-link text-danger',
+					'class' => 'btn btn-danger ml-2 ms-2',
 					'href'  => esc_url( wp_nonce_url( add_query_arg( array( 'revoke-key' => $key_id ), admin_url( 'admin.php?page=gd-settings&tab=api&section=keys' ) ), 'revoke' ) ),
 				)
 			);
@@ -159,7 +147,7 @@ $user_string    = sprintf(
 			'label_type'        => 'horizontal',
 			'label_col'         => '3',
 			'class'             => '',
-			'label_class'       => 'font-weight-bold',
+			'label_class'       => 'font-weight-bold fw-bold',
 			'wrap_class'        => '',
 			'label'             => __( 'Consumer key', 'geodirectory' ),
 			'type'              => 'text',
@@ -178,7 +166,7 @@ $user_string    = sprintf(
 			'label_type'        => 'horizontal',
 			'label_col'         => '3',
 			'class'             => '',
-			'label_class'       => 'font-weight-bold',
+			'label_class'       => 'font-weight-bold fw-bold',
 			'wrap_class'        => '',
 			'label'             => __( 'Consumer secret', 'geodirectory' ),
 			'type'              => 'text',
@@ -190,8 +178,8 @@ $user_string    = sprintf(
 		)
 	);
 	?>
-	<div data-argument="keys-qrcode" class="form-group row">
-		<label for="keys-qrcode" class="font-weight-bold  col-sm-3 col-form-label"><?php _e( 'QRCode', 'geodirectory' ); ?></label>
+	<div data-argument="keys-qrcode" class="form-group row mb-3">
+		<label for="keys-qrcode" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e( 'QRCode', 'geodirectory' ); ?></label>
 		<div class="col-sm-9"><div class="input-group"><div id="keys-qrcode"></div></div>
 	</div>
 </script>

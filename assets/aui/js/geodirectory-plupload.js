@@ -296,7 +296,7 @@ function plu_show_thumbs(imgId) {
             var image_title = img_arr[2];
             var image_caption = img_arr[3];
             var image_title_html = '';
-            var image_caption_html = ''; 
+            var image_caption_html = '';
 
             // fix undefined id
             if (typeof image_id === "undefined") {
@@ -333,10 +333,10 @@ function plu_show_thumbs(imgId) {
             if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico' || file_ext == 'webp') {
                 file_display = '<img class="gd-file-info embed-responsive-item embed-item-cover-xy " data-id="' + image_id + '" data-title="' + image_title + '" data-caption="' + image_caption + '" data-src="' + image_url + '" src="' + image_url + '" alt=""  />';
                 if(!!image_title.trim()){
-                    image_title_html = '<span class="gd-title-preview badge badge-light ab-top-left text-truncate mw-100" style="background: #ffffffc7">' + image_title + '</span>';
+                    image_title_html = '<span class="gd-title-preview badge badge-light ab-top-left text-truncate mw-100 h-auto text-dark w-auto" style="background: #ffffffc7">' + image_title + '</span>';
                 }
                 if(!!image_caption.trim()){
-                    image_caption_html = '<span class="gd-caption-preview badge badge-light ab-top-left mt-4 text-truncate mw-100" style="background: #ffffffc7">' + image_caption + '</span>';
+                    image_caption_html = '<span class="gd-caption-preview badge badge-light ab-top-left mt-4 text-truncate mw-100 h-auto text-dark w-auto" style="background: #ffffffc7">' + image_caption + '</span>';
                 }
             } else {
                 var file_type_class = 'fa-file';
@@ -357,11 +357,11 @@ function plu_show_thumbs(imgId) {
                 file_display = '<i title="' + file_name + '" class="fas ' + file_type_class + ' gd-file-info embed-responsive-item embed-item-cover-xy display-1" data-id="' + image_id + '" data-title="' + image_title + '" data-caption="' + image_caption + '" data-src="' + image_url + '" aria-hidden="true"></i>';
             }
 
-            var thumb = $('<div class="col px-2 mb-2"><div class="thumb ' + file_display_class + ' embed-responsive embed-responsive-16by9 bg-white border c-move" id="thumb' + imgId + i + '">' +
+            var thumb = $('<div class="col px-2 mb-2"><div class="thumb ' + file_display_class + ' ratio ratio-16x9 embed-responsive embed-responsive-16by9 bg-white border c-move" id="thumb' + imgId + i + '">' +
                 image_title_html +
                 file_display +
                 image_caption_html +
-                '<div class="gd-thumb-actions position-absolute text-white w-100  d-flex justify-content-around" style="bottom: 0;background: #00000063;">' +
+                '<div class="gd-thumb-actions position-absolute text-white w-100  d-flex justify-content-around" style="bottom: 0;background: #00000063;top: auto; height:20px;">' +
                 '<a class="thumbpreviewlink text-white" title="' + geodir_esc_entities( geodir_params.txt_preview ) + '" id="thumbpreviewlink' + imgId + i + '" href="' + image_url + '" target="_blank"><i class="far fa-eye" aria-hidden="true"></i></a> ' +
                 '<span class="thumbeditlink c-pointer" title="' + geodir_esc_entities( geodir_params.txt_edit ) + '" onclick="gd_edit_image_meta(' + imgId + ',' + i + ');"><i class="far fa-edit" aria-hidden="true"></i></span>' +
                 '<span class="thumbremovelink c-pointer" title="' + geodir_esc_entities( geodir_params.txt_delete ) + '" id="thumbremovelink' + imgId + i + '"><i class="fas fa-trash-alt" aria-hidden="true"></i></span>' +
@@ -436,8 +436,8 @@ function gd_edit_image_meta(input, order_id) {
     var html = '';
     var button = '';
 
-    html = html + "<div class='form-group'><label for='gd-image-meta-title' class='text-left'>" + geodir_params.label_title + "</label><input id='gd-image-meta-title' value='" + image_title + "' class='form-control'></div>"; // title value
-    html = html + "<div class='form-group'><label for='gd-image-meta-caption' class='text-left'>" + geodir_params.label_caption + "</label><input id='gd-image-meta-caption' value='" + image_caption + "' class='form-control'></div>"; // caption value
+    html = html + "<div class='form-group mb-3'><label for='gd-image-meta-title' class='text-left text-start form-label'>" + geodir_params.label_title + "</label><input id='gd-image-meta-title' value='" + image_title + "' class='form-control'></div>"; // title value
+    html = html + "<div class='form-group mb-3'><label for='gd-image-meta-caption' class='text-left text-start form-label'>" + geodir_params.label_caption + "</label><input id='gd-image-meta-caption' value='" + image_caption + "' class='form-control'></div>"; // caption value
     button = "<span class='btn btn-primary c-pointer' onclick='gd_set_image_meta(\"" + input.id + "\"," + order_id + ")'>" + geodir_params.button_set + "</span>"; // set button
     jQuery('#gd-image-meta-input .modal-body').html(html);
     jQuery('#gd-image-meta-input .modal-footer').html(button);

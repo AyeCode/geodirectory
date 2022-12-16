@@ -22,8 +22,9 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+global $aui_bs5;
 ?>
-<div class='gd-search-field-search col-auto flex-fill<?php echo $input_wrap_class; ?>' style="flex-grow:9999 !important;" <?php echo geodir_conditional_field_attrs( array( 'type' => 'text' ), 's', 'text' ); ?>>
+<div class='gd-search-field-search col-auto flex-fill<?php echo $input_wrap_class; echo $aui_bs5 ? ' px-0' : ''; ?>' style="flex-grow:9999 !important;" <?php echo geodir_conditional_field_attrs( array( 'type' => 'text' ), 's', 'text' ); ?>>
 	<?php
 	do_action('geodir_before_search_for_input');
 
@@ -37,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
 			'value' =>  $search_term,
 			'name'  => 's',
 			'placeholder'  => esc_html__($default_search_for_text,'geodirectory'),
-			'class' => 'search_text gd_search_text pl-4 w-100',
+			'class' => 'search_text gd_search_text pl-4 ps-4 w-100',
 			'label'   => esc_html__($default_search_for_text,'geodirectory'),
 			'label_type'       => 'hidden',//hidden, top, horizontal, floating
 			'extra_attributes' => array(

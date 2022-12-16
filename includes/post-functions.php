@@ -342,8 +342,7 @@ function geodir_new_post_default_status() {
  * @return string
  */
 function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
-
-	global $current_user, $post;
+	global $current_user, $aui_bs5, $post;
 
 	if ( isset( $post->post_type ) && $post->post_type ) {
 		$post_type = $post->post_type;
@@ -474,7 +473,7 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 	if($design_style){
 		// type
 		if($args['type'] == 'badge'){$link_class .= ' badge';}
-		if($args['type'] == 'pill'){$link_class .= ' badge badge-pill';}
+		if($args['type'] == 'pill'){$link_class .= ' badge ' . ( $aui_bs5 ? 'rounded-pill' : 'badge-pill' );}
 
 		// shadow
 		if(!empty($args['shadow'])){
@@ -490,7 +489,7 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 
 		// bg color
 		if( !empty($args['color']) ){
-			$link_class .= ' badge-'.sanitize_html_class($args['color']);
+			$link_class .= ( $aui_bs5 ? 'bg-' : 'badge-' ) . sanitize_html_class( $args['color'] );
 		}elseif( !empty($args['bg_color']) && $args['type']!='link'){
 			$link_style .= "background:".esc_attr($args['bg_color']).";";
 		}
@@ -950,7 +949,7 @@ function geodir_setup_postdata( $the_post ) {
  * @return string $output.
  */
 function geodir_get_post_badge( $post_id ='', $args = array() ) {
-	global $gd_post;
+	global $aui_bs5, $gd_post;
 
 	$output = '';
 	if ( empty( $post_id ) ) {
@@ -1402,23 +1401,23 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 
 					// type
-					if( !empty( $args['type'] ) && $args['type']=='pill' ){
-						$btn_class .= ' border-0 badge badge-pill';
-						$btn_class .= $badge_color ? ' badge-'.$badge_color. ' ' : '';
-					}elseif( !empty( $args['type'] ) && $args['type']=='button' ) {
+					if ( ! empty( $args['type'] ) && $args['type'] == 'pill' ) {
+						$btn_class .= ' border-0 badge ' . ( $aui_bs5 ? 'rounded-pill' : 'badge-pill' );
+						$btn_class .= $badge_color ? ' ' . ( $aui_bs5 ? 'bg-' : 'badge-' ) . $badge_color . ' ' : '';
+					} else if ( ! empty( $args['type'] ) && $args['type'] == 'button' ) {
 						$btn_class .= ' btn ';
-						$btn_class .= $badge_color ? ' btn-'.$badge_color. ' ' : '';
-					}elseif( !empty( $args['type'] ) && $args['type']=='link' ) {
+						$btn_class .= $badge_color ? ' btn-' . $badge_color . ' ' : '';
+					} else if ( ! empty( $args['type'] ) && $args['type'] == 'link' ) {
 						$btn_class .= ' btn btn-link ';
-					}else{
+					} else {
 						$btn_class .= ' border-0 badge';
-						$btn_class .= $badge_color ? ' badge-'.$badge_color. ' ' : '';
+						$btn_class .= $badge_color ? ' ' . ( $aui_bs5 ? 'bg-' : 'badge-' ) . $badge_color . ' ' : '';
 					}
 
 					//alignment
 					if($args['alignment']=='block'){$btn_class .= " d-block ";}
-					elseif($args['alignment']=='left'){$btn_class .= " float-left mr-2 ";}
-					elseif($args['alignment']=='right'){$btn_class .= " float-right ml-2 ";}
+					elseif($args['alignment']=='left'){$btn_class .= ( $aui_bs5 ? ' float-start ms-2 ' : ' float-left mr-2 ' );}
+					elseif($args['alignment']=='right'){$btn_class .= ( $aui_bs5 ? ' float-end me-2 ' : ' float-right ml-2 ' );}
 					elseif($args['alignment']=='center'){$btn_class .= " mw-100 d-block mx-auto ";}
 
 					if ( ! empty( $args['css_class'] ) ) {
