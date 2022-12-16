@@ -830,8 +830,6 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		// preview wrapper close
 		$content .= $is_preview ? '</div></div></div></div>' : '';
 
-
-//	    $content = do_blocks( $content );
 		$content = do_shortcode( $content );
 
 		return $content;

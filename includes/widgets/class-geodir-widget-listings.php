@@ -498,43 +498,84 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			'group' => __( 'Carousel', 'geodirectory' )
 		);
 
-	    /*
+		$arguments['template_type'] = array(
+			'title' => __( 'Archive Item Template Type:', 'geodirectory' ),
+			'desc' => 'Select archive item template type to assign template to archive loop.',
+			'type' => 'select',
+			'options' => geodir_template_type_options(),
+			'default' => '',
+			'desc_tip' => true,
+			'advanced' => false,
+			'group' => __( 'Design', 'geodirectory' )
+		);
+
+		$arguments['tmpl_page'] = array(
+			'title' => __( 'Archive Item Template Page:', 'geodirectory' ),
+			'desc' => 'Select archive item template page.',
+			'type' => 'select',
+			'options' => geodir_template_page_options(),
+			'default' => '',
+			'desc_tip' => true,
+			'advanced' => false,
+			'element_require' => '[%template_type%]=="page"',
+			'group' => __( 'Design', 'geodirectory' )
+		);
+
+		if ( geodir_is_block_theme() ) {
+			$arguments['tmpl_part'] = array(
+				'title' => __( 'Archive Item Template Part:', 'geodirectory' ),
+				'desc' => 'Select archive item template part.',
+				'type' => 'select',
+				'options' => geodir_template_part_options(),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'element_require' => '[%template_type%]=="template_part"',
+				'group' => __( 'Design', 'geodirectory' )
+			);
+		}
+
+		/*
 		 * Elementor Pro features below here
 		 */
-	    if(defined( 'ELEMENTOR_PRO_VERSION' )){
-		    $arguments['skin_id'] = array(
-			    'title' => __( "Elementor Skin", 'geodirectory' ),
-			    'desc' => '',
-			    'type' => 'select',
-			    'options' =>  GeoDir_Elementor::get_elementor_pro_skins(),
-			    'default'  => '',
-			    'desc_tip' => false,
-			    'advanced' => false,
-			    'group'     => __("Design","geodirectory")
-		    );
+		if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
+			$arguments['skin_id'] = array(
+				'title' => __( 'Archive Item Elementor Skin:', 'geodirectory' ),
+				'desc' => '',
+				'type' => 'select',
+				'options' => GeoDir_Elementor::get_elementor_pro_skins(),
+				'default' => '',
+				'desc_tip' => false,
+				'advanced' => false,
+				'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
+				'group' => __( 'Design', 'geodirectory' )
+			);
 
-		    $arguments['skin_column_gap'] = array(
-			    'title' => __('Skin column gap', 'geodirectory'),
-			    'desc' => __('The px value for the column gap.', 'geodirectory'),
-			    'type' => 'number',
-			    'default'  => '30',
-			    'desc_tip' => true,
-			    'advanced' => false,
-			    'group'     => __("Design","geodirectory")
-		    );
-		    $arguments['skin_row_gap'] = array(
-			    'title' => __('Skin row gap', 'geodirectory'),
-			    'desc' => __('The px value for the row gap.', 'geodirectory'),
-			    'type' => 'number',
-			    'default'  => '35',
-			    'desc_tip' => true,
-			    'advanced' => false,
-			    'group'     => __("Design","geodirectory")
-		    );
-	    }
-	    
-	    return $arguments;
-    }
+			$arguments['skin_column_gap'] = array(
+				'title' => __( 'Skin column gap', 'geodirectory' ),
+				'desc' => __( 'The px value for the column gap.', 'geodirectory' ),
+				'type' => 'number',
+				'default' => '30',
+				'desc_tip' => true,
+				'advanced' => false,
+				'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
+				'group' => __( 'Design', 'geodirectory' )
+			);
+
+			$arguments['skin_row_gap'] = array(
+				'title' => __( 'Skin row gap', 'geodirectory' ),
+				'desc' => __( 'The px value for the row gap.', 'geodirectory' ),
+				'type' => 'number',
+				'default' => '35',
+				'desc_tip' => true,
+				'advanced' => false,
+				'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
+				'group' => __( 'Design', 'geodirectory' )
+			);
+		}
+
+		return $arguments;
+	}
 
 	/**
 	 * The Super block output function.
@@ -580,6 +621,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				'top_pagination' => '0',
 				'bottom_pagination' => '1',
 				'pagination_info' => '',
+				// Template Settings
+				'template_type' => '',
+				'tmpl_page' => '',
+				'tmpl_part' => '',
 				// elementor settings
 				'skin_id' => '',
 				'skin_column_gap' => '',
@@ -634,7 +679,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @param array|string $instance           The settings for the particular instance of the widget.
      */
     public function output_html( $args = '', $instance = '' ) {
-        global $wp, $aui_bs5, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings, $geodir_carousel_open;
+        global $wp, $aui_bs5, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings, $geodir_carousel_open, $geodir_item_tmpl;
 
 		$is_single = ( geodir_is_page( 'single' ) || ! empty( $instance['set_post'] ) ) && ! empty( $gd_post ) ? true : false;
 
@@ -756,15 +801,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		 */
 		$favorites_by_user = empty( $instance['favorites_by_user'] ) || empty( $show_favorites_only ) ? '' : apply_filters( 'widget_favorites_by_user', $instance['favorites_by_user'], $instance, $this->id_base );
 
-		/**
-		 * Filter the widget skin_id param.
-		 *
-		 * @since 2.0.0.86
-		 *
-		 * @param string $instance ['skin_id'] Filter skin_id.
-		 */
-		$skin_id = empty( $instance['skin_id'] ) ? '' : apply_filters( 'widget_skin_id', $instance['skin_id'], $instance, $this->id_base );
-
 	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
 
 		if ( ! empty( $instance['with_carousel'] ) ) {
@@ -802,6 +838,58 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		// check its a GD post type, if not then bail
 		if ( ! geodir_is_gd_post_type( $post_type ) ) {
 			return '';
+		}
+
+		/**
+		 * Filter the widget template_type param.
+		 *
+		 * @since 2.2.20
+		 *
+		 * @param string $template_type Filter template_type.
+		 */
+		$template_type = apply_filters( 'geodir_widget_gd_listings_template_type', ( ! empty( $instance['template_type'] ) ? $instance['template_type'] : '' ), $instance, $this->id_base );
+
+		$template_page = 0;
+		/**
+		 * Filter the widget tmpl_page param.
+		 *
+		 * @since 2.2.20
+		 *
+		 * @param int $template_page Filter tmpl_page.
+		 */
+		if ( $template_type == 'page' ) {
+			$template_page = apply_filters( 'geodir_widget_gd_listings_tmpl_page', ( ! empty( $instance['tmpl_page'] ) ? (int) $instance['tmpl_page'] : 0 ), $instance, $this->id_base );
+		}
+
+		$template_part = '';
+		/**
+		 * Filter the widget tmpl_part param.
+		 *
+		 * @since 2.2.20
+		 *
+		 * @param string $template_part Filter tmpl_part.
+		 */
+		if ( $template_type == 'template_part' && geodir_is_block_theme() ) {
+			$template_part = apply_filters( 'geodir_widget_gd_listings_tmpl_part', ( ! empty( $instance['tmpl_part'] ) ? $instance['tmpl_part'] : '' ), $instance, $this->id_base );
+		}
+
+		$skin_id = 0;
+		/**
+		 * Filter the widget skin_id param.
+		 *
+		 * @since 2.2.20
+		 *
+		 * @param int $skin_id Filter skin_id.
+		 */
+		if ( empty( $template_type ) || $template_type == 'elementor_skin' ) {
+			$skin_id = apply_filters( 'widget_skin_id', ( ! empty( $instance['skin_id'] ) ? (int) $instance['skin_id'] : 0 ), $instance, $this->id_base );
+		}
+
+		$geodir_item_tmpl = array();
+		if ( ! empty( $template_page ) && get_post_type( $template_page ) == 'page' && get_post_status( $template_page ) == 'publish' ) {
+			$geodir_item_tmpl = array( 'id' => $template_page, 'type' => 'page' );
+		} else if ( ! empty( $template_part ) && ( $_template_part = geodir_get_template_part_by_slug( $template_part ) ) ) {
+			$geodir_item_tmpl = array( 'id' => $_template_part->ID, 'type' => 'template_part' );
 		}
 
 		// Filter posts by current terms on category/tag/search archive pages.
@@ -1206,9 +1294,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		// Elementor
 		$skin_active = false;
 		$elementor_wrapper_class = '';
-		if ( defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id ) {
+		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $skin_id ) {
 			if ( get_post_status ( $skin_id ) == 'publish' ) {
 				$skin_active = true;
+
+				$geodir_item_tmpl = array( 'id' => $skin_id, 'type' => 'elementor_skin' );
 			}
 
 			if ( $skin_active ) {
@@ -1406,6 +1496,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$paged = $backup_paged;
 		$gd_advanced_pagination = $backup_gd_advanced_pagination;
 		$geodir_carousel_open = false;
+		$geodir_item_tmpl = array();
 
 		remove_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 2 );
 	}
@@ -1571,8 +1662,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	 */
 	public function get_rest_slugs_array(){
 		$post_types = geodir_get_posttypes('array');
-
-//		print_r($post_types);exit;
 
 		$options = array();
 		if (!empty($post_types)) {

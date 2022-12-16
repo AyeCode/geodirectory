@@ -289,6 +289,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory Business Directory Plugin v2.2.20 =
 * Changes for AUI Bootstrap 5 compatibility - ADDED
 * New field adeed to set category bottom description - ADDED
+* Option added to select archive item template for listings loop - ADDED
 
 = GeoDirectory Business Directory Plugin v2.2.19 - 2022-12-15 =
 * Map directions link from listings is not working when multiple post map on the page - FIXED
