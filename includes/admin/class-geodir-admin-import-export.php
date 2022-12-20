@@ -420,6 +420,8 @@ class GeoDir_Admin_Import_Export {
 	public static function validate_post( $row ) {
 		$post_info = $row;
 
+		$post_info = array_map( 'trim', $post_info );
+
 		// Validate post_type
 		if ( ! empty( $post_info['post_type'] ) ) {
 			$post_type = esc_attr( $post_info['post_type'] );
@@ -954,13 +956,15 @@ class GeoDir_Admin_Import_Export {
 		if ( function_exists( 'fputcsv' ) ) {
 			$file = fopen( $file_path, $mode );
 			foreach ( $csv_data as $csv_row ) {
-				//$csv_row = array_map( 'utf8_decode', $csv_row );
+				// Escape data to prevent injection.
+				$csv_row = array_map( 'geodir_escape_csv_data', $csv_row );
 				$write_successful = fputcsv( $file, $csv_row, ",", $enclosure = '"' );
 			}
 			fclose( $file );
 		} else {
 			foreach ( $csv_data as $csv_row ) {
-				//$csv_row = array_map( 'utf8_decode', $csv_row );
+				// Escape data to prevent injection.
+				$csv_row = array_map( 'geodir_escape_csv_data', $csv_row ); 
 				$wp_filesystem->put_contents( $file_path, $csv_row );
 			}
 		}
@@ -1307,6 +1311,7 @@ class GeoDir_Admin_Import_Export {
 	 * @return array
 	 */
 	public static function validate_cat( $cat_info ) {
+		$cat_info = array_map( 'trim', $cat_info );
 
 		$cat_info_fixed = array();
 

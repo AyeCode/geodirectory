@@ -2133,3 +2133,40 @@ function geodir_parse_embed_url( $url, $args = array() ) {
 	 */
 	return apply_filters( 'geodir_parse_embed_url', $embed_url, $url, $data, $args );
 }
+
+/**
+ * Escape a string to be used in a CSV export.
+ *
+ * @see https://hackerone.com/reports/72785
+ *
+ * @since 2.2.20
+ *
+ * @param string $data Data to escape.
+ * @return string
+ */
+function geodir_escape_csv_data( $data ) {
+	$escape_chars = array( '=', '+', '-', '@' );
+
+	if ( $data && in_array( substr( $data, 0, 1 ), $escape_chars, true ) ) {
+		$data = " " . $data;
+	}
+
+	return $data;
+}
+
+/**
+ * Format and escape data ready for the CSV export.
+ *
+ * @since 2.2.20
+ *
+ * @param  string $data Data to format.
+ * @return string
+ */
+function geodir_format_csv_data( $data ) {
+	if ( $data && function_exists( 'mb_convert_encoding' ) ) {
+		$encoding = mb_detect_encoding( $data, 'UTF-8, ISO-8859-1', true );
+		$data = 'UTF-8' === $encoding ? $data : utf8_encode( $data );
+	}
+
+	return geodir_escape_csv_data( $data );
+}
