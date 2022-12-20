@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.2.19\n"
+"Project-Id-Version: GeoDirectory 2.2.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-15 16:31+0530\n"
-"PO-Revision-Date: 2022-12-15 16:31+0530\n"
+"POT-Creation-Date: 2022-12-20 20:06+0530\n"
+"PO-Revision-Date: 2022-12-20 20:06+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1805,8 +1805,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:232
 #: includes/admin/class-geodir-admin-import-export.php:328
-#: includes/admin/class-geodir-admin-import-export.php:1286
-#: includes/admin/class-geodir-admin-import-export.php:2108
+#: includes/admin/class-geodir-admin-import-export.php:1290
+#: includes/admin/class-geodir-admin-import-export.php:2113
 msgid "No data found in csv file."
 msgstr ""
 
@@ -1822,98 +1822,98 @@ msgstr ""
 msgid "Row %d Error: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:428
+#: includes/admin/class-geodir-admin-import-export.php:430
 #, php-format
 msgid "Invalid post type - %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:431
+#: includes/admin/class-geodir-admin-import-export.php:433
 msgid "Post type missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:436
+#: includes/admin/class-geodir-admin-import-export.php:438
 msgid "Title missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:497
+#: includes/admin/class-geodir-admin-import-export.php:499
 msgid "Address city, region or country missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:535
+#: includes/admin/class-geodir-admin-import-export.php:537
 #: includes/location-functions.php:787
 msgid "Failed to retrieve GPS data from a address using API."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:559
+#: includes/admin/class-geodir-admin-import-export.php:561
 msgid "Not enough GPS info for address."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:582
-#: includes/admin/class-geodir-admin-import-export.php:600
+#: includes/admin/class-geodir-admin-import-export.php:584
+#: includes/admin/class-geodir-admin-import-export.php:602
 #: includes/location-functions.php:896 includes/location-functions.php:921
 msgid "Failed to reach Google geocode server."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:597
+#: includes/admin/class-geodir-admin-import-export.php:599
 #: includes/location-functions.php:919
 #, php-format
 msgid "Google geocode failed: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:695
-#: includes/admin/class-geodir-admin-import-export.php:1008
-#: includes/admin/class-geodir-admin-import-export.php:1951
+#: includes/admin/class-geodir-admin-import-export.php:697
+#: includes/admin/class-geodir-admin-import-export.php:1012
+#: includes/admin/class-geodir-admin-import-export.php:1956
 #: includes/admin/settings/class-geodir-settings-import-export.php:903
 msgid "No records to export."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:741
-#: includes/admin/class-geodir-admin-import-export.php:1050
-#: includes/admin/class-geodir-admin-import-export.php:1995
+#: includes/admin/class-geodir-admin-import-export.php:743
+#: includes/admin/class-geodir-admin-import-export.php:1054
+#: includes/admin/class-geodir-admin-import-export.php:2000
 msgid ""
 "ERROR: Could not create csv file. This is usually due to inconsistent file "
 "permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1588
+#: includes/admin/class-geodir-admin-import-export.php:1593
 msgid "json file is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1590
+#: includes/admin/class-geodir-admin-import-export.php:1595
 msgid "json file is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1602
+#: includes/admin/class-geodir-admin-import-export.php:1607
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2026
+#: includes/admin/class-geodir-admin-import-export.php:2031
 #, php-format
 msgid "GD IMPORT REVIEW [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2034
+#: includes/admin/class-geodir-admin-import-export.php:2039
 msgid "data is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2047
+#: includes/admin/class-geodir-admin-import-export.php:2052
 msgid "invalid comment content."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2051
+#: includes/admin/class-geodir-admin-import-export.php:2056
 msgid "invalid comment post ID."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2055
+#: includes/admin/class-geodir-admin-import-export.php:2060
 msgid "invalid user details(user id or author name, author email)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2059
+#: includes/admin/class-geodir-admin-import-export.php:2064
 msgid "invalid rating."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2085
-#: includes/admin/class-geodir-admin-import-export.php:2102
+#: includes/admin/class-geodir-admin-import-export.php:2090
+#: includes/admin/class-geodir-admin-import-export.php:2107
 msgid "invalid data."
 msgstr ""
 
