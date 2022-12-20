@@ -228,12 +228,12 @@ if ( $wp_query->max_num_pages <= 1 && empty($args['preview']) ) {
 
 	$defaults = array(
 		'prev_text' => sprintf(
-			'%s <span class="nav-prev-text sr-only visually-hidden">%s</span>',
+			'%s <span class="nav-prev-text sr-only">%s</span>',
 			'<i class="fas fa-chevron-left"></i>',
 			__( 'Newer posts', 'ayetheme' )
 		),
 		'next_text' => sprintf(
-			'<span class="nav-next-text sr-only visually-hidden">%s</span> %s',
+			'<span class="nav-next-text sr-only">%s</span> %s',
 			__( 'Older posts', 'ayetheme' ),
 			'<i class="fas fa-chevron-right"></i>'
 		),

@@ -1268,7 +1268,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
                 foreach ($option_values as $val) {
                     if( $show_as_csv && count($option_values) > 1 && count($option_values)!=$li_count+1 ){
                         $val = count($option_values)!=$li_count+1 ? $val."," : $val;
-                        $li_class = ' mx-0 pr-1 pr-0 pl-0 ps-0 d-inline-block';
+                        $li_class = ' mx-0 pr-1 pl-0 d-inline-block';
                     }
 
                     $field_value .= '<li class="geodir-fv-' . sanitize_html_class( sanitize_title_with_dashes( $val ) ) . $li_class.'">' . $val . '</li>';
@@ -1864,7 +1864,7 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
 
                 if ( $design_style ) {
                     // check if we have any media in iframe first, if so maybe wrap in responsive wrapper.
-                    $content = str_replace( array( "<iframe ", "</iframe>" ), array( '<div class="geodir-embed-container embed-responsive embed-responsive-16by9 ratio ratio-16x9"><iframe ', '</iframe></div>' ), $content );
+                    $content = str_replace( array( "<iframe ", "</iframe>" ), array( '<div class="geodir-embed-container embed-responsive embed-responsive-16by9"><iframe ', '</iframe></div>' ), $content );
                 }
 
                 $gd_skip_the_content = false;
@@ -2009,7 +2009,7 @@ function geodir_cf_html($html,$location,$cf,$p='',$output=''){
 
             if ( geodir_design_style() ) {
                 // check if we have any media in iframe first, if so maybe wrap in responsive wrapper.
-                $value = str_replace( array( "<iframe ", "</iframe>" ), array( '<div class="geodir-embed-container embed-responsive embed-responsive-16by9 ratio ratio-16x9"><iframe ', '</iframe></div>' ), $value );
+                $value = str_replace( array( "<iframe ", "</iframe>" ), array( '<div class="geodir-embed-container embed-responsive embed-responsive-16by9"><iframe ', '</iframe></div>' ), $value );
             }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
@@ -2563,8 +2563,6 @@ add_filter('geodir_custom_field_output_address','geodir_cf_address',10,5);
  * @return string The html to output.
  */
 function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
-	global $aui_bs5;
-
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
     else{ global $gd_post;}
@@ -2649,13 +2647,8 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                 $dropdown_toggle_class =  $design_style ? ' dropdown-toggle ' : '';
                 $dropdown_item_class =  $design_style ? ' dropdown-item py-1 ' : '';
                 $dropdown_item_inline_class =  $design_style ? ' d-inline-block ' : '';
-				if ( $aui_bs5 ) {
-					$dropdown_item_mr_class =  $design_style ? ' me-3 ' : '';
-					$dropdown_item_float_class =  $design_style ? ' float-end' : '';
-				} else {
-					$dropdown_item_mr_class =  $design_style ? ' mr-3 ' : '';
-					$dropdown_item_float_class =  $design_style ? ' float-right' : '';
-				}
+                $dropdown_item_mr_class =  $design_style ? ' mr-3 ' : '';
+                $dropdown_item_float_class =  $design_style ? ' float-right' : '';
                 $dropdown_menu_class =  $design_style ? ' dropdown-menu dropdown-caret-0 my-3 ' : '';
 
                 if($design_style && $bh_expanded ){

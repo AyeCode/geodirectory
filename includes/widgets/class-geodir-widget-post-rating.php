@@ -154,7 +154,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
      * @return mixed|string|void
      */
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
-        global $aui_bs5, $post, $gd_post;
+        global $post, $gd_post;
 
         // Check comments are disabled.
         if ( ! geodir_is_block_demo() && ! ( ! empty( $gd_post ) && ! empty( $gd_post->post_type ) && GeoDir_Post_types::supports( $gd_post->post_type, 'comments' ) ) ) {
@@ -183,8 +183,8 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         if ( $args['alignment'] != '' ) {
             if($design_style){
                 if($args['alignment']=='block'){$class .= " d-block ";}
-                elseif($args['alignment']=='left'){$class .= ( $aui_bs5 ? ' float-start ms-2 ' : ' float-left mr-2 ' );}
-                elseif($args['alignment']=='right'){$class .= ( $aui_bs5 ? ' float-end me-2 ' : ' float-right ml-2 ' );}
+                elseif($args['alignment']=='left'){$class .= " float-left mr-2 ";}
+                elseif($args['alignment']=='right'){$class .= " float-right ml-2 ";}
                 elseif($args['alignment']=='center'){$class .= " mw-100 d-block mx-auto text-center ";}
             }else{
                 $class .= " geodir-align" . sanitize_html_class( $args['alignment'] );

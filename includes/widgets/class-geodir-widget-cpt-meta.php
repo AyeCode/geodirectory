@@ -253,8 +253,8 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 		if ( $instance['alignment'] != '' ) {
 			if($design_style){
 				if($instance['alignment']=='block'){$css_class .= " d-block ";}
-				elseif($instance['alignment']=='left'){$css_class .= ( $aui_bs5 ? ' float-start ms-2 ' : ' float-left mr-2 ' );}
-				elseif($instance['alignment']=='right'){$css_class .= ( $aui_bs5 ? ' float-end me-2 ' : ' float-right ml-2 ' );}
+				elseif($instance['alignment']=='left'){$css_class .= " float-left mr-2 ";}
+				elseif($instance['alignment']=='right'){$css_class .= " float-right ml-2 ";}
 				elseif($instance['alignment']=='center'){$css_class .= " mw-100 d-block mx-auto ";}
 			}else{
 				$css_class .= " geodir-align" . sanitize_html_class( $instance['alignment'] );

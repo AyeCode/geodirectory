@@ -605,14 +605,15 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $instance = array(), $widget_args = array(), $content = '' ) {
-		global $aui_bs5, $gd_post, $post;
-
+		global $gd_post, $post;
 		$instance = wp_parse_args(
 			(array) $instance,
 			array(
 				'title' => '',
+
 			)
 		);
+
 
 		$is_preview = self::is_preview();
 
@@ -669,6 +670,9 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			$content .= $is_preview ? '</div>' : "[gd_archive_item_section type='close' position='left']";
 		}
 
+
+
+
 		// Open Body
 		// wrapper class
 		$args = array();
@@ -713,6 +717,8 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 				}
 			}
 
+
+
 			// align
 			if($circle_image_align == 'left'){$author_image_class = 'start';}
 			elseif($circle_image_align == 'right'){$author_image_class = 'end';}
@@ -729,7 +735,10 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 				$content .= '</div>';
 				$content .= '</div>';
 			}
+
 		}
+
+
 
 		// title
 		$args = array();
@@ -758,6 +767,7 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		$limit = absint( $instance['limit'] );
 		$read_more = esc_attr( $instance['read_more'] );
 		$content .= $limit !== 0 ? "[gd_post_content key='post_content' limit='$limit' read_more='$read_more' alignment='$alignment' $args_out]" : '';
+
 
 		// Output location
 		$args = array();
@@ -803,7 +813,7 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 
 			// border
 			if(!empty($instance['footer_border']) && $instance['footer_border']!='none'){
-				$wrap_class .= ( $aui_bs5 ? 'border-start-0 border-end-0' : 'border-right-0 border-left-0' ) . " border-bottom-0";
+				$wrap_class .= " border-right-0 border-left-0 border-bottom-0";
 			}
 
 			// font size
@@ -895,7 +905,6 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 	}
 
 	public function get_badge_type( $type, $args = array(),$badge_args = array() ) {
-		global $aui_bs5;
 
 		$type = esc_attr( $type );
 
@@ -916,11 +925,14 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			$position_args = " position='ab-bottom-right'  mt=''  mr='1'  mb='$mb'  ml='' ";
 		}
 
+
 		// alignment
 		$alignment = ! empty( $args['alignment'] ) ? esc_attr( $args['alignment'] ) : '';
 		if ( $alignment ) {
 			$alignment = '';//"alignment='".esc_attr($alignment)."'";
 		}
+
+
 
 		if ( $type == 'featured' ) {
 			$output = "[gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='' $alignment $position_args]";
@@ -952,7 +964,7 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			$css_class = '';
 			if ( $show == 'badge' ) {
 				$show = 'value';
-				$css_class = 'badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' );
+				$css_class = 'badge badge-primary';
 			}
 			$output = "[gd_post_meta title=''  id=''  key='$type'  show='$show'  no_wrap='false'  $alignment text_alignment=''  list_hide=''  list_hide_secondary='$lhs'  location=''  css_class='$css_class' ]";
 		}

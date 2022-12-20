@@ -1159,7 +1159,7 @@ class GeoDir_Block_Theme {
 				array(
 					'type'=> 'warning',
 					'content'=> $response->get_error_message(),
-					'class' => 'geodir-new-tmpl-msg mb-3 text-left text-start'
+					'class' => 'geodir-new-tmpl-msg mb-3 text-left'
 				)
 			);
 			wp_send_json_error( array( 'message' => $message ) );
@@ -1169,7 +1169,7 @@ class GeoDir_Block_Theme {
 					array(
 						'type'=> 'success',
 						'content'=> $response['message'],
-						'class' => 'geodir-new-tmpl-msg m-3 text-left text-start'
+						'class' => 'geodir-new-tmpl-msg m-3 text-left'
 					)
 				);
 			}

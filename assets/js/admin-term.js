@@ -8,14 +8,6 @@ jQuery(function($) {
         } catch (e) {
             console.log(e);
         }
-        try {
-            var mceField = typeof tinymce != 'undefined' && typeof tinymce.editors != 'undefined' && typeof tinymce.editors['ct_cat_bottom_desc'] == 'object' ? tinymce.editors['ct_cat_bottom_desc'] : null;
-            if (mceField) {
-                mceField.editorManager.triggerSave();
-            }
-        } catch (e) {
-            console.log(e);
-        }
     });
     
     jQuery(document).ajaxComplete(function(e, request, options) {

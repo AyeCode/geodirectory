@@ -110,101 +110,106 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
         parent::__construct( $options );
     }
 
-	/**
-	 * The Super block output function.
-	 *
-	 * @param array $args
-	 * @param array $widget_args
-	 * @param string $content
-	 *
-	 * @return mixed|string|void
-	 */
-	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-		global $aui_bs5;
 
-		$defaults = array(
-			'location' => '',
-			'list_style' => 'wrap',
-			'item_py' => '',
-			'text_align' => '',
-			'mt' => '',
-			'mr' => '',
-			'mb' => '',
-			'ml' => '',
-			'pt' => '',
-			'pr' => '',
-			'pb' => '',
-			'pl' => '',
-		);
+    /**
+     * The Super block output function.
+     *
+     * @param array $args
+     * @param array $widget_args
+     * @param string $content
+     *
+     * @return mixed|string|void
+     */
+    public function output($args = array(), $widget_args = array(),$content = ''){
 
-		/**
-		 * Parse incoming $args into an array and merge it with $defaults
-		 */
-		$args = wp_parse_args( $args, $defaults );
-		if ( ! empty( $args['location'] ) ) {
-			$args['location'] = str_replace( array( '[', ']' ), '', $args['location'] );
-		}
+        $defaults = array(
+	        'location'      => '', //
+	        'list_style'      => 'wrap', //
+	        'item_py' => '',
+	        'text_align' => '',
+	        'mt' => '',
+	        'mr' => '',
+	        'mb' => '',
+	        'ml' => '',
+	        'pt' => '',
+	        'pr' => '',
+	        'pb' => '',
+	        'pl' => '',
+        );
 
-		$wrap_class = '';
-		$inner_class = '';
-		$wrap_style = '';
-		$design_style = geodir_design_style();
+        /**
+         * Parse incoming $args into an array and merge it with $defaults
+         */
+        $args = wp_parse_args( $args, $defaults );
+        if(!empty($args['location'])){
+            $args['location'] = str_replace(array('[',']'),'',$args['location']);
+        }
 
-		if ( $design_style ) {
-			$inner_class = 'list-group-item list-group-item-action';
+	    $wrap_class = '';
+	    $inner_class = '';
+	    $wrap_style = '';
+	    $design_style = geodir_design_style();
+	    if($design_style){
 
-			if ( empty( $args['list_style'] ) ) {
-				$args['list_style'] = $defaults['list_style'];
-			}
+		    $inner_class = 'list-group-item list-group-item-action';
 
-			if ( $args['list_style'] == 'wrap' ) {
-				$wrap_class = 'list-group';
-			} else if ( $args['list_style'] == 'line' ) {
-				$wrap_class = 'list-group list-group-flush';
-			} else if ( $args['list_style'] == 'none' ) {
-				$inner_class = '';
-			}
+		    if(empty($args['list_style'])){$args['list_style'] = $defaults['list_style'];}
 
-			if ( $args['location'] == 'mapbubble' ) {
-				$wrap_class = '';
-			} else if ( $args['location'] == 'listing' ) {
-				$wrap_style .= "clear:both;";
-				$wrap_class .= " mx-n2 ";
+		    if($args['list_style']=='wrap'){
+			    $wrap_class = 'list-group';
+		    }elseif($args['list_style']=='line'){
+			    $wrap_class = 'list-group list-group-flush';
+		    }elseif($args['list_style']=='none'){
+			    $inner_class = '';
+		    }
 
-				if ( $args['list_style'] == 'wrap' ) {
-					$inner_class .= ( $aui_bs5 ? 'border-start-0 border-end-0' : 'border-left-0 border-right-0' ) . ' rounded-0 px-2';
-				} else if ( $args['list_style'] == 'none' ) {
-					$wrap_class = '';
-				}
-			}
+		    if($args['location']=='mapbubble'){
+			    $wrap_class = '';
+		    }elseif($args['location']=='listing'){
+			    $wrap_style .= "clear:both;";
+			    $wrap_class .= " mx-n2 ";
 
-			if ( ! empty( $args['item_py'] ) || $args['item_py'] == '0' ) {
-				$inner_class .= ' py-' . absint( $args['item_py'] );
-			}
+			    if($args['list_style']=='wrap'){
+				    $inner_class .= ' border-left-0 border-right-0 rounded-0 px-2';
+			    }elseif($args['list_style']=='none'){
+//				    $wrap_style = '';
+				    $wrap_class = '';
+				   // $inner_class .= ' p-2 ';
+			    }
 
-			// wrapper class
-			$wrap_class .= " " . geodir_build_aui_class( $args );
-		}
+		    }
 
-		$output = '';
-		$geodir_post_detail_fields = geodir_show_listing_info( $args['location'] );
+		    if ( ! empty( $args['item_py'] ) || $args['item_py']=='0' ) {
+			    $inner_class .= ' py-'.absint($args['item_py']);
+		    }
 
-		if ( ! $geodir_post_detail_fields && $design_style  && $this->is_preview() ) {
-			$geodir_post_detail_fields = $this->get_dummy_data();
-		}
 
-		if ( ! empty( $args['location'] ) && $geodir_post_detail_fields ) {
-			if ( $geodir_post_detail_fields && $design_style && $inner_class ) {
-				$geodir_post_detail_fields = str_replace( "geodir_post_meta ", "geodir_post_meta " . $inner_class . ' ', $geodir_post_detail_fields );
-			}
+		    // wrapper class
+		    $wrap_class .= " ".geodir_build_aui_class($args);
 
-			$output .= "<div class='$wrap_class d-block geodir-output-location geodir-output-location-" . esc_attr( $args['location'] ) . "' style='$wrap_style'>";
-			$output .= $geodir_post_detail_fields;
-			$output .= "</div>";
-		}
+	    }
 
-		return $output;
-	}
+	    $output = '';
+
+	    $geodir_post_detail_fields = geodir_show_listing_info($args['location']);
+
+	    if(! $geodir_post_detail_fields && $design_style  && $this->is_preview() ){
+		    $geodir_post_detail_fields = $this->get_dummy_data();
+	    }
+
+        if (!empty($args['location']) && $geodir_post_detail_fields ) {
+
+	        if($geodir_post_detail_fields && $design_style && $inner_class){
+		        $geodir_post_detail_fields = str_replace("geodir_post_meta ","geodir_post_meta  ".$inner_class.' ',$geodir_post_detail_fields);
+	        }
+            $output .= "<div class='$wrap_class d-block geodir-output-location geodir-output-location-".esc_attr($args['location'])."' style='$wrap_style' >";
+            $output .= $geodir_post_detail_fields;
+            $output .= "</div>";
+        }
+
+        return $output;
+
+    }
 
 	public function show_in_locations() {
 		$locations = geodir_show_in_locations();

@@ -515,12 +515,12 @@ class GeoDir_Admin_Dummy_Data {
 		} else {
 
 			?>
-			<table class="form-table gd-dummy-table table table-borderless gd-dummy-data">
+			<table class="form-table gd-dummy-table table table-borderless table-sm gd-dummy-data">
 				<tbody>
 				<tr>
 					<td><strong><?php _e( 'CPT', 'geodirectory' ); ?></strong></td>
 					<td><strong><?php _e( 'Data Type', 'geodirectory' ); ?></strong></td>
-					<td class="text-right text-end invisible"><strong><?php _e( 'Action', 'geodirectory' ); ?></strong></td>
+					<td class="text-right invisible"><strong><?php _e( 'Action', 'geodirectory' ); ?></strong></td>
 				</tr>
 
 				<?php
@@ -549,7 +549,7 @@ class GeoDir_Admin_Dummy_Data {
 
 
 					$select_disabled = $post_counts > 0 ? 'disabled' : '';
-					echo "<td class='d-flex flex-row mb-0'>";
+					echo "<td class='d-flex flex-row'>";
 					echo "<select title='".__( "Select the data type", "geodirectory" )."' data-toggle=\"tooltip\" id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='flex-fill form-control form-control-sm' style='min-width:180px'>";
 
 					$c = 0;
@@ -564,7 +564,7 @@ class GeoDir_Admin_Dummy_Data {
 					echo "</select>";
 
 					$select_display = $post_counts > 0 ? 'display:none;' : '';
-					echo "<span title='".__( "Set the number of listings", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-count flex-shrink-1 flex-fill ml-1 ms-1' style='$select_display'><select id='" . $post_type . "_data_type_count' style='min-width:65px;' class='form-control form-control-sm '>";
+					echo "<span title='".__( "Set the number of listings", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-count flex-shrink-1 flex-fill ml-1' style='$select_display'><select id='" . $post_type . "_data_type_count' style='min-width:65px;' class='form-control form-control-sm '>";
 					$x = 1;
 					while ( $x <= $count ) {
 						$selected = ( $x == $count ) ? "selected='selected'" : '';
@@ -574,7 +574,7 @@ class GeoDir_Admin_Dummy_Data {
 					echo "</select></span>";
 
 					// Page templates styles
-					echo "<span title='".__( "Overwrite the template designs to suit the data type", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-templates ml-1 ms-1 flex-fill' style='$select_display'>";
+					echo "<span title='".__( "Overwrite the template designs to suit the data type", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-templates ml-1 flex-fill' style='$select_display'>";
 					echo "<label>";
 //					echo "<input value='1' style='width: auto;height: 16px;' id='" . $post_type . "_data_type_templates' type='checkbox' name='gd-data-templates' checked />".__("(Update page templates)","geodirectory");
 					echo "<select style=''  id='" . $post_type . "_data_type_templates' name='gd-data-templates' class='form-control form-control-sm'>";
@@ -588,9 +588,9 @@ class GeoDir_Admin_Dummy_Data {
 
 
 					if ( $post_counts > 0 ) {
-						echo '<td class="text-right text-end"><input type="button" value="' . __( 'Remove posts', 'geodirectory' ) . '" class="btn btn-danger btn-sm geodir_dummy_button gd-remove-data" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
+						echo '<td class="text-right"><input type="button" value="' . __( 'Remove posts', 'geodirectory' ) . '" class="btn btn-danger btn-sm geodir_dummy_button gd-remove-data" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
 					} else {
-						echo '<td class="text-right text-end"><input type="button" value="' . __( 'Insert posts', 'geodirectory' ) . '" class="btn btn-primary btn-sm geodir_dummy_button" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
+						echo '<td class="text-right"><input type="button" value="' . __( 'Insert posts', 'geodirectory' ) . '" class="btn btn-primary btn-sm geodir_dummy_button" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
 					}
 
 					echo "</tr>";

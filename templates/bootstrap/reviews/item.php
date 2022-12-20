@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var int $depth Depth of comment.
  * @var int $rating The rating number.
  */
-global $post, $aui_bs5;
+global $post;
 ?>
 <li <?php comment_class( 'geodir-comment list-unstyled' ); ?> id="li-comment-<?php comment_ID(); ?>">
 	<div id="comment-<?php comment_ID(); ?>" class="card mt-3 shadow-sm">
-		<div class="card-header border-bottom toast-header <?php echo $aui_bs5 ? 'px-2 py-1 border-bottom border-opacity-25' : ''; ?>">
+		<div class="card-header border-bottom toast-header">
 
 			<?php
 			/**
@@ -29,16 +29,16 @@ global $post, $aui_bs5;
 			$avatar_size = apply_filters( 'geodir_comment_avatar_size', 44 );
 			?>
 				<?php if ( $avatar_size != 0  ): ?>
-					<?php if(!empty($comment->user_id)){ ?><a href="<?php echo get_author_posts_url($comment->user_id); ?>" class="media-object <?php echo ( $aui_bs5 ? 'float-start' : 'float-left' ); ?>"><?php }?>
+					<?php if(!empty($comment->user_id)){ ?><a href="<?php echo get_author_posts_url($comment->user_id); ?>" class="media-object float-left"><?php }?>
 						<?php echo get_avatar( $comment, $avatar_size,'mm','', array('class'=>"comment_avatar rounded-circle position-relative") ); ?>
 					<?php if(!empty($comment->user_id)){ ?></a><?php }?>
 				<?php endif; ?>
-				<span class="media-heading pl-2 ps-2 mr-auto me-auto h4 m-0 align-items-center d-flex justify-content-center">
+				<span class="media-heading pl-2 mr-auto h4 m-0 align-items-center d-flex justify-content-center">
 					<?php
 					if(!empty($comment->user_id)){ echo "<a href='".get_author_posts_url($comment->user_id)."' class='' >"; }
 					echo get_comment_author($comment->comment_ID);
 					if(!empty($comment->user_id)){ echo "</a>"; }
-					echo $comment->user_id === $post->post_author ? ' <span class="ml-2 ms-2 h6 m-0"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">'.__( 'Post author', 'geodirectory' ).'</span></span>' : '';
+					echo $comment->user_id === $post->post_author ? ' <span class="ml-2 h6 m-0"><span class="badge badge-primary">'.__( 'Post author', 'geodirectory' ).'</span></span>' : '';
 					?>
 				</span>
 
@@ -71,7 +71,7 @@ global $post, $aui_bs5;
 						</time>
 					</a>
 				</div>
-				<div class="col-7 text-right text-end">
+				<div class="col-7 text-right">
 					<div class="comment-links">
 						<?php
 						do_action( "geodir_comment_links_start" , $comment );
@@ -84,14 +84,14 @@ global $post, $aui_bs5;
 								'depth'      => $depth,
 								'max_depth'  => $args['max_depth']
 							) ) );
-							echo str_replace("comment-reply-link","comment-reply-link btn btn-sm btn-primary",$reply_link);
+							echo str_replace("comment-reply-link","comment-reply-link btn btn-primary",$reply_link);
 							?>
 						</span>
 						<?php do_action( "geodir_comment_links_end" , $comment ); ?>
 					</div>
 				</div>
 			</div>
-
+			
 		</div>
 
 

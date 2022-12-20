@@ -37,7 +37,7 @@ if ( ! empty( $tabs_array ) ) {
 			// Tab icon
 			$icon = trim( $tab['tab_icon'] );
 			if ( geodir_is_fa_icon( $icon ) ) {
-				$tab_icon = '<i class="' . esc_attr( $icon ) . ' fa-fw mr-1 me-1" aria-hidden="true"></i>';
+				$tab_icon = '<i class="' . esc_attr( $icon ) . ' fa-fw mr-1" aria-hidden="true"></i>';
 			} elseif ( strpos( $icon, 'fa-' ) === 0 ) {
 				$tab_icon = '<i class="fas ' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
 			} else {
@@ -90,7 +90,7 @@ if ( ! empty( $tabs_array ) ) {
 				$tab_icon = '';
 
 				if ( $tab['tab_icon'] ) {
-					$tab_icon = '<i class=" ' . esc_attr( $tab['tab_icon'] ) . ' mr-1 me-1" aria-hidden="true"></i>';
+					$tab_icon = '<i class=" ' . esc_attr( $tab['tab_icon'] ) . ' mr-1" aria-hidden="true"></i>';
 				}
 				$tab_title = '<h2 class="gd-tab-list-title h3" ><a href="#' . $key . '" class="text-reset">' . $tab_icon . esc_attr__( stripslashes( $tab['tab_name'] ), 'geodirectory' ) . '</a></h2><hr />';
 

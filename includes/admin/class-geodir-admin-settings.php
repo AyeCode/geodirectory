@@ -198,8 +198,6 @@ class GeoDir_Admin_Settings {
 	 * @param array $options Opens array to output
 	 */
 	public static function output_fields( $options ) {
-		global $aui_bs5;
-
 		$disable_advanced = geodir_get_option( 'admin_disable_advanced', false );
 
 		foreach ( $options as $value ) {
@@ -378,7 +376,7 @@ class GeoDir_Admin_Settings {
 						'name'              => $value['id'],
 						'label_type'        => $label_type,
 						'label_col'        => '3',
-						'label_class'=> 'font-weight-bold fw-bold',
+						'label_class'=> 'font-weight-bold',
 						'class' => !empty($value['class']) ? $value['class'] : '',
 						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 						'label'              => $value['title'] . $tooltip_html,
@@ -410,7 +408,7 @@ class GeoDir_Admin_Settings {
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
 							'label_col'         => '3',
-							'label_class'       => 'font-weight-bold fw-bold',
+							'label_class'       => 'font-weight-bold',
 							'class'             => $value['class'].' gd-color-picker',
 							'wrap_class'        => isset( $value['advanced'] ) && $value['advanced'] ? geodir_advanced_toggle_class() . " gd-row-color-picker" : ' gd-row-color-picker ',
 							'label'             => $value['title'] . $tooltip_html,
@@ -463,7 +461,7 @@ class GeoDir_Admin_Settings {
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
 							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold fw-bold',
+							'label_class'=> 'font-weight-bold',
 							'class' => !empty($value['class']) ? $value['class'] : '',
 							//'required'          => true,
 							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
@@ -473,7 +471,7 @@ class GeoDir_Admin_Settings {
 							'value' => $option_value,
 							'help_text'  => isset($description) ? $description : '',
 							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
-							'input_group_left'  => '<div class="gd-upload-img" data-field="' . esc_attr( $value['id'] ) . '"><button type="button" class="gd_upload_image_button btn btn-outline-primary mr-2 me-2">' . __( 'Upload Image', 'geodirectory' ) . '</button><button type="button" class="gd_remove_image_button btn btn-outline-primary ' . $remove_class . '">' . __( 'Remove Image', 'geodirectory' ) . '</button> <div class="gd-upload-display gd-img-size-' . $image_size . ' thumbnail mr-3 me-3"><div class="centered">' . $show_img . '</div></div></div>',
+							'input_group_left'  => '<div class="gd-upload-img" data-field="' . esc_attr( $value['id'] ) . '"><button type="button" class="gd_upload_image_button btn btn-outline-primary mr-2">' . __( 'Upload Image', 'geodirectory' ) . '</button><button type="button" class="gd_remove_image_button btn btn-outline-primary ' . $remove_class . '">' . __( 'Remove Image', 'geodirectory' ) . '</button> <div class="gd-upload-display gd-img-size-' . $image_size . ' thumbnail mr-3"><div class="centered">' . $show_img . '</div></div></div>',
 							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
 						)
 					);
@@ -514,7 +512,7 @@ class GeoDir_Admin_Settings {
 							'label_type'        => $label_type,
 							'label_col'         => '3',
 							'class'             => $class,
-							'label_class'       => 'font-weight-bold fw-bold',
+							'label_class'       => 'font-weight-bold',
 							'wrap_class'        => isset( $value['advanced'] ) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'             => $value['title'] . $tooltip_html,
 							'placeholder'       => $value['placeholder'],
@@ -587,7 +585,6 @@ class GeoDir_Admin_Settings {
 
 					$select2 = strpos($value['class'], 'geodir-select') !== false ? true : false;
 //				$value['class'] = str_replace('geodir-select')
-				$class = $aui_bs5 ? str_replace('geodir-select','',$value['class']) : $value['class'];
 
 				echo aui()->select(
 					array(
@@ -595,9 +592,9 @@ class GeoDir_Admin_Settings {
 						'name'              => $value['id'],
 						'label_type'        => $label_type,
 						'label_col'        => '3',
-						'label_class'=> 'font-weight-bold fw-bold',
+						'label_class'=> 'font-weight-bold',
 						'multiple'   => 'multiselect' == $value['type'] ? true : false,
-						'class' => $class." mw-100",
+						'class' => $value['class']." mw-100",
 						//'required'          => true,
 						'select2'   => $select2,
 						'options'       => $value['options'],
@@ -629,7 +626,7 @@ class GeoDir_Admin_Settings {
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
 							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold fw-bold',
+							'label_class'=> 'font-weight-bold',
 							'type'              => "radio",
 //							'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
 							'label'             => $value['title'] . $tooltip_html,
@@ -669,7 +666,7 @@ class GeoDir_Admin_Settings {
 						'value'              => !empty($value['value']) ? $value['value'] : '1',
 						'label_type'        => $label_type,
 						'label_col'        => '3',
-						'label_class'=> 'font-weight-bold fw-bold',
+						'label_class'=> 'font-weight-bold',
 						'label_force_left'  => true,
 						'class' => !empty($value['class']) ? $value['class'] : '',
 						//'required'          => true,
@@ -769,8 +766,6 @@ class GeoDir_Admin_Settings {
 					} else {
 						$option_value = self::get_option( $value['id'] );
 					}
-
-					$bs_prefix = $aui_bs5 ? 'bs-' : '';
 
 					$args = array(
 						'name'             => $value['id'],
@@ -885,7 +880,7 @@ class GeoDir_Admin_Settings {
 
 					if(!empty($buttons_links)) {
 						?>
-						<button class="btn btn-outline-primary dropdown-toggle" type="button" data-<?php echo $bs_prefix;?>toggle="dropdown"
+						<button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown"
 						        aria-haspopup="true"
 						        aria-expanded="false"><?php _e( "Actions", "geodirectory" ); ?></button>
 						<div class="dropdown-menu">
@@ -913,17 +908,15 @@ class GeoDir_Admin_Settings {
 						$placeholder = __( 'Select a page&hellip;', 'geodirectory' );
 					}
 
-					$class = $aui_bs5 ? str_replace('geodir-select','',$value['class']) : $value['class'];
-
 					$output =  aui()->select(
 						array(
 							'id'                => $value['id'],
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
 							'label_col'         => '3',
-							'label_class'       => 'font-weight-bold fw-bold',
+							'label_class'       => 'font-weight-bold',
 							'multiple'          => 'multiselect' == $value['type'] ? true : false,
-							'class'             => $buttons ? $class. ' mw-100 w-auto' : $class.' mw-100 w-100',
+							'class'             => $buttons ? $value['class']. ' mw-100 w-auto' : $value['class'].' mw-100 w-100',
 							'select2'           => strpos( $value['class'], 'geodir-select' ) !== false ? true : false,
 							'options'           => array( '' => esc_html( $placeholder ) ) + $page_options,
 							'wrap_class'        => ! empty( $value['advanced'] ) ? geodir_advanced_toggle_class() : '',
@@ -1118,17 +1111,15 @@ class GeoDir_Admin_Settings {
 						$placeholder = __( 'Select a template&hellip;', 'geodirectory' );
 					}
 
-					$class = $aui_bs5 ? str_replace('geodir-select','',$value['class']) : $value['class'];
-
 					$output =  aui()->select(
 						array(
 							'id'                => $value['id'],
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
 							'label_col'         => '3',
-							'label_class'       => 'font-weight-bold fw-bold',
+							'label_class'       => 'font-weight-bold',
 							'multiple'          => 'multiselect' == $value['type'] ? true : false,
-							'class'             => $buttons ? $class. ' mw-100 w-auto' : $class.' mw-100 w-100',
+							'class'             => $buttons ? $value['class']. ' mw-100 w-auto' : $value['class'].' mw-100 w-100',
 							'select2'           => strpos( $value['class'], 'geodir-select' ) !== false ? true : false,
 							'options'           => array( '' => esc_html( $placeholder ) ) + $page_options,
 							'wrap_class'        => ! empty( $value['advanced'] ) ? geodir_advanced_toggle_class() : '',
@@ -1164,18 +1155,15 @@ class GeoDir_Admin_Settings {
 					}
 
 					$countries = geodir_get_country_dl($country,'',true);
-
-					$class = $aui_bs5 ? str_replace('geodir-select','',$value['class']) : $value['class'];
-
 					echo aui()->select(
 						array(
 							'id'                => $value['id'],
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
 							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold fw-bold',
+							'label_class'=> 'font-weight-bold',
 							'multiple'   => 'multiselect' == $value['type'] ? true : false,
-							'class'             => $class .' mw-100',
+							'class'             => $value['class'].' mw-100',
 							//'required'          => true,
 							'select2'   => strpos($value['class'], 'geodir-select') !== false ? true : false,
 							'options'       => $countries,
@@ -1318,7 +1306,7 @@ class GeoDir_Admin_Settings {
 
                     ?>
 
-					<div class="form-group mb-3">
+					<div class="form-group">
 					<?php /**
                      * Contains add listing page map functions.
                      *
@@ -1359,7 +1347,7 @@ class GeoDir_Admin_Settings {
 							'label_type'        => $label_type,
 							'label_col'        => '3',
 							'class' => !empty($value['class']) ? $value['class'] : '',
-							'label_class'=> 'font-weight-bold fw-bold',
+							'label_class'=> 'font-weight-bold',
 							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'type'              =>  $value['type'] ?  $value['type']  : 'text',
@@ -1367,7 +1355,7 @@ class GeoDir_Admin_Settings {
 							'value' => $option_value,
 							'help_text'  => $description,
 							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
-							'input_group_right' => '<button class="btn btn-success text-white" type="button"  onclick="geodir_validate_google_api_key(jQuery(\'#google_maps_api_key\').val());">'.esc_attr__( 'Verify', 'geodirectory' ).'</button><div class="input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'API Key Guide', 'geodirectory' ) . '"><a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="text-dark"><i class="fas fa-info-circle"></i></a></div><button class="btn btn-primary" type="button"  onclick=\'window.open("'.wp_slash($gm_api_url).'", "newwindow", "width=600, height=400"); return false;\' >' . esc_attr__( 'Generate Key', 'geodirectory' ) . '</button>',
+							'input_group_right' => '<button class="btn btn-success" type="button"  onclick="geodir_validate_google_api_key(jQuery(\'#google_maps_api_key\').val());">'.esc_attr__( 'Verify', 'geodirectory' ).'</button><div class="input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'API Key Guide', 'geodirectory' ) . '"><a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="text-dark"><i class="fas fa-info-circle"></i></a></div><button class="btn btn-primary" type="button"  onclick=\'window.open("'.wp_slash($gm_api_url).'", "newwindow", "width=600, height=400"); return false;\' >' . esc_attr__( 'Generate Key', 'geodirectory' ) . '</button>',
 							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
 						)
 					);
@@ -1389,7 +1377,7 @@ class GeoDir_Admin_Settings {
 							'label_type'        => $label_type,
 							'label_col'        => '3',
 							'class' => !empty($value['class']) ? $value['class'] : '',
-							'label_class'=> 'font-weight-bold fw-bold',
+							'label_class'=> 'font-weight-bold',
 							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'type'              =>  $value['type'] ?  $value['type']  : 'text',
@@ -1441,7 +1429,7 @@ class GeoDir_Admin_Settings {
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
 							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold fw-bold',
+							'label_class'=> 'font-weight-bold',
 							//'multiple'   => 'multiselect' == $value['type'] ? true : false,
 							'class'             => $value['class'],
 							//'required'          => true,
@@ -1491,7 +1479,7 @@ class GeoDir_Admin_Settings {
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
 							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold fw-bold',
+							'label_class'=> 'font-weight-bold',
 							'multiple'   => 'multiselect' == $value['type'] ? true : false,
 							'class'             => $value['class']. " gd-dashicons-picker",
 							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
@@ -1548,7 +1536,7 @@ class GeoDir_Admin_Settings {
 								'name'              => $value['id'],
 								'label_type'        => $label_type,
 								'label_col'        => '3',
-								'label_class'=> 'font-weight-bold fw-bold',
+								'label_class'=> 'font-weight-bold',
 								'class' => !empty($value['class']) ? $value['class'] : '',
 								//'required'          => true,
 								'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : 'd-none',
@@ -1573,7 +1561,6 @@ class GeoDir_Admin_Settings {
 					$placeholder = ! empty( $value['placeholder'] ) ? $value['placeholder'] : __( 'Choose a city/timezone&hellip;', 'geodirectory' );
 					$locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
 
-					$class = $aui_bs5 ? str_replace('geodir-select','',$value['class']) : $value['class'];
 
 					$tz = geodir_timezone_choice( $timezone_string, $locale, true );
 					echo aui()->select(
@@ -1582,9 +1569,9 @@ class GeoDir_Admin_Settings {
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
 							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold fw-bold',
+							'label_class'=> 'font-weight-bold',
 							'multiple'   => 'multiselect' == $value['type'] ? true : false,
-							'class'             => $class . ' mw-100',
+							'class'             => $value['class'].' mw-100',
 							//'required'          => true,
 							'select2'   => strpos($value['class'], 'geodir-select') !== false ? true : false,
 							'options'       => $tz,

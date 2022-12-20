@@ -303,11 +303,6 @@ class GeoDir_Admin_Taxonomies {
             <?php echo $this->render_cat_top_desc(); ?>
         </div>
         <?php do_action( 'geodir_add_category_after_cat_top_desc', $taxonomy ); ?>
-        <div class="form-field term-ct_cat_bottom_desc-wrap gd-term-form-field">
-            <label for="ct_cat_bottom_desc"><?php _e( 'Category Bottom Description', 'geodirectory' ); ?></label>
-            <?php echo $this->render_cat_bottom_desc(); ?>
-        </div>
-        <?php do_action( 'geodir_add_category_after_cat_bottom_desc', $taxonomy ); ?>
         <div class="form-field term-ct_cat_default_img-wrap gd-term-form-field">
             <label for="ct_cat_default_img"><?php _e( 'Default Listing Image', 'geodirectory' ); ?></label>
             <?php echo $this->render_cat_default_img(); ?>
@@ -348,8 +343,8 @@ class GeoDir_Admin_Taxonomies {
      * @param string $taxonomy Current taxonomy slug.
      */
     public function edit_category_fields( $term, $taxonomy ) {
+        //print_r(get_term_meta( $term->term_id));
         $cat_top_desc = get_term_meta( $term->term_id, 'ct_cat_top_desc', true );
-        $cat_bottom_desc = get_term_meta( $term->term_id, 'ct_cat_bottom_desc', true );
         $cat_default_img = get_term_meta( $term->term_id, 'ct_cat_default_img', true );
         $cat_icon = get_term_meta( $term->term_id, 'ct_cat_icon', true );
         $cat_font_icon = get_term_meta( $term->term_id, 'ct_cat_font_icon', true );
@@ -368,11 +363,6 @@ class GeoDir_Admin_Taxonomies {
             <td><?php echo $this->render_cat_top_desc( $cat_top_desc ); ?></td>
         </tr>
         <?php do_action( 'geodir_edit_category_after_cat_top_desc', $term, $taxonomy ); ?>
-        <tr class="form-field term-ct_cat_bottom_desc-wrap gd-term-form-field">
-            <th scope="row"><label for="ct_cat_bottom_desc"><?php _e( 'Category Bottom Description', 'geodirectory' ); ?></label></th>
-            <td><?php echo $this->render_cat_bottom_desc( $cat_bottom_desc ); ?></td>
-        </tr>
-        <?php do_action( 'geodir_edit_category_after_cat_bottom_desc', $term, $taxonomy ); ?>
         <tr class="form-field term-ct_cat_default_img-wrap gd-term-form-field">
             <th scope="row"><label for="ct_cat_default_img"><?php _e( 'Default Listing Image', 'geodirectory' ); ?></label></th>
             <td><?php echo $this->render_cat_default_img( $cat_default_img ); ?></td>
@@ -419,40 +409,12 @@ class GeoDir_Admin_Taxonomies {
         if ( empty( $name ) ) {
             $name = $id;
         }
-
-        $height = ! empty( $_REQUEST['tag_ID'] ) ? 150 : 100;
-
-        $settings = apply_filters( 'geodir_cat_top_desc_editor_settings', array( 'editor_height' => $height, 'textarea_rows' => 5, 'textarea_name' => $name ), $content, $id, $name );
-
+        
+        $settings = apply_filters( 'geodir_cat_top_desc_editor_settings', array( 'editor_height' => 150, 'textarea_rows' => 5, 'textarea_name' => $name ), $content, $id, $name );
+        
         ob_start();
         wp_editor( $content, $id, $settings );
-        ?><p class="description"><?php _e( 'This will appear at the top of the category listings.', 'geodirectory' ); ?></p><?php
-        return ob_get_clean();
-    }
-
-    /**
-     * Render category bottom description.
-     *
-     * @since 2.2.19
-     *
-     * @param string $content Optional. Render cat content. Default null.
-     * @param string $id Optional. Cat ID. Default ct_cat_bottom_desc.
-     * @param string $name Optional. Cat name. Default null.
-     * @return string Description.
-     */
-    public function render_cat_bottom_desc( $content = '', $id = 'ct_cat_bottom_desc', $name = '' ) {
-        if ( empty( $name ) ) {
-            $name = $id;
-        }
-
-        $height = ! empty( $_REQUEST['tag_ID'] ) ? 150 : 100;
-
-        $settings = apply_filters( 'geodir_cat_bottom_desc_editor_settings', array( 'editor_height' => $height, 'textarea_rows' => 5, 'textarea_name' => $name ), $content, $id, $name );
-
-        ob_start();
-        wp_editor( $content, $id, $settings );
-        ?><p class="description"><?php _e( 'This will appear at the bottom of the category listings.', 'geodirectory' ); ?></p><?php
-        if ( ! empty( $_REQUEST['tag_ID'] ) ) { ?><div class="description wrap geodirectory" style="margin-bottom:0"><?php _e( 'Available Tags:.', 'geodirectory' ); ?> <?php echo GeoDir_SEO::helper_tags( 'location_tags' ); ?></div><?php }
+        ?><p class="description"><?php _e( 'This will appear at the top of the category listing.', 'geodirectory' ); ?></p><?php
         return ob_get_clean();
     }
 
@@ -637,12 +599,7 @@ class GeoDir_Admin_Taxonomies {
         if ( isset( $_POST['ct_cat_top_desc'] ) ) {
             update_term_meta( $term_id, 'ct_cat_top_desc', $_POST['ct_cat_top_desc'] );
         }
-
-        // Category bottom description.
-        if ( isset( $_POST['ct_cat_bottom_desc'] ) ) {
-            update_term_meta( $term_id, 'ct_cat_bottom_desc', $_POST['ct_cat_bottom_desc'] );
-        }
-
+        
         // Category listing default image.
         if ( isset( $_POST['ct_cat_default_img'] ) ) {
             $cat_default_img = $_POST['ct_cat_default_img'];
@@ -820,7 +777,7 @@ class GeoDir_Admin_Taxonomies {
      * @return string Taxonomy walker html.
      */
     public static function taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty = false, $padding = 0 ) {
-        global $aui_bs5, $cat_display, $post_cat, $exclude_cats;
+        global $cat_display, $post_cat, $exclude_cats;
 
         $search_terms = trim( $post_cat, "," );
         $search_terms = explode( ",", $search_terms );
@@ -849,7 +806,7 @@ class GeoDir_Admin_Taxonomies {
                     $list_class = 'sub_list gd-sub-cats-list';
 
                     if ( geodir_design_style() ) {
-                        $list_class .= ' pl-3  ps-3'; // Left padding for sub-categories.
+                        $list_class .= ' pl-3'; // Left padding for sub-categories.
                     }
                 }
             }
@@ -859,7 +816,7 @@ class GeoDir_Admin_Taxonomies {
                 $out = '<div class="' . $list_class . ' gd-cat-row-' . $cat_parent . '" style="margin-left:' . $p . 'px;' . $display . ';">';
 
                 if ( geodir_design_style() ) {
-                    $main_list_class .= ( $aui_bs5 ? ' me-1' : ' mr-1' );
+                    $main_list_class .= ' mr-1';
                 }
             }
 
@@ -990,43 +947,9 @@ class GeoDir_Admin_Taxonomies {
                 }
             }
         }
-
+        
         return apply_filters( 'geodir_get_cat_top_description', $top_description, $term_id );
     }
-
-	/**
-	 * Get the category description html.
-	 *
-	 * @since 2.2.19
-	 *
-	 * @param int    $term_id The term id.
-	 * @param string $type Description type.
-	 * @return mixed|void
-	 */
-	public static function get_category_description( $term_id, $type = 'top' ) {
-		if ( $type && in_array( $type, array( 'bottom', 'main' ) ) ) {
-			if ( $type == 'bottom' ) {
-				$description = get_term_meta( $term_id, 'ct_cat_bottom_desc', true );
-			} else {
-				$description = term_description( $term_id );
-			}
-
-			if ( $description ) {
-				// Location variables
-				$replace_vars = geodir_location_replace_vars();
-
-				foreach( $replace_vars as $key => $value ) {
-					if ( strpos( $description, $key ) !== false ) {
-						$description = str_replace( $key, $value, $description );
-					}
-				}
-			}
-		} else {
-			$description = self::get_cat_top_description( $term_id );
-		}
-
-		return apply_filters( 'geodir_get_category_description', $description, $term_id, $type );
-	}
 
     /**
      * Get the category default image.
