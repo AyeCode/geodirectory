@@ -183,7 +183,7 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $instance = array(), $args = array(), $content = '' ) {
-		global $aui_bs5, $geodirectory, $post, $gd_post;
+		global $geodirectory, $post, $gd_post;
 
 		$instance = shortcode_atts(
 			array(
@@ -249,8 +249,8 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 		if ( $instance['alignment'] != '' ) {
 			if($design_style){
 				if($instance['alignment']=='block'){$container_class .= " d-block ";}
-				elseif($instance['alignment']=='left'){$container_class .= ( $aui_bs5 ? ' float-start ms-2 ' : ' float-left mr-2 ' );}
-				elseif($instance['alignment']=='right'){$container_class .= ( $aui_bs5 ? ' float-end me-2 ' : ' float-right ml-2 ' );}
+				elseif($instance['alignment']=='left'){$container_class .= " float-left mr-2 ";}
+				elseif($instance['alignment']=='right'){$container_class .= " float-right ml-2 ";}
 				elseif($instance['alignment']=='center'){$container_class .= " mw-100 d-block mx-auto ";}
 			}else{
 				$container_class .= " geodir-align" . sanitize_html_class( $instance['alignment'] );

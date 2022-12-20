@@ -49,7 +49,6 @@ class GeoDir_Admin_Conditional_Fields {
 	 * @return array The settings.
 	 */
 	public function conditional_fields_setting( $post_type, $field, $data ) {
-		global $aui_bs5;
 		self::$post_type = $post_type;
 		self::$field = $field;
 
@@ -74,14 +73,14 @@ class GeoDir_Admin_Conditional_Fields {
 		$conditions = geodir_parse_field_conditions( $extra_fields );
 
 		$count = count($conditions);
-		$count_badge = $count ?  '<span class="badge ' . ( $aui_bs5 ? 'bg-warning ms-2' : 'badge-warning ml-2' ) . '">' . absint( $count ) . '</span>' : '';
+		$count_badge = $count ?  '<span class="badge badge-warning ml-2">'.absint($count).'</span>' : '';;
 		?>
 		<div class="geodir-con-fields-hidden border-top mt-4 pt-4" data-setting="conditional_fields_heading">
-			<a href="#geodir_conditional_fields" data-<?php echo $aui_bs5 ? 'bs-' : ''; ?>toggle="collapse" class="btn d-block btn-outline-primary"><span class="geodir-show-cf"><i class="fas fa-plus" aria-hidden="true"></i></span><span class="geodir-hide-cf"><i class="fas fa-minus" aria-hidden="true"></i></span> <?php _e( 'Conditional Fields', 'geodirectory' ); echo $count_badge; ?></a>
+			<a href="#geodir_conditional_fields" data-toggle="collapse" class="btn btn-block btn-outline-primary"><span class="geodir-show-cf"><i class="fas fa-plus" aria-hidden="true"></i></span><span class="geodir-hide-cf"><i class="fas fa-minus" aria-hidden="true"></i></span> <?php _e( 'Conditional Fields', 'geodirectory' ); echo $count_badge; ?></a>
 		</div>
 		<div class="collapse"  data-setting="conditional_fields" id="geodir_conditional_fields">
 			<p data-setting="conditional_fields_desc" class="pt-2"><?php _e( 'Setup conditional logic to show/hide this field in the listing form based on specific fields value or conditions.', 'geodirectory' ); ?></p>
-			<?php
+			<?php 
 			/**
 			 * Show conditional field extra message.
 			 *
@@ -92,13 +91,11 @@ class GeoDir_Admin_Conditional_Fields {
 			 * @param array  $data Current field data.
 			 */
 			do_action( 'geodir_cf_show_conditional_fields_setting_desc', $post_type, $field, $data );
-			$bs5_class = $aui_bs5 ? 'rounded-0 border-start-0' : 'border-left-0';
-
-			$if = '<div class="' . ( $aui_bs5 ? '' : 'input-group-prepend' ) . '"><span class="input-group-text px-2 ' . $bs5_class . '">'.__("if","geodirectory").'</span></div>';
+			$if = '<div class="input-group-prepend"><span class="input-group-text border-left-0 px-2">'.__("if","geodirectory").'</span></div>';
 			?>
 			<div class="geodir-conditional-template">
 				<div class="geodir-conditional-row  input-group input-group-sm mb-2" data-condition-index="TEMP">
-					<?php
+					<?php 
 					echo $this->get_field( 'action' );
 					echo $if;
 					echo $this->get_field( 'field' );
@@ -112,7 +109,7 @@ class GeoDir_Admin_Conditional_Fields {
 				<?php if ( ! empty( $conditions ) ) { ?>
 					<?php foreach ( $conditions as $k => $condition ) { ?>
 						<div class="geodir-conditional-row  input-group input-group-sm mb-2" data-condition-index="<?php echo esc_attr( $k ); ?>">
-							<?php
+							<?php 
 							echo $this->get_field( 'action', $condition['action'], $k );
 							echo $if;
 							echo $this->get_field( 'field', $condition['field'], $k );
@@ -124,7 +121,7 @@ class GeoDir_Admin_Conditional_Fields {
 					<?php } ?>
 				<?php } else { ?>
 				<div class="geodir-conditional-row  input-group input-group-sm mb-2" data-condition-index="0">
-					<?php
+					<?php 
 					echo $this->get_field( 'action', '', 0 );
 					echo $if;
 					echo $this->get_field( 'field', '', 0 );
@@ -135,7 +132,7 @@ class GeoDir_Admin_Conditional_Fields {
 				</div>
 				<?php } ?>
 			</div>
-			<p data-setting="conditional_fields_add" class="pt-1 text-right text-end">
+			<p data-setting="conditional_fields_add" class="pt-1 text-right">
 				<a href="javascript:void(0);" class="btn btn-primary btn-sm geodir-conditional-add"><i class="fas fa-plus-circle"></i> <?php _e( 'Add Rule', 'geodirectory' ); ?></a>
 			</p>
 		</div>
@@ -153,8 +150,6 @@ class GeoDir_Admin_Conditional_Fields {
 	 * @return string Conditional field HTML.
 	 */
 	public function get_field( $key, $value = '', $index = 'TEMP' ) {
-		global $aui_bs5;
-
 		ob_start();
 		switch ( $key ) {
 			case 'action':
@@ -208,8 +203,8 @@ class GeoDir_Admin_Conditional_Fields {
 				break;
 			case 'remove':
 				?>
-				<div class="<?php echo $aui_bs5 ? '' : 'input-group-append';?>">
-					<span class="input-group-text px-2 <?php echo $aui_bs5 ? 'rounded-end rounded-0' : '';?>">
+				<div class="input-group-append">
+					<span class="input-group-text px-2">
 						<a class="geodir-conditional-<?php echo $key; ?> text-danger" data-toggle="tooltip"  href="javascript:void(0);" title="<?php esc_attr_e( 'Remove', 'geodirectory' ); ?>"><i class="fas fa-minus-circle"></i></a>
 					</span>
 				</div>
@@ -423,13 +418,11 @@ class GeoDir_Admin_Conditional_Fields {
 	 * @return mixed
 	 */
 	public function show_conditional_icon( $field, $cf ) {
-		global $aui_bs5;
-
 		$conditional_attrs = geodir_conditional_field_attrs( $field );
 		$conditional_icon = geodir_conditional_field_icon( $conditional_attrs, $field );
 
 		if ( $conditional_icon ) {
-			echo ' <span class="dd-extra-icon ' . ( $aui_bs5 ? 'ms-2 me-0' : 'ml-2 mr-0' ) . '">' . $conditional_icon . '</span> ';
+			echo ' <span class="dd-extra-icon ml-2 mr-0">' . $conditional_icon . '</span> ';
 		}
 	}
 } }

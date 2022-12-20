@@ -390,7 +390,7 @@ function geodir_show_sub_cat_collapse_button() {
             if (!(typeof sub_cat_list.attr('class') === 'undefined')) {
 
                 // insert
-                jQuery(sub_cat_list).parent('li').find('> .custom-checkbox label, > .form-check label').after('<span class="gd-map-cat-toggle ml-2 ms-2 c-pointer"><i class="fas fa-caret-down" aria-hidden="true" style="display:none"></i></span>');
+                jQuery(sub_cat_list).parent('li').find('> .custom-checkbox label').after('<span class="gd-map-cat-toggle ml-2 c-pointer"><i class="fas fa-caret-down" aria-hidden="true" style="display:none"></i></span>');
 
                 if (sub_cat_list.is(':visible')) {
                     jQuery(this).find('i,svg').removeClass('fa-caret-down');
@@ -1033,7 +1033,7 @@ function geodirFindRoute(map_canvas) {
 
             var $routing = jQuery('#' + map_canvas + ' .leaflet-routing-geocoders .leaflet-routing-search-info');
             if (!$routing.find('#' + map_canvas + '_mylocation').length) {
-                $routing.append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="' + map_canvas + '_mylocation" class="gd-map-mylocation c-pointer ml-1 ms-1"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
+                $routing.append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="' + map_canvas + '_mylocation" class="gd-map-mylocation c-pointer ml-1"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
             }
         } catch (e) {
             console.log(e.message);

@@ -221,7 +221,7 @@ class GeoDir_Widget_Report_Post extends WP_Super_Duper {
 	 * @return bool|string
 	 */
 	public function output_html( $instance = array(), $args = array() ) {
-		global $aui_bs5, $gd_post;
+		global $gd_post;
 
 		$is_preview = $this->is_preview();
 		$block_preview = $this->is_block_content_call();
@@ -272,9 +272,9 @@ class GeoDir_Widget_Report_Post extends WP_Super_Duper {
 			if ( $instance['alignment'] == 'block' ) {
 				$instance['css_class'] .= " d-block ";
 			} elseif( $instance['alignment'] == 'left' ) {
-				$instance['css_class'] .= ( $aui_bs5 ? ' float-start ms-2 ' : ' float-left mr-2 ' );
+				$instance['css_class'] .= " float-left mr-2 ";
 			} elseif ( $instance['alignment'] == 'right' ) {
-				$instance['css_class'] .= ( $aui_bs5 ? ' float-end me-2 ' : ' float-right ml-2 ' );
+				$instance['css_class'] .= " float-right ml-2 ";
 			} elseif ( $instance['alignment'] == 'center' ) {
 				$instance['css_class'] .= " text-center ";
 			}
@@ -285,13 +285,13 @@ class GeoDir_Widget_Report_Post extends WP_Super_Duper {
 			$instance['css_class'] .= ' mt-' . sanitize_html_class( $instance['mt'] ) . ' ';
 		}
 		if ( ! empty( $instance['mr'] ) ) {
-			$instance['css_class'] .= ( $aui_bs5 ? ' me-' : ' mr-' ) . sanitize_html_class( $instance['mr'] ) . ' ';
+			$instance['css_class'] .= ' mr-' . sanitize_html_class( $instance['mr'] ) . ' ';
 		}
 		if ( ! empty( $instance['mb'] ) ) {
 			$instance['css_class'] .= ' mb-' . sanitize_html_class( $instance['mb'] ) . ' ';
 		}
 		if ( ! empty( $instance['ml'] ) ) {
-			$instance['css_class'] .= ( $aui_bs5 ? ' ms-' : ' ml-' ) . sanitize_html_class( $instance['ml'] ) . ' ';
+			$instance['css_class'] .= ' ml-' . sanitize_html_class( $instance['ml'] ) . ' ';
 		}
 
 		// Size

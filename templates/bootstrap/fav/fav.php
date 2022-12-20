@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var array  $args The raw arguments for the output.
  */
 
-$text_class .= $show == 'icon' ? 'sr-only visually-hidden' : '';
+$text_class .= $show == 'icon' ? 'sr-only' : '';
 $text = '<span class="geodir-fav-text gv-secondary '.$text_class.'" style="'.$text_style.'">'.$text.'</span>';
 ?>
 <span class="geodir-addtofav favorite_property_<?php echo absint($post_id);  echo ' '.$wrap_class;?>">
@@ -34,13 +34,13 @@ $text = '<span class="geodir-fav-text gv-secondary '.$text_class.'" style="'.$te
 			'class'      =>  esc_attr($link_class),
 			'title'      =>  $title,
 			'content'    => $text ,
-			'icon'      => $show == 'text' ? $icon_class . ' sr-only visually-hidden' : $icon_class,
+			'icon'      => $show == 'text' ? $icon_class . ' sr-only' : $icon_class,
 			'href'       => 'javascript:void(0);',
 			'onclick'   => $onclick,
 			'style'     => $link_style,
 			'extra_attributes'  => array(
 				'data-color-on' => $icon_color_on,
-				'data-icon' => $show == 'text' ? $icon_class . ' sr-only visually-hidden' : $icon_class,
+				'data-icon' => $show == 'text' ? $icon_class . ' sr-only' : $icon_class,
 				'data-color-off' => $icon_color_off,
 				'data-toggle'   => 'tooltip',
 			),

@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.2.19
+ * @version    2.1.1.4
  */
 
 //$cpt_row = $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
@@ -26,7 +26,7 @@
 //
 //$indents = $depth > 2 ? implode("", array_fill( 0,$depth - 2, "- " ) ) : '';
 //
-//$link_class = $depth ? 'h6' : 'font-weight-bold fw-bold h5';
+//$link_class = $depth ? 'h6' : 'font-weight-bold h5';
 //$cpt_row .= '<div class="gd-cptcat-cat-right   text-uppercase text-truncate">';
 //$cpt_row .= '<a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '" class="text-lightx text-reset stretched-link   '.$link_class.'">';
 //$cpt_row .= $indents;
@@ -54,12 +54,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var array $args All the raw widget arguments.
  */;
 
-global $aui_bs5;
-
-$count = !$hide_count ? ' <span class="gd-cptcat-count badge ' . ( $aui_bs5 ? 'text-bg-light ms-2' : 'badge-light ml-2' ) . '">' . $cat_count . '</span>' : '';
+$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
 $icon = '';
 if(!$hide_icon){
-	$img_class =  ' d-inline-block mr-1 me-1 align-middle h1';
+	$img_class =  ' d-inline-block mr-1 align-middle h1';
 	$cat_icon = str_replace('<i class="','<i style="opacity:0.8;" class="d-block ', $cat_icon);
 	$icon = "<div class='gd-cptcat-cat-left border-0 m-0 overflow-hidden embed-responsive-item text-center $img_class' >$cat_icon</div>";
 }
@@ -72,7 +70,7 @@ if(!$hide_icon){
 	<div class="card-img-overlay d-flex align-items-end text-center rounded p-0 pb-3 bg-shadow-bottom">
 	<div class="card-body text-center btn btn-link p-1 overflow-hidden">
 		<div class="gd-cptcat-cat-right text-uppercase text-truncate">
-			<a href="<?php echo esc_url($term_link);?>" class="text-white stretched-link font-weight-bold fw-bold h5">
+			<a href="<?php echo esc_url($term_link);?>" class="text-white stretched-link font-weight-bold h5">
 				<?php echo esc_attr( $cat_name );?>
 			</a>
 			<?php echo $count;?>

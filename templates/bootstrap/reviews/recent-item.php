@@ -3,9 +3,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-global $aui_bs5;
-
 /**
  * Variables.
  *
@@ -22,8 +19,8 @@ global $aui_bs5;
 ?>
 <li class="clearfix list-unstyled mw-100 col <?php if($carousel){echo "carousel-item";}  if($active){echo " active";} ?>">
 	<div class="card h-100 mw-100">
-		<div class="card-header toast-header <?php echo $aui_bs5 ? 'ps-2 py-1 border-bottom border-opacity-25' : ''; ?>">
-			<span class="li<?php echo $comment_id;?> geodir_reviewer_image mr-2 me-2">
+		<div class="card-header toast-header">
+			<span class="li<?php echo $comment_id;?> geodir_reviewer_image mr-2">
 			<?php echo get_avatar( $comment, $avatar_size, '', $comment_id . ' comment avatar',array('class'=>"comment_avatar rounded-circle position-static") );?>
 			</span>
 			<?php
@@ -33,7 +30,7 @@ global $aui_bs5;
 			?>
 			<strong class="geodir_reviewer_author h5">
 				<?php echo esc_attr( $comment->comment_author ); ?>
-				<small class="text-muted font-weight-normal fw-normal d-block h6 mb-0"><?php _e( 'Wrote a review', 'geodirectory' );?></small>
+				<small class="text-muted font-weight-normal d-block h6 mb-0"><?php _e( 'Wrote a review', 'geodirectory' );?></small>
 			</strong>
 			<?php
 			if ( $comment->user_id ) {

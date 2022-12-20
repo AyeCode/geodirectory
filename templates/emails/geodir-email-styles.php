@@ -212,10 +212,10 @@ img {
 .normal {
     font-weight: normal;
 }
-.text-left,.text-start {
+.text-left {
   text-align: left;
 }
-.text-right,.text-end {
+.text-right {
   text-align: right;
 }
 .text-center {

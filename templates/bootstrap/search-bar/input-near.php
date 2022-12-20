@@ -23,9 +23,8 @@
  */
 
 defined( 'ABSPATH' ) || exit;
-global $aui_bs5;
 ?>
-<div class='gd-search-field-near col-auto flex-fill <?php echo $near_class; echo $aui_bs5 ? ' px-0' : ''; ?>' style="flex-grow:9999 !important;" <?php echo geodir_conditional_field_attrs( array( 'type' => 'text' ), 'near', 'text' ); ?>>
+<div class='gd-search-field-near col-auto flex-fill <?php echo $near_class;?>' style="flex-grow:9999 !important;" <?php echo geodir_conditional_field_attrs( array( 'type' => 'text' ), 'near', 'text' ); ?>>
 	<?php
 	do_action( 'geodir_before_search_near_input' );
 
@@ -39,9 +38,9 @@ global $aui_bs5;
 			'value'                   => $near,
 			'name'                    => 'snear',
 			'placeholder'             => esc_html__( $default_near_text, 'geodirectory' ),
-			'class'                   => 'snear pl-4 ps-4 w-100',
+			'class'                   => 'snear pl-4 w-100',
 			'label'                   => esc_html__( $default_near_text, 'geodirectory' ),
-			'label_class'             => 'sr-only visually-hidden',
+			'label_class'             => 'sr-only',
 			'extra_attributes'        => array(
 				'onkeydown'    => 'javascript: if(event.keyCode == 13) geodir_click_search(this);',
 				'onClick'      => 'this.select();',

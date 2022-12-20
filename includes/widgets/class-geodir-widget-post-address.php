@@ -158,7 +158,6 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output($args = array(), $widget_args = array(),$content = ''){
-		global $aui_bs5;
 
 		/**
 		 * @var int    $ID Optional. The current post ID if empty.
@@ -242,8 +241,8 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 					if ( $args['alignment'] != '' ) {
 						if($design_style){
 							if($args['alignment']=='block'){$field['css_class'] .= " d-block ";}
-							elseif($args['alignment']=='left'){$field['css_class'] .= ( $aui_bs5 ? ' float-start ms-2 ' : ' float-left mr-2 ' );}
-							elseif($args['alignment']=='right'){$field['css_class'] .= ( $aui_bs5 ? ' float-end me-2 ' : ' float-right ml-2 ' );}
+							elseif($args['alignment']=='left'){$field['css_class'] .= " float-left mr-2 ";}
+							elseif($args['alignment']=='right'){$field['css_class'] .= " float-right ml-2 ";}
 							elseif($args['alignment']=='center'){$field['css_class'] .= " mw-100 d-block mx-auto ";}
 						}else{
 							$field['css_class'] .= $args['alignment']=='block' ? " gd-d-block gd-clear-both " : " geodir-align" . sanitize_html_class( $args['alignment'] );

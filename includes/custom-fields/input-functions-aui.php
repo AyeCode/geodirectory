@@ -41,7 +41,7 @@ function geodir_cfi_fieldset($html,$cf){
 
         ob_start(); // Start  buffering;
         ?>
-        <fieldset class="form-group mb-3" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>"<?php echo $conditional_attrs; ?>>
+        <fieldset class="form-group" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>"<?php echo $conditional_attrs; ?>>
             <h3 class="h3"><?php echo __( $cf['frontend_title'], 'geodirectory' ); ?></h3>
             <?php if ( $cf['desc'] != '' ) {
                 echo '<small class="text-muted">( ' . __( $cf['desc'], 'geodirectory' ) . ' )</small>';
@@ -831,7 +831,7 @@ function geodir_cfi_multiselect( $html, $cf ) {
 			$horizontal = true;
 			ob_start();
 			?>
-			<div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row mb-3"<?php echo $conditional_attrs; ?>>
+			<div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row"<?php echo $conditional_attrs; ?>>
 				<label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
 					<?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
 					echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
@@ -1530,7 +1530,7 @@ function geodir_cfi_address( $html, $cf ) {
 				 *
 				 * @param bool $gd_move_inline_script Whether to move inline .
 				 */
-				$gd_move_inline_script = apply_filters( 'geodir_add_listing_move_inline_script', true );
+				$gd_move_inline_script = apply_filters( 'geodir_add_listing_move_inline_script', ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) );
 
                 /**
                  * Contains add listing page map functions.
@@ -1646,7 +1646,7 @@ function geodir_cfi_address( $html, $cf ) {
         }?>
 
         <?php if ( isset( $post_mapzoom ) ) { ?>
-            <div data-argument="<?php echo $prefix . 'mapzoom'; ?>" class="form-group row mb-3 d-none"<?php echo geodir_conditional_field_attrs( $cf, 'mapzoom', 'hidden' ); ?>><input type="hidden" value="<?php echo esc_attr( $post_mapzoom ); ?>" name="<?php echo 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/></div>
+            <div data-argument="<?php echo $prefix . 'mapzoom'; ?>" class="form-group row d-none"<?php echo geodir_conditional_field_attrs( $cf, 'mapzoom', 'hidden' ); ?>><input type="hidden" value="<?php echo esc_attr( $post_mapzoom ); ?>" name="<?php echo 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/></div>
         <?php }
 
         $html = ob_get_clean();
@@ -1855,8 +1855,8 @@ function geodir_cfi_categories($html,$cf){
         } ?>
 
         <div id="<?php echo $taxonomy;?>_row"
-             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group mb-3 <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>"<?php echo $conditional_attrs; ?>>
-            <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : ''; echo $geodir_label_type == 'hidden' || $geodir_label_type=='floating' ? ' sr-only visually-hidden ' : '';?>">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>"<?php echo $conditional_attrs; ?>>
+            <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : ''; echo $geodir_label_type == 'hidden' || $geodir_label_type=='floating' ? ' sr-only ' : '';?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
                 <?php if ($is_required) echo '<span class="text-danger">*</span>';?>
@@ -2196,7 +2196,7 @@ add_filter('geodir_custom_field_input_tags','geodir_cfi_tags',10,2);
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_business_hours( $html, $cf ) {
-    global $aui_bs5, $gd_post, $geodir_label_type;
+    global $gd_post, $geodir_label_type;
 
     if ( empty( $html ) ) {
         $horizontal = empty( $geodir_label_type ) || $geodir_label_type == 'horizontal' ? true : false;
@@ -2241,7 +2241,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
         ob_start();
         ?>
         <script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
-        <div id="<?php echo $name;?>_row" class="gd-bh-row form-group row mb-3"<?php echo $conditional_attrs; ?>>
+        <div id="<?php echo $name;?>_row" class="gd-bh-row form-group row"<?php echo $conditional_attrs; ?>>
             <label for="<?php echo $htmlvar_name; ?>_f_active_1" class="<?php echo ( $horizontal ? ' pt-0 col-sm-2 col-form-label' : '' ); ?>"><?php echo $label; ?></label>
             <div class="gd-bh-field<?php echo ( $horizontal ? ' col-sm-10' : '' ); ?>" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
                 <?php echo aui()->radio(
@@ -2265,9 +2265,9 @@ function geodir_cfi_business_hours( $html, $cf ) {
                 );
                 ?>
                 <div class="gd-bh-items" style="display:<?php echo $display; ?>" data-12am="<?php echo esc_attr( strtoupper( date_i18n( $time_format, strtotime( '00:00' ) ) ) ); ?>">
-                    <table class="table table-borderless table-striped">
-                        <thead class="<?php echo ( $aui_bs5 ? 'table-light' : 'thead-light' ); ?>">
-                        <tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours text-nowrap"><?php _e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only visually-hidden"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
+                    <table class="table table-borderless table table-striped">
+                        <thead class="thead-light">
+                        <tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours"><?php _e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
                         </thead>
                         <tbody>
                         <tr style="display:none!important">
@@ -2277,14 +2277,14 @@ function geodir_cfi_business_hours( $html, $cf ) {
                                         <div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-open form-control text-center bg-white rounded-0 w-100 GD_UNIQUE_ID_oa" class="form-control text-center bg-white rounded-0 w-100" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" value="09:00"></div>
                                         <div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-close form-control text-center bg-white rounded-0 w-100 GD_UNIQUE_ID_oa" class="form-control text-center bg-white rounded-0 w-100" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" value="17:00"></div>
                                     </div></div>
-                                    <div class="col-2 text-left text-start gd-bh-remove"><i class="fas fa-minus-circle text-danger c-pointer mt-2" title="<?php _e("Remove hours","geodirectory"); ?>" data-toggle="tooltip" aria-hidden="true"></i></div>
+                                    <div class="col-2 text-left gd-bh-remove"><i class="fas fa-minus-circle c-pointer mt-2" title="<?php _e("Remove hours","geodirectory"); ?>" data-toggle="tooltip" aria-hidden="true"></i></div>
                                 </div>
                             </td>
                         </tr>
                         <?php foreach ( $weekdays as $day_no => $day ) { ?>
                             <tr class="gd-bh-item<?php echo ( empty( $hours[ $day_no ] ) ? ' gd-bh-item-closed' : '' ); ?>">
-                                <td class="gd-bh-day align-top"><?php echo $day; ?></td>
-                                <td class="gd-bh-24hours align-top"><div class="form-check mt-1"><input type="checkbox" value="1" class="form-check-input" <?php echo ( empty( $hours[ $day_no ] ) ? 'style="display:none"' : '' ); ?>></div></td>
+                                <td class="gd-bh-day"><?php echo $day; ?></td>
+                                <td class="gd-bh-24hours"><div class="form-check"><input type="checkbox" value="1" class="form-check-input" <?php echo ( empty( $hours[ $day_no ] ) ? 'style="display:none"' : '' ); ?>></div></td>
                                 <td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>]">
                                     <?php
                                     if ( ! empty( $hours[ $day_no ] ) ) {
@@ -2314,27 +2314,27 @@ function geodir_cfi_business_hours( $html, $cf ) {
                                                     <div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-open form-control text-center bg-white rounded-0 w-100 <?php echo $unique_id; ?>_oa" data-aui-init="flatpickr" class="form-control text-center bg-white rounded-0 w-100" id="<?php echo $unique_id; ?>_o" data-field-alt="open" data-bh="time" value="<?php echo esc_attr( $open_His ); ?>" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" data-time="<?php echo $open_His; ?>" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]"></div>
                                                     <div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-close form-control text-center bg-white rounded-0 w-100 <?php echo $unique_id; ?>_oa" data-aui-init="flatpickr" class="form-control text-center bg-white rounded-0 w-100" id="<?php echo $unique_id; ?>_c" data-field-alt="close" data-bh="time" value="<?php echo esc_attr( $close_His ); ?>" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" data-time="<?php echo $close_His; ?>" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]"></div>
                                                 </div></div>
-                                                <div class="col-2 text-left text-start gd-bh-remove"><i class="fas fa-minus-circle text-danger c-pointer mt-2" title="<?php _e( "Remove hours", "geodirectory" ); ?>" data-toggle="tooltip" aria-hidden="true"></i></div>
+                                                <div class="col-2 text-left gd-bh-remove"><i class="fas fa-minus-circle c-pointer mt-2" title="<?php _e( "Remove hours", "geodirectory" ); ?>" data-toggle="tooltip" aria-hidden="true"></i></div>
                                             </div>
                                         <?php } ?>
                                     <?php } else { ?>
                                         <div class="gd-bh-closed text-center"><?php _e( 'Closed', 'geodirectory' ); ?></div>
                                     <?php } ?>
                                 </td>
-                                <td class="gd-bh-act align-top"><span class="gd-bh-add c-pointer" title="<?php _e("Add new set of hours","geodirectory"); ?>" data-toggle="tooltip"><i class="fas fa-plus-circle text-primary" aria-hidden="true"></i></span></td>
+                                <td class="gd-bh-act "><span class="gd-bh-add c-pointer" title="<?php _e("Add new set of hours","geodirectory"); ?>" data-toggle="tooltip"><i class="fas fa-plus-circle" aria-hidden="true"></i></span></td>
                             </tr>
                         <?php } ?>
                         <tr class="gd-tz-item">
-                            <td colspan="4"><div class="row mb-0"><div class="col-sm-2 col-form-label"><label for="<?php echo $htmlvar_name; ?>_f_timezone_string" class="mb-0"><?php _e( 'Timezone:', 'geodirectory' ); ?></label></div><div class="col-sm-10 pt-1"><select data-field="timezone_string" id="<?php echo $htmlvar_name; ?>_f_timezone_string" class="<?php echo ( $aui_bs5 ? 'form-select form-select-sm' : 'custom-select custom-select-sm' ); ?> aui-select2" data-placeholder="<?php esc_attr_e( 'Select a city/timezone&hellip;', 'geodirectory' ); ?>" data-allow-clear="1" option-ajaxchosen="false" tabindex="-1" aria-hidden="true" data-select2-id="<?php echo $htmlvar_name; ?>"><?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?></select></div></div>
+                            <td colspan="4"><div class="row mb-0"><div class="col-sm-2 col-form-label"><label for="<?php echo $htmlvar_name; ?>_f_timezone_string" class="mb-0"><?php _e( 'Timezone:', 'geodirectory' ); ?></label></div><div class="col-sm-10"><select data-field="timezone_string" id="<?php echo $htmlvar_name; ?>_f_timezone_string" class="custom-select aui-select2" data-placeholder="<?php esc_attr_e( 'Select a city/timezone&hellip;', 'geodirectory' ); ?>" data-allow-clear="1" option-ajaxchosen="false" tabindex="-1" aria-hidden="true" data-select2-id="<?php echo $htmlvar_name; ?>"><?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?></select></div></div>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
                 <input type="hidden" name="<?php echo $htmlvar_name; ?>" value="<?php echo esc_attr( $value ); ?>">
-                <?php if($horizontal){echo '<small class="form-text text-muted d-block">'. $description.'</small>';} ?>
+                <?php if($horizontal){echo '<small class="form-text text-muted">'. $description.'</small>';} ?>
             </div>
-            <?php if(!$horizontal){echo '<small class="form-text text-muted d-block">'. $description.'</small>';} ?>
+            <?php if(!$horizontal){echo '<small class="form-text text-muted">'. $description.'</small>';} ?>
         </div>
         <?php
         $html = ob_get_clean();
@@ -2356,8 +2356,6 @@ add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hou
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_files( $html, $cf ) {
-	global $aui_bs5;
-
     $html_var = $cf['htmlvar_name'];
 
     // we use the standard WP tags UI in backend
@@ -2467,7 +2465,7 @@ function geodir_cfi_files( $html, $cf ) {
             $admin_only = geodir_cfi_admin_only($cf);
             $conditional_attrs = geodir_conditional_field_attrs( $cf, $cf['name'], 'hidden' );
             ?>
-            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row mb-3"<?php echo $conditional_attrs; ?>>
+            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row"<?php echo $conditional_attrs; ?>>
                 <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
                     <?php
                     echo ( trim( $frontend_title ) ) ? esc_html( $frontend_title ) : '&nbsp;'; echo $admin_only;?>
@@ -2483,7 +2481,7 @@ function geodir_cfi_files( $html, $cf ) {
                 // params for file upload
                 $is_required = $cf['is_required'];
 
-                if($horizontal){echo $aui_bs5 ? "<div class='w-100'>" : "<div class='mx-3 w-100'>";}
+                if($horizontal){echo "<div class='mx-3 w-100'>";}
                 // the file upload template
                 echo geodir_get_template_html( "bootstrap/file-upload.php", array(
                     'id'                  => $id,
@@ -2535,7 +2533,7 @@ function geodir_input_parse_year_range( $range ) {
 	} else if ( empty( $year_range['min_year'] ) && ! empty( $year_range['max_year'] ) && $year_range['max_year'] < $current_year ) {
 		$year_range['min_year'] = $year_range['max_year'];
 		$year_range['max_year'] = 0;
-	}
+	} 
 
 	return $year_range;
 }

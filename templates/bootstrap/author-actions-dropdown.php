@@ -26,7 +26,7 @@ if ( ! empty( $author_actions ) ) {
 	$dropdown_id = '_' . uniqid();
 
 	echo '<div class="gd-author-actions ' . $wrap_class . '" role="btn-group" aria-label="' . __( "Author Actions", "geodirectory" ) . '">';
-	echo '<button id="' . $dropdown_id . '" type="button" class="btn btn-' . sanitize_html_class( $args['color'] ) . ' text-' . sanitize_html_class( $args['text_color'] ) . ' btn-' . sanitize_html_class( $args['alignment'] ) . ' btn-' . sanitize_html_class( $args['size'] ) . ' dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-bars mr-1 me-1" aria-hidden="true"></i> ' . __( "Author Actions", "geodirectory" ) , '</button>';
+	echo '<button id="' . $dropdown_id . '" type="button" class="btn btn-' . sanitize_html_class( $args['color'] ) . ' text-' . sanitize_html_class( $args['text_color'] ) . ' btn-' . sanitize_html_class( $args['alignment'] ) . ' btn-' . sanitize_html_class( $args['size'] ) . ' dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-bars mr-1" aria-hidden="true"></i> ' . __( "Author Actions", "geodirectory" ) , '</button>';
 	echo '<div class="dropdown-menu" aria-labelledby="' . $dropdown_id . '">';
 
 	foreach ( $author_actions as $type => $action ) {

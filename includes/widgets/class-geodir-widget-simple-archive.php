@@ -385,8 +385,8 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 		$responsive_buttons = '';
 		if ( empty( $instance['output'] ) ) {
 			$responsive_buttons .= '<div class="d-lg-none mb-3">';
-			$responsive_buttons .= '<button class="btn btn-primary  gd-sa-button-map" onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' ); if (window.gdMaps == \'osm\') {jQuery.goMap.map._onResize();}else{jQuery(window).trigger(\'resize\'); }"> ' . __( 'Show Map', 'geodirectory' ) . ' <i class="fas fa-map-marked ' . ( $aui_bs5 ? 'ms-2' : 'ml-2' ) . '"></i></button>';
-			$responsive_buttons .= '<button class="btn btn-primary gd-sa-button-list d-none"  onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' ); if (window.gdMaps == \'osm\') {jQuery.goMap.map._onResize();}else{jQuery(window).trigger(\'resize\'); }">' . __( 'Show Listings', 'geodirectory' ) . ' <i class="fas fa-th-list ' . ( $aui_bs5 ? 'ms-2' : 'ml-2' ) . '"></i></button>';
+			$responsive_buttons .= '<button class="btn btn-primary  gd-sa-button-map" onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' ); if (window.gdMaps == \'osm\') {jQuery.goMap.map._onResize();}else{jQuery(window).trigger(\'resize\'); }"> ' . __( 'Show Map', 'geodirectory' ) . ' <i class="fas fa-map-marked ml-2"></i></button>';
+			$responsive_buttons .= '<button class="btn btn-primary gd-sa-button-list d-none"  onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' ); if (window.gdMaps == \'osm\') {jQuery.goMap.map._onResize();}else{jQuery(window).trigger(\'resize\'); }">' . __( 'Show Listings', 'geodirectory' ) . ' <i class="fas fa-th-list ml-2"></i></button>';
 			$responsive_buttons .= '</div>';
 		}
 
@@ -477,7 +477,6 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 	}
 
 	public function get_badge_type( $type, $args = array(), $badge_args = array() ) {
-		global $aui_bs5;
 
 		$type = esc_attr( $type );
 
@@ -534,7 +533,7 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 			$css_class = '';
 			if ( $show == 'badge' ) {
 				$show      = 'value';
-				$css_class = 'badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' );
+				$css_class = 'badge badge-primary';
 			}
 			$output = "[gd_post_meta title=''  id=''  key='$type'  show='$show'  no_wrap='false'  $alignment text_alignment=''  list_hide=''  list_hide_secondary='$lhs'  location=''  css_class='$css_class' ]";
 		}

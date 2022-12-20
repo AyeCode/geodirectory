@@ -88,8 +88,8 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 
 					?>
 
-					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
-						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
+					<div data-argument="gd_im_choicepost" class="form-group row">
+						<label for="gd_im_choicepost" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
 						<div class="col-sm-9">
 							<?php
 							echo aui()->button(
@@ -169,9 +169,13 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						<input onclick="gd_imex_ContinueImport(this, 'cat')" type="button"
 						       value="<?php _e( "Continue Import Data", 'geodirectory' ); ?>"
 						       id="gd_continue_data" class="btn btn-primary" style="display:none"/>
-						<input type="button" value="<?php _e( "Terminate Import Data", 'geodirectory' ); ?>" id="gd_stop_import" class="btn btn-outline-danger" name="gd_stop_import" style="display:none" onclick="gd_imex_TerminateImport(this, 'cat')"/>
+						<input type="button"
+						       value="<?php _e( "Terminate Import Data", 'geodirectory' ); ?>"
+						       id="gd_stop_import" class="btn btn-outline-danger" name="gd_stop_import"
+						       style="display:none" onclick="gd_imex_TerminateImport(this, 'cat')"/>
 						<div id="gd_process_data" style="display:none">
-							<span class="spinner is-active float-left float-start" style="display:inline-block;margin:0 5px 0 5px;"></span><?php _e( "Wait, processing import data...", 'geodirectory' ); ?>
+											<span class="spinner is-active"
+											      style="display:inline-block;margin:0 5px 0 5px;float:left"></span><?php _e( "Wait, processing import data...", 'geodirectory' ); ?>
 						</div>
 					</div>
 
@@ -204,7 +208,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						echo aui()->select(
 							array(
 								'label_col'        => '3',
-								'label_class'=> 'font-weight-bold fw-bold',
+								'label_class'=> 'font-weight-bold',
 								'label_type'        => 'horizontal',
 								'label'       => __( 'Post Type', 'geodirectory' ),
 								'class'     => 'mw-100',
@@ -223,7 +227,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						echo aui()->select(
 							array(
 								'label_col'        => '3',
-								'label_class'=> 'font-weight-bold fw-bold',
+								'label_class'=> 'font-weight-bold',
 								'label_type'        => 'horizontal',
 								'label'       => __( 'Max entries per csv file', 'geodirectory' ) . geodir_help_tip( __( 'Please select the maximum number of entries per csv file (defaults to 5000, you might want to lower this to prevent memory issues on some installs)', 'geodirectory' )),
 								'class'     => 'mw-100',
@@ -251,7 +255,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 
 						<div class="gd-ie-actions d-flex flex-row align-items-center">
 							<input type="submit" value="<?php echo esc_attr( __( 'Export CSV', 'geodirectory' ) );?>" class="btn btn-primary" name="gd_ie_excats_submit" id="gd_ie_excats_submit">
-							<div id="gd_ie_ex_files" class="gd-ie-files ml-4 ms-4 mt-2"></div>
+							<div id="gd_ie_ex_files" class="gd-ie-files ml-4 mt-2"></div>
 						</div>
 
 

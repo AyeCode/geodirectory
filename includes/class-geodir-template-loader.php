@@ -536,50 +536,42 @@ class GeoDir_Template_Loader {
 		return $content;
 	}
 
-	/**
-	 * Setup the GD Archive item page content.
-	 *
-	 * @since 2.0.0
+    /**
+     * Setup the GD Archive item page content.
+     *
+     * @since 2.0.0
 	 * @param string $post_type Post type.
-	 * @return string $content The filtered content.
-	 */
-	public static function archive_item_template_content( $post_type = '', $page_id = 0 ) {
-		global $geodir_item_tmpl;
+     * @return string $content The filtered content.
+     */
+    public static function archive_item_template_content($post_type = ''){
 
-		// Get the archive template page content
-		if ( (int) $page_id > 0 ) {
-			$archive_page_id = (int) $page_id;
-		} else if ( ! empty( $geodir_item_tmpl['type'] ) && $geodir_item_tmpl['type'] == 'page' && ! empty( $geodir_item_tmpl['id'] ) ) {
-			$archive_page_id = (int) $geodir_item_tmpl['id'];
-		} else if ( ! empty( $geodir_item_tmpl['type'] ) && $geodir_item_tmpl['type'] == 'template_part' && ! empty( $geodir_item_tmpl['id'] ) && geodir_is_block_theme() ) {
-			$archive_page_id = (int) $geodir_item_tmpl['id'];
-		} else {
-			$archive_page_id = (int) geodir_archive_item_page_id( $post_type );
-		}
+        // get the archive template page content
+        $archive_page_id = geodir_archive_item_page_id($post_type);
+        $content = get_post_field('post_content', $archive_page_id  );
 
-		$content = get_post_field( 'post_content', $archive_page_id  );
+        // maybe bypass content
+        $bypass_content = apply_filters('geodir_bypass_archive_item_template_content','',$content,$archive_page_id);
+        if($bypass_content){
+            return $bypass_content;
+        }
 
-		// Maybe bypass content
-		$bypass_content = apply_filters( 'geodir_bypass_archive_item_template_content', '', $content, $archive_page_id );
-		if ( $bypass_content ) {
-			return $bypass_content;
-		}
+        // if the content is blank then we grab the page defaults
+        if($content==''){
+            $content = GeoDir_Defaults::page_archive_item_content();
+        }
 
-		// If the content is blank then we grab the page defaults
-		if ( $content == '' ) {
-			$content = GeoDir_Defaults::page_archive_item_content();
-		}
+        // run the shortcodes on the content
+        $content = do_shortcode($content);
 
-		// Run the shortcodes on the content
-		$content = do_shortcode( $content );
+        // run block content if its available
+        if(function_exists('do_blocks')){
+            $content = do_blocks( $content );
+        }
 
-		// Run block content if its available
-		if ( function_exists( 'do_blocks' ) ) {
-			$content = do_blocks( $content );
-		}
 
-		return $content;
-	}
+        return $content;
+    }
+
 
     /**
      * Attempt to remove the theme featured image output if set to do so.

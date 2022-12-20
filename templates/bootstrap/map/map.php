@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
 	<div id="catcher_<?php echo $map_canvas; ?>"></div>
 	<!--START stick_trigger_container-->
 	<div class="stick_trigger_container bsui">
-		<div class="trigger_sticky triggeroff_sticky mt-n5 btn btn-secondary mr-n2 me-n2 c-pointer" style="display: none;">
+		<div class="trigger_sticky triggeroff_sticky mt-n5 btn btn-secondary mr-n2 c-pointer" style="display: none;">
 			<i class="fas fa-map-marked-alt"></i>
 			<i class="fas fa-angle-right"></i>
 		</div>
@@ -40,19 +40,25 @@ defined( 'ABSPATH' ) || exit;
 			<!--END map_background-->
 			<div class="map_background">
 				<div class="top_banner_section_in clearfix">
-					<div class="<?php if ( wp_doing_ajax() || ! empty( $hide_expand_map ) ) { echo "d-none "; } echo $map_canvas; ?>_TopLeft TopLeft position-absolute bg-white text-muted rounded-sm rounded-1 shadow-sm m-2 px-1 py-1 h5 c-pointer" style="z-index: 3;">
+					<div class="<?php if ( wp_doing_ajax() || ! empty( $hide_expand_map ) ) { echo "d-none "; } echo $map_canvas; ?>_TopLeft TopLeft position-absolute bg-white text-muted rounded-sm shadow-sm m-2 px-1 py-1 h5 c-pointer" style="z-index: 3;">
 						<span class="triggermap" id="<?php echo $map_canvas; ?>_triggermap">
 							<i class="fas fa-expand-arrows-alt fa-fw" aria-hidden="true"></i>
 							<i class="fas fa-compress-arrows-alt fa-fw d-none" aria-hidden="true"></i>
 						</span>
 					</div>
 					<div class="<?php echo $map_canvas; ?>_TopRight TopRight"></div>
-					<div id="<?php echo $map_canvas; ?>_wrapper" class="main_map_wrapper" style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;">
+					<div id="<?php echo $map_canvas; ?>_wrapper" class="main_map_wrapper"
+					     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;">
 						<div class="iprelative position-relative">
-							<div id="<?php echo $map_canvas; ?>" class="geodir-map-canvas" data-map-type="<?php echo $map_type; ?>" data-map-canvas="<?php echo $map_canvas; ?>" style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;z-index: 0;" <?php echo ( isset( $extra_attribs ) ? $extra_attribs : '' ); ?>></div>
-							<div id="<?php echo $map_canvas; ?>_loading_div" class="loading_div overlay overlay-black position-absolute row m-0" style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;top:0;z-index: 2;">
+							<div id="<?php echo $map_canvas; ?>" class="geodir-map-canvas"
+							     data-map-type="<?php echo $map_type; ?>"
+							     data-map-canvas="<?php echo $map_canvas; ?>"
+							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;z-index: 0;" <?php echo ( isset( $extra_attribs ) ? $extra_attribs : '' ); ?>></div>
+							<div id="<?php echo $map_canvas; ?>_loading_div"
+							     class="loading_div overlay overlay-black position-absolute row m-0"
+							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;top:0;z-index: 2;">
 								<div class="spinner-border mx-auto align-self-center text-white" role="status">
-									<span class="sr-only visually-hidden"><?php _e( "Loading...", "geodirectory" ); ?></span>
+									<span class="sr-only"><?php _e( "Loading...", "geodirectory" ); ?></span>
 								</div>
 							</div>
 							<div id="<?php echo $map_canvas; ?>_map_nofound"

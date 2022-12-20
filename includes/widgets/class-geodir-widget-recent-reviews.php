@@ -471,7 +471,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			$post_title        = trim( esc_html( strip_tags( stripslashes( get_the_title( $comment_post_ID ) ) ) ) );
 			$permalink         = get_permalink( $comment_post_ID );
 			$comment_permalink = $permalink . "#comment-" . $comment->comment_ID;
-			$readmore_seo_class = $design_style ? 'sr-only visually-hidden' : '';
+			$readmore_seo_class = $design_style ? 'sr-only' : '';
 			$read_more         = '<a class="comment_excerpt" href="' . $comment_permalink . '">' . __( 'Read more', 'geodirectory' ) . '<span class="gd-visuallyhidden '.$readmore_seo_class.'"> ' . __( 'about this listing', 'geodirectory' ) . '</span></a>';
 
 			$comment_content_length = strlen( $comment_content );
