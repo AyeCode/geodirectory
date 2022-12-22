@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.2.20\n"
+"Project-Id-Version: GeoDirectory 2.2.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 20:06+0530\n"
-"PO-Revision-Date: 2022-12-20 20:06+0530\n"
+"POT-Creation-Date: 2022-12-22 14:10+0530\n"
+"PO-Revision-Date: 2022-12-22 14:10+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -830,11 +830,11 @@ msgstr ""
 #: includes/admin/admin-functions.php:1287
 #: includes/admin/class-geodir-admin-dummy-data.php:1029
 #: includes/admin/class-geodir-admin-dummy-data.php:1041
-#: includes/admin/dummy-data/car_sales.php:94
+#: includes/admin/dummy-data/car_sales.php:92
 #: includes/admin/dummy-data/classifieds.php:88
 #: includes/admin/dummy-data/property_rent.php:65
 #: includes/admin/dummy-data/property_sale.php:65
-#: includes/admin/dummy-data/standard_places.php:107
+#: includes/admin/dummy-data/standard_places.php:105
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:362
 #: includes/admin/settings/class-geodir-settings-cpt.php:614
 #: includes/admin/settings/class-geodir-settings-general.php:385
@@ -1453,9 +1453,9 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:910
 #: includes/admin/class-geodir-admin-dummy-data.php:912
 #: includes/admin/class-geodir-admin-dummy-data.php:920
-#: includes/admin/dummy-data/freelancer.php:748
-#: includes/admin/dummy-data/freelancer.php:750
-#: includes/admin/dummy-data/freelancer.php:756
+#: includes/admin/dummy-data/freelancer.php:744
+#: includes/admin/dummy-data/freelancer.php:746
+#: includes/admin/dummy-data/freelancer.php:752
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:408
 #: includes/class-geodir-comments.php:91
 #: includes/class-geodir-post-data.php:962
@@ -1472,8 +1472,8 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:925
 #: includes/admin/class-geodir-admin-dummy-data.php:927
 #: includes/admin/class-geodir-admin-dummy-data.php:935
-#: includes/admin/dummy-data/freelancer.php:766
-#: includes/admin/dummy-data/freelancer.php:767
+#: includes/admin/dummy-data/freelancer.php:762
+#: includes/admin/dummy-data/freelancer.php:763
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:610
 #: includes/class-geodir-comments.php:107
 #: includes/class-geodir-comments.php:109 language.php:56 language.php:125
@@ -3703,9 +3703,9 @@ msgid "API Keys"
 msgstr ""
 
 #: includes/admin/diagnostic-functions.php:558
+#: includes/admin/dummy-data/standard_places.php:71
 #: includes/admin/dummy-data/standard_places.php:73
-#: includes/admin/dummy-data/standard_places.php:75
-#: includes/admin/dummy-data/standard_places.php:84
+#: includes/admin/dummy-data/standard_places.php:82
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:511
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:862
 #: includes/widgets/class-geodir-widget-simple-archive.php:436
@@ -3919,27 +3919,27 @@ msgstr ""
 msgid "Load custom fields in to file for translation: ok"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:18
+#: includes/admin/dummy-data/car_sales.php:16
 msgid "SUVs"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:24
+#: includes/admin/dummy-data/car_sales.php:22
 msgid "Trucks"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:28
-#: includes/admin/dummy-data/car_sales.php:35
-#: includes/admin/dummy-data/car_sales.php:139
-#: includes/admin/dummy-data/car_sales.php:163
-#: includes/admin/dummy-data/car_sales.php:187
-#: includes/admin/dummy-data/car_sales.php:211
-#: includes/admin/dummy-data/car_sales.php:235
-#: includes/admin/dummy-data/car_sales.php:489
-#: includes/admin/dummy-data/car_sales.php:514
-#: includes/admin/dummy-data/car_sales.php:539
-#: includes/admin/dummy-data/car_sales.php:564
-#: includes/admin/dummy-data/car_sales.php:589
-#: includes/admin/dummy-data/car_sales.php:614
+#: includes/admin/dummy-data/car_sales.php:26
+#: includes/admin/dummy-data/car_sales.php:33
+#: includes/admin/dummy-data/car_sales.php:137
+#: includes/admin/dummy-data/car_sales.php:161
+#: includes/admin/dummy-data/car_sales.php:185
+#: includes/admin/dummy-data/car_sales.php:209
+#: includes/admin/dummy-data/car_sales.php:233
+#: includes/admin/dummy-data/car_sales.php:487
+#: includes/admin/dummy-data/car_sales.php:512
+#: includes/admin/dummy-data/car_sales.php:537
+#: includes/admin/dummy-data/car_sales.php:562
+#: includes/admin/dummy-data/car_sales.php:587
+#: includes/admin/dummy-data/car_sales.php:612
 #: includes/admin/dummy-data/classifieds.php:18
 #: includes/admin/dummy-data/classifieds.php:28
 #: includes/admin/dummy-data/classifieds.php:35
@@ -3957,40 +3957,40 @@ msgstr ""
 msgid "Electronics"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:31
+#: includes/admin/dummy-data/car_sales.php:29
 msgid "Crossovers"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:39
+#: includes/admin/dummy-data/car_sales.php:37
 msgid "Sedans"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:45
+#: includes/admin/dummy-data/car_sales.php:43
 msgid "Coupes"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:52
+#: includes/admin/dummy-data/car_sales.php:50
 msgid "Convertibles"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:58
+#: includes/admin/dummy-data/car_sales.php:56
 msgid "Luxury"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:64
+#: includes/admin/dummy-data/car_sales.php:62
 msgid "Sports Cars"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:82
+#: includes/admin/dummy-data/car_sales.php:80
 #: includes/admin/dummy-data/classifieds.php:76
-#: includes/admin/dummy-data/freelancer.php:62
+#: includes/admin/dummy-data/freelancer.php:58
 #: includes/admin/dummy-data/property_rent.php:53
 #: includes/admin/dummy-data/property_sale.php:53
-#: includes/admin/dummy-data/standard_places.php:95
+#: includes/admin/dummy-data/standard_places.php:93
 msgid "Newest"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:106
+#: includes/admin/dummy-data/car_sales.php:104
 #: includes/admin/dummy-data/classifieds.php:100
 #: includes/admin/dummy-data/property_rent.php:76
 #: includes/admin/dummy-data/property_sale.php:76
@@ -3998,11 +3998,11 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:118
+#: includes/admin/dummy-data/car_sales.php:116
 #: includes/admin/dummy-data/classifieds.php:112
 #: includes/admin/dummy-data/property_rent.php:87
 #: includes/admin/dummy-data/property_sale.php:87
-#: includes/admin/dummy-data/standard_places.php:119
+#: includes/admin/dummy-data/standard_places.php:117
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:353
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:253
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:861
@@ -4010,16 +4010,16 @@ msgstr ""
 msgid "Rating"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:131
+#: includes/admin/dummy-data/car_sales.php:129
 #: includes/admin/dummy-data/classifieds.php:125
 msgid "Samsung S10+"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:139
-#: includes/admin/dummy-data/car_sales.php:163
-#: includes/admin/dummy-data/car_sales.php:187
-#: includes/admin/dummy-data/car_sales.php:211
-#: includes/admin/dummy-data/car_sales.php:235
+#: includes/admin/dummy-data/car_sales.php:137
+#: includes/admin/dummy-data/car_sales.php:161
+#: includes/admin/dummy-data/car_sales.php:185
+#: includes/admin/dummy-data/car_sales.php:209
+#: includes/admin/dummy-data/car_sales.php:233
 #: includes/admin/dummy-data/classifieds.php:24
 #: includes/admin/dummy-data/classifieds.php:133
 #: includes/admin/dummy-data/classifieds.php:157
@@ -4029,15 +4029,15 @@ msgstr ""
 msgid "Mobile Phones"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:252
+#: includes/admin/dummy-data/car_sales.php:250
 #: includes/admin/dummy-data/classifieds.php:246
 msgid "King Sized bed"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:261
-#: includes/admin/dummy-data/car_sales.php:286
-#: includes/admin/dummy-data/car_sales.php:311
-#: includes/admin/dummy-data/car_sales.php:336
+#: includes/admin/dummy-data/car_sales.php:259
+#: includes/admin/dummy-data/car_sales.php:284
+#: includes/admin/dummy-data/car_sales.php:309
+#: includes/admin/dummy-data/car_sales.php:334
 #: includes/admin/dummy-data/classifieds.php:52
 #: includes/admin/dummy-data/classifieds.php:255
 #: includes/admin/dummy-data/classifieds.php:280
@@ -4046,10 +4046,10 @@ msgstr ""
 msgid "Furniture"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:261
-#: includes/admin/dummy-data/car_sales.php:286
-#: includes/admin/dummy-data/car_sales.php:311
-#: includes/admin/dummy-data/car_sales.php:336
+#: includes/admin/dummy-data/car_sales.php:259
+#: includes/admin/dummy-data/car_sales.php:284
+#: includes/admin/dummy-data/car_sales.php:309
+#: includes/admin/dummy-data/car_sales.php:334
 #: includes/admin/dummy-data/classifieds.php:58
 #: includes/admin/dummy-data/classifieds.php:255
 #: includes/admin/dummy-data/classifieds.php:280
@@ -4058,31 +4058,31 @@ msgstr ""
 msgid "Beds"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:277
+#: includes/admin/dummy-data/car_sales.php:275
 #: includes/admin/dummy-data/classifieds.php:271
 msgid "Sleepeezee double bed"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:302
+#: includes/admin/dummy-data/car_sales.php:300
 #: includes/admin/dummy-data/classifieds.php:296
 msgid "Slumber 1000"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:327
+#: includes/admin/dummy-data/car_sales.php:325
 #: includes/admin/dummy-data/classifieds.php:321
 msgid "Slumber 5000"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:353
+#: includes/admin/dummy-data/car_sales.php:351
 #: includes/admin/dummy-data/classifieds.php:347
 msgid "Gibson Worn Bourbon"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:362
-#: includes/admin/dummy-data/car_sales.php:387
-#: includes/admin/dummy-data/car_sales.php:412
-#: includes/admin/dummy-data/car_sales.php:437
-#: includes/admin/dummy-data/car_sales.php:462
+#: includes/admin/dummy-data/car_sales.php:360
+#: includes/admin/dummy-data/car_sales.php:385
+#: includes/admin/dummy-data/car_sales.php:410
+#: includes/admin/dummy-data/car_sales.php:435
+#: includes/admin/dummy-data/car_sales.php:460
 #: includes/admin/dummy-data/classifieds.php:39
 #: includes/admin/dummy-data/classifieds.php:356
 #: includes/admin/dummy-data/classifieds.php:381
@@ -4092,11 +4092,11 @@ msgstr ""
 msgid "Instruments"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:362
-#: includes/admin/dummy-data/car_sales.php:387
-#: includes/admin/dummy-data/car_sales.php:412
-#: includes/admin/dummy-data/car_sales.php:437
-#: includes/admin/dummy-data/car_sales.php:462
+#: includes/admin/dummy-data/car_sales.php:360
+#: includes/admin/dummy-data/car_sales.php:385
+#: includes/admin/dummy-data/car_sales.php:410
+#: includes/admin/dummy-data/car_sales.php:435
+#: includes/admin/dummy-data/car_sales.php:460
 #: includes/admin/dummy-data/classifieds.php:45
 #: includes/admin/dummy-data/classifieds.php:356
 #: includes/admin/dummy-data/classifieds.php:381
@@ -4106,32 +4106,32 @@ msgstr ""
 msgid "Guitars"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:378
+#: includes/admin/dummy-data/car_sales.php:376
 #: includes/admin/dummy-data/classifieds.php:372
 msgid "Gibson 2018 Mojave Burst"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:403
+#: includes/admin/dummy-data/car_sales.php:401
 #: includes/admin/dummy-data/classifieds.php:397
 msgid "Fender Jazzmaster"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:428
+#: includes/admin/dummy-data/car_sales.php:426
 #: includes/admin/dummy-data/classifieds.php:422
 msgid "Fender Stratocaster"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:453
+#: includes/admin/dummy-data/car_sales.php:451
 #: includes/admin/dummy-data/classifieds.php:447
 msgid "Yamaha Pacifica 612V"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:489
-#: includes/admin/dummy-data/car_sales.php:514
-#: includes/admin/dummy-data/car_sales.php:539
-#: includes/admin/dummy-data/car_sales.php:564
-#: includes/admin/dummy-data/car_sales.php:589
-#: includes/admin/dummy-data/car_sales.php:614
+#: includes/admin/dummy-data/car_sales.php:487
+#: includes/admin/dummy-data/car_sales.php:512
+#: includes/admin/dummy-data/car_sales.php:537
+#: includes/admin/dummy-data/car_sales.php:562
+#: includes/admin/dummy-data/car_sales.php:587
+#: includes/admin/dummy-data/car_sales.php:612
 #: includes/admin/dummy-data/classifieds.php:31
 #: includes/admin/dummy-data/classifieds.php:483
 #: includes/admin/dummy-data/classifieds.php:508
@@ -4142,9 +4142,9 @@ msgstr ""
 msgid "Televisions"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:690
 #: includes/admin/dummy-data/car_sales.php:692
-#: includes/admin/dummy-data/car_sales.php:694
-#: includes/admin/dummy-data/car_sales.php:706
+#: includes/admin/dummy-data/car_sales.php:704
 #: includes/admin/dummy-data/classifieds.php:686
 #: includes/admin/dummy-data/classifieds.php:688
 #: includes/admin/dummy-data/classifieds.php:700
@@ -4152,182 +4152,182 @@ msgstr ""
 msgid "Condition"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:693
+#: includes/admin/dummy-data/car_sales.php:691
 #: includes/admin/dummy-data/classifieds.php:687
 msgid "Condition."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:716
 #: includes/admin/dummy-data/car_sales.php:718
-#: includes/admin/dummy-data/car_sales.php:720
-#: includes/admin/dummy-data/car_sales.php:732
+#: includes/admin/dummy-data/car_sales.php:730
 #: includes/admin/dummy-data/classifieds.php:712
 #: includes/admin/dummy-data/classifieds.php:714
 #: includes/admin/dummy-data/classifieds.php:726
 msgid "Brand"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:719
+#: includes/admin/dummy-data/car_sales.php:717
 #: includes/admin/dummy-data/classifieds.php:713
 msgid "Please select the brand."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:741
 #: includes/admin/dummy-data/car_sales.php:743
-#: includes/admin/dummy-data/car_sales.php:745
-#: includes/admin/dummy-data/car_sales.php:756
+#: includes/admin/dummy-data/car_sales.php:754
 #: includes/admin/dummy-data/classifieds.php:737
 #: includes/admin/dummy-data/classifieds.php:739
 #: includes/admin/dummy-data/classifieds.php:750
 msgid "Model"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:744
+#: includes/admin/dummy-data/car_sales.php:742
 #: includes/admin/dummy-data/classifieds.php:738
 msgid "Please select the model."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:766
 #: includes/admin/dummy-data/car_sales.php:768
-#: includes/admin/dummy-data/car_sales.php:770
-#: includes/admin/dummy-data/car_sales.php:782
+#: includes/admin/dummy-data/car_sales.php:780
 #: includes/admin/dummy-data/classifieds.php:762
 #: includes/admin/dummy-data/classifieds.php:764
 #: includes/admin/dummy-data/classifieds.php:776
 msgid "Seller Type"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:769
+#: includes/admin/dummy-data/car_sales.php:767
 #: includes/admin/dummy-data/classifieds.php:763
 msgid "Please select if you are a private or trade seller."
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:790
-#: includes/admin/dummy-data/car_sales.php:791
+#: includes/admin/dummy-data/car_sales.php:788
+#: includes/admin/dummy-data/car_sales.php:789
 #: includes/admin/dummy-data/classifieds.php:784
 #: includes/admin/dummy-data/classifieds.php:785
 msgid "Payment Types"
 msgstr ""
 
-#: includes/admin/dummy-data/car_sales.php:792
+#: includes/admin/dummy-data/car_sales.php:790
 #: includes/admin/dummy-data/classifieds.php:786
 msgid "Select the accepted payment types."
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:74
+#: includes/admin/dummy-data/freelancer.php:70
 msgid "Best Rated"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:86
+#: includes/admin/dummy-data/freelancer.php:82
 msgid "Hourly Price (Least)"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:98
+#: includes/admin/dummy-data/freelancer.php:94
 msgid "Hourly Price (Most)"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:749
+#: includes/admin/dummy-data/freelancer.php:745
 msgid "Please enter your contact email address."
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:758
+#: includes/admin/dummy-data/freelancer.php:754
 msgid "Enter email to get leads!"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:768
+#: includes/admin/dummy-data/freelancer.php:764
 msgid "You can enter your business website."
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:783
-#: includes/admin/dummy-data/freelancer.php:784
+#: includes/admin/dummy-data/freelancer.php:779
+#: includes/admin/dummy-data/freelancer.php:780
 msgid "Hourly Price"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:785
+#: includes/admin/dummy-data/freelancer.php:781
 msgid "Enter the hourly price in $ (no currency symbol). Example : 40\n"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:793
+#: includes/admin/dummy-data/freelancer.php:789
 msgid "Please enter your hourly rate"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:817
+#: includes/admin/dummy-data/freelancer.php:813
+#: includes/admin/dummy-data/freelancer.php:815
 #: includes/admin/dummy-data/freelancer.php:819
-#: includes/admin/dummy-data/freelancer.php:823
 msgid "For Hire?"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:818
+#: includes/admin/dummy-data/freelancer.php:814
 msgid "Tick \"Yes\" if you are available for Hire."
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:837
-#: includes/admin/dummy-data/freelancer.php:839
-#: includes/admin/dummy-data/freelancer.php:851
+#: includes/admin/dummy-data/freelancer.php:833
+#: includes/admin/dummy-data/freelancer.php:835
+#: includes/admin/dummy-data/freelancer.php:847
 msgid "Areas of Expertise"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:838
+#: includes/admin/dummy-data/freelancer.php:834
 msgid "Areas of Expertise."
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:843
+#: includes/admin/dummy-data/freelancer.php:839
 msgid "Select your areas of expertise"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:858
-#: includes/admin/dummy-data/freelancer.php:860
-#: includes/admin/dummy-data/freelancer.php:868
+#: includes/admin/dummy-data/freelancer.php:854
+#: includes/admin/dummy-data/freelancer.php:856
+#: includes/admin/dummy-data/freelancer.php:864
 msgid "Portfolio link 1"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:859
-#: includes/admin/dummy-data/freelancer.php:876
-#: includes/admin/dummy-data/freelancer.php:893
-#: includes/admin/dummy-data/freelancer.php:909
-#: includes/admin/dummy-data/freelancer.php:925
-#: includes/admin/dummy-data/freelancer.php:941
-#: includes/admin/dummy-data/freelancer.php:957
-#: includes/admin/dummy-data/freelancer.php:973
+#: includes/admin/dummy-data/freelancer.php:855
+#: includes/admin/dummy-data/freelancer.php:872
+#: includes/admin/dummy-data/freelancer.php:889
+#: includes/admin/dummy-data/freelancer.php:905
+#: includes/admin/dummy-data/freelancer.php:921
+#: includes/admin/dummy-data/freelancer.php:937
+#: includes/admin/dummy-data/freelancer.php:953
+#: includes/admin/dummy-data/freelancer.php:969
 msgid "Please add a link to a website you have created."
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:875
-#: includes/admin/dummy-data/freelancer.php:877
-#: includes/admin/dummy-data/freelancer.php:885
+#: includes/admin/dummy-data/freelancer.php:871
+#: includes/admin/dummy-data/freelancer.php:873
+#: includes/admin/dummy-data/freelancer.php:881
 msgid "Portfolio link 2"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:892
-#: includes/admin/dummy-data/freelancer.php:894
-#: includes/admin/dummy-data/freelancer.php:902
+#: includes/admin/dummy-data/freelancer.php:888
+#: includes/admin/dummy-data/freelancer.php:890
+#: includes/admin/dummy-data/freelancer.php:898
 msgid "Portfolio link 3"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:908
-#: includes/admin/dummy-data/freelancer.php:910
-#: includes/admin/dummy-data/freelancer.php:918
+#: includes/admin/dummy-data/freelancer.php:904
+#: includes/admin/dummy-data/freelancer.php:906
+#: includes/admin/dummy-data/freelancer.php:914
 msgid "Portfolio link 4"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:924
-#: includes/admin/dummy-data/freelancer.php:926
-#: includes/admin/dummy-data/freelancer.php:934
+#: includes/admin/dummy-data/freelancer.php:920
+#: includes/admin/dummy-data/freelancer.php:922
+#: includes/admin/dummy-data/freelancer.php:930
 msgid "Portfolio link 5"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:940
-#: includes/admin/dummy-data/freelancer.php:942
-#: includes/admin/dummy-data/freelancer.php:950
+#: includes/admin/dummy-data/freelancer.php:936
+#: includes/admin/dummy-data/freelancer.php:938
+#: includes/admin/dummy-data/freelancer.php:946
 msgid "Portfolio link 6"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:956
-#: includes/admin/dummy-data/freelancer.php:958
-#: includes/admin/dummy-data/freelancer.php:966
+#: includes/admin/dummy-data/freelancer.php:952
+#: includes/admin/dummy-data/freelancer.php:954
+#: includes/admin/dummy-data/freelancer.php:962
 msgid "Portfolio link 7"
 msgstr ""
 
-#: includes/admin/dummy-data/freelancer.php:972
-#: includes/admin/dummy-data/freelancer.php:974
-#: includes/admin/dummy-data/freelancer.php:982
+#: includes/admin/dummy-data/freelancer.php:968
+#: includes/admin/dummy-data/freelancer.php:970
+#: includes/admin/dummy-data/freelancer.php:978
 msgid "Portfolio link 8"
 msgstr ""
 
@@ -4476,7 +4476,7 @@ msgstr ""
 msgid "Select the property features."
 msgstr ""
 
-#: includes/admin/dummy-data/standard_places.php:74
+#: includes/admin/dummy-data/standard_places.php:72
 msgid "Select your business opening/operating hours."
 msgstr ""
 
