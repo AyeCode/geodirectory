@@ -624,7 +624,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 */
 	public static function get_dummy_images(){
 		$images = array();
-		$dummy_image_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/plugin/';
+		$dummy_image_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/plugin/';
 		$dummy_images = array(
 			'burger.jpg',
 			'food-salad.jpg',
