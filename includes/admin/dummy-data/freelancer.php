@@ -6,12 +6,8 @@
  * @package GeoDirectory
  */
 
-// Set the dummy image url
-//$dummy_image_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/'; // CDN URL will be faster
-
-$dummy_image_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/freelancers/images';
-$dummy_caticon_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/freelancers/icons';
-
+$dummy_image_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/freelancers/images';
+$dummy_caticon_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/freelancers/icons';
 
 // Set the dummy categories
 $dummy_categories  = array();

@@ -7,7 +7,7 @@
  */
 
 // Set the dummy image url
-$dummy_image_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/'; // CDN URL will be faster
+$dummy_image_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/'; // CDN URL will be faster
 
 // Set the dummy categories
 $dummy_categories  = array();
@@ -117,11 +117,11 @@ $dummy_posts[] = array(
 
 	Suspendisse interdum accumsan magna et tempor. Suspendisse scelerisque at lorem sit amet faucibus. Aenean quis consectetur enim. Duis aliquet tristique tempus. Suspendisse id ullamcorper mauris. Aliquam in libero eu justo porttitor pulvinar. Nulla semper placerat lectus. Nulla mollis suscipit lacus, a blandit purus cursus non. Maecenas id tellus mi. Pellentesque sollicitudin nibh eget magna scelerisque consequat. Aliquam convallis orci arcu, et euismod dui cursus et. Donec nec pellentesque nulla, ac pretium massa. In gravida bibendum ornare.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf1.jpg",
-		"$dummy_image_url/ps/psl1.jpg",
-		"$dummy_image_url/ps/psb1.jpg",
-		"$dummy_image_url/ps/psk.jpg",
-		"$dummy_image_url/ps/psbr.jpg"
+		$dummy_image_url . "ps/psf1.jpg",
+		$dummy_image_url . "ps/psl1.jpg",
+		$dummy_image_url . "ps/psb1.jpg",
+		$dummy_image_url . "ps/psk.jpg",
+		$dummy_image_url . "ps/psbr.jpg"
 	),
 	"post_category" => array( 'Houses' ),
 	"post_tags" => array( 'Property', 'Real Estate' ),
@@ -156,11 +156,11 @@ $dummy_posts[] = array(
 
 	Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ullamcorper. Nunc facilisis elit eget lorem bibendum, eu fermentum neque ultrices. Etiam vestibulum gravida sollicitudin. Nullam velit quam, luctus vel suscipit id, ullamcorper sit amet ipsum. Donec a elit ac lorem porttitor gravida. Sed non dui sed lacus vulputate varius. Nullam in tincidunt odio, ac pharetra mauris. Integer ac volutpat quam. Mauris fermentum facilisis porttitor. Nunc ornare vel erat volutpat consectetur. Phasellus ut lacinia ante. Vestibulum massa orci, tincidunt sit amet urna in, maximus mollis ligula.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf2.jpg",
-		"$dummy_image_url/ps/psl2.jpg",
-		"$dummy_image_url/ps/psb2.jpg",
-		"$dummy_image_url/ps/psk.jpg",
-		"$dummy_image_url/ps/psbr.jpg"
+		$dummy_image_url . "ps/psf2.jpg",
+		$dummy_image_url . "ps/psl2.jpg",
+		$dummy_image_url . "ps/psb2.jpg",
+		$dummy_image_url . "ps/psk.jpg",
+		$dummy_image_url . "ps/psbr.jpg"
 	),
 	"post_category" => array( 'Houses' ),
 	"post_tags" => array( 'Garage' ),
@@ -195,11 +195,11 @@ $dummy_posts[] = array(
 
 	Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ullamcorper. Nunc facilisis elit eget lorem bibendum, eu fermentum neque ultrices. Etiam vestibulum gravida sollicitudin. Nullam velit quam, luctus vel suscipit id, ullamcorper sit amet ipsum. Donec a elit ac lorem porttitor gravida. Sed non dui sed lacus vulputate varius. Nullam in tincidunt odio, ac pharetra mauris. Integer ac volutpat quam. Mauris fermentum facilisis porttitor. Nunc ornare vel erat volutpat consectetur. Phasellus ut lacinia ante. Vestibulum massa orci, tincidunt sit amet urna in, maximus mollis ligula.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf3.jpg",
-		"$dummy_image_url/ps/psl3.jpg",
-		"$dummy_image_url/ps/psb3.jpg",
-		"$dummy_image_url/ps/psk.jpg",
-		"$dummy_image_url/ps/psbr.jpg"
+		$dummy_image_url . "ps/psf3.jpg",
+		$dummy_image_url . "ps/psl3.jpg",
+		$dummy_image_url . "ps/psb3.jpg",
+		$dummy_image_url . "ps/psk.jpg",
+		$dummy_image_url . "ps/psbr.jpg"
 	),
 	"post_category" => array( 'Houses' ),
 	"post_tags" => array( 'House', 'Property' ),
@@ -234,11 +234,11 @@ $dummy_posts[] = array(
 
 	Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ullamcorper. Nunc facilisis elit eget lorem bibendum, eu fermentum neque ultrices. Etiam vestibulum gravida sollicitudin. Nullam velit quam, luctus vel suscipit id, ullamcorper sit amet ipsum. Donec a elit ac lorem porttitor gravida. Sed non dui sed lacus vulputate varius. Nullam in tincidunt odio, ac pharetra mauris. Integer ac volutpat quam. Mauris fermentum facilisis porttitor. Nunc ornare vel erat volutpat consectetur. Phasellus ut lacinia ante. Vestibulum massa orci, tincidunt sit amet urna in, maximus mollis ligula.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf4.jpg",
-		"$dummy_image_url/ps/psl4.jpg",
-		"$dummy_image_url/ps/psb4.jpg",
-		"$dummy_image_url/ps/psk.jpg",
-		"$dummy_image_url/ps/psbr.jpg"
+		$dummy_image_url . "ps/psf4.jpg",
+		$dummy_image_url . "ps/psl4.jpg",
+		$dummy_image_url . "ps/psb4.jpg",
+		$dummy_image_url . "ps/psk.jpg",
+		$dummy_image_url . "ps/psbr.jpg"
 	),
 	"post_category" => array( 'Houses' ),
 	"post_tags" => array( 'House', 'Real Estate' ),
@@ -273,11 +273,11 @@ $dummy_posts[] = array(
 
 	Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ullamcorper. Nunc facilisis elit eget lorem bibendum, eu fermentum neque ultrices. Etiam vestibulum gravida sollicitudin. Nullam velit quam, luctus vel suscipit id, ullamcorper sit amet ipsum. Donec a elit ac lorem porttitor gravida. Sed non dui sed lacus vulputate varius. Nullam in tincidunt odio, ac pharetra mauris. Integer ac volutpat quam. Mauris fermentum facilisis porttitor. Nunc ornare vel erat volutpat consectetur. Phasellus ut lacinia ante. Vestibulum massa orci, tincidunt sit amet urna in, maximus mollis ligula.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf5.jpg",
-		"$dummy_image_url/ps/psl5.jpg",
-		"$dummy_image_url/ps/psb5.jpg",
-		"$dummy_image_url/ps/psk.jpg",
-		"$dummy_image_url/ps/psbr.jpg"
+		$dummy_image_url . "ps/psf5.jpg",
+		$dummy_image_url . "ps/psl5.jpg",
+		$dummy_image_url . "ps/psb5.jpg",
+		$dummy_image_url . "ps/psk.jpg",
+		$dummy_image_url . "ps/psbr.jpg"
 	),
 	"post_category" => array( 'Houses' ),
 	"post_tags" => array( 'House', 'Logde' ),
@@ -312,11 +312,11 @@ $dummy_posts[] = array(
 
 	Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ullamcorper. Nunc facilisis elit eget lorem bibendum, eu fermentum neque ultrices. Etiam vestibulum gravida sollicitudin. Nullam velit quam, luctus vel suscipit id, ullamcorper sit amet ipsum. Donec a elit ac lorem porttitor gravida. Sed non dui sed lacus vulputate varius. Nullam in tincidunt odio, ac pharetra mauris. Integer ac volutpat quam. Mauris fermentum facilisis porttitor. Nunc ornare vel erat volutpat consectetur. Phasellus ut lacinia ante. Vestibulum massa orci, tincidunt sit amet urna in, maximus mollis ligula.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf6.jpg",
-		"$dummy_image_url/ps/psl6.jpg",
-		"$dummy_image_url/ps/psb6.jpg",
-		"$dummy_image_url/ps/psk.jpg",
-		"$dummy_image_url/ps/psbr.jpg"
+		$dummy_image_url . "ps/psf6.jpg",
+		$dummy_image_url . "ps/psl6.jpg",
+		$dummy_image_url . "ps/psb6.jpg",
+		$dummy_image_url . "ps/psk.jpg",
+		$dummy_image_url . "ps/psbr.jpg"
 	),
 	"post_category" => array( 'Houses' ),
 	"post_tags" => array( 'Park' ),
@@ -351,11 +351,11 @@ $dummy_posts[] = array(
 
 	Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ullamcorper. Nunc facilisis elit eget lorem bibendum, eu fermentum neque ultrices. Etiam vestibulum gravida sollicitudin. Nullam velit quam, luctus vel suscipit id, ullamcorper sit amet ipsum. Donec a elit ac lorem porttitor gravida. Sed non dui sed lacus vulputate varius. Nullam in tincidunt odio, ac pharetra mauris. Integer ac volutpat quam. Mauris fermentum facilisis porttitor. Nunc ornare vel erat volutpat consectetur. Phasellus ut lacinia ante. Vestibulum massa orci, tincidunt sit amet urna in, maximus mollis ligula.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf7.jpg",
-		"$dummy_image_url/ps/psl4.jpg",
-		"$dummy_image_url/ps/psb4.jpg",
-		"$dummy_image_url/ps/psk.jpg",
-		"$dummy_image_url/ps/psbr.jpg"
+		$dummy_image_url . "ps/psf7.jpg",
+		$dummy_image_url . "ps/psl4.jpg",
+		$dummy_image_url . "ps/psb4.jpg",
+		$dummy_image_url . "ps/psk.jpg",
+		$dummy_image_url . "ps/psbr.jpg"
 	),
 	"post_category" => array( 'Apartments' ),
 	"post_tags" => array( 'Property', 'Suites' ),
@@ -390,11 +390,11 @@ $dummy_posts[] = array(
 
 	Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ullamcorper. Nunc facilisis elit eget lorem bibendum, eu fermentum neque ultrices. Etiam vestibulum gravida sollicitudin. Nullam velit quam, luctus vel suscipit id, ullamcorper sit amet ipsum. Donec a elit ac lorem porttitor gravida. Sed non dui sed lacus vulputate varius. Nullam in tincidunt odio, ac pharetra mauris. Integer ac volutpat quam. Mauris fermentum facilisis porttitor. Nunc ornare vel erat volutpat consectetur. Phasellus ut lacinia ante. Vestibulum massa orci, tincidunt sit amet urna in, maximus mollis ligula.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf8.jpg",
-		"$dummy_image_url/ps/psl2.jpg",
-		"$dummy_image_url/ps/psb3.jpg",
-		"$dummy_image_url/ps/psk.jpg",
-		"$dummy_image_url/ps/psbr.jpg"
+		$dummy_image_url . "ps/psf8.jpg",
+		$dummy_image_url . "ps/psl2.jpg",
+		$dummy_image_url . "ps/psb3.jpg",
+		$dummy_image_url . "ps/psk.jpg",
+		$dummy_image_url . "ps/psbr.jpg"
 	),
 	"post_category" => array( 'Apartments' ),
 	"post_tags" => array( 'Property', 'Real Estate' ),
@@ -429,11 +429,11 @@ $dummy_posts[] = array(
 
 	Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ullamcorper. Nunc facilisis elit eget lorem bibendum, eu fermentum neque ultrices. Etiam vestibulum gravida sollicitudin. Nullam velit quam, luctus vel suscipit id, ullamcorper sit amet ipsum. Donec a elit ac lorem porttitor gravida. Sed non dui sed lacus vulputate varius. Nullam in tincidunt odio, ac pharetra mauris. Integer ac volutpat quam. Mauris fermentum facilisis porttitor. Nunc ornare vel erat volutpat consectetur. Phasellus ut lacinia ante. Vestibulum massa orci, tincidunt sit amet urna in, maximus mollis ligula.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf9.jpg",
-		"$dummy_image_url/ps/psl2.jpg",
-		"$dummy_image_url/ps/psb5.jpg",
-		"$dummy_image_url/ps/psk.jpg",
-		"$dummy_image_url/ps/psbr.jpg"
+		$dummy_image_url . "ps/psf9.jpg",
+		$dummy_image_url . "ps/psl2.jpg",
+		$dummy_image_url . "ps/psb5.jpg",
+		$dummy_image_url . "ps/psk.jpg",
+		$dummy_image_url . "ps/psbr.jpg"
 	),
 	"post_category" => array( 'Commercial' ),
 	"post_tags" => array( 'Five Star' ),
@@ -468,8 +468,8 @@ $dummy_posts[] = array(
 
 	Mauris ac elit vitae massa dignissim posuere. Sed blandit nibh ut elementum ullamcorper. Nunc facilisis elit eget lorem bibendum, eu fermentum neque ultrices. Etiam vestibulum gravida sollicitudin. Nullam velit quam, luctus vel suscipit id, ullamcorper sit amet ipsum. Donec a elit ac lorem porttitor gravida. Sed non dui sed lacus vulputate varius. Nullam in tincidunt odio, ac pharetra mauris. Integer ac volutpat quam. Mauris fermentum facilisis porttitor. Nunc ornare vel erat volutpat consectetur. Phasellus ut lacinia ante. Vestibulum massa orci, tincidunt sit amet urna in, maximus mollis ligula.',
 	"post_images"   => array(
-		"$dummy_image_url/ps/psf10.jpg",
-		"$dummy_image_url/ps/psf102.jpg"
+		$dummy_image_url . "ps/psf10.jpg",
+		$dummy_image_url . "ps/psf102.jpg"
 	),
 	"post_category" => array( 'Land' ),
 	"post_tags" => array( 'Real Estate' ),
