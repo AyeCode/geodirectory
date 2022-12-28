@@ -243,7 +243,7 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 		$css_class = 'geodir-cpt-meta geodir-meta-' . $key;
 
 		if ( $instance['css_class'] != '' ) {
-			$css_class .= " " . esc_attr( $instance['css_class'] );
+			$css_class .= " " . geodir_sanitize_html_class( $instance['css_class'] );
 		}
 
 		if ( $instance['text_alignment'] != '' ) {

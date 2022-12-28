@@ -239,7 +239,7 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 		$container_class .= " ".$wrap_class;
 
 		if ( $instance['container_class'] != '' ) {
-			$container_class .= ' ' . esc_attr( $instance['container_class'] );
+			$container_class .= ' ' . geodir_sanitize_html_class( $instance['container_class'] );
 		}
 
 		if ( $instance['text_alignment'] != '' ) {
@@ -261,11 +261,11 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 		$title_class = 'geodir-page-title';
 
 		if ( $instance['css_class'] != '' ) {
-			$title_class .= ' ' . esc_attr( $instance['css_class'] );
+			$title_class .= ' ' . geodir_sanitize_html_class( $instance['css_class'] );
 		}
 
 		if ( $instance['font_size_class'] != '' ) {
-			$title_class .= ' ' . esc_attr( $instance['font_size_class'] );
+			$title_class .= ' ' . geodir_sanitize_html_class( $instance['font_size_class'] );
 		}
 
 		$title = GeoDir_SEO::set_meta();
