@@ -279,7 +279,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 					// apply standard css
 					if ( ! empty( $args['css_class'] ) ) {
-						$field['css_class'] .=" ".$args['css_class']." ";
+						$field['css_class'] .= " " . esc_attr( $args['css_class'] ) . " ";
 					}
 
 					// set text alignment class
