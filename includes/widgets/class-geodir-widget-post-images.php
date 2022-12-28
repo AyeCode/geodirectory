@@ -537,7 +537,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$main_wrapper_class_x = 'card-img-top embed-responsive-item';
 
 			$args = array(
-				'main_wrapper_class'   => " ".$main_wrapper_class." ".esc_attr($options['css_class']),
+				'main_wrapper_class'   => " ".$main_wrapper_class." " . geodir_sanitize_html_class( $options['css_class'] ),
 				'type'  => $options['type'],
 				'slider_id'    =>  $slider_id,
 				'second_wrapper_class' =>  $second_wrapper_class,

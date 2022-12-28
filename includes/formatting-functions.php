@@ -714,3 +714,27 @@ function geodir_sanitize_float( $number ) {
 
 	return $number;
 }
+
+/**
+ * Emulate the WP native sanitize_html_class to sanitize css class.
+ *
+ * @since 2.2.22
+ *
+ * @param string $value String value to sanitize.
+ *
+ * @return string
+ */
+function geodir_sanitize_html_class( $string ) {
+	if ( empty( $string ) ) {
+		return $string;
+	}
+
+	if ( ! is_array( $string ) ) {
+		$string = explode( ' ', $string );
+	}
+
+	$string = array_filter( array_map( 'sanitize_html_class', $string ) );
+	$string = trim( implode( ' ', $string ) );
+
+	return $string;
+}
