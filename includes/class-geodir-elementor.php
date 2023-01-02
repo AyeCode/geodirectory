@@ -23,6 +23,7 @@ class GeoDir_Elementor {
 	public static function init() {
 		// add any extra scripts
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ), 11 );
+		add_filter( 'geodir_bypass_setup_archive_page_content', array( __CLASS__, 'bypass_setup_archive_page_content' ), 10, 2 );
 		add_filter( 'geodir_overwrite_archive_template_content', array( __CLASS__, 'overwrite_archive_template_content' ), 10, 3 );
 		add_filter( 'geodir_overwrite_single_template_content', array( __CLASS__, 'overwrite_single_template_content' ), 10, 3 );
 		add_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'archive_item_template_content' ), 10, 3 );
@@ -1154,6 +1155,27 @@ class GeoDir_Elementor {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * Bypass archive page template setup for the elementor builder page.
+	 *
+	 * @since 2.2.23
+	 *
+	 * @param bool|string $bypass True to basspass content.
+	 * @param string      $content Archive page template content.
+	 * @return bool|string Bypass archive content.
+	 */
+	public static function bypass_setup_archive_page_content( $bypass, $content ) {
+		if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) && geodir_is_page( 'search' ) ) {
+			$page_id = geodir_search_page_id();
+
+			if ( $page_id && self::is_elementor( $page_id ) ) {
+				$bypass = false;
+			}
+		}
+
+		return $bypass;
 	}
 
 	/**

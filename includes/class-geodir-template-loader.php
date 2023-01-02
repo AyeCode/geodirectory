@@ -334,7 +334,21 @@ class GeoDir_Template_Loader {
 			if ( current_filter() == 'the_excerpt' && $gd_done_archive_loop ) {
 				// We might be inside a "the_excerpt" filter which might be outside the loop so we don't return.
 			} else {
-				return;
+				/**
+				 * Bypass setup archive page content.
+				 *
+				 * @since 2.2.23
+				 *
+				 * @param bool|string $bypass_content True to basspass content.
+				 * @param string      $content Loop content.
+				 */
+				$bypass_content = apply_filters( 'geodir_bypass_setup_archive_page_content', true, $content );
+
+				if ( $bypass_content === true ) {
+					return;
+				} else if ( $bypass_content !== false ) {
+					return $content;
+				}
 			}
 		}
 
