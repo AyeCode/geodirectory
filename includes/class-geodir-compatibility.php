@@ -1169,16 +1169,22 @@ class GeoDir_Compatibility {
 	 * @return array Post classes.
 	 */
 	public static function astra_pro_post_class( $classes, $class, $post_id = 0 ) {
+		global $wp_query;
+
 		$post_type = $post_id ? get_post_type( (int) $post_id ) : '';
 
 		if ( $post_type && ( geodir_is_gd_post_type( $post_type ) || ( $post_type == 'page' && ( geodir_is_page( 'search' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) ) ) ) {
+			if ( ! empty( $wp_query ) && $wp_query->is_main_query() && is_search() && ! geodir_is_page( 'search' ) ) {
+				return $classes;
+			}
+
 			$_classes = $classes;
 			$classes = array();
 
 			foreach ( $_classes as $_class ) {
 				if ( $_class == 'ast-article-single' && is_singular( $post_type ) ) {
 					$classes[] = $_class;
-				} else if ( strpos( $_class, "ast-" ) !== 0 ) {
+				} else if ( strpos( $_class, "ast-" ) !== 0 && ! in_array( $_class, array( 'remove-featured-img-padding', 'masonry-brick' ) ) ) {
 					$classes[] = $_class;
 				}
 			}
