@@ -1186,6 +1186,8 @@ class GeoDir_Compatibility {
 					$classes[] = $_class;
 				} else if ( strpos( $_class, "ast-" ) !== 0 && ! in_array( $_class, array( 'remove-featured-img-padding', 'masonry-brick' ) ) ) {
 					$classes[] = $_class;
+				} else if ( $post_type == 'page' && strpos( $_class, 'ast-full-width' ) !== false ) {
+					$classes[] = 'ast-full-width';
 				}
 			}
 		}
