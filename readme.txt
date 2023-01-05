@@ -290,6 +290,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Prevent auto save when images are being uploading - FIXED
 * Search page shows wrong content on free elementor plugin - FIXED
 * GD listings layout broken in Astra WP search results - FIXED
+* Open reviews tab on post rating click on single page - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.22 - 2022-12-29 =
 * Post meta widget CSS class sanitation - FIXED

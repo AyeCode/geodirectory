@@ -211,6 +211,26 @@ class GeoDir_Compatibility {
 		// Astra Pro
 		if ( defined( 'ASTRA_EXT_VER' ) ) {
 			add_filter( 'post_class', array( __CLASS__, 'astra_pro_post_class' ), 99, 3 );
+
+			$astra_meta = array(
+				'adv-header-id-meta',
+				'ast-above-header-display',
+				'ast-below-header-display',
+				'ast-hfb-above-header-display',
+				'ast-hfb-below-header-display',
+				'footer-adv-display',
+				'header-above-stick-meta',
+				'header-below-stick-meta',
+				'header-main-stick-meta',
+				'stick-header-meta',
+				'sticky-header-on-devices',
+				'sticky-header-style',
+				'sticky-hide-on-scroll'
+			);
+
+			foreach ( $astra_meta as $meta_key ) {
+				add_filter( 'astra_get_option_meta_' . $meta_key, array( __CLASS__, 'astra_get_option_meta' ), 20, 2 );
+			}
 		}
 	}
 
@@ -1193,6 +1213,31 @@ class GeoDir_Compatibility {
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Get the astra meta for GD search & archive pages.
+	 *
+	 * @since 2.2.23
+	 *
+	 * @param array|string $value   Meta value.
+	 * @param array|string $default Default value.
+	 * @return array|string Filtered meta value.
+	 */
+	public static function astra_get_option_meta( $value, $default ) {
+		if ( ( $page_id = (int) self::gd_page_id() ) && ! geodir_is_page( 'single' ) && ( $current_filter = current_filter() ) ) {
+			$meta_key = strpos( $current_filter, 'astra_get_option_meta_' ) === 0 ? str_replace( 'astra_get_option_meta_', '', $current_filter ) : '';
+
+			if ( $meta_key ) {
+				$value = get_post_meta( $page_id, $meta_key, true );
+
+				if ( empty( $value ) || 'default' == $value ) {
+					$value = astra_get_option( $meta_key, $default );
+				}
+			}
+		}
+
+		return $value;
 	}
 
 	/**

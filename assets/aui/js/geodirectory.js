@@ -77,6 +77,19 @@ jQuery(document).ready(function($) {
             }, 200);
         }
     }
+    /* Open reviews tab on post rating click on single page */
+    $('.geodir-page-single').find('.geodir-trigger-reviews,.gd-list-rating-link').on('click', function(e) {
+        if ($('#gd-tabs #reviews').length) {
+            if (!$('#gd-tabs #reviews').is(':visible')) {
+                $('#gd-single-tabs [href="#reviews"]').trigger('click');
+            }
+            setTimeout(function() {
+                $('html,body').animate({
+                    scrollTop: $('#gd-tabs #reviews').offset().top
+                }, 'slow');
+            }, 200);
+        }
+    });
 });
 
 /**
