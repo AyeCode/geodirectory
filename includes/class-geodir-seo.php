@@ -68,6 +68,14 @@ class GeoDir_SEO {
 			add_filter( 'the_seo_framework_sitemap_hpt_query_args', array( __CLASS__ , 'the_seo_framework_sitemap_exclude_posts' ), 20, 1 );
 			add_filter( 'the_seo_framework_sitemap_nhpt_query_args', array( __CLASS__ , 'the_seo_framework_sitemap_exclude_posts' ), 20, 1 );
 		}
+
+		// SEOPress
+		add_filter( 'seopress_titles_title', array( __CLASS__ , 'replace_variables' ), 100, 1 );
+		add_filter( 'seopress_social_og_title', array( __CLASS__ , 'replace_variables' ), 100, 1 );
+		add_filter( 'seopress_social_og_desc', array( __CLASS__ , 'replace_variables' ), 100, 1 );
+		add_filter( 'seopress_social_twitter_card_title', array( __CLASS__ , 'replace_variables' ), 100, 1 );
+		add_filter( 'seopress_social_twitter_card_summary', array( __CLASS__ , 'replace_variables' ), 100, 1 );
+		add_filter( 'seopress_social_twitter_card_desc', array( __CLASS__ , 'replace_variables' ), 100, 1 );
 	}
 
 	/**
@@ -104,6 +112,22 @@ class GeoDir_SEO {
 		global $geodir_options;
 
 		return function_exists( 'seopress_activation' ) && ( ! isset( $geodir_options['seopress_disable'] ) || ( isset( $geodir_options['seopress_disable'] ) && $geodir_options['seopress_disable'] == '0' ) ) ? true : false;
+	}
+
+	/**
+	 * Replace GD SEO title & metas variables with values.
+	 *
+	 * @since 2.2.23
+	 *
+	 * @param string $string String to replace variables.
+	 * @return string $string String after GD SEO variables replaced.
+	 */
+	public static function replace_variables( $string ) {
+		if ( ! empty( $string ) && is_scalar( $string ) && strpos( $string, '%%' ) !== false && geodir_is_geodir_page() ) {
+			$string = self::replace_variable( $string, self::$gd_page );
+		}
+
+		return $string;
 	}
 
 	public static function maybe_run() {
