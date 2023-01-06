@@ -827,6 +827,7 @@ function geodir_resize_rating_stars(re) {
 function geodir_load_search_form(stype, el) {
     var $container = jQuery(el).closest('.geodir-search-container');
     var $adv_show = $container.attr('data-show-adv');
+	var $form = jQuery(el).closest('form');
     var data = {
         action: 'geodir_search_form',
         stype: stype,
@@ -836,8 +837,34 @@ function geodir_load_search_form(stype, el) {
         data.keepArgs = jQuery('.geodir-keep-args', $container).text();
     }
 
-    if (jQuery(el).closest('form').data('show') == 'main' && jQuery('form.geodir-search-show-advanced').length) {
+    if ($form.data('show') == 'main' && jQuery('form.geodir-search-show-advanced').length) {
         data.advanced = true;
+    }
+
+    /* Keep location when CPT changed */
+    if (jQuery('input[name="snear"]', $form).length && jQuery('input[name="snear"]', $form).is(':visible')) {
+        var lname = jQuery('input.geodir-location-search-type', $form).prop('name'),
+            lval = jQuery('input.geodir-location-search-type', $form).val(),
+            _gdSLoc = {};
+        if (lval && (lname == 'country' || lname == 'region' || lname == 'city' || lname == 'neighbourhood')) {
+            _gdSLoc[lname] = lval;
+        } else {
+            if (jQuery('input.sgeo_lat', $form).val() && jQuery('input.sgeo_lon', $form).val()) {
+                data['sgeo_lat'] = jQuery('input.sgeo_lat', $form).val();
+                data['sgeo_lon'] = jQuery('input.sgeo_lon', $form).val();
+                _gdSLoc['sgeo_lat'] = data['sgeo_lat'];
+                _gdSLoc['sgeo_lon'] = data['sgeo_lon'];
+            }
+            if (lname == 'near' && lval == 'me') {
+                _gdSLoc[lname] = lval;
+            } else {
+                _gdSLoc = {};
+                data['snear'] = jQuery('input[name="snear"]', $form).val();
+            }
+        }
+        if (_gdSLoc && Object.keys(_gdSLoc).length) {
+            data['_gd_keep_loc'] = _gdSLoc;
+        }
     }
 
     jQuery.ajax({
