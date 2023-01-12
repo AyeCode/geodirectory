@@ -157,8 +157,7 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 	 *
 	 * @return mixed|string|void
 	 */
-	public function output($args = array(), $widget_args = array(),$content = ''){
-
+	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		/**
 		 * @var int    $ID Optional. The current post ID if empty.
 		 * @var string $key The meta key : email
@@ -168,102 +167,124 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 		 */
 		extract($args, EXTR_SKIP);
 
-		global $post,$gd_post;
+		global $post, $gd_post;
 
-		$original_id = isset($args['id']) ? $args['id'] : '';
-		$args['location'] = !empty($args['location']) ? $args['location'] : 'none';
-		$output = '';
+		$args['location'] = ! empty( $args['location'] ) ? $args['location'] : 'none';
+
 		$args = shortcode_atts( array(
-			'id'    => isset($gd_post->ID) ? $gd_post->ID : 0,
-			'key'   => 'address',
-			'show'    => 'icon-label-value', // title,value (default blank, all)
-			'alignment'    => '', // left,right,center
-			'text_alignment'    => '', // left,right,center
-			'list_hide'    => '',
-			'list_hide_secondary'    => '',
+			'id' => ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0,
+			'key' => 'address',
+			'show' => 'icon-label-value', // title,value (default blank, all)
+			'alignment' => '', // left,right,center
+			'text_alignment' => '', // left,right,center
+			'list_hide' => '',
+			'list_hide_secondary' => '',
 			'address_template' => '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%',
 			'map_link' => '',
-			'location'  => 'none',
-		), $args, 'gd_post_meta' );
-		if(empty($args['id'])){
-			$args['id'] =  isset($gd_post->ID) ? $gd_post->ID : 0;
+			'location' => 'none',
+		), $args, 'gd_post_address' );
+
+		if ( empty( $args['id'] ) ) {
+			$args['id'] = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
+
+			if ( ! empty( $args['id'] ) && (int) wp_is_post_revision( $args['id'] ) ) {
+				$args['id'] = (int) wp_get_post_parent_id( $args['id'] );
+			}
+		}
+
+		// Maybe no wrap.
+		if ( $args['show'] == 'value-strip' ) {
+			$args['no_wrap'] = true;
 		}
 
 		$design_style = geodir_design_style();
 		$block_preview = $this->is_block_content_call();
 
-		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
-		if($block_preview){$post_type = 'gd_place';}
-
-		// error checks
-		$errors = array();
-		if(!$block_preview){
-			if(empty($args['key'])){$errors[] = __('key is missing','geodirectory');}
-			if(empty($args['id'])){$errors[] = __('id is missing','geodirectory');}
-			if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
+		if ( empty( $gd_post->ID ) && $block_preview && ! empty( $args['key'] ) ) {
+			$args['id'] = geodir_get_post_id_with_content( $args['key'] );
 		}
 
+		$post_type = ! empty( $args['id'] ) ? get_post_type( $args['id'] ) : ( ! empty( $post->post_type ) ? $post->post_type : '' );
 
+		// Error checks
+		$errors = array();
+
+		if ( empty( $args['key'] ) ) {
+			$errors[] = __( 'key is missing', 'geodirectory' );
+		}
+
+		if ( empty( $post_type ) ) {
+			$errors[] = __( 'invalid post type', 'geodirectory' );
+		}
+
+		$output = '';
 		if ( ! empty( $errors ) ) {
 			$output .= implode( ", ", $errors );
+		}
+
+		// Check if its demo content
+		if ( $post_type == 'page' && ! empty( $args['id'] ) && geodir_is_block_demo() ) {
+			$post_type = 'gd_place';
 		}
 
 		if ( class_exists( 'FLBuilder' ) && isset( $_REQUEST['fl_builder'] ) ) {
 			$output = ''; // Show placehoder on beaver builder preview.
 		}
 
-		// check if its demo content
-		if($post_type == 'page' && !empty($args['id']) && geodir_is_block_demo()){
-			$post_type = 'gd_place';
-		}
+		if ( geodir_is_gd_post_type( $post_type ) ) {
+			$args['id'] = apply_filters( 'geodir_widget_post_meta_set_id', $args['id'], $args );
 
-		if(geodir_is_gd_post_type($post_type)){
+			$package_id = $this->is_preview() ? 0 : geodir_get_post_package_id( $args['id'], $post_type );
+			$fields = geodir_post_custom_fields( $package_id,  'all', $post_type , 'none' );
 
-			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
-			$fields = geodir_post_custom_fields($package_id ,  'all', $post_type);
-
-			if(!empty($fields)){
+			if ( ! empty( $fields ) ) {
 				$field = array();
-				foreach($fields as $field_info){
-					if($args['key']==$field_info['htmlvar_name']){
+				foreach ( $fields as $field_info ) {
+					if ( $args['key'] == $field_info['htmlvar_name'] ) {
 						$field = $field_info;
 					}
 				}
-				if(!empty($field)){ // the field is allowed to be shown
+
+				if ( ! empty( $field ) ) {
 					$field = stripslashes_deep( $field );
 
-					// set text alignment class
+					// Apply CSS css
+					if ( ! empty( $args['css_class'] ) ) {
+						$field['css_class'] .= " " . geodir_sanitize_html_class( $args['css_class'] ) . " ";
+					}
+
+					// Set text alignment class
 					if ( $args['text_alignment'] != '' ) {
 						$field['css_class'] .= $design_style ? " text-".sanitize_html_class( $args['text_alignment'] ) : " geodir-text-align" . sanitize_html_class( $args['text_alignment'] );
 					}
 
-					// set alignment class
+					// Set alignment class
 					if ( $args['alignment'] != '' ) {
-						if($design_style){
-							if($args['alignment']=='block'){$field['css_class'] .= " d-block ";}
-							elseif($args['alignment']=='left'){$field['css_class'] .= " float-left mr-2 ";}
-							elseif($args['alignment']=='right'){$field['css_class'] .= " float-right ml-2 ";}
-							elseif($args['alignment']=='center'){$field['css_class'] .= " mw-100 d-block mx-auto ";}
-						}else{
-							$field['css_class'] .= $args['alignment']=='block' ? " gd-d-block gd-clear-both " : " geodir-align" . sanitize_html_class( $args['alignment'] );
+						if ( $design_style ) {
+							if ( $args['alignment'] == 'block' ) { $field['css_class'] .= " d-block "; }
+							else if ( $args['alignment'] == 'left' ) { $field['css_class'] .= " float-left mr-2 "; }
+							else if ( $args['alignment'] == 'right' ) { $field['css_class'] .= " float-right ml-2 "; }
+							else if ( $args['alignment'] == 'center' ) { $field['css_class'] .= " mw-100 d-block mx-auto "; }
+							else { $field['css_class'] .= " clear-both "; }
+						} else {
+							$field['css_class'] .= $args['alignment'] == 'block' ? " gd-d-block gd-clear-both " : " geodir-align" . sanitize_html_class( $args['alignment'] );
 						}
 					}
 
-					// set list_hide class
-					if($args['list_hide']=='2'){$field['css_class'] .= $design_style ? " gv-hide-2 " : " gd-lv-2 ";}
-					if($args['list_hide']=='3'){$field['css_class'] .= $design_style ? " gv-hide-3 " : " gd-lv-3 ";}
-					if($args['list_hide']=='4'){$field['css_class'] .= $design_style ? " gv-hide-4 " : " gd-lv-4 ";}
-					if($args['list_hide']=='5'){$field['css_class'] .= $design_style ? " gv-hide-5 " : " gd-lv-5 ";}
+					// Set list_hide class
+					if ( $args['list_hide'] == '2' ) { $field['css_class'] .= $design_style ? " gv-hide-2 " : " gd-lv-2 "; }
+					if ( $args['list_hide'] == '3' ) { $field['css_class'] .= $design_style ? " gv-hide-3 " : " gd-lv-3 "; }
+					if ( $args['list_hide'] == '4' ) { $field['css_class'] .= $design_style ? " gv-hide-4 " : " gd-lv-4 "; }
+					if ( $args['list_hide'] == '5' ) { $field['css_class'] .= $design_style ? " gv-hide-5 " : " gd-lv-5 "; }
 
-					// set list_hide_secondary class
-					if($args['list_hide_secondary']=='2'){$field['css_class'] .= $design_style ? " gv-hide-s-2 " : " gd-lv-s-2 ";}
-					if($args['list_hide_secondary']=='3'){$field['css_class'] .= $design_style ? " gv-hide-s-3 " : " gd-lv-s-3 ";}
-					if($args['list_hide_secondary']=='4'){$field['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
-					if($args['list_hide_secondary']=='5'){$field['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
+					// Set list_hide_secondary class
+					if ( $args['list_hide_secondary'] == '2' ) { $field['css_class'] .= $design_style ? " gv-hide-s-2 " : " gd-lv-s-2 "; }
+					if ( $args['list_hide_secondary'] == '3' ) { $field['css_class'] .= $design_style ? " gv-hide-s-3 " : " gd-lv-s-3 "; }
+					if ( $args['list_hide_secondary'] == '4' ) { $field['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 "; }
+					if ( $args['list_hide_secondary'] == '5' ) { $field['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 "; }
 
-
-					// set to value if empty
-					if(empty($args['show'])){
+					// Set to value if empty
+					if ( empty( $args['show'] ) ) {
 						$args['show'] = 'icon-label-value';
 					}
 
@@ -271,45 +292,25 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 						$args['show'] = str_replace( 'value', 'link', $args['show'] );
 					}
 
+					// Wrapper class
+					$wrap_class = geodir_build_aui_class( $args );
+					$field['css_class'] .= " ".$wrap_class;
 					$field['address_template'] = $args['address_template'];
 
-					// unset the extra fields
-					unset($field['extra_fields']);
+					// Unset the extra fields
+					unset( $field['extra_fields'] );
 
-					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
-
+					$output = apply_filters( "geodir_custom_field_output_{$field['type']}", '', $args['location'], $field, $args['id'], $args['show'] );
 				}
 			}
 
 			if ( ! empty( $output ) && absint( $args['id'] ) ) {
 				$output = geodir_post_address( $output, 'gd_post_address', absint( $args['id'] ) );
 			}
+
+			$args['id'] = apply_filters( 'geodir_widget_post_meta_reset_id', $args['id'], $args );
 		}
 
 		return $output;
-
 	}
-
-	/**
-	 * Gets an array of custom field keys for textareas.
-	 *
-	 * @return array
-	 */
-	public function get_custom_field_keys(){
-		$fields = geodir_post_custom_fields('', 'all', 'all','none');
-		$keys = array();
-		$keys[] = __('Select Key','geodirectory');
-		if(!empty($fields)){
-			foreach($fields as $field){
-				if(isset($field['field_type']) && $field['field_type']=='textarea'){
-					$keys[$field['htmlvar_name']] = $field['htmlvar_name'];
-				}
-			}
-		}
-
-		return $keys;
-
-	}
-
 }
-
