@@ -293,6 +293,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Open reviews tab on post rating click on single page - FIXED
 * Allow to use GD SEO variables in SEOPress title & metas - ADDED
 * GD > Post Address renders content with id missing error - FIXED
+* OSM GeoCode API don't return state name for minato city - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.22 - 2022-12-29 =
 * Post meta widget CSS class sanitation - FIXED

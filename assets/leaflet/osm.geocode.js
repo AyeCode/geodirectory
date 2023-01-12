@@ -411,7 +411,12 @@ function gd_osm_parse_item(item) {
         if (address.country_code) {
             item.country_code = address.country_code.toUpperCase();
         }
-        
+        if (!item.state) {
+            if (item.country_code == 'JP' && item.city && item.city.toLowerCase()=='minato') {
+                item.state = 'Tokyo';
+                formated = gd_osm_parse_name(formated, item.state);
+            }
+        }
         if (address.state_district) {
             formated = gd_osm_parse_name(formated, address.state_district);
         }
