@@ -34,6 +34,7 @@ class GeoDir_Elementor {
 
 		// add templates
 		add_action( 'option_elementor_remote_info_library', array( __CLASS__, 'add_gd_templates' ), 10, 2 );
+		add_filter( 'http_response', array( __CLASS__, 'attach_gd_templates' ), 10, 3 );
 
 		// Since Elementor v3.5.0 elementor/dynamic_tags/register_tags is replaced with elementor/dynamic_tags/register.
 		if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '<' ) ) {
@@ -1030,18 +1031,66 @@ class GeoDir_Elementor {
 				$value['types_data']['popup']['categories'][] = "directory";
 			}
 
-
 			// Get remote templates
 			$templates = self::get_remote_templates();
 
 			if(!empty($templates)){
 				$value['templates'] = $templates + $default_templates;
 			}
-
-
 		}
-//		print_r($value);exit;
+
 		return $value;
+	}
+
+	/**
+	 * Filters a http response to attach GD templates to Elementor templates API response.
+	 *
+	 * @since 2.2.23
+	 *
+	 * @param array  $response    HTTP response.
+	 * @param array  $parsed_args HTTP request arguments.
+	 * @param string $url         The request URL.
+	 * @return array Filtered response.
+	 */
+	public static function attach_gd_templates( $response, $parsed_args, $url ) {
+		if ( $url != 'https://my.elementor.com/api/connect/v1/library/templates' ) {
+			return $response;
+		}
+
+		if ( is_wp_error( $response ) || 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
+			return $response;
+		}
+
+		$templates = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		if ( empty( $templates ) || ! is_array( $templates ) ) {
+			return $response;
+		}
+
+		// Get remote templates.
+		$_templates = self::get_remote_templates();
+
+		if ( ! empty( $_templates ) ) {
+			foreach ( $_templates as $template ) {
+				if ( ! isset( $template['editor_layout_type'] ) ) {
+					$template['editor_layout_type'] = '';
+				}
+
+				if ( ! isset( $template['minimum_version'] ) ) {
+					$template['minimum_version'] = '0.0.0';
+				}
+
+				if ( ! isset( $template['access_level'] ) ) {
+					$template['access_level'] = Elementor\Core\Common\Modules\Connect\Module::ACCESS_LEVEL_CORE;
+				}
+
+				$templates[] = $template;
+			}
+
+			$response['body'] = json_encode( $templates );
+		}
+
+		return $response;
 	}
 
 	/**
