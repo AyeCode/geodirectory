@@ -295,6 +295,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * GD > Post Address renders content with id missing error - FIXED
 * OSM GeoCode API don't return state name for minato city - FIXED
 * Template Library don't show GD templates after Elementor v3.10 update - FIXED
+* Added callback function to Google Maps JavaScript API - CHANGED
 
 = GeoDirectory Business Directory Plugin v2.2.22 - 2022-12-29 =
 * Post meta widget CSS class sanitation - FIXED

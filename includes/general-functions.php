@@ -1492,6 +1492,9 @@ function geodir_googlemap_script_extra_details_page( $extra ) {
 		$extra .= "&amp;libraries=places";
 	}
 
+	// Since January 2023 Google made callback as a required parameter.
+	$extra .= '&amp;callback=geodirInitGoogleMap';
+
 	return $extra;
 }
 

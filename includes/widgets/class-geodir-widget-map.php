@@ -1148,6 +1148,7 @@ jQuery(function ($) {
 			// Lazy Load
 			wp_enqueue_script( 'geodir-map' );
 			wp_localize_script( 'geodir-map', $map_options['map_canvas'], $map_options );
+			wp_add_inline_script( 'geodir-map', GeoDir_Maps::google_map_callback(), 'before' );
 		} else {
 			wp_enqueue_script( 'geodir-map-widget' );
 			wp_localize_script( 'geodir-map-widget', $map_options['map_canvas'], $map_options );
