@@ -227,6 +227,9 @@ class GeoDir_Admin_Setup_Wizard {
 
 
 		wp_localize_script( 'geodir-setup', 'geodir_params', geodir_params() );
+		if ( in_array( 'geodir-google-maps', $required_scripts ) ) {
+			wp_add_inline_script( 'geodir-google-maps', GeoDir_Maps::google_map_callback(), 'before' );
+		}
 
 		wp_enqueue_style( 'geodir-admin-css', geodir_plugin_url() . '/assets/css/admin.css', array(), GEODIRECTORY_VERSION );
 		wp_enqueue_style( 'geodir-jquery-ui-css', geodir_plugin_url() . '/assets/css/jquery-ui.css', array(), GEODIRECTORY_VERSION );

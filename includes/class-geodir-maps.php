@@ -207,7 +207,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	}
 
 	/**
-	 * Get OpenStreepMap routing language.
+	 * Get OpenStreetMap routing language.
 	 *
 	 * @since 2.1.0.7
 	 *
@@ -604,7 +604,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 						'scripts' => array(
 							array( 
 								'id' => 'geodir-google-maps-script',
-								'src' => 'https://maps.googleapis.com/maps/api/js?key=' . $google_api_key . '&libraries=places&language=' . $language . '&ver=' . GEODIRECTORY_VERSION,
+								'src' => 'https://maps.googleapis.com/maps/api/js?key=' . $google_api_key . '&libraries=places&language=' . $language . '&callback=geodirInitGoogleMap&ver=' . GEODIRECTORY_VERSION,
 								'main' => true,
 								'onLoad' => true,
 								'onError' => true,
@@ -696,10 +696,34 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 ?><script type="text/javascript">
 /* <![CDATA[ */
-<?php echo "var geodir_map_params=" . wp_json_encode( geodir_map_params() ) . ';'; ?>var el=document.createElement("script");el.setAttribute("type","text/javascript");el.setAttribute("id",'geodir-map-js');el.setAttribute("src",'<?php echo geodir_plugin_url(); ?>/assets/js/geodir-map<?php echo $suffix; ?>.js');el.setAttribute("async",true);document.getElementsByTagName("head")[0].appendChild(el);
+<?php echo "var geodir_map_params=" . wp_json_encode( geodir_map_params() ) . ';'; ?>var el=document.createElement("script");el.setAttribute("type","text/javascript");el.setAttribute("id",'geodir-map-js');el.setAttribute("src",'<?php echo geodir_plugin_url(); ?>/assets/js/geodir-map<?php echo $suffix; ?>.js');el.setAttribute("async",true);document.getElementsByTagName("head")[0].appendChild(el);<?php echo trim( self::google_map_callback() ); ?>
 /* ]]> */
 </script><?php
 		}
+	}
+
+	/**
+	 * Google Maps JavaScript API callback.
+	 *
+	 * @since 2.2.23
+	 *
+	 * @return string Callback script.
+	 */
+	public static function google_map_callback() {
+		$script = 'function geodirInitGoogleMap(){';
+		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
+			$script .= 'console.log("geodirInitGoogleMap");';
+		}
+		$script .= '}';
+
+		/**
+		 * Filters the Google Maps JavaScript callback.
+		 *
+		 * @since 2.2.23
+		 *
+		 * @param string $script The callback script.
+		 */
+		return apply_filters( 'geodir_google_map_callback_script', $script );
 	}
 }
 

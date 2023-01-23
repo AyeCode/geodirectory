@@ -746,12 +746,14 @@ class GeoDir_Frontend_Scripts {
 			// Lazy Load
 			if ( $map_api != 'none' && geodir_is_page( 'add-listing' ) ) {
 				self::enqueue_script( 'geodir-map' );
+				wp_add_inline_script( 'geodir-map', GeoDir_Maps::google_map_callback(), 'before' );
 			}
 		} else {
 			// Normal
 			if ( in_array( $map_api, array( 'auto', 'google' ) ) ) {
 				self::enqueue_script('geodir-google-maps');
 				self::enqueue_script('geodir-g-overlappingmarker');
+				wp_add_inline_script( 'geodir-google-maps', GeoDir_Maps::google_map_callback(), 'before' );
 			} elseif ( $map_api == 'osm' ) {
 				self::enqueue_style('leaflet');
 				self::enqueue_style('leaflet-routing-machine');

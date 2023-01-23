@@ -144,7 +144,6 @@ class GeoDir_Admin_Assets {
 			$map_require = array('geodir-leaflet-script','geodir-leaflet-geo-script','geodir-o-overlappingmarker-script');
 		}
 
-
 		// Register scripts
 		if ( wp_script_is( 'select2', 'registered' ) ) {
 			wp_deregister_script( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
@@ -222,6 +221,9 @@ class GeoDir_Admin_Assets {
 			( isset($screen->base) && $screen->base=='post' && isset($screen->post_type) &&  substr( $screen->post_type, 0, 3 ) === "gd_" ) ||
 			$load_gomap_script
 			){
+				if ( in_array( 'geodir-google-maps', $map_require ) ) {
+					wp_add_inline_script( 'geodir-google-maps', GeoDir_Maps::google_map_callback(), 'before' );
+				}
 				$osm_extra = GeoDir_Maps::footer_script();
 				wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".GeoDir_Maps::active_map()."';".$osm_extra, 'before' );
 				wp_enqueue_script( 'geodir-goMap' );
