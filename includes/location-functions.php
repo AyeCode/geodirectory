@@ -668,6 +668,21 @@ function geodir_ip_api_data( $ip = '' ) {
     // check transient cache
     $cache = get_transient( 'geodir_ip_location_' . $ip );
 
+    /**
+     * Filters the IP 2 location before the request takes place.
+     *
+     * @since 2.2.23
+     *
+     * @param null|array $pre_data Location data.
+     * @param string     $ip IP.
+     * @param null|array $cache Cached location data.
+     */
+    $pre_data = apply_filters( 'geodir_ip_api_pre_data', null, $ip, $cache );
+
+    if ( $pre_data !== null && is_array( $pre_data ) ) {
+        $cache = $pre_data;
+    }
+
     if ( $cache === false ) {
         $url = 'http://ip-api.com/json/' . $ip;
         $response = wp_remote_get($url);
