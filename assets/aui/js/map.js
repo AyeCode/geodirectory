@@ -1433,6 +1433,9 @@ function create_marker_osm(item, map_canvas) {
         }
         // Adding a click event to the marker
         L.DomEvent.addListener(marker, 'click', function() {
+            marker.fireEvent('spider_click');
+        });
+        L.DomEvent.addListener(marker, 'spider_click', function() {// 'click' => normal, 'spider_click' => Overlapping Marker Spiderfier
             var marker_url = options.map_marker_ajax_url;
             if (marker.options.clustered) {
                 jQuery("#" + map_canvas).goMap();
