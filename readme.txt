@@ -286,6 +286,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory Business Directory Plugin v2.2.24 =
+* Map popup not opening for OSM on click from GD > Map Pinpoint - FIXED
+
 = GeoDirectory Business Directory Plugin v2.2.23 - 2023-01-23 =
 * Prevent auto save when images are being uploading - FIXED
 * Search page shows wrong content on free elementor plugin - FIXED
