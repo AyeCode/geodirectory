@@ -207,16 +207,18 @@ class GeoDir_Admin_Dummy_Data {
 	public static function delete_dummy_posts( $post_type ) {
 		global $wpdb, $plugin_prefix;
 
+		$table = geodir_db_cpt_table( $post_type );
 
-		$post_ids = $wpdb->get_results( "SELECT post_id FROM " . $plugin_prefix . $post_type . "_detail WHERE post_dummy='1'" );
+		$post_ids = $wpdb->get_results( "SELECT post_id FROM `" . $table . "` WHERE post_dummy = '1'" );
 
+		if ( ! empty( $post_ids ) ) {
+			foreach ( $post_ids as $post_ids_obj ) {
+				wp_delete_post( (int) $post_ids_obj->post_id );
+			}
 
-		foreach ( $post_ids as $post_ids_obj ) {
-			wp_delete_post( $post_ids_obj->post_id );
+			// Double check posts are deleted
+			$wpdb->delete( $table, array( 'post_dummy' => '1' ) );
 		}
-
-		//double check posts are deleted
-		$wpdb->get_results( "DELETE FROM " . $plugin_prefix . $post_type . "_detail WHERE post_dummy='1'" );
 
 		geodir_update_option( $post_type . '_dummy_data_type', '' );
 	}
@@ -724,8 +726,8 @@ class GeoDir_Admin_Dummy_Data {
 							function (data) {
 								geodir_installing_dummy_data = false;
 								jQuery('.gd_progressbar_container_' + posttype + ' .progress-bar' ).removeClass('progress-bar-striped progress-bar-animated').width('100%').parent().find('.gd-dummy-progress-label').html( '<i class="fas fa-check" aria-hidden="true"></i> <?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
-								jQuery(obj).removeClass('gd-remove-data');
-								jQuery(obj).val('<?php _e( 'Insert data', 'geodirectory' );?>');
+								jQuery(obj).removeClass('gd-remove-data btn-danger').addClass('btn-primary');
+								jQuery(obj).val('<?php esc_attr_e( 'Insert posts', 'geodirectory' );?>');
 								jQuery(obj).prop('disabled', false);
 								jQuery('#' + posttype + '_data_type_count').closest('.gd-data-type-count').show();
 								jQuery('#' + posttype + '_data_type_templates').closest('.gd-data-type-templates').show();
@@ -830,8 +832,8 @@ class GeoDir_Admin_Dummy_Data {
 							geodir_installing_dummy_data = false;
 							percentage = 100;
 							jQuery('.gd_progressbar_container_' + posttype + ' .progress-bar' ).removeClass('progress-bar-striped progress-bar-animated').width(percentage+"%").parent().find('.gd-dummy-progress-label').html( percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-check" aria-hidden="true"></i> <?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
-							jQuery(obj).addClass('gd-remove-data');
-							jQuery(obj).val('<?php _e( 'Remove data', 'geodirectory' );?>');
+							jQuery(obj).removeClass('btn-primary').addClass('gd-remove-data btn-danger');
+							jQuery(obj).val('<?php esc_attr_e( 'Remove posts', 'geodirectory' );?>');
 							jQuery(obj).prop('disabled', false);
 
 						}

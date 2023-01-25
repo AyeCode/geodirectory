@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.2.24 =
 * Map popup not opening for OSM on click from GD > Map Pinpoint - FIXED
+* delete_dummy_posts() function sanitization from admin user - ADDED
 
 = GeoDirectory Business Directory Plugin v2.2.23 - 2023-01-23 =
 * Prevent auto save when images are being uploading - FIXED
