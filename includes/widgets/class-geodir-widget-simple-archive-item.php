@@ -615,7 +615,7 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		);
 
 
-		$is_preview = self::is_preview();
+		$is_preview = $this->is_preview();
 
 		if ( $is_preview ) {
 			$is_archive_template = false;
@@ -947,7 +947,7 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		} elseif ($type == 'rating' ) {
 			$output = "[gd_post_rating show='stars'  size=''  $alignment  list_hide=''  list_hide_secondary='' ]";
 		} elseif ($type == 'business_hours' ) {
-			$lhs = self::is_preview() ? '1' : '2';
+			$lhs = $this->is_preview() ? '1' : '2';
 			$output = "[gd_post_meta title=''  id=''  key='business_hours'  show=''  no_wrap='false'  $alignment text_alignment=''  list_hide=''  list_hide_secondary='$lhs'  location=''  css_class='' ]";
 		} elseif ($type == 'custom_badge' ) {
 			$args_out = '';
@@ -959,7 +959,7 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 
 			$output = "[gd_post_badge $args_out $alignment $position_args]";
 		} else {
-			$lhs = self::is_preview() ? '1' : '2';
+			$lhs = $this->is_preview() ? '1' : '2';
 			$show = !empty($args['show']) ? esc_attr($args['show']) : '';
 			$css_class = '';
 			if ( $show == 'badge' ) {

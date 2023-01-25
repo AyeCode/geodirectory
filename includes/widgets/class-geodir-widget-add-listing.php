@@ -244,9 +244,8 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             ) : $message;
         }
 
-
-        if(self::is_preview()){
-            return $design_style ? $this->get_dummy_preview($params) : '';
+        if ( $this->is_preview() ) {
+            return $design_style ? $this->get_dummy_preview( $params ) : '';
         }
 
         foreach ( $params as $key => $value ) {

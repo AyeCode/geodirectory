@@ -710,11 +710,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @return string Callback script.
 	 */
 	public static function google_map_callback() {
-		$script = 'function geodirInitGoogleMap(){';
-		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
-			$script .= 'console.log("geodirInitGoogleMap");';
-		}
-		$script .= '}';
+		$script = 'function geodirInitGoogleMap(){window.geodirGoogleMapsCallback=true;try{jQuery(document).trigger("geodir.googleMapsCallback")}catch(err){}}';
 
 		/**
 		 * Filters the Google Maps JavaScript callback.

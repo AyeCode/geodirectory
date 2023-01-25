@@ -316,7 +316,7 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 	public function output( $instance = array(), $widget_args = array(), $content = '' ) {
 		global $gd_post, $post;
 
-		$is_preview = self::is_preview();
+		$is_preview = $this->is_preview();
 
 		$search       = ! empty( $instance['show_search'] ) ? "[gd_search post_type=''  post_type_hide='false'  hide_search_input='false'  hide_near_input='false'  bg=''  mt=''  mr=''  mb='3'  ml=''  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow=''  show='' ]" : '';
 		$loop_actions = ! empty( $instance['show_loop_actions'] ) ? "[gd_loop_actions hide_layouts=''  bg=''  mt=''  mr=''  mb='3'  ml=''  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]" : '';
@@ -516,7 +516,7 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 		} elseif ( $type == 'rating' ) {
 			$output = "[gd_post_rating show='stars'  size=''  $alignment  list_hide=''  list_hide_secondary='' ]";
 		} elseif ( $type == 'business_hours' ) {
-			$lhs    = self::is_preview() ? '1' : '2';
+			$lhs    = $this->is_preview() ? '1' : '2';
 			$output = "[gd_post_meta title=''  id=''  key='business_hours'  show=''  no_wrap='false'  $alignment text_alignment=''  list_hide=''  list_hide_secondary='$lhs'  location=''  css_class='' ]";
 		} elseif ( $type == 'custom_badge' ) {
 			$args_out = '';
@@ -528,7 +528,7 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 
 			$output = "[gd_post_badge $args_out $alignment $position_args]";
 		} else {
-			$lhs       = self::is_preview() ? '1' : '2';
+			$lhs       = $this->is_preview() ? '1' : '2';
 			$show      = ! empty( $args['show'] ) ? esc_attr( $args['show'] ) : '';
 			$css_class = '';
 			if ( $show == 'badge' ) {
