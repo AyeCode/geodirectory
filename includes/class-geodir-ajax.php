@@ -799,23 +799,24 @@ class GeoDir_AJAX {
 		wp_die();
 	}
 
-    /**
-     * Get category select.
-     *
-     * @since 2.0.0
-     */
+	/**
+	 * Get category select.
+	 *
+	 * @since 2.0.0
+	 */
 	public static function get_category_select(){
-		// security
-		//check_ajax_referer( 'geodir_get_category_select');
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-		$selected = isset($_REQUEST['selected']) ? $_REQUEST['selected'] : '';
+
+		$post_type = ! empty( $_REQUEST['post_type'] ) ? sanitize_text_field( $_REQUEST['post_type'] ) : '';
+		$selected = isset( $_REQUEST['selected'] ) ? sanitize_text_field( $_REQUEST['selected'] ) : '';
+
 		$tax = new GeoDir_Admin_Taxonomies();
-		$tax->get_category_select($_REQUEST['post_type'], $selected, false, true);
+		$tax->get_category_select( $post_type, $selected, false, true );
+
 		wp_die();
 	}
-	
 
 	/**
 	 * Admin action to get a custom field sorting form.
@@ -883,21 +884,28 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to delete dummy data.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 */
 	public static function delete_dummy_data(){
-		// security
+		// Security
 		check_ajax_referer( 'geodir_dummy_data', 'security' );
+
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
 
-		$result = GeoDir_Admin_Dummy_Data::delete_dummy_posts( $_REQUEST['post_type'] );
+		$post_type = ! empty( $_REQUEST['post_type'] ) ? sanitize_text_field( $_REQUEST['post_type'] ) : '';
 
-		if(is_wp_error( $result ) ){
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
+			wp_send_json_error( __( 'Invalid post type', 'geodirectory' ) );
+		}
+
+		$result = GeoDir_Admin_Dummy_Data::delete_dummy_posts( $post_type );
+
+		if ( is_wp_error( $result ) ) {
 			wp_send_json_error( $result->get_error_message() );
-		}else{
+		} else {
 			wp_send_json_success();
 		}
 
