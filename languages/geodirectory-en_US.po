@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.2.23\n"
+"Project-Id-Version: GeoDirectory 2.2.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-23 19:08+0530\n"
-"PO-Revision-Date: 2023-01-23 19:08+0530\n"
+"POT-Creation-Date: 2023-01-25 11:18+0530\n"
+"PO-Revision-Date: 2023-01-25 11:18+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -181,7 +181,7 @@ msgid ""
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:852
-#: includes/admin/class-geodir-admin-dummy-data.php:1115
+#: includes/admin/class-geodir-admin-dummy-data.php:1117
 #: includes/admin/class-geodir-admin-settings.php:1204
 #: includes/admin/settings/class-geodir-settings-general.php:830
 #: includes/api/class-geodir-rest-posts-controller.php:2198
@@ -196,7 +196,7 @@ msgid "Choose a country"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:861
-#: includes/admin/class-geodir-admin-dummy-data.php:1114
+#: includes/admin/class-geodir-admin-dummy-data.php:1116
 #: includes/admin/settings/class-geodir-settings-general.php:820
 #: includes/api/class-geodir-rest-posts-controller.php:2212
 #: includes/class-geodir-location.php:384
@@ -210,7 +210,7 @@ msgid "Choose a region"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:870
-#: includes/admin/class-geodir-admin-dummy-data.php:1113
+#: includes/admin/class-geodir-admin-dummy-data.php:1115
 #: includes/admin/settings/class-geodir-settings-general.php:810
 #: includes/api/class-geodir-rest-posts-controller.php:2226
 #: includes/class-geodir-location.php:404
@@ -232,7 +232,7 @@ msgid "Choose a neighbourhood"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:890
-#: includes/admin/class-geodir-admin-dummy-data.php:1116
+#: includes/admin/class-geodir-admin-dummy-data.php:1118
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
 #: includes/custom-fields/functions.php:680 includes/post-functions.php:2164
@@ -603,7 +603,7 @@ msgstr ""
 #: includes/admin/admin-functions.php:912
 #: includes/admin/admin-functions.php:925
 #: includes/admin/admin-functions.php:942
-#: includes/admin/class-geodir-admin-dummy-data.php:854
+#: includes/admin/class-geodir-admin-dummy-data.php:856
 #: includes/admin/class-geodir-admin-permalink-settings.php:67
 #: includes/admin/class-geodir-admin-permalink-settings.php:141
 #: includes/admin/class-geodir-admin-taxonomies.php:857
@@ -828,8 +828,8 @@ msgstr ""
 #: includes/admin/admin-functions.php:1269
 #: includes/admin/admin-functions.php:1278
 #: includes/admin/admin-functions.php:1287
-#: includes/admin/class-geodir-admin-dummy-data.php:1029
-#: includes/admin/class-geodir-admin-dummy-data.php:1041
+#: includes/admin/class-geodir-admin-dummy-data.php:1031
+#: includes/admin/class-geodir-admin-dummy-data.php:1043
 #: includes/admin/dummy-data/car_sales.php:92
 #: includes/admin/dummy-data/classifieds.php:88
 #: includes/admin/dummy-data/property_rent.php:65
@@ -842,7 +842,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:542
 #: includes/admin/settings/class-geodir-settings-general.php:584
 #: includes/class-geodir-post-data.php:1628 includes/core-functions.php:379
-#: includes/widgets/class-geodir-widget-add-listing.php:318
+#: includes/widgets/class-geodir-widget-add-listing.php:317
 #: includes/widgets/class-geodir-widget-categories.php:46
 #: includes/widgets/class-geodir-widget-post-images.php:37
 #: includes/widgets/class-geodir-widget-recent-reviews.php:49
@@ -1022,14 +1022,14 @@ msgid ""
 msgstr ""
 
 #: includes/admin/class-geodir-admin-api-keys-table-list.php:40
-#: includes/admin/class-geodir-admin-dummy-data.php:1046
-#: includes/admin/class-geodir-admin-dummy-data.php:1058
+#: includes/admin/class-geodir-admin-dummy-data.php:1048
+#: includes/admin/class-geodir-admin-dummy-data.php:1060
 #: includes/admin/diagnostic-functions.php:41
 #: includes/admin/settings/class-geodir-settings-cpt.php:586
 #: includes/admin/settings/class-geodir-settings-cpt.php:594
 #: includes/admin/views/html-admin-settings-cpt-cf-setting-item.php:168
 #: includes/admin/views/html-keys-edit.php:33
-#: includes/widgets/class-geodir-widget-add-listing.php:333
+#: includes/widgets/class-geodir-widget-add-listing.php:332
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:266
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:276
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:278
@@ -1331,23 +1331,23 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:514
+#: includes/admin/class-geodir-admin-dummy-data.php:516
 #, php-format
 msgid ""
 "Please %sclick here%s to set a default location, this will help to set "
 "location of all dummy data."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:521
+#: includes/admin/class-geodir-admin-dummy-data.php:523
 msgid "CPT"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:522
+#: includes/admin/class-geodir-admin-dummy-data.php:524
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:1135
 msgid "Data Type"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:523
+#: includes/admin/class-geodir-admin-dummy-data.php:525
 #: includes/admin/class-geodir-admin-setup-wizard.php:1815
 #: includes/admin/class-geodir-admin-setup-wizard.php:1892
 #: includes/admin/class-geodir-admin-setup-wizard.php:1991
@@ -1355,104 +1355,98 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:553
+#: includes/admin/class-geodir-admin-dummy-data.php:555
 msgid "Select the data type"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:567
+#: includes/admin/class-geodir-admin-dummy-data.php:569
 msgid "Set the number of listings"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:577
+#: includes/admin/class-geodir-admin-dummy-data.php:579
 msgid "Overwrite the template designs to suit the data type"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:581
+#: includes/admin/class-geodir-admin-dummy-data.php:583
 msgid "Update page templates"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:582
+#: includes/admin/class-geodir-admin-dummy-data.php:584
 msgid "Do not update page templates"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:591
+#: includes/admin/class-geodir-admin-dummy-data.php:593
+#: includes/admin/class-geodir-admin-dummy-data.php:836
 msgid "Remove posts"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:593
+#: includes/admin/class-geodir-admin-dummy-data.php:595
+#: includes/admin/class-geodir-admin-dummy-data.php:730
 msgid "Insert posts"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:622
+#: includes/admin/class-geodir-admin-dummy-data.php:624
 msgid "Dummy data has not fully installed yet!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:672
+#: includes/admin/class-geodir-admin-dummy-data.php:674
 #: templates/bootstrap/map/map-add-listing.php:721
 #: templates/bootstrap/map/map-add-listing.php:891 templates/map.php:723
 #: templates/map.php:912
 msgid "Geocode was not successful for the following reason:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:696
+#: includes/admin/class-geodir-admin-dummy-data.php:698
 msgid "Are you sure you want to delete dummy data?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:712
+#: includes/admin/class-geodir-admin-dummy-data.php:714
 msgid "Removing data..."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:726
-#: includes/admin/class-geodir-admin-dummy-data.php:832
+#: includes/admin/class-geodir-admin-dummy-data.php:728
+#: includes/admin/class-geodir-admin-dummy-data.php:834
 #: includes/admin/settings/class-geodir-settings-import-export.php:744
 #: includes/admin/settings/class-geodir-settings-import-export.php:801
 #: includes/admin/settings/class-geodir-settings-import-export.php:953
 msgid "Complete!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:728
-msgid "Insert data"
-msgstr ""
-
-#: includes/admin/class-geodir-admin-dummy-data.php:788
+#: includes/admin/class-geodir-admin-dummy-data.php:790
 msgid "Creating categories and custom fields..."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:825
+#: includes/admin/class-geodir-admin-dummy-data.php:827
 msgid "Inserting data..."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:834
-msgid "Remove data"
-msgstr ""
-
-#: includes/admin/class-geodir-admin-dummy-data.php:858
+#: includes/admin/class-geodir-admin-dummy-data.php:860
 msgid "Property for sale"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:862
+#: includes/admin/class-geodir-admin-dummy-data.php:864
 msgid "Property for rent"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:866
+#: includes/admin/class-geodir-admin-dummy-data.php:868
 #: includes/admin/class-geodir-admin-setup-wizard.php:948
 msgid "Classifieds"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:895
 #: includes/admin/class-geodir-admin-dummy-data.php:897
-#: includes/admin/class-geodir-admin-dummy-data.php:905
+#: includes/admin/class-geodir-admin-dummy-data.php:899
+#: includes/admin/class-geodir-admin-dummy-data.php:907
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:394 language.php:54
 msgid "Phone"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:896 language.php:95
+#: includes/admin/class-geodir-admin-dummy-data.php:898 language.php:95
 msgid "You can enter phone number,cell phone number etc."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:910
 #: includes/admin/class-geodir-admin-dummy-data.php:912
-#: includes/admin/class-geodir-admin-dummy-data.php:920
+#: includes/admin/class-geodir-admin-dummy-data.php:914
+#: includes/admin/class-geodir-admin-dummy-data.php:922
 #: includes/admin/dummy-data/freelancer.php:744
 #: includes/admin/dummy-data/freelancer.php:746
 #: includes/admin/dummy-data/freelancer.php:752
@@ -1465,13 +1459,13 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:911
+#: includes/admin/class-geodir-admin-dummy-data.php:913
 msgid "You can enter your business or listing email."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:925
 #: includes/admin/class-geodir-admin-dummy-data.php:927
-#: includes/admin/class-geodir-admin-dummy-data.php:935
+#: includes/admin/class-geodir-admin-dummy-data.php:929
+#: includes/admin/class-geodir-admin-dummy-data.php:937
 #: includes/admin/dummy-data/freelancer.php:762
 #: includes/admin/dummy-data/freelancer.php:763
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:610
@@ -1480,98 +1474,98 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:926
+#: includes/admin/class-geodir-admin-dummy-data.php:928
 msgid "You can enter your business or listing website."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:940
 #: includes/admin/class-geodir-admin-dummy-data.php:942
-#: includes/admin/class-geodir-admin-dummy-data.php:950
+#: includes/admin/class-geodir-admin-dummy-data.php:944
+#: includes/admin/class-geodir-admin-dummy-data.php:952
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:669
 #: includes/helper-functions.php:1916 language.php:57
 #: vendor/ayecode/wp-super-duper/sd-functions.php:993
 msgid "Twitter"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:941
+#: includes/admin/class-geodir-admin-dummy-data.php:943
 msgid "You can enter your business or listing twitter url."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:955
 #: includes/admin/class-geodir-admin-dummy-data.php:957
-#: includes/admin/class-geodir-admin-dummy-data.php:965
+#: includes/admin/class-geodir-admin-dummy-data.php:959
+#: includes/admin/class-geodir-admin-dummy-data.php:967
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:640
 #: includes/helper-functions.php:1915 language.php:58
 #: vendor/ayecode/wp-super-duper/sd-functions.php:992
 msgid "Facebook"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:956
+#: includes/admin/class-geodir-admin-dummy-data.php:958
 msgid "You can enter your business or listing facebook url."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:970
 #: includes/admin/class-geodir-admin-dummy-data.php:972
-#: includes/admin/class-geodir-admin-dummy-data.php:980
+#: includes/admin/class-geodir-admin-dummy-data.php:974
+#: includes/admin/class-geodir-admin-dummy-data.php:982
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:756
 #: includes/general-functions.php:2636
 msgid "Video"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:971
+#: includes/admin/class-geodir-admin-dummy-data.php:973
 msgid "Add video code here, YouTube etc."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:985
 #: includes/admin/class-geodir-admin-dummy-data.php:987
-#: includes/admin/class-geodir-admin-dummy-data.php:995
+#: includes/admin/class-geodir-admin-dummy-data.php:989
+#: includes/admin/class-geodir-admin-dummy-data.php:997
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:785 language.php:52
 msgid "Special Offers"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:986 language.php:101
+#: includes/admin/class-geodir-admin-dummy-data.php:988 language.php:101
 msgid "Note: List out any special offers (optional)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1023
+#: includes/admin/class-geodir-admin-dummy-data.php:1025
 #: includes/class-geodir-post-data.php:881
 msgid "Listing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1030
+#: includes/admin/class-geodir-admin-dummy-data.php:1032
 msgid "Enter the title."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1031
+#: includes/admin/class-geodir-admin-dummy-data.php:1033
 #, php-format
 msgid "%s Title"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1047
+#: includes/admin/class-geodir-admin-dummy-data.php:1049
 msgid "Enter a description"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1048
+#: includes/admin/class-geodir-admin-dummy-data.php:1050
 #, php-format
 msgid "%s Description"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1063
 #: includes/admin/class-geodir-admin-dummy-data.php:1065
-#: includes/admin/class-geodir-admin-dummy-data.php:1074
+#: includes/admin/class-geodir-admin-dummy-data.php:1067
+#: includes/admin/class-geodir-admin-dummy-data.php:1076
 #: includes/admin/class-geodir-admin-post-view.php:87
 #: includes/widgets/class-geodir-widget-listings.php:103
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:50
 msgid "Tags"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1064
+#: includes/admin/class-geodir-admin-dummy-data.php:1066
 msgid "Tags are short keywords, with no space within.(eg: tag1, tag2, tag3)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1079
 #: includes/admin/class-geodir-admin-dummy-data.php:1081
-#: includes/admin/class-geodir-admin-dummy-data.php:1090
+#: includes/admin/class-geodir-admin-dummy-data.php:1083
+#: includes/admin/class-geodir-admin-dummy-data.php:1092
 #: includes/class-geodir-post-data.php:1634
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:856
 #: includes/widgets/class-geodir-widget-simple-archive.php:430 language.php:59
@@ -1579,70 +1573,70 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1080
+#: includes/admin/class-geodir-admin-dummy-data.php:1082
 msgid "SELECT listing category FROM here. SELECT at least one CATEGORY"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1099
 #: includes/admin/class-geodir-admin-dummy-data.php:1101
-#: includes/admin/class-geodir-admin-dummy-data.php:1111
+#: includes/admin/class-geodir-admin-dummy-data.php:1103
+#: includes/admin/class-geodir-admin-dummy-data.php:1113
 #: includes/class-geodir-post-data.php:1631
 #: includes/custom-fields/functions.php:670 includes/post-functions.php:2109
 msgid "Address"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1100 language.php:41
+#: includes/admin/class-geodir-admin-dummy-data.php:1102 language.php:41
 msgid "Please enter the listing street address. eg. : 230 Vine Street"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1110
+#: includes/admin/class-geodir-admin-dummy-data.php:1112
 msgid "Address fields are required"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1117
+#: includes/admin/class-geodir-admin-dummy-data.php:1119
 #: includes/admin/class-geodir-admin-settings.php:1301
 msgid "Set Address On Map"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1118
+#: includes/admin/class-geodir-admin-dummy-data.php:1120
 msgid "Select Map View"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1125
 #: includes/admin/class-geodir-admin-dummy-data.php:1127
-#: includes/admin/class-geodir-admin-dummy-data.php:1136
+#: includes/admin/class-geodir-admin-dummy-data.php:1129
+#: includes/admin/class-geodir-admin-dummy-data.php:1138
 msgid "Images"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1126
+#: includes/admin/class-geodir-admin-dummy-data.php:1128
 msgid ""
 "You can upload more than one image to create a image gallery on the details "
 "page."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1165
+#: includes/admin/class-geodir-admin-dummy-data.php:1167
 msgid "The sidebar id is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1197
+#: includes/admin/class-geodir-admin-dummy-data.php:1199
 msgid "Widgets already exist, none added."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1199
+#: includes/admin/class-geodir-admin-dummy-data.php:1201
 msgid "Widgets inserted"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1201
+#: includes/admin/class-geodir-admin-dummy-data.php:1203
 msgid ""
 "Something went wrong and no inserted, you can do this manually in Appearance "
 "> Widgets"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1261
+#: includes/admin/class-geodir-admin-dummy-data.php:1263
 msgid "GD Dashboard"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1263
+#: includes/admin/class-geodir-admin-dummy-data.php:1265
 #: includes/admin/diagnostic-functions.php:781
 #: includes/class-geodir-email.php:256 includes/class-geodir-user.php:546
 #: includes/widgets/class-geodir-widget-add-listing.php:78
@@ -1651,24 +1645,24 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1323
-#: includes/admin/class-geodir-admin-dummy-data.php:1336
+#: includes/admin/class-geodir-admin-dummy-data.php:1325
+#: includes/admin/class-geodir-admin-dummy-data.php:1338
 msgid "The menu is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1405
+#: includes/admin/class-geodir-admin-dummy-data.php:1407
 msgid "Menu already exists."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1411
+#: includes/admin/class-geodir-admin-dummy-data.php:1413
 msgid "Menu items already exist, none added."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1413
+#: includes/admin/class-geodir-admin-dummy-data.php:1415
 msgid "Menu items added successfully."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1415
+#: includes/admin/class-geodir-admin-dummy-data.php:1417
 msgid "Something went wrong, you can manually add items in Appearance > Menus"
 msgstr ""
 
@@ -2319,7 +2313,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:310
 #: includes/admin/views/html-keys-edit.php:11
-#: includes/class-geodir-ajax.php:1304 includes/user-functions.php:213
+#: includes/class-geodir-ajax.php:1312 includes/user-functions.php:213
 #, php-format
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
@@ -6293,7 +6287,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-design.php:471
 #: includes/widgets/class-geodir-widget-add-listing.php:102
-#: includes/widgets/class-geodir-widget-add-listing.php:287
+#: includes/widgets/class-geodir-widget-add-listing.php:286
 #: includes/widgets/class-geodir-widget-categories.php:490
 #: includes/widgets/class-geodir-widget-listings.php:492
 #: includes/widgets/class-geodir-widget-map.php:117
@@ -8723,7 +8717,7 @@ msgid "Generate API key"
 msgstr ""
 
 #: includes/admin/views/html-keys-edit.php:139
-#: includes/class-geodir-ajax.php:1240
+#: includes/class-geodir-ajax.php:1248
 msgid "Revoke key"
 msgstr ""
 
@@ -10376,8 +10370,8 @@ msgstr ""
 msgid "Your recently viewed listings will show here."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:410 includes/class-geodir-ajax.php:1108
-#: includes/class-geodir-ajax.php:1141
+#: includes/class-geodir-ajax.php:410 includes/class-geodir-ajax.php:1116
+#: includes/class-geodir-ajax.php:1149
 msgid "No tabs provided."
 msgstr ""
 
@@ -10411,41 +10405,45 @@ msgstr ""
 msgid "Action failed."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1174
+#: includes/class-geodir-ajax.php:901
+msgid "Invalid post type"
+msgstr ""
+
+#: includes/class-geodir-ajax.php:1182
 msgid "Description is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1177
+#: includes/class-geodir-ajax.php:1185
 msgid "User is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1180
+#: includes/class-geodir-ajax.php:1188
 msgid "Permissions is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1209
+#: includes/class-geodir-ajax.php:1217
 msgid "API Key updated successfully."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1239
+#: includes/class-geodir-ajax.php:1247
 msgid ""
 "API Key generated successfully. Make sure to copy your new keys now as the "
 "secret key will be hidden once you leave this page."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1468 includes/class-geodir-ajax.php:1472
-#: includes/class-geodir-ajax.php:1513
+#: includes/class-geodir-ajax.php:1476 includes/class-geodir-ajax.php:1480
+#: includes/class-geodir-ajax.php:1521
 #: includes/class-geodir-report-post.php:414
 msgid "Invalid post."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1506
+#: includes/class-geodir-ajax.php:1514
 #: includes/widgets/class-geodir-widget-report-post.php:52
 #: includes/widgets/class-geodir-widget-report-post.php:258
 msgid "Report Post"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1522
+#: includes/class-geodir-ajax.php:1530
 #: includes/class-geodir-report-post.php:418
 msgid "You can' report this post."
 msgstr ""
@@ -14722,27 +14720,27 @@ msgstr ""
 msgid "Adding listings is disabled for this post type."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-add-listing.php:269
+#: includes/widgets/class-geodir-widget-add-listing.php:268
 msgid "User registration is disabled, please login to continue."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-add-listing.php:310
+#: includes/widgets/class-geodir-widget-add-listing.php:309
 msgid "This is a simple preview for the add listing form."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-add-listing.php:321
+#: includes/widgets/class-geodir-widget-add-listing.php:320
 msgid "Enter the listing title"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-add-listing.php:324
+#: includes/widgets/class-geodir-widget-add-listing.php:323
 msgid "Enter the title for the listing."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-add-listing.php:331
+#: includes/widgets/class-geodir-widget-add-listing.php:330
 msgid "Description text"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-add-listing.php:337
+#: includes/widgets/class-geodir-widget-add-listing.php:336
 msgid "Enter a description for your listing."
 msgstr ""
 
