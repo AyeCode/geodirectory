@@ -1,3 +1,44 @@
+= 2.2.26 =
+* Approve comment link was not working for listing author - FIXED
+
+= 2.2.25 =
+* Search form CPT change fails to AJAX load new search form - FIXED
+
+= 2.2.24 =
+* Map popup not opening for OSM on click from GD > Map Pinpoint - FIXED
+* delete_dummy_posts() function sanitization from admin user - ADDED
+
+= 2.2.23 =
+* Prevent auto save when images are being uploading - FIXED
+* Search page shows wrong content on free elementor plugin - FIXED
+* GD listings layout broken in Astra WP search results - FIXED
+* Open reviews tab on post rating click on single page - FIXED
+* Allow to use GD SEO variables in SEOPress title & metas - ADDED
+* GD > Post Address renders content with id missing error - FIXED
+* OSM GeoCode API don't return state name for minato city - FIXED
+* Template Library don't show GD templates after Elementor v3.10 update - FIXED
+* Added callback function to Google Maps JavaScript API - CHANGED
+
+= 2.2.22 =
+* Post meta widget CSS class sanitation - FIXED
+
+= 2.2.21 =
+* Replace dummy images CDN url - CHANGED
+
+= 2.2.20 =
+* CSV formula injection sanitation - ADDED
+
+= 2.2.19 =
+* Map directions link from listings is not working when multiple post map on the page - FIXED
+* Move add listing JS in footer in backend - CHANGED
+* Rank Math description meta snippet not replaces location vars - FIXED
+* GeneratePress blocks dynamic css not added on GD archive pages - FIXED
+* Avada v7.9 is breaking the GD pages - FIXED
+
+= 2.2.18 =
+* GD Single should show blank content when assigned empty elementor template - CHANGED
+* Allowing to set comment author cookies option not working with reviews - FIXED
+
 = 2.2.17 =
 * GD Search page is not working when built with Elementor Free version- FIXED
 * Logged out comments, website field should not be marked `required` - FIXED
