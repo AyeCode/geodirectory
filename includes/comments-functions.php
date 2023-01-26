@@ -466,7 +466,8 @@ function geodir_post_author_moderate_comment() {
 	}
 	// If not logged in redirect to login form.
 	if( ! is_user_logged_in() ){
-		$login_url = geodir_login_url( false );
+		$redirect = geodir_curPageURL();
+		$login_url = geodir_login_url( $redirect );
 		wp_safe_redirect( $login_url );
 		exit;
 	}
