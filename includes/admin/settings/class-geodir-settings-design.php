@@ -127,7 +127,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 						'id'   => 'rating_icon',
 						'name' => __( 'Rating icon', 'geodirectory' ),
 						'desc' => __( 'Select the font awesome icon to use for ratings.', 'geodirectory' ),
-						'class' => 'geodir-select',
+						'class' => '',
 						'default' => 'fas fa-star',
 						'type' => 'font-awesome',
 						'desc_tip' => true,
@@ -280,7 +280,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 			} elseif ($current_section == 'email_template') {
 				$settings = apply_filters( 'geodir_email_template_settings', array(
 					array('name' => __('Email Template', 'geodirectory'), 'type' => 'title', 'desc' => wp_sprintf( __( 'This section lets you customize the GeoDirectory emails. <a href="%s" target="_blank">Click here to preview your email template</a>.', 'geodirectory' ), wp_nonce_url( admin_url( '?geodir_preview_mail=true' ), 'geodir-preview-mail' ) ), 'id' => 'email_template_settings'),
-					
+
 					array(
 						'type' => 'select',
 						'id' => 'email_type',
@@ -431,7 +431,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 		public function email_name(){
 			return get_bloginfo('name');
 		}
-		
+
 		/**
 		 * The default email footer text.
 		 *
@@ -439,11 +439,11 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 		 * @return string
 		 */
 		public function email_footer_text(){
-			return apply_filters('geodir_email_footer_text', 
-				wp_sprintf( __( '%s - Powered by GeoDirectory', 'geodirectory' ), get_bloginfo( 'name', 'display' ) ) 
+			return apply_filters('geodir_email_footer_text',
+				wp_sprintf( __( '%s - Powered by GeoDirectory', 'geodirectory' ), get_bloginfo( 'name', 'display' ) )
 			);
 		}
-		
+
 		/**
 		 * Email type options.
 		 *

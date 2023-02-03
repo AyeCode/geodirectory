@@ -228,12 +228,12 @@ if ( $wp_query->max_num_pages <= 1 && empty($args['preview']) ) {
 
 	$defaults = array(
 		'prev_text' => sprintf(
-			'%s <span class="nav-prev-text sr-only">%s</span>',
+			'%s <span class="nav-prev-text sr-only visually-hidden">%s</span>',
 			'<i class="fas fa-chevron-left"></i>',
 			__( 'Newer posts', 'ayetheme' )
 		),
 		'next_text' => sprintf(
-			'<span class="nav-next-text sr-only">%s</span> %s',
+			'<span class="nav-next-text sr-only visually-hidden">%s</span> %s',
 			__( 'Older posts', 'ayetheme' ),
 			'<i class="fas fa-chevron-right"></i>'
 		),
@@ -1095,4 +1095,192 @@ function geodir_details_template_id( $post_type = '' ) {
 	$gd_page_id = geodir_get_template_id( 'details', $post_type );
 
 	return apply_filters( 'geodir_details_template_id', $gd_page_id, $post_type );
+}
+
+/**
+ * Check whether block there or not.
+ *
+ * @since 2.2.20
+ *
+ * @return bool True when block theme active.
+ */
+function geodir_is_block_theme() {
+	return function_exists( 'wp_is_block_theme' ) && wp_is_block_theme();
+}
+
+/**
+ * Get archive item template type options.
+ *
+ * @since 2.2.20
+ *
+ * @return array Template type options.
+ */
+function geodir_template_type_options() {
+	$options = array(
+		'' => __( 'Default Template', 'geodirectory' ),
+		'page' => __( 'Page ID', 'geodirectory' )
+	);
+
+	// FSE
+	if ( geodir_is_block_theme() ) {
+		$options['template_part'] = __( 'Template Part', 'geodirectory' );
+	}
+
+	// Elementor PRO
+	if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
+		$options['elementor_skin'] = __( 'Elementor Skin', 'geodirectory' );
+	}
+
+	return $options;
+}
+
+/**
+ * Get archive item template page options.
+ *
+ * @since 2.2.20
+ *
+ * @return array Template page options.
+ */
+function geodir_template_page_options() {
+	global $geodir_tmpl_page_options;
+
+	if ( ! empty( $geodir_tmpl_page_options ) ) {
+		return $geodir_tmpl_page_options;
+	}
+
+	$args = array(
+		'child_of'    => 0,
+		'sort_column' => 'post_title',
+		'sort_order'  => 'ASC'
+	);
+
+	$exclude_pages = array();
+	if ( $page_on_front = get_option( 'page_on_front' ) ) {
+		$exclude_pages[] = $page_on_front;
+	}
+	if ( $page_for_posts = get_option( 'page_for_posts' ) ) {
+		$exclude_pages[] = $page_for_posts;
+	}
+	if ( ! empty( $exclude_pages ) ) {
+		$args['exclude'] = $exclude_pages;
+	}
+
+	$pages = get_pages( $args );
+
+	$options = array( '' => __( 'Select Page...', 'geodirectory' ) );
+	if ( ! empty( $pages ) ) {
+		foreach ( $pages as $page ) {
+			if ( ! empty( $page->ID ) && ! empty( $page->post_title ) ) {
+				$options[ $page->ID ] = $page->post_title . ' (#' . $page->ID . ')';
+			}
+		}
+	}
+
+	$geodir_tmpl_page_options = $options;
+
+	return $options;
+}
+
+/**
+ * Get archive item template part options.
+ *
+ * @since 2.2.20
+ * @param array $args Array of arguments.
+ * @return array Template part options.
+ */
+function geodir_template_part_options( $args = array() ) {
+	global $geodir_tmpl_part_options;
+
+	if ( ! empty( $geodir_tmpl_part_options ) ) {
+		return $geodir_tmpl_part_options;
+	}
+
+	$options = array( '' => __( 'Select Template Part...', 'geodirectory' ) );
+
+	if ( ! geodir_is_block_theme() ) {
+		return $options;
+	}
+
+	$defaults = array(
+		'post_status'    => array( 'publish' ),
+		'post_type'      => 'wp_template_part',
+		'posts_per_page' => -1,
+		'no_found_rows'  => true,
+		'tax_query'      => array(
+			array(
+				'taxonomy' => 'wp_theme',
+				'field'    => 'name',
+				'terms'    => wp_get_theme()->get_stylesheet(),
+			),
+		),
+	);
+
+	$parsed_args = wp_parse_args( $args, $defaults );
+
+	$template_query = new WP_Query( $parsed_args );
+
+	$posts =  $template_query->posts;
+
+	if ( ! empty( $posts ) ) {
+		foreach ( $posts as $_post ) {
+			if ( ! empty( $_post->ID ) && ! empty( $_post->post_title ) && ! empty( $_post->post_name ) ) {
+				if ( in_array( $_post->post_name, array( 'header', 'footer' ) ) ) {
+					continue;
+				}
+				$options[ $_post->post_name ] = $_post->post_title . ' (#' . $_post->post_name . ')';
+			}
+		}
+	}
+
+	$geodir_tmpl_part_options = $options;
+
+	return $options;
+}
+
+/**
+ * Get the template part by slug.
+ *
+ * @since 2.2.20
+ * @param string $slug Template slug.
+ * @return array Template part object.
+ */
+function geodir_get_template_part_by_slug( $slug ) {
+	global $geodir_tmpl_part_by_slug;
+
+	if ( ! geodir_is_block_theme() ) {
+		return array();
+	}
+
+	if ( empty( $geodir_tmpl_part_by_slug ) ) {
+		$geodir_tmpl_part_by_slug = array();
+	}
+
+	if ( isset( $geodir_tmpl_part_by_slug[ $slug ] ) ) {
+		return $geodir_tmpl_part_by_slug[ $slug ];
+	}
+
+	$args = array(
+		'post_status'    => array( 'publish' ),
+		'post_type'      => 'wp_template_part',
+		'post_name__in'  => array( $slug ),
+		'posts_per_page' => 1,
+		'no_found_rows'  => true,
+		'tax_query'      => array(
+			array(
+				'taxonomy' => 'wp_theme',
+				'field'    => 'name',
+				'terms'    => wp_get_theme()->get_stylesheet(),
+			),
+		),
+	);
+
+	$template_query = new WP_Query( $args );
+
+	$query_post = ! empty( $template_query->posts ) ? $template_query->posts[0] : array();
+
+	$template_part = ! empty( $query_post ) && $query_post->post_status == 'publish' ? $query_post : array();
+
+	$geodir_tmpl_part_by_slug[ $slug ] = $template_part;
+
+	return $template_part;
 }

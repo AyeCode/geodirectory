@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="1"/>
 				<div class="geodir_toggle">
 				<?php if ( geodir_lazy_load_map() ) { ?>
-					<div class="py-2 px-1"><i class="fas fa-circle-notch fa-spin mr-1" aria-hidden="true"></i> <small><?php _e( "Loading categories...", "geodirectory" ); ?></small></div>
+					<div class="py-2 px-1"><i class="fas fa-circle-notch fa-spin mr-1 me-1" aria-hidden="true"></i> <small><?php _e( "Loading categories...", "geodirectory" ); ?></small></div>
 					<?php } else { ?>
 					<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), $map_options['terms'], true, $map_options['tick_terms'] ); ?>
 					<script type="text/javascript">jQuery(window).on("load",function(){geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');});</script>

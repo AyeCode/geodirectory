@@ -817,16 +817,16 @@ class GeoDir_SEO {
      * @param string $page optional. Page. Default null.
      * @return string $output.
      */
-	public static function helper_tags($page = ''){
+	public static function helper_tags( $page = '' ) {
 		$output = '';
-		$variables = self::variables($page);
-		if(!empty($variables)){
-			$output .= '<ul class="geodir-helper-tags d-block clearfix">';
-			foreach($variables as $variable => $desc){
-				$output .= "<li><span class='geodir-helper-tag' title='".__("Click to copy","geodirectory")."'>".esc_attr($variable)."</span>".geodir_help_tip( $desc )."</li>";
+		$variables = self::variables( $page );
+
+		if ( ! empty( $variables ) ) {
+			$output .= '<ul class="geodir-helper-tags d-block clearfix p-0">';
+			foreach( $variables as $variable => $desc ) {
+				$output .= "<li><span class='geodir-helper-tag' title='" . esc_attr__( "Click to copy", "geodirectory" ) . "'>" . esc_attr( $variable ) . "</span>" . geodir_help_tip( $desc ) . "</li>";
 			}
 			$output .= '</ul>';
-
 		}
 
 		return $output;

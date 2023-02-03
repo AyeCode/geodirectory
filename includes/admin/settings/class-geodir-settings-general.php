@@ -116,7 +116,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	 * @return array
 	 */
 	public function get_settings( $current_section = '' ) {
-		global $geodir_fajax_error, $geodir_fajax_check;
+		global $geodir_fajax_error, $geodir_fajax_check, $aui_bs5;
 
 		if ( 'developer' == $current_section ) {
 			// Fast AJAX file check.
@@ -130,7 +130,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			}
 
 			if ( $geodir_fajax_error ) {
-				$geodir_fajax_error = '<br><div class="font-weight-bold text-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> ' . strip_tags( $geodir_fajax_error ) . '</div>';
+				$geodir_fajax_error = '<br><div class="font-weight-bold fw-bold text-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> ' . strip_tags( $geodir_fajax_error ) . '</div>';
 			}
 
 			/**
@@ -704,7 +704,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'name' => __('Search button label', 'geodirectory'),
 					'desc' => __('Show the search button label on search form. You can use a font awesome class here.', 'geodirectory'),
 					'id' => 'search_default_button_text',
-					'type' => 'text',
+					'type' => 'font-awesome',
 					'placeholder' => geodir_get_search_default_button_text(),
 					'desc_tip' => true,
 					'default'  => '',
@@ -834,7 +834,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc_tip' => true,
 					'advanced' => true,
 					'type'       => 'single_select_country',
-					'class'      => 'geodir-select',
+					'class'      => $aui_bs5 ? 'aui-select2' : 'geodir-select',
 					'default'  => 'United States',
 					'options'    => geodir_get_countries()
 				),
@@ -931,7 +931,8 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'         => 'admin_blocked_roles',
 					'default'    => array('subscriber'),
 					'type'       => 'multiselect',
-					'class'      => 'geodir-select',
+					'placeholder'=> __('Select roles to restrict from the wp-admin','geodirectory'),
+					'class'      => $aui_bs5 ? 'aui-select2' : 'geodir-select',
 					'options'    => geodir_user_roles(array('administrator')),
 					'desc_tip'   => true
 				),
@@ -1094,13 +1095,14 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
      * @return array Language settings.
      */
 	public static function get_map_language_setting(){
+		global $aui_bs5;
 		return array(
 			'name'       => __( 'Default map language', 'geodirectory' ),
 			'desc'       => __( 'URLs will only be in one language, this will determine the language location slugs get. You should avoid changing this after listings have been added.', 'geodirectory' ),
 			'id'         => 'map_language',
 			'default'    => 'en',
 			'type'       => 'select',
-			'class'      => 'geodir-select',
+			'class'      => $aui_bs5 ? 'aui-select2' : 'geodir-select',
 			'options'    => self::supported_map_languages(),
 			'desc_tip' => true,
 			'advanced' => true
@@ -1115,6 +1117,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
      * @return array Map Api settings.
      */
 	public static function get_maps_api_setting(){
+		global $aui_bs5;
 		return array(
 			'name'       => __( 'Maps API', 'geodirectory' ),
 			'desc'       => __( "- Google Maps API will force to load Google JS library only.
@@ -1124,7 +1127,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'id'         => 'maps_api',
 			'default'    => 'auto',
 			'type'       => 'select',
-			'class'      => 'geodir-select',
+			'class'      => $aui_bs5 ? 'aui-select2' : 'geodir-select',
 			'options'    => self::supported_maps_apis(),
 			'desc_tip' => true,
 			'advanced' => true
@@ -1139,13 +1142,14 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	 * @return array Settings.
 	 */
 	public static function get_maps_lazy_load_setting(){
+		global $aui_bs5;
 		return array(
 			'name'       => __( 'Lazy Load Maps', 'geodirectory' ),
 			'desc'       => __( "How to load maps on frontend.", 'geodirectory' ),
 			'id'         => 'maps_lazy_load',
 			'default'    => '',
 			'type'       => 'select',
-			'class'      => 'geodir-select',
+			'class'      => $aui_bs5 ? 'aui-select2' : 'geodir-select',
 			'options'    => array(
 				'' => __( 'Off (no lazy loading)', 'geodirectory' ),
 				'auto' => __( 'Auto (load when map visible on page scroll)', 'geodirectory' ),

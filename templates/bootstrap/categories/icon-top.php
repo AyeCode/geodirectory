@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.1.1.4
+ * @version    2.2.19
  */
 
 //$cpt_row = $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
@@ -26,7 +26,7 @@
 //
 //$indents = $depth > 2 ? implode("", array_fill( 0,$depth - 2, "- " ) ) : '';
 //
-//$link_class = $depth ? 'h6' : 'font-weight-bold h5';
+//$link_class = $depth ? 'h6' : 'font-weight-bold fw-bold h5';
 //$cpt_row .= '<div class="gd-cptcat-cat-right   text-uppercase text-truncate">';
 //$cpt_row .= '<a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '" class="text-lightx text-reset stretched-link   '.$link_class.'">';
 //$cpt_row .= $indents;
@@ -53,8 +53,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var int $depth The count of the depth of the sub category.
  * @var array $args All the raw widget arguments.
  */
+global $aui_bs5;
 
-$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
+$count = !$hide_count ? ' <span class="gd-cptcat-count badge ' . ( $aui_bs5 ? 'text-bg-light ms-2' : 'badge-light ml-2' ) . '">' . $cat_count . '</span>' : '';
 $card_color = !empty($args['card_color']) ? sanitize_html_class($args['card_color']) : 'outline-primary';
 $card_padding_inside = !empty($args['card_padding_inside']) ? absint($args['card_padding_inside']) : '4';
 $icon = '';
@@ -78,7 +79,7 @@ if(!$hide_icon){
 	<div class="card-body text-center btn btn-<?php echo $card_color;?> p-1 py-<?php echo $card_padding_inside;?>">
 		<?php echo $icon; ?>
 		<div class="gd-cptcat-cat-right text-uppercase text-truncate">
-			<a href="<?php echo esc_url($term_link);?>" class="text-reset stretched-link font-weight-bold h6">
+			<a href="<?php echo esc_url($term_link);?>" class="text-reset stretched-link font-weight-bold fw-bold h6">
 				<?php echo esc_attr( $cat_name );?>
 			</a>
 			<?php echo $count;?>

@@ -7,6 +7,8 @@
  * @package GeoDirectory
  */
 
+global $aui_bs5;
+
 /**
  * Displays the custom field form content.
  *
@@ -15,32 +17,31 @@
  * @global string $post_type Post type.
  */
 
-//print_r($field);echo '###';
-//mjs-nestedSortable-no-nesting
+
 $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 'mjs-nestedSortable-no-nesting';
 ?>
-<li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>" data-htmlvar_name="<?php echo ( isset( $field->htmlvar_name ) ? esc_attr( $field->htmlvar_name ) : '' );?>" id="setName_<?php echo $field->id;?>" data-field_type="<?php echo esc_attr( $field->field_type ); ?>" data-field_type_key="<?php echo esc_attr( $field->field_type_key ); ?>" data-field-nonce="<?php echo esc_attr( $nonce ); ?>">
-	<div class="hover-shadow dd-form d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-left bg-light <?php if(empty($field->is_active)){echo 'border-warning';} ?>" onclick="gd_tabs_item_settings(this);">
-		<div class="  flex-fill font-weight-bold">
+<li class="dd-item mb-0 <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>" data-htmlvar_name="<?php echo ( isset( $field->htmlvar_name ) ? esc_attr( $field->htmlvar_name ) : '' );?>" id="setName_<?php echo $field->id;?>" data-field_type="<?php echo esc_attr( $field->field_type ); ?>" data-field_type_key="<?php echo esc_attr( $field->field_type_key ); ?>" data-field-nonce="<?php echo esc_attr( $nonce ); ?>">
+	<div class="hover-shadow dd-form d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx <?php echo $aui_bs5 ? 'text-start' : 'text-left';?> bg-light <?php if(empty($field->is_active)){echo 'border-warning';} ?>" onclick="gd_tabs_item_settings(this);">
+		<div class="  flex-fill font-weight-bold fw-bold">
 			<?php echo $field_icon; ?>
 			<?php echo isset( $field->admin_title ) ? $field->admin_title : '';?>
-			<span class="float-right text-right small" title="<?php _e('Open/Close','geodirectory');?>"><?php echo ' ('.esc_attr($field->field_type_name).')';?></span>
+			<span class="<?php echo $aui_bs5 ? 'float-end text-end' : 'float-right text-right';?> small" title="<?php _e('Open/Close','geodirectory');?>"><?php echo ' ('.esc_attr($field->field_type_name).')';?></span>
 		</div>
 		<div class="dd-handle">
 			<?php do_action( 'geodir_cfa_tab_header_icon', $field, $cf ); ?>
 			<?php
 			if(empty($field->is_active)){
 				?>
-				<i class="fas fa-exclamation-triangle text-warning ml-2" title="<?php _e("Inactive","geodirectory");?>" data-toggle="tooltip"></i>
+				<i class="fas fa-exclamation-triangle text-warning ml-2 ms-2" title="<?php _e("Inactive","geodirectory");?>" data-toggle="tooltip"></i>
 			<?php } ?>
 			<?php
 			$core_fields = array('post_title','post_content','post_tags','post_category','address','post_images');
 			if ( ! ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, $core_fields ) ) && apply_filters( 'geodir_cfa_can_delete_field', true, $field ) ) {
 				?>
-				<i class="far fa-trash-alt text-danger ml-2" id="delete-16"  onclick="gd_delete_custom_field('<?php echo esc_attr( $field->id ); ?>','<?php echo $nonce; ?>');event.stopPropagation();return false;"></i>
+				<i class="far fa-trash-alt text-danger ml-2 ms-2" id="delete-16"  onclick="gd_delete_custom_field('<?php echo esc_attr( $field->id ); ?>','<?php echo $nonce; ?>');event.stopPropagation();return false;"></i>
 			<?php }
 			?>
-			<i class="fas fa-grip-vertical text-muted ml-2" style="cursor: move" aria-hidden="true" ></i>
+			<i class="fas fa-grip-vertical text-muted ml-2 ms-2" style="cursor: move" aria-hidden="true" ></i>
 		</div>
 		<?php // store the form as a template. This saves a load of memory on page load. ?>
 		<script type="text/template" class="dd-setting <?php echo 'dd-type-'.esc_attr($field->field_type_name);?>">
@@ -176,11 +177,11 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 
 			// htmlvar_name
 			do_action( "geodir_cfa_before_htmlvar_name_{$field->field_type}", $cf, $field);
-			
+
 			if ( has_filter( "geodir_cfa_htmlvar_name_{$field->field_type}" ) ) {
-			
+
 				echo apply_filters( "geodir_cfa_htmlvar_name_{$field->field_type}", '', $field->id, $cf, $field );
-			
+
 			} else {
 				$value = '';
 				if ( isset( $field->htmlvar_name ) ) {
@@ -734,23 +735,16 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					 */
 					do_action( 'geodir_advance_custom_fields', $field, $cf ); ?>
 
-
 				<?php endswitch;
-
-
 			// action before save button
 			do_action( "geodir_cfa_before_save", self::$post_type, $field, $cf );
 			do_action( "geodir_cfa_before_save_{$field->field_type}", $cf, $field);
 
 			?>
-
-
 			<div class="gd-tab-actions mb-0" data-setting="save_button">
-
-				<span class="lext-left float-left">
-					<?php GeoDir_Settings_Page::toggle_advanced_button('btn btn-outline-primary text-left gd-advanced-toggle-field',false);?>
+				<span class="text-left text-start float-left float-start">
+					<?php GeoDir_Settings_Page::toggle_advanced_button('btn btn-outline-primary text-left text-start gd-advanced-toggle-field',false);?>
 				</span>
-
 
 				<a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="gd_tabs_close_settings(this); return false;"><?php _e("Close","geodirectory");?></a>
 				<button type="button" class="btn btn-primary" name="save" id="save" data-save-text="<?php _e("Save","geodirectory");?>"  onclick="gd_save_custom_field('<?php echo esc_attr( $field->id ); ?>',event);jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'geodirectory' ); ?>').addClass('disabled');return false;">

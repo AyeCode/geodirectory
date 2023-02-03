@@ -66,9 +66,7 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
             )
         );
 
-
-        if($design_style){
-
+        if ( $design_style ) {
             $options['arguments']['bg']  = array(
                 'title' => __('Background color', 'geodirectory'),
                 'desc' => __('Select the the background color.', 'geodirectory'),
@@ -139,30 +137,26 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
      * @return mixed|string|void
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
+        global $aui_bs5;
 
         $defaults = array(
             'type' => 'open',
             'position' => 'left',
         );
-//        print_r($args);
+
         $args = wp_parse_args( $args, $defaults );
         $output = '';
 
         $design_style = geodir_design_style();
 
-//        print_r($args);
-        if(isset($args['type']) && $args['type']=='open'){
-
-
-
-            if($design_style){
-
+        if ( isset( $args['type'] ) && $args['type'] == 'open' ) {
+            if ( $design_style ) {
                 // wrapper class
                 $wrap_class = geodir_build_aui_class($args);
 
                 // border separator
-                if(!empty($args['border']) && $args['border']!='none'){
-                    $wrap_class .= " border-right-0 border-left-0 border-bottom-0";
+                if ( ! empty( $args['border'] ) && $args['border'] != 'none' ) {
+                    $wrap_class .= ( $aui_bs5 ? 'border-start-0 border-end-0' : 'border-left-0 border-right-0' ) . " border-bottom-0";
                 }
 
                 // font size
@@ -170,53 +164,49 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
                     $wrap_class .= " small";
                 }
 
-                $class = !empty($args['class']) ? esc_attr($args['class']) : '';
+                $class = ! empty( $args['class'] ) ? esc_attr( $args['class'] ) : '';
                 $position = '';
-                if( empty($args['position']) || $args['position'] == 'left' ){
+                if ( empty( $args['position'] ) || $args['position'] == 'left' ) {
                     $position =  'card-img-top overflow-hidden position-relative';
-                }elseif( $args['position'] == 'right' ){
+                } else if ( $args['position'] == 'right' ) {
                     $position = 'card-body p-2';
-                }elseif( $args['position'] == 'header' ){
+                } else if ( $args['position'] == 'header' ) {
                     $position = 'card-header p-2';
-                }elseif( $args['position'] == 'footer' ){
+                } else if ( $args['position'] == 'footer' ) {
                     $position = 'card-footer p-2';
                 }
-                $output = '<div class="'.$position.' '.$class.' '.$wrap_class.'">';
-            }else{
-                $class = !empty($args['class']) ? esc_attr($args['class']) : '';
-                $position = isset($args['position']) && $args['position']=='left' ? 'left' : 'right';
-                $output = '<div class="gd-list-item-'.$position.' '.$class.'">';
+                $output = '<div class="' . $position . ' ' . $class . ' ' . $wrap_class . '">';
+            } else {
+                $class = ! empty( $args['class'] ) ? esc_attr( $args['class'] ) : '';
+                $position = isset( $args['position'] ) && $args['position'] == 'left' ? 'left' : 'right';
+                $output = '<div class="gd-list-item-' . $position . ' ' . $class . '">';
             }
-
-
-        }elseif(isset($args['type']) && $args['type']=='close'){
+        } else if ( isset( $args['type'] ) && $args['type'] == 'close' ) {
             $output = "</div>";
         }
 
         // if block demo return empty to show placeholder text
-        if($this->is_block_content_call() && geodir_is_archive_item_template_page() ){
-            $type = !empty($args['type']) ? esc_attr($args['type']) : '';
-            if($design_style){
+        if ( $this->is_block_content_call() && geodir_is_archive_item_template_page() ) {
+            $type = ! empty( $args['type'] ) ? esc_attr( $args['type'] ) : '';
+            if ( $design_style ) {
                 $position = '';
-                if( empty($args['position']) || $args['position'] == 'left' ){
+                if ( empty( $args['position'] ) || $args['position'] == 'left' ) {
                     $position =  'media';
-                }elseif( $args['position'] == 'right' ){
+                } else if ( $args['position'] == 'right' ) {
                     $position = 'body';
-                }elseif( $args['position'] == 'header' ){
+                } else if ( $args['position'] == 'header' ) {
                     $position = 'header';
-                }elseif( $args['position'] == 'footer' ){
+                } else if ( $args['position'] == 'footer' ) {
                     $position = 'footer';
                 }
-            }else{
-                $position = isset($args['position']) && $args['position']=='left' ? 'left' : 'right';
+            } else {
+                $position = isset( $args['position'] ) && $args['position'] == 'left' ? 'left' : 'right';
             }
-            $section_type = $type=='open' ? __('closing','geodirectory') : __('opening','geodirectory');
-            $output = '<div style="background:#0185ba33;padding: 10px;">'.sprintf( __('Archive Item Section: <b>%s : %s</b> <small>(requires %s section to work)</small>', 'geodirectory'),strtoupper($type),strtoupper($position),$section_type).'</div>';
+
+            $section_type = $type == 'open' ? __( 'closing', 'geodirectory' ) : __( 'opening', 'geodirectory' );
+            $output = '<div style="background:#0185ba33;padding:10px;">' . wp_sprintf( __( 'Archive Item Section: <b>%s : %s</b> <small>(requires %s section to work)</small>', 'geodirectory' ), strtoupper( $type ), strtoupper( $position), $section_type ) . '</div>';
         }
 
         return $output;
     }
-
-    
-
 }

@@ -187,6 +187,8 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
+		global $aui_bs5, $post, $gd_post;
+
 		/**
 		 * @var int    $ID Optional. The current post ID if empty.
 		 * @var string $key The meta key : email
@@ -195,8 +197,6 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		 * @var string $location The show in what location key. Default 'none'
 		 */
 		extract( $args, EXTR_SKIP );
-
-		global $post, $gd_post;
 
 		$args['location'] = ! empty( $args['location'] ) ? $args['location'] : 'none';
 
@@ -291,8 +291,8 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					if ( $args['alignment'] != '' ) {
 						if ( $design_style ) {
 							if ( $args['alignment'] == 'block' ) { $field['css_class'] .= " d-block "; }
-							else if ( $args['alignment'] == 'left' ) { $field['css_class'] .= " float-left mr-2 "; }
-							else if ( $args['alignment'] == 'right' ) { $field['css_class'] .= " float-right ml-2 "; }
+							else if ( $args['alignment'] == 'left' ) { $field['css_class'] .= ( $aui_bs5 ? ' float-start ms-2 ' : ' float-left mr-2 ' ); }
+							else if ( $args['alignment'] == 'right' ) { $field['css_class'] .= ( $aui_bs5 ? ' float-end me-2 ' : ' float-right ml-2 ' ); }
 							else if ( $args['alignment'] == 'center' ) { $field['css_class'] .= " mw-100 d-block mx-auto "; }
 							else { $field['css_class'] .= " clear-both "; }
 						} else {

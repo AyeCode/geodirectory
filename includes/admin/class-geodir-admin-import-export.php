@@ -1103,6 +1103,7 @@ class GeoDir_Admin_Import_Export {
 			$csv_row[] = 'cat_color';
 			$csv_row[] = 'cat_description';
 			$csv_row[] = 'cat_top_description';
+			$csv_row[] = 'cat_bottom_description';
 			$csv_row[] = 'cat_image';
 			$csv_row[] = 'cat_icon';
 
@@ -1129,6 +1130,7 @@ class GeoDir_Admin_Import_Export {
 				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_color', true );
 				$csv_row[] = $term->description;
 				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_top_desc', true );
+				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_bottom_desc', true );
 				$csv_row[] = $cat_image;
 				$csv_row[] = $cat_icon;
 
@@ -1209,6 +1211,10 @@ class GeoDir_Admin_Import_Export {
 
 						if ( isset( $term_data['cat_top_description'] ) ) {
 							update_term_meta( $term_id, 'ct_cat_top_desc', $term_data['cat_top_description'] );
+						}
+
+						if ( isset( $term_data['cat_bottom_description'] ) ) {
+							update_term_meta( $term_id, 'ct_cat_bottom_desc', $term_data['cat_bottom_description'] );
 						}
 
 						if ( isset( $term_data['cat_schema'] ) ) {
@@ -1326,6 +1332,7 @@ class GeoDir_Admin_Import_Export {
 		$cat_info_fixed['cat_font_icon']       = isset( $cat_info['cat_font_icon'] ) && $cat_info['cat_font_icon'] ? esc_attr( $cat_info['cat_font_icon'] ) : '';
 		$cat_info_fixed['cat_color']           = isset( $cat_info['cat_color'] ) && $cat_info['cat_color'] ? esc_attr( $cat_info['cat_color'] ) : '';
 		$cat_info_fixed['cat_top_description'] = isset( $cat_info['cat_top_description'] ) && $cat_info['cat_top_description'] ? esc_attr( $cat_info['cat_top_description'] ) : '';
+		$cat_info_fixed['cat_bottom_description'] = isset( $cat_info['cat_bottom_description'] ) && $cat_info['cat_bottom_description'] ? esc_attr( $cat_info['cat_bottom_description'] ) : '';
 		$cat_info_fixed['cat_image']           = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
 		$cat_info_fixed['cat_icon']            = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
 
@@ -1518,6 +1525,7 @@ class GeoDir_Admin_Import_Export {
 	 * @type string $slug Term slug.
 	 * @type string $description Term description.
 	 * @type string $top_description Term top description.
+	 * @type string $bottom_description Term bottom description.
 	 * @type string $image Default Term image.
 	 * @type string $icon Default Term icon.
 	 * @type string $taxonomy Term taxonomy.

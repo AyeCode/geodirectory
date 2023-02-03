@@ -26,8 +26,8 @@ $nonce = wp_create_nonce( 'geodir_import_export_nonce' );
 				<div id="gd_ie_im_posts" class="gd-hndle-pbox card-body">
 
 
-					<div data-argument="gd_im_choicepost" class="form-group row">
-						<label for="gd_im_choicepost" class="font-weight-bold  col-sm-3 col-form-label"><?php _e('Upload JSON file', 'geodirectory'); ?></label>
+					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Upload JSON file', 'geodirectory'); ?></label>
 						<div class="col-sm-9">
 							<?php
 
