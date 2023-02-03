@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			do_action( 'geodir_settings_' . $current_tab );
 			do_action( 'geodir_settings_tabs_' . $current_tab ); // @deprecated hook
 		?>
-		<p class="submit mt-2 text-right">
+		<p class="submit mt-2 text-right text-end">
 			<?php if ( empty( $GLOBALS['hide_save_button'] ) ) : ?>
 				<input name="save" class="btn btn-primary geodir-save-button" type="submit" value="<?php esc_attr_e( 'Save changes', 'geodirectory' ); ?>" />
 			<?php endif; ?>

@@ -386,7 +386,7 @@ if ( isset( $_REQUEST['resolved'] ) || isset( $_REQUEST['rejected'] ) || isset( 
 				array(
 					'type'=> 'warning',
 					'content'=> $response->get_error_message(),
-					'class' => 'geodir-report-post-msg mb-3 text-left'
+					'class' => 'geodir-report-post-msg mb-3 text-left text-start'
 				)
 			);
 			wp_send_json_error( array( 'message' => $message ) );
@@ -396,7 +396,7 @@ if ( isset( $_REQUEST['resolved'] ) || isset( $_REQUEST['rejected'] ) || isset( 
 					array(
 						'type'=> 'success',
 						'content'=> $response['message'],
-						'class' => 'geodir-report-post-msg m-3 text-left'
+						'class' => 'geodir-report-post-msg m-3 text-left text-start'
 					)
 				);
 			}

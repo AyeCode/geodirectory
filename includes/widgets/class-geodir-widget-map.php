@@ -23,6 +23,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
+		global $aui_bs5;
 
 		$options = array(
 			'textdomain'     => GEODIRECTORY_TEXTDOMAIN,
@@ -43,7 +44,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						'width'   => '[%width%]',
 						'height'  => '[%height%]',
 						'style'   => '{height: "inherit","object-fit": "cover"}',
-						'class'   => 'mb-[%mb%] mt-[%mt%] ml-[%ml%] mr-[%mr%] pb-[%pb%] pt-[%pt%] pl-[%pl%] pr-[%pr%] border border-[%border%] [%rounded%] [%shadow%] rounded-[%rounded_size%] bg-[%bg%]',
+						'class'   => $aui_bs5 ? 'mb-[%mb%] mt-[%mt%] ms-[%ml%] me-[%mr%] pb-[%pb%] pt-[%pt%] ps-[%pl%] pe-[%pr%] border border-[%border%] [%rounded%] [%shadow%] rounded-[%rounded_size%] bg-[%bg%]' : 'mb-[%mb%] mt-[%mt%] ml-[%ml%] mr-[%mr%] pb-[%pb%] pt-[%pt%] pl-[%pl%] pr-[%pr%] border border-[%border%] [%rounded%] [%shadow%] rounded-[%rounded_size%] bg-[%bg%]',
 					)
 				)
 			),

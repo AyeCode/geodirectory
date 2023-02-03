@@ -286,6 +286,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory Business Directory Plugin v2.2.25 =
+* Changes for AUI Bootstrap 5 compatibility - ADDED
+
 = GeoDirectory Business Directory Plugin v2.2.24 - 2023-01-25 =
 * Map popup not opening for OSM on click from GD > Map Pinpoint - FIXED
 * delete_dummy_posts() function sanitization from admin user - ADDED
@@ -309,6 +312,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.2.20 - 2022-12-20 =
 * CSV formula injection sanitation - ADDED
+* New field adeed to set category bottom description - ADDED
+* Option added to select archive item template for listings loop - ADDED
 
 = GeoDirectory Business Directory Plugin v2.2.19 - 2022-12-15 =
 * Map directions link from listings is not working when multiple post map on the page - FIXED

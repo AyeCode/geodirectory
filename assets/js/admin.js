@@ -1496,7 +1496,7 @@ function geodir_validate_google_api_key($key,$id){
     }
 
     //aui_toast($id,$type,$title,$title_small,$body,$time,$can_close)
-    $title = geodir_params.txt_google_key_verifying + ' <div class="spinner-border spinner-border-sm" role="status"><span class="sr-only"></span></div>';
+    $title = geodir_params.txt_google_key_verifying + ' <div class="spinner-border spinner-border-sm" role="status"><span class="sr-only visually-hidden"></span></div>';
     aui_toast('geodir_validate_google_api_key','info', $title ,'','',10000,false);
     setTimeout(function (){
         if( !gd_has_map_error ){

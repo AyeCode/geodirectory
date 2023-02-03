@@ -216,10 +216,8 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
 
         }
 
-
         return $arguments;
     }
-
 
     /**
      * The Super block output function.
@@ -230,9 +228,8 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
      *
      * @return mixed|string|void
      */
-    public function output($args = array(), $widget_args = array(),$content = ''){
-
-        global $post,$gd_post;
+    public function output( $args = array(), $widget_args = array(), $content = '' ) {
+        global $aui_bs5, $post, $gd_post;
 
         $defaults = array(
             'form_id' => '',
@@ -255,7 +252,6 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
          * Parse incoming $args into an array and merge it with $defaults
          */
         $args = wp_parse_args( $args, $defaults );
-
 
         $design_style = geodir_design_style();
 
@@ -307,17 +303,17 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 }
 
                 // margins
-                if ( !empty( $args['mt'] ) ) { $args['css_class'] .= " mt-".sanitize_html_class($args['mt'])." "; }
-                if ( !empty( $args['mr'] ) ) { $args['css_class'] .= " mr-".sanitize_html_class($args['mr'])." "; }
-                if ( !empty( $args['mb'] ) ) { $args['css_class'] .= " mb-".sanitize_html_class($args['mb'])." "; }
-                if ( !empty( $args['ml'] ) ) { $args['css_class'] .= " ml-".sanitize_html_class($args['ml'])." "; }
+                if ( ! empty( $args['mt'] ) ) { $args['css_class'] .= " mt-".sanitize_html_class($args['mt'])." "; }
+                if ( ! empty( $args['mr'] ) ) { $args['css_class'] .= ( $aui_bs5 ? ' me-' : ' mr-' ) . sanitize_html_class( $args['mr'] ) . " "; }
+                if ( ! empty( $args['mb'] ) ) { $args['css_class'] .= " mb-".sanitize_html_class($args['mb'])." "; }
+                if ( ! empty( $args['ml'] ) ) { $args['css_class'] .= ( $aui_bs5 ? ' ms-' : ' ml-' ) . sanitize_html_class( $args['ml'] ) . " "; }
 
                 // set alignment class
                 if ( $args['alignment'] != '' ) {
                     if($design_style){
                         if($args['alignment']=='block'){$args['css_class'] .= " d-block ";}
-                        elseif($args['alignment']=='left'){$args['css_class'] .= " float-left mr-2 ";}
-                        elseif($args['alignment']=='right'){$args['css_class'] .= " float-right ml-2 ";}
+                        elseif($args['alignment']=='left'){$args['css_class'] .= ( $aui_bs5 ? ' float-start ms-2 ' : ' float-left mr-2 ' );}
+                        elseif($args['alignment']=='right'){$args['css_class'] .= ( $aui_bs5 ? ' float-end me-2 ' : ' float-right ml-2 ' );}
                         elseif($args['alignment']=='center'){$args['css_class'] .= " text-center ";}
                     }else{
                         $args['css_class'] .= $args['alignment']=='block' ? " gd-d-block gd-clear-both " : " geodir-align-" . sanitize_html_class( $args['alignment'] );

@@ -25,7 +25,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @var string
 		 */
 		private static $page = '';
-		
+
 		/**
 		 * Post type.
 		 *
@@ -110,7 +110,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
 		}
-		
+
 
 		/**
 		 * Output the settings.
@@ -235,6 +235,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @package GeoDirectory
 		 */
 		public function output_standard_fields() {
+			global $aui_bs5;
 			$listing_type = self::$post_type;
 
 			$cfs = self::fields_standard( self::$post_type );
@@ -242,7 +243,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			<ul class="row row-cols-1 px-2 mb-0">
 				<li class="gd-cf-tooltip-wrap col px-1">
 					<a id="gd-fieldset"
-					   class="gd-draggable-form-items gd-fieldset btn btn-sm d-block m-0 btn-outline-gray text-dark text-left"
+					   class="gd-draggable-form-items gd-fieldset btn btn-sm d-block m-0 btn-outline-gray text-dark <?php echo $aui_bs5 ? 'text-start' : 'text-left';?>"
 					   href="javascript:void(0);"
 					   data-field-custom-type=""
 					   data-field-type="fieldset"
@@ -252,7 +253,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 						<i class="fas fa-long-arrow-alt-right " aria-hidden="true"></i>
 						<?php _e( 'Fieldset (section separator)', 'geodirectory' ); ?>
 
-						<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help text-muted float-right" data-toggle="tooltip" title="<?php _e( 'This adds a section separator with a title.', 'geodirectory' );?>"></span>
+						<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help text-muted <?php echo $aui_bs5 ? 'float-end' : 'float-right';?>" data-toggle="tooltip" title="<?php _e( 'This adds a section separator with a title.', 'geodirectory' );?>"></span>
 					</a>
 				</li>
 			</ul>
@@ -1397,7 +1398,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 							<?php
 
 
-							echo '<ul class="dd-list gd-tabs-sortable gd-custom-fields-sortable geodir-cpt-cf-items">';
+							echo '<ul class="dd-list gd-tabs-sortable gd-custom-fields-sortable geodir-cpt-cf-items ps-0 list-group">';
 
 							if ( ! empty( $fields ) ) {
 
@@ -1464,7 +1465,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			}
 			return ob_get_clean();
 		}
-		
+
 
         /**
          * GeoDir get all fields by posttype.
@@ -1557,7 +1558,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					return;
 				}
 			}
-			
+
 
 			// @todo do we need this?
 			$field_display = $field->field_type == 'address' && $field->htmlvar_name == 'post' ? 'style="display:none"' : '';
@@ -2049,7 +2050,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 		/**
 		 * An array of fields that dont need to add a new column
-		 * 
+		 *
 		 * @return array
 		 */
 		public static function get_default_field_htmlvars(){
@@ -2063,7 +2064,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 		/**
 		 * Save the custom field.
-		 * 
+		 *
 		 * @param array $field
 		 *
 		 * @return int|string
@@ -2335,7 +2336,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					array('id' => $field->field_id),
 					$db_format
 				);
-				
+
 				if ( $result === false ) {
 					return new WP_Error( 'failed', __( "Field update failed.x", "geodirectory" ) );
 				}
