@@ -1637,13 +1637,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 *
 		 * }
 		 */
-		private static function sanatize_custom_field($input){
-
-			// if object convert to array
-			if(is_object($input)){
-				$input = json_decode(json_encode($input), true);
+		private static function sanatize_custom_field( $input ) {
+			// If object convert to array
+			if ( is_object( $input ) ) {
+				$input = json_decode( json_encode( $input ), true );
 			}
-
 
 			$field = new stdClass();
 
@@ -1694,6 +1692,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field->validation_msg = isset( $input['validation_msg'] ) ? sanitize_text_field( $input['validation_msg'] ) : '';
 			$field->for_admin_use = isset( $input['for_admin_use'] ) ? absint( $input['for_admin_use'] ) : 0;
 			$field->add_column = !empty( $input['add_column'] ) ? 1 : 0;
+
+			if ( isset( $input['tab_parent'] ) && isset( $input['tab_level'] ) ) {
+				$field->tab_parent = (int) $input['tab_parent'];
+				$field->tab_level = (int) $input['tab_level'];
+			}
 
 			// Set some default after sanitation
 			$field->data_type = self::sanitize_data_type($field);
@@ -2303,6 +2306,26 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'%s', // validation_msg
 				'%d', // for_admin_use
 			);
+
+			$cf_data = array(
+				'db_data' => $db_data,
+				'db_format' => $db_format
+			);
+
+			/**
+			 * Filter the custom fields data to save in database.
+			 *
+			 * @since 2.2.25
+			 *
+			 * @param array  $cf_data Field data.
+			 * @param object $field Custom field object.
+			 */
+			$cf_data = apply_filters( 'geodir_cpt_cf_save_data', $cf_data, $field );
+
+			if ( ! empty( $cf_data['db_data'] ) && ! empty( $cf_data['db_format'] ) ) {
+				$db_data = $cf_data['db_data'];
+				$db_format = $cf_data['db_format'];
+			}
 
 			if ( $exists ) {
 				// Update the field settings.

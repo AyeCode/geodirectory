@@ -783,13 +783,13 @@ function geodir_field_init_conditional($) {
     if (!$('#geodir_conditional_fields').length) {
         return;
     }
-    $(document.body).on('click', '.geodir-conditional-add', function() {
+    $(document.body).off('click', '.geodir-conditional-add').on('click', '.geodir-conditional-add', function() {
         geodir_field_add_condition(this);
     });
-    $(document.body).on('click', '.geodir-conditional-remove', function() {
+    $(document.body).off('click', '.geodir-conditional-remove').on('click', '.geodir-conditional-remove', function() {
         geodir_field_remove_condition(this);
     });
-    $(document.body).on('click', '[data-setting="conditional_fields_heading"]', function() {
+    $(document.body).off('click', '[data-setting="conditional_fields_heading"]').on('click', '[data-setting="conditional_fields_heading"]', function() {
         if ($(this).hasClass('geodir-con-fields-open')) {
             $(this).removeClass('geodir-con-fields-open').addClass('geodir-con-fields-hidden');
             // $(this).closest('.dd-setting').find('#geodir_conditional_fields').hide();
