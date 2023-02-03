@@ -780,39 +780,39 @@ if (!function_exists('geodir_check_field_visibility')) {
  * @param bool $translated True if label needs to be translated.
  * @return array Returns option array.
  */
-function geodir_string_to_options($input = '', $translated = false)
-{
+function geodir_string_to_options( $input = '', $translated = false ) {
     $return = array();
-    if ($input != '') {
-        $input = trim($input);
-        $input = rtrim($input, ",");
-        $input = ltrim($input, ",");
-        $input = trim($input);
+
+    if ( $input != '' ) {
+        $input = trim( $input );
+        $input = rtrim( $input, "," );
+        $input = ltrim( $input, "," );
+        $input = trim( $input );
     }
 
-    $input_arr = explode(',', $input);
+    $input_arr = explode( ',', $input );
 
-    if (!empty($input_arr)) {
-        foreach ($input_arr as $input_str) {
-            $input_str = trim($input_str);
+    if ( ! empty( $input_arr ) ) {
+        foreach ( $input_arr as $input_str ) {
+            $input_str = trim( stripslashes( $input_str ) );
 
-            if (strpos($input_str, "/") !== false) {
-                $input_str = explode("/", $input_str, 2);
-                $label = trim($input_str[0]);
-                if ($translated && $label != '') {
-                    $label = __($label, 'geodirectory');
+            if ( strpos( $input_str, "/" ) !== false ) {
+                $input_str = explode( "/", $input_str, 2 );
+                $label = trim( $input_str[0] );
+                if ( $translated && $label != '' ) {
+                    $label = __( $label, 'geodirectory' );
                 }
-                $value = trim($input_str[1]);
+                $value = trim( $input_str[1] );
             } else {
                 $value = $input_str;
-                if ($translated && $input_str != '') {
-                    $input_str = __($input_str, 'geodirectory');
+                if ( $translated && $input_str != '' ) {
+                    $input_str = __( $input_str, 'geodirectory' );
                 }
                 $label = $input_str;
             }
 
-            if ($label != '') {
-                $return[] = array('label' => $label, 'value' => $value, 'optgroup' => NULL);
+            if ( $label != '' ) {
+                $return[] = array( 'label' => $label, 'value' => $value, 'optgroup' => NULL );
             }
         }
     }
