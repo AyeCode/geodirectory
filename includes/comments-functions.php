@@ -464,6 +464,15 @@ function geodir_post_author_moderate_comment() {
 	if ( empty( $_REQUEST['_gd_action'] ) ) {
 		return;
 	}
+
+	// If not logged in redirect to login form.
+	if ( ! is_user_logged_in() ) {
+		$redirect = geodir_curPageURL();
+		$login_url = geodir_login_url( $redirect );
+		wp_safe_redirect( $login_url );
+		exit;
+	}
+
 	$request = $_REQUEST;
 	$action  = sanitize_text_field( $request['_gd_action'] );
 
