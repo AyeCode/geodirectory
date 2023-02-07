@@ -18,7 +18,8 @@ global $aui_bs5;
  */
 
 
-$tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 'mjs-nestedSortable-no-nesting';
+$tab_class = isset( $field->id ) && strpos( $field->id, 'new' ) === 0 ? 'geodir-tab-new ' : '';
+$tab_class .= ( isset( $field->field_type ) && $field->field_type == 'fieldset' ) && ! $tab_class ? '' : 'mjs-nestedSortable-no-nesting';
 ?>
 <li class="dd-item mb-0 <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>" data-htmlvar_name="<?php echo ( isset( $field->htmlvar_name ) ? esc_attr( $field->htmlvar_name ) : '' );?>" id="setName_<?php echo $field->id;?>" data-field_type="<?php echo esc_attr( $field->field_type ); ?>" data-field_type_key="<?php echo esc_attr( $field->field_type_key ); ?>" data-field-nonce="<?php echo esc_attr( $nonce ); ?>">
 	<div class="hover-shadow dd-form d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx <?php echo $aui_bs5 ? 'text-start' : 'text-left';?> bg-light <?php if(empty($field->is_active)){echo 'border-warning';} ?>" onclick="gd_tabs_item_settings(this);">

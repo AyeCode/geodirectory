@@ -291,6 +291,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Approve comment link should redirect to login page for non-logged author - FIXED
 * Several block improvements for BS5 changes - ADDED
 * Allow basic HTML tags in CPT tab shortcode - FIXED
+* Child field disappeared when moved under new fieldset - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.25 - 2023-01-26 =
 * Search form CPT change fails to AJAX load new search form - FIXED
@@ -318,7 +319,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.2.20 - 2022-12-20 =
 * CSV formula injection sanitation - ADDED
-* New field adeed to set category bottom description - ADDED
+* New field added to set category bottom description - ADDED
 * Option added to select archive item template for listings loop - ADDED
 
 = GeoDirectory Business Directory Plugin v2.2.19 - 2022-12-15 =
