@@ -53,20 +53,20 @@
     },
     {
         "name": "ayecode/wp-ayecode-ui",
-        "version": "0.1.85",
-        "version_normalized": "0.1.85.0",
+        "version": "0.1.88",
+        "version_normalized": "0.1.88.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-            "reference": "b17bfcbae9152cef23fd658c998808f571cf8c99"
+            "reference": "18d7c7e34d2d5ad99d1917bb2b523f011d30ad75"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/b17bfcbae9152cef23fd658c998808f571cf8c99",
-            "reference": "b17bfcbae9152cef23fd658c998808f571cf8c99",
+            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/18d7c7e34d2d5ad99d1917bb2b523f011d30ad75",
+            "reference": "18d7c7e34d2d5ad99d1917bb2b523f011d30ad75",
             "shasum": ""
         },
-        "time": "2022-11-02T10:47:29+00:00",
+        "time": "2023-02-06T17:08:35+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -249,24 +249,24 @@
     },
     {
         "name": "ayecode/wp-super-duper",
-        "version": "1.1.10",
-        "version_normalized": "1.1.10.0",
+        "version": "1.1.14",
+        "version_normalized": "1.1.14.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "348d38793739564121bf1c9ede023d5e86279225"
+            "reference": "0011a2a1066c178263fe49d1e20259797d4e7730"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/348d38793739564121bf1c9ede023d5e86279225",
-            "reference": "348d38793739564121bf1c9ede023d5e86279225",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/0011a2a1066c178263fe49d1e20259797d4e7730",
+            "reference": "0011a2a1066c178263fe49d1e20259797d4e7730",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2022-11-02T10:48:13+00:00",
+        "time": "2023-02-06T17:07:29+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

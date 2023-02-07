@@ -12,17 +12,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wp_query;
 
-if ( $wp_query->max_num_pages <= 1 && empty($args['preview']) ) {
+if ( $wp_query->max_num_pages <= 1 && empty( $args['preview'] ) ) {
 	return;
 }
 
 
 ?>
-<div class="<?php echo $wrap_class;?>">
+<div class="<?php echo esc_attr( $wrap_class ); ?>">
 	<?php
-	/**
-	 * Call AyeCode UI Pagination component.
-	 */
-	echo aui()->pagination($args);
+
+	if ( ! empty( $args['advanced_pagination_only'] ) ) {
+		echo wp_kses_post( $args['advanced_pagination_only'] );
+	} else {
+		/**
+		 * Call AyeCode UI Pagination component.
+		 */
+		echo wp_kses_post( aui()->pagination( $args ) );
+	}
 	?>
 </div>

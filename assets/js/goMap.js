@@ -1640,7 +1640,11 @@ function gdGeoLocateMe(el, type) {
         window.gdLocate = type;
     }
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(gdGeoLocateMeSuccess, gdGeoLocateMeError);
+        navigator.geolocation.getCurrentPosition(gdGeoLocateMeSuccess, gdGeoLocateMeError, {
+			enableHighAccuracy: true,
+			timeout: 10000,
+			maximumAge: 0
+		});
     } else {
         gdGeoLocateMeError(-1);
     }

@@ -1,0 +1,7 @@
+.input-group-inside input:not(:placeholder-shown) + .aui-clear-input {
+  display: block !important;
+}
+
+.input-group-inside .input-group-text, .input-group-append .input-group-text{
+  position: absolute;
+}

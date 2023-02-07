@@ -2437,7 +2437,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ( isset( $gd_post->longitude ) && $gd_post->longitude ) {
                 $address_fields['longitude'] = '<span itemprop="addressLongitude">' . $gd_post->longitude . '</span>';
             }
-            
+
             // trick LM to add hoods if
             if (strpos($address_template, '%%neighbourhood') !== false) {
                 if(!empty($cf['extra_fields'])){
@@ -2513,6 +2513,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 return stripslashes( wp_strip_all_tags($address_fields) );
             }
 
+//			print_r($cf);exit;
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" itemscope itemtype="http://schema.org/PostalAddress">';
 
             $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';

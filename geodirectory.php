@@ -301,7 +301,7 @@ final class GeoDirectory {
 	    // @todo not ready for production yet
 	    //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-fse.php' );
 
-	    if ( wp_get_theme()->get_stylesheet() == 'blockstrap' ) {
+	    if ( 'blockstrap' === wp_get_theme()->get_stylesheet() || 'blockstrap' === wp_get_theme()->get_template() ) {
 		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-blockstrap.php' );
 	    }
 
