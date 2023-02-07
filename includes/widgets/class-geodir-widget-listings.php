@@ -181,15 +181,15 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	            'advanced' => true,
 	            'group'     => __("Filters","geodirectory")
             ),
-            'with_pics_only'  => array(
-	            'title' => __("Only show listings with pictures?", 'geodirectory'),
-	            'type' => 'checkbox',
-	            'desc_tip' => true,
-	            'value'  => '1',
-	            'default'  => '0',
-	            'advanced' => true,
-	            'group'     => __("Filters","geodirectory")
-            ),
+			'with_pics_only' => array(
+				'title' => __( 'Only show listings with images(post_images)?', 'geodirectory' ),
+				'type' => 'checkbox',
+				'desc_tip' => true,
+				'value' => '1',
+				'default' => '0',
+				'advanced' => true,
+				'group' => __( 'Filters', 'geodirectory' )
+			),
             'with_videos_only'  => array(
 	            'title' => __("Only show listings with videos?", 'geodirectory'),
 	            'type' => 'checkbox',
