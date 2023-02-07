@@ -290,6 +290,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Changes for AUI Bootstrap 5 compatibility - ADDED
 * Approve comment link should redirect to login page for non-logged author - FIXED
 * Several block improvements for BS5 changes - ADDED
+* Allow basic HTML tags in CPT tab shortcode - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.25 - 2023-01-26 =
 * Search form CPT change fails to AJAX load new search form - FIXED
