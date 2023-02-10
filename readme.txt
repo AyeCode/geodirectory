@@ -292,6 +292,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Several block improvements for BS5 changes - ADDED
 * Allow basic HTML tags in CPT tab shortcode - FIXED
 * Child field disappeared when moved under new fieldset - FIXED
+* Listings carousel sometimes skips one slide - FIXED
 
 = GeoDirectory Business Directory Plugin v2.2.25 - 2023-01-26 =
 * Search form CPT change fails to AJAX load new search form - FIXED

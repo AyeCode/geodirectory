@@ -1283,6 +1283,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 			$wrapper_attrs .= ' data-' . $bs . 'interval="' . $slide_interval . '"';
 			$wrapper_attrs .= ' data-' . $bs . 'ride="' . ( $instance['slide_ride'] == 'click' ? 'false' : 'carousel' ) . '"';
+			$wrapper_attrs .= ' data-' . $bs . 'pause="hover"';
 
 			if ( $carousel_items < 1 ) {
 				$carousel_items = 1;
