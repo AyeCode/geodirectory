@@ -2045,10 +2045,8 @@ function geodir_init_listings_carousel(el, index) {
             cid = $el.prop('id') + '_' + index;
             $carousel.prop('id', cid);
         }
-        $carousel.addClass('carousel slide').addClass('d-block').attr('data-' + bsDash + 'interval', $el.data(bsDash + 'interval')).attr('data-' + bsDash + 'ride', $el.data(bsDash + 'ride'));
-        if (bsDash) {
-            $el.removeAttr('data-' + bsDash + 'interval data-' + bsDash + 'ride').removeClass('carousel slide');
-        }
+        $carousel.addClass('carousel slide').addClass('d-block').attr('data-' + bsDash + 'interval', $el.data(bsDash + 'interval')).attr('data-' + bsDash + 'ride', $el.data(bsDash + 'ride')).attr('data-' + bsDash + 'pause', $el.data(bsDash + 'pause'));
+        $el.removeAttr('data-' + bsDash + 'interval data-' + bsDash + 'ride data-' + bsDash + 'pause').removeClass('carousel slide');
         $el.addClass('carousel-inner');
         $el.find(wEl).addClass('carousel-item');
         var $content = jQuery($el.html()).empty();

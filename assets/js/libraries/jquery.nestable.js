@@ -7,6 +7,7 @@
  *	 jquery.ui.sortable.js 1.10+
  *
  * 2022-01-27 Added 267-272 lines for WordPress v5.9 + jQuery UI v1.13 compatibility.
+ * 2023-02-07 Line: 797. Skip new field from nesting order.
  *
  * Copyright (c) 2010-2016 Manuele J Sarfatti and contributors
  * Licensed under the MIT License
@@ -793,7 +794,7 @@
                     pid = parentItem[2];
                 }
 
-                if (id) {
+                if (id && !$(item).hasClass('geodir-tab-new')) {
                     var data = $(item).children('div').data();
                     var itemObj = $.extend( data, {
                         "id":id[2],
