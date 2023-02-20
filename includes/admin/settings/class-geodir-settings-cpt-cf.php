@@ -1759,26 +1759,31 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			return (int)$last_order + 1;
 		}
 
-        /**
-         * GeoDir sanitize extra values.
-         *
-         * @since 2.0.0
-         *
-         * @param string|array $value Extra values.
-         * @return array|string.
-         */
-		private static function sanatize_extra( $value ){
-			if( is_array($value) ){
-				if(empty($value)){$value = '';}else{
-//					$value = maybe_serialize(array_map( 'sanitize_text_field', $value ));
-					foreach($value as $key => $val){
-						$value[$key] = self::sanatize_extra($val);
-					}
-					$value = maybe_serialize($value);
+		/**
+		 * GeoDir sanitize extra values.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string|array $value Extra values.
+		 * @return array|string.
+		 */
+		private static function sanatize_extra( $value ) {
+			if ( is_array( $value ) ) {
+				if ( empty( $value ) ) {
+					$value = '';
+				} else {
+					foreach ( $value as $key => $val ) {
+						if ( $key == 'gd_file_types' && is_array( $val ) ) {
+							$val = array_filter( $val );
+						}
 
+						$value[ $key ] = self::sanatize_extra( $val );
+					}
+
+					$value = maybe_serialize( $value );
 				}
-			}else{
-				$value = sanitize_text_field($value );
+			} else {
+				$value = sanitize_text_field( $value );
 			}
 
 			return $value;

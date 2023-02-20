@@ -389,21 +389,20 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
          * @param object $field_info File type fields information.
          * @return string $output.
          */
-		public static function file_types($output,$result_str,$cf,$field_info){
-
+		public static function file_types( $output, $result_str, $cf, $field_info ) {
 			$allowed_file_types = geodir_allowed_mime_types();
 
 			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
 			$gd_file_types = !empty($extra_fields) && !empty($extra_fields['gd_file_types']) ? maybe_unserialize($extra_fields['gd_file_types']) : array('*');
+			if ( ! empty( $gd_file_types ) ) {
+				$gd_file_types = array_filter( $gd_file_types );
+			}
 
 			$options = array(
 				'*' => __('All types', 'geodirectory')
 			);
 
-//			print_r( $gd_file_types );exit;
-
 			foreach ( $allowed_file_types as $format => $types ) {
-
 				if ( ! empty( $types ) ) {
 					$options[] = array(
 						'optgroup'  => 'start',
@@ -421,7 +420,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 						'optgroup'  => 'end',
 					);
 				}
-
 			}
 
 			$output .= aui()->select(
@@ -438,7 +436,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 //					'element_require'   => '[%data_type%] == "DECIMAL" && [%decimal_point%] != "" '
 				)
 			);
-
 
 			return $output;
 		}
