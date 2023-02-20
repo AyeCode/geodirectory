@@ -101,7 +101,7 @@ jQuery(document).ready(function($) {
                     window.geodirUploading = false;
                 }
                 if (files.code == -600) {
-                    jQuery('#' + imgId + 'upload-error').addClass('d-block');
+                    jQuery('#' + imgId + 'upload-error').removeClass('d-none').addClass('d-block');
 
                     if (typeof geodir_params.err_max_file_size != 'undefined' && geodir_params.err_max_file_size != '') {
                         msgErr = geodir_params.err_max_file_size;
@@ -112,7 +112,7 @@ jQuery(document).ready(function($) {
 
                     jQuery('#' + imgId + 'upload-error').html(msgErr);
                 } else if (files.code == -601) {
-                    jQuery('#' + imgId + 'upload-error').addClass('d-block');
+                    jQuery('#' + imgId + 'upload-error').removeClass('d-none').addClass('d-block');
 
                     if (typeof geodir_params.err_file_type != 'undefined' && geodir_params.err_file_type != '') {
                         msgErr = geodir_params.err_file_type;
@@ -128,7 +128,7 @@ jQuery(document).ready(function($) {
 
                     jQuery('#' + imgId + 'upload-error').html(msgErr);
                 } else {
-                    jQuery('#' + imgId + 'upload-error').addClass('d-block');
+                    jQuery('#' + imgId + 'upload-error').removeClass('d-none').addClass('d-block');
                     jQuery('#' + imgId + 'upload-error').html(files.message);
                 }
             });
@@ -140,7 +140,7 @@ jQuery(document).ready(function($) {
                 var totalImg = parseInt(jQuery("#" + imgId + "totImg").val());
                 var limitImg = parseInt(jQuery("#" + imgId + "image_limit").val());
                 jQuery('#' + imgId + 'upload-error').html('');
-                jQuery('#' + imgId + 'upload-error').removeClass('d-block');
+                jQuery('#' + imgId + 'upload-error').removeClass('d-block').addClass('d-none');
 
                 if (limitImg && $this.hasClass("plupload-upload-uic-multiple") && limitImg > 0) {
                     if (totalImg >= limitImg && limitImg > 0) {
@@ -155,7 +155,7 @@ jQuery(document).ready(function($) {
                         }
                         msgErr = msgErr.replace("%s", limitImg);
 
-                        jQuery('#' + imgId + 'upload-error').addClass('d-block');
+                        jQuery('#' + imgId + 'upload-error').removeClass('d-none').addClass('d-block');
 
                         jQuery('#' + imgId + 'upload-error').html(msgErr);
                         return false;
@@ -173,7 +173,7 @@ jQuery(document).ready(function($) {
                         }
                         msgErr = msgErr.replace("%s", limitImg);
 
-                        jQuery('#' + imgId + 'upload-error').addClass('d-block');
+                        jQuery('#' + imgId + 'upload-error').removeClass('d-none').addClass('d-block');
                         jQuery('#' + imgId + 'upload-error').html(msgErr);
                         return false;
                     }
@@ -394,7 +394,7 @@ function plu_show_thumbs(imgId) {
                     jQuery("#" + imgId + "totImg").val(totalImg);
                 }
                 jQuery('#' + imgId + 'upload-error').html('');
-                jQuery('#' + imgId + 'upload-error').removeClass('d-block');
+                jQuery('#' + imgId + 'upload-error').removeClass('d-block').addClass('d-none');
                 var ki = $(this).attr("id").replace("thumbremovelink" + imgId, "");
                 ki = parseInt(ki);
                 var kimages = [];
