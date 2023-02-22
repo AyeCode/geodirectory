@@ -135,10 +135,10 @@ class GeoDir_SEO {
 
 		// Bail if we have a SEO plugin installed.
 		if (
-			self::yoast_enabled() // Don't run if active and not set to be disabled 
-			|| self::rank_math_enabled() // Don't run if active and not set to be disabled 
+			self::yoast_enabled() // Don't run if active and not set to be disabled
+			|| self::rank_math_enabled() // Don't run if active and not set to be disabled
 			|| self::seopress_enabled() // SEOPress
-			|| class_exists( 'All_in_One_SEO_Pack' )  // don't run if active 
+			|| class_exists( 'All_in_One_SEO_Pack' )  // don't run if active
 			|| ( is_admin() && ! $ajax_search ) // No need to run in wp-admin
 		) {
 			// Even if disabled we still need to replace title vars
@@ -653,7 +653,7 @@ class GeoDir_SEO {
 		// %%for_search_term%%
 		if ( strpos( $string, '%%for_search_term%%' ) !== false ) {
 			$for_search_term = $search_term != '' ? wp_sprintf( __( 'for %s', 'geodirectory' ), $search_term ) : '';
-		
+
 			$string = str_replace( "%%for_search_term%%", $for_search_term, $string );
 		}
 
@@ -1012,7 +1012,7 @@ class GeoDir_SEO {
 
 		return $excluded_posts_ids;
 	}
-	
+
 	/**
 	 * Get nonindex page ids.
 	 *
@@ -1529,7 +1529,7 @@ class GeoDir_SEO {
 									$is_robots_noindex = ! WPSEO_Options::get( 'noindex-tax-' . $term->taxonomy, false ) ? false : true;
 								}
 							}
-		
+
 							$presentation->model->is_robots_noindex = $is_robots_noindex;
 							$presentation->model->is_public = ( $presentation->model->is_robots_noindex === null ) ? null : ! $presentation->model->is_robots_noindex;
 						}
@@ -1580,7 +1580,7 @@ class GeoDir_SEO {
 	 */
 	public static function filter_post_metadata( $value, $object_id, $meta_key, $single = false, $meta_type = '' ) {
 		global $geodir_post_meta_loop;
-		
+
 		if ( null === $value ) {
 			return $value;
 		}

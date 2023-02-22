@@ -1073,7 +1073,7 @@ add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5
  * @since 2.0.0
  */
 function geodir_search_form_post_type_input() {
-	global $aui_bs5, $geodir_search_post_type, $geodir_search_post_type_hide;
+	global $aui_bs5, $geodir_search_post_type, $geodir_search_widget_params;
 
 	$post_types     = apply_filters( 'geodir_search_form_post_types', geodir_get_posttypes( 'object' ) );
 	$curr_post_type = $geodir_search_post_type;
@@ -1088,7 +1088,7 @@ function geodir_search_form_post_type_input() {
 		}
 
 		$show_select = true;
-		if ( $geodir_search_post_type_hide == true && ! isset( $_REQUEST['stype'] ) ) {
+		if ( ! empty( $geodir_search_widget_params['post_type_hide'] ) && ! isset( $_REQUEST['stype'] ) ) {
 			$show_select = false;
 		}
 
@@ -1110,11 +1110,11 @@ function geodir_search_form_post_type_input() {
 
 			$select_class = $design_style ? " form-control " . ( $aui_bs5 ? 'form-select' : 'custom-select' ) : '';
 
-			echo $design_style ? '<div class="' . ( $aui_bs5 ? 'mb-3' : 'form-group' ) . '">' : '';
+			echo $design_style ? '<div class="' . ( $aui_bs5 ? '' : 'form-group' ) . '">' : '';
 			echo $design_style ? '<label class="sr-only visually-hidden">'.__("Select search type","geodirectory").'</label>' : '';
 
 			?>
-			<select name="stype" class="search_by_post <?php echo $select_class;?>" aria-label="<?php esc_attr_e( 'Post Type', 'geodirectory' ); ?>">
+			<select name="stype" class="search_by_post <?php echo $select_class . ' c-pointer ' . $geodir_search_widget_params['main_search_inputs_class'];?>" aria-label="<?php esc_attr_e( 'Post Type', 'geodirectory' ); ?>">
 				<?php foreach ( $post_types as $post_type => $info ):
 					global $wpdb;
 					$pt_slug = isset($info->rewrite->slug) ? esc_attr($info->rewrite->slug) : 'places';
@@ -1170,8 +1170,8 @@ function geodir_search_form_post_type_input() {
  *
  * @since 2.0.0
  */
-function geodir_search_form_search_input() {
-	global $geodir_hide_search_input;
+function geodir_search_form_search_input( $instance ) {
+	global $geodir_search_widget_params;
 
 	$design_style = geodir_design_style();
 	$default_search_for_text = geodir_get_option('search_default_text');
@@ -1187,7 +1187,7 @@ function geodir_search_form_search_input() {
 		$search_term = '';
 	}
 
-	if ( ! empty( $geodir_hide_search_input ) ) {
+	if ( ! empty( $geodir_search_widget_params['hide_search_input'] ) ) {
 		$input_wrap_class = $design_style ? ' d-none' : ' gd-hide';
 	} else {
 		$input_wrap_class = '';
@@ -1219,7 +1219,7 @@ function geodir_search_form_search_input() {
  * @since 2.0.0
  */
 function geodir_search_form_near_input() {
-	global $geodir_search_post_type, $geodir_hide_near_input;
+	global $geodir_search_post_type;
 
 	$design_style = geodir_design_style();
 	$default_near_text = geodir_get_option('search_default_near_text');
@@ -1267,7 +1267,7 @@ function geodir_search_form_near_input() {
 	 */
 	$default_near_text = apply_filters( 'geodir_search_default_near_text', $default_near_text, $near );
 
-	if ( ! empty( $geodir_hide_near_input ) ) {
+	if ( ! empty( $geodir_search_widget_params['hide_near_input'] ) ) {
 		$near_class = $design_style ? ' d-none' : ' gd-hide';
 	} else {
 		$near_class = '';
@@ -1356,24 +1356,71 @@ function geodir_get_search_post_type($pt=''){
  * @since 2.0.0
  */
 function geodir_search_form() {
-	global $geodir_search_post_type_hide, $geodir_hide_search_input, $geodir_hide_near_input;
-
-	geodir_get_search_post_type();
-
-	$design_style = geodir_design_style();
-	$template = $design_style ? $design_style . "/search-bar/form.php" : "listing-filter-form.php";
+	global $geodir_search_widget_params;
 
 	$args = array();
 	if ( wp_doing_ajax() && ! empty( $_POST['keepArgs'] ) ) {
-		$_args = json_decode( stripslashes( sanitize_text_field( $_POST['keepArgs'] ) ), true );
+
+		// yes this has 3 html codes, all 3 are needed.
+		$KeepArgs = str_replace( array('“','”','″'), '"', $_POST['keepArgs'] );
+
+//		echo $_POST['keepArgs'].'###'." \n".$KeepArgs;
+		$_args = json_decode( stripslashes( sanitize_text_field( $KeepArgs  ) ), true );
+//		print_r( $_args );
 
 		if ( ! empty( $_args ) && is_array( $_args ) ) {
 			$args = $_args;
 		}
 	}
 
+
+
 	$instance = $args;
 	$keep_args = $args;
+//	print_r( $instance );
+
+
+	// filters position
+	$geodir_search_widget_params['filters_pos'] = ! empty( $instance['filters_pos'] ) ? esc_attr($instance['filters_pos']) : '';
+
+	// Inputs classes
+	$geodir_search_widget_params['main_search_inputs_class'] = sd_build_aui_class(
+		array(
+			'border'         => isset( $instance['input_border'] ) ? $instance['input_border'] : '',
+			'border_opacity' => isset( $instance['input_border_opacity'] ) ? $instance['input_border_opacity'] : '',
+			'rounded_size'   => isset( $instance['input_rounded_size'] ) ? $instance['input_rounded_size'] : '',
+		)
+	);
+
+	// Buttons classes
+	$geodir_search_widget_params['btn_icon_class'] = '';
+	$geodir_search_widget_params['buttons_class']  = sd_build_aui_class(
+		array(
+			'rounded_size'    => isset( $instance['btn_rounded_size'] ) ? $instance['btn_rounded_size'] : '',
+			'rounded_size_md' => isset( $instance['btn_rounded_size_md'] ) ? $instance['btn_rounded_size_md'] : '',
+			'rounded_size_lg' => isset( $instance['btn_rounded_size_lg'] ) ? $instance['btn_rounded_size_lg'] : '',
+		)
+	);
+	$geodir_search_widget_params['buttons_class'] .= $instance['btn_bg'] ? ' btn-' . esc_attr( $instance['btn_bg'] ) : 'btn-primary';
+	$geodir_search_widget_params['buttons_class'] .= $instance['input_size'] ? ' btn-' . esc_attr( $instance['input_size'] ) : '';
+	if ( 'circle' === $instance['btn_rounded_size'] || 'circle' === $instance['btn_rounded_size_md'] || 'circle' === $instance['btn_rounded_size_lg']) {
+		$geodir_search_widget_params['buttons_class'] .= ' px-3';
+
+		if ( $instance['input_size'] !== 'lg' ) {
+			$geodir_search_widget_params['btn_icon_class'] = ' mx-n1';
+		}
+	}
+
+	// input size
+	$geodir_search_widget_params['input_size'] = $instance['input_size'] ? esc_attr( $instance['input_size'] ) : '';
+
+
+	geodir_get_search_post_type();
+
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style . "/search-bar/form.php" : "listing-filter-form.php";
+
+
 	$show = '';
 
 	$form_class = 'geodir-listing-search gd-search-bar-style';
@@ -1383,6 +1430,10 @@ function geodir_search_form() {
 		$form_class .= ' geodir-search-show-' . sanitize_html_class( $show );
 	} else {
 		$form_class .= ' geodir-search-show-all';
+	}
+
+	if ( 'absolute' === $geodir_search_widget_params['filters_pos'] ) {
+		$form_class .= ' position-relative';
 	}
 
 	/**
@@ -1395,20 +1446,29 @@ function geodir_search_form() {
 	$form_class = apply_filters( 'geodir_search_form_class', $form_class, $instance );
 
 	if ( ! empty( $instance['post_type_hide'] ) ) {
-		$geodir_search_post_type_hide = true;
+		$geodir_search_widget_params['post_type_hide'] = true;
 	}
 
 	if ( ! empty( $instance['hide_search_input'] ) ) {
-		$geodir_hide_search_input = true;
+		$geodir_search_widget_params['hide_search_input'] = true;
 	}
 
 	if ( ! empty( $instance['hide_near_input'] ) ) {
-		$geodir_hide_near_input = true;
+		$geodir_search_widget_params['hide_near_input'] = true;
 	}
 
+	$bar_class = sd_build_aui_class(
+		array(
+			'flex_wrap'    => isset( $instance['bar_flex_wrap'] ) ? $instance['bar_flex_wrap'] : '',
+			'flex_wrap_md' => isset( $instance['bar_flex_wrap_md'] ) ? $instance['bar_flex_wrap_md'] : '',
+			'flex_wrap_lg' => isset( $instance['bar_flex_wrap_lg'] ) ? $instance['bar_flex_wrap_lg'] : '',
+		)
+	);
+
 	$tmpl_args = array(
-		'wrap_class' => geodir_build_aui_class( $instance ),
+		'wrap_class' => sd_build_aui_class( $instance ),
 		'form_class' => $form_class,
+		'bar_class'  => $bar_class,
 		'instance' => $instance,
 		'keep_args' => $keep_args,
 		'show' => $show

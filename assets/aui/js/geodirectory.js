@@ -134,6 +134,8 @@ function gd_init_carousel_ajax(){
 function geodir_lightbox_embed($link,ele){
 	ele.preventDefault();
 
+	var bs5_prefix = jQuery('body').hasClass('aui_bs5') ? 'bs-' : '';
+
 	// remove it first
 	jQuery('.geodir-carousel-modal').remove();
 
@@ -177,7 +179,7 @@ function geodir_lightbox_embed($link,ele){
 			$carousel  += '<ol class="carousel-indicators position-fixed">';
 			$container.find('.geodir-lightbox-iframe, .geodir-lightbox-image').each(function() {
 				$active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-				$carousel  += '<li data-target="#geodir-embed-slider-modal" data-slide-to="'+$i+'" class="'+$active+'"></li>';
+				$carousel  += '<li data-'+ bs5_prefix +'target="#geodir-embed-slider-modal" data-slide-to="'+$i+'" class="'+$active+'"></li>';
 				$i++;
 			});
 			$carousel  += '</ol>';
@@ -2071,7 +2073,7 @@ function geodir_init_listings_carousel(el, index) {
             cid = $el.prop('id') + '_' + index;
             $carousel.prop('id', cid);
         }
-        $carousel.addClass('carousel slide').addClass('d-block').attr('data-' + bsDash + 'interval', $el.data(bsDash + 'interval')).attr('data-' + bsDash + 'ride', $el.data(bsDash + 'ride')).attr('data-' + bsDash + 'pause', $el.data(bsDash + 'pause'));
+        $carousel.addClass('carousel slide mx-n2').addClass('d-block').attr('data-' + bsDash + 'interval', $el.data(bsDash + 'interval')).attr('data-' + bsDash + 'ride', $el.data(bsDash + 'ride')).attr('data-' + bsDash + 'pause', $el.data(bsDash + 'pause'));
         $el.removeAttr('data-' + bsDash + 'interval data-' + bsDash + 'ride').removeClass('carousel slide');
         $el.addClass('carousel-inner');
         var $content = jQuery($el.html()).empty();
@@ -2094,7 +2096,7 @@ function geodir_init_listings_carousel(el, index) {
 			});
 		}
         // Indicators
-        if ($el.data('with-indicators')) {
+        if ($el.data('with-controls')) {
             var indicators = '<ol class="carousel-indicators position-relative">';
             for (var i = 0; i < slides; i++) {
                 var cls = i == 0 ? ' active' : '';
@@ -2105,10 +2107,12 @@ function geodir_init_listings_carousel(el, index) {
             jQuery(el).after(indicators);
         }
         // Controls
-        if ($el.data('with-controls')) {
-            var controls = '<a class="carousel-control-prev text-dark mr-2 ml-n2 me-2 ms-n2 w-auto" href="#' + cid + '" role="button" data-' + bsDash + 'slide="prev"><i class="fas fa-chevron-left fa-2x" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_previous + '</span></a><a class="carousel-control-next text-dark ml-2 w-auto mr-n2 me-n2 ms-2" href="#' + cid + '" role="button" data-' + bsDash + 'slide="next"><i class="fas fa-chevron-right fa-2x" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_next + '</span></a>';
+        if ($el.data('with-indicators')) {
+			var i_mb = $el.data(bsDash + 'indicators-class');
+            var controls = '<a class="carousel-control-prev text-dark mr-2 ml-n2 me-2 ms-n4 w-auto '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="prev"><i class="fas fa-chevron-left fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_previous + '</span></a><a class="carousel-control-next text-dark ml-2 w-auto mr-n2 me-n4 ms-2 '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="next"><i class="fas fa-chevron-right fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_next + '</span></a>';
             jQuery(el).after(controls);
         }
+
         geodir_ajax_load_slider($el);
         $el.find('.bs-carousel-item:first').addClass('active');
         $el.find('.geodir-image-container .carousel-inner').removeClass('carousel-inner');

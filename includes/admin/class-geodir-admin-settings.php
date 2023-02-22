@@ -256,6 +256,8 @@ class GeoDir_Admin_Settings {
 			$label_type =  isset($_REQUEST['page']) && $_REQUEST['page']=='gd-setup' ? 'top' : 'horizontal';
 
 
+			$bs_prefix = $aui_bs5 ? 'bs-' : '';
+
 			// Switch based on type
 			switch ( $value['type'] ) {
 
@@ -770,7 +772,7 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'] );
 					}
 
-					$bs_prefix = $aui_bs5 ? 'bs-' : '';
+
 
 					$args = array(
 						'name'             => $value['id'],
@@ -1081,7 +1083,7 @@ class GeoDir_Admin_Settings {
 
 					if ( ! empty( $buttons_links ) ) {
 						?>
-						<button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php _e( "Actions", "geodirectory" ); ?></button>
+						<button class="btn btn-outline-primary dropdown-toggle" type="button" data-<?php echo $bs_prefix;?>toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php _e( "Actions", "geodirectory" ); ?></button>
 						<div class="dropdown-menu">
 							<?php
 							foreach( $buttons_links as $link => $title ) {

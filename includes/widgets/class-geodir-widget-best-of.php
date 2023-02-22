@@ -418,7 +418,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		 * @param string $instance ['excerpt_type'] The excerpt type.
 		 */
 		$excerpt_type = empty($instance['excerpt_type']) ? 'show-desc' : apply_filters('bestof_widget_excerpt_type', $instance['excerpt_type']);
-		
+
 		/**
 		 * Filter the event type.
 		 *
@@ -543,8 +543,8 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		$term_args = array(
 			'hide_empty' => true,
 			'parent' => 0,
-			'orderby' => 'count', 
-			'order' => 'DESC', 
+			'orderby' => 'count',
+			'order' => 'DESC',
 		);
 
 		$term_args = apply_filters( 'bestof_widget_term_args', $term_args );
@@ -825,7 +825,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		if ( ! empty( $instance['tmpl_page'] ) && get_post_type( (int) $instance['tmpl_page'] ) == 'page' && get_post_status( (int) $instance['tmpl_page'] ) == 'publish' ) {
 			$geodir_item_tmpl = array( 'id' => (int) $instance['tmpl_page'], 'type' => 'page' );
 		} else if ( ! empty( $instance['tmpl_part'] ) && ( $_template_part = geodir_get_template_part_by_slug( $instance['tmpl_part'] ) ) ) {
-			$geodir_item_tmpl = array( 'id' => $_template_part->ID, 'type' => 'template_part' );
+			$geodir_item_tmpl = array( 'id' => $_template_part->slug, 'content' => $_template_part->content, 'type' => 'template_part' );
 		}
 
 		/**
@@ -896,7 +896,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		$layout = isset($instance['layout']) ? $instance['layout'] : '';
 		$gd_layout_class = geodir_convert_listing_view_class( $layout );
 
-		
+
 		if ( $skin_active ) {
 			$column_gap = ! empty( $instance['skin_column_gap'] ) ? absint( $instance['skin_column_gap'] ) : '';
 			$row_gap = ! empty( $instance['skin_row_gap'] ) ? absint( $instance['skin_row_gap'] ) : '';
@@ -963,7 +963,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 					if(!term_id ){
 						return;
 					}
-					
+
 					var post_type = jQuery(widgetBox).find('#bestof_widget_post_type').val();
 					var excerpt_type = jQuery(widgetBox).find('#bestof_widget_excerpt_type').val();
 					var post_limit = jQuery(widgetBox).find('#bestof_widget_post_limit').val();

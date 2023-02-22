@@ -24,29 +24,34 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 $text_class .= $show == 'icon' ? 'sr-only visually-hidden' : '';
-$text = '<span class="geodir-fav-text gv-secondary '.$text_class.'" style="'.$text_style.'">'.$text.'</span>';
+$text        = '<span class="geodir-fav-text gv-secondary ' . $text_class . '" style="' . $text_style . '">' . $text . '</span>';
 ?>
-<span class="geodir-addtofav favorite_property_<?php echo absint($post_id);  echo ' '.$wrap_class;?>">
+<span class="geodir-addtofav favorite_property_
+<?php
+echo absint( $post_id );
+echo ' ' . $wrap_class;
+?>
+">
 	<?php
 	echo aui()->badge(
 		array(
-			'type'       => 'a',
-			'class'      =>  esc_attr($link_class),
-			'title'      =>  $title,
-			'content'    => $text ,
-			'icon'      => $show == 'text' ? $icon_class . ' sr-only visually-hidden' : $icon_class,
-			'href'       => 'javascript:void(0);',
-			'onclick'   => $onclick,
-			'style'     => $link_style,
-			'extra_attributes'  => array(
-				'data-color-on' => $icon_color_on,
-				'data-icon' => $show == 'text' ? $icon_class . ' sr-only visually-hidden' : $icon_class,
+			'type'                  => 'a',
+			'class'                 => esc_attr( $link_class ),
+			'title'                 => $title,
+			'content'               => $text,
+			'icon'                  => $show == 'text' ? $icon_class . ' sr-only visually-hidden' : $icon_class,
+			'href'                  => 'javascript:void(0);',
+			'onclick'               => $onclick,
+			'style'                 => $link_style,
+			'extra_attributes'      => array(
+				'data-color-on'  => $icon_color_on,
+				'data-icon'      => $show == 'text' ? $icon_class . ' sr-only visually-hidden' : $icon_class,
 				'data-color-off' => $icon_color_off,
-				'data-toggle'   => 'tooltip',
+				'data-toggle'    => 'tooltip',
 			),
-			'icon_extra_attributes'  => array(
+			'icon_extra_attributes' => array(
 				'style' => $icon_style,
-			)
+			),
 		)
 	);
 	?>
