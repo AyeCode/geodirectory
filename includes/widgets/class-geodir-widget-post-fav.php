@@ -43,6 +43,9 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 				'gd_wgt_showhide'             => 'show_on',
 				'gd_wgt_restrict'             => array( 'gd-detail' ),
 			),
+			'no_wrap'          => true,
+			'block-wrap'       => '',
+			'block_edit_wrap_tag' => 'span',
 			'block_group_tabs' => array(
 				'content'  => array(
 					'groups' => array(

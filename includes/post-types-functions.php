@@ -107,12 +107,12 @@ function geodir_post_type_options( $plural_name = false, $translated = false ) {
             }
             $options[ $key ] = $name;
         }
-        
+
         if ( !empty( $options ) ) {
             $options = array_unique( $options );
         }
     }
-    
+
     return $options;
 }
 
@@ -126,31 +126,31 @@ function geodir_post_type_options( $plural_name = false, $translated = false ) {
  */
 function geodir_is_gd_post_type( $post_type ) {
     global $gd_is_post_type;
-    
+
     if ( empty( $post_type ) || is_array($post_type) ) {
         return false;
     }
-    
+
     if ( strpos( $post_type, 'gd_' ) !== 0 ) {
         return false;
     }
-    
+
     if ( !empty( $gd_is_post_type ) && !empty( $gd_is_post_type[ $post_type ] ) ) {
         return true;
     }
-    
+
     $gd_posttypes = geodir_get_posttypes();
-    
+
     if ( !empty( $gd_posttypes ) && in_array( $post_type, $gd_posttypes ) ) {
         if ( !is_array( $gd_is_post_type ) ) {
             $gd_is_post_type = array();
         }
-        
+
         $gd_is_post_type[ $post_type ] = true;
-        
+
         return true;
     }
-    
+
     return false;
 }
 
@@ -165,12 +165,12 @@ function geodir_is_gd_post_type( $post_type ) {
 function geodir_post_type_object( $post_type ) {
     if ( geodir_is_gd_post_type( $post_type ) ) {
         $post_types = geodir_get_posttypes( 'object' );
-        
+
         $post_type_obj = !empty( $post_types->{$post_type} ) ? $post_types->{$post_type} : NULL;
     } else {
         $post_type_obj = get_post_type_object( $post_type );
     }
-    
+
     return $post_type_obj;
 }
 
@@ -188,16 +188,16 @@ function geodir_post_type_object( $post_type ) {
  */
 function geodir_post_type_name( $post_type, $translated = false ) {
     $post_type_obj = geodir_post_type_object( $post_type );
-    
+
     if ( !( !empty( $post_type_obj ) && !empty( $post_type_obj->labels->name ) ) ) {
         return $post_type;
     }
-    
+
     $name = $post_type_obj->labels->name;
     if ( $translated ) {
         $name = __( $name, 'geodirectory' );
     }
-    
+
     return apply_filters( 'geodir_post_type_name', $name, $post_type, $translated );
 }
 
@@ -215,22 +215,22 @@ function geodir_post_type_name( $post_type, $translated = false ) {
  */
 function geodir_post_type_singular_name( $post_type, $translated = false ) {
     $post_type_obj = geodir_post_type_object( $post_type );
-    
+
     if ( !( !empty( $post_type_obj ) && !empty( $post_type_obj->labels->singular_name ) ) ) {
         return $post_type;
     }
-    
+
     $singular_name = $post_type_obj->labels->singular_name;
     if ( $translated ) {
         $singular_name = __( $singular_name, 'geodirectory' );
     }
-    
+
     return apply_filters( 'geodir_post_type_singular_name', $singular_name, $post_type, $translated );
 }
 
 /**
  * Get and array of CPTs allowed to be added from the frontend.
- * 
+ *
  * @return mixed|void
  */
 function geodir_add_listing_allowed_post_types() {
@@ -674,7 +674,7 @@ function geodir_get_sort_options( $post_type ) {
          * @param string $post_type      Post type.
          */
         $sort_field_info = apply_filters( 'geodir_get_sort_options', $sort_field_info, $post_type );
-        
+
         wp_cache_set("geodir_get_sort_options_{$post_type}", $sort_field_info );
 
         return $sort_field_info;
@@ -794,7 +794,7 @@ function geodir_check_column_search_title( $post_type ) {
 /**
  * Generate keywords from post title.
  *
- * @param bool $force True to copy all search titles. 
+ * @param bool $force True to copy all search titles.
  *                    False to copy only empty search titles. Default False.
  * @return int No. of keywords generated.
  */
@@ -817,14 +817,14 @@ function geodir_generate_title_keywords( $force = false ) {
  * Generate keywords from post title for post type.
  *
  * @param string $post_type The post type.
- * @param bool $force True to copy all search titles. 
+ * @param bool $force True to copy all search titles.
  *                    False to copy only empty search titles. Default False.
  * @return int No. of keywords generated.
  */
 function geodir_cpt_generate_title_keywords( $post_type, $force = false ) {
 	global $wpdb;
 
-	// Check & add column _search_title. 
+	// Check & add column _search_title.
 	geodir_check_column_search_title( $post_type );
 
 	$table = geodir_db_cpt_table( $post_type );
@@ -862,7 +862,7 @@ function geodir_cpt_generate_title_keywords( $post_type, $force = false ) {
 
 /**
  * Get the show in locations.
- * 
+ *
  * @param string $field
  * @param string $field_type
  *

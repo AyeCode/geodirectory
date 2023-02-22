@@ -560,21 +560,27 @@ class GeoDir_Template_Loader {
 	public static function archive_item_template_content( $post_type = '', $page_id = 0 ) {
 		global $geodir_item_tmpl;
 
+		$content = '';
+		$type    = 'page_id';
 		// Get the archive template page content
 		if ( (int) $page_id > 0 ) {
 			$archive_page_id = (int) $page_id;
 		} else if ( ! empty( $geodir_item_tmpl['type'] ) && $geodir_item_tmpl['type'] == 'page' && ! empty( $geodir_item_tmpl['id'] ) ) {
 			$archive_page_id = (int) $geodir_item_tmpl['id'];
-		} else if ( ! empty( $geodir_item_tmpl['type'] ) && $geodir_item_tmpl['type'] == 'template_part' && ! empty( $geodir_item_tmpl['id'] ) && geodir_is_block_theme() ) {
-			$archive_page_id = (int) $geodir_item_tmpl['id'];
+		} else if ( ! empty( $geodir_item_tmpl['type'] ) && $geodir_item_tmpl['type'] == 'template_part' && ! empty( $geodir_item_tmpl['content'] ) && geodir_is_block_theme() ) {
+			$content = $geodir_item_tmpl['content'];
+			$archive_page_id = esc_attr($geodir_item_tmpl['id']);
+			$type = 'template_part';
 		} else {
 			$archive_page_id = (int) geodir_archive_item_page_id( $post_type );
 		}
 
-		$content = get_post_field( 'post_content', $archive_page_id  );
+		if ( ! $content ) {
+			$content = get_post_field( 'post_content', $archive_page_id  );
+		}
 
 		// Maybe bypass content
-		$bypass_content = apply_filters( 'geodir_bypass_archive_item_template_content', '', $content, $archive_page_id );
+		$bypass_content = apply_filters( 'geodir_bypass_archive_item_template_content', '', $content, $archive_page_id, $type );
 		if ( $bypass_content ) {
 			return $bypass_content;
 		}
@@ -585,7 +591,7 @@ class GeoDir_Template_Loader {
 		}
 
 		// Run the shortcodes on the content
-		$content = do_shortcode( $content );
+		//$content = do_shortcode( $content ); // @todo this causes issues with nested blocks in the archive template block template part, specifically it outputs the last "[/bs_container]"  is it required here?
 
 		// Run block content if its available
 		if ( function_exists( 'do_blocks' ) ) {

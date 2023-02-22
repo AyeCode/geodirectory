@@ -233,8 +233,8 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 		$is_preview = $this->is_preview();
 
 		if ( geodir_is_post_type_archive() || geodir_is_taxonomy() || geodir_is_page( 'search' ) || ( is_author() && ! empty( $wp_query->query['gd_favs'] ) || apply_filters( 'geodir_loop_active', false ) ) || $is_preview ) {
-			$widget_args = wp_parse_args( 
-				$args, 
+			$widget_args = wp_parse_args(
+				$args,
 				array(
 					'layout' => '',
 					// AUI settings
@@ -249,7 +249,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 					'skin_id' => '',
 					'skin_column_gap' => '',
 					'skin_row_gap' => ''
-				) 
+				)
 			);
 
 			/**
@@ -301,7 +301,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 			if ( ! empty( $template_page ) && get_post_type( $template_page ) == 'page' && get_post_status( $template_page ) == 'publish' ) {
 				$geodir_item_tmpl = array( 'id' => $template_page, 'type' => 'page' );
 			} else if ( ! empty( $template_part ) && ( $_template_part = geodir_get_template_part_by_slug( $template_part ) ) ) {
-				$geodir_item_tmpl = array( 'id' => $_template_part->ID, 'type' => 'template_part' );
+				$geodir_item_tmpl = array( 'id' => $_template_part->slug, 'content' => $_template_part->content, 'type' => 'template_part' );
 			}
 
 			// card border class
@@ -405,13 +405,13 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 						$column_gap = ! empty( $widget_args['skin_column_gap'] ) ? absint( $widget_args['skin_column_gap'] ) : '';
 						$row_gap = ! empty( $widget_args['skin_row_gap'] ) ? absint( $widget_args['skin_row_gap'] ) : '';
 
-						geodir_get_template( 'elementor/content-archive-listing.php', 
-							array( 
-								'skin_id' => $skin_id, 
-								'columns' => $columns, 
-								'column_gap' => $column_gap, 
-								'row_gap' => $row_gap 
-							) 
+						geodir_get_template( 'elementor/content-archive-listing.php',
+							array(
+								'skin_id' => $skin_id,
+								'columns' => $columns,
+								'column_gap' => $column_gap,
+								'row_gap' => $row_gap
+							)
 						);
 					} else {
 						$template = $design_style ? $design_style . "/content-archive-listing.php" : "content-archive-listing.php";
@@ -458,7 +458,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 
 	/**
 	 * Filter to close the comments for archive pages after the GD loop.
-	 * 
+	 *
 	 * @param $open
 	 * @param $post_id
 	 *

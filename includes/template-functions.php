@@ -1240,34 +1240,11 @@ function geodir_template_part_options( $args = array() ) {
 		return $options;
 	}
 
-	$defaults = array(
-		'post_status'    => array( 'publish' ),
-		'post_type'      => 'wp_template_part',
-		'posts_per_page' => -1,
-		'no_found_rows'  => true,
-		'tax_query'      => array(
-			array(
-				'taxonomy' => 'wp_theme',
-				'field'    => 'name',
-				'terms'    => wp_get_theme()->get_stylesheet(),
-			),
-		),
-	);
+	$parts = get_block_templates(array(),'wp_template_part');
 
-	$parsed_args = wp_parse_args( $args, $defaults );
-
-	$template_query = new WP_Query( $parsed_args );
-
-	$posts =  $template_query->posts;
-
-	if ( ! empty( $posts ) ) {
-		foreach ( $posts as $_post ) {
-			if ( ! empty( $_post->ID ) && ! empty( $_post->post_title ) && ! empty( $_post->post_name ) ) {
-				if ( in_array( $_post->post_name, array( 'header', 'footer' ) ) ) {
-					continue;
-				}
-				$options[ $_post->post_name ] = $_post->post_title . ' (#' . $_post->post_name . ')';
-			}
+	if ( ! empty( $parts ) ) {
+		foreach ( $parts as $part ) {
+			$options[ $part->slug ] = $part->title . ' (#' . $part->slug . ')';
 		}
 	}
 
@@ -1298,26 +1275,11 @@ function geodir_get_template_part_by_slug( $slug ) {
 		return $geodir_tmpl_part_by_slug[ $slug ];
 	}
 
-	$args = array(
-		'post_status'    => array( 'publish' ),
-		'post_type'      => 'wp_template_part',
-		'post_name__in'  => array( $slug ),
-		'posts_per_page' => 1,
-		'no_found_rows'  => true,
-		'tax_query'      => array(
-			array(
-				'taxonomy' => 'wp_theme',
-				'field'    => 'name',
-				'terms'    => wp_get_theme()->get_stylesheet(),
-			),
-		),
-	);
+	$template_query = get_block_templates(array('slug__in'=>array($slug)),'wp_template_part');
 
-	$template_query = new WP_Query( $args );
+	$query_post = ! empty( $template_query ) ? $template_query[0] : array();
 
-	$query_post = ! empty( $template_query->posts ) ? $template_query->posts[0] : array();
-
-	$template_part = ! empty( $query_post ) && $query_post->post_status == 'publish' ? $query_post : array();
+	$template_part = ! empty( $query_post ) && $query_post->status == 'publish' ? $query_post : array();
 
 	$geodir_tmpl_part_by_slug[ $slug ] = $template_part;
 

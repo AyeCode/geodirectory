@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-global $aui_bs5;
+global $aui_bs5,$geodir_search_widget_params;
 
 /**
  * Variables.
@@ -14,13 +14,13 @@ global $aui_bs5;
  */
 ?>
 <div class='gd-search-field-search col-auto flex-grow-1 <?php echo $aui_bs5 ? 'px-0' : ''; ?>'>
-	<div class='<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>'>
+	<div class='<?php echo ( $aui_bs5 ? '' : 'form-group' ); ?>'>
 		<?php
 		echo aui()->button(
 			array(
 				'type'       => 'button',
-				'class'      => 'geodir_submit_search btn btn-primary w-100 ',
-				'content'    => $fa_class ? '<i class="fas ' . esc_attr( $default_search_button_label ) . '" aria-hidden="true"></i><span class="sr-only visually-hidden">' . __( 'Search', 'geodirectory' ) . '</span>' : __( $default_search_button_label, 'geodirectory' ) . '<span class="sr-only visually-hidden">' . $default_search_button_label . '</span>',
+				'class'      => 'geodir_submit_search btn w-100 ' . esc_attr( $geodir_search_widget_params['buttons_class'] ),
+				'content'    => $fa_class ? '<i class="fas ' . esc_attr( $default_search_button_label ) . esc_attr( $geodir_search_widget_params['btn_icon_class'] ) . '" aria-hidden="true"></i><span class="sr-only visually-hidden">' . __( 'Search', 'geodirectory' ) . '</span>' : __( $default_search_button_label, 'geodirectory' ) . '<span class="sr-only visually-hidden">' . $default_search_button_label . '</span>',
 				'data-title' => esc_attr__( $default_search_button_label, 'geodirectory' ),
 				'aria-label' => $fa_class ? __( 'Search', 'geodirectory' ) : esc_attr__( $default_search_button_label, 'geodirectory' ),
 			)
