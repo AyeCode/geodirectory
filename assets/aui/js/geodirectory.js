@@ -45,10 +45,36 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	$(document).on("geodir.init-posts-carousel", function(ev, params){
+		$cInner = $(params.element);
+		if (params.slides && parseInt(params.slides) > 1 && !$cInner.closest('.bs-carousel').length) {
+			$carousel = $cInner.closest('.carousel');
+			$carousel.addClass('bs-carousel');
+		}
+		cId = "bs-carousel-" + params.index;
+		$carousel.after('<div class="bs-carousel-wrapper position-relative"><div class="bs-carousel-outer p-0"><div id="' + cId + '"  class="bs-carousel-viewport overflow-hidden"></div></div></div>');
+		$("#" + $carousel.attr('id')).appendTo("#" + cId);
+		bs_carousel_clone_items();
+		if ($carousel.find('.carousel-control-next').length && $carousel.find('.carousel-control-prev').length) {
+			mLeft = parseFloat($carousel.css('margin-left'));
+			mRight = parseFloat($carousel.css('margin-right'));
+			cpLeft = parseFloat($carousel.find('.bs-carousel-item:nth-child(2)').css('padding-left'));
+			cpRight = parseFloat($carousel.find('.bs-carousel-item:nth-child(2)').css('padding-right'));
+			pLeft = (mLeft/2)-cpLeft+$carousel.find('.carousel-control-prev').outerWidth();
+			pRight = (mRight/2)-cpRight+$carousel.find('.carousel-control-next').outerWidth();
+			if (pLeft && pRight) {
+				$carousel.find('.carousel-control-prev').css({'left':(pLeft*-1) + 'px'});
+				$carousel.find('.carousel-control-next').css({'right':(pRight*-1) + 'px'});
+			}
+		}
+	});
+
 	// Listings carousel
 	$('.geodir-posts-carousel').each(function(index) {
 		geodir_init_listings_carousel(this, index);
 	});
+
+	bs_carousel_handle_events();
 
 	$(document).on('elementor/popup/show', (e, id, ins) => {
 		if ($('.elementor-popup-modal .geodir-lazy-load').length) {
@@ -2046,27 +2072,34 @@ function geodir_init_listings_carousel(el, index) {
             $carousel.prop('id', cid);
         }
         $carousel.addClass('carousel slide').addClass('d-block').attr('data-' + bsDash + 'interval', $el.data(bsDash + 'interval')).attr('data-' + bsDash + 'ride', $el.data(bsDash + 'ride')).attr('data-' + bsDash + 'pause', $el.data(bsDash + 'pause'));
-        $el.removeAttr('data-' + bsDash + 'interval data-' + bsDash + 'ride data-' + bsDash + 'pause').removeClass('carousel slide');
+        $el.removeAttr('data-' + bsDash + 'interval data-' + bsDash + 'ride').removeClass('carousel slide');
         $el.addClass('carousel-inner');
-        $el.find(wEl).addClass('carousel-item');
         var $content = jQuery($el.html()).empty();
         $content = $content[0].outerHTML;
-        $content = $content.replace('</div>', '');
+        $content = '<div class="carousel-item bs-carousel-item">' + $content.replace('</div>', '');
         var $html = $content;
         for (var i = 1; i <= items; i++) {
             var $_html = $el.find(wEl + ' > ' + rEl + ':nth-child(' + i + ')');
             $html += $_html[0].outerHTML;
             if (i % pitems === 0 && i < items) {
-                $html += '</div>' + $content;
+                $html += '</div></div>' + $content;
             }
         }
-        $el.html($html);
+        $el.html($html + '</div>');
+		var pdLeft = $el.find(wEl + ' > ' + rEl).css('padding-left'), pdRight = $el.find(wEl + ' > ' + rEl).css('padding-right');
+		if (pdLeft && pdRight) {
+			$el.find('.bs-carousel-item').css({
+				'padding-left' : pdLeft,
+				'padding-right' : pdRight
+			});
+		}
         // Indicators
         if ($el.data('with-indicators')) {
             var indicators = '<ol class="carousel-indicators position-relative">';
             for (var i = 0; i < slides; i++) {
                 var cls = i == 0 ? ' active' : '';
-                indicators += '<li data-target="#' + cid + '" data-' + bsDash + 'slide-to="' + i + '" class="bg-dark' + cls + '"></li>';
+                var attrs = i == 0 ? ' aria-current="true"' : '';
+                indicators += '<li data-' + bsDash + 'target="#' + cid + '" data-' + bsDash + 'slide-to="' + i + '" class="bg-dark' + cls + '"' + attrs + '></li>';
             }
             indicators += '</ol>';
             jQuery(el).after(indicators);
@@ -2077,10 +2110,18 @@ function geodir_init_listings_carousel(el, index) {
             jQuery(el).after(controls);
         }
         geodir_ajax_load_slider($el);
-        $el.find('.carousel-item:first').addClass('active');
+        $el.find('.bs-carousel-item:first').addClass('active');
         $el.find('.geodir-image-container .carousel-inner').removeClass('carousel-inner');
         $el.find('.geodir-image-container .carousel-item.active').removeClass('active');
         $el.find('.geodir-image-container .carousel-item').removeClass('carousel-item');
+
+		if (bsDash && $el.data('center-slide') && slides > 1 && fWidth >= 576) {
+			jQuery(document).trigger("geodir.init-posts-carousel", [{
+				element: el,
+				index: index,
+				slides: slides
+			}]);
+		}
     }
 }
 
@@ -2177,3 +2218,105 @@ function geodir_report_post(el) {
 		});
 }
 
+function bs_carousel_clone_items() {
+    jQuery('.bs-carousel .carousel-inner').each(function() {
+        if (jQuery(this).find('.bs-carousel-item').length > 1 && !jQuery(this).find('.bs-carousel-item.bs-item-cloned').length) {
+            jQuery(this).find('.bs-carousel-item:first').addClass('carousel-item-first');
+            jQuery(this).find('.bs-carousel-item:last').addClass('carousel-item-last');
+            cloneFirst = jQuery(this).find('.bs-carousel-item:first').clone();
+            cloneLast = jQuery(this).find('.bs-carousel-item:last').clone();
+            cloneFirst.removeClass('active carousel-item-first carousel-item-last').addClass('bs-item-cloned');
+            cloneLast.removeClass('active carousel-item-first carousel-item-last').addClass('bs-item-cloned');
+            jQuery(this).prepend(cloneLast);
+            jQuery(this).append(cloneFirst);
+
+            jQuery(this).closest('.bs-carousel-viewport').find('.carousel-indicators').each(function() {
+                jQuery(this).find('[data-bs-slide-to]').each(function(i) {
+                    jQuery(this).attr('data-bs-slide-to', parseInt(jQuery(this).attr('data-bs-slide-to')) + 1);
+                });
+            });
+        }
+    });
+}
+
+function bs_carousel_data(el) {
+    var cData = [],
+        $ci, vWidth, cWidth, items = [],
+        left = 0,
+        vWidth, cWidth, tItem = null;
+    if (!el.relatedTarget) {
+        return cData;
+    }
+
+    $ci = jQuery(el.relatedTarget).closest('.carousel-inner');
+
+    if ($ci.length && $ci.find('.bs-carousel-item').length && $ci.find('.carousel-item').length > 1) {
+        var to = typeof el.to ? parseInt(el.to) : parseInt($ci.find('.carousel-item.active').index());
+
+        cWidth = parseFloat($ci.closest('.bs-carousel').outerWidth());
+        vWidth = parseFloat($ci.closest('.bs-carousel-viewport').outerWidth());
+
+        $ci.find('.bs-carousel-item').each(function(i) {
+            var item = {
+                'width': parseFloat(jQuery(this).outerWidth()),
+                'height': parseFloat(jQuery(this).height()),
+                'left': left
+            }
+            if (i == to) {
+                tItem = item;
+            }
+            left += item.width;
+            items[i] = item;
+        });
+
+        cData = {
+            'items': items,
+            'width': cWidth,
+            'viewportWidth': vWidth,
+            'sliderWidth': left,
+            'aciveItem': tItem
+        }
+    }
+
+    return cData;
+}
+
+function bs_carousel_transform(el) {
+    var bsData = bs_carousel_data(el);
+
+    if (bsData && typeof bsData.aciveItem != 'undefined') {
+        var tf = 'translate3d(' + (parseFloat(bsData.aciveItem.left) * -1) + 'px, 0px, 0px)';
+        jQuery(el.relatedTarget).closest('.carousel-inner').css({
+            '-webkit-transform': tf,
+            '-moz-transform': tf,
+            '-ms-transform': tf,
+            '-o-transform': tf,
+            'transform': tf
+        });
+    }
+}
+
+function bs_carousel_handle_events() {
+	jQuery(".bs-carousel").on('slide.bs.carousel', function(el) {
+		if (el.to > (jQuery(el.relatedTarget).closest('.carousel-inner').find('.bs-carousel-item').length - 2)) {
+			el.to = 1;
+		} else if (el.to < 1) {
+			el.to = jQuery(el.relatedTarget).closest('.carousel-inner').find('.bs-carousel-item').length - 2;
+		}
+		bs_carousel_transform(el);
+	});
+
+	jQuery(".bs-carousel").on('slid.bs.carousel', function(el) {
+		var $ci = jQuery(el.relatedTarget).closest('.carousel-inner');
+		if ($ci.find('.bs-item-cloned').length) {
+			$ci.find('.bs-item-cloned').removeClass('active');
+			if (el.to > ($ci.find('.bs-carousel-item').length - 2)) {
+				$ci.find('.carousel-item-first').addClass('active');
+				$ci.closest('.bs-carousel-viewport').find('.carousel-indicators [data-bs-slide-to]:first').addClass('active').attr('aria-current', true);
+			} else if (el.to < 1) {
+				$ci.find('.carousel-item-last').addClass('active');
+				$ci.closest('.bs-carousel-viewport').find('.carousel-indicators [data-bs-slide-to]:last').addClass('active').attr('aria-current', true);
+			}
+		}
+	});
+}

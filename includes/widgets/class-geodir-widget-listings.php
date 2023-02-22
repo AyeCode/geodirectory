@@ -498,6 +498,21 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			'group' => __( 'Carousel', 'geodirectory' )
 		);
 
+		$arguments['center_slide'] = array(
+			'type' => 'select',
+			'title' => __( 'Center Slides:', 'geodirectory' ),
+			'desc' => __( 'Show center slide and left/right slide with half preview.', 'geodirectory' ),
+			'options' => array(
+				'' => __( 'No', 'geodirectory' ),
+				'1' => __( 'Yes', 'geodirectory' )
+			),
+			'default' => '',
+			'desc_tip' => false,
+			'advanced' => false,
+			'element_require' => '[%with_carousel%]=="1"',
+			'group' => __( 'Carousel', 'geodirectory' )
+		);
+
 		$arguments['template_type'] = array(
 			'title' => __( 'Archive Item Template Type:', 'geodirectory' ),
 			'desc' => 'Select archive item template type to assign template to archive loop.',
@@ -651,7 +666,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				'with_controls' => '',
 				'with_indicators' => '',
 				'slide_interval' => '5',
-				'slide_ride' => ''
+				'slide_ride' => '',
+				'center_slide' => ''
 			)
 		);
 
@@ -1270,6 +1286,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 			if ( ! empty( $instance['with_indicators'] ) ) {
 				$wrapper_attrs .= ' data-with-indicators="1"';
+			}
+
+			if ( $aui_bs5 && ! empty( $instance['center_slide'] ) ) {
+				$wrapper_attrs .= ' data-center-slide="1"';
 			}
 
 			// Interval
