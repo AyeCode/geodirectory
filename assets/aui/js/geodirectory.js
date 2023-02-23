@@ -45,42 +45,47 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	$(document).on("geodir.init-posts-carousel", function(ev, params){
-		$cInner = $(params.element);
-		if (params.slides && parseInt(params.slides) > 1 && !$cInner.closest('.bs-carousel').length) {
-			$carousel = $cInner.closest('.carousel');
-			$carousel.addClass('bs-carousel');
-		}
-		cId = "bs-carousel-" + params.index;
-		$carousel.after('<div class="bs-carousel-wrapper position-relative"><div class="bs-carousel-outer p-0"><div id="' + cId + '"  class="bs-carousel-viewport overflow-hidden"></div></div></div>');
-		$("#" + $carousel.attr('id')).appendTo("#" + cId);
-		bs_carousel_clone_items();
-		if ($carousel.find('.carousel-control-next').length && $carousel.find('.carousel-control-prev').length) {
-			mLeft = parseFloat($carousel.css('margin-left'));
-			mRight = parseFloat($carousel.css('margin-right'));
-			cpLeft = parseFloat($carousel.find('.bs-carousel-item:nth-child(2)').css('padding-left'));
-			cpRight = parseFloat($carousel.find('.bs-carousel-item:nth-child(2)').css('padding-right'));
-			pLeft = (mLeft/2)-cpLeft+$carousel.find('.carousel-control-prev').outerWidth();
-			pRight = (mRight/2)-cpRight+$carousel.find('.carousel-control-next').outerWidth();
-			if (pLeft && pRight) {
-				$carousel.find('.carousel-control-prev').css({'left':(pLeft*-1) + 'px'});
-				$carousel.find('.carousel-control-next').css({'right':(pRight*-1) + 'px'});
-			}
-		}
-	});
+    $(document).on("geodir.init-posts-carousel", function(ev, params) {
+        $cInner = $(params.element);
+        if (params.slides && parseInt(params.slides) > 1 && !$cInner.closest('.bs-carousel').length) {
+            $carousel = $cInner.closest('.carousel');
+            $carousel.addClass('bs-carousel');
+        }
+        cId = "bs-carousel-" + params.index;
+        $carousel.after('<div class="bs-carousel-wrapper position-relative"><div class="bs-carousel-outer p-0"><div id="' + cId + '"  class="bs-carousel-viewport overflow-hidden"></div></div></div>');
+        $("#" + $carousel.attr('id')).appendTo("#" + cId);
 
-	// Listings carousel
-	$('.geodir-posts-carousel').each(function(index) {
-		geodir_init_listings_carousel(this, index);
-	});
+        bs_carousel_clone_slides();
 
-	bs_carousel_handle_events();
+        if ($carousel.find('.carousel-control-next').length && $carousel.find('.carousel-control-prev').length) {
+            mLeft = parseFloat($carousel.css('margin-left'));
+            mRight = parseFloat($carousel.css('margin-right'));
+            pLeft = (mLeft / 2) - $carousel.find('.carousel-control-prev').width();
+            pRight = (mRight / 2) - $carousel.find('.carousel-control-next').width();
 
-	$(document).on('elementor/popup/show', (e, id, ins) => {
-		if ($('.elementor-popup-modal .geodir-lazy-load').length) {
-			geodir_init_lazy_load($);
-		}
-	});
+            if (pLeft && pRight) {
+                $carousel.find('.carousel-control-prev').css({
+                    'left': (pLeft * -1) + 'px'
+                });
+                $carousel.find('.carousel-control-next').css({
+                    'right': (pRight * -1) + 'px'
+                });
+            }
+        }
+    });
+
+    // Listings carousel
+    $('.geodir-posts-carousel').each(function(index) {
+        geodir_init_listings_carousel(this, index);
+    });
+
+    bs_carousel_handle_events();
+
+    $(document).on('elementor/popup/show', (e, id, ins) => {
+        if ($('.elementor-popup-modal .geodir-lazy-load').length) {
+            geodir_init_lazy_load($);
+        }
+    });
 
     /* Scroll to reviews/comment on detail page */
     if ($('#gd-tabs #reviews').length && window.location.hash) {
@@ -2222,7 +2227,7 @@ function geodir_report_post(el) {
 		});
 }
 
-function bs_carousel_clone_items() {
+function bs_carousel_clone_slides() {
     jQuery('.bs-carousel .carousel-inner').each(function() {
         if (jQuery(this).find('.bs-carousel-item').length > 1 && !jQuery(this).find('.bs-carousel-item.bs-item-cloned').length) {
             jQuery(this).find('.bs-carousel-item:first').addClass('carousel-item-first');
@@ -2239,45 +2244,61 @@ function bs_carousel_clone_items() {
                     jQuery(this).attr('data-bs-slide-to', parseInt(jQuery(this).attr('data-bs-slide-to')) + 1);
                 });
             });
+            el = {
+                relatedTarget: jQuery(this).find('.bs-carousel-item.active'),
+                to: jQuery(this).find('.bs-carousel-item.active').index()
+            }
+            bs_carousel_transform(el);
         }
     });
 }
 
 function bs_carousel_data(el) {
     var cData = [],
-        $ci, vWidth, cWidth, items = [],
-        left = 0,
-        vWidth, cWidth, tItem = null;
+        $ci, slides = [],
+        transform = 0,
+        tItem = null;
+
     if (!el.relatedTarget) {
         return cData;
     }
 
     $ci = jQuery(el.relatedTarget).closest('.carousel-inner');
 
-    if ($ci.length && $ci.find('.bs-carousel-item').length && $ci.find('.carousel-item').length > 1) {
-        var to = typeof el.to ? parseInt(el.to) : parseInt($ci.find('.carousel-item.active').index());
+    if ($ci.length && $ci.find('.bs-carousel-item').length && $ci.find('.bs-carousel-item').length > 1) {
+        var to = typeof el.to ? parseInt(el.to) : parseInt($ci.find('.bs-carousel-item.active').index());
+        cW = parseFloat($ci.closest('.bs-carousel').outerWidth(false));
+        mL = parseFloat($ci.closest('.bs-carousel').css('margin-left'));
+        mR = parseFloat($ci.closest('.bs-carousel').css('margin-right'));
+        ciW = (cW * $ci.find('.bs-carousel-item').length) + mL + mR;
 
-        cWidth = parseFloat($ci.closest('.bs-carousel').outerWidth());
-        vWidth = parseFloat($ci.closest('.bs-carousel-viewport').outerWidth());
+        $ci.closest('.bs-carousel').css({
+            'margin-left': mL + 'px',
+            'margin-right': mR + 'px'
+        });
+        $ci.find('.bs-carousel-item').css({
+            'width': cW + 'px'
+        });
+        $ci.css({
+            'width': ciW + 'px'
+        });
+
+        $ci = jQuery(el.relatedTarget).closest('.carousel-inner');
 
         $ci.find('.bs-carousel-item').each(function(i) {
             var item = {
-                'width': parseFloat(jQuery(this).outerWidth()),
-                'height': parseFloat(jQuery(this).height()),
-                'left': left
+                'width': cW,
+                'transform': transform * -1,
             }
             if (i == to) {
                 tItem = item;
             }
-            left += item.width;
-            items[i] = item;
+            transform += cW;
+            slides[i] = item;
         });
 
         cData = {
-            'items': items,
-            'width': cWidth,
-            'viewportWidth': vWidth,
-            'sliderWidth': left,
+            'slides': slides,
             'aciveItem': tItem
         }
     }
@@ -2289,7 +2310,7 @@ function bs_carousel_transform(el) {
     var bsData = bs_carousel_data(el);
 
     if (bsData && typeof bsData.aciveItem != 'undefined') {
-        var tf = 'translate3d(' + (parseFloat(bsData.aciveItem.left) * -1) + 'px, 0px, 0px)';
+        var tf = 'translate3d(' + bsData.aciveItem.transform + 'px, 0px, 0px)';
         jQuery(el.relatedTarget).closest('.carousel-inner').css({
             '-webkit-transform': tf,
             '-moz-transform': tf,
@@ -2301,26 +2322,26 @@ function bs_carousel_transform(el) {
 }
 
 function bs_carousel_handle_events() {
-	jQuery(".bs-carousel").on('slide.bs.carousel', function(el) {
-		if (el.to > (jQuery(el.relatedTarget).closest('.carousel-inner').find('.bs-carousel-item').length - 2)) {
-			el.to = 1;
-		} else if (el.to < 1) {
-			el.to = jQuery(el.relatedTarget).closest('.carousel-inner').find('.bs-carousel-item').length - 2;
-		}
-		bs_carousel_transform(el);
-	});
+    jQuery(".bs-carousel").on('slide.bs.carousel', function(el) {
+        if (el.to > (jQuery(el.relatedTarget).closest('.carousel-inner').find('.bs-carousel-item').length - 2)) {
+            el.to = 1;
+        } else if (el.to < 1) {
+            el.to = jQuery(el.relatedTarget).closest('.carousel-inner').find('.bs-carousel-item').length - 2;
+        }
+        bs_carousel_transform(el);
+    });
 
-	jQuery(".bs-carousel").on('slid.bs.carousel', function(el) {
-		var $ci = jQuery(el.relatedTarget).closest('.carousel-inner');
-		if ($ci.find('.bs-item-cloned').length) {
-			$ci.find('.bs-item-cloned').removeClass('active');
-			if (el.to > ($ci.find('.bs-carousel-item').length - 2)) {
-				$ci.find('.carousel-item-first').addClass('active');
-				$ci.closest('.bs-carousel-viewport').find('.carousel-indicators [data-bs-slide-to]:first').addClass('active').attr('aria-current', true);
-			} else if (el.to < 1) {
-				$ci.find('.carousel-item-last').addClass('active');
-				$ci.closest('.bs-carousel-viewport').find('.carousel-indicators [data-bs-slide-to]:last').addClass('active').attr('aria-current', true);
-			}
-		}
-	});
+    jQuery(".bs-carousel").on('slid.bs.carousel', function(el) {
+        var $ci = jQuery(el.relatedTarget).closest('.carousel-inner');
+        if ($ci.find('.bs-item-cloned').length) {
+            $ci.find('.bs-item-cloned').removeClass('active');
+            if (el.to > ($ci.find('.bs-carousel-item').length - 2)) {
+                $ci.find('.carousel-item-first').addClass('active');
+                $ci.closest('.bs-carousel-viewport').find('.carousel-indicators [data-bs-slide-to]:first').addClass('active').attr('aria-current', true);
+            } else if (el.to < 1) {
+                $ci.find('.carousel-item-last').addClass('active');
+                $ci.closest('.bs-carousel-viewport').find('.carousel-indicators [data-bs-slide-to]:last').addClass('active').attr('aria-current', true);
+            }
+        }
+    });
 }
