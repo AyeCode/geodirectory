@@ -1068,11 +1068,11 @@ function gd_fav_save(post_id) {
 						$text_classes = jQuery( this ).find('.geodir-fav-text').attr('class');
 						$style =  $color_value ? "style='color:"+$color_value+"'" : "";
 						$icon = $icon_value ? $icon_value : geodir_params.icon_fav;
-						jQuery( this )
+						jQuery( this ).tooltip('dispose')
 							.removeClass('geodir-removetofav-icon')
 							.addClass('geodir-addtofav-icon')
 							.attr("title", geodir_params.text_add_fav)
-							.html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>').tooltip('dispose').tooltip('enable');
+							.html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>').tooltip('enable');
 					});
 				} else {
 					jQuery('.favorite_property_' + post_id + ' a').each(function( index ) {
@@ -1081,11 +1081,11 @@ function gd_fav_save(post_id) {
 						$text_classes = jQuery( this ).find('.geodir-fav-text').attr('class');
 						$style =  $color_value ? "style='color:"+$color_value+"'" : "";
 						$icon = $icon_value ? $icon_value : geodir_params.icon_fav;
-						jQuery( this )
+						jQuery( this ).tooltip('dispose')
 							.removeClass('geodir-addtofav-icon')
 							.addClass('geodir-removetofav-icon')
 							.attr("title", geodir_params.text_remove_fav)
-							.html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_unfav ) + '</span>').tooltip('dispose').tooltip('enable');
+							.html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_unfav ) + '</span>').tooltip('enable');
 					});
 				}
 			} else {

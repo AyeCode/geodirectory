@@ -33,6 +33,7 @@ class AUI_Component_Input {
 			'required'                 => false,
 			'size'                     => '', // sm, lg, small, large
 			'clear_icon'               => '', // true will show a clear icon, can't be used with input_group_right
+			'with_hidden'              => false, // Append hidden field for single checkbox.
 			'label'                    => '',
 			'label_after'              => false,
 			'label_class'              => '',
@@ -50,6 +51,7 @@ class AUI_Component_Input {
 			// forces the input group inside the input
 			'input_group_left_inside'  => false,
 			// forces the input group inside the input
+			'form_group_class'         => '',
 			'step'                     => '',
 			'switch'                   => false,
 			// to show checkbox as a switch
@@ -113,11 +115,17 @@ class AUI_Component_Input {
 				$label_after = true; // if type file we need the label after
 				$args['class'] .= $aui_bs5 ? ' form-check-input' : ' custom-control-input ';
 			} elseif ( $type == 'datepicker' || $type == 'timepicker' ) {
+				$orig_type = $type;
 				$type = 'text';
 				$args['class'] .= ' bg-initial '; // @todo not sure why we have this?
 				$clear_function .= "jQuery(this).parent().parent().find('input[name=\'" . esc_attr( $args['name'] ) . "\']').trigger('change');";
 
 				$args['extra_attributes']['data-aui-init'] = 'flatpickr';
+
+				// Disable native datetime inputs.
+				if ( ( $orig_type == 'timepicker' || ! empty( $args['extra_attributes']['data-enable-time'] ) ) && ! isset( $args['extra_attributes']['data-disable-mobile'] ) ) {
+					$args['extra_attributes']['data-disable-mobile'] = 'true';
+				}
 
 				// set a way to clear field if empty
 				if ( $args['input_group_right'] === '' && $args['clear_icon'] !== false ) {
@@ -143,7 +151,7 @@ class AUI_Component_Input {
 				$aui_settings->enqueue_iconpicker();
 			}
 
-			if ( $type == 'checkbox' && !empty($args['name'] ) && strpos($args['name'], '[') === false ) {
+			if ( $type == 'checkbox' && ( ( ! empty( $args['name'] ) && strpos( $args['name'], '[' ) === false ) || ! empty( $args['with_hidden'] ) ) ) {
 				$output .= '<input type="hidden" name="' . esc_attr( $args['name'] ) . '" value="0" />';
 			}
 
@@ -346,7 +354,11 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// wrap
 			if ( ! $args['no_wrap'] ) {
-				$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+				if ( ! empty( $args['form_group_class'] ) ) {
+					$fg_class = esc_attr( $args['form_group_class'] );
+				}else{
+					$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+				}
 				$form_group_class = $args['label_type'] == 'floating' && $type != 'checkbox' ? 'form-label-group' : $fg_class;
 				$wrap_class       = $args['label_type'] == 'horizontal' ? $form_group_class . ' row' : $form_group_class;
 				$wrap_class       = ! empty( $args['wrap_class'] ) ? $wrap_class . " " . $args['wrap_class'] : $wrap_class;
@@ -542,6 +554,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'input_group_right'        => '',
 			'input_group_left'         => '',
 			'input_group_right_inside' => false,
+			'form_group_class'      => '',
 			'help_text'          => '',
 			'validation_text'    => '',
 			'validation_pattern' => '',
@@ -744,7 +757,11 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// wrap
 		if ( ! $args['no_wrap'] ) {
-			$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+			if ( ! empty( $args['form_group_class'] ) ) {
+				$fg_class = esc_attr( $args['form_group_class'] );
+			}else{
+				$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+			}
 			$form_group_class = $args['label_type'] == 'floating' ? 'form-label-group' : $fg_class;
 			$wrap_class       = $args['label_type'] == 'horizontal' ? $form_group_class . ' row' : $form_group_class;
 			$wrap_class       = ! empty( $args['wrap_class'] ) ? $wrap_class . " " . $args['wrap_class'] : $wrap_class;
@@ -796,6 +813,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'input_group_left' => '',
 			'input_group_right_inside' => false, // forces the input group inside the input
 			'input_group_left_inside' => false, // forces the input group inside the input
+			'form_group_class'  => '',
 			'element_require'  => '',
 			// [%element_id%] == "1"
 			'extra_attributes' => array(),
@@ -1031,7 +1049,11 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// wrap
 		if ( ! $args['no_wrap'] ) {
-			$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+			if ( ! empty( $args['form_group_class'] ) ) {
+				$fg_class = esc_attr( $args['form_group_class'] );
+			}else{
+				$fg_class = $aui_bs5 ? 'mb-3' : 'form-group';
+			}
 			$wrap_class = $args['label_type'] == 'horizontal' ? $fg_class . ' row' : $fg_class;
 			$wrap_class = ! empty( $args['wrap_class'] ) ? $wrap_class . " " . $args['wrap_class'] : $wrap_class;
 			$output     = self::wrap( array(

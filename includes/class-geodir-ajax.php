@@ -24,7 +24,7 @@ class GeoDir_AJAX {
 		//add_action( 'template_redirect', array( __CLASS__, 'do_gd_ajax' ), 0 );
 		self::add_ajax_events();
 	}
-	
+
 	/**
 	 * Hook in methods - uses WordPress ajax handlers (admin-ajax).
 	 */
@@ -247,7 +247,7 @@ class GeoDir_AJAX {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-		
+
 		$tab_id = isset($_POST['tab_id']) && $_POST['tab_id'] ? absint($_POST['tab_id']) : '';
 
 		if(!$tab_id){
@@ -491,7 +491,7 @@ class GeoDir_AJAX {
 
 		$post_id = isset($_REQUEST['p']) ? absint($_REQUEST['p']) : url_to_postid( wp_get_referer() );
 		$form_id = isset($_REQUEST['extra']) ? absint($_REQUEST['extra']) : '';
-		
+
 		if ( ! $post_id || ! $form_id ) {
 			return 'no post id';
 		}
@@ -561,7 +561,7 @@ class GeoDir_AJAX {
 
 		wp_die();
 	}
-	
+
 	/**
 	 * Adds widgets to sidebar during setup wizard.
      *
@@ -625,7 +625,7 @@ class GeoDir_AJAX {
 
 		wp_die();
 	}
-	
+
 	/**
 	 * GD Categories widget ajax.
      *
@@ -684,7 +684,7 @@ class GeoDir_AJAX {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-		
+
 		$result = GeoDir_Admin_Import_Export::start_import_export();
 
 		if(is_wp_error( $result ) ){
@@ -747,9 +747,9 @@ class GeoDir_AJAX {
 	public static function save_post(){
 		// security
 		check_ajax_referer( 'geodir-save-post', 'security' );
-		
+
 		$result = GeoDir_Post_Data::ajax_save_post( $_REQUEST );
-		
+
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
@@ -851,7 +851,7 @@ class GeoDir_AJAX {
 	public static function post_attachment_upload(){
 		// security
 		check_ajax_referer( 'geodir_attachment_upload', '_ajax_nonce' );
-		
+
 		GeoDir_Media::post_attachment_upload();
 		wp_die();
 	}
@@ -870,7 +870,7 @@ class GeoDir_AJAX {
 
 		//Suspend cache additions
 		wp_suspend_cache_addition(true);
-		
+
 		$result = GeoDir_Admin_Dummy_Data::create_dummy_posts( $_REQUEST );
 
 		if(is_wp_error( $result ) ){
@@ -947,7 +947,7 @@ class GeoDir_AJAX {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-		
+
 		$result = GeoDir_Settings_Cpt_Sorting::save_custom_field($_POST);
 
 		if(is_wp_error( $result ) ){
@@ -1118,7 +1118,7 @@ class GeoDir_AJAX {
 
 			$cfs = new GeoDir_Settings_Cpt_Cf();
 			$result = $cfs->set_field_orders($tabs);
-			
+
 			//$result = GeoDir_Settings_Cpt_Tabs::set_tabs_orders($tabs);
 
 			if(is_wp_error( $result ) ){
@@ -1160,7 +1160,7 @@ class GeoDir_AJAX {
 
 		wp_die();
 	}
-	
+
 	/**
 	 * Create/Update API key.
      *
@@ -1253,7 +1253,7 @@ class GeoDir_AJAX {
 			wp_send_json_error( array( 'message' => $e->getMessage() ) );
 		}
 	}
-	
+
 	/**
 	 * Search for customers and return json.
      *
@@ -1367,7 +1367,7 @@ class GeoDir_AJAX {
 
 		return $results;
 	}
-	
+
 	/**
 	 * GD Listings widget ajax pagination.
      *
@@ -1396,7 +1396,7 @@ class GeoDir_AJAX {
 		$timestamp = isset( $_POST['ts'] ) ? absint( $_POST['ts'] ) : 0;
 
 		$data = geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 );
-		
+
 		if ( is_wp_error( $data ) ) {
 			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
 		} else {

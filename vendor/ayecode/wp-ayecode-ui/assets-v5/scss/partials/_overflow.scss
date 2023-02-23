@@ -6,8 +6,8 @@
 .scrollbars-ios{
   &::-webkit-scrollbar
   {
-    width: 5px;  /* for vertical scrollbars */
-    height: 5px; /* for horizontal scrollbars */
+    width: 3px;  /* for vertical scrollbars */
+    height: 3px; /* for horizontal scrollbars */
   }
 
   &::-webkit-scrollbar-track
@@ -17,7 +17,7 @@
 
   &::-webkit-scrollbar-thumb
   {
-    background: rgba(128, 128, 128, 0.5);
+    background: rgba(180, 184, 201, 0.5);
     border-radius: 2px;
   }
 

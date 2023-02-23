@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.14' );
+	define( 'SUPER_DUPER_VER', '1.1.15' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -1949,6 +1949,11 @@ new MutationObserver(() => {
 					$styles['lineHeight'] =  $args['font_line_height'];
 				}
 
+				// max height
+				if( $args['max_height'] !== undefined && $args['max_height'] !== '' ){
+					$styles['maxHeight'] =  $args['max_height'];
+				}
+
                 return $styles;
 
             }
@@ -2044,14 +2049,22 @@ new MutationObserver(() => {
               //  if ( $args['rounded'] !== undefined && $args['rounded'] !== '' ) { $classes.push($args['rounded']); }
 
                 // border radius size
-                if ( $args['rounded_size'] !== undefined && $args['rounded_size'] !== '' ) {
-                    $classes.push("rounded-" + $args['rounded_size']);
-                    // if we set a size then we need to remove "rounded" if set
-                    var index = $classes.indexOf("rounded");
-                    if (index !== -1) {
-                      $classes.splice(index, 1);
-                    }
+                if( $args['rounded_size'] !== undefined && ( $args['rounded_size']==='sm' || $args['rounded_size']==='lg' ) ){
+					if ( $args['rounded_size'] !== undefined && $args['rounded_size'] !== '' ) {
+						$classes.push("rounded-" + $args['rounded_size']);
+						// if we set a size then we need to remove "rounded" if set
+						var index = $classes.indexOf("rounded");
+						if (index !== -1) {
+						  $classes.splice(index, 1);
+						}
+                	}
+                }else{
+					// rounded_size , mobile, tablet, desktop
+					if ( $args['rounded_size'] !== undefined && $args['rounded_size'] !== '' ) { $classes.push( "rounded-" + $args['rounded_size'] );  $rounded_size = $args['rounded_size']; }else{$rounded_size = null;}
+					if ( $args['rounded_size_md'] !== undefined && $args['rounded_size_md'] !== '' ) { $classes.push( "rounded-md-" + $args['rounded_size_md'] );  $rounded_size_md = $args['rounded_size_md']; }else{$rounded_size_md = null;}
+					if ( $args['rounded_size_lg'] !== undefined && $args['rounded_size_lg'] !== '' ) { if($rounded_size == null && $rounded_size_md == null){ $classes.push( "rounded-" + $args['rounded_size_lg'] ); }else{$classes.push( "rounded-lg-" + $args['rounded_size_lg'] ); } }
                 }
+
 
                 // shadow
                // if ( $args['shadow'] !== undefined && $args['shadow'] !== '' ) { $classes.push($args['shadow']); }
@@ -2091,7 +2104,30 @@ new MutationObserver(() => {
                 if ( $args['bgtus'] !== undefined && $args['bgtus'] && $args['cscos'] !== undefined && $args['cscos'] ) { $classes.push("color-scheme-flip-on-scroll"); }
 
 				// hover animations
-                if ( $args['hover_animations'] !== undefined && $args['hover_animations'] ) { $classes.push($args['hover_animations'].replace(',',' ')); }
+                if ( $args['hover_animations'] !== undefined && $args['hover_animations'] ) { $classes.push($args['hover_animations'].toString().replace(',',' ')); }
+
+				// absolute_position
+				if ( $args['absolute_position'] !== undefined ) {
+					if ( 'top-left' === $args['absolute_position'] ) {
+						$classes.push('start-0 top-0');
+					} else if ( 'top-center' === $args['absolute_position'] ) {
+						$classes.push('start-50 top-0 translate-middle');
+					} else if ( 'top-right' === $args['absolute_position'] ) {
+						$classes.push('end-0 top-0');
+					} else if ( 'center-left' === $args['absolute_position'] ) {
+						$classes.push('start-0 bottom-50');
+					} else if ( 'center' === $args['absolute_position'] ) {
+						$classes.push('start-50 top-50 translate-middle');
+					} else if ( 'center-right' === $args['absolute_position'] ) {
+						$classes.push('end-0 top-50');
+					} else if ( 'bottom-left' === $args['absolute_position'] ) {
+						$classes.push('start-0 bottom-0');
+					} else if ( 'bottom-center' === $args['absolute_position'] ) {
+						$classes.push('start-50 bottom-0 translate-middle');
+					} else if ( 'bottom-right' === $args['absolute_position'] ) {
+						$classes.push('end-0 bottom-0');
+					}
+				}
 
 				// build classes from build keys
 				$build_keys = sd_get_class_build_keys();
@@ -2597,7 +2633,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
                                              <?php
                                         }else{
                                         ?>
-                                       props.setAttributes({content: env});
+                                        props.setAttributes({content: env});
 										is_fetching = false;
 										prev_attributes[props.clientId] = props.attributes;
                                         <?php

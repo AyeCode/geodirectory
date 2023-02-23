@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.85';
+		public $version = '0.1.89';
 
 		/**
 		 * Class textdomain.
@@ -49,7 +49,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $latest = "4.5.3";
+		public $latest = "5.2.2";
 
 		/**
 		 * Current version of select2 being used.
@@ -267,17 +267,30 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		}
 
 		/**
-         * Add a body class to show when BS5 is active.
-         *
+		 * Add admin body class to show when BS5 is active.
+		 *
 		 * @param $classes
 		 *
 		 * @return mixed
 		 */
-        public function add_bs5_body_class( $classes ){
-	        $classes[] = 'aui_bs5';
+		public function add_bs5_admin_body_class( $classes = '' ) {
+			$classes .= ' aui_bs5';
 
-            return $classes;
-        }
+			return $classes;
+		}
+
+		/**
+		 * Add a body class to show when BS5 is active.
+		 *
+		 * @param $classes
+		 *
+		 * @return mixed
+		 */
+		public function add_bs5_body_class( $classes ) {
+			$classes[] = 'aui_bs5';
+
+			return $classes;
+		}
 
 		/**
 		 * Initiate the settings and add the required action hooks.
@@ -305,6 +318,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			if ( $aui_bs5 ) {
 				include_once( dirname( __FILE__ ) . '/inc/bs-conversion.php' );
+				add_filter( 'admin_body_class', array( $this, 'add_bs5_admin_body_class' ), 99, 1 );
 				add_filter( 'body_class', array( $this, 'add_bs5_body_class' ) );
 			}
 
@@ -315,6 +329,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			 */
 			if ( $this->settings['css'] ) {
 				$priority = $this->is_bs3_compat() ? 100 : 1;
+                $priority = $aui_bs5 ? 10 : $priority;
 				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), $priority );
 			}
 			if ( $this->settings['css_backend'] && $this->load_admin_scripts() ) {
@@ -825,6 +840,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			if ( ! current_user_can( 'manage_options' ) ) {
 				wp_die( __( 'You do not have sufficient permissions to access this page.', 'aui' ) );
 			}
+            $overrides = apply_filters( 'ayecode-ui-settings', array(), array(), array() );
+
 			?>
             <div class="wrap">
                 <h1><?php echo $this->name; ?></h1>
@@ -837,13 +854,22 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
                     <h2><?php _e( 'BootStrap Version', 'aui' ); ?></h2>
                     <p><?php echo apply_filters( 'ayecode-ui-version-settings-message', __("V5 is recommended, however if you have another plugin installed using v4, you may need to use v4 also.",'aui') );?></p>
+	                <div class="bsui"><?php
+	                if ( ! empty( $overrides ) ) {
+		                echo aui()->alert(array(
+			                'type'=> 'info',
+			                'content'=> __("Some options are disabled as your current theme is overriding them.",'aui')
+		                ));
+	                }
+	                ?>
+                    </div>
                     <table class="form-table wpbs-table-version-settings">
                         <tr valign="top">
                             <th scope="row"><label
                                         for="wpbs-css"><?php _e( 'Version', 'aui' ); ?></label></th>
                             <td>
-                                <select name="ayecode-ui-settings[bs_ver]" id="wpbs-css">
-                                    <option	value="5" <?php selected( $this->settings['bs_ver'], '5' ); ?>><?php _e( 'v5', 'aui' ); ?></option>
+                                <select name="ayecode-ui-settings[bs_ver]" id="wpbs-css" <?php echo !empty($overrides['bs_ver']) ? 'disabled' : ''; ?>>
+                                    <option	value="5" <?php selected( $this->settings['bs_ver'], '5' ); ?>><?php _e( 'v5 (recommended)', 'aui' ); ?></option>
                                     <option value="4" <?php selected( $this->settings['bs_ver'], '4' ); ?>><?php _e( 'v4 (legacy)', 'aui' ); ?></option>
                                 </select>
                             </td>
@@ -856,7 +882,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                             <th scope="row"><label
                                         for="wpbs-css"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
                             <td>
-                                <select name="ayecode-ui-settings[css]" id="wpbs-css">
+                                <select name="ayecode-ui-settings[css]" id="wpbs-css" <?php echo !empty($overrides['css']) ? 'disabled' : ''; ?>>
                                     <option	value="compatibility" <?php selected( $this->settings['css'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'aui' ); ?></option>
                                     <option value="core" <?php selected( $this->settings['css'], 'core' ); ?>><?php _e( 'Full Mode', 'aui' ); ?></option>
                                     <option	value="" <?php selected( $this->settings['css'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
@@ -868,7 +894,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                             <th scope="row"><label
                                         for="wpbs-js"><?php _e( 'Load JS', 'aui' ); ?></label></th>
                             <td>
-                                <select name="ayecode-ui-settings[js]" id="wpbs-js">
+                                <select name="ayecode-ui-settings[js]" id="wpbs-js" <?php echo !empty($overrides['js']) ? 'disabled' : ''; ?>>
                                     <option	value="core-popper" <?php selected( $this->settings['js'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
                                     <option value="popper" <?php selected( $this->settings['js'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
                                     <option value="required" <?php selected( $this->settings['js'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
@@ -881,7 +907,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                             <th scope="row"><label
                                         for="wpbs-font_size"><?php _e( 'HTML Font Size (px)', 'aui' ); ?></label></th>
                             <td>
-                                <input type="number" name="ayecode-ui-settings[html_font_size]" id="wpbs-font_size" value="<?php echo absint( $this->settings['html_font_size']); ?>" placeholder="16" />
+                                <input type="number" name="ayecode-ui-settings[html_font_size]" id="wpbs-font_size" value="<?php echo absint( $this->settings['html_font_size']); ?>" placeholder="16" <?php echo !empty($overrides['html_font_size']) ? 'disabled' : ''; ?> />
                                 <p class="description" ><?php _e("Our font sizing is rem (responsive based) here you can set the html font size in-case your theme is setting it too low.",'aui');?></p>
                             </td>
                         </tr>
@@ -894,7 +920,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                             <th scope="row"><label
                                         for="wpbs-css-admin"><?php _e( 'Load CSS', 'aui' ); ?></label></th>
                             <td>
-                                <select name="ayecode-ui-settings[css_backend]" id="wpbs-css-admin">
+                                <select name="ayecode-ui-settings[css_backend]" id="wpbs-css-admin" <?php echo !empty($overrides['css_backend']) ? 'disabled' : ''; ?>>
                                     <option	value="compatibility" <?php selected( $this->settings['css_backend'], 'compatibility' ); ?>><?php _e( 'Compatibility Mode (default)', 'aui' ); ?></option>
                                     <option value="core" <?php selected( $this->settings['css_backend'], 'core' ); ?>><?php _e( 'Full Mode (will cause style issues)', 'aui' ); ?></option>
                                     <option	value="" <?php selected( $this->settings['css_backend'], '' ); ?>><?php _e( 'Disabled', 'aui' ); ?></option>
@@ -906,7 +932,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                             <th scope="row"><label
                                         for="wpbs-js-admin"><?php _e( 'Load JS', 'aui' ); ?></label></th>
                             <td>
-                                <select name="ayecode-ui-settings[js_backend]" id="wpbs-js-admin">
+                                <select name="ayecode-ui-settings[js_backend]" id="wpbs-js-admin" <?php echo !empty($overrides['js_backend']) ? 'disabled' : ''; ?>>
                                     <option	value="core-popper" <?php selected( $this->settings['js_backend'], 'core-popper' ); ?>><?php _e( 'Core + Popper (default)', 'aui' ); ?></option>
                                     <option value="popper" <?php selected( $this->settings['js_backend'], 'popper' ); ?>><?php _e( 'Popper', 'aui' ); ?></option>
                                     <option value="required" <?php selected( $this->settings['js_backend'], 'required' ); ?>><?php _e( 'Required functions only', 'aui' ); ?></option>
@@ -1139,14 +1165,17 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * @return string
 		 */
 		public static function css_overwrite($type,$color_code,$compatibility){
+            global $aui_bs5;
 
 			$is_var = false;
 			if(!$color_code){return '';}
 			if(!sanitize_hex_color($color_code)){
 				$color_code = esc_attr($color_code);
 				$is_var = true;
-//                echo '###1'.$color_code;//exit;
+//				$color_code = "rgba($color_code, 0.5)";
+//                echo '###1'.$color_code.'###';//exit;
 			}
+
 			if(!$color_code){return '';}
 
 			if($compatibility===true || $compatibility===1){
@@ -1178,6 +1207,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				".bg-{$type}"                                               => array( 'b', 'f' ),
 				".btn-link.btn-{$type}"                                     => array( 'c' ),
 			);
+
+			if ( $aui_bs5 ) {
+                unset($selectors[".alert-{$type}" ]);
+			}
 
 			if ( $type == 'primary' ) {
 				$selectors = $selectors + array(
@@ -1288,6 +1321,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			$darker_075 = $is_var ? $color_code.';filter:brightness(0.925)' : self::css_hex_lighten_darken($color_code,"-0.075");
 			$darker_10 = $is_var ? $color_code.';filter:brightness(0.9)' : self::css_hex_lighten_darken($color_code,"-0.10");
 			$darker_125 = $is_var ? $color_code.';filter:brightness(0.875)' : self::css_hex_lighten_darken($color_code,"-0.125");
+			$darker_40 = $is_var ? $color_code.';filter:brightness(0.6)' : self::css_hex_lighten_darken($color_code,"-0.4");
 
 			// lighten
 			$lighten_25 = $is_var ? $color_code.';filter:brightness(1.25)' :self::css_hex_lighten_darken($color_code,"0.25");
@@ -1313,6 +1347,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 				// page link
 				$output .= $prefix . " .page-link:focus{box-shadow: 0 0 0 0.2rem $op_25;} ";
+			}
+
+            // alerts
+			if ( $aui_bs5 ) {
+				$output .= $is_var ? '' : $prefix ." .alert-{$type} {background-color: ".$color_code."20;    border-color: ".$color_code."30;color:$darker_40} ";
 			}
 
 			return $output;
@@ -2100,14 +2139,12 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                     }
                     $('input.select2-search__field').attr('data-ignore-rule','');
                     $('[data-rule-key]').on('change keypress keyup gdclear', 'input, textarea', function() {
-                        aui_cf_field_apply_rules($(this));
+                        if (!$(this).hasClass('select2-search__field')) {
+                            aui_cf_field_apply_rules($(this));
+                        }
                     });
 
-                    $('[data-rule-key]').on('change gdclear', 'select', function() {
-                        aui_cf_field_apply_rules($(this));
-                    });
-
-                    $('[data-rule-key]').on('change.select2', 'select', function() {
+                    $('[data-rule-key]').on('change change.select2 gdclear', 'select', function() {
                         aui_cf_field_apply_rules($(this));
                     });
 
