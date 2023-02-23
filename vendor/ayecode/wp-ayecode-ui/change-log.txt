@@ -1,3 +1,8 @@
+= 0.1.89 =
+* Prevent conditional fields execution twice on select2 - FIXED
+* Changes to BS5 CSS - CHANGED
+* Added notice when theme is overriding default settings - ADDED
+
 = 0.1.88 =
 * BS 4/5 functions split to separate files - CHANGED
 * Tweaks for FSE styles - ADDED

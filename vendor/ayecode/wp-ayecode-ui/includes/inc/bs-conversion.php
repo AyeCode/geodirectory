@@ -13,7 +13,7 @@
  *
  * @return array|mixed|string|string[]
  */
-function aui_bs_convert_sd_output( $output, $instance, $args, $sd ) {
+function aui_bs_convert_sd_output( $output, $instance = '', $args = '', $sd = '' ) {
 	global $aui_bs5;
 
 	if ( $aui_bs5 ) {
@@ -41,6 +41,9 @@ function aui_bs_convert_sd_output( $output, $instance, $args, $sd ) {
 			'border-right'    => 'border-end',
 			'border-left'    => 'border-start',
 			'font-weight-'  => 'fw-',
+			'btn-block'     => 'w-100',
+			'rounded-left'  => 'rounded-start',
+			'rounded-right'  => 'rounded-left',
 
 //			'custom-control custom-checkbox'    => 'form-check',
 			// data
@@ -50,6 +53,9 @@ function aui_bs_convert_sd_output( $output, $instance, $args, $sd ) {
 			'data-slide='   => 'data-bs-slide=',
 			'data-slide-to=' => 'data-bs-slide-to=',
 			'data-target='  => 'data-bs-target=',
+			'data-dismiss="modal"'  => 'data-bs-dismiss="modal"',
+			'class="close"' => 'class="btn-close"',
+			'<span aria-hidden="true">&times;</span>' => '',
 		);
 		$output  = str_replace(
 			array_keys( $convert ),

@@ -5,3 +5,13 @@
 .input-group-inside .input-group-text, .input-group-append .input-group-text{
   position: absolute;
 }
+
+.input-group-inside {
+  .input-group-text{
+    padding-left: 0.9rem;
+    padding-right: 0.3rem;
+  }
+  .form-control{
+    padding-left: 2.1rem;
+  }
+}

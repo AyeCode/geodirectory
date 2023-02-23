@@ -1,3 +1,6 @@
+= 1.1.15 =
+* Prevent duplicate CPT sort options API requests - FIXED
+
 = 1.1.14 =
 * Helper functions for BS5 added - ADDED
 * Will try to auto-recover blocks in editor - ADDED
