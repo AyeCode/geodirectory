@@ -20,19 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $icon_color_on The color code for the icon set.
  * @var string $icon_color_off The color code for the icon unset.
  * @var string $show The string indicating what should be shown.
- * @var array  $args The raw arguments for the output.
+ * @var array $args The raw arguments for the output.
  */
 
 $text_class .= $show == 'icon' ? 'sr-only visually-hidden' : '';
 $text        = '<span class="geodir-fav-text gv-secondary ' . $text_class . '" style="' . $text_style . '">' . $text . '</span>';
-?>
-<span class="geodir-addtofav favorite_property_
-<?php
-echo absint( $post_id );
-echo ' ' . $wrap_class;
-?>
-">
-	<?php
+
+echo '<span class="geodir-addtofav favorite_property_' . absint( $post_id ) . ' ' . esc_attr( $wrap_class ) . '">';
+
 	echo aui()->badge(
 		array(
 			'type'                  => 'a',
