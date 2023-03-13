@@ -33,18 +33,24 @@ global $post, $aui_bs5;
 						<?php echo get_avatar( $comment, $avatar_size,'mm','', array('class'=>"comment_avatar rounded-circle position-relative") ); ?>
 					<?php if(!empty($comment->user_id)){ ?></a><?php }?>
 				<?php endif; ?>
-				<span class="media-heading pl-2 ps-2 mr-auto me-auto h4 m-0 align-items-center d-flex justify-content-center">
+				<span class="media-heading pl-2 ps-2 mr-auto me-auto h4 m-0 align-items-center d-flex justify-content-center h5">
 					<?php
-					if(!empty($comment->user_id)){ echo "<a href='".get_author_posts_url($comment->user_id)."' class='' >"; }
+					if(!empty($comment->user_id)){ echo "<a href='".get_author_posts_url($comment->user_id)."' class='text-reset' >"; }
 					echo get_comment_author($comment->comment_ID);
 					if(!empty($comment->user_id)){ echo "</a>"; }
-					echo $comment->user_id === $post->post_author ? ' <span class="ml-2 ms-2 h6 m-0"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">'.__( 'Post author', 'geodirectory' ).'</span></span>' : '';
+					echo $comment->user_id === $post->post_author ? ' <span class="ml-2 ms-2 h6 m-0 fs-sm"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">'.__( 'Post author', 'geodirectory' ).'</span></span>' : '';
 					?>
 				</span>
 
 			<?php
 			if($rating != 0){
-				echo '<div class="geodir-review-ratings">'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
+				$ratings_html = '';
+				if ( function_exists( 'geodir_reviewrating_get_comment_rating_by_id' ) ) {
+					$comment_ratings = geodir_reviewrating_get_comment_rating_by_id($comment->comment_ID);
+					$ratings = @unserialize($comment_ratings->ratings);
+					$ratings_html = GeoDir_Review_Rating_Template::geodir_reviewrating_draw_ratings($ratings, true);
+				}
+				echo '<div class="geodir-review-ratings c-pointer"  data-bs-toggle="popover-html" data-bs-sanitize="false" data-bs-placement="top" data-bs-html="true"  data-bs-content="'.esc_attr($ratings_html).'" data-bs-trigger="hover focus" >'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
 			}
 			?>
 

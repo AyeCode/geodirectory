@@ -148,7 +148,7 @@ if ( ! $hide_icon ) {
 }
 
 // category text
-$cat_class .= ' text-reset';
+$cat_class .= $args['cat_text_color'] ? '' : ' text-reset';
 $cat_class .= empty( $args['cat_font_size'] ) ? ' h6' : '';
 $cat_class .= empty( $args['cat_font_weight'] ) ? ' font-weight-bold fw-bold' : '';
 $cat_class .= empty( $args['cat_font_case'] ) ? ' text-uppercase' : '';

@@ -630,16 +630,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			'group' => __( 'Carousel', 'geodirectory' )
 		);
 
-		$arguments['template_type'] = array(
-			'title' => __( 'Archive Item Template Type:', 'geodirectory' ),
-			'desc' => 'Select archive item template type to assign template to archive loop.',
-			'type' => 'select',
-			'options' => geodir_template_type_options(),
-			'default' => '',
-			'desc_tip' => true,
-			'advanced' => false,
-			'group' => __( 'Design', 'geodirectory' )
-		);
 			// background
 			$arguments['bg'] = geodir_get_sd_background_input( 'mt' );
 
