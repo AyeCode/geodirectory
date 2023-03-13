@@ -445,7 +445,7 @@ class GeoDir_User {
 		$options = array();
 		$addlisting_links = $output=='array' ? array() : '';
 		foreach ( $post_types as $key => $postobj ) {
-			
+
 			if ( ! isset( $postobj->disable_frontend_add ) || $postobj->disable_frontend_add == '0' ) {
 				if ( $add_link = geodir_add_listing_page_url( $key ) ) {
 

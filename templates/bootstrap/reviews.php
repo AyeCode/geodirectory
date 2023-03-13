@@ -38,9 +38,9 @@ if (post_password_required() || $preview)
     do_action('geodir_before_review_list'); ?>
 
     <?php if (have_comments()) :
-
-        ?>
-        <h3 class="comments-title h3">
+		$sr_class = $aui_bs5 ? 'sr-only' : '';
+			?>
+        <h3 class="comments-title h3 <?php echo esc_attr($sr_class );?>">
             <?php
             printf(_n('1 Review <span class="r-title-on">on</span> <span class="r-title">&ldquo;%2$s&rdquo;</span>', '%1$s Reviews <span>on</span> <span class="r-title"> &ldquo;%2$s&rdquo;</span>', get_comments_number(), 'geodirectory'),
                 number_format_i18n(get_comments_number()), trim( esc_html( strip_tags( stripslashes( get_the_title() ) ) ) ) );
@@ -48,7 +48,6 @@ if (post_password_required() || $preview)
         </h3>
 
         <?php
-
         /**
          * Filter the label for main rating.
          *
@@ -56,7 +55,7 @@ if (post_password_required() || $preview)
          */
         $overall_label = apply_filters('geodir_overall_rating_label_main','');
         $post_rating = geodir_get_post_rating( $post->ID );
-        echo "<div class='gd-main-overall-rating d-flex align-items-center h4'>" . geodir_get_rating_stars( $post_rating, $post->ID, $overall_label ) . "<span class='gd-overall-rating-text badge " . ( $aui_bs5 ? 'bg-secondary ms-2' : 'badge-secondary ml-2' ) . "'>".__("Overall rating","geodirectory")."</span></div>";
+        echo $aui_bs5 ? GeoDir_Comments::get_overall_box_html( $post->ID ) :  "<div class='gd-main-overall-rating d-flex align-items-center h4'>" . geodir_get_rating_stars( $post_rating, $post->ID, $overall_label ) . "<span class='gd-overall-rating-text badge " . ( $aui_bs5 ? 'bg-secondary ms-2' : 'badge-secondary ml-2' ) . "'>".__("Overall rating","geodirectory")."</span></div>";
         /**
          * Called after displaying review listing title.
          *

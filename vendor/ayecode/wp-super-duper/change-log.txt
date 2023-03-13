@@ -1,3 +1,7 @@
+= 1.1.16 =
+* Better block auto-recovery - ADDED
+* Functions added to support BS5 changes and new features - ADDED
+
 = 1.1.15 =
 * Prevent duplicate CPT sort options API requests - FIXED
 

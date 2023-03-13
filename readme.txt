@@ -286,7 +286,7 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory Business Directory Plugin v2.2.26 =
+= GeoDirectory Business Directory Plugin v2.3.0 =
 * Changes for AUI Bootstrap 5 compatibility - ADDED
 * Approve comment link should redirect to login page for non-logged author - FIXED
 * Several block improvements for BS5 changes - ADDED
@@ -1830,3 +1830,14 @@ NOTICE: The latest version of GDv2 (2.0.0.58+) contains a security release (does
 
 = 2.0.0.0 =
 NOTICE: GDv2 is a major update that will require some manual steps to restore some directory functionality when updating from GDv1. [Documentation](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)
+
+
+= Resources used to build this plugin =
+
+* Image for reviews widget block editor preview ( dummy-avatar-1.png ), Copyright PxHere
+  License: CC0 Public Domain
+  Source: https://pxhere.com/en/photo/629034
+  
+* Image for reviews widget block editor preview ( dummy-avatar-2.png ), Copyright PxHere
+  License: CC0 Public Domain
+  Source: https://pxhere.com/en/photo/773318

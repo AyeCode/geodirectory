@@ -677,7 +677,7 @@ class GeoDir_Admin_Settings {
 						//'required'          => true,
 						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 						'label'              => $value['title'],
-						'type'              =>  $value['type'] ?  $value['type']  : 'text',
+						'type'              =>  $value['type'] ?  $value['type']  : 'checkbox',
 						'placeholder'       => $value['placeholder'],
 						'checked' => $option_value,
 						'help_text'  => isset($description) ? $description : ' ',

@@ -445,6 +445,10 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 	public function tab_content_child( $tab ) {
 		global $post;
 
+		if ( ! isset( $post->post_type ) ) {
+			return;
+		}
+
 		$post_type = $post->post_type;
 		$tabs      = self::get_tab_settings( $post_type );
 		$parent_id = $tab->id;
