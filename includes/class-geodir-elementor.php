@@ -1211,7 +1211,7 @@ class GeoDir_Elementor {
 	 *
 	 * @since 2.2.23
 	 *
-	 * @param bool|string $bypass True to basspass content.
+	 * @param bool|string $bypass True to bypass content.
 	 * @param string      $content Archive page template content.
 	 * @return bool|string Bypass archive content.
 	 */
@@ -1261,7 +1261,8 @@ class GeoDir_Elementor {
 	 * @return string Filtered content.
 	 */
 	public static function overwrite_single_template_content( $content, $original_content, $page_id ) {
-		if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) && $page_id && self::is_elementor( $page_id ) ) {
+		//if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) && $page_id && self::is_elementor( $page_id ) ) {
+		if ( $page_id && self::is_elementor( $page_id ) ) {
 			$content = \Elementor\Plugin::$instance->frontend->get_builder_content( $page_id, true );
 
 			if ( ! $content ) {
@@ -1489,6 +1490,11 @@ class GeoDir_Elementor {
 		$controls = array_intersect_key( $all_controls, $dynamic_settings );
 		if ( empty( $controls ) ) {
 			return;
+		}
+
+		// Prevent Illegal type offset error.
+		if ( ! empty( $all_controls['pp_wrapper_link'] ) && is_array( $all_controls['pp_wrapper_link'] ) && ! empty( $dynamic_settings['pp_wrapper_link'] ) && ! is_array( $dynamic_settings['pp_wrapper_link'] ) ) {
+			$dynamic_settings['pp_wrapper_link'] = $all_controls['pp_wrapper_link'];
 		}
 
 		self::custom_skin_recursive_unset( $dynamic_settings, 'link' ); // We don't need the link options

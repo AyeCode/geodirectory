@@ -1280,12 +1280,15 @@ class GeoDir_Post_Data {
 	 * @return bool|WP_Error
 	 */
 	public static function delete_revision( $post_data ) {
-
 		if ( ! self::owner_check( $post_data['ID'], get_current_user_id() ) ) {
 			return new WP_Error( 'gd-not-owner', __( "You do not own this post", "geodirectory" ) );
 		}
 
 		$result = wp_delete_post( $post_data['ID'], true );
+		if ( ! empty( $post_data['post_parent'] ) ) {
+			delete_post_meta( (int) $post_data['post_parent'], "__" . (int) $post_data['ID'] ); // Delete any temp stored media values from auto saves.
+		}
+
 		if ( $result == false ) {
 			return new WP_Error( 'gd-delete-failed', __( "Delete revision failed.", "geodirectory" ) );
 		} else {

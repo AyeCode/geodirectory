@@ -977,6 +977,8 @@ public function setup_wizard_header() {
 	 * @since 2.0.0
 	 */
 	public function setup_maps() {
+		global $aui_bs5;
+
 		$active_class = "border border-primary border-width-4 shadow pointer";
 		$active_map = 'osm';
 		$maps_api = geodir_get_option( 'maps_api' );
@@ -984,14 +986,7 @@ public function setup_wizard_header() {
 		if ( ( $maps_api == 'auto' || $maps_api == 'google')  && $maps_api_key ) {
 			$active_map = 'google';
 		}
-//		$active_map = 'osm';
-
-//echo '###'.$maps_api;
-
 		?>
-
-
-
 		<script>
 			$temp_map_key = jQuery('#google_maps_api_key').val();
 			function gd_setup_wiz_map_select($type) {
