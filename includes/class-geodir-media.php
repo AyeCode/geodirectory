@@ -874,6 +874,12 @@ class GeoDir_Media {
 	public static function get_attachments_by_type( $post_id, $type = 'post_images', $limit = '', $revision_id ='', $other_id = '', $status = '' ) {
 		global $wpdb;
 
+		if ( ! empty( $_REQUEST['preview_id'] ) && $revision_id && is_preview() && geodir_listing_belong_to_current_user( $post_id ) && ( $temp_media = get_post_meta( $post_id, "__" . $revision_id, true ) ) ) {
+			$attachments = self::get_preview_attachments_by_type( $temp_media, $post_id, $type, $limit, $revision_id, $other_id, $status );
+
+			return $attachments;
+		}
+
 		$cache_type_key = $type;
 		if ( is_array( $type ) ) {
 			$cache_type_key = implode( ":", $type );
@@ -883,7 +889,7 @@ class GeoDir_Media {
 		}
 
 		// Check for cache
-		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $cache_type_key. ':' . $limit . ':' . $revision_id . ':' . $other_id . ':' . $status;
+		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $cache_type_key. ':' . $limit . ':' . $revision_id . ':' . $other_id . ':' . $status . ':' . (int) is_preview();
 		$cache = wp_cache_get( $cache_key, 'gd_attachments_by_type' );
 		if ( $cache !== false ) {
 			return $cache;
@@ -959,6 +965,64 @@ class GeoDir_Media {
 		wp_cache_set( $cache_key, $results, 'gd_attachments_by_type' );
 		return $results;
 
+	}
+
+	/**
+	 * Get preview attachments by type.
+	 * 
+	 * @param $post_id
+	 * @param mixed $type
+	 * @param string $limit
+	 * @param int $revision_id
+	 * @param int $other_id
+	 * @param int $status
+	 *
+	 * @return array|null|object
+	 */
+	public static function get_preview_attachments_by_type( $temp_media, $post_id, $type = 'post_images', $limit = '', $revision_id ='', $other_id = '', $status = '' ) {
+		global $wpdb;
+
+		$types = array();
+		$attachments = array();
+
+		if ( empty( $type ) ) {
+			$types = array( 'post_images' );
+		} else if ( is_scalar( $type ) ) {
+			$types = array( $type );
+		} else {
+			$types = $type;
+		}
+
+		if ( in_array( 'post_images', $types ) ) {
+			$types = array_unique( array_merge( array( 'post_images' ), $types ) );//geodir_error_log( $types, 'types', __FILE__, __LINE__ );
+		}
+
+		foreach ( $types as $_type ) {
+			if ( ! empty( $temp_media[ $_type ] ) ) {
+				$_temp_media = explode( "::", $temp_media[ $_type ] );
+
+				foreach ( $_temp_media as $temp_file ) {
+					$file_info = explode( "|", $temp_file );
+
+					if ( ! empty( $file_info[1] ) && (int) $file_info[1] > 0 ) {
+						$attachment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `" . GEODIR_ATTACHMENT_TABLE . "` WHERE id = %d", (int) $file_info[1] ) );
+
+						if ( ! empty( $attachment ) ) {
+							$attachment->title = ! empty( $file_info[2] ) ? sanitize_text_field( $file_info[2] ) : '';
+							$attachment->caption = ! empty( $file_info[3] ) ? sanitize_text_field( $file_info[3] ) : '';
+
+							$attachments[] = $attachment;
+						}
+
+						if ( ! empty( $limit ) && (int) $limit == count( $attachments ) ) {
+							return self::set_external_src_meta( $attachments );
+						}
+					}
+				}
+			}
+		}
+
+		return self::set_external_src_meta( $attachments );
 	}
 
 	/**

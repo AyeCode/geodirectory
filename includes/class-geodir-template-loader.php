@@ -591,7 +591,7 @@ class GeoDir_Template_Loader {
 		}
 
 		// Run the shortcodes on the content
-		//$content = do_shortcode( $content ); // @todo this causes issues with nested blocks in the archive template block template part, specifically it outputs the last "[/bs_container]"  is it required here?
+		$content = do_shortcode( $content ); // @todo this causes issues with nested blocks in the archive template block template part, specifically it outputs the last "[/bs_container]"  is it required here?
 
 		// Run block content if its available
 		if ( function_exists( 'do_blocks' ) ) {

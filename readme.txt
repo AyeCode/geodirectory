@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, member directory
 Requires at least: 4.5
-Tested up to: 6.1
-Stable tag: 2.2.25
+Tested up to: 6.2
+Stable tag: 2.3
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -286,7 +286,7 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory Business Directory Plugin v2.3.0 =
+= GeoDirectory Business Directory Plugin v2.3 - 2023-03-16 =
 * Changes for AUI Bootstrap 5 compatibility - ADDED
 * Approve comment link should redirect to login page for non-logged author - FIXED
 * Several block improvements for BS5 changes - ADDED

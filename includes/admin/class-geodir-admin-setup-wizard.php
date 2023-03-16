@@ -344,6 +344,8 @@ public function setup_wizard_header() {
 	 * @since 2.0.0
 	 */
 	public function setup_wizard_steps() {
+		global $aui_bs5;
+
 		$ouput_steps = $this->steps;
 		array_shift( $ouput_steps );
 		/*?>
@@ -367,7 +369,7 @@ public function setup_wizard_header() {
 			<?php foreach ( $ouput_steps as $step_key => $step ) : ?>
 				<li class="nav-link border-0 d-flex align-content-center justify-content-center <?php
 				if ( $step_key === $this->step ) {
-					echo 'active text-white';
+					echo 'active ' . ( $aui_bs5 ? 'text-dark' : 'text-white' );
 					$tick_class = '';
 				} elseif ( array_search( $this->step, array_keys( $this->steps ) ) > array_search( $step_key, array_keys( $this->steps ) ) ) {
 					$tick_class = 'text-primary';
@@ -977,6 +979,8 @@ public function setup_wizard_header() {
 	 * @since 2.0.0
 	 */
 	public function setup_maps() {
+		global $aui_bs5;
+
 		$active_class = "border border-primary border-width-4 shadow pointer";
 		$active_map = 'osm';
 		$maps_api = geodir_get_option( 'maps_api' );
@@ -984,14 +988,7 @@ public function setup_wizard_header() {
 		if ( ( $maps_api == 'auto' || $maps_api == 'google')  && $maps_api_key ) {
 			$active_map = 'google';
 		}
-//		$active_map = 'osm';
-
-//echo '###'.$maps_api;
-
 		?>
-
-
-
 		<script>
 			$temp_map_key = jQuery('#google_maps_api_key').val();
 			function gd_setup_wiz_map_select($type) {
@@ -1687,6 +1684,7 @@ public function setup_wizard_header() {
 	 * Output the setup wizard content sidebars settings.
 	 */
 	public static function content_sidebars() {
+		global $aui_bs5;
 
 		$gd_sidebar_top = get_theme_support( 'geodirectory-sidebar-top' );
 		if ( isset( $gd_sidebar_top[0] ) ) {
@@ -1694,7 +1692,7 @@ public function setup_wizard_header() {
 			<div class="form-table gd-dummy-table gd-dummy-widgets">
 				<div class="d-flex justify-content-between">
 					<div class="pb-1 flex-fill">
-						<div class="form-group mb-3">
+						<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>">
 							<label for="geodir-wizard-widgets-top"><?php _e( "Select the theme top sidebar", "geodirectory" ); ?></label>
 							<select id='geodir-wizard-widgets-top' class="geodir-select form-control form-control-sm w-100 mw-100 ">
 								<?php
@@ -1748,7 +1746,7 @@ public function setup_wizard_header() {
 						</div>
 					</div>
 					<div class="pl-2 ps-2 pb-1">
-						<div class="form-group mb-3 text-right text-end">
+						<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> text-right text-end">
 							<label
 								for="geodir-wizard-widgets-top-submit" class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
 							<input type="button" id="geodir-wizard-widgets-top-submit"
@@ -1770,7 +1768,7 @@ public function setup_wizard_header() {
 		<div class="form-table gd-dummy-table gd-dummy-widgets">
 			<div class="d-flex justify-content-between">
 				<div class="pb-1 flex-fill">
-					<div class="form-group mb-3">
+					<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>">
 						<label for="geodir-wizard-widgets"><?php _e( "Select the theme sidebar", "geodirectory" ); ?></label>
 						<select id='geodir-wizard-widgets' class="geodir-select form-control form-control-sm w-100 mw-100">
 							<?php
@@ -1824,8 +1822,8 @@ public function setup_wizard_header() {
 						</select>
 					</div>
 				</div>
-				<div class="pl-2 pb-1">
-					<div class="form-group mb-3 text-right text-end">
+				<div class="<?php echo ( $aui_bs5 ? 'ps-2' : 'pl-2' ); ?> pb-1">
+					<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> text-right text-end">
 						<label
 							for="geodir-wizard-widgets-top-submit" class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
 						<input type="button" id="geodir-wizard-widgets-submit" value="<?php _e( "Insert widgets", "geodirectory" ); ?>"
@@ -1843,12 +1841,12 @@ public function setup_wizard_header() {
 	 * Output the setup wizard content menu settings.
 	 */
 	public static function content_menus() {
-
+		global $aui_bs5;
 		?>
 		<div class="form-table gd-dummy-table gd-dummy-widgets gd-dummy-posts">
 			<div class="d-flex justify-content-between">
 				<div class="pb-1 flex-fill">
-					<div class="form-group mb-3">
+					<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>">
 						<label for="geodir-wizard-menus"><?php _e( "Select the theme main menu", "geodirectory" ); ?></label>
 						<?php
 
@@ -1919,7 +1917,7 @@ public function setup_wizard_header() {
 					</div>
 				</div>
 				<div class="pl-2 ps-2 pb-1">
-					<div class="form-group mb-3 text-right text-end">
+					<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> text-right text-end">
 						<label for="geodir-wizard-menu-submit" class="invisible"><?php _e( "Action", "geodirectory" ); ?></label>
 						<input type="button" id="geodir-wizard-menu-submit" value="<?php _e( "Insert menu items", "geodirectory" ); ?>" class="btn btn-primary btn-sm geodir_dummy_button d-block" onclick="gd_wizard_setup_menu('<?php echo wp_create_nonce( "geodir-wizard-setup-menu" ); ?>');return false;">
 					</div>

@@ -18,6 +18,7 @@
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_fieldset($html,$cf){
+	global $aui_bs5;
 
     $html_var = $cf['htmlvar_name'];
 
@@ -41,7 +42,7 @@ function geodir_cfi_fieldset($html,$cf){
 
         ob_start(); // Start  buffering;
         ?>
-        <fieldset class="form-group mb-3" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>"<?php echo $conditional_attrs; ?>>
+        <fieldset class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>"<?php echo $conditional_attrs; ?>>
             <h3 class="h3"><?php echo __( $cf['frontend_title'], 'geodirectory' ); ?></h3>
             <?php if ( $cf['desc'] != '' ) {
                 echo '<small class="text-muted">( ' . __( $cf['desc'], 'geodirectory' ) . ' )</small>';
@@ -699,6 +700,8 @@ add_filter('geodir_custom_field_input_select','geodir_cfi_select',10,2);
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_multiselect( $html, $cf ) {
+	global $aui_bs5;
+
 	$html_var = $cf['htmlvar_name'];
 
 	// Check if there is a custom field specific filter.
@@ -831,7 +834,7 @@ function geodir_cfi_multiselect( $html, $cf ) {
 			$horizontal = true;
 			ob_start();
 			?>
-			<div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row mb-3"<?php echo $conditional_attrs; ?>>
+			<div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> <?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row"<?php echo $conditional_attrs; ?>>
 				<label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
 					<?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
 					echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
@@ -1301,7 +1304,7 @@ add_filter('geodir_custom_field_input_time','geodir_cfi_time',10,2);
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_address( $html, $cf ) {
-    global $mapzoom, $gd_move_inline_script;
+    global $aui_bs5, $mapzoom, $gd_move_inline_script;
 
     $html_var = $cf['htmlvar_name'];
 
@@ -1646,7 +1649,7 @@ function geodir_cfi_address( $html, $cf ) {
         }?>
 
         <?php if ( isset( $post_mapzoom ) ) { ?>
-            <div data-argument="<?php echo $prefix . 'mapzoom'; ?>" class="form-group row mb-3 d-none"<?php echo geodir_conditional_field_attrs( $cf, 'mapzoom', 'hidden' ); ?>><input type="hidden" value="<?php echo esc_attr( $post_mapzoom ); ?>" name="<?php echo 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/></div>
+            <div data-argument="<?php echo $prefix . 'mapzoom'; ?>" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row d-none"<?php echo geodir_conditional_field_attrs( $cf, 'mapzoom', 'hidden' ); ?>><input type="hidden" value="<?php echo esc_attr( $post_mapzoom ); ?>" name="<?php echo 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/></div>
         <?php }
 
         $html = ob_get_clean();
@@ -1812,6 +1815,7 @@ add_filter('geodir_custom_field_input_taxonomy','geodir_cfi_taxonomy',10,2);
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_categories($html,$cf){
+	global $aui_bs5;
 
     $html_var = $cf['htmlvar_name'];
 
@@ -1855,7 +1859,7 @@ function geodir_cfi_categories($html,$cf){
         } ?>
 
         <div id="<?php echo $taxonomy;?>_row"
-             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group mb-3 <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>"<?php echo $conditional_attrs; ?>>
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> <?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>"<?php echo $conditional_attrs; ?>>
             <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : ''; echo $geodir_label_type == 'hidden' || $geodir_label_type=='floating' ? ' sr-only visually-hidden ' : '';?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
@@ -1924,7 +1928,7 @@ function geodir_cfi_categories($html,$cf){
                         }
                         $data_attrs .= ' required oninvalid="setCustomValidity(\'' . esc_attr( $required_msg ) . '\')" onchange="try{setCustomValidity(\'\')}catch(e){}"';
 
-                        echo '<select  id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir-category-select geodir-select aui-select2" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . ' aria-label="' . esc_attr( $placeholder ) . '" style="width:100%"' . $data_attrs . '>';
+                        echo '<select  id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir-category-select ' . ( $aui_bs5 ? 'form-select' : 'geodir-select' ) . ' aui-select2" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . ' aria-label="' . esc_attr( $placeholder ) . '" style="width:100%"' . $data_attrs . '>';
 
                         if ($cat_display == 'select')
                             echo '<option value="">' . __('Select Category', 'geodirectory') . '</option>';
@@ -2241,7 +2245,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
         ob_start();
         ?>
         <script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
-        <div id="<?php echo $name;?>_row" class="gd-bh-row form-group row mb-3"<?php echo $conditional_attrs; ?>>
+        <div id="<?php echo $name;?>_row" class="gd-bh-row row <?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>"<?php echo $conditional_attrs; ?>>
             <label for="<?php echo $htmlvar_name; ?>_f_active_1" class="<?php echo ( $horizontal ? ' pt-0 col-sm-2 col-form-label' : '' ); ?>"><?php echo $label; ?></label>
             <div class="gd-bh-field<?php echo ( $horizontal ? ' col-sm-10' : '' ); ?>" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
                 <?php echo aui()->radio(
@@ -2467,7 +2471,7 @@ function geodir_cfi_files( $html, $cf ) {
             $admin_only = geodir_cfi_admin_only($cf);
             $conditional_attrs = geodir_conditional_field_attrs( $cf, $cf['name'], 'hidden' );
             ?>
-            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row mb-3"<?php echo $conditional_attrs; ?>>
+            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> <?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row"<?php echo $conditional_attrs; ?>>
                 <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
                     <?php
                     echo ( trim( $frontend_title ) ) ? esc_html( $frontend_title ) : '&nbsp;'; echo $admin_only;?>

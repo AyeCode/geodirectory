@@ -6,6 +6,8 @@
  * @package GeoDirectory
  */
 
+global $aui_bs5;
+
 $nonce = wp_create_nonce( 'geodir_import_export_nonce' );
 $sample_csv = geodir_plugin_url() . '/assets/sample_reviews.csv';
 /**
@@ -88,7 +90,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 
 					?>
 
-					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+					<div data-argument="gd_im_choicepost" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
 						<div class="col-sm-9">
 							<?php
@@ -221,7 +223,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 					);
 					?>
 
-					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+					<div data-argument="gd_im_choicepost" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Filter published dates', 'geodirectory'); echo geodir_help_tip( __( 'Export listings based on the published date', 'geodirectory' ));?></label>
 						<div class="col-sm-9 d-flex flex-row gap-2">
 							<?php
@@ -241,7 +243,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 									'name'              => 'gd_imex[end_date]',
 									'type'              => 'datepicker',
 									'placeholder'       => esc_html__( 'End date', 'geodirectory'),
-									'class'             => 'w-100 ml-2 ms-2',
+									'class'             => 'w-100',
 									'no_wrap'           => true,
 								)
 							);
@@ -249,9 +251,9 @@ foreach ($gd_chunksize_options as $value => $title) {
 						</div>
 					</div>
 
-					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+					<div data-argument="gd_im_choicepost" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Rating', 'geodirectory'); echo geodir_help_tip( __( 'Min & max rating star range of which the reviews are to be exported', 'geodirectory' ));?></label>
-						<div class="col-sm-9 d-flex flex-row">
+						<div class="col-sm-9 d-flex flex-row gap-2">
 							<?php
 							echo aui()->select(
 								array(
@@ -273,7 +275,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 								array(
 									'id'                => 'gd_imex_max_rating',
 									'name'              => 'gd_imex[max_rating]',
-									'class'             => 'w-100 ml-2 ms-2 mw-100',
+									'class'             => 'w-100 mw-100',
 									'no_wrap'           => true,
 									'options'           => array(
 										''  => __( 'Any', 'geodirectory' ),
