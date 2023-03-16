@@ -6,6 +6,8 @@
  * @package GeoDirectory
  */
 
+global $aui_bs5;
+
 $nonce = wp_create_nonce( 'geodir_import_export_nonce' );
 $gd_cats_sample_csv = geodir_plugin_url() . '/assets/gd_sample_categories.csv';
 /**
@@ -88,7 +90,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 
 					?>
 
-					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+					<div data-argument="gd_im_choicepost" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
 						<div class="col-sm-9">
 							<?php

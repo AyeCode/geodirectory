@@ -38,7 +38,7 @@ $user_string    = sprintf(
 				)
 			);
 			?>
-			<div class="form-group row mb-3">
+			<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 				<label for="key_user" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('User', 'geodirectory'); ?></label>
 				<div class="col-sm-9">
 					<?php
@@ -75,14 +75,14 @@ $user_string    = sprintf(
 				);
 			?>
 			<?php if ( 0 !== $key_id ) : ?>
-				<div class="form-group row mb-3">
+				<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 					<label for="key_user" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Consumer key ending in', 'geodirectory'); ?></label>
 					<div class="col-sm-9">
 						<div class="mt-2"><code>&hellip;<?php echo esc_html( $key_data['truncated_key'] ); ?></code></div>
 					</div>
 				</div>
 
-				<div class="form-group row mb-3">
+				<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 					<label for="key_user" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Last access', 'geodirectory'); ?></label>
 					<div class="col-sm-9">
 						<div class="mt-2"><?php
@@ -178,7 +178,7 @@ $user_string    = sprintf(
 		)
 	);
 	?>
-	<div data-argument="keys-qrcode" class="form-group row mb-3">
+	<div data-argument="keys-qrcode" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 		<label for="keys-qrcode" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e( 'QRCode', 'geodirectory' ); ?></label>
 		<div class="col-sm-9"><div class="input-group"><div id="keys-qrcode"></div></div>
 	</div>

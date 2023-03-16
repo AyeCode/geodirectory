@@ -6,6 +6,8 @@
  * @package GeoDirectory
  */
 
+global $aui_bs5;
+
 $nonce = wp_create_nonce( 'geodir_import_export_nonce' );
 
 $gd_posttypes = geodir_get_posttypes( 'options-plural' );
@@ -78,7 +80,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 
 					?>
 
-					<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+					<div data-argument="gd_im_choicepost" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 						<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Upload CSV file', 'geodirectory'); ?></label>
 						<div class="col-sm-9">
 							<?php
@@ -225,9 +227,9 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						);
 						?>
 
-						<div data-argument="gd_im_choicepost" class="form-group row mb-3">
+						<div data-argument="gd_im_choicepost" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row">
 							<label for="gd_im_choicepost" class="font-weight-bold fw-bold  col-sm-3 col-form-label"><?php _e('Filter published dates', 'geodirectory'); echo geodir_help_tip( __( 'Export listings based on the published date', 'geodirectory' ));?></label>
-							<div class="col-sm-9 d-flex flex-row">
+							<div class="col-sm-9 d-flex flex-row gap-2">
 								<?php
 								echo aui()->input(
 									array(
@@ -246,7 +248,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 										'type'              => 'datepicker',
 										'placeholder'       => esc_html__( 'End date', 'geodirectory'),
 										'class'             => 'w-100 ml-2 ms-2',
-										'no_wrap'           => true,
+										'no_wrap'           => true
 									)
 								);
 								?>

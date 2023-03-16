@@ -150,12 +150,14 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 				'group'    => __( 'Search bar', 'geodirectory' ),
 			);
 
-			$arguments = $arguments + sd_get_flex_wrap_group(
-				'bar_flex_wrap',
-				array(
-					'group' => __( 'Search bar', 'geodirectory' ),
-				)
-			);
+			if ( function_exists( 'sd_get_flex_wrap_group' ) ) {
+				$arguments = $arguments + sd_get_flex_wrap_group(
+					'bar_flex_wrap',
+					array(
+						'group' => __( 'Search bar', 'geodirectory' ),
+					)
+				);
+			}
 
 			// Main Inputs
 			$arguments['input_border'] = sd_get_border_input(

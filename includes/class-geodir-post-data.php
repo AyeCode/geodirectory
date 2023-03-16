@@ -797,8 +797,8 @@ class GeoDir_Post_Data {
 	 * @todo make the form work in sections with fieldsets, all collapsed apart from the one our on.
 	 */
 	public static function add_listing_form( $params = array() ) {
+		global $aui_bs5, $cat_display, $post_cat, $current_user, $gd_post,$geodir_label_type;
 
-		global $cat_display, $post_cat, $current_user, $gd_post,$geodir_label_type;
 		$page_id       = get_the_ID();
 		$post          = '';
 		$submit_button = '';
@@ -936,7 +936,7 @@ class GeoDir_Post_Data {
 
 				if($design_style ){
 
-					echo '<fieldset class="form-group mb-3" id="geodir_fieldset_your_details">';
+					echo '<fieldset class="' . ( $aui_bs5 ? 'mb-3' : 'form-group' ) . '" id="geodir_fieldset_your_details">';
 					echo '<h3 class="h3">'.__( "Your Details", "geodirectory" ).'</h3>';
 					echo '</fieldset>';
 
@@ -1015,7 +1015,7 @@ class GeoDir_Post_Data {
 				if($design_style ) {
 					$conditional_attrs = geodir_conditional_field_attrs( array( 'type' => 'fieldset' ), 'details', 'fieldset' );
 
-					echo '<fieldset class="form-group mb-3" id="geodir_fieldset_details"' . $conditional_attrs . '>';
+					echo '<fieldset class="' . ( $aui_bs5 ? 'mb-3' : 'form-group' ) . '" id="geodir_fieldset_details"' . $conditional_attrs . '>';
 					echo '<h3 class="h3">' . $details_header . '</h3>';
 					echo '</fieldset>';
 				}else {
@@ -1060,7 +1060,7 @@ class GeoDir_Post_Data {
 				       aria-label="<?php esc_attr_e( 'Type 64 into this box', 'geodirectory' ); ?>"/>
 				<!-- end captcha code -->
 			<?php } ?>
-			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both <?php echo $design_style && $horizontal? 'form-group row mb-3' :'';?>"
+			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both <?php echo $design_style && $horizontal? ( $aui_bs5 ? 'mb-3' : 'form-group' ) . ' row' :'';?>"
 			     style="<?php echo $design_style ? '' :'padding:2px;text-align:center;';?>">
 
 				<?php echo $design_style && $horizontal ? '<label class="  col-sm-2 col-form-label"></label>' :'';?>

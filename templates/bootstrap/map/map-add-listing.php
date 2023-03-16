@@ -20,7 +20,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-global $mapzoom, $geodir_manual_map, $geodir_label_type, $gd_move_inline_script;
+global $aui_bs5, $mapzoom, $geodir_manual_map, $geodir_label_type, $gd_move_inline_script;
 
 /**
  * Filter the map restriction for specific address only
@@ -946,7 +946,7 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
     /* ]]> */
 </script>
 <?php } if ( ! wp_doing_ajax() ) { ?>
-<div class="form-group mb-3 <?php if($geodir_label_type=='horizontal'){ echo "row";}?>">
+<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> <?php if($geodir_label_type=='horizontal'){ echo "row";}?>">
     <?php if($geodir_label_type=='horizontal'  ){ ?>
     <div class="col-sm-2 col-form-label"></div>
     <div class="col-sm-10">
@@ -961,7 +961,7 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
 <?php } ?>
 </div>
 <?php } ?>
-<div class="form-group row mb-3 d-block">
+<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row d-block">
 
     <?php
     /**

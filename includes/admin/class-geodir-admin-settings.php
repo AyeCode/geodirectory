@@ -1320,7 +1320,7 @@ class GeoDir_Admin_Settings {
 
                     ?>
 
-					<div class="form-group mb-3">
+					<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>">
 					<?php /**
                      * Contains add listing page map functions.
                      *
