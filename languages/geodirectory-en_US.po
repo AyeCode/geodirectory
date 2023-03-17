@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3\n"
+"Project-Id-Version: GeoDirectory 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-15 17:07+0530\n"
-"PO-Revision-Date: 2023-03-15 17:07+0530\n"
+"POT-Creation-Date: 2023-03-17 20:50+0530\n"
+"PO-Revision-Date: 2023-03-17 20:50+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -267,14 +267,14 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:907
 #: includes/api/class-geodir-rest-posts-controller.php:2266
-#: includes/custom-fields/input-functions-aui.php:1571
+#: includes/custom-fields/input-functions-aui.php:1574
 #: includes/custom-fields/input-functions.php:1271 language.php:46
 msgid "Address Latitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:908
 #: includes/api/class-geodir-rest-posts-controller.php:2267
-#: includes/custom-fields/input-functions-aui.php:1577
+#: includes/custom-fields/input-functions-aui.php:1580
 #: includes/custom-fields/input-functions.php:1275 language.php:91
 msgid ""
 "Please enter latitude for google map perfection. eg. : "
@@ -283,14 +283,14 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:917
 #: includes/api/class-geodir-rest-posts-controller.php:2281
-#: includes/custom-fields/input-functions-aui.php:1602
+#: includes/custom-fields/input-functions-aui.php:1605
 #: includes/custom-fields/input-functions.php:1284 language.php:47
 msgid "Address Longitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:918
 #: includes/api/class-geodir-rest-posts-controller.php:2282
-#: includes/custom-fields/input-functions-aui.php:1608
+#: includes/custom-fields/input-functions-aui.php:1611
 #: includes/custom-fields/input-functions.php:1292 language.php:92
 msgid ""
 "Please enter longitude for google map perfection. eg. : "
@@ -994,7 +994,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:347
 #: includes/admin/class-geodir-admin-addons.php:348
-#: includes/admin/class-geodir-admin-setup-wizard.php:588
+#: includes/admin/class-geodir-admin-setup-wizard.php:590
 msgid "Free"
 msgstr ""
 
@@ -1004,8 +1004,8 @@ msgid "From: $%d"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:417
-#: includes/admin/class-geodir-admin-setup-wizard.php:576
-#: includes/admin/class-geodir-admin-setup-wizard.php:741
+#: includes/admin/class-geodir-admin-setup-wizard.php:578
+#: includes/admin/class-geodir-admin-setup-wizard.php:743
 #: includes/admin/views/html-notice-v2-update.php:223
 msgid "Active"
 msgstr ""
@@ -1018,8 +1018,8 @@ msgstr ""
 #: includes/admin/class-geodir-admin-addons.php:438
 #: includes/admin/class-geodir-admin-addons.php:444
 #: includes/admin/class-geodir-admin-addons.php:488
-#: includes/admin/class-geodir-admin-setup-wizard.php:823
-#: includes/admin/class-geodir-admin-setup-wizard.php:1540
+#: includes/admin/class-geodir-admin-setup-wizard.php:825
+#: includes/admin/class-geodir-admin-setup-wizard.php:1542
 #: includes/admin/views/html-admin-page-addons.php:198
 msgid "Install"
 msgstr ""
@@ -1042,16 +1042,16 @@ msgid "Deactivate"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:487
-#: includes/admin/class-geodir-admin-setup-wizard.php:545
-#: includes/admin/class-geodir-admin-setup-wizard.php:1410
+#: includes/admin/class-geodir-admin-setup-wizard.php:547
+#: includes/admin/class-geodir-admin-setup-wizard.php:1412
 msgid "Installed"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:489
-#: includes/admin/class-geodir-admin-setup-wizard.php:546
-#: includes/admin/class-geodir-admin-setup-wizard.php:586
-#: includes/admin/class-geodir-admin-setup-wizard.php:758
-#: includes/admin/class-geodir-admin-setup-wizard.php:1411
+#: includes/admin/class-geodir-admin-setup-wizard.php:548
+#: includes/admin/class-geodir-admin-setup-wizard.php:588
+#: includes/admin/class-geodir-admin-setup-wizard.php:760
+#: includes/admin/class-geodir-admin-setup-wizard.php:1413
 msgid "Installing"
 msgstr ""
 
@@ -1322,7 +1322,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:258
 #: includes/class-geodir-privacy-exporters.php:344
-#: includes/custom-fields/input-functions-aui.php:1964
+#: includes/custom-fields/input-functions-aui.php:1968
 #: includes/post-functions.php:1193 includes/post-functions.php:1945
 #: includes/widgets/class-geodir-widget-dynamic-content.php:333
 #: includes/widgets/class-geodir-widget-dynamic-content.php:392
@@ -1404,9 +1404,9 @@ msgid "Data Type"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:525
-#: includes/admin/class-geodir-admin-setup-wizard.php:1748
-#: includes/admin/class-geodir-admin-setup-wizard.php:1825
-#: includes/admin/class-geodir-admin-setup-wizard.php:1918
+#: includes/admin/class-geodir-admin-setup-wizard.php:1751
+#: includes/admin/class-geodir-admin-setup-wizard.php:1828
+#: includes/admin/class-geodir-admin-setup-wizard.php:1921
 #: includes/admin/diagnostic-functions.php:42
 msgid "Action"
 msgstr ""
@@ -1485,7 +1485,7 @@ msgid "Property for rent"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:868
-#: includes/admin/class-geodir-admin-setup-wizard.php:886
+#: includes/admin/class-geodir-admin-setup-wizard.php:888
 msgid "Classifieds"
 msgstr ""
 
@@ -1507,7 +1507,7 @@ msgstr ""
 #: includes/admin/dummy-data/freelancer.php:746
 #: includes/admin/dummy-data/freelancer.php:752
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:409
-#: includes/class-geodir-comments.php:93
+#: includes/class-geodir-comments.php:95
 #: includes/class-geodir-post-data.php:962
 #: includes/class-geodir-post-data.php:983
 #: includes/widgets/class-geodir-widget-ninja-forms.php:424 language.php:35
@@ -1525,8 +1525,8 @@ msgstr ""
 #: includes/admin/dummy-data/freelancer.php:762
 #: includes/admin/dummy-data/freelancer.php:763
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:611
-#: includes/class-geodir-comments.php:109
-#: includes/class-geodir-comments.php:111 language.php:56 language.php:125
+#: includes/class-geodir-comments.php:111
+#: includes/class-geodir-comments.php:113 language.php:56 language.php:125
 msgid "Website"
 msgstr ""
 
@@ -2137,7 +2137,7 @@ msgid "GeoDirectory status"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:146
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:298
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:300
 #: includes/post-functions.php:2033
 msgid "Status"
 msgstr ""
@@ -2568,7 +2568,7 @@ msgid "Rejected"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-report-post-list-table.php:808
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:306
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:308
 msgid "Pending"
 msgstr ""
 
@@ -2736,41 +2736,41 @@ msgstr ""
 msgid "GeoDirectory &rsaquo; Setup Wizard"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:405
+#: includes/admin/class-geodir-admin-setup-wizard.php:407
 msgid "Return to the WordPress Dashboard"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:431
+#: includes/admin/class-geodir-admin-setup-wizard.php:433
 msgid "Welcome to the world of GeoDirectory!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:432
+#: includes/admin/class-geodir-admin-setup-wizard.php:434
 msgid ""
 "This quick setup wizard will help you <b>configure your directory</b>. It's "
 "<b>completely optional</b> and shouldn't take longer than <b>five minutes<b/"
 ">."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:435
+#: includes/admin/class-geodir-admin-setup-wizard.php:437
 msgid "Not right now"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:446
+#: includes/admin/class-geodir-admin-setup-wizard.php:448
 msgid "Let's go!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:515
+#: includes/admin/class-geodir-admin-setup-wizard.php:517
 #: includes/admin/class-geodir-admin.php:251
 msgid "GeoDirectory - an AyeCode product!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:516
+#: includes/admin/class-geodir-admin-setup-wizard.php:518
 #: includes/admin/class-geodir-admin.php:252
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:41
 msgid "Please confirm you wish to connect your site?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:517
+#: includes/admin/class-geodir-admin-setup-wizard.php:519
 #: includes/admin/class-geodir-admin.php:253
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:42
 #, php-format
@@ -2779,280 +2779,280 @@ msgid ""
 "downloading zip files, connect your site for instant access. %slearn more%s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:518
+#: includes/admin/class-geodir-admin-setup-wizard.php:520
 #: includes/admin/class-geodir-admin.php:254
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:43
 msgid "Connect Site"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:519
+#: includes/admin/class-geodir-admin-setup-wizard.php:521
 #: includes/admin/class-geodir-admin.php:255
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:44
 msgid "Connecting..."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:520
+#: includes/admin/class-geodir-admin-setup-wizard.php:522
 #: includes/admin/class-geodir-admin.php:256
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:45
 msgid "This service will only work with a live domain, not a localhost."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:521
+#: includes/admin/class-geodir-admin-setup-wizard.php:523
 #: includes/admin/class-geodir-admin.php:257
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:46
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:539
+#: includes/admin/class-geodir-admin-setup-wizard.php:541
 msgid "What Directory features do you need?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:540
-#: includes/admin/class-geodir-admin-setup-wizard.php:921
+#: includes/admin/class-geodir-admin-setup-wizard.php:542
+#: includes/admin/class-geodir-admin-setup-wizard.php:923
 msgid "Select any that apply"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:621
-#: includes/admin/class-geodir-admin-setup-wizard.php:1344
+#: includes/admin/class-geodir-admin-setup-wizard.php:623
+#: includes/admin/class-geodir-admin-setup-wizard.php:1346
 msgid "Connect Site for more free and premium features"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:641
+#: includes/admin/class-geodir-admin-setup-wizard.php:643
 msgid "You have a valid Membership!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:649
+#: includes/admin/class-geodir-admin-setup-wizard.php:651
 msgid "Buy now"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:680
+#: includes/admin/class-geodir-admin-setup-wizard.php:682
 msgid "Membership (includes all extensions on unlimited sites)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:680
+#: includes/admin/class-geodir-admin-setup-wizard.php:682
 msgid "Recent purchase?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:680
+#: includes/admin/class-geodir-admin-setup-wizard.php:682
 msgid "Refresh Licenses"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:759
+#: includes/admin/class-geodir-admin-setup-wizard.php:761
 msgid "Valid"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:765
+#: includes/admin/class-geodir-admin-setup-wizard.php:767
 #, php-format
 msgid "$%s / year"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:768
+#: includes/admin/class-geodir-admin-setup-wizard.php:770
 #, php-format
 msgid "$%s / month"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:771
+#: includes/admin/class-geodir-admin-setup-wizard.php:773
 msgid "Included"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:784
+#: includes/admin/class-geodir-admin-setup-wizard.php:786
 msgid "Show more"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:785
+#: includes/admin/class-geodir-admin-setup-wizard.php:787
 msgid "Show less"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:798
+#: includes/admin/class-geodir-admin-setup-wizard.php:800
 msgid "Display monthly prices"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:820
-#: includes/admin/class-geodir-admin-setup-wizard.php:965
-#: includes/admin/class-geodir-admin-setup-wizard.php:1069
-#: includes/admin/class-geodir-admin-setup-wizard.php:1172
-#: includes/admin/class-geodir-admin-setup-wizard.php:1360
-#: includes/admin/class-geodir-admin-setup-wizard.php:1537
-msgid "Skip this step"
-msgstr ""
-
-#: includes/admin/class-geodir-admin-setup-wizard.php:825
+#: includes/admin/class-geodir-admin-setup-wizard.php:822
 #: includes/admin/class-geodir-admin-setup-wizard.php:967
 #: includes/admin/class-geodir-admin-setup-wizard.php:1071
 #: includes/admin/class-geodir-admin-setup-wizard.php:1174
 #: includes/admin/class-geodir-admin-setup-wizard.php:1362
-#: includes/admin/class-geodir-admin-setup-wizard.php:1542
+#: includes/admin/class-geodir-admin-setup-wizard.php:1539
+msgid "Skip this step"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-setup-wizard.php:827
+#: includes/admin/class-geodir-admin-setup-wizard.php:969
+#: includes/admin/class-geodir-admin-setup-wizard.php:1073
+#: includes/admin/class-geodir-admin-setup-wizard.php:1176
+#: includes/admin/class-geodir-admin-setup-wizard.php:1364
+#: includes/admin/class-geodir-admin-setup-wizard.php:1544
 #: includes/admin/views/html-admin-settings-cpt-cf-setting-item.php:751
 #: includes/admin/views/html-admin-settings-cpt-sorting-setting-item.php:117
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:72
 msgid "Saving"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:826
-#: includes/admin/class-geodir-admin-setup-wizard.php:968
-#: includes/admin/class-geodir-admin-setup-wizard.php:1072
-#: includes/admin/class-geodir-admin-setup-wizard.php:1175
-#: includes/admin/class-geodir-admin-setup-wizard.php:1363
-#: includes/admin/class-geodir-admin-setup-wizard.php:1543
+#: includes/admin/class-geodir-admin-setup-wizard.php:828
+#: includes/admin/class-geodir-admin-setup-wizard.php:970
+#: includes/admin/class-geodir-admin-setup-wizard.php:1074
+#: includes/admin/class-geodir-admin-setup-wizard.php:1177
+#: includes/admin/class-geodir-admin-setup-wizard.php:1365
+#: includes/admin/class-geodir-admin-setup-wizard.php:1545
 #: includes/core-functions.php:357
 msgid "Continue"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:829
+#: includes/admin/class-geodir-admin-setup-wizard.php:831
 msgid "Installing..."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:882
+#: includes/admin/class-geodir-admin-setup-wizard.php:884
 msgid "General Business"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:883
+#: includes/admin/class-geodir-admin-setup-wizard.php:885
 msgid "Events"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:884
+#: includes/admin/class-geodir-admin-setup-wizard.php:886
 msgid "Property for Sale"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:885
+#: includes/admin/class-geodir-admin-setup-wizard.php:887
 msgid "Property for Rent"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:887
+#: includes/admin/class-geodir-admin-setup-wizard.php:889
 msgid "Car Sales"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:888
+#: includes/admin/class-geodir-admin-setup-wizard.php:890
 msgid "Job Board"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:889
+#: includes/admin/class-geodir-admin-setup-wizard.php:891
 msgid "Yoga Studios"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:890
+#: includes/admin/class-geodir-admin-setup-wizard.php:892
 msgid "Restaurant Guide"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:891
+#: includes/admin/class-geodir-admin-setup-wizard.php:893
 msgid "Doctors Directory"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:892
+#: includes/admin/class-geodir-admin-setup-wizard.php:894
 msgid "Accommodation"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:893
+#: includes/admin/class-geodir-admin-setup-wizard.php:895
 msgid "Staff Directory"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:920
+#: includes/admin/class-geodir-admin-setup-wizard.php:922
 msgid "What Directory types are you setting up?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:934
+#: includes/admin/class-geodir-admin-setup-wizard.php:936
 msgid "Enable our Events addon to be able to use events"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1012
+#: includes/admin/class-geodir-admin-setup-wizard.php:1014
 msgid "Requires API key"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1015
+#: includes/admin/class-geodir-admin-setup-wizard.php:1017
 msgid "Google Maps"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1022
+#: includes/admin/class-geodir-admin-setup-wizard.php:1024
 msgid "Open Street Maps"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1049
+#: includes/admin/class-geodir-admin-setup-wizard.php:1051
 msgid "Enter your Google Maps API key"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1108
+#: includes/admin/class-geodir-admin-setup-wizard.php:1110
 msgid "Drag the map or marker to the center of your default town/city."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1125
+#: includes/admin/class-geodir-admin-setup-wizard.php:1127
 msgid "Allow listings to be placed outside the default city?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1156
+#: includes/admin/class-geodir-admin-setup-wizard.php:1158
 #: includes/admin/settings/class-geodir-settings-general.php:84
 msgid "Are you sure? This can break current listings."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1197
+#: includes/admin/class-geodir-admin-setup-wizard.php:1199
 msgid ""
 "You have not set a Google Maps API key, please press the back button in your "
 "browser and add a key otherwise Open Street Maps (OSM) will be used instead."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1200
+#: includes/admin/class-geodir-admin-setup-wizard.php:1202
 msgid ""
 "You have not set a Google Maps API key, please press the back button in your "
 "browser and add a key."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1202
+#: includes/admin/class-geodir-admin-setup-wizard.php:1204
 msgid ""
 "There is a problem with the Google Maps API key you have set, please press "
 "the back button in your browser and add a valid key."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1256
+#: includes/admin/class-geodir-admin-setup-wizard.php:1258
 #: includes/admin/settings/class-geodir-settings-general.php:48
 msgid "Dummy Data"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1257
+#: includes/admin/class-geodir-admin-setup-wizard.php:1259
 msgid "Sidebars"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1258
+#: includes/admin/class-geodir-admin-setup-wizard.php:1260
 msgid "Menus"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1268
+#: includes/admin/class-geodir-admin-setup-wizard.php:1270
 msgid "Import full demo site"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1269
+#: includes/admin/class-geodir-admin-setup-wizard.php:1271
 msgid "Add to existing site"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1300
+#: includes/admin/class-geodir-admin-setup-wizard.php:1302
 msgid "This importer will not work on localhost"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1336
+#: includes/admin/class-geodir-admin-setup-wizard.php:1338
 msgid "Please Update AyeCode Connect Plugin to Continue."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1395
+#: includes/admin/class-geodir-admin-setup-wizard.php:1397
 msgid "Recommend Plugins"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1397
+#: includes/admin/class-geodir-admin-setup-wizard.php:1399
 msgid ""
 "Below are a few recommend plugins that will help you with your directory."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1440
+#: includes/admin/class-geodir-admin-setup-wizard.php:1442
 msgid "Tick to install"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1573
+#: includes/admin/class-geodir-admin-setup-wizard.php:1575
 msgid "Awesome, your directory is ready!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1575
+#: includes/admin/class-geodir-admin-setup-wizard.php:1577
 #: includes/admin/class-geodir-admin.php:423
 msgid "Thank you for using GeoDirectory!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1582
+#: includes/admin/class-geodir-admin-setup-wizard.php:1584
 #: includes/admin/settings/class-geodir-settings-general.php:1074
 #, php-format
 msgid ""
@@ -3061,79 +3061,79 @@ msgid ""
 "more%2$s."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1585
+#: includes/admin/class-geodir-admin-setup-wizard.php:1587
 msgid "Allow"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1587
+#: includes/admin/class-geodir-admin-setup-wizard.php:1589
 msgid "No thanks"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1594
+#: includes/admin/class-geodir-admin-setup-wizard.php:1596
 msgid "Next steps"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1597
+#: includes/admin/class-geodir-admin-setup-wizard.php:1599
 msgid "Create your first listing!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1602
+#: includes/admin/class-geodir-admin-setup-wizard.php:1604
 msgid "Learn more"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1607
+#: includes/admin/class-geodir-admin-setup-wizard.php:1609
 msgid "Getting started guide"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1611
+#: includes/admin/class-geodir-admin-setup-wizard.php:1613
 msgid "Get GeoDirectory advice in your inbox"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1615
+#: includes/admin/class-geodir-admin-setup-wizard.php:1617
 msgid "Have questions? Get help."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1693
+#: includes/admin/class-geodir-admin-setup-wizard.php:1696
 msgid "Select the theme top sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1711
-#: includes/admin/class-geodir-admin-setup-wizard.php:1716
-#: includes/admin/class-geodir-admin-setup-wizard.php:1788
-#: includes/admin/class-geodir-admin-setup-wizard.php:1793
+#: includes/admin/class-geodir-admin-setup-wizard.php:1714
+#: includes/admin/class-geodir-admin-setup-wizard.php:1719
+#: includes/admin/class-geodir-admin-setup-wizard.php:1791
+#: includes/admin/class-geodir-admin-setup-wizard.php:1796
 msgid "sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1720
-#: includes/admin/class-geodir-admin-setup-wizard.php:1797
+#: includes/admin/class-geodir-admin-setup-wizard.php:1723
+#: includes/admin/class-geodir-admin-setup-wizard.php:1800
 msgid "sidebar page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1736
-#: includes/admin/class-geodir-admin-setup-wizard.php:1813
-#: includes/admin/class-geodir-admin-setup-wizard.php:1873
-#: includes/admin/class-geodir-admin-setup-wizard.php:1903
+#: includes/admin/class-geodir-admin-setup-wizard.php:1739
+#: includes/admin/class-geodir-admin-setup-wizard.php:1816
+#: includes/admin/class-geodir-admin-setup-wizard.php:1876
+#: includes/admin/class-geodir-admin-setup-wizard.php:1906
 msgid "( Auto detected )"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1750
-#: includes/admin/class-geodir-admin-setup-wizard.php:1826
+#: includes/admin/class-geodir-admin-setup-wizard.php:1753
+#: includes/admin/class-geodir-admin-setup-wizard.php:1829
 msgid "Insert widgets"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1769
+#: includes/admin/class-geodir-admin-setup-wizard.php:1772
 msgid "Select the theme sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1847
+#: includes/admin/class-geodir-admin-setup-wizard.php:1850
 msgid "Select the theme main menu"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1899
+#: includes/admin/class-geodir-admin-setup-wizard.php:1902
 msgid "Create new menu in:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:1919
+#: includes/admin/class-geodir-admin-setup-wizard.php:1922
 msgid "Insert menu items"
 msgstr ""
 
@@ -3244,7 +3244,7 @@ msgid "Make default"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:939
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:183
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:185
 #: includes/helper-functions.php:1689 includes/helper-functions.php:1789
 #: includes/widgets/class-geodir-widget-categories.php:163
 #: includes/widgets/class-geodir-widget-categories.php:173
@@ -3334,9 +3334,9 @@ msgid ""
 msgstr ""
 
 #: includes/admin/class-geodir-admin-tools.php:77
-#: includes/admin/views/html-admin-settings-import-export-categories.php:248
-#: includes/admin/views/html-admin-settings-import-export-listings.php:263
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:321
+#: includes/admin/views/html-admin-settings-import-export-categories.php:250
+#: includes/admin/views/html-admin-settings-import-export-listings.php:265
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:323
 msgid "Elapsed Time:"
 msgstr ""
 
@@ -4086,7 +4086,7 @@ msgstr ""
 #: includes/admin/dummy-data/property_sale.php:87
 #: includes/admin/dummy-data/standard_places.php:117
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:353
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:253
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:255
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:944
 #: includes/widgets/class-geodir-widget-simple-archive.php:435
 msgid "Rating"
@@ -5786,7 +5786,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt.php:475
 #: includes/admin/views/html-admin-page-status-report.php:578
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:23
-#: includes/class-geodir-comments.php:77
+#: includes/class-geodir-comments.php:79
 #: includes/class-geodir-post-data.php:948
 #: includes/class-geodir-post-data.php:976 language.php:33 language.php:123
 msgid "Name"
@@ -6373,7 +6373,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-map.php:401
 #: includes/widgets/class-geodir-widget-map.php:907
 #: includes/widgets/class-geodir-widget-post-meta.php:293
-#: includes/widgets/class-geodir-widget-search.php:467
+#: includes/widgets/class-geodir-widget-search.php:469
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1915
 msgid "Auto"
 msgstr ""
@@ -8445,8 +8445,8 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-cpt-cf-setting-item.php:750
 #: includes/admin/views/html-admin-settings-cpt-sorting-setting-item.php:116
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:71
-#: includes/custom-fields/input-functions-aui.php:2278
-#: includes/custom-fields/input-functions-aui.php:2315
+#: includes/custom-fields/input-functions-aui.php:2282
+#: includes/custom-fields/input-functions-aui.php:2319
 #: includes/custom-fields/input-functions.php:1813
 #: includes/custom-fields/input-functions.php:1843
 #: includes/widgets/class-geodir-widget-archive-item-section.php:43
@@ -8534,166 +8534,166 @@ msgstr ""
 msgid "Add shortcode"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:67
+#: includes/admin/views/html-admin-settings-import-export-categories.php:69
 msgid "Categories: Import CSV"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:74
+#: includes/admin/views/html-admin-settings-import-export-categories.php:76
 msgid "If cat_id/cat_slug exists"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:75
+#: includes/admin/views/html-admin-settings-import-export-categories.php:77
 msgid ""
 "If the cat_id/cat_slug column exists in the CSV, you can either update the "
 "category or it can be skipped"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:80
-#: includes/admin/views/html-admin-settings-import-export-listings.php:70
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:80
+#: includes/admin/views/html-admin-settings-import-export-categories.php:82
+#: includes/admin/views/html-admin-settings-import-export-listings.php:72
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:82
 msgid "Skip row"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:81
+#: includes/admin/views/html-admin-settings-import-export-categories.php:83
 msgid "Update Category"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:92
-#: includes/admin/views/html-admin-settings-import-export-listings.php:82
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:92
+#: includes/admin/views/html-admin-settings-import-export-categories.php:94
+#: includes/admin/views/html-admin-settings-import-export-listings.php:84
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:94
 msgid "Upload CSV file"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:98
-#: includes/admin/views/html-admin-settings-import-export-listings.php:88
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:98
-#: includes/admin/views/html-admin-settings-import-export-settings.php:39
+#: includes/admin/views/html-admin-settings-import-export-categories.php:100
+#: includes/admin/views/html-admin-settings-import-export-listings.php:90
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:100
+#: includes/admin/views/html-admin-settings-import-export-settings.php:41
 msgid "Select file"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:109
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:109
+#: includes/admin/views/html-admin-settings-import-export-categories.php:111
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:111
 msgid "Download Sample CSV"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:120
-#: includes/admin/views/html-admin-settings-import-export-listings.php:120
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:121
+#: includes/admin/views/html-admin-settings-import-export-categories.php:122
+#: includes/admin/views/html-admin-settings-import-export-listings.php:122
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:123
 #: language.php:186
 msgid "Select & Upload CSV"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:150
-#: includes/admin/views/html-admin-settings-import-export-listings.php:140
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:149
-#: includes/admin/views/html-admin-settings-import-export-settings.php:91
+#: includes/admin/views/html-admin-settings-import-export-categories.php:152
+#: includes/admin/views/html-admin-settings-import-export-listings.php:142
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:151
+#: includes/admin/views/html-admin-settings-import-export-settings.php:93
 msgid "Import Data Status :"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:167
-#: includes/admin/views/html-admin-settings-import-export-listings.php:154
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:160
-#: includes/admin/views/html-admin-settings-import-export-settings.php:103
+#: includes/admin/views/html-admin-settings-import-export-categories.php:169
+#: includes/admin/views/html-admin-settings-import-export-listings.php:156
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:162
+#: includes/admin/views/html-admin-settings-import-export-settings.php:105
 #: language.php:187
 msgid "Import data now"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:170
-#: includes/admin/views/html-admin-settings-import-export-listings.php:155
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:161
-#: includes/admin/views/html-admin-settings-import-export-settings.php:104
-msgid "Continue Import Data"
-msgstr ""
-
 #: includes/admin/views/html-admin-settings-import-export-categories.php:172
-#: includes/admin/views/html-admin-settings-import-export-listings.php:156
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:162
-#: includes/admin/views/html-admin-settings-import-export-settings.php:105
-msgid "Terminate Import Data"
+#: includes/admin/views/html-admin-settings-import-export-listings.php:157
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:163
+#: includes/admin/views/html-admin-settings-import-export-settings.php:106
+msgid "Continue Import Data"
 msgstr ""
 
 #: includes/admin/views/html-admin-settings-import-export-categories.php:174
 #: includes/admin/views/html-admin-settings-import-export-listings.php:158
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:164
 #: includes/admin/views/html-admin-settings-import-export-settings.php:107
+msgid "Terminate Import Data"
+msgstr ""
+
+#: includes/admin/views/html-admin-settings-import-export-categories.php:176
+#: includes/admin/views/html-admin-settings-import-export-listings.php:160
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:166
+#: includes/admin/views/html-admin-settings-import-export-settings.php:109
 msgid "Wait, processing import data..."
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:184
+#: includes/admin/views/html-admin-settings-import-export-categories.php:186
 msgid "Categories: Export CSV"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:209
-#: includes/admin/views/html-admin-settings-import-export-listings.php:195
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:191
+#: includes/admin/views/html-admin-settings-import-export-categories.php:211
+#: includes/admin/views/html-admin-settings-import-export-listings.php:197
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:193
 #: includes/core-functions.php:1117 language.php:174
 #: templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:228
-#: includes/admin/views/html-admin-settings-import-export-listings.php:214
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:210
+#: includes/admin/views/html-admin-settings-import-export-categories.php:230
+#: includes/admin/views/html-admin-settings-import-export-listings.php:216
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:212
 msgid "Max entries per csv file"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:228
-#: includes/admin/views/html-admin-settings-import-export-listings.php:214
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:210
+#: includes/admin/views/html-admin-settings-import-export-categories.php:230
+#: includes/admin/views/html-admin-settings-import-export-listings.php:216
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:212
 msgid ""
 "Please select the maximum number of entries per csv file (defaults to 5000, "
 "you might want to lower this to prevent memory issues on some installs)"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-categories.php:253
-#: includes/admin/views/html-admin-settings-import-export-listings.php:270
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:326
+#: includes/admin/views/html-admin-settings-import-export-categories.php:255
+#: includes/admin/views/html-admin-settings-import-export-listings.php:272
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:328
 msgid "Export CSV"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:57
+#: includes/admin/views/html-admin-settings-import-export-listings.php:59
 msgid "Listings: Import CSV"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:64
+#: includes/admin/views/html-admin-settings-import-export-listings.php:66
 msgid "If post ID exists"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:65
+#: includes/admin/views/html-admin-settings-import-export-listings.php:67
 msgid ""
 "If the ID column exists in the CSV, you can either update the listing or it "
 "can be skipped"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:71
+#: includes/admin/views/html-admin-settings-import-export-listings.php:73
 msgid "Update listing"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:99
+#: includes/admin/views/html-admin-settings-import-export-listings.php:101
 msgid "How To Get Sample CSV File To Prepare Import Listings"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:171
+#: includes/admin/views/html-admin-settings-import-export-listings.php:173
 msgid "Listings: Export CSV"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:229
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:225
+#: includes/admin/views/html-admin-settings-import-export-listings.php:231
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:227
 msgid "Filter published dates"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:229
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:225
+#: includes/admin/views/html-admin-settings-import-export-listings.php:231
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:227
 msgid "Export listings based on the published date"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:237
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:233
+#: includes/admin/views/html-admin-settings-import-export-listings.php:239
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:235
 msgid "Start date"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-listings.php:247
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:243
+#: includes/admin/views/html-admin-settings-import-export-listings.php:249
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:245
 msgid "End date"
 msgstr ""
 
@@ -8723,68 +8723,68 @@ msgstr ""
 msgid "Recommended Value"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:66
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:68
 msgid "Reviews: Import CSV"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:74
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:76
 msgid "If comment_ID exists"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:75
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:77
 msgid ""
 "If the comment_ID column exists in the CSV, you can either update the review "
 "or it can be skipped"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:81
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:83
 msgid "Update Review"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:176
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:178
 msgid "Reviews: Export CSV"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:253
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:255
 msgid "Min & max rating star range of which the reviews are to be exported"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:263
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:279
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:304
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:265
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:281
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:306
 msgid "Any"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:298
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:300
 msgid "Select the status of the reviews to export"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:305
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:307
 msgid "Approved"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:307
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:309
 #: includes/class-geodir-report-post.php:210 language.php:130
 msgid "Spam"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-reviews.php:308
+#: includes/admin/views/html-admin-settings-import-export-reviews.php:310
 msgid "Trashed"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-settings.php:24
+#: includes/admin/views/html-admin-settings-import-export-settings.php:26
 msgid "Import / Export Settings"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-settings.php:30
+#: includes/admin/views/html-admin-settings-import-export-settings.php:32
 msgid "Upload JSON file"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-settings.php:50
+#: includes/admin/views/html-admin-settings-import-export-settings.php:52
 msgid "Download Settings"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings-import-export-settings.php:62
+#: includes/admin/views/html-admin-settings-import-export-settings.php:64
 msgid "Import Settings"
 msgstr ""
 
@@ -9649,7 +9649,7 @@ msgstr ""
 #: includes/class-geodir-privacy-exporters.php:238
 #: includes/class-geodir-privacy-exporters.php:303
 #: includes/core-functions.php:358
-#: includes/custom-fields/input-functions-aui.php:2257
+#: includes/custom-fields/input-functions-aui.php:2261
 #: includes/custom-fields/input-functions.php:1805
 #: includes/custom-fields/output-functions.php:86
 #: includes/widgets/class-geodir-widget-listings.php:542
@@ -9666,7 +9666,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2804
 #: includes/api/class-geodir-rest-posts-controller.php:2854
 #: includes/class-geodir-privacy-exporters.php:301
-#: includes/custom-fields/input-functions-aui.php:2258
+#: includes/custom-fields/input-functions-aui.php:2262
 #: includes/custom-fields/input-functions.php:1806
 #: includes/custom-fields/output-functions.php:88
 #: includes/widgets/class-geodir-widget-listings.php:541
@@ -10401,7 +10401,7 @@ msgid "Sun"
 msgstr ""
 
 #: includes/business-hours-functions.php:677 includes/core-functions.php:341
-#: includes/custom-fields/input-functions-aui.php:2321
+#: includes/custom-fields/input-functions-aui.php:2325
 #: includes/custom-fields/input-functions.php:1847
 msgid "Closed"
 msgstr ""
@@ -10416,7 +10416,7 @@ msgid "Closed now"
 msgstr ""
 
 #: includes/business-hours-functions.php:680
-#: includes/custom-fields/input-functions-aui.php:2270
+#: includes/custom-fields/input-functions-aui.php:2274
 #: includes/custom-fields/input-functions.php:1810
 msgid "Open 24 hours"
 msgstr ""
@@ -10880,85 +10880,85 @@ msgstr ""
 msgid "Adds a select input to set a sale status of the listing."
 msgstr ""
 
-#: includes/class-geodir-comments.php:64
+#: includes/class-geodir-comments.php:66
 msgid "Enter your review comments here (required)..."
 msgstr ""
 
-#: includes/class-geodir-comments.php:66 includes/core-functions.php:289
+#: includes/class-geodir-comments.php:68 includes/core-functions.php:289
 #: includes/core-functions.php:335 templates/reviews.php:115
 msgid "Review text"
 msgstr ""
 
-#: includes/class-geodir-comments.php:79
+#: includes/class-geodir-comments.php:81
 msgid "Name (required)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:95
+#: includes/class-geodir-comments.php:97
 msgid "Email (required)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:127
+#: includes/class-geodir-comments.php:129
 msgid ""
 "Save my name, email, and website in this browser for the next time I comment."
 msgstr ""
 
-#: includes/class-geodir-comments.php:141
+#: includes/class-geodir-comments.php:143
 msgid "Your email address will not be published."
 msgstr ""
 
-#: includes/class-geodir-comments.php:145 includes/core-functions.php:332
+#: includes/class-geodir-comments.php:147 includes/core-functions.php:332
 #: templates/reviews.php:113
 msgid "Leave a Review"
 msgstr ""
 
-#: includes/class-geodir-comments.php:149 includes/core-functions.php:288
+#: includes/class-geodir-comments.php:151 includes/core-functions.php:288
 #: includes/core-functions.php:330 templates/reviews.php:114
 msgid "Post Review"
 msgstr ""
 
-#: includes/class-geodir-comments.php:674
+#: includes/class-geodir-comments.php:676
 msgid "Pingback:"
 msgstr ""
 
-#: includes/class-geodir-comments.php:674
+#: includes/class-geodir-comments.php:676
 msgid "(Edit)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:835
+#: includes/class-geodir-comments.php:837
 #, php-format
 msgid "%d star rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:838
+#: includes/class-geodir-comments.php:840
 msgid "No rating yet!"
 msgstr ""
 
-#: includes/class-geodir-comments.php:892
-#: includes/class-geodir-comments.php:919
+#: includes/class-geodir-comments.php:894
+#: includes/class-geodir-comments.php:921
 msgid "Select a rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:952
+#: includes/class-geodir-comments.php:954
 msgid "Terrible"
 msgstr ""
 
-#: includes/class-geodir-comments.php:953
+#: includes/class-geodir-comments.php:955
 msgid "Poor"
 msgstr ""
 
-#: includes/class-geodir-comments.php:954
+#: includes/class-geodir-comments.php:956
 msgid "Average"
 msgstr ""
 
-#: includes/class-geodir-comments.php:955
+#: includes/class-geodir-comments.php:957
 msgid "Very Good"
 msgstr ""
 
-#: includes/class-geodir-comments.php:956
+#: includes/class-geodir-comments.php:958
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-comments.php:1253
+#: includes/class-geodir-comments.php:1255
 #, php-format
 msgid "%d review"
 msgid_plural "%d reviews"
@@ -13224,62 +13224,62 @@ msgstr ""
 msgid "Has hide conditions"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:59
+#: includes/custom-fields/input-functions-aui.php:60
 msgid "Admin only"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:114
+#: includes/custom-fields/input-functions-aui.php:115
 #: includes/custom-fields/input-functions.php:112
 msgid "(km)"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:116
+#: includes/custom-fields/input-functions-aui.php:117
 #: includes/custom-fields/input-functions.php:114
 msgid "(miles)"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:648
-#: includes/custom-fields/input-functions-aui.php:752
+#: includes/custom-fields/input-functions-aui.php:649
+#: includes/custom-fields/input-functions-aui.php:755
 #: includes/custom-fields/input-functions.php:654
 #: includes/custom-fields/input-functions.php:708
 #, php-format
 msgid "Select %s&hellip;"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1436
+#: includes/custom-fields/input-functions-aui.php:1439
 #: includes/custom-fields/input-functions.php:1179
 msgid "Enter a location"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1454
+#: includes/custom-fields/input-functions-aui.php:1457
 #: templates/bootstrap/map/directions.php:37
 msgid "use my location"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1478
-#: includes/custom-fields/input-functions-aui.php:1512
+#: includes/custom-fields/input-functions-aui.php:1481
+#: includes/custom-fields/input-functions-aui.php:1515
 #: includes/custom-fields/input-functions.php:1209
 #: includes/custom-fields/input-functions.php:1231
 #, php-format
 msgid "Please enter listing %s"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1496
+#: includes/custom-fields/input-functions-aui.php:1499
 #: includes/custom-fields/input-functions.php:1232
 msgid "Zip/Post Code is required!"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1634
+#: includes/custom-fields/input-functions-aui.php:1637
 #: includes/custom-fields/input-functions.php:1315
 msgid "Please select listing map view to use"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1637
+#: includes/custom-fields/input-functions-aui.php:1640
 #: includes/custom-fields/input-functions.php:1305
 msgid "Default Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1638
+#: includes/custom-fields/input-functions-aui.php:1641
 #: includes/custom-fields/input-functions.php:1306
 #: includes/widgets/class-geodir-widget-map.php:388
 #: includes/widgets/class-geodir-widget-simple-archive.php:256
@@ -13287,24 +13287,24 @@ msgstr ""
 msgid "Satellite Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1639
+#: includes/custom-fields/input-functions-aui.php:1642
 #: includes/custom-fields/input-functions.php:1307
 #: includes/widgets/class-geodir-widget-map.php:389
 #: includes/widgets/class-geodir-widget-simple-archive.php:257
 msgid "Hybrid Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1640
+#: includes/custom-fields/input-functions-aui.php:1643
 #: includes/custom-fields/input-functions.php:1308
 #: includes/widgets/class-geodir-widget-map.php:390
 #: includes/widgets/class-geodir-widget-simple-archive.php:258
 msgid "Terrain Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1700
-#: includes/custom-fields/input-functions-aui.php:1776
-#: includes/custom-fields/input-functions-aui.php:1847
-#: includes/custom-fields/input-functions-aui.php:1930
+#: includes/custom-fields/input-functions-aui.php:1703
+#: includes/custom-fields/input-functions-aui.php:1779
+#: includes/custom-fields/input-functions-aui.php:1851
+#: includes/custom-fields/input-functions-aui.php:1934
 #: includes/custom-fields/input-functions.php:1373
 #: includes/custom-fields/input-functions.php:1445
 #: includes/custom-fields/input-functions.php:1515
@@ -13315,83 +13315,83 @@ msgstr ""
 msgid "Select Category"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1750
-#: includes/custom-fields/input-functions-aui.php:1898
+#: includes/custom-fields/input-functions-aui.php:1753
+#: includes/custom-fields/input-functions-aui.php:1902
 #: includes/custom-fields/input-functions.php:1423
 #: includes/custom-fields/input-functions.php:1563
 #, php-format
 msgid "Only select %d categories for this package."
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1923
+#: includes/custom-fields/input-functions-aui.php:1927
 msgid "Select at least one category from the list!"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1960
+#: includes/custom-fields/input-functions-aui.php:1964
 msgid "Select Default Category"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1965
+#: includes/custom-fields/input-functions-aui.php:1969
 msgid "The default category can affect the listing URL and map marker."
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2052
+#: includes/custom-fields/input-functions-aui.php:2056
 #: includes/custom-fields/input-functions.php:1650
 msgid "Enter tags separated by a comma ,"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2111
+#: includes/custom-fields/input-functions-aui.php:2115
 #: includes/custom-fields/input-functions.php:1709
 msgid "Popular tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2125
+#: includes/custom-fields/input-functions-aui.php:2129
 #: includes/custom-fields/input-functions.php:1724
 msgid "Your tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2270
+#: includes/custom-fields/input-functions-aui.php:2274
 #: includes/custom-fields/input-functions.php:1810
 msgid "Day"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2270
+#: includes/custom-fields/input-functions-aui.php:2274
 #: includes/custom-fields/input-functions.php:1810
 msgid "Opening Hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2270
+#: includes/custom-fields/input-functions-aui.php:2274
 #: includes/custom-fields/input-functions.php:1810
 msgid "Add"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2277
-#: includes/custom-fields/input-functions-aui.php:2314
+#: includes/custom-fields/input-functions-aui.php:2281
+#: includes/custom-fields/input-functions-aui.php:2318
 #: includes/custom-fields/input-functions.php:1813
 #: includes/custom-fields/input-functions.php:1843
 #: includes/widgets/class-geodir-widget-archive-item-section.php:42
 msgid "Open"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2280
-#: includes/custom-fields/input-functions-aui.php:2317
+#: includes/custom-fields/input-functions-aui.php:2284
+#: includes/custom-fields/input-functions-aui.php:2321
 msgid "Remove hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2324
+#: includes/custom-fields/input-functions-aui.php:2328
 msgid "Add new set of hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2328
+#: includes/custom-fields/input-functions-aui.php:2332
 msgid "Timezone:"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2328
+#: includes/custom-fields/input-functions-aui.php:2332
 #: includes/custom-fields/input-functions.php:1855
 msgid "Select a city/timezone&hellip;"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2455
+#: includes/custom-fields/input-functions-aui.php:2459
 #, php-format
 msgid "%s is a required field."
 msgstr ""
@@ -16461,10 +16461,10 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-loop-actions.php:164
 #: includes/widgets/class-geodir-widget-loop-actions.php:172
 #: includes/widgets/class-geodir-widget-search.php:51
-#: includes/widgets/class-geodir-widget-search.php:188
-#: includes/widgets/class-geodir-widget-search.php:199
-#: includes/widgets/class-geodir-widget-search.php:208
-#: includes/widgets/class-geodir-widget-search.php:217
+#: includes/widgets/class-geodir-widget-search.php:190
+#: includes/widgets/class-geodir-widget-search.php:201
+#: includes/widgets/class-geodir-widget-search.php:210
+#: includes/widgets/class-geodir-widget-search.php:219
 msgid "Buttons"
 msgstr ""
 
@@ -18393,14 +18393,14 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-search.php:49
 #: includes/widgets/class-geodir-widget-search.php:150
-#: includes/widgets/class-geodir-widget-search.php:156
+#: includes/widgets/class-geodir-widget-search.php:157
 msgid "Search bar"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-search.php:50
-#: includes/widgets/class-geodir-widget-search.php:164
-#: includes/widgets/class-geodir-widget-search.php:171
-#: includes/widgets/class-geodir-widget-search.php:178
+#: includes/widgets/class-geodir-widget-search.php:166
+#: includes/widgets/class-geodir-widget-search.php:173
+#: includes/widgets/class-geodir-widget-search.php:180
 msgid "Main Inputs"
 msgstr ""
 
@@ -18434,7 +18434,7 @@ msgstr ""
 msgid "Input size"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-search.php:187
+#: includes/widgets/class-geodir-widget-search.php:189
 msgid "Button color"
 msgstr ""
 
