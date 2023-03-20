@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.2 =
 * Clear attachment title & caption cache on title & caption update - FIXED
+* GD Listings next page not working when no center page links in pagination - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.1 - 2023-03-17 =
 * Changed order of block and shortcode rendering calls to fix output bug in blockthemes - FIXED
