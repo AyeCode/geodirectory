@@ -1883,7 +1883,14 @@ function geodir_widget_listings_pagination(id, params) {
 					hrefs = href.split("#");
 					page = (hrefs.length > 1 && parseInt(hrefs[1]) > 0 ? parseInt(hrefs[1]) : (parseInt(jQuery(this).text()) > 0 ? parseInt(jQuery(this).text()) : 0));
 					if (!page > 0) {
-						var cpage = parseInt(jQuery(this).closest('.pagination').find('[aria-current="page"]').text());
+						var ePage = jQuery(this).closest('.pagination').find('[aria-current="page"]');
+						if (!ePage.length) {
+							ePage = jQuery(this).closest('.pagination').find('.page-link.current');
+						}
+						if (!ePage.length) {
+							ePage = jQuery(this).closest('.pagination').find('.page-link.active');
+						}
+						var cpage = ePage.length ? parseInt(ePage.text()) : 0;
 						if (cpage > 0) {
 							if (jQuery(this).hasClass('next')) {
 								page = cpage + 1;
