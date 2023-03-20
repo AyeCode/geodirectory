@@ -416,12 +416,7 @@ class GeoDir_Media {
 		}
 
 		// Clear the post attachment cache
-		wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::' . $other_id . ':', 'gd_attachments_by_type' );
-		wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::' . $other_id . ':1', 'gd_attachments_by_type' );
-		if ( ! $other_id ) {
-			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':1:::', 'gd_attachments_by_type' );
-			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':1:::1', 'gd_attachments_by_type' );
-		}
+		self::clear_attachment_cache( $post_id, $type, $other_id );
 
 		$file_info['ID'] = $wpdb->insert_id;
 
@@ -596,12 +591,7 @@ class GeoDir_Media {
 		}
 
 		// Clear the post attachment cache
-		wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $field . ':::' . $other_id . ':', 'gd_attachments_by_type' );
-		wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $field . ':::' . $other_id . ':1', 'gd_attachments_by_type' );
-		if ( ! $other_id ) {
-			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $field . ':1:::', 'gd_attachments_by_type' );
-			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $field . ':1:::1', 'gd_attachments_by_type' );
-		}
+		self::clear_attachment_cache( $post_id, $field, $other_id );
 
 		// Attachment info.
 		$attachment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE ID = %d", $file_id ), ARRAY_A );
@@ -820,10 +810,7 @@ class GeoDir_Media {
 				}
 
 				// Clear post attachment cache.
-				wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $attachment->type . '::::', 'gd_attachments_by_type' );
-				wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $attachment->type . ':1:::', 'gd_attachments_by_type' );
-				wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $attachment->type . '::::1', 'gd_attachments_by_type' );
-				wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $attachment->type . ':1:::1', 'gd_attachments_by_type' );
+				self::clear_attachment_cache( $post_id, $attachment->type );
 			}
 		}
 
@@ -1148,10 +1135,7 @@ class GeoDir_Media {
 
 						if ( ! empty( $file->type ) ) {
 							// Clear post attachment cache.
-							wp_cache_delete( 'gd_attachments_by_type:' . $file->post_id . ':' . $file->type . '::::', 'gd_attachments_by_type' );
-							wp_cache_delete( 'gd_attachments_by_type:' . $file->post_id . ':' . $file->type . ':1:::', 'gd_attachments_by_type' );
-							wp_cache_delete( 'gd_attachments_by_type:' . $file->post_id . ':' . $file->type . '::::1', 'gd_attachments_by_type' );
-							wp_cache_delete( 'gd_attachments_by_type:' . $file->post_id . ':' . $file->type . ':1:::', 'gd_attachments_by_type' );
+							self::clear_attachment_cache( $file->post_id, $file->type );
 						}
 					}else{
 						self::delete_attachment($file->ID,$file->post_id, $file);
@@ -1478,5 +1462,39 @@ class GeoDir_Media {
 		}
 
 		return $metadata;
+	}
+
+	/**
+	 * Clear attachment cache.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param int      $post_id The post ID.
+	 * @param string   $type Attachment type.
+	 * @param int|null $other_id The other ID.
+	 */
+	public static function clear_attachment_cache( $post_id, $type = '', $other_id = '' ) {
+		// 'gd_attachments_by_type:' . $post_id . ':' . $type. ':' . $limit . ':' . $revision_id . ':' . $other_id . ':' . $status . ':' . (int) is_preview()
+		if ( $other_id !== '' ) {
+			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::' . $other_id . '::0', 'gd_attachments_by_type' );
+			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::' . $other_id . ':1:0', 'gd_attachments_by_type' );
+
+			if ( is_preview() ) {
+				wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::' . $other_id . '::1', 'gd_attachments_by_type' );
+				wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::' . $other_id . ':1:1', 'gd_attachments_by_type' );
+			}
+		}
+
+		wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::::0', 'gd_attachments_by_type' );
+		wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':1::::0', 'gd_attachments_by_type' );
+		wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . '::::1:0', 'gd_attachments_by_type' );
+		wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':1:::1:0', 'gd_attachments_by_type' );
+
+		if ( is_preview() ) {
+			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::::1', 'gd_attachments_by_type' );
+			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':1::::1', 'gd_attachments_by_type' );
+			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . '::::1:1', 'gd_attachments_by_type' );
+			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':1:::1:1', 'gd_attachments_by_type' );
+		}
 	}
 }
