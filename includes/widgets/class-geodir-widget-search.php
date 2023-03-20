@@ -301,6 +301,8 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 		 */
 		extract( $instance, EXTR_SKIP );
 
+		$design_style = ! empty( $instance['design_style'] ) ? esc_attr( $instance['design_style'] ) : geodir_design_style();
+
 		// Set the CPT to be used.
 		if ( isset( $post_type ) && $post_type && geodir_is_gd_post_type( $post_type ) ) {
 			geodir_get_search_post_type( $post_type ); // set the post type
@@ -325,27 +327,33 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 
 		// Buttons classes
 		$geodir_search_widget_params['btn_icon_class'] = '';
-		$geodir_search_widget_params['buttons_class']  = sd_build_aui_class(
-			array(
-				'rounded_size'    => isset( $instance['btn_rounded_size'] ) ? $instance['btn_rounded_size'] : '',
-				'rounded_size_md' => isset( $instance['btn_rounded_size_md'] ) ? $instance['btn_rounded_size_md'] : '',
-				'rounded_size_lg' => isset( $instance['btn_rounded_size_lg'] ) ? $instance['btn_rounded_size_lg'] : '',
-			)
-		);
-		$geodir_search_widget_params['buttons_class'] .= $instance['btn_bg'] ? ' btn-' . esc_attr( $instance['btn_bg'] ) : 'btn-primary';
-		$geodir_search_widget_params['buttons_class'] .= $instance['input_size'] ? ' btn-' . esc_attr( $instance['input_size'] ) : '';
-		if ( 'circle' === $instance['btn_rounded_size'] || 'circle' === $instance['btn_rounded_size_md'] || 'circle' === $instance['btn_rounded_size_lg'] ) {
-			$geodir_search_widget_params['buttons_class'] .= ' px-3';
+		if ( $design_style ) {
+			$geodir_search_widget_params['buttons_class'] = sd_build_aui_class(
+				array(
+					'rounded_size'    => isset( $instance['btn_rounded_size'] ) ? $instance['btn_rounded_size'] : '',
+					'rounded_size_md' => isset( $instance['btn_rounded_size_md'] ) ? $instance['btn_rounded_size_md'] : '',
+					'rounded_size_lg' => isset( $instance['btn_rounded_size_lg'] ) ? $instance['btn_rounded_size_lg'] : '',
+				)
+			);
 
-			if ( $instance['input_size'] !== 'lg' ) {
-				$geodir_search_widget_params['btn_icon_class'] = ' mx-n1';
+			$geodir_search_widget_params['buttons_class'] .= ! empty( $instance['btn_bg'] ) ? ' btn-' . esc_attr( $instance['btn_bg'] ) : 'btn-primary';
+			$geodir_search_widget_params['buttons_class'] .= ! empty( $instance['input_size'] ) ? ' btn-' . esc_attr( $instance['input_size'] ) : '';
+
+			if ( ( isset( $instance['btn_rounded_size'] ) && 'circle' === $instance['btn_rounded_size'] ) || ( isset( $instance['btn_rounded_size_md'] ) && 'circle' === $instance['btn_rounded_size_md'] ) || ( isset( $instance['btn_rounded_size_lg'] ) && 'circle' === $instance['btn_rounded_size_lg'] ) ) {
+				$geodir_search_widget_params['buttons_class'] .= ' px-3';
+
+				if ( ! ( isset( $instance['input_size'] ) && $instance['input_size'] == 'lg' ) ) {
+					$geodir_search_widget_params['btn_icon_class'] = ' mx-n1';
+				}
 			}
+		} else {
+			$geodir_search_widget_params['buttons_class'] = '';
 		}
 
 		// input size
-		$geodir_search_widget_params['input_size'] = $instance['input_size'] ? esc_attr( $instance['input_size'] ) : '';
+		$geodir_search_widget_params['input_size'] = ! empty( $instance['input_size'] ) ? esc_attr( $instance['input_size'] ) : '';
 
-		if ( isset( $instance['input_border'] ) & '0' === $instance['input_border'] ) {
+		if ( isset( $instance['input_border'] ) && '0' === $instance['input_border'] ) {
 			$geodir_search_widget_params['main_search_inputs_class'] .= ' shadow-none';
 		}
 
@@ -361,7 +369,6 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 			$geodir_search_widget_params['hide_near_input'] = true;
 		}
 
-		$design_style = ! empty( $instance['design_style'] ) ? esc_attr( $instance['design_style'] ) : geodir_design_style();
 		$template     = $design_style ? $design_style . '/search-bar/form.php' : 'listing-filter-form.php';
 
 		if ( $design_style && ! empty( $instance ) ) {
