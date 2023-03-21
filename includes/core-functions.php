@@ -1088,7 +1088,7 @@ function geodir_search_form_post_type_input() {
 		}
 
 		$show_select = true;
-		if ( ! empty( $geodir_search_widget_params['post_type_hide'] ) && ! isset( $_REQUEST['stype'] ) ) {
+		if ( ! empty( $geodir_search_widget_params['post_type_hide'] ) ) {
 			$show_select = false;
 		}
 
