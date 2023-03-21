@@ -549,6 +549,7 @@ function geodir_cfi_textarea($html,$cf){
         $extra_attributes['field_type'] =  $wysiwyg ? 'editor' :  $cf['type'];
 
         $extra_attributes = apply_filters( 'geodir_cfi_aui_textarea_attributes', $extra_attributes, $cf );
+        $wysiwyg_attributes = apply_filters( 'geodir_cfi_aui_textarea_wysiwyg_attributes', array('quicktags' => true), $cf );
 
         // required
         $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
@@ -574,7 +575,7 @@ function geodir_cfi_textarea($html,$cf){
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
             'no_wrap'    => false,
             'rows'      => 8,
-            'wysiwyg'   => $wysiwyg ? array('quicktags' => true) : false,
+            'wysiwyg'   => $wysiwyg ? $wysiwyg_attributes : false,
             'allow_tags' => $allow_tags,
             'help_text'        => $help_text,
             'extra_attributes' => $extra_attributes,
