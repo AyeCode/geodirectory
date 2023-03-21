@@ -386,84 +386,83 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			'group'           => __( 'Design', 'geodirectory' ),
 		);
 
-		if ( $design_style ) {
+		$arguments['template_type'] = array(
+			'title'    => __( 'Archive Item Template Type:', 'geodirectory' ),
+			'desc'     => 'Select archive item template type to assign template to archive loop.',
+			'type'     => 'select',
+			'options'  => geodir_template_type_options(),
+			'default'  => '',
+			'desc_tip' => true,
+			'advanced' => false,
+			'group'    => __( 'Card Design', 'geodirectory' ),
+		);
 
-			$arguments['template_type'] = array(
-				'title'    => __( 'Archive Item Template Type:', 'geodirectory' ),
-				'desc'     => 'Select archive item template type to assign template to archive loop.',
-				'type'     => 'select',
-				'options'  => geodir_template_type_options(),
-				'default'  => '',
-				'desc_tip' => true,
-				'advanced' => false,
-				'group'    => __( 'Card Design', 'geodirectory' ),
-			);
+		$arguments['tmpl_page'] = array(
+			'title'           => __( 'Archive Item Template Page:', 'geodirectory' ),
+			'desc'            => 'Select archive item template page.',
+			'type'            => 'select',
+			'options'         => geodir_template_page_options(),
+			'default'         => '',
+			'desc_tip'        => true,
+			'advanced'        => false,
+			'element_require' => '[%template_type%]=="page"',
+			'group'           => __( 'Card Design', 'geodirectory' ),
+		);
 
-			$arguments['tmpl_page'] = array(
-				'title'           => __( 'Archive Item Template Page:', 'geodirectory' ),
-				'desc'            => 'Select archive item template page.',
+		if ( geodir_is_block_theme() ) {
+			$arguments['tmpl_part'] = array(
+				'title'           => __( 'Archive Item Template Part:', 'geodirectory' ),
+				'desc'            => 'Select archive item template part.',
 				'type'            => 'select',
-				'options'         => geodir_template_page_options(),
+				'options'         => geodir_template_part_options(),
 				'default'         => '',
 				'desc_tip'        => true,
 				'advanced'        => false,
-				'element_require' => '[%template_type%]=="page"',
+				'element_require' => '[%template_type%]=="template_part"',
+				'group'           => __( 'Card Design', 'geodirectory' ),
+			);
+		}
+
+		/*
+		* Elementor Pro features below here
+		*/
+		if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
+			$arguments['skin_id'] = array(
+				'title'           => __( 'Archive Item Elementor Skin:', 'geodirectory' ),
+				'desc'            => '',
+				'type'            => 'select',
+				'options'         => GeoDir_Elementor::get_elementor_pro_skins(),
+				'default'         => '',
+				'desc_tip'        => false,
+				'advanced'        => false,
+				'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
 				'group'           => __( 'Card Design', 'geodirectory' ),
 			);
 
-			if ( geodir_is_block_theme() ) {
-				$arguments['tmpl_part'] = array(
-					'title'           => __( 'Archive Item Template Part:', 'geodirectory' ),
-					'desc'            => 'Select archive item template part.',
-					'type'            => 'select',
-					'options'         => geodir_template_part_options(),
-					'default'         => '',
-					'desc_tip'        => true,
-					'advanced'        => false,
-					'element_require' => '[%template_type%]=="template_part"',
-					'group'           => __( 'Card Design', 'geodirectory' ),
-				);
-			}
+			$arguments['skin_column_gap'] = array(
+				'title'           => __( 'Skin column gap', 'geodirectory' ),
+				'desc'            => __( 'The px value for the column gap.', 'geodirectory' ),
+				'type'            => 'number',
+				'default'         => '30',
+				'desc_tip'        => true,
+				'advanced'        => false,
+				'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
+				'group'           => __( 'Card Design', 'geodirectory' ),
+			);
 
-			/*
-			* Elementor Pro features below here
-			*/
-			if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
-				$arguments['skin_id'] = array(
-					'title'           => __( 'Archive Item Elementor Skin:', 'geodirectory' ),
-					'desc'            => '',
-					'type'            => 'select',
-					'options'         => GeoDir_Elementor::get_elementor_pro_skins(),
-					'default'         => '',
-					'desc_tip'        => false,
-					'advanced'        => false,
-					'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
-					'group'           => __( 'Card Design', 'geodirectory' ),
-				);
+			$arguments['skin_row_gap'] = array(
+				'title'           => __( 'Skin row gap', 'geodirectory' ),
+				'desc'            => __( 'The px value for the row gap.', 'geodirectory' ),
+				'type'            => 'number',
+				'default'         => '35',
+				'desc_tip'        => true,
+				'advanced'        => false,
+				'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
+				'group'           => __( 'Card Design', 'geodirectory' ),
+			);
+		}
 
-				$arguments['skin_column_gap'] = array(
-					'title'           => __( 'Skin column gap', 'geodirectory' ),
-					'desc'            => __( 'The px value for the column gap.', 'geodirectory' ),
-					'type'            => 'number',
-					'default'         => '30',
-					'desc_tip'        => true,
-					'advanced'        => false,
-					'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
-					'group'           => __( 'Card Design', 'geodirectory' ),
-				);
-
-				$arguments['skin_row_gap'] = array(
-					'title'           => __( 'Skin row gap', 'geodirectory' ),
-					'desc'            => __( 'The px value for the row gap.', 'geodirectory' ),
-					'type'            => 'number',
-					'default'         => '35',
-					'desc_tip'        => true,
-					'advanced'        => false,
-					'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
-					'group'           => __( 'Card Design', 'geodirectory' ),
-				);
-			}
-
+		if ( $design_style ) {
 			$arguments['row_gap'] = array(
 				'title'    => __( 'Card row gap', 'geodirectory' ),
 				'desc'     => __( 'This adjusts the spacing between the cards horizontally.', 'geodirectory' ),
