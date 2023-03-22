@@ -117,7 +117,7 @@ function geodir_predefined_custom_field_output_distanceto( $html, $location, $cf
 		if ( $output == '' || isset( $output['label'] ) ) $html .= $label ? '<span class="geodir_post_meta_title">' . __( $label, 'geodirectory' ) . ': ' . '</span>' : '';
 		if ( $output == '' || isset( $output['icon'] ) ) $html .= '</span>';
 		if ( $output == '' || isset( $output['value'] ) ) {
-			$google_map_link = 'https://www.google.com/maps/dir/' . $start_point['latitude'] . ',' . $start_point['longitude'] . '/' . $end_point['latitude'] . ',' . $end_point['longitude'] . '/';
+			$google_map_link = 'https://www.google.com/maps/dir//' . $start_point['latitude'] . ',' . $start_point['longitude'] . '/' . $end_point['latitude'] . ',' . $end_point['longitude'] . '/';
 			$google_map_link = apply_filters( 'geodir_custom_field_output_distanceto_on_google_map', $google_map_link, $start_point, $end_point );
 
 			if ( $google_map_link ) {
@@ -441,7 +441,7 @@ function geodir_custom_field_output_map_directions( $html, $location, $cf, $outp
 			$field_icon    = '';
 		}
 
-		$map_directions_url = 'https://www.google.com/maps/dir/' . $latitude . ',' . $longitude . '/';
+		$map_directions_url = 'https://www.google.com/maps/dir//' . $latitude . ',' . $longitude . '/';
 		$map_directions_url = apply_filters( 'geodir_custom_field_output_directions_on_map', $map_directions_url, $latitude, $longitude );
 
 		$map_directions_url = geodir_post_address( $map_directions_url, 'map_directions', $gd_post );
