@@ -597,33 +597,24 @@ function geodir_date_format_php_to_aui( $php_format ) {
 	for ( $i = 0; $i < strlen( $php_format ); $i++ ) {
 		$char = $php_format[$i];
 
-		// PHP date format escaping character
+		// PHP date format escaping character.
 		if ( $char === '\\' ) {
-			$i++;
+			$aui_format .= $char;
 
 			if ( $escaping ) {
-				$aui_format .= $php_format[$i];
-			} else {
-				$aui_format .= '\'' . $php_format[$i];
-			}
-
-			$escaping = true;
-		} else {
-			if ( $escaping ) {
-				$aui_format .= "'";
 				$escaping = false;
+			} else {
+				$escaping = true;
 			}
-
-			if ( isset( $symbols[$char] ) ) {
+		} else {
+			if ( ! $escaping && isset( $symbols[$char] ) ) {
 				$aui_format .= $symbols[$char];
 			} else {
 				$aui_format .= $char;
 			}
-		}
-	}
 
-	if ( $escaping ) {
-		$aui_format .= "'";
+			$escaping = false;
+		}
 	}
 
 	return $aui_format;
