@@ -1219,7 +1219,7 @@ function geodir_search_form_search_input( $instance ) {
  * @since 2.0.0
  */
 function geodir_search_form_near_input() {
-	global $geodir_search_post_type;
+	global $geodir_search_post_type, $geodir_search_widget_params;
 
 	$design_style = geodir_design_style();
 	$default_near_text = geodir_get_option('search_default_near_text');
