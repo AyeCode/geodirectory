@@ -290,6 +290,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Show business hours timepicker in 24 hours format as per WordPress setting - CHANGED
 * GD Search widget hide near search input option not working - FIXED
 * Open Map Directions link on Google Maps with address in destination point - CHANGED
+* SD and AUI packages updated - UPDATED
+* Listing widget queries now cached for speed improvement when used multiple times on the same page - ADDED
 
 = GeoDirectory Business Directory Plugin v2.3.2 - 2023-03-21 =
 * Clear attachment title & caption cache on title & caption update - FIXED
