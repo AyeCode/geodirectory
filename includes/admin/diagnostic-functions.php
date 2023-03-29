@@ -459,17 +459,16 @@ function geodir_diagnose_version_clear()
     if (!empty($ver_arr)) {
         foreach ($ver_arr as $key => $val) {
             if (delete_option($val)) {
-                $output_str .= "<li>" . $key . __(' Version: Deleted', 'geodirectory') . "</li>";
+                $output_str .= "<li> " . $key . __('Version: Deleted', 'geodirectory') . "</li>";
             } else {
-                $output_str .= "<li>" . $key . __(' Version: Not Found', 'geodirectory') . "</li>";
+                $output_str .= "<li> " . $key . __('Version: Not Found', 'geodirectory') . "</li>";
             }
 
         }
 
         if ($output_str) {
-            $output_str .= "<li><strong>" . __(' Upgrade/install scripts will run on next page reload.', 'geodirectory') . "</strong></li>";
+            $output_str .= "<li><strong> " . __('Upgrade/install scripts will run on next page reload.', 'geodirectory') . "</strong></li>";
         }
-
     }
 
     if ($is_error_during_diagnose) {

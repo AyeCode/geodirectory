@@ -243,7 +243,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 						jQuery(cont).find('.filelist .file').remove();
 
-						jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html("<p><?php esc_attr_e( ' Please select csv file.', 'geodirectory' ); ?></p>");
+						jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html("<p><?php esc_attr_e( 'Please select csv file.', 'geodirectory' ); ?></p>");
 						jQuery('#gd-import-msg', cont).show();
 
 						return false;
