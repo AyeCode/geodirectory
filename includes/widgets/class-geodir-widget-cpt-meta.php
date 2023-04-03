@@ -180,7 +180,7 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $instance = array(), $args = array(), $content = '' ) {
-		global $geodirectory, $post, $gd_post;
+		global $aui_bs5, $geodirectory, $post, $gd_post;
 
 		$instance = shortcode_atts(
 			array(

@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.4 =
 * GD > Listings results cache not cleared on add/delete listing - FIXED
+* Conflicts with JetElements plugin breaks elementor template - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.3 - 2023-03-29 =
 * Show business hours timepicker in 24 hours format as per WordPress setting - CHANGED
