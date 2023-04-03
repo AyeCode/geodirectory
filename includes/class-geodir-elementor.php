@@ -1492,9 +1492,13 @@ class GeoDir_Elementor {
 			return;
 		}
 
-		// Prevent Illegal type offset error.
-		if ( ! empty( $all_controls['pp_wrapper_link'] ) && is_array( $all_controls['pp_wrapper_link'] ) && ! empty( $dynamic_settings['pp_wrapper_link'] ) && ! is_array( $dynamic_settings['pp_wrapper_link'] ) ) {
-			$dynamic_settings['pp_wrapper_link'] = $all_controls['pp_wrapper_link'];
+		// Prevent: Uncaught TypeError: Cannot access offset of type string on string in controls-stack.php
+		if ( ! empty( $dynamic_settings ) ) {
+			foreach ( $dynamic_settings as $dynamic_key => $dynamic_value ) {
+				if ( ! empty( $controls ) && ! empty( $controls[ $dynamic_key ] ) && ! empty( $controls[ $dynamic_key ][ 'dynamic' ] ) && ! empty( $controls[ $dynamic_key ][ 'type' ] ) && $controls[ $dynamic_key ][ 'type' ] == 'url' ) {
+					unset( $dynamic_settings[ $dynamic_key ] );
+				}
+			}
 		}
 
 		self::custom_skin_recursive_unset( $dynamic_settings, 'link' ); // We don't need the link options
