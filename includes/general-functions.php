@@ -1091,12 +1091,12 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$sql = apply_filters( 'geodir_filter_widget_listings_count_sql', $sql, $post_type );
 		$sql = str_replace( "WHERE 1=1 AND ", "WHERE ", $sql );
 
-		$key = wp_hash($sql);
-
-		if ( ! $rows = get_transient( $key ) ) {
+		//$key = wp_hash($sql);
+		// @TODO Restructure cache feature
+		//if ( ! $rows = get_transient( $key ) ) {
 			$rows = (int) $wpdb->get_var( $sql );
-			set_transient( $key, $rows, '', 3600 );
-		}
+			//set_transient( $key, $rows, '', 3600 );
+		//}
 
 	} else {
 		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
@@ -1178,9 +1178,10 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$sql = str_replace( "WHERE 1=1 AND ", "WHERE ", $sql );
 
 
-		$key = wp_hash($sql);
+		// @TODO Restructure cache feature
+		//$key = wp_hash($sql);
 
-		// @todo we should probably use wp_cache functions, these only really work in certain conditions such as with memcach or varnish, we should try to detect thse and swap when active.
+		// @todo we should probably use wp_cache functions, these only really work in certain conditions such as with memcache or varnish, we should try to detect these and swap when active.
 //		if(class_exists('Memcache')){
 //			echo 'mmmm';exit;
 //		}
@@ -1189,10 +1190,10 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 //			wp_cache_set( $key, $rows, '', 3600 );
 //		}
 
-		if ( ! $rows = get_transient( $key ) ) {
+		//if ( ! $rows = get_transient( $key ) ) {
 			$rows = $wpdb->get_results( $sql );
-			set_transient( $key, $rows, '', 3600 );
-		}
+			//set_transient( $key, $rows, '', 3600 );
+		//}
 	}
 
 	unset( $GLOBALS['gd_query_args_widgets'] );
