@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.3\n"
+"Project-Id-Version: GeoDirectory 2.3.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 16:30+0530\n"
-"PO-Revision-Date: 2023-03-29 16:31+0530\n"
+"POT-Creation-Date: 2023-04-04 19:00+0530\n"
+"PO-Revision-Date: 2023-04-04 19:01+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1566,7 +1566,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:974
 #: includes/admin/class-geodir-admin-dummy-data.php:982
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:757
-#: includes/general-functions.php:2657
+#: includes/general-functions.php:2658
 msgid "Video"
 msgstr ""
 
@@ -2682,7 +2682,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:1636
 #: includes/admin/views/html-notice-v2-update.php:194
-#: includes/core-functions.php:361 includes/general-functions.php:2656
+#: includes/core-functions.php:361 includes/general-functions.php:2657
 msgid "Documentation"
 msgstr ""
 
@@ -4432,7 +4432,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:381
 #: includes/elementor/class-geodir-elementor-form-contact.php:96
 #: includes/elementor/class-geodir-elementor-form-contact.php:404
-#: includes/general-functions.php:2561 language.php:53
+#: includes/general-functions.php:2562 language.php:53
 msgid "Time"
 msgstr ""
 
@@ -12456,18 +12456,18 @@ msgstr ""
 msgid "Could not save report post."
 msgstr ""
 
-#: includes/class-geodir-seo.php:596 includes/general-functions.php:1936
+#: includes/class-geodir-seo.php:596 includes/general-functions.php:1937
 #, php-format
 msgctxt "in category"
 msgid "in %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:655 includes/general-functions.php:2027
+#: includes/class-geodir-seo.php:655 includes/general-functions.php:2028
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:671 includes/general-functions.php:2040
+#: includes/class-geodir-seo.php:671 includes/general-functions.php:2041
 #, php-format
 msgid "near %s"
 msgstr ""
@@ -13864,7 +13864,7 @@ msgstr ""
 msgid "First"
 msgstr ""
 
-#: includes/general-functions.php:223 includes/general-functions.php:2564
+#: includes/general-functions.php:223 includes/general-functions.php:2565
 msgid "Second"
 msgstr ""
 
@@ -13884,122 +13884,122 @@ msgstr ""
 msgid "Given image size is not valid"
 msgstr ""
 
-#: includes/general-functions.php:2170
+#: includes/general-functions.php:2171
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: includes/general-functions.php:2560
+#: includes/general-functions.php:2561
 msgid "Choose Time"
 msgstr ""
 
-#: includes/general-functions.php:2562
+#: includes/general-functions.php:2563
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2125
 msgid "Hour"
 msgstr ""
 
-#: includes/general-functions.php:2563
+#: includes/general-functions.php:2564
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2126
 msgid "Minute"
 msgstr ""
 
-#: includes/general-functions.php:2565
+#: includes/general-functions.php:2566
 msgid "Millisecond"
 msgstr ""
 
-#: includes/general-functions.php:2566
+#: includes/general-functions.php:2567
 msgid "Microsecond"
 msgstr ""
 
-#: includes/general-functions.php:2567
+#: includes/general-functions.php:2568
 msgid "Time Zone"
 msgstr ""
 
-#: includes/general-functions.php:2568
+#: includes/general-functions.php:2569
 msgid "Now"
 msgstr ""
 
-#: includes/general-functions.php:2569
+#: includes/general-functions.php:2570
 msgid "Done"
 msgstr ""
 
-#: includes/general-functions.php:2570 includes/helper-functions.php:693
+#: includes/general-functions.php:2571 includes/helper-functions.php:693
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2120
 msgid "AM"
 msgstr ""
 
-#: includes/general-functions.php:2571 includes/helper-functions.php:694
+#: includes/general-functions.php:2572 includes/helper-functions.php:694
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2121
 msgid "PM"
 msgstr ""
 
-#: includes/general-functions.php:2599
+#: includes/general-functions.php:2600
 msgid "View: Grid 1"
 msgstr ""
 
-#: includes/general-functions.php:2599
+#: includes/general-functions.php:2600
 msgid "Grid View (One Column)"
 msgstr ""
 
-#: includes/general-functions.php:2600
+#: includes/general-functions.php:2601
 msgid "View: Grid 2"
 msgstr ""
 
-#: includes/general-functions.php:2600
+#: includes/general-functions.php:2601
 msgid "Grid View (Two Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2601
+#: includes/general-functions.php:2602
 msgid "View: Grid 3"
 msgstr ""
 
-#: includes/general-functions.php:2601
+#: includes/general-functions.php:2602
 msgid "Grid View (Three Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2602
+#: includes/general-functions.php:2603
 msgid "View: Grid 4"
 msgstr ""
 
-#: includes/general-functions.php:2602
+#: includes/general-functions.php:2603
 msgid "Grid View (Four Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2603
+#: includes/general-functions.php:2604
 msgid "View: Grid 5"
 msgstr ""
 
-#: includes/general-functions.php:2603
+#: includes/general-functions.php:2604
 msgid "Grid View (Five Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2604
+#: includes/general-functions.php:2605
 #: templates/bootstrap/loop/select-layout.php:108
 #: templates/loop/select-layout.php:118
 msgid "View: List"
 msgstr ""
 
-#: includes/general-functions.php:2604
+#: includes/general-functions.php:2605
 msgid "List view"
 msgstr ""
 
-#: includes/general-functions.php:2655
+#: includes/general-functions.php:2656
 msgid "Disable hints"
 msgstr ""
 
-#: includes/general-functions.php:2658
+#: includes/general-functions.php:2659
 msgid "Feedback"
 msgstr ""
 
-#: includes/general-functions.php:2659
+#: includes/general-functions.php:2660
 msgid "Admin Hints:"
 msgstr ""
 
-#: includes/general-functions.php:2719 includes/general-functions.php:2733
+#: includes/general-functions.php:2720 includes/general-functions.php:2734
 msgid "meters"
 msgstr ""
 
-#: includes/general-functions.php:2722 includes/general-functions.php:2736
+#: includes/general-functions.php:2723 includes/general-functions.php:2737
 msgid "feet"
 msgstr ""
 
@@ -14017,77 +14017,77 @@ msgstr ""
 msgid "%1$s is not of typeggg %2$s."
 msgstr ""
 
-#: includes/geodir-rest-functions.php:387
+#: includes/geodir-rest-functions.php:392
 #, php-format
 msgid "%1$s value \"%2$s\" is not one of %3$s."
 msgstr ""
 
-#: includes/geodir-rest-functions.php:393
+#: includes/geodir-rest-functions.php:400
 #, php-format
 msgid "%1$s is not one of %2$s."
 msgstr ""
 
-#: includes/geodir-rest-functions.php:400
-#: includes/geodir-rest-functions.php:405
-#: includes/geodir-rest-functions.php:410
+#: includes/geodir-rest-functions.php:407
+#: includes/geodir-rest-functions.php:412
+#: includes/geodir-rest-functions.php:417
 #, php-format
 msgid "%1$s is not of type %2$s."
 msgstr ""
 
-#: includes/geodir-rest-functions.php:418
+#: includes/geodir-rest-functions.php:425
 #, php-format
 msgid "Invalid date. Valid format is %1$s."
 msgstr ""
 
-#: includes/geodir-rest-functions.php:422
+#: includes/geodir-rest-functions.php:429
 msgid "Invalid date."
 msgstr ""
 
-#: includes/geodir-rest-functions.php:435
+#: includes/geodir-rest-functions.php:442
 msgid "Invalid email address."
 msgstr ""
 
-#: includes/geodir-rest-functions.php:442
+#: includes/geodir-rest-functions.php:449
 #, php-format
 msgid "%s is not a valid IP address."
 msgstr ""
 
-#: includes/geodir-rest-functions.php:452
+#: includes/geodir-rest-functions.php:459
 #, php-format
 msgid "%1$s must be greater than %2$d (exclusive)"
 msgstr ""
 
-#: includes/geodir-rest-functions.php:455
+#: includes/geodir-rest-functions.php:462
 #, php-format
 msgid "%1$s must be greater than %2$d (inclusive)"
 msgstr ""
 
-#: includes/geodir-rest-functions.php:460
+#: includes/geodir-rest-functions.php:467
 #, php-format
 msgid "%1$s must be less than %2$d (exclusive)"
 msgstr ""
 
-#: includes/geodir-rest-functions.php:463
+#: includes/geodir-rest-functions.php:470
 #, php-format
 msgid "%1$s must be less than %2$d (inclusive)"
 msgstr ""
 
-#: includes/geodir-rest-functions.php:469
+#: includes/geodir-rest-functions.php:476
 #, php-format
 msgid "%1$s must be between %2$d (exclusive) and %3$d (exclusive)"
 msgstr ""
 
-#: includes/geodir-rest-functions.php:474
+#: includes/geodir-rest-functions.php:481
 #, php-format
 msgid "%1$s must be between %2$d (inclusive) and %3$d (exclusive)"
 msgstr ""
 
-#: includes/geodir-rest-functions.php:479
+#: includes/geodir-rest-functions.php:486
 #, php-format
 msgid "%1$s must be between %2$d (exclusive) and %3$d (inclusive)"
 msgstr ""
 
-#: includes/geodir-rest-functions.php:484
+#: includes/geodir-rest-functions.php:491
 #, php-format
 msgid "%1$s must be between %2$d (inclusive) and %3$d (inclusive)"
 msgstr ""

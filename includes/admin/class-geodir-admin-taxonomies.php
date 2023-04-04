@@ -422,7 +422,7 @@ class GeoDir_Admin_Taxonomies {
 
         $height = ! empty( $_REQUEST['tag_ID'] ) ? 150 : 100;
 
-        $settings = apply_filters( 'geodir_cat_top_desc_editor_settings', array( 'editor_height' => $height, 'textarea_rows' => 5, 'textarea_name' => $name ), $content, $id, $name );
+        $settings = apply_filters( 'geodir_cat_top_desc_editor_settings', array( 'editor_height' => $height, 'textarea_rows' => 5, 'textarea_name' => $name, 'wpautop' => false ), $content, $id, $name );
 
         ob_start();
         wp_editor( $content, $id, $settings );
@@ -447,7 +447,7 @@ class GeoDir_Admin_Taxonomies {
 
         $height = ! empty( $_REQUEST['tag_ID'] ) ? 150 : 100;
 
-        $settings = apply_filters( 'geodir_cat_bottom_desc_editor_settings', array( 'editor_height' => $height, 'textarea_rows' => 5, 'textarea_name' => $name ), $content, $id, $name );
+        $settings = apply_filters( 'geodir_cat_bottom_desc_editor_settings', array( 'editor_height' => $height, 'textarea_rows' => 5, 'textarea_name' => $name, 'wpautop' => false ), $content, $id, $name );
 
         ob_start();
         wp_editor( $content, $id, $settings );
