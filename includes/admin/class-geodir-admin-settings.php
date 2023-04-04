@@ -557,7 +557,7 @@ class GeoDir_Admin_Settings {
 							<?php echo $description; ?>
 							<?php
 							if ( $wp_version >= 3.3 && function_exists( 'wp_editor' ) ) {
-								wp_editor( stripslashes( $option_value ), $value['id'], array( 'textarea_name' => esc_attr( $value['id'] ), 'textarea_rows' => $rows, 'media_buttons' => false, 'editor_class' => 'gd-wp-editor', 'editor_height' => 16 * $rows ) );
+								wp_editor( stripslashes( $option_value ), $value['id'], array( 'textarea_name' => esc_attr( $value['id'] ), 'wpautop' => false, 'textarea_rows' => $rows, 'media_buttons' => false, 'editor_class' => 'gd-wp-editor', 'editor_height' => 16 * $rows ) );
 							} else { ?>
 								<textarea
 									name="<?php echo esc_attr( $value['id'] ); ?>"
