@@ -1,7 +1,7 @@
-=== GeoDirectory -  WordPress Business Directory Plugin and Classified Ads Listings ===
+=== GeoDirectory - Business Directory, Listings or Classified Directory ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
-Tags: business directory, listings, directory plugin, classifieds, member directory
+Tags: business directory, listings, directory plugin, classifieds, directory, member directory, company directory, team directory, chamber of commerce business directory, church directory, address book, contact directory, local business directory, listings directory, link directory
 Requires at least: 4.5
 Tested up to: 6.2
 Stable tag: 2.3.4
