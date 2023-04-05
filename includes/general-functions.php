@@ -984,6 +984,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	$GLOBALS['gd_query_args_widgets'] = $query_args;
 	$gd_query_args_widgets            = $query_args;
+	$cache_group = 'widget_listings_' . $post_type;
 
 	$fields = $wpdb->posts . ".*, " . $table . ".*";
 	/**
@@ -1091,13 +1092,15 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$sql = apply_filters( 'geodir_filter_widget_listings_count_sql', $sql, $post_type );
 		$sql = str_replace( "WHERE 1=1 AND ", "WHERE ", $sql );
 
-		//$key = wp_hash($sql);
-		// @TODO Restructure cache feature
-		//if ( ! $rows = get_transient( $key ) ) {
-			$rows = (int) $wpdb->get_var( $sql );
-			//set_transient( $key, $rows, '', 3600 );
-		//}
+		$cache_key = wp_hash( $sql );
 
+		$rows = geodir_cache_get( $cache_key, $cache_group );
+
+		if ( $rows === false ) {
+			$rows = (int) $wpdb->get_var( $sql );
+
+			geodir_cache_set( $cache_key, $rows, $cache_group );
+		}
 	} else {
 		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
 		if ( ! empty( $query_args['is_gps_query'] ) || ! empty( $query_args['nearby_gps'] ) ) {
@@ -1177,23 +1180,15 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$sql = apply_filters( 'geodir_filter_widget_listings_sql', $sql, $post_type );
 		$sql = str_replace( "WHERE 1=1 AND ", "WHERE ", $sql );
 
+		$cache_key = wp_hash( $sql );
 
-		// @TODO Restructure cache feature
-		//$key = wp_hash($sql);
+		$rows = geodir_cache_get( $cache_key, $cache_group );
 
-		// @todo we should probably use wp_cache functions, these only really work in certain conditions such as with memcache or varnish, we should try to detect these and swap when active.
-//		if(class_exists('Memcache')){
-//			echo 'mmmm';exit;
-//		}
-//		if ( ! $rows = wp_cache_get( $key ) ) {
-//			$rows = $wpdb->get_results( $sql );
-//			wp_cache_set( $key, $rows, '', 3600 );
-//		}
-
-		//if ( ! $rows = get_transient( $key ) ) {
+		if ( $rows === false ) {
 			$rows = $wpdb->get_results( $sql );
-			//set_transient( $key, $rows, '', 3600 );
-		//}
+
+			geodir_cache_set( $cache_key, $rows, $cache_group );
+		}
 	}
 
 	unset( $GLOBALS['gd_query_args_widgets'] );
@@ -2811,4 +2806,126 @@ function geodir_lazy_load_map() {
  */
 function geodir_map_params() {
 	return GeoDir_Maps::get_map_params();
+}
+
+/**
+ * Get the cache prefix.
+ *
+ * @since 2.3.5
+ *
+ * @return string Cache prefix.
+ */
+function geodir_cache_prefix() {
+	$cache_prefix = 'geodir_cache_';
+
+	return apply_filters( 'geodir_cache_prefix', $cache_prefix );
+}
+
+/**
+ * Saves the data to the cache.
+ *
+ * @since 2.3.5
+ *
+ * @param int|string $key    The cache key to use for retrieval later.
+ * @param mixed      $data   The contents to store in the cache.
+ * @param string     $group  Optional. Where to group the cache contents. Enables the same key
+ *                           to be used across groups. Default empty.
+ * @param int        $expire Optional. When to expire the cache contents, in seconds.
+ *                           Default 0 (no expiration).
+ * @return bool True on success, false on failure.
+ */
+function geodir_cache_set( $key, $data, $group = '', $expire = 0 ) {
+	$key = geodir_cache_prefix() . $key;
+
+	if ( ! ( function_exists( 'wp_cache_supports' ) && wp_cache_supports( 'flush_group' ) ) ) {
+		$groups = wp_cache_get( 'geodir_cache_groups' );
+
+		if ( ! is_array( $groups ) ) {
+			$groups = array();
+		}
+
+		$_group = ! empty( $group ) ? $group : 'geodir_no_group';
+
+		if ( empty( $groups[ $_group ] ) ) {
+			$groups[ $_group ] = array();
+		}
+
+		if ( ! in_array( $key , $groups[ $_group ] ) ) {
+			$groups[ $_group ][] = $key ;
+
+			wp_cache_set( 'geodir_cache_groups', $groups );
+		}
+	}
+
+	return wp_cache_set( $key, $data, $group, $expire );
+}
+
+/**
+ * Retrieves the cache contents from the cache by key and group.
+ *
+ * @since 2.3.5
+ *
+ * @param int|string $key   The key under which the cache contents are stored.
+ * @param string     $group Optional. Where the cache contents are grouped. Default empty.
+ * @param bool       $force Optional. Whether to force an update of the local cache
+ *                          from the persistent cache. Default false.
+ * @param bool       $found Optional. Whether the key was found in the cache (passed by reference).
+ *                          Disambiguates a return of false, a storable value. Default null.
+ * @return mixed|false The cache contents on success, false on failure to retrieve contents.
+ */
+function geodir_cache_get( $key, $group = '', $force = false, &$found = null ) {
+	$key = geodir_cache_prefix() . $key;
+
+	return wp_cache_get( $key, $group, $force, $found );
+}
+
+/**
+ * Removes the cache contents matching key and group.
+ *
+ * @since 2.3.5
+ *
+ * @param int|string $key   What the contents in the cache are called.
+ * @param string     $group Optional. Where the cache contents are grouped. Default empty.
+ * @return bool True on successful removal, false on failure.
+ */
+function geodir_cache_delete( $key, $group = '' ) {
+	$key = geodir_cache_prefix() . $key;
+
+	return wp_cache_delete( $key, $group );
+}
+
+/**
+ * Removes all cache items.
+ *
+ * @since 2.3.5
+ *
+ * @return bool True on success, false on failure.
+ */
+function geodir_cache_flush() {
+	return wp_cache_flush();
+}
+
+/**
+ * Removes all cache items in a group, if the object cache implementation supports it.
+ *
+ * @since 2.3.5
+ *
+ * @param string $group Name of group to remove from cache.
+ * @return bool True if group was flushed, false otherwise.
+ */
+function geodir_cache_flush_group( $group ) {
+	if ( function_exists( 'wp_cache_supports' ) && wp_cache_supports( 'flush_group' ) ) {
+		return wp_cache_flush_group( $group );
+	} else {
+		$groups = wp_cache_get( 'geodir_cache_groups' );
+		$_group = ! empty( $group ) ? $group : 'geodir_no_group';
+
+		if ( ! empty( $groups ) && is_array( $groups ) && ! empty( $groups[ $_group ] ) && is_array( $groups[ $_group ] ) ) {
+			foreach ( $groups[ $_group ] as $cache_key ) {
+				if ( $cache_key ) {
+					wp_cache_delete( $cache_key, $group );
+				}
+			}
+		}
+	}
 }
