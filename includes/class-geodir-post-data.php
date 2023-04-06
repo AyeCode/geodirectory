@@ -81,6 +81,7 @@ class GeoDir_Post_Data {
 
 		// Private Address
 		add_filter( 'geodir_check_display_map', array( __CLASS__, 'check_display_map' ), 11, 2 );
+		add_action( 'clean_post_cache', array( __CLASS__, 'on_clean_post_cache' ), 10, 2 );
 	}
 
 	/**
@@ -2490,5 +2491,20 @@ class GeoDir_Post_Data {
 		 * @param object $gd_post The post.
 		 */
 		return apply_filters( 'geodir_post_has_private_address', $is_private, $gd_post );
+	}
+
+	/**
+	 * Fires on post cache is cleaned.
+	 *
+	 * @since 2.3.5
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 */
+	public static function on_clean_post_cache( $post_ID, $post ) {
+		if ( ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) {
+			// Flush widget listings cache.
+			geodir_cache_flush_group( 'widget_listings_' . $post->post_type );
+		}
 	}
 }

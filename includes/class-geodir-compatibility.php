@@ -111,6 +111,11 @@ class GeoDir_Compatibility {
 		add_filter( 'astra_get_content_layout', array( __CLASS__, 'astra_get_content_layout' ) );
 		add_action( 'wp', array( __CLASS__, 'astra_wp' ), 20, 1 );
 
+		// Astra Theme v4.1 compatibility
+		add_filter( 'astra_single_layout_one_banner_visibility', array( __CLASS__, 'astra_single_layout_one_banner_visibility' ), 9999, 1 );
+		add_filter( 'astra_entry_header_class', array( __CLASS__, 'astra_entry_header_class' ), 10, 1 );
+		add_filter( 'astra_get_option_ast-dynamic-archive-page-structure', array( __CLASS__, 'astra_filter_option' ), 10, 3 );
+
 
 		/*######################################################
 		Divi (theme) :: maps api
@@ -1278,6 +1283,71 @@ class GeoDir_Compatibility {
 	 */
 	public static function astra_the_search_page_title( $title = '' ) {
 		return get_the_title();
+	}
+
+	/**
+	 * Set flag to fix Astra v4.1 compatibility issue.
+	 *
+	 * @since 2.3.5
+	 *
+	 * @param bool $value True to set single layout one banner visibility.
+	 * @return bool True or False.
+	 */
+	public static function astra_single_layout_one_banner_visibility( $value ) {
+		global $gd_astra_41_fix, $gd_skip_the_content;
+
+		if ( $value && defined( 'ASTRA_THEME_VERSION' ) && version_compare( ASTRA_THEME_VERSION, '4.1', '>=' ) && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) ) {
+			$gd_astra_41_fix = true;
+			$gd_skip_the_content = true;
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Unset flag that set to fix Astra v4.1 compatibility issue.
+	 *
+	 * @since 2.3.5
+	 *
+	 * @param array $classes CSS classes.
+	 * @return array CSS classes.
+	 */
+	public static function astra_entry_header_class( $classes ) {
+		global $gd_astra_41_fix, $gd_skip_the_content;
+
+		if ( $gd_astra_41_fix && $gd_skip_the_content ) {
+			$gd_skip_the_content = false;
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Filter Astra option.
+	 *
+	 * @since 2.3.5
+	 *
+	 * @param mixed $value Option value.
+	 * @param string $option Option name.
+	 * @param mixed $default Default value.
+	 * @return mixed Filtered value.
+	 */
+	public static function astra_filter_option( $value, $option, $default ) {
+		if ( ! ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ! geodir_is_page( 'search' ) ) ) {
+			return $value;
+		}
+
+		$post_type = geodir_get_current_posttype();
+
+		if ( ! $post_type ) {
+			return $value;
+		}
+
+		if ( $option == 'ast-dynamic-archive-page-structure' ) {
+			$value = astra_get_option( 'ast-dynamic-archive-' . $post_type . '-structure', array( 'ast-dynamic-archive-' . $post_type . '-title' ) );
+		}
+
+		return $value;
 	}
 
 	/**
