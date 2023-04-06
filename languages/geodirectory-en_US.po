@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.4\n"
+"Project-Id-Version: GeoDirectory 2.3.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 19:00+0530\n"
-"PO-Revision-Date: 2023-04-04 19:01+0530\n"
+"POT-Creation-Date: 2023-04-06 20:24+0530\n"
+"PO-Revision-Date: 2023-04-06 20:24+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -891,7 +891,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:499
 #: includes/admin/settings/class-geodir-settings-general.php:542
 #: includes/admin/settings/class-geodir-settings-general.php:584
-#: includes/class-geodir-post-data.php:1631 includes/core-functions.php:380
+#: includes/class-geodir-post-data.php:1632 includes/core-functions.php:380
 #: includes/widgets/class-geodir-widget-add-listing.php:317
 #: includes/widgets/class-geodir-widget-categories.php:46
 #: includes/widgets/class-geodir-widget-categories.php:109
@@ -1510,8 +1510,8 @@ msgstr ""
 #: includes/admin/dummy-data/freelancer.php:752
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:409
 #: includes/class-geodir-comments.php:95
-#: includes/class-geodir-post-data.php:962
-#: includes/class-geodir-post-data.php:983
+#: includes/class-geodir-post-data.php:963
+#: includes/class-geodir-post-data.php:984
 #: includes/widgets/class-geodir-widget-ninja-forms.php:424 language.php:35
 #: language.php:55 language.php:124 language.php:140
 msgid "Email"
@@ -1566,7 +1566,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:974
 #: includes/admin/class-geodir-admin-dummy-data.php:982
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:757
-#: includes/general-functions.php:2658
+#: includes/general-functions.php:2653
 msgid "Video"
 msgstr ""
 
@@ -1586,7 +1586,7 @@ msgid "Note: List out any special offers (optional)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1025
-#: includes/class-geodir-post-data.php:881
+#: includes/class-geodir-post-data.php:882
 msgid "Listing"
 msgstr ""
 
@@ -1624,7 +1624,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1081
 #: includes/admin/class-geodir-admin-dummy-data.php:1083
 #: includes/admin/class-geodir-admin-dummy-data.php:1092
-#: includes/class-geodir-post-data.php:1637
+#: includes/class-geodir-post-data.php:1638
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:939
 #: includes/widgets/class-geodir-widget-simple-archive.php:430 language.php:59
 #: language.php:175
@@ -1638,7 +1638,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1101
 #: includes/admin/class-geodir-admin-dummy-data.php:1103
 #: includes/admin/class-geodir-admin-dummy-data.php:1113
-#: includes/class-geodir-post-data.php:1634
+#: includes/class-geodir-post-data.php:1635
 #: includes/custom-fields/functions.php:670 includes/post-functions.php:2108
 msgid "Address"
 msgstr ""
@@ -2682,7 +2682,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:1636
 #: includes/admin/views/html-notice-v2-update.php:194
-#: includes/core-functions.php:361 includes/general-functions.php:2657
+#: includes/core-functions.php:361 includes/general-functions.php:2652
 msgid "Documentation"
 msgstr ""
 
@@ -4432,7 +4432,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:381
 #: includes/elementor/class-geodir-elementor-form-contact.php:96
 #: includes/elementor/class-geodir-elementor-form-contact.php:404
-#: includes/general-functions.php:2562 language.php:53
+#: includes/general-functions.php:2557 language.php:53
 msgid "Time"
 msgstr ""
 
@@ -5789,8 +5789,8 @@ msgstr ""
 #: includes/admin/views/html-admin-page-status-report.php:578
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:23
 #: includes/class-geodir-comments.php:79
-#: includes/class-geodir-post-data.php:948
-#: includes/class-geodir-post-data.php:976 language.php:33 language.php:123
+#: includes/class-geodir-post-data.php:949
+#: includes/class-geodir-post-data.php:977 language.php:33 language.php:123
 msgid "Name"
 msgstr ""
 
@@ -10968,85 +10968,85 @@ msgid_plural "%d reviews"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-geodir-compatibility.php:250
+#: includes/class-geodir-compatibility.php:255
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:252
+#: includes/class-geodir-compatibility.php:257
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:257
+#: includes/class-geodir-compatibility.php:262
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:258
+#: includes/class-geodir-compatibility.php:263
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:273
+#: includes/class-geodir-compatibility.php:278
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:275
+#: includes/class-geodir-compatibility.php:280
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:280
+#: includes/class-geodir-compatibility.php:285
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:281
+#: includes/class-geodir-compatibility.php:286
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:298
+#: includes/class-geodir-compatibility.php:303
 msgid "SEOPress SEO Detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:299
+#: includes/class-geodir-compatibility.php:304
 msgid ""
 "The SEOPress SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:304
+#: includes/class-geodir-compatibility.php:309
 msgid "Disable SEOPress"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:305
+#: includes/class-geodir-compatibility.php:310
 msgid "Disable overwrite by SEOPress titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:335
+#: includes/class-geodir-compatibility.php:340
 #, php-format
 msgid ""
 "Kleo theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:349
+#: includes/class-geodir-compatibility.php:354
 #, php-format
 msgid ""
 "Listimia theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:665
+#: includes/class-geodir-compatibility.php:670
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:808
+#: includes/class-geodir-compatibility.php:813
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -11054,37 +11054,37 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2860
+#: includes/class-geodir-compatibility.php:2930
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2871
+#: includes/class-geodir-compatibility.php:2941
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2878
+#: includes/class-geodir-compatibility.php:2948
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2879
+#: includes/class-geodir-compatibility.php:2949
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3584
+#: includes/class-geodir-compatibility.php:3654
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3795
+#: includes/class-geodir-compatibility.php:3865
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3796
+#: includes/class-geodir-compatibility.php:3866
 msgid "Enable Borlabs Cookie integration for GeoDirectory maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3922
+#: includes/class-geodir-compatibility.php:3992
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
@@ -11745,21 +11745,21 @@ msgstr ""
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:686
+#: includes/class-geodir-post-data.php:687
 #, php-format
 msgid "Could not update post in the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:696
+#: includes/class-geodir-post-data.php:697
 #, php-format
 msgid "Could not insert post into the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:821
+#: includes/class-geodir-post-data.php:822
 msgid "You do not have permission to edit this post."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:839
+#: includes/class-geodir-post-data.php:840
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -11767,7 +11767,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:863
+#: includes/class-geodir-post-data.php:864
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -11775,91 +11775,91 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:940
-#: includes/class-geodir-post-data.php:973
+#: includes/class-geodir-post-data.php:941
+#: includes/class-geodir-post-data.php:974
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:953
-#: includes/class-geodir-post-data.php:979
+#: includes/class-geodir-post-data.php:954
+#: includes/class-geodir-post-data.php:980
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:967
-#: includes/class-geodir-post-data.php:986
+#: includes/class-geodir-post-data.php:968
+#: includes/class-geodir-post-data.php:987
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1012 language.php:36
+#: includes/class-geodir-post-data.php:1013 language.php:36
 msgid "Enter Listing Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1054
-#: includes/class-geodir-post-data.php:1060
+#: includes/class-geodir-post-data.php:1055
+#: includes/class-geodir-post-data.php:1061
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1071
+#: includes/class-geodir-post-data.php:1072
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1090
+#: includes/class-geodir-post-data.php:1091
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1284
+#: includes/class-geodir-post-data.php:1285
 msgid "You do not own this post"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1293
+#: includes/class-geodir-post-data.php:1294
 msgid "Delete revision failed."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1382
-#: includes/class-geodir-post-data.php:1624
+#: includes/class-geodir-post-data.php:1383
+#: includes/class-geodir-post-data.php:1625
 msgid "You do not have the privileges to perform this action."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1532
+#: includes/class-geodir-post-data.php:1533
 msgid "User name must have atleast 3 characters."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1534
+#: includes/class-geodir-post-data.php:1535
 msgid "Invalid user email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1560
+#: includes/class-geodir-post-data.php:1561
 msgid "Something wrong! Fail to register a new user."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1641
+#: includes/class-geodir-post-data.php:1642
 #, php-format
 msgid "%s is empty but is a mandatory field, please check and try again."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1734
+#: includes/class-geodir-post-data.php:1735
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1737
+#: includes/class-geodir-post-data.php:1738
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1744
+#: includes/class-geodir-post-data.php:1745
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1750
+#: includes/class-geodir-post-data.php:1751
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1838
+#: includes/class-geodir-post-data.php:1839
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -12456,18 +12456,18 @@ msgstr ""
 msgid "Could not save report post."
 msgstr ""
 
-#: includes/class-geodir-seo.php:596 includes/general-functions.php:1937
+#: includes/class-geodir-seo.php:596 includes/general-functions.php:1932
 #, php-format
 msgctxt "in category"
 msgid "in %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:655 includes/general-functions.php:2028
+#: includes/class-geodir-seo.php:655 includes/general-functions.php:2023
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:671 includes/general-functions.php:2041
+#: includes/class-geodir-seo.php:671 includes/general-functions.php:2036
 #, php-format
 msgid "near %s"
 msgstr ""
@@ -13864,7 +13864,7 @@ msgstr ""
 msgid "First"
 msgstr ""
 
-#: includes/general-functions.php:223 includes/general-functions.php:2565
+#: includes/general-functions.php:223 includes/general-functions.php:2560
 msgid "Second"
 msgstr ""
 
@@ -13884,122 +13884,122 @@ msgstr ""
 msgid "Given image size is not valid"
 msgstr ""
 
-#: includes/general-functions.php:2171
+#: includes/general-functions.php:2166
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: includes/general-functions.php:2561
+#: includes/general-functions.php:2556
 msgid "Choose Time"
 msgstr ""
 
-#: includes/general-functions.php:2563
+#: includes/general-functions.php:2558
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2125
 msgid "Hour"
 msgstr ""
 
-#: includes/general-functions.php:2564
+#: includes/general-functions.php:2559
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2126
 msgid "Minute"
 msgstr ""
 
-#: includes/general-functions.php:2566
+#: includes/general-functions.php:2561
 msgid "Millisecond"
 msgstr ""
 
-#: includes/general-functions.php:2567
+#: includes/general-functions.php:2562
 msgid "Microsecond"
 msgstr ""
 
-#: includes/general-functions.php:2568
+#: includes/general-functions.php:2563
 msgid "Time Zone"
 msgstr ""
 
-#: includes/general-functions.php:2569
+#: includes/general-functions.php:2564
 msgid "Now"
 msgstr ""
 
-#: includes/general-functions.php:2570
+#: includes/general-functions.php:2565
 msgid "Done"
 msgstr ""
 
-#: includes/general-functions.php:2571 includes/helper-functions.php:693
+#: includes/general-functions.php:2566 includes/helper-functions.php:693
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2120
 msgid "AM"
 msgstr ""
 
-#: includes/general-functions.php:2572 includes/helper-functions.php:694
+#: includes/general-functions.php:2567 includes/helper-functions.php:694
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2121
 msgid "PM"
 msgstr ""
 
-#: includes/general-functions.php:2600
+#: includes/general-functions.php:2595
 msgid "View: Grid 1"
 msgstr ""
 
-#: includes/general-functions.php:2600
+#: includes/general-functions.php:2595
 msgid "Grid View (One Column)"
 msgstr ""
 
-#: includes/general-functions.php:2601
+#: includes/general-functions.php:2596
 msgid "View: Grid 2"
 msgstr ""
 
-#: includes/general-functions.php:2601
+#: includes/general-functions.php:2596
 msgid "Grid View (Two Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2602
+#: includes/general-functions.php:2597
 msgid "View: Grid 3"
 msgstr ""
 
-#: includes/general-functions.php:2602
+#: includes/general-functions.php:2597
 msgid "Grid View (Three Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2603
+#: includes/general-functions.php:2598
 msgid "View: Grid 4"
 msgstr ""
 
-#: includes/general-functions.php:2603
+#: includes/general-functions.php:2598
 msgid "Grid View (Four Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2604
+#: includes/general-functions.php:2599
 msgid "View: Grid 5"
 msgstr ""
 
-#: includes/general-functions.php:2604
+#: includes/general-functions.php:2599
 msgid "Grid View (Five Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2605
+#: includes/general-functions.php:2600
 #: templates/bootstrap/loop/select-layout.php:108
 #: templates/loop/select-layout.php:118
 msgid "View: List"
 msgstr ""
 
-#: includes/general-functions.php:2605
+#: includes/general-functions.php:2600
 msgid "List view"
 msgstr ""
 
-#: includes/general-functions.php:2656
+#: includes/general-functions.php:2651
 msgid "Disable hints"
 msgstr ""
 
-#: includes/general-functions.php:2659
+#: includes/general-functions.php:2654
 msgid "Feedback"
 msgstr ""
 
-#: includes/general-functions.php:2660
+#: includes/general-functions.php:2655
 msgid "Admin Hints:"
 msgstr ""
 
-#: includes/general-functions.php:2720 includes/general-functions.php:2734
+#: includes/general-functions.php:2715 includes/general-functions.php:2729
 msgid "meters"
 msgstr ""
 
-#: includes/general-functions.php:2723 includes/general-functions.php:2737
+#: includes/general-functions.php:2718 includes/general-functions.php:2732
 msgid "feet"
 msgstr ""
 
