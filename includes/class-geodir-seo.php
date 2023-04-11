@@ -900,6 +900,7 @@ class GeoDir_SEO {
 	public static function rank_math_frontend_breadcrumb_settings( $settings ) {
 		if ( ! is_admin() && geodir_is_geodir_page() ) {
 			$settings['show_ancestors'] = false;
+			$settings['hide_tax_name'] = true;
 		}
 
 		return $settings;
@@ -918,20 +919,32 @@ class GeoDir_SEO {
 		// Maybe add category link to single page
 		if ( ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) ) && ! $gd_detail_breadcrumb ) {
 			$post_type = geodir_get_current_posttype();
-			$category = ! empty( $wp_query->query_vars[ $post_type . "category" ] ) ? $wp_query->query_vars[ $post_type . "category" ] : '';
 
 			$breadcrumb = array();
-			if ( $category ) {
-				$term  = get_term_by( 'slug', $category, $post_type . "category" );
+			$adjust = 0;
 
-				if ( ! empty( $term ) ) {
-					$breadcrumb[]= array( $term->name, get_term_link( $term->slug, $post_type . "category" ) );
+			if ( is_tax() && ! is_post_type_archive() ) {
+				$breadcrumb[]= array(
+					wp_strip_all_tags( geodir_post_type_name( $post_type, true ) ),
+					get_post_type_archive_link( $post_type ),
+					'hide_in_schema' => false
+				);
+				$adjust--;
+			} else {
+				$category = ! empty( $wp_query->query_vars[ $post_type . "category" ] ) ? $wp_query->query_vars[ $post_type . "category" ] : '';
+
+				if ( $category ) {
+					$term  = get_term_by( 'slug', $category, $post_type . "category" );
+
+					if ( ! empty( $term ) ) {
+						$breadcrumb[]= array( $term->name, get_term_link( $term->slug, $post_type . "category" ) );
+					}
 				}
 			}
 
 			if ( ! empty( $breadcrumb ) && count( $breadcrumb ) > 0 ) {
 				$offset = RankMath\Helper::get_settings( 'general.breadcrumbs_home' ) ? 2 : 1;
-				$offset = apply_filters( 'rankmath_breadcrumb_links_offset', $offset, $breadcrumb, $crumbs );
+				$offset = apply_filters( 'rankmath_breadcrumb_links_offset', ( $offset + $adjust ), $breadcrumb, $crumbs );
 				$length = apply_filters( 'rankmath_breadcrumb_links_length', 0, $breadcrumb, $crumbs );
 
 				array_splice( $crumbs, $offset, $length, $breadcrumb );

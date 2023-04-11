@@ -136,30 +136,35 @@ final class GeoDirectory {
 
     }
 
-    /**
-     * Loads the plugin language files
-     *
-     * @access public
-     * @since 2.0.0
-     * @return void
-     */
-    public function load_textdomain() {
-        global $wp_version;
+	/**
+	 * Loads the plugin language files
+	 *
+	 * @access public
+	 * @since 2.0.0
+	 * @return void
+	 */
+	public function load_textdomain() {
+		// Determines the current locale.
+		if ( function_exists( 'determine_locale' ) ) {
+			$locale = determine_locale();
+		} else if ( function_exists( 'get_user_locale' ) ) {
+			$locale = get_user_locale();
+		} else {
+			$locale = get_locale();
+		}
 
-        $locale = $wp_version >= 4.7 ? get_user_locale() : get_locale();
-
-        /**
-         * Filter the plugin locale.
-         *
-         * @since   1.4.2
-         * @package GeoDirectory
-         */
-        $locale = apply_filters( 'plugin_locale', $locale, 'geodirectory' );
+		/**
+		 * Filter the plugin locale.
+		 *
+		 * @since   1.4.2
+		 * @package GeoDirectory
+		 */
+		$locale = apply_filters( 'plugin_locale', $locale, 'geodirectory' );
 
 		unload_textdomain( 'geodirectory' );
-        load_textdomain( 'geodirectory', WP_LANG_DIR . '/' . 'geodirectory' . '/' . 'geodirectory' . '-' . $locale . '.mo' );
-        load_plugin_textdomain( 'geodirectory', FALSE, basename( dirname( GEODIRECTORY_PLUGIN_FILE ) ) . '/languages/' );
-    }
+		load_textdomain( 'geodirectory', WP_LANG_DIR . '/geodirectory/geodirectory-' . $locale . '.mo' );
+		load_plugin_textdomain( 'geodirectory', false, basename( dirname( GEODIRECTORY_PLUGIN_FILE ) ) . '/languages/' );
+	}
 
     /**
      * Show a warning to sites running PHP < 5.3
