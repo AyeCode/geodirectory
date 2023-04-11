@@ -701,10 +701,15 @@ class GeoDir_Permalinks {
 				// add the post single permalinks
 				$regex_part = '/';
 				foreach ( $cpt_permalink_arr as $rkey => $rvalue ) {
-					if ( $rvalue == "%post_id%" ) {
-						$regex_part .= '([0-9]+)/';
+					if ( strpos( trim( $rvalue ), '%' ) === 0 ) {
+						if ( $rvalue == "%post_id%" ) {
+							$regex_part .= '([0-9]+)/';
+						} else {
+							$regex_part .= '([^/]*)/';
+						}
 					} else {
-						$regex_part .= '([^/]*)/';
+						// Custom tag
+						$regex_part .= $rvalue . '/';
 					}
 				}
 				$regex_part .= '?';
@@ -714,6 +719,11 @@ class GeoDir_Permalinks {
 				$query_vars = array();
 
 				foreach ( $cpt_permalink_arr as $tag ) {
+					// Skip custom tag
+					if ( strpos( trim( $tag ), '%' ) !== 0 ) {
+						continue;
+					}
+
 					$tag = trim( $tag, "%" );
 					if ( $tag == "postname" ) {
 						$query_vars[] = "$cpt=" . '$matches[' . $match . ']';
