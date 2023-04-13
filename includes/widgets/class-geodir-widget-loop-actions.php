@@ -250,6 +250,8 @@ class GeoDir_Widget_Loop_Actions extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
+		$design_style = geodir_design_style();
+
 		$defaults = array(
 			'hide_layouts' => '',
 			'bg'           => '',
@@ -283,24 +285,27 @@ class GeoDir_Widget_Loop_Actions extends WP_Super_Duper {
 			$output = ob_get_clean();
 		}
 
-		if ( $args['btn_style'] && 'custom' !== $args['btn_style'] ) {
-			$btn_class = 'btn-' . esc_attr( $args['btn_style'] );
-			$output    = str_replace( 'btn-outline-primary', $btn_class, $output );
-		} elseif ( 'custom' === $args['btn_style'] ) {
-			$btn_class = sd_build_aui_class(
-				array(
-					'bg'         => $args['btn_bg'],
-					'border'     => $args['btn_border'],
-					'text_color' => $args['text_color'],
-				//              'bg' => $args['btn_bg'],
-				)
-			);
-			$output = str_replace( 'btn-outline-primary', $btn_class, $output );
-		}
+		if ( $design_style && ! empty( $output ) ) {
+			if ( ! empty( $args['btn_style'] ) && 'custom' !== $args['btn_style'] ) {
+				$btn_class = 'btn-' . esc_attr( $args['btn_style'] );
+				$output = str_replace( 'btn-outline-primary', $btn_class, $output );
+			} else if ( ! empty( $args['btn_style'] ) && 'custom' === $args['btn_style'] ) {
+				$btn_class = sd_build_aui_class(
+					array(
+						'bg' => isset( $args['btn_bg'] ) ? $args['btn_bg'] : '',
+						'border' => isset( $args['btn_border'] ) ? $args['btn_border'] : '',
+						'text_color' => isset( $args['text_color'] ) ? $args['text_color'] : ''
+					)
+				);
 
-		if ( $args['btn_size'] ) {
-			$btn_class = 'normal' === $args['btn_size'] ? 'btn-group' : 'btn-group-lg';
-			$output    = str_replace( 'btn-group-sm', $btn_class, $output );
+				$output = str_replace( 'btn-outline-primary', $btn_class, $output );
+			}
+
+			if ( ! empty( $args['btn_size'] ) ) {
+				$btn_class = 'normal' === $args['btn_size'] ? 'btn-group' : 'btn-group-lg';
+
+				$output = str_replace( 'btn-group-sm', $btn_class, $output );
+			}
 		}
 
 		return $output;
