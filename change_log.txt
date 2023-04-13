@@ -3,6 +3,7 @@
 * Logged out comments, website field should not be marked `required` - FIXED
 * Published listing preview is not showing updated data - FIXED
 * GD > Post Meta breaks output when showing stripped value for empty multiselect value - FIXED
+* Post fav widget changed from using a tag to span tag for better page speed SEO score - CHANGED
 
 = 2.2.16 =
 * Astra Pro page layout setting is not working for search page - FIXED
