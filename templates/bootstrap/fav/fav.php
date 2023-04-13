@@ -30,12 +30,12 @@ echo '<span class="geodir-addtofav favorite_property_' . absint( $post_id ) . ' 
 
 	echo aui()->badge(
 		array(
-			'type'                  => 'a',
+			'type'                  => 'badge',
 			'class'                 => esc_attr( $link_class ),
 			'title'                 => $title,
 			'content'               => $text,
 			'icon'                  => $show == 'text' ? $icon_class . ' sr-only visually-hidden' : $icon_class,
-			'href'                  => 'javascript:void(0);',
+			'href'                  => '',
 			'onclick'               => $onclick,
 			'style'                 => $link_style,
 			'extra_attributes'      => array(

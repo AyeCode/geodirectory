@@ -463,7 +463,7 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 			$onclick = 'javascript:gd_fav_save(' . $post_id . ')';
 		}
 
-		$link_class = 'geodir-addtofav-icon';
+		$link_class = 'geodir-addtofav-icon c-pointer';
 		$title = $add_favourite_text;
 		$icon_class = !empty($args['icon']) ? esc_attr($args['icon']) : $favourite_icon;
 		$icon_style .= $icon_color_off ? "color:$icon_color_off;" : '';
