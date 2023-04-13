@@ -256,6 +256,8 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $geodir_is_widget_listing;
 
+		$design_style = geodir_design_style();
+
 		$defaults = array(
 			'show_advanced' => '',
 			'bg'            => '',
@@ -308,16 +310,22 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 		}
 
 		// advanced paging class
-		$args['advanced_pagination_class'] = sd_build_aui_class(
-			array(
-				'text_color' => $args['ap_text_color'] ? $args['ap_text_color'] : 'muted',
-				'font_size'  => $args['ap_font_size'],
-				'pt'         => $args['ap_pt'],
-				'pr'         => $args['ap_pr'],
-				'pb'         => $args['ap_pb'],
-				'pl'         => $args['ap_pl'],
-			)
-		);
+		if ( $design_style ) {
+			$advanced_pagination_class = sd_build_aui_class(
+				array(
+					'text_color' => ! empty( $args['ap_text_color'] ) ? $args['ap_text_color'] : 'muted',
+					'font_size'  => isset( $args['ap_font_size'] ) ? $args['ap_font_size'] : '',
+					'pt'         => isset( $args['ap_pt'] ) ? $args['ap_pt'] : '',
+					'pr'         => isset( $args['ap_pr'] ) ? $args['ap_pr'] : '',
+					'pb'         => isset( $args['ap_pb'] ) ? $args['ap_pb'] : '',
+					'pl'         => isset( $args['ap_pl'] ) ? $args['ap_pl'] : ''
+				)
+			);
+		} else {
+			$advanced_pagination_class = '';
+		}
+
+		$args['advanced_pagination_class'] = $advanced_pagination_class;
 
 		ob_start();
 		if ( geodir_is_post_type_archive() || geodir_is_taxonomy() || geodir_is_page( 'search' ) || $geodir_is_widget_listing || $is_preview ) {
