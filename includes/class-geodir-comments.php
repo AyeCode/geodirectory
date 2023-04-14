@@ -156,7 +156,7 @@ class GeoDir_Comments {
 	}
 
 	/**
-	 * Channge the comments url hash to review types.
+	 * Change the comments url hash to review types.
 	 *
 	 * @param $comments_link
 	 * @param $post_id
@@ -247,15 +247,15 @@ class GeoDir_Comments {
 	public static function get_review( $comment_id = 0 ) {
 		global $wpdb;
 
-		$reatings = $wpdb->get_row(
+		$ratings = $wpdb->get_row(
 			$wpdb->prepare(
 				'SELECT * FROM ' . GEODIR_REVIEW_TABLE . ' WHERE comment_id = %d',
 				array( $comment_id )
 			)
 		);
 
-		if ( ! empty( $reatings ) ) {
-			return $reatings;
+		if ( ! empty( $ratings ) ) {
+			return $ratings;
 		} else {
 			return false;
 		}
@@ -1339,5 +1339,27 @@ class GeoDir_Comments {
 		</div>
 		<?php
 		return ob_get_clean();
+	}
+
+	/**
+	 * Get the listing owner label for the review.
+	 *
+	 * @since 2.3.7
+	 *
+	 * @param string $post_type Post type. Default empty.
+	 * @return string Review post owner label.
+	 */
+	public static function get_listing_owner_label( $post_type = '' ) {
+		$label = geodir_listing_owner_label( $post_type );
+
+		/**
+		 * Filter the listing owner label for the review.
+		 *
+		 * @since 2.3.7
+		 *
+		 * @param string $label Listing owner label.
+		 * @param string $post_type The post type.
+		 */
+		return apply_filters( 'geodir_review_listing_owner_label', $label, $post_type );
 	}
 }

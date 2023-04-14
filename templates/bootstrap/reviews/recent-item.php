@@ -26,26 +26,20 @@ global $aui_bs5;
 			<span class="li<?php echo $comment_id;?> geodir_reviewer_image mr-2 me-2">
 			<?php echo get_avatar( $comment, $avatar_size, '', $comment_id . ' comment avatar',array('class'=>"comment_avatar rounded-circle position-static") );?>
 			</span>
-			<?php
-			if ( $comment->user_id ) {
-				echo '<a href="' . get_author_posts_url( $comment->user_id ) . '">';
-			}
-			?>
 			<strong class="geodir_reviewer_author h5">
+				<?php echo ( ! empty( $comment->user_id ) ? '<a href="' . get_author_posts_url( $comment->user_id ) . '">' : '' ); ?>
 				<?php echo esc_attr( $comment->comment_author ); ?>
-				<small class="text-muted font-weight-normal fw-normal d-block h6 mb-0"><?php _e( 'Wrote a review', 'geodirectory' );?></small>
+				<?php echo ( ! empty( $comment->user_id ) ? '</a>' : '' ); ?>
+
+				<small class="text-muted font-weight-normal d-block h6 mb-0 fs-xs">
+					<a href="<?php echo esc_url_raw( $comment_permalink ); ?>" class="geodir_reviewer_title text-muted"><?php echo esc_html( $post_title ); ?></a>
+				</small>
 			</strong>
-			<?php
-			if ( $comment->user_id ) {
-				echo '</a>';
-			}
-			?>
 		</div>
 
-		<div class="card-body py-1">
-			<a href="<?php echo esc_url_raw( $permalink );?>" class="geodir_reviewer_title h5"><?php echo esc_html( $post_title );?></a>
+		<div class="card-body py-2 px-3">
 			<?php echo geodir_get_rating_stars( $comment->rating, $comment_post_ID ); ?>
-			<p class="geodir_reviewer_text p-0 m-0"><?php echo $comment_excerpt;?></p>
+			<p class="geodir_reviewer_text p-0 m-0 mt-2"><?php echo $comment_excerpt;?></p>
 		</div>
 	</div>
 </li>

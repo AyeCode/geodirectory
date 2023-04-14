@@ -1,9 +1,19 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 /**
+ * Review item.
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/bootstrap/reviews/item.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory\Templates
+ * @version    2.3.7
+ *
  * Variables.
  *
  * @var object $comment The comment object.
@@ -11,12 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var int $depth Depth of comment.
  * @var int $rating The rating number.
  */
+
+defined( 'ABSPATH' ) || exit;
+
 global $post, $aui_bs5;
 ?>
 <li <?php comment_class( 'geodir-comment list-unstyled' ); ?> id="li-comment-<?php comment_ID(); ?>">
 	<div id="comment-<?php comment_ID(); ?>" class="card mt-3 shadow-sm">
 		<div class="card-header border-bottom toast-header <?php echo $aui_bs5 ? 'px-2 py-1 border-bottom border-opacity-25' : ''; ?>">
-
 			<?php
 			/**
 			 * Filter to modify comment avatar size
@@ -38,7 +50,9 @@ global $post, $aui_bs5;
 					if(!empty($comment->user_id)){ echo "<a href='".get_author_posts_url($comment->user_id)."' class='text-reset' >"; }
 					echo get_comment_author($comment->comment_ID);
 					if(!empty($comment->user_id)){ echo "</a>"; }
-					echo $comment->user_id === $post->post_author ? ' <span class="ml-2 ms-2 h6 m-0 fs-sm"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">'.__( 'Post author', 'geodirectory' ).'</span></span>' : '';
+					if ( ! empty( $comment->user_id ) && ! empty( $comment->comment_post_ID ) && ( (int) $comment->user_id == (int) get_post_field( 'post_author', (int) $comment->comment_post_ID ) ) ) {
+						echo ' <span class="ml-2 ms-2 h6 m-0 fs-sm"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">'. GeoDir_Comments::get_listing_owner_label( get_post_type( (int) $comment->comment_post_ID ) ) . '</span></span>';
+					}
 					?>
 				</span>
 
@@ -53,8 +67,6 @@ global $post, $aui_bs5;
 				echo '<div class="geodir-review-ratings c-pointer"  data-bs-toggle="popover-html" data-bs-sanitize="false" data-bs-placement="top" data-bs-html="true"  data-bs-content="'.esc_attr($ratings_html).'" data-bs-trigger="hover focus" >'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
 			}
 			?>
-
-
 		</div>
 		<!-- .comment-meta -->
 
@@ -97,10 +109,7 @@ global $post, $aui_bs5;
 					</div>
 				</div>
 			</div>
-
 		</div>
-
-
 		<!-- .reply -->
 	</div>
 	<!-- #comment-## -->

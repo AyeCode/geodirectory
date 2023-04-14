@@ -229,6 +229,42 @@ function geodir_post_type_singular_name( $post_type, $translated = false ) {
 }
 
 /**
+ * Get the listing owner label for the post type.
+ *
+ * @since 2.3.7
+ *
+ * @param string $post_type The post type.
+ * @param bool $translated Optional. Default true.
+ * @return string Listing owner label.
+ */
+function geodir_listing_owner_label( $post_type, $translated = true ) {
+	$label = 'Listing Owner';
+
+	if ( ! empty( $post_type ) ) {
+		$post_type_obj = geodir_post_type_object( $post_type );
+
+		if ( ! empty( $post_type_obj ) && ! empty( $post_type_obj->labels->listing_owner ) ) {
+			$label = $post_type_obj->labels->listing_owner;
+		}
+	}
+
+	if ( $translated ) {
+		$label = __( $label, 'geodirectory' );
+	}
+
+	/**
+	 * Filter the listing owner label for the post type.
+	 *
+	 * @since 2.3.7
+	 *
+	 * @param string $label Listing owner label.
+	 * @param string $post_type The post type.
+	 * @param bool $translated Optional. Default true.
+	 */
+	return apply_filters( 'geodir_listing_owner_label', $label, $post_type, $translated );
+}
+
+/**
  * Get and array of CPTs allowed to be added from the frontend.
  *
  * @return mixed|void

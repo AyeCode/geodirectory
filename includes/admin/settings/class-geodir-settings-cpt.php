@@ -165,6 +165,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				'search_items' => '',
 				'not_found' => '',
 				'not_found_in_trash' => '',
+				'listing_owner' => '',
 				'parent_item_colon' => '',
 				'all_items' => '',
 				'archives' => '',
@@ -577,8 +578,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 						'advanced' => true,
 						'value'	   => $post_type_values['not_found_in_trash']
 					),
-					
-
+					array(
+						'name'        => __( 'Listing owner', 'geodirectory' ),
+						'desc'        => __( 'The listing owner label. Default is Listing Owner.', 'geodirectory' ),
+						'id'          => 'label_listing_owner',
+						'placeholder' => __( 'Listing Owner', 'geodirectory' ),
+						'type'        => 'text',
+						'std'         => '',
+						'desc_tip'    => true,
+						'advanced'    => true,
+						'value'	      => $post_type_values['listing_owner']
+					),
 
 					array( 'type' => 'sectionend', 'id' => 'cpt_settings_labels' ),
 
@@ -770,7 +780,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				'view_item' => isset($raw['view_item']) && $raw['view_item'] ? sanitize_text_field($raw['view_item']) : __( 'View ' . $singular_name, 'geodirectory' ),
 				'search_items' => isset($raw['search_items']) && $raw['search_items'] ? sanitize_text_field($raw['search_items']) : __( 'Search ' . $name, 'geodirectory' ),
 				'not_found' => isset($raw['not_found']) && $raw['not_found'] ? sanitize_text_field($raw['not_found']) : __( 'No ' . $name . ' found.', 'geodirectory' ),
-				'not_found_in_trash' => isset($raw['not_found_in_trash']) && $raw['not_found_in_trash'] ? sanitize_text_field($raw['not_found_in_trash']) : __( 'No ' . $name . ' found in trash.', 'geodirectory' )
+				'not_found_in_trash' => isset($raw['not_found_in_trash']) && $raw['not_found_in_trash'] ? sanitize_text_field($raw['not_found_in_trash']) : __( 'No ' . $name . ' found in trash.', 'geodirectory' ),
+				'listing_owner' => ! empty( $raw['label_listing_owner'] ) ? sanitize_text_field( $raw['label_listing_owner'] ) : ''
 			);
 			// Post type description
 			$output[$post_type]['description'] = ! empty( $raw['description'] ) ? trim( $raw['description'] ) : '';

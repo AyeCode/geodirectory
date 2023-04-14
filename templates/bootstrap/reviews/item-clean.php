@@ -1,9 +1,19 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 /**
+ * Review item clean.
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/bootstrap/reviews/item-clean.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory\Templates
+ * @version    2.3.7
+ *
  * Variables.
  *
  * @var object $comment The comment object.
@@ -11,9 +21,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var int $depth Depth of comment.
  * @var int $rating The rating number.
  */
+
+defined( 'ABSPATH' ) || exit;
+
 global $post, $aui_bs5;
 ?>
-
 <li <?php comment_class( 'geodir-comment list-unstyled mb-4 pb-3 border-bottom fs-sm' ); ?>
 	id="li-comment-<?php comment_ID(); ?>">
 	<div class="" id="comment-<?php comment_ID(); ?>">
@@ -51,7 +63,9 @@ global $post, $aui_bs5;
 						if ( ! empty( $comment->user_id ) ) {
 							echo '</a>';
 						}
-						echo $comment->user_id === $post->post_author ? ' <span class="ml-2 ms-2 h6 m-0 fs-xs"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">' . __( 'Post author', 'geodirectory' ) . '</span></span>' : '';
+						if ( ! empty( $comment->user_id ) && ! empty( $comment->comment_post_ID ) && ( (int) $comment->user_id == (int) get_post_field( 'post_author', (int) $comment->comment_post_ID ) ) ) {
+							echo ' <span class="ml-2 ms-2 h6 m-0 fs-xs"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">' . GeoDir_Comments::get_listing_owner_label( get_post_type( $comment->comment_post_ID ) ) . '</span></span>';
+						}
 						?>
 					</h6>
 					<?php
@@ -69,9 +83,9 @@ global $post, $aui_bs5;
 			</div>
 			<span class="text-muted fs-sm <?php if( '0' != $comment->comment_parent ){ echo 'd-flex align-items-center'; } ?>">
 			<time class="chip timeago" datetime="<?php comment_time( 'c' ); ?>">
-							<?php comment_date(); ?>,
-							<?php comment_time(); ?>
-						</time>
+				<?php comment_date(); ?>,
+				<?php comment_time(); ?>
+			</time>
 		</span>
 		</div>
 
@@ -113,7 +127,6 @@ global $post, $aui_bs5;
 				<?php do_action( 'geodir_comment_links_end', $comment ); ?>
 			</div>
 		</div>
-
 	</div>
 	<!-- .reply -->
 </li>
