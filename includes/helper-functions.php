@@ -1075,6 +1075,7 @@ function geodir_tool_restore_cpt_from_taxonomies() {
                 'search_items' => 'Search ' . $cpt['slug'],
                 'not_found' => 'No ' . $cpt['slug'] . ' Found',
                 'not_found_in_trash' => 'No ' . $cpt['slug'] . ' Found In Trash',
+                'listing_owner' => '',
                 'label_post_profile' => '',
                 'label_post_info' => '',
                 'label_post_images' => '',

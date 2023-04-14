@@ -30,7 +30,7 @@ global $post;
 			printf( '<cite><b class="reviewer">%1$s</b> %2$s</cite>',
 				get_comment_author_link(),
 				// If current post author is also comment author, make it known visually.
-				( $comment->user_id === $post->post_author ) ? '<span class="geodir-review-author">' . __( 'Post author', 'geodirectory' ) . '</span>' : ''
+				( ! empty( $comment->user_id ) && ! empty( $comment->comment_post_ID ) && ( (int) $comment->user_id == (int) get_post_field( 'post_author', (int) $comment->comment_post_ID ) ) ) ? '<span class="geodir-review-author">' . GeoDir_Comments::get_listing_owner_label( get_post_type( (int) $comment->comment_post_ID ) ) . '</span>' : ''
 			);
 
 			if($rating != 0){

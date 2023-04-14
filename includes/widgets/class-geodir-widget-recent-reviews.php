@@ -273,6 +273,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
+		$design_style = geodir_design_style();
+
 		$defaults = array(
 			'title'                 => '',
 			'count'                 => '5',
@@ -297,13 +299,12 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			'rounded'               => '',
 			'rounded_size'          => '',
 			'shadow'                => '',
+			'design_style'          => $design_style
 		);
 		$instance = wp_parse_args( $args, $defaults );
 
 		// prints the widget
 		extract( $widget_args, EXTR_SKIP );
-
-		$design_style = geodir_design_style();
 
 		/** This filter is documented in includes/widget/class-geodir-widget-advance-search.php.php */
 		$title = empty( $instance['title'] ) ? '' : apply_filters( 'widget_title', __( $instance['title'], 'geodirectory' ) );
@@ -505,6 +506,9 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 	 */
 	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0, $carousel = '', $review_by_author = '', $post_id = '', $design_type = '' ) {
 		global $wpdb, $tablecomments, $tableposts, $rating_table_name, $table_prefix;
+
+		$design_style = geodir_design_style();
+
 		$tablecomments = $wpdb->comments;
 		$tableposts    = $wpdb->posts;
 		$comments_echo = '';
@@ -552,7 +556,6 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 
 		$comments = $wpdb->get_results( $request );
 
-		$design_style = geodir_design_style();
 		$i            = 0;
 		foreach ( $comments as $comment ) {
 			$comment_id      = $comment->comment_ID;
@@ -609,5 +612,4 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 
 		return $comments_echo;
 	}
-
 }
