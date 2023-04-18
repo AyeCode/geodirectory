@@ -310,7 +310,7 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 				'total' => $page_limit,
 				'prev_next' => false,
 				'show_all' => 'yes' !== $parent_settings['pagination_numbers_shorten'],
-				'before_page_number' => '<span class="elementor-screen-only">' . __( 'Page', 'elementor-pro' ) . '</span>',
+				'before_page_number' => '<span class="elementor-screen-only">' . __( 'Page', 'geodirectory' ) . '</span>',
 			];
 
 			if ( is_singular() && ! is_front_page() ) {
@@ -334,7 +334,7 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 		}
 
 		?>
-		<nav class="elementor-pagination" role="navigation" aria-label="<?php esc_attr_e( 'Pagination', 'elementor-pro' ); ?>">
+		<nav class="elementor-pagination" role="navigation" aria-label="<?php esc_attr_e( 'Pagination', 'geodirectory' ); ?>">
 			<?php echo implode( PHP_EOL, $links ); ?>
 		</nav>
 		<?php

@@ -103,7 +103,7 @@ Class GeoDir_Elementor_Tag_Gallery extends Elementor\Core\DynamicTags\Data_Tag {
 		$this->add_control(
 			'key',
 			[
-				'label'   => __( 'Key', 'elementor-pro' ),
+				'label'   => __( 'Key', 'geodirectory' ),
 				'type'    => \Elementor\Controls_Manager::SELECT,
 				'options' => $this->get_custom_field_options(),
 			]

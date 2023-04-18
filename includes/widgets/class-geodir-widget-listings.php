@@ -46,13 +46,13 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			'block_group_tabs' => array(
 				'content'  => array(
 					'groups' => array(
-						__( 'Title', 'blockstrap' ),
-						__( 'Filters', 'blockstrap' ),
-						__( 'Sorting', 'blockstrap' ),
-						__( 'SEO', 'blockstrap' ),
+						__( 'Title', 'geodirectory' ),
+						__( 'Filters', 'geodirectory' ),
+						__( 'Sorting', 'geodirectory' ),
+						__( 'SEO', 'geodirectory' ),
 					),
 					'tab'    => array(
-						'title'     => __( 'Content', 'blockstrap' ),
+						'title'     => __( 'Content', 'geodirectory' ),
 						'key'       => 'bs_tab_content',
 						'tabs_open' => true,
 						'open'      => true,
@@ -61,12 +61,12 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				),
 				'styles'   => array(
 					'groups' => array(
-						__( 'Design', 'blockstrap' ),
-						__( 'Card Design', 'blockstrap' ),
-						__( 'Carousel', 'blockstrap' ),
+						__( 'Design', 'geodirectory' ),
+						__( 'Card Design', 'geodirectory' ),
+						__( 'Carousel', 'geodirectory' ),
 					),
 					'tab'    => array(
-						'title'     => __( 'Styles', 'blockstrap' ),
+						'title'     => __( 'Styles', 'geodirectory' ),
 						'key'       => 'bs_tab_styles',
 						'tabs_open' => true,
 						'open'      => true,
@@ -75,11 +75,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				),
 				'advanced' => array(
 					'groups' => array(
-						__( 'Wrapper Styles', 'blockstrap' ),
-						__( 'Advanced', 'blockstrap' ),
+						__( 'Wrapper Styles', 'geodirectory' ),
+						__( 'Advanced', 'geodirectory' ),
 					),
 					'tab'    => array(
-						'title'     => __( 'Advanced', 'blockstrap' ),
+						'title'     => __( 'Advanced', 'geodirectory' ),
 						'key'       => 'bs_tab_advanced',
 						'tabs_open' => true,
 						'open'      => true,

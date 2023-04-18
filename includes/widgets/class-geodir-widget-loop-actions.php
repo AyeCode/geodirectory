@@ -34,9 +34,9 @@ class GeoDir_Widget_Loop_Actions extends WP_Super_Duper {
 			),
 			'block_group_tabs' => array(
 				'content'  => array(
-					'groups' => array( __( 'Output', 'blockstrap' ) ),
+					'groups' => array( __( 'Output', 'geodirectory' ) ),
 					'tab'    => array(
-						'title'     => __( 'Content', 'blockstrap' ),
+						'title'     => __( 'Content', 'geodirectory' ),
 						'key'       => 'bs_tab_content',
 						'tabs_open' => true,
 						'open'      => true,
@@ -44,9 +44,9 @@ class GeoDir_Widget_Loop_Actions extends WP_Super_Duper {
 					),
 				),
 				'styles'   => array(
-					'groups' => array( __( 'Buttons', 'blockstrap' ) ),
+					'groups' => array( __( 'Buttons', 'geodirectory' ) ),
 					'tab'    => array(
-						'title'     => __( 'Styles', 'blockstrap' ),
+						'title'     => __( 'Styles', 'geodirectory' ),
 						'key'       => 'bs_tab_styles',
 						'tabs_open' => true,
 						'open'      => true,
@@ -54,9 +54,9 @@ class GeoDir_Widget_Loop_Actions extends WP_Super_Duper {
 					),
 				),
 				'advanced' => array(
-					'groups' => array( __( 'Wrapper Styles', 'blockstrap' ), __( 'Advanced', 'blockstrap' ) ),
+					'groups' => array( __( 'Wrapper Styles', 'geodirectory' ), __( 'Advanced', 'geodirectory' ) ),
 					'tab'    => array(
-						'title'     => __( 'Advanced', 'blockstrap' ),
+						'title'     => __( 'Advanced', 'geodirectory' ),
 						'key'       => 'bs_tab_advanced',
 						'tabs_open' => true,
 						'open'      => true,
@@ -95,31 +95,31 @@ class GeoDir_Widget_Loop_Actions extends WP_Super_Duper {
 
 			// button size
 			$arguments['btn_size'] = array(
-				'title'    => __( 'Button size', 'blockstrap' ),
+				'title'    => __( 'Button size', 'geodirectory' ),
 				'type'     => 'select',
 				'options'  => array(
-					''       => __( 'Default (small)', 'blockstrap' ),
-					'normal' => __( 'Normal', 'blockstrap' ),
-					'large'  => __( 'Large', 'blockstrap' ),
+					''       => __( 'Default (small)', 'geodirectory' ),
+					'normal' => __( 'Normal', 'geodirectory' ),
+					'large'  => __( 'Large', 'geodirectory' ),
 				),
 				'default'  => '',
 				'desc_tip' => true,
 				'advanced' => false,
-				'group'    => __( 'Buttons', 'blockstrap' ),
+				'group'    => __( 'Buttons', 'geodirectory' ),
 			);
 
 			// button style
 			$arguments['btn_style'] = array(
-				'title'    => __( 'Button style', 'blockstrap' ),
+				'title'    => __( 'Button style', 'geodirectory' ),
 				'type'     => 'select',
 				'options'  => array(
-					''       => __( 'Default (primary outline)', 'blockstrap' ),
-					'custom' => __( 'Custom', 'blockstrap' ),
+					''       => __( 'Default (primary outline)', 'geodirectory' ),
+					'custom' => __( 'Custom', 'geodirectory' ),
 				) + sd_aui_colors( false, true ),
 				'default'  => '',
 				'desc_tip' => true,
 				'advanced' => false,
-				'group'    => __( 'Buttons', 'blockstrap' ),
+				'group'    => __( 'Buttons', 'geodirectory' ),
 			);
 
 			// background

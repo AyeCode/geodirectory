@@ -232,11 +232,11 @@ function geodir_loop_paging( $args = array() ) {
 		'prev_text' => sprintf(
 			'%s <span class="nav-prev-text sr-only visually-hidden">%s</span>',
 			'<i class="fas fa-chevron-left"></i>',
-			__( 'Newer posts', 'ayetheme' )
+			__( 'Newer posts', 'geodirectory' )
 		),
 		'next_text' => sprintf(
 			'<span class="nav-next-text sr-only visually-hidden">%s</span> %s',
-			__( 'Older posts', 'ayetheme' ),
+			__( 'Older posts', 'geodirectory' ),
 			'<i class="fas fa-chevron-right"></i>'
 		),
 	);
