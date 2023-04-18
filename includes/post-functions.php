@@ -414,19 +414,14 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 	 */
 	$unfavourite_icon = apply_filters( 'geodir_unfavourite_icon', 'fas fa-heart' );
 
-
-	// overwrite settings if set in widget
-
 	// set icon if user set
-	if(!empty($args['icon'])){
-		$unfavourite_icon = $favourite_icon = esc_attr($args['icon']);
+	if ( ! empty( $args['icon'] ) ) {
+		$unfavourite_icon = $favourite_icon = esc_attr( $args['icon'] );
 	}
 
 	// set colour
 	$icon_color_off = !empty($args['icon_color_off']) ? esc_attr($args['icon_color_off']) : 'grey';
 	$icon_color_on = !empty($args['icon_color_on']) ? esc_attr($args['icon_color_on']) : '#e84739';
-
-	$icon_style = '';
 
 	$user_meta_data = '';
 	if ( isset( $current_user->data->ID ) ) {
@@ -435,7 +430,6 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 
 	$design_style = geodir_design_style();
 	$template = $design_style ? $design_style."/fav/fav.php" : "legacy/fav/fav.php";
-//	$template = "legacy/fav/fav.php";
 
 	$show = isset($args['show']) ? esc_attr($args['show']) : '';
 	$post_id = absint($post_id);
@@ -445,25 +439,21 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 	$icon_style = '';
 	$link_style = '';
 
-
 	if ( ! empty( $user_meta_data ) && in_array( $post_id, $user_meta_data ) ) {
-
-		$link_class = 'geodir-removetofav-icon';
+		$link_class = 'geodir-removetofav-icon c-pointer geodir-act-fav';
 		$onclick = "javascript:gd_fav_save($post_id);";
 		$title = $remove_favourite_text;
 		$icon_class = !empty($args['icon']) ? esc_attr($args['icon']) : $favourite_icon;
 		$icon_style .= $icon_color_on ? "color:$icon_color_on;" : '';
 		$text = $unfavourite_text;
-
 	} else {
-
 		if ( ! isset( $current_user->data->ID ) || $current_user->data->ID == '' ) {
 			$onclick = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
 		} else {
 			$onclick = 'javascript:gd_fav_save(' . $post_id . ')';
 		}
 
-		$link_class = 'geodir-addtofav-icon c-pointer';
+		$link_class = 'geodir-addtofav-icon c-pointer geodir-act-fav';
 		$title = $add_favourite_text;
 		$icon_class = !empty($args['icon']) ? esc_attr($args['icon']) : $favourite_icon;
 		$icon_style .= $icon_color_off ? "color:$icon_color_off;" : '';

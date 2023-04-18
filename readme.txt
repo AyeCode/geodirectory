@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.7 =
 * CPT settings option added to set post owner label for review - ADDED
+* Remove from Favorites is not working - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.6 - 2023-04-13 =
 * Custom base tag in permalink breaks pagination on category page - FIXED

@@ -1038,62 +1038,66 @@ function geodir_click_search($this) {
 }
 
 function gd_fav_save(post_id) {
-	var ajax_action;
-	if (jQuery('.favorite_property_' + post_id + ' a').hasClass('geodir-removetofav-icon')) {
-		ajax_action = 'remove';
-	} else {
-		ajax_action = 'add';
-	}
-	jQuery.ajax({
-		url: geodir_params.gd_ajax_url,
-		type: 'GET',
-		dataType: 'json',
-		data: {
-			action: 'geodir_user_add_fav',
-			type_action: ajax_action,
-			security: geodir_params.basic_nonce,
-			pid: post_id
-		},
-		timeout: 20000,
-		error: function() {
-			alert(geodir_params.loading_listing_error_favorite);
-		},
-		success: function(data) {
-			if (data.success) {
-				var action_text = (data.data && data.data.action_text) ? data.data.action_text : '';
-				if (ajax_action == 'remove') {
-					jQuery('.favorite_property_' + post_id + ' a').each(function( index ) {
-						$color_value = jQuery( this ).data("color-off");
-						$icon_value = jQuery( this ).data("icon");
-						$text_classes = jQuery( this ).find('.geodir-fav-text').attr('class');
-						$style =  $color_value ? "style='color:"+$color_value+"'" : "";
-						$icon = $icon_value ? $icon_value : geodir_params.icon_fav;
-						jQuery( this ).tooltip('dispose')
-							.removeClass('geodir-removetofav-icon')
-							.addClass('geodir-addtofav-icon')
-							.attr("title", geodir_params.text_add_fav)
-							.html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>').tooltip('enable');
-					});
-				} else {
-					jQuery('.favorite_property_' + post_id + ' a').each(function( index ) {
-						$color_value = jQuery( this ).data("color-on");
-						$icon_value = jQuery( this ).data("icon");
-						$text_classes = jQuery( this ).find('.geodir-fav-text').attr('class');
-						$style =  $color_value ? "style='color:"+$color_value+"'" : "";
-						$icon = $icon_value ? $icon_value : geodir_params.icon_fav;
-						jQuery( this ).tooltip('dispose')
-							.removeClass('geodir-addtofav-icon')
-							.addClass('geodir-removetofav-icon')
-							.attr("title", geodir_params.text_remove_fav)
-							.html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_unfav ) + '</span>').tooltip('enable');
-					});
-				}
-			} else {
-				alert(geodir_params.loading_listing_error_favorite);
-			}
-		}
-	});
-	return false;
+    var ajax_action;
+    if (jQuery('.favorite_property_' + post_id + ' .geodir-act-fav').hasClass('geodir-removetofav-icon')) {
+        ajax_action = 'remove';
+    } else {
+        ajax_action = 'add';
+    }
+    jQuery.ajax({
+        url: geodir_params.gd_ajax_url,
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            action: 'geodir_user_add_fav',
+            type_action: ajax_action,
+            security: geodir_params.basic_nonce,
+            pid: post_id
+        },
+        timeout: 20000,
+        error: function() {
+            alert(geodir_params.loading_listing_error_favorite);
+        },
+        beforeSend: function(xhr, obj) {
+            jQuery('.favorite_property_' + post_id + ' .geodir-act-fav').css('opacity', '0.6');
+        },
+        success: function(data) {
+            jQuery('.favorite_property_' + post_id + ' .geodir-act-fav').css('opacity', 1);
+            if (data.success) {
+                var action_text = (data.data && data.data.action_text) ? data.data.action_text : '';
+                jQuery('.favorite_property_' + post_id).each(function(index) {
+                    if (jQuery(this).find('.geodir-act-fav').length) {
+                        var $el = jQuery(this).find('.geodir-act-fav');
+                        $icon_value = $el.data("icon");
+                        $icon = $icon_value ? $icon_value : geodir_params.icon_fav;
+
+                        if (ajax_action == 'remove') {
+                            $color_value = $el.data("color-off");
+                            $text_classes = $el.find('.geodir-fav-text').attr('class');
+                            $style = $color_value ? "style='color:" + $color_value + "'" : "";
+                            $el.tooltip('dispose')
+                                .removeClass('geodir-removetofav-icon')
+                                .addClass('geodir-addtofav-icon')
+                                .attr("title", geodir_params.text_add_fav)
+                                .html('<i ' + $style + ' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + (action_text ? action_text : geodir_params.text_fav) + '</span>').tooltip('enable');
+                        } else {
+                            $color_value = $el.data("color-on");
+                            $text_classes = $el.find('.geodir-fav-text').attr('class');
+                            $style = $color_value ? "style='color:" + $color_value + "'" : "";
+                            $el.tooltip('dispose')
+                                .removeClass('geodir-addtofav-icon')
+                                .addClass('geodir-removetofav-icon')
+                                .attr("title", geodir_params.text_remove_fav)
+                                .html('<i ' + $style + ' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + (action_text ? action_text : geodir_params.text_unfav) + '</span>').tooltip('enable');
+                        }
+                    }
+                });
+            } else {
+                alert(geodir_params.loading_listing_error_favorite);
+            }
+        }
+    });
+    return false;
 }
 
 function geodir_refresh_business_hours() {
