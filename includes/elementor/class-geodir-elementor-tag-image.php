@@ -208,7 +208,7 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 		$this->add_control(
 			'key',
 			[
-				'label' => __( 'Key', 'elementor-pro' ),
+				'label' => __( 'Key', 'geodirectory' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
 				'groups' => $this->get_custom_field_group_options(),
 			]

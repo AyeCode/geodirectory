@@ -34,9 +34,9 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 			),
 			'block_group_tabs' => array(
 				'content'  => array(
-					'groups' => array( __( 'Output', 'blockstrap' ) ),
+					'groups' => array( __( 'Output', 'geodirectory' ) ),
 					'tab'    => array(
-						'title'     => __( 'Content', 'blockstrap' ),
+						'title'     => __( 'Content', 'geodirectory' ),
 						'key'       => 'bs_tab_content',
 						'tabs_open' => true,
 						'open'      => true,
@@ -44,9 +44,9 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 					),
 				),
 				'styles'   => array(
-					'groups' => array( __( 'Paging', 'blockstrap' ), __( 'Advanced Paging', 'blockstrap' ) ),
+					'groups' => array( __( 'Paging', 'geodirectory' ), __( 'Advanced Paging', 'geodirectory' ) ),
 					'tab'    => array(
-						'title'     => __( 'Styles', 'blockstrap' ),
+						'title'     => __( 'Styles', 'geodirectory' ),
 						'key'       => 'bs_tab_styles',
 						'tabs_open' => true,
 						'open'      => true,
@@ -54,9 +54,9 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 					),
 				),
 				'advanced' => array(
-					'groups' => array( __( 'Wrapper Styles', 'blockstrap' ), __( 'Advanced', 'blockstrap' ) ),
+					'groups' => array( __( 'Wrapper Styles', 'geodirectory' ), __( 'Advanced', 'geodirectory' ) ),
 					'tab'    => array(
-						'title'     => __( 'Advanced', 'blockstrap' ),
+						'title'     => __( 'Advanced', 'geodirectory' ),
 						'key'       => 'bs_tab_advanced',
 						'tabs_open' => true,
 						'open'      => true,
@@ -127,31 +127,31 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 
 			// paging style
 			$arguments['paging_style'] = array(
-				'title'    => __( 'Style', 'blockstrap' ),
+				'title'    => __( 'Style', 'geodirectory' ),
 				'type'     => 'select',
 				'options'  => array(
-					''      => __( 'Default', 'blockstrap' ),
-					'rounded' => __( 'Rounded', 'blockstrap' ),
+					''      => __( 'Default', 'geodirectory' ),
+					'rounded' => __( 'Rounded', 'geodirectory' ),
 				),
 				'default'  => '',
 				'desc_tip' => true,
 				'advanced' => false,
-				'group'    => __( 'Paging', 'blockstrap' ),
+				'group'    => __( 'Paging', 'geodirectory' ),
 			);
 
 			// button size
 			$arguments['size'] = array(
-				'title'    => __( 'Size', 'blockstrap' ),
+				'title'    => __( 'Size', 'geodirectory' ),
 				'type'     => 'select',
 				'options'  => array(
-					''      => __( 'Default', 'blockstrap' ),
-					'small' => __( 'Small', 'blockstrap' ),
-					'large' => __( 'Large', 'blockstrap' ),
+					''      => __( 'Default', 'geodirectory' ),
+					'small' => __( 'Small', 'geodirectory' ),
+					'large' => __( 'Large', 'geodirectory' ),
 				),
 				'default'  => '',
 				'desc_tip' => true,
 				'advanced' => false,
-				'group'    => __( 'Paging', 'blockstrap' ),
+				'group'    => __( 'Paging', 'geodirectory' ),
 				'element_require' => '[%paging_style%]==""',
 			);
 

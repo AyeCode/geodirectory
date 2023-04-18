@@ -456,11 +456,11 @@ class GeoDir_Elementor {
 						<?php if ( !empty($settings['navigation']) && ( $settings['navigation']=='both' || $settings['navigation']=='arrows')) : ?>
 							<div class="elementor-swiper-button elementor-swiper-button-prev">
 								<i class="eicon-chevron-left" aria-hidden="true"></i>
-								<span class="elementor-screen-only"><?php _e( 'Previous', 'elementor-pro' ); ?></span>
+								<span class="elementor-screen-only"><?php _e( 'Previous', 'geodirectory' ); ?></span>
 							</div>
 							<div class="elementor-swiper-button elementor-swiper-button-next">
 								<i class="eicon-chevron-right" aria-hidden="true"></i>
-								<span class="elementor-screen-only"><?php _e( 'Next', 'elementor-pro' ); ?></span>
+								<span class="elementor-screen-only"><?php _e( 'Next', 'geodirectory' ); ?></span>
 							</div>
 						<?php endif; ?>
 					<?php endif; ?>

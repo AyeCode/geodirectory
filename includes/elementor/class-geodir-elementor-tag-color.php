@@ -96,7 +96,7 @@ Class GeoDir_Elementor_Tag_Color extends \Elementor\Core\DynamicTags\Tag {
 		$this->add_control(
 			'key',
 			[
-				'label' => __( 'Key', 'elementor-pro' ),
+				'label' => __( 'Key', 'geodirectory' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
 				'options' => $this->get_custom_field_options(),
 			]

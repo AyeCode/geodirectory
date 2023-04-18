@@ -149,7 +149,7 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 		$this->add_control(
 			'key',
 			[
-				'label' => __( 'Key', 'elementor-pro' ),
+				'label' => __( 'Key', 'geodirectory' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
 //				'groups' => GeoDir_Elementor::get_control_options( $this->get_supported_fields() ),
 				'options' => $this->get_custom_field_options(),
@@ -159,7 +159,7 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 		$this->add_control(
 			'fallback_url',
 			[
-				'label' => __( 'Fallback URL', 'elementor-pro' ),
+				'label' => __( 'Fallback URL', 'geodirectory' ),
 			]
 		);
 	}

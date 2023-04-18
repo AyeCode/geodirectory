@@ -71,11 +71,11 @@ class GeoDir_Elementor_Template_Single extends \ElementorPro\Modules\ThemeBuilde
 	}
 
 	public static function get_title() {
-		return esc_html__( 'GD Single', 'elementor-pro' );
+		return esc_html__( 'GD Single', 'geodirectory' );
 	}
 
 	public static function get_plural_title() {
-		return esc_html__( 'GD Singles', 'elementor-pro' );
+		return esc_html__( 'GD Singles', 'geodirectory' );
 	}
 
 	public static function get_site_editor_thumbnail_url() {
