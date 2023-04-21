@@ -57,6 +57,7 @@ global $post;
 
 		<div class="comment-links">
 			<?php edit_comment_link( __( 'Edit', 'geodirectory' ), '<span class="edit-link">', '</span>' ); ?>
+			<?php if ( geodir_user_can_reply_review( $comment ) ) { ?>
 			<div class="reply">
 				<?php comment_reply_link( array_merge( $args, array(
 					'reply_text' => __( 'Reply', 'geodirectory' ),
@@ -65,6 +66,7 @@ global $post;
 					'max_depth'  => $args['max_depth']
 				) ) ); ?>
 			</div>
+			<?php } ?>
 		</div>
 
 		<!-- .reply -->

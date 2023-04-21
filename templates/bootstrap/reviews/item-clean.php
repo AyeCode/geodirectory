@@ -108,23 +108,25 @@ global $post, $aui_bs5;
 				$edit_link = ob_get_clean();
 				echo str_replace( 'comment-edit-link', 'comment-edit-link btn btn-sm btn-link px-1', $edit_link );
 				do_action( 'geodir_comment_links_after_edit', $comment );
+
+				if ( geodir_user_can_reply_review( $comment ) ) {
 				?>
 				<span class="reply-link">
-							<?php
-							$reply_link = get_comment_reply_link(
-								array_merge(
-									$args,
-									array(
-										'reply_text' => __( 'Reply', 'geodirectory' ),
-										'depth'      => $depth,
-										'max_depth'  => $args['max_depth'],
-									)
-								)
-							);
-							echo str_replace( 'comment-reply-link', 'comment-reply-link btn btn-sm btn-link px-1', $reply_link );
-							?>
-						</span>
-				<?php do_action( 'geodir_comment_links_end', $comment ); ?>
+					<?php
+					$reply_link = get_comment_reply_link(
+						array_merge(
+							$args,
+							array(
+								'reply_text' => __( 'Reply', 'geodirectory' ),
+								'depth'      => $depth,
+								'max_depth'  => $args['max_depth'],
+							)
+						)
+					);
+					echo str_replace( 'comment-reply-link', 'comment-reply-link btn btn-sm btn-link px-1', $reply_link );
+					?>
+				</span>
+				<?php } do_action( 'geodir_comment_links_end', $comment ); ?>
 			</div>
 		</div>
 	</div>
