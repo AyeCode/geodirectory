@@ -535,3 +535,23 @@ function geodir_handle_comment_status_change( $comment_ID, $comment_status ) {
 }
 
 add_action( 'wp_set_comment_status', 'geodir_handle_comment_status_change', 10, 2 );
+
+/**
+ * Check whether current user can reply review.
+ *
+ * @since 2.3.8
+ *
+ * @param object $comment Comment object.
+ * @return bool True if user allwed to reply else false.
+ */
+function geodir_user_can_reply_review( $comment ) {
+	/**
+	 * Filter whether current user can reply review.
+	 *
+	 * @since 2.3.8
+	 *
+	 * @param bool   $can_reply_review If allowed then true else false.
+	 * @param object $comment Comment object.
+	 */
+	return apply_filters( 'geodir_user_can_reply_review', true, $comment );
+}

@@ -95,6 +95,8 @@ global $post, $aui_bs5;
 						do_action( "geodir_comment_links_start" , $comment );
 						edit_comment_link( __( 'Edit', 'geodirectory' ), '<span class="edit-link btn btn-link">', '</span>' );
 						do_action( "geodir_comment_links_after_edit" , $comment );
+
+						if ( geodir_user_can_reply_review( $comment ) ) {
 						?>
 						<span class="reply-link">
 							<?php $reply_link = get_comment_reply_link( array_merge( $args, array(
@@ -105,7 +107,7 @@ global $post, $aui_bs5;
 							echo str_replace("comment-reply-link","comment-reply-link btn btn-sm btn-primary",$reply_link);
 							?>
 						</span>
-						<?php do_action( "geodir_comment_links_end" , $comment ); ?>
+						<?php } do_action( "geodir_comment_links_end" , $comment ); ?>
 					</div>
 				</div>
 			</div>

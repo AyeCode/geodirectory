@@ -286,6 +286,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory Business Directory Plugin v2.3.8 =
+* Hook added to enable/disable who can reply reviews - ADDED
+
 = GeoDirectory Business Directory Plugin v2.3.7 - 2023-04-19 =
 * CPT settings option added to set post owner label for review - ADDED
 * Remove from Favorites is not working - FIXED

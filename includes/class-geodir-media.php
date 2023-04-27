@@ -228,7 +228,7 @@ class GeoDir_Media {
 
 			if ( ! is_wp_error( $editor ) ){
 				// If stored EXIF data exists, rotate the source image before creating sub-sizes.
-				if ( ! empty( $image_meta ) ) {
+				if ( ! empty( $image_meta ) && method_exists( $editor, 'maybe_exif_rotate' ) ) {
 					$rotated = $editor->maybe_exif_rotate();
 				}
 
@@ -981,7 +981,7 @@ class GeoDir_Media {
 		}
 
 		if ( in_array( 'post_images', $types ) ) {
-			$types = array_unique( array_merge( array( 'post_images' ), $types ) );//geodir_error_log( $types, 'types', __FILE__, __LINE__ );
+			$types = array_unique( array_merge( array( 'post_images' ), $types ) );
 		}
 
 		foreach ( $types as $_type ) {
