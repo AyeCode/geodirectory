@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.7\n"
+"Project-Id-Version: GeoDirectory 2.3.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 16:23+0530\n"
-"PO-Revision-Date: 2023-04-19 16:24+0530\n"
+"POT-Creation-Date: 2023-04-27 19:32+0530\n"
+"PO-Revision-Date: 2023-04-27 19:32+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -668,7 +668,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-simple-archive.php:143
 #: includes/widgets/class-geodir-widget-simple-archive.php:161
 #: includes/widgets/class-geodir-widget-simple-archive.php:179
-#: includes/widgets/class-geodir-widget-single-reviews.php:68
+#: includes/widgets/class-geodir-widget-single-reviews.php:67
 #: includes/widgets/class-geodir-widget-single-tabs.php:122
 #: templates/bootstrap/loop/select-sort.php:46
 #: vendor/ayecode/wp-super-duper/sd-functions.php:228
@@ -16614,7 +16614,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-loop-paging.php:130
 #: includes/widgets/class-geodir-widget-post-rating.php:103
-#: includes/widgets/class-geodir-widget-single-reviews.php:75
+#: includes/widgets/class-geodir-widget-single-reviews.php:73
 msgid "Style"
 msgstr ""
 
@@ -18322,7 +18322,7 @@ msgid "Design style"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-recent-reviews.php:176
-#: includes/widgets/class-geodir-widget-single-reviews.php:69
+#: includes/widgets/class-geodir-widget-single-reviews.php:68
 msgid "Clean"
 msgstr ""
 
@@ -19315,9 +19315,9 @@ msgstr ""
 msgid "Add Comment"
 msgstr ""
 
-#: language.php:127 templates/bootstrap/reviews/item-clean.php:118
-#: templates/bootstrap/reviews/item.php:101
-#: templates/legacy/reviews/item.php:62
+#: language.php:127 templates/bootstrap/reviews/item-clean.php:120
+#: templates/bootstrap/reviews/item.php:103
+#: templates/legacy/reviews/item.php:63
 msgid "Reply"
 msgstr ""
 
