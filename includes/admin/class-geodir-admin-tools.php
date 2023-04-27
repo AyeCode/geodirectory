@@ -507,7 +507,7 @@ class GeoDir_Admin_Tools {
 					if ( $labels['not_found_in_trash'] != '' && ! in_array( $labels['not_found_in_trash'], $translation_texts ) ) {
 						$translation_texts[] = $labels['not_found_in_trash'];
 					}
-					if ( $labels['listing_owner'] != '' && ! in_array( $labels['listing_owner'], $translation_texts ) ) {
+					if ( isset( $labels['listing_owner'] ) && $labels['listing_owner'] != '' && ! in_array( $labels['listing_owner'], $translation_texts ) ) {
 						$translation_texts[] = $labels['listing_owner'];
 					}
 					if ( isset( $labels['label_post_profile'] ) && $labels['label_post_profile'] != '' && ! in_array( $labels['label_post_profile'], $translation_texts ) ) {
