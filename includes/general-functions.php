@@ -149,11 +149,14 @@ function geodir_add_listing_page_url( $post_type = '' ) {
  * @return string The current URL.
  */
 function geodir_curPageURL() {
-	$pageURL = 'http';
-	if ( isset( $_SERVER['HTTPS'] ) && ! empty( $_SERVER['HTTPS'] ) && ( strtolower( $_SERVER['HTTPS'] ) == 'on' ) ) {
-		$pageURL .= "s";
+	$pageURL = is_ssl() ? 'https://' : 'http://';
+
+	// Host
+	if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+		$host = wp_unslash( $_SERVER['HTTP_HOST'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	} else {
+		$host = wp_parse_url( home_url(), PHP_URL_HOST );
 	}
-	$pageURL .= "://";
 
 	/*
 	 * Since we are assigning the URI from the server variables, we first need
@@ -163,7 +166,7 @@ function geodir_curPageURL() {
 	if ( ! empty( $_SERVER['PHP_SELF'] ) && ! empty( $_SERVER['REQUEST_URI'] ) ) {
 		// To build the entire URI we need to prepend the protocol, and the http host
 		// to the URI string.
-		$pageURL .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$pageURL .= $host . $_SERVER['REQUEST_URI'];
 	} else {
 		/*
 		 * Since we do not have REQUEST_URI to work with, we will assume we are
@@ -172,7 +175,7 @@ function geodir_curPageURL() {
 		 *
 		 * IIS uses the SCRIPT_NAME variable instead of a REQUEST_URI variable... thanks, MS
 		 */
-		$pageURL .= $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
+		$pageURL .= $host . $_SERVER['SCRIPT_NAME'];
 
 		// If the query string exists append it to the URI string
 		if ( isset( $_SERVER['QUERY_STRING'] ) && ! empty( $_SERVER['QUERY_STRING'] ) ) {
@@ -189,7 +192,6 @@ function geodir_curPageURL() {
 	 */
 	return apply_filters( 'geodir_curPageURL', $pageURL );
 }
-
 
 /**
  * Get Week Days list.
