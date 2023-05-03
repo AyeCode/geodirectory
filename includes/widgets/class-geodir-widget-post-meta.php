@@ -467,12 +467,17 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					}
 
 					// wrapper class
-					$wrap_class          = geodir_build_aui_class( $args );
-					$wrap_class          .= ' ' .sd_build_aui_class( $args );
+					$wrap_class = geodir_build_aui_class( $args );
+					$wrap_class .= ' ' .sd_build_aui_class( $args );
 
 					$field['css_class'] .= ' ' . $wrap_class;
 
-					$output = apply_filters( "geodir_custom_field_output_{$field['type']}", '', $args['location'], $field, $args['id'], $args['show'] );
+					$type = $field['type'];
+					if ( isset( $args['key'] ) && $args['key'] == 'post_images' ) {
+						$type = 'file';
+					}
+
+					$output = apply_filters( "geodir_custom_field_output_{$type}", '', $args['location'], $field, $args['id'], $args['show'] );
 
 					if ( ! $output && $this->is_preview() ) {
 						$output = $this->get_field_preview( $args );

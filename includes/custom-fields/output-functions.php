@@ -1561,7 +1561,9 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
 
             // Database value.
             if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                return ( isset( $gd_post->{$html_var} ) ? stripslashes_deep( $gd_post->{$html_var} ) : '' );
+                $value_raw = ( isset( $gd_post->{$html_var} ) ? stripslashes_deep( $gd_post->{$html_var} ) : '' );
+
+                return apply_filters( 'geodir_cf_file_output_value_raw', $value_raw, $files, $location, $cf, $output );
             }
 
             $allowed_file_types = ! empty( $extra_fields['gd_file_types'] ) && is_array( $extra_fields['gd_file_types'] ) && ! in_array( "*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
@@ -1570,12 +1572,14 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
             $upload_basedir = $upload_dir['basedir'];
             $upload_baseurl = $upload_dir['baseurl'];
             $file_paths = '';
+            $file_urls = array();
 
             foreach ( $files as $file ) {
                 $file_path = isset( $file->file ) ? $file->file : '';
                 $title = isset( $file->title ) && $file->title != '' ? strip_tags( stripslashes_deep( $file->title ) ) : '';
                 $desc = isset( $file->caption ) ? stripslashes_deep( $file->caption ) : '';
                 $url = $upload_baseurl . $file_path;
+                $file_urls[] = $url;
                 $outout_item = '';
 
                 if ( ! empty( $file ) ) {
@@ -1698,7 +1702,9 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
 
             // Stripped value.
             if ( ! empty( $output ) && isset( $output['strip'] ) ) {
-                return $file_paths;
+                $value_strip = ! empty( $file_urls ) ? $file_urls[0] : '';
+
+                return apply_filters( 'geodir_cf_file_output_value_strip', $value_strip, $file_urls, $files, $location, $cf, $output );
             }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
