@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.9 =
 * PHP warning undefined array key "HTTP_HOST" with WP-CLI - FIXED
+* Show the file url via GD > Post Meta value-strip option - CHANGED
 
 = GeoDirectory Business Directory Plugin v2.3.8 - 2023-04-27 =
 * Hook added to enable/disable who can reply reviews - ADDED
