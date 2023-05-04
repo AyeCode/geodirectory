@@ -763,6 +763,14 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'row_items'           => '3',
 				'row_positioning'     => '',
 				'card_padding_inside' => '3',
+				'cat_text_color'      => '',
+				'cat_font_size'       => '',
+				'cat_font_weight'     => '',
+				'cat_font_case'       => '',
+				'badge_text_color'    => '',
+				'badge_font_size'     => '',
+				'badge_font_weight'   => '',
+				'badge_font_case'     => '',
 
 				'bg'                  => '',
 				'mt'                  => '',
@@ -1059,9 +1067,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 									$term_icon_class .= ' embed-item-contain align-top card-img';
 								}
 							}
-							$term_icon_class = $term_icon_class != '' ? ' class="' . $term_icon_class . '"' : '';
 							$term_icon_url   = ! empty( $term_icons ) && isset( $term_icons[ $category->term_id ] ) ? $term_icons[ $category->term_id ] : '';
-							$term_icon_url   = $term_icon_url != '' ? '<img alt="' . esc_attr( $category->name ) . ' icon" src="' . $term_icon_url . '" ' . $term_icon_class . '/> ' : '';
+							$term_icon_url   = $term_icon_url != '' ? '<img alt="' . esc_attr( $category->name ) . ' icon" src="' . $term_icon_url . '" class="' . $term_icon_class . '"/> ' : '';
 							$cat_font_icon   = get_term_meta( $category->term_id, 'ct_cat_font_icon', true );
 							$cat_color       = get_term_meta( $category->term_id, 'ct_cat_color', true );
 							$cat_color       = $cat_color ? $cat_color : '#ababab';
@@ -1355,7 +1362,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			$link_height = !empty($args['card_padding_inside']) && $args['card_padding_inside'] < 3 ? "15px" : "22px";
 			$content = $depth == 1 ? '<div class="gd-cptcat-li gd-cptcat-li-sub-container dropdown w-100 position-absolute" style="bottom: 0;left: 0;height:'.$link_height.';">' : '';
 			$content .= $depth == 1 ? '<a class="btn btn-link z-index-1 p-0 text-reset w-100 align-top position-relative" href="#" id="cat-submenu-'.$parent_id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label><span class="sr-only visually-hidden">' . __( "Expand sub-categories", "geodirectory" ) . '</span><i class="fas fa-chevron-down align-top"></i></a>' : '';
-			$content .= $depth == 1 ? '<ul class="p-0 mt-1 gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '  dropdown-menu dropdown-caret-0" aria-labelledby="cat-submenu-'.$parent_id.'">' : '';
+			$content .= $depth == 1 ? '<ul class="p-0 mt-1 gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '  dropdown-menu dropdown-caret-0 w-100" aria-labelledby="cat-submenu-'.$parent_id.'">' : '';
 		}else{
 			$content = '<li class="gd-cptcat-li gd-cptcat-li-sub-container"><ul class="gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '">';
 		}
@@ -1363,7 +1370,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		$depth++;
 		foreach ( $child_cats as $category ) {
 			$term_icon_url = ! empty( $term_icons ) && isset( $term_icons[ $category->term_id ] ) ? $term_icons[ $category->term_id ] : '';
-			$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr( $category->name ) . ' icon" src="' . $term_icon_url . '" /> ' : '';
+			$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr( $category->name ) . ' icon" src="' . $term_icon_url . '" class=""/> ' : '';
 			$cat_font_icon = get_term_meta( $category->term_id, 'ct_cat_font_icon', true );
 			$cat_color     = get_term_meta( $category->term_id, 'ct_cat_color', true );
 			$cat_color     = $cat_color ? $cat_color : '#ababab';

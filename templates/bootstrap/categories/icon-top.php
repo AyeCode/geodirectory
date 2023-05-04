@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.2.20
+ * @version    2.3.9
  */
 
 //$cpt_row = $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
@@ -57,7 +57,9 @@ global $aui_bs5;
 
 $count_class = '';
 $cat_class   = '';
-if ( ! empty( $args['badge_position'] ) && 'block' === $args['badge_position'] ) {
+if ( $aui_bs5 && ! empty( $args['badge_position'] ) && 'top-right' === $args['badge_position'] ) {
+	$count_class .= ' position-absolute top-0 end-0';
+} else if ( ! empty( $args['badge_position'] ) && 'block' === $args['badge_position'] ) {
 	$cat_class .= 'd-block';
 } else {
 	$count_class .= 'ml-2';
@@ -106,12 +108,13 @@ if ( ! $hide_count ) {
 	if ( $cat_app ) {
 		$cat_count = str_replace( $cat_num, $cat_app, $cat_count );
 	}
+
+	$count = ' <span class="gd-cptcat-count ' . esc_attr( $count_class ) . '">' . $cat_count . '</span>';
+} else {
+	$count = '';
 }
 
-
 //translucent
-
-$count               = ! $hide_count ? ' <span class="gd-cptcat-count text-reset ' . esc_attr( $count_class ) . '">' . $cat_count . '</span>' : '';
 $card_color          = ! empty( $args['card_color'] ) ? sanitize_html_class( $args['card_color'] ) : 'outline-primary';
 $card_padding_inside = ! empty( $args['card_padding_inside'] ) ? absint( $args['card_padding_inside'] ) : '4';
 $icon                = '';
@@ -143,7 +146,7 @@ if ( ! $hide_icon ) {
 	$cat_color = $cat_color ? ' style="color:' . sanitize_hex_color( $cat_color ) . '"' : '';
 
 	$icon = "<a href='".esc_url( $term_link )."' class='gd-cptcat-cat-left border-0 mb-3 overflow-hidden stretched-link $img_class'><span class='gd-cptcat-icon" . $icon_color_class . "'" . $cat_color . ">$cat_icon</span></a>";
-}else{
+} else {
 	$cat_class .= ' stretched-link';
 }
 
@@ -163,15 +166,11 @@ $cat_class .= ' ' . sd_build_aui_class(
 
 ?>
 <div class="card h-100 p-0 m-0 border-0 bg-transparent <?php echo $card_class; ?>">
-	<div class="card-body text-center btn btn-<?php echo $card_color; ?> p-1 py-<?php echo $card_padding_inside; ?>">
+	<div class="card-body position-relative text-center btn btn-<?php echo $card_color; ?> p-1 py-<?php echo $card_padding_inside; ?>">
 		<?php echo $icon; ?>
 		<div class="gd-cptcat-cat-right text-truncate">
-			<a href="<?php echo esc_url( $term_link ); ?>" class="<?php echo esc_attr( $cat_class ); ?>">
-				<?php echo esc_attr( $cat_name ); ?>
-			</a>
-			<?php echo $count; ?>
+			<a href="<?php echo esc_url( $term_link ); ?>" class="<?php echo esc_attr( $cat_class ); ?>"><?php echo esc_attr( $cat_name ); ?></a><?php echo $count; ?>
 		</div>
-
 <?php
 // NOTE: The two closing divs are added in the main loop so that child cats can be added inside.
 //	</div>
