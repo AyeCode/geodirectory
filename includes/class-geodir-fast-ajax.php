@@ -159,7 +159,7 @@ class GeoDir_Fast_AJAX {
 
 		$allowed_plugins = array();
 		foreach ( $plugins as $plugin ) {
-			// Skip not allowed plugins 
+			// Skip not allowed plugins
 			if ( in_array( $plugin, $not_allowed ) ) {
 				continue;
 			}
@@ -177,7 +177,7 @@ class GeoDir_Fast_AJAX {
 			}
 
 			// Page builder plugins
-			if ( in_array( $action, array( 'geodir_ajax_search' ) ) && ( strpos( $plugin, 'elementor' ) !== false || strpos( $plugin, 'kadence' ) !== false || strpos( $plugin, 'bb-custom-attributes' ) !== false || strpos( $plugin, 'bb-plugin' ) !== false || strpos( $plugin, 'bb-theme-builder' ) !== false || strpos( $plugin, 'buddyboss-platform' ) !== false || strpos( $plugin, 'userswp' ) !== false ) || ( ! empty( $_REQUEST['gdbdate'] ) && ( strpos( $plugin, 'invoicing' ) !== false || strpos( $plugin, 'getpaid-wallet' ) !== false ) ) ) {
+			if ( in_array( $action, array( 'geodir_ajax_search' ) ) && ( strpos( $plugin, 'elementor' ) !== false || strpos( $plugin, 'kadence' ) !== false || strpos( $plugin, 'bb-custom-attributes' ) !== false || strpos( $plugin, 'bb-plugin' ) !== false || strpos( $plugin, 'bb-theme-builder' ) !== false || strpos( $plugin, 'buddyboss-platform' ) !== false || strpos( $plugin, 'userswp' ) !== false ) || strpos( $plugin, 'fusion-builder' ) !== false || ( ! empty( $_REQUEST['gdbdate'] ) && ( strpos( $plugin, 'invoicing' ) !== false || strpos( $plugin, 'getpaid-wallet' ) !== false ) ) ) {
 				$allowed_plugins[] = $plugin;
 				continue;
 			}
