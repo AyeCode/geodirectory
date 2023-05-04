@@ -117,3 +117,7 @@ body.modal-open .modal{
 .bs-skip-links:focus-within {
   transform: translate(-50%, 0%);
 }
+
+.form-switch .form-check-input:checked::before{
+  content: none;
+}
