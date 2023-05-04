@@ -290,6 +290,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * PHP warning undefined array key "HTTP_HOST" with WP-CLI - FIXED
 * Show the file url via GD > Post Meta value-strip option - CHANGED
 * GD > Categories category text style is not working - FIXED
+* Fast Ajax setting conflict with fusion builder - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.8 - 2023-04-27 =
 * Hook added to enable/disable who can reply reviews - ADDED
