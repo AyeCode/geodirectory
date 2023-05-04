@@ -1,3 +1,7 @@
+= 0.1.96 =
+* BS4 to BS5 font italic class is not working - FIXED
+* Custom pallet colors not showing in BS5 when selected as a color in block - FIXED
+
 = 0.1.94 =
 * Fix conditional field for multiselect field type in search bar - FIXED
 
