@@ -147,29 +147,20 @@
     },
     {
         "name": "ayecode/wp-deactivation-survey",
-        "version": "1.0.4",
-        "version_normalized": "1.0.4.0",
+        "version": "1.0.6",
+        "version_normalized": "1.0.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-deactivation-survey.git",
-            "reference": "d2777fed30acfc4da53b45bf3b4fec2fb27d8398"
+            "reference": "4edfd24e58ee27ecb6bab08a4e15bed5dd012bda"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-deactivation-survey/zipball/d2777fed30acfc4da53b45bf3b4fec2fb27d8398",
-            "reference": "d2777fed30acfc4da53b45bf3b4fec2fb27d8398",
+            "url": "https://api.github.com/repos/AyeCode/wp-deactivation-survey/zipball/4edfd24e58ee27ecb6bab08a4e15bed5dd012bda",
+            "reference": "4edfd24e58ee27ecb6bab08a4e15bed5dd012bda",
             "shasum": ""
         },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "*",
-            "squizlabs/php_codesniffer": "^3.2",
-            "wp-coding-standards/wpcs": "*"
-        },
-        "time": "2021-10-11T16:17:34+00:00",
+        "time": "2023-04-13T12:44:54+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -245,24 +236,24 @@
     },
     {
         "name": "ayecode/wp-super-duper",
-        "version": "1.1.19",
-        "version_normalized": "1.1.19.0",
+        "version": "1.1.20",
+        "version_normalized": "1.1.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "539de9f8de4cf799f9d58899766054661772a50b"
+            "reference": "0bbc595fec9c547aca0a26fbf8db2ab3aedc8a32"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/539de9f8de4cf799f9d58899766054661772a50b",
-            "reference": "539de9f8de4cf799f9d58899766054661772a50b",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/0bbc595fec9c547aca0a26fbf8db2ab3aedc8a32",
+            "reference": "0bbc595fec9c547aca0a26fbf8db2ab3aedc8a32",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2023-04-13T12:20:44+00:00",
+        "time": "2023-05-04T08:55:42+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

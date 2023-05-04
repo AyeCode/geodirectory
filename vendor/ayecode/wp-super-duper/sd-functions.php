@@ -2933,7 +2933,7 @@ function sd_get_template_part_by_slug( $slug ) {
  * @param array    $block         The full block, including name and attributes.
  * @param WP_Block $instance      The block instance.
  */
-function sd_render_block( $block_content, $block, $instance ) {
+function sd_render_block( $block_content, $block, $instance = '' ) {
 	// No block visibility conditions set.
 	if ( empty( $block['attrs']['visibility_conditions'] ) ) {
 		return $block_content;
