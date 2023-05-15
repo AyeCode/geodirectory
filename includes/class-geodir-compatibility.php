@@ -20,6 +20,7 @@ class GeoDir_Compatibility {
 	 */
 	public static function init() {
 		add_action( 'plugins_loaded', array( __CLASS__, 'plugins_loaded' ) );
+		add_action( 'cron_schedules', array( __CLASS__, 'cron_schedules' ), 10, 1 );
 
 		/*######################################################
 		Yoast (WP SEO)
@@ -237,6 +238,26 @@ class GeoDir_Compatibility {
 				add_filter( 'astra_get_option_meta_' . $meta_key, array( __CLASS__, 'astra_get_option_meta' ), 20, 2 );
 			}
 		}
+	}
+
+	/**
+	 * Add more cron schedules.
+	 *
+	 * @since 2.3.10
+	 *
+	 * @param array $schedules List of WP scheduled cron jobs.
+	 * @return array Cron schedules.
+	 */
+	public static function cron_schedules( $schedules ) {
+		// Monthly
+		if ( empty( $schedules['monthly'] ) ) {
+			$schedules['monthly'] = array(
+				'interval' => MONTH_IN_SECONDS,
+				'display' => __( 'Once Monthly', 'geodirectory' ),
+			);
+		}
+
+		return $schedules;
 	}
 
 	/**
