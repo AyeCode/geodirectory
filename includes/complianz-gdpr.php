@@ -45,6 +45,10 @@ add_filter( 'cmplz_detected_services', 'cmplz_geodirectory_detected_services', 2
  * @return string Filtered lazy load map.
  */
 function cmplz_geodirectory_lazy_load_map( $lazy_load = '' ) {
+	if ( is_admin() && ! wp_doing_ajax() ) {
+		return $lazy_load;
+	}
+
 	if ( ! ( isset( $_COOKIE['cmplz_marketing'] ) && $_COOKIE['cmplz_marketing'] == 'allow' ) ) {
 		$lazy_load = 'click';
 	}
