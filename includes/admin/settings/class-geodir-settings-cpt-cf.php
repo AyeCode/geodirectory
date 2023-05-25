@@ -2102,6 +2102,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'post_type',
 				'post_mime_type',
 				'comment_count',
+				'geodir_search',
+				'type',
+				'near',
+				'geo_lat',
+				'geo_lon'
 			);
 
 			if ( in_array( $field->htmlvar_name, $wp_post_cols ) ) {

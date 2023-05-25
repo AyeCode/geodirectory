@@ -289,6 +289,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory Business Directory Plugin v2.3.10 =
 * Added monthly cron schedule to prevent issue with Kadence blocks - ADDED
 * Complianz compatibility affects backend maps – CHANGED
+* Added some keys in reserved fields list - CHANGED
 
 = GeoDirectory Business Directory Plugin v2.3.9 - 2023-05-04 =
 * PHP warning undefined array key "HTTP_HOST" with WP-CLI - FIXED
