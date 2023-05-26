@@ -607,29 +607,21 @@ add_filter('upload_mimes', 'geodir_custom_upload_mimes');
  * @param array $existing_mimes List of existing mime types.
  * @return array Returns list of supported mime types.
  */
-function geodir_custom_upload_mimes($existing_mimes = array())
-{
-    $existing_mimes['wif'] = 'text/plain';
-    $existing_mimes['jpg|jpeg'] = 'image/jpeg';
-    $existing_mimes['gif'] = 'image/gif';
-    $existing_mimes['png'] = 'image/png';
-    $existing_mimes['pdf'] = 'application/pdf';
-    $existing_mimes['txt'] = 'text/text';
-    $existing_mimes['csv'] = 'application/octet-stream';
-    $existing_mimes['doc'] = 'application/msword';
-    $existing_mimes['xla|xls|xlt|xlw'] = 'application/vnd.ms-excel';
-    $existing_mimes['docx'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-    $existing_mimes['xlsx'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+function geodir_custom_upload_mimes( $existing_mimes = array() ) {
+	$existing_mimes['wif'] = 'text/plain';
+	$existing_mimes['jpg|jpeg'] = 'image/jpeg';
+	$existing_mimes['gif'] = 'image/gif';
+	$existing_mimes['png'] = 'image/png';
+	$existing_mimes['pdf'] = 'application/pdf';
+	$existing_mimes['txt'] = 'text/text';
+	$existing_mimes['csv'] = 'text/csv';
+	$existing_mimes['doc'] = 'application/msword';
+	$existing_mimes['xla|xls|xlt|xlw'] = 'application/vnd.ms-excel';
+	$existing_mimes['docx'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+	$existing_mimes['xlsx'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 	$existing_mimes['webp'] = 'image/webp';
-    return $existing_mimes;
+	return $existing_mimes;
 }
-
-
-
-
-
-
-
 add_filter('geodir_add_custom_sort_options', 'geodir_add_custom_sort_options', 0, 2);
 
 /**
