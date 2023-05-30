@@ -68,7 +68,7 @@ class GeoDir_Email {
 
 		return apply_filters( 'geodir_email_header_text', $header_text );
 	}
-	
+
 	/**
 	 * Get the email header template.
 	 *
@@ -84,7 +84,7 @@ class GeoDir_Email {
 		if ( ! $plain_text ) {
 			$header_text = self::email_header_text();
 			$header_text = $header_text ? wpautop( wp_kses_post( wptexturize( $header_text ) ) ) : '';
-		
+
 			geodir_get_template( 'emails/geodir-email-header.php', array(
 				'email_heading' => $email_heading,
 				'email_name'    => $email_name,
@@ -95,7 +95,7 @@ class GeoDir_Email {
 			) );
 		}
 	}
-	
+
 	/**
 	 * The default email footer text.
 	 *
@@ -526,9 +526,9 @@ class GeoDir_Email {
 		add_filter( 'wp_mail_content_type', array( __CLASS__, 'get_content_type' ) );
 
 		$message = self::style_body( $message, $email_name, $email_vars );
-		$message = apply_filters( 'geodir_mail_content', $message, $email_name, $email_vars );
+		$message = apply_filters( 'geodir_mail_content', $message, $email_name, $email_vars, $to, $subject );
 
-		$sent = wp_mail( $to, $subject, $message, $headers, $attachments );
+		$sent = $message ? wp_mail( $to, $subject, $message, $headers, $attachments ) : false;
 
 		if ( ! $sent ) {
 			$log_message = wp_sprintf( __( "\nTime: %s\nTo: %s\nSubject: %s\n", 'geodirectory' ), date_i18n( 'F j Y H:i:s', current_time( 'timestamp' ) ), ( is_array( $to ) ? implode( ', ', $to ) : $to ), $subject );
@@ -604,7 +604,7 @@ class GeoDir_Email {
 
 		return apply_filters( 'geodir_mail_admin_bcc_active', $active, $email_name );
 	}
-	
+
 	/**
 	 * Send the user an email when their post is published.
      *
@@ -657,12 +657,12 @@ class GeoDir_Email {
 			'message_body'  => $message_body,
 		) );
 
-		$sent = self::send( $recipient, $subject, $content, $headers, $attachments );
+		$sent = self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 
 		if ( self::is_admin_bcc_active( $email_name ) ) {
 			$recipient = self::get_admin_email();
 			$subject .= ' - ADMIN BCC COPY';
-			self::send( $recipient, $subject, $content, $headers, $attachments );
+			self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 		}
 
 		do_action( 'geodir_post_user_publish_post_email', $email_name, $email_vars );
@@ -776,7 +776,7 @@ class GeoDir_Email {
 			'message_body'  => $message_body,
 		) );
 
-		$sent = self::send( $recipient, $subject, $content, $headers, $attachments );
+		$sent = self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 
 		do_action( 'geodir_post_admin_post_edit_email', $email_name, $email_vars );
 
@@ -829,7 +829,7 @@ class GeoDir_Email {
 			'message_body'  => $message_body,
 		) );
 
-		$sent = self::send( $recipient, $subject, $content, $headers, $attachments );
+		$sent = self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 
 		do_action( 'geodir_post_admin_pending_post_email', $email_name, $email_vars );
 
@@ -888,12 +888,12 @@ class GeoDir_Email {
 			'message_body'  => $message_body,
 		) );
 
-		$sent = self::send( $recipient, $subject, $content, $headers, $attachments );
+		$sent = self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 
 		if ( self::is_admin_bcc_active( $email_name ) ) {
 			$recipient = self::get_admin_email();
 			$subject .= ' - ADMIN BCC COPY';
-			self::send( $recipient, $subject, $content, $headers, $attachments );
+			self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 		}
 
 		do_action( 'geodir_post_user_pending_post_email', $email_name, $email_vars );
@@ -992,12 +992,12 @@ class GeoDir_Email {
 			'message_body'  => $message_body,
 		) );
 
-		$sent = self::send( $recipient, $subject, $content, $headers, $attachments );
+		$sent = self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 
 		if ( self::is_admin_bcc_active( $email_name ) ) {
 			$recipient = self::get_admin_email();
 			$subject .= ' - ADMIN BCC COPY';
-			self::send( $recipient, $subject, $content, $headers, $attachments );
+			self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 		}
 
 		do_action( 'geodir_post_owner_comment_submit_email', $email_name, $email_vars );
@@ -1063,12 +1063,12 @@ class GeoDir_Email {
 			'message_body'  => $message_body,
 		) );
 
-		$sent = self::send( $recipient, $subject, $content, $headers, $attachments );
+		$sent = self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 
 		if ( self::is_admin_bcc_active( $email_name ) ) {
 			$recipient = self::get_admin_email();
 			$subject .= ' - ADMIN BCC COPY';
-			self::send( $recipient, $subject, $content, $headers, $attachments );
+			self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 		}
 
 		do_action( 'geodir_post_owner_comment_approved_email', $email_name, $email_vars );
@@ -1130,12 +1130,12 @@ class GeoDir_Email {
 			'message_body'  => $message_body,
 		) );
 
-		$sent = self::send( $recipient, $subject, $content, $headers, $attachments );
+		$sent = self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 
 		if ( self::is_admin_bcc_active( $email_name ) ) {
 			$recipient = self::get_admin_email();
 			$subject .= ' - ADMIN BCC COPY';
-			self::send( $recipient, $subject, $content, $headers, $attachments );
+			self::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 		}
 
 		do_action( 'geodir_post_author_comment_approved_email', $email_name, $email_vars );

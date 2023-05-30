@@ -1939,7 +1939,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				}else{
 					$wpdb->query(
 						$wpdb->prepare(
-							"update " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " set 
+							"update " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " set
 					 	frontend_title=%s
 					where post_type = %s and htmlvar_name = %s",
 							array($field->frontend_title, $field->post_type, $field->htmlvar_name)

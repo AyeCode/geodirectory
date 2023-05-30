@@ -81,7 +81,7 @@ class GeoDir_Report_Post {
 				$title = __( 'Reported Posts', 'geodirectory' );
 			}
 
-			$settings = apply_filters( 'geodir_admin_report_post_settings', 
+			$settings = apply_filters( 'geodir_admin_report_post_settings',
 				array(
 					array(
 						'type'  => 'page-title',
@@ -97,7 +97,7 @@ class GeoDir_Report_Post {
 						'css' => 'min-width:300px;',
 						'std' => '40'
 					)
-				) 
+				)
 			);
 		}
 
@@ -271,7 +271,7 @@ if ( isset( $_REQUEST['resolved'] ) || isset( $_REQUEST['rejected'] ) || isset( 
 		return $settings;
 	}
 
-	public static function admin_report_post_email_tags( $inline = true ) { 
+	public static function admin_report_post_email_tags( $inline = true ) {
 		$tags = array( '[#blogname#]', '[#site_name#]', '[#site_url#]', '[#site_name_url#]', '[#login_url#]', '[#login_link#]', '[#date#]', '[#time#]', '[#date_time#]', '[#current_date#]', '[#to_name#]', '[#to_email#]', '[#from_name#]', '[#from_email#]', '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]', '[#report_id#]', '[#report_post_user_name#]', '[#report_post_user_email#]', '[#report_post_user_ip#]', '[#report_post_date#]', '[#report_post_reason#]', '[#report_post_message#]', '[#report_post_section_link#]' );
 
 		$tags = apply_filters( 'geodir_email_admin_report_post_email_tags', $tags );
@@ -334,7 +334,7 @@ if ( isset( $_REQUEST['resolved'] ) || isset( $_REQUEST['rejected'] ) || isset( 
 			'message_body'  => $message_body,
 		) );
 
-		$sent = GeoDir_Email::send( $recipient, $subject, $content, $headers, $attachments );
+		$sent = GeoDir_Email::send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 
 		do_action( 'geodir_post_' . $email_name . '_email', $email_vars );
 	}
