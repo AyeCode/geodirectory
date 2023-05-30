@@ -288,6 +288,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.11 =
 * Change CSV extension mime type to prevent upload issue - FIXED
+* Email function will not send if message body is empty to allow for filtering email out - ADDED
+* Emails not adding $email_name, $email_vars to the call which are used in filters later - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.10 - 2023-05-25 =
 * Added monthly cron schedule to prevent issue with Kadence blocks - ADDED
