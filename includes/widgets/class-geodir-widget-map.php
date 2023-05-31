@@ -646,9 +646,18 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$map_args['region']        = ! empty( $current_location->region_slug ) ? $current_location->region_slug : $map_args['region'];
 		$map_args['city']          = ! empty( $current_location->city_slug ) ? $current_location->city_slug : $map_args['city'];
 		$map_args['neighbourhood'] = ! empty( $current_location->neighbourhood_slug ) ? $current_location->neighbourhood_slug : $map_args['neighbourhood'];
-		if ( empty( $map_args['country'] ) && empty( $map_args['region'] ) && empty( $map_args['city'] ) && empty( $map_args['neighbourhood'] ) && ! empty( $current_location->latitude ) ) {
-			$map_args['lat'] = ! empty( $current_location->latitude ) ? $current_location->latitude : '';
-			$map_args['lon'] = ! empty( $current_location->longitude ) ? $current_location->longitude : '';
+
+		$latitude = ! empty( $current_location->latitude ) ? $current_location->latitude : '';
+		$longitude = ! empty( $current_location->longitude ) ? $current_location->longitude : '';
+
+		if ( ! ( ! empty( $latitude ) && ! empty( $longitude ) ) && geodir_is_page( 'search' ) && ( $near_lat = GeoDir_Query::get_query_var( 'sgeo_lat' ) ) && ( $near_lon = GeoDir_Query::get_query_var( 'sgeo_lon' ) ) ) {
+			$latitude = geodir_sanitize_float( $near_lat );
+			$longitude = geodir_sanitize_float( $near_lon );
+		}
+
+		if ( empty( $map_args['country'] ) && empty( $map_args['region'] ) && empty( $map_args['city'] ) && empty( $map_args['neighbourhood'] ) && ! empty( $latitude ) && ! empty( $longitude ) ) {
+			$map_args['lat'] = $latitude;
+			$map_args['lon'] = $longitude;
 
 			if ( ( GeoDir_Query::get_query_var( 'snear' ) || GeoDir_Query::get_query_var( 'near' ) ) && ( $distance = geodir_sanitize_float( GeoDir_Query::get_query_var( 'dist' ) ) ) ) {
 				$map_args['dist'] = $distance;
