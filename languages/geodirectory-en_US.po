@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.10\n"
+"Project-Id-Version: GeoDirectory 2.3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-25 11:44+0530\n"
-"PO-Revision-Date: 2023-05-25 11:44+0530\n"
+"POT-Creation-Date: 2023-06-01 19:05+0530\n"
+"PO-Revision-Date: 2023-06-01 19:05+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -235,7 +235,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1118
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
-#: includes/custom-fields/functions.php:680 includes/post-functions.php:2153
+#: includes/custom-fields/functions.php:672 includes/post-functions.php:2153
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -1645,7 +1645,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1103
 #: includes/admin/class-geodir-admin-dummy-data.php:1113
 #: includes/class-geodir-post-data.php:1635
-#: includes/custom-fields/functions.php:670 includes/post-functions.php:2098
+#: includes/custom-fields/functions.php:662 includes/post-functions.php:2098
 msgid "Address"
 msgstr ""
 
@@ -6392,7 +6392,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-listings.php:608
 #: includes/widgets/class-geodir-widget-map.php:133
 #: includes/widgets/class-geodir-widget-map.php:401
-#: includes/widgets/class-geodir-widget-map.php:907
+#: includes/widgets/class-geodir-widget-map.php:916
 #: includes/widgets/class-geodir-widget-post-meta.php:293
 #: includes/widgets/class-geodir-widget-search.php:476
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1963
@@ -13236,15 +13236,15 @@ msgstr ""
 msgid "Auto Draft"
 msgstr ""
 
-#: includes/custom-fields/functions.php:673
+#: includes/custom-fields/functions.php:665
 msgid "Sort by address."
 msgstr ""
 
-#: includes/custom-fields/functions.php:683
+#: includes/custom-fields/functions.php:675
 msgid "Sort by zip/post code."
 msgstr ""
 
-#: includes/custom-fields/functions.php:1157
+#: includes/custom-fields/functions.php:1149
 msgid "Has hide conditions"
 msgstr ""
 
