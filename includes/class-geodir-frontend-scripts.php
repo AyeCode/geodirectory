@@ -112,7 +112,7 @@ class GeoDir_Frontend_Scripts {
 			$default_near_text = geodir_get_search_default_near_text();
 		}
 
-		$search_location = $geodirectory->location->get_default_location();
+		$search_location = ! empty( $geodirectory ) && ! empty( $geodirectory->location ) ? $geodirectory->location->get_default_location() : array();
 
 		$default_search_for_text = addslashes(stripslashes($default_search_for_text));
 		$default_near_text = addslashes(stripslashes($default_near_text));
