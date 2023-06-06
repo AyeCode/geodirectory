@@ -611,8 +611,8 @@ class GeoDir_Admin_Dummy_Data {
 			$city           = isset( $default_location->city ) ? $default_location->city : '';
 			$region         = isset( $default_location->region ) ? $default_location->region : '';
 			$country        = isset( $default_location->country ) ? $default_location->country : '';
-			$city_latitude  = isset( $default_location->latitude ) ? $default_location->latitude : '';
-			$city_longitude = isset( $default_location->longitude ) ? $default_location->longitude : '';
+			$city_latitude  = ! empty( $default_location->latitude ) ? $default_location->latitude : '""';
+			$city_longitude = ! empty( $default_location->longitude ) ? $default_location->longitude : '""';
 			?>
 			<script type="text/javascript">
 
