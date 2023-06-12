@@ -64,6 +64,10 @@ function geodir_post_custom_fields( $package_id = '', $default = 'all', $post_ty
     $custom_fields = array();
     $geodir_post_custom_fields_cache = get_transient( 'geodir_post_custom_fields' );
 
+    if ( ! is_array( $geodir_post_custom_fields_cache ) ) {
+        $geodir_post_custom_fields_cache = array();
+    }
+
     if ( !empty( $geodir_post_custom_fields_cache ) && array_key_exists( $cache_stored, $geodir_post_custom_fields_cache ) ) {
         $custom_fields = $geodir_post_custom_fields_cache[ $cache_stored ];
     }else{
