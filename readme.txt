@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory, member directory, company directory, team directory, chamber of commerce business directory, church directory, address book, contact directory, local business directory, listings directory, link directory
 Requires at least: 4.5
 Tested up to: 6.2
-Stable tag: 2.3.11
+Stable tag: 2.3.12
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -285,6 +285,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 == Changelog ==
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
+
+= GeoDirectory Business Directory Plugin v2.3.12 - 2023-06-14 =
+* JavaScript error when latitude/longitude are empty - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.11 - 2023-06-01 =
 * Change CSV extension mime type to prevent upload issue - FIXED
