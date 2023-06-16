@@ -2106,7 +2106,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'type',
 				'near',
 				'geo_lat',
-				'geo_lon'
+				'geo_lon',
+				'action',
+				'security',
+				'preview'
 			);
 
 			if ( in_array( $field->htmlvar_name, $wp_post_cols ) ) {
