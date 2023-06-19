@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.12\n"
+"Project-Id-Version: GeoDirectory 2.3.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-14 16:32+0530\n"
-"PO-Revision-Date: 2023-06-14 16:32+0530\n"
+"POT-Creation-Date: 2023-06-19 17:50+0530\n"
+"PO-Revision-Date: 2023-06-19 17:51+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: geodirectory.php:178
+#: geodirectory.php:214
 msgid ""
 "Your version of PHP is below the minimum version of PHP required by "
 "GeoDirectory. Please contact your host and request that your version be "
@@ -5415,37 +5415,37 @@ msgstr ""
 msgid "Failed to sort tab items."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2113
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2116
 msgid ""
 "Field key name MUST NOT match a standard WordPress field, please use another "
 "key and re-save."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2123
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2126
 #, php-format
 msgid "%s field already exists, it can not be used twice."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2125
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2128
 msgid ""
 "Field key name MUST be unique, duplicate field detected, please fix and re-"
 "save."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2185
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2188
 msgid "Column change failed, you may have too many columns."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2351
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2354
 msgid "Field update failed.x"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2363
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2366
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:688
 msgid "Field create failed."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2381
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2384
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "does not match with field data type."
