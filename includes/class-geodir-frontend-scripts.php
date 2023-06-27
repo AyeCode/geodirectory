@@ -553,6 +553,13 @@ class GeoDir_Frontend_Scripts {
 
 		$suffix           = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$aui = geodir_design_style() ? '/aui' : '';
+
+		$plupload_deps = array( 'plupload', 'jquery', 'jquery-ui-sortable' );
+		if ( wp_is_mobile() ) {
+			// jQuery UI Touch Punch to enable sorting on touch device.
+			$plupload_deps[] = 'jquery-touch-punch';
+		}
+
 		$register_scripts = array(
 			'select2' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js',
@@ -616,7 +623,7 @@ class GeoDir_Frontend_Scripts {
 			),
 			'geodir-plupload' => array(
 				'src'     => geodir_plugin_url() . '/assets'.$aui.'/js/geodirectory-plupload' . $suffix . '.js',
-				'deps'    => array('plupload','jquery','jquery-ui-sortable'),
+				'deps'    => $plupload_deps,
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir' => array(
