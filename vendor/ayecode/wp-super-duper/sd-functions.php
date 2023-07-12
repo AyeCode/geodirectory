@@ -1034,6 +1034,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 	$theme_colors['info']      = __( 'Info', 'super-duper' );
 	$theme_colors['light']     = __( 'Light', 'super-duper' );
 	$theme_colors['dark']      = __( 'Dark', 'super-duper' );
+	$theme_colors['black']     = __( 'Black', 'super-duper' );
 	$theme_colors['white']     = __( 'White', 'super-duper' );
 	$theme_colors['purple']    = __( 'Purple', 'super-duper' );
 	$theme_colors['salmon']    = __( 'Salmon', 'super-duper' );

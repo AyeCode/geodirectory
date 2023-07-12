@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.20' );
+	define( 'SUPER_DUPER_VER', '1.1.21' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -3522,6 +3522,42 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
                     },";
 			}elseif ( $args['type'] == 'gradient' ) {
 				$type = 'GradientPicker';
+				$extra .= "gradients: [{
+			name: 'Vivid cyan blue to vivid purple',
+			gradient:
+				'linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
+			slug: 'vivid-cyan-blue-to-vivid-purple',
+		},
+		{
+			name: 'Light green cyan to vivid green cyan',
+			gradient:
+				'linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%)',
+			slug: 'light-green-cyan-to-vivid-green-cyan',
+		},
+		{
+			name: 'Luminous vivid amber to luminous vivid orange',
+			gradient:
+				'linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%)',
+			slug: 'luminous-vivid-amber-to-luminous-vivid-orange',
+		},
+		{
+			name: 'Luminous vivid orange to vivid red',
+			gradient:
+				'linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%)',
+			slug: 'luminous-vivid-orange-to-vivid-red',
+		},
+		{
+			name: 'Very light gray to cyan bluish gray',
+			gradient:
+				'linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%)',
+			slug: 'very-light-gray-to-cyan-bluish-gray',
+		},
+		{
+			name: 'Cool to warm spectrum',
+			gradient:
+				'linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%)',
+			slug: 'cool-to-warm-spectrum',
+		}],";
 
 			}elseif ( $args['type'] == 'image' ) {
 //                print_r($args);
@@ -3809,54 +3845,28 @@ if (confirmed) {
 			echo $icon;
 			?>
 			el( <?php echo $args['type'] == 'image' || $args['type'] == 'images' ? $type  : "wp.components.".$type; ?>, {
-			label: <?php
-			if(empty($args['title'])){
-                echo "''";
-			}elseif(empty($args['row']) && !empty($args['device_type'])){
-                ?>el('label', {
-									className: 'components-base-control__label',
-									style: {width:"100%"}
-								},
-								el('span',{dangerouslySetInnerHTML: {__html: '<?php echo addslashes( $args['title'] ) ?>'}}),
-								<?php if($device_type_icon){ ?>
-                                    deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {right:"0",position:"absolute",color:"var(--wp-admin-theme-color)"}})
-								<?php
-                                }
-                                ?>
-
-
-							)<?php
-
-			}else{
-                 ?>'<?php echo addslashes( $args['title'] ); ?>'<?php
-
-			}
-
-			?>,
-			help: <?php if ( isset( $args['desc'] ) ) {
-				echo "el('span',{dangerouslySetInnerHTML: {__html: '".wp_kses_post( addslashes($args['desc']) )."'}})";
-			}else{ echo "''"; } ?>,
+			label: <?php if ( empty( $args['title'] ) ) { echo "''"; } else if ( empty( $args['row'] ) && ! empty( $args['device_type'] ) ) { ?>el('label',{className:'components-base-control__label',style:{width:"100%"}},el('span',{dangerouslySetInnerHTML: {__html: '<?php echo addslashes( $args['title'] ) ?>'}}),<?php if ( $device_type_icon ) { ?>deviceType == '<?php echo $device_type;?>' && el('span',{dangerouslySetInnerHTML: {__html: '<?php echo $device_type_icon; ?>'},title: deviceType + ": Set preview mode to change",style: {right:"0",position:"absolute",color:"var(--wp-admin-theme-color)"}})<?php } ?>)<?php
+			} else { ?>'<?php echo addslashes( trim( esc_html( $args['title'] ) ) ); ?>'<?php } ?>,
+			help: <?php echo ( isset( $args['desc'] ) ? "el('span', {dangerouslySetInnerHTML: {__html: '" . trim( wp_kses_post( addslashes( $args['desc'] ) ) ) . "'}})" : "''" ); ?>,
 			value: <?php echo $value; ?>,
 			<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
 				echo "type: '" . addslashes( $args['type'] ) . "',";
 			} ?>
 			<?php if ( ! empty( $args['placeholder'] ) ) {
-				echo "placeholder: '" . addslashes( $args['placeholder'] ) . "',";
+				echo "placeholder: '" . addslashes( trim( esc_html( $args['placeholder'] ) ) ) . "',";
 			} ?>
 			<?php echo $options; ?>
 			<?php echo $extra; ?>
 			<?php echo $custom_attributes; ?>
-			<?php echo $onchangecomplete;
-            if($onchange){
-            ?>
+			<?php echo $onchangecomplete; ?>
+			<?php if ( $onchange ) { ?>
 			onChange: function ( <?php echo $key; ?> ) {
-			<?php echo $onchange; ?>
+				<?php echo $onchange; ?>
 			}
-			<?php }?>
-			} <?php echo $inside_elements; ?> ),
+			<?php } ?>
+		} <?php echo $inside_elements; ?> ),
 			<?php
 			echo $after_elements;
-
 		}
 
 		/**
