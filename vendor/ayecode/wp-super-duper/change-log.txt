@@ -1,3 +1,7 @@
+= 1.1.21 =
+* New line character in translation results in JS error - FIXED
+* Background Gradient picker broken after WP update - FIXED
+
 = 1.1.20 =
 * WP installs less than 5.9 can throw fatal error for render_block filter - FIXED
 
