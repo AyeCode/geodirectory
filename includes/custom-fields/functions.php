@@ -363,16 +363,17 @@ if ( ! function_exists( 'geodir_get_field_infoby' ) ) {
 	 * @param string $key The key you want to look for.
 	 * @param string $value The value of the key you want to look for.
 	 * @param string $post_type The post type.
+	 * @param bool $stripslashes Return with stripslashes. Default True.
 	 * @return bool|mixed Returns field info when available. otherwise returns false.
 	 */
-	function geodir_get_field_infoby( $key = '', $value = '', $post_type = '' ) {
+	function geodir_get_field_infoby( $key = '', $value = '', $post_type = '', $stripslashes = true ) {
 		global $wpdb, $geodir_field_infoby;
 
 		if ( empty( $geodir_field_infoby ) ) {
 			$geodir_field_infoby = array();
 		}
 
-		$cache_key = $key . '::' . $value . '::' . $post_type;
+		$cache_key = $key . '::' . $value . '::' . $post_type . '::' . (int) $stripslashes;
 
 		// Return cached field data.
 		if ( isset( $geodir_field_infoby[ $cache_key ] ) ) {
@@ -382,7 +383,7 @@ if ( ! function_exists( 'geodir_get_field_infoby' ) ) {
 		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND " . $key . "='" . $value . "'", array( $post_type ) ), ARRAY_A );
 
 		if ( ! empty( $row ) ) {
-			$row = stripslashes_deep( $row );
+			$row = $stripslashes ? stripslashes_deep( $row ) : $row;
 		} else {
 			$row = false;
 		}

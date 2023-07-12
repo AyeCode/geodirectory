@@ -2085,7 +2085,7 @@ function geodir_post_meta_address_fields( $post_type = 'gd_place' ) {
 		return $geodir_post_meta_fields[ $post_type ];
 	}
 
-	$field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type );
+	$field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type, false );
 	$extra_fields = ! empty( $field['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $field['extra_fields'] ) ) : NULL;
 	$field_icon = ! empty( $field['field_icon'] ) ? $field['field_icon'] : 'fas fa-map-marker-alt';
 

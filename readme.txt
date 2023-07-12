@@ -288,6 +288,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.14 =
 * Images on add listing page are not sortable in touch devices - FIXED
+* Allow location image to set in elementor element background setting - ADDED
+* Fix conflict with Relevanssi plugin - CHANGED
 
 = GeoDirectory Business Directory Plugin v2.3.13 - 2023-06-19 =
 * PHP deprecated notice "Creation of dynamic property" - FIXED
