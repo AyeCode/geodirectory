@@ -238,6 +238,10 @@ class GeoDir_Compatibility {
 				add_filter( 'astra_get_option_meta_' . $meta_key, array( __CLASS__, 'astra_get_option_meta' ), 20, 2 );
 			}
 		}
+
+		// Relevanssi compatibility
+		add_filter( 'relevanssi_search_ok', array( __CLASS__, 'relevanssi_search_ok' ), 10, 2 );
+		add_filter( 'relevanssi_prevent_default_request', array( __CLASS__, 'relevanssi_prevent_default_request' ), 10, 2 );
 	}
 
 	/**
@@ -4047,5 +4051,37 @@ class GeoDir_Compatibility {
 
 			GeoDir_Frontend_Scripts::load_scripts();
 		}
+	}
+
+	/**
+	 * Disable Relevanssi search on GD Search page.
+	 *
+	 * @since 2.3.14
+	 *
+	 * @param bool   $search_ok True to use Relevanssi else false.
+	 * @param object $query The Query request.
+	 */
+	public static function relevanssi_search_ok( $search_ok, $query ){
+		if ( $search_ok && geodir_is_page( 'search' ) ) {
+			$search_ok = false;
+		}
+
+		return $search_ok;
+	}
+
+	/**
+	 * Prevent Relevanssi search request on GD Search page.
+	 *
+	 * @since 2.3.14
+	 *
+	 * @param bool   $default_request True to use Relevanssi request else false.
+	 * @param object $query The Query request.
+	 */
+	public static function relevanssi_prevent_default_request( $default_request, $query ){
+		if ( $default_request && geodir_is_page( 'search' ) ) {
+			$default_request = false;
+		}
+
+		return $default_request;
 	}
 }
