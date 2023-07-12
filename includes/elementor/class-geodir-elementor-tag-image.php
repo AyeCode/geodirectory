@@ -91,9 +91,11 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 			'url' => '',
 		];
 
-		if(substr( $key, 0, 9 ) === "category_"){
-			$image_data = $this->get_category_meta($key);
-		}elseif ( ! empty( $key ) && !empty($gd_post->ID)) {
+		if ( strpos( $key, 'location_image' ) === 0 ) {
+			$image_data = $this->get_location_meta( $key );
+		} else if ( substr( $key, 0, 9 ) === "category_" ) {
+			$image_data = $this->get_category_meta( $key );
+		} else if ( ! empty( $key ) && ! empty( $gd_post->ID ) ) {
 			$cf = geodir_get_field_infoby('htmlvar_name', $key, $gd_post->post_type);
 			$field_type = !empty($cf['field_type']) ? esc_attr($cf['field_type']) : '';
 
@@ -187,9 +189,69 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 			}
 		}
 
-
-
 		return $image_data;
+	}
+
+	/**
+	 * Get locaion meta.
+	 *
+	 * @since 2.3.14
+	 *
+	 * @param string $key The setting key.
+	 * @return array Setting value.
+	 */
+	public function get_location_meta( $key ) {
+		$meta = array();
+
+		if ( class_exists( 'GeoDir_Location_SEO' ) ) {
+			if ( $key == 'location_image' ) {
+				$location_seo = $this->get_location_seo();
+
+				if ( ! empty( $location_seo->image ) ) {
+					$image_src = wp_get_attachment_image_src( (int) $location_seo->image, 'full' );
+
+					if ( ! empty( $image_src[0] ) ) {
+						$meta = array(
+							'id' => (int) $location_seo->image,
+							'url' => esc_url_raw( $image_src[0] )
+						);
+					}
+				}
+			}
+		}
+
+		return $meta;
+	}
+
+	/**
+	 * Get locaion SEO.
+	 *
+	 * @since 2.3.14
+	 *
+	 * @return array Location SEO.
+	 */
+	public function get_location_seo() {
+		global $geodirectory, $geodir_ele_location_seo;
+
+		$location = ! empty( $geodirectory ) && ! empty( $geodirectory->location ) ? $geodirectory->location : array();
+
+		$location_seo = array();
+
+		if ( ! empty( $location ) ) {
+			if ( empty( $geodir_ele_location_seo ) ) {
+				$geodir_ele_location_seo = array();
+			}
+
+			$location_key = maybe_serialize( $location );
+
+			if ( ! isset( $geodir_ele_location_seo[ $location_key ] ) ) {
+				$geodir_ele_location_seo[ $location_key ] = GeoDir_Location_SEO::get_location_seo();
+			}
+
+			$location_seo = $geodir_ele_location_seo[ $location_key ];
+		}
+
+		return $location_seo;
 	}
 
 	/**
@@ -262,9 +324,18 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 			'options'   => $cat_keys
 		);
 
+		if ( class_exists( 'GeoDir_Location_Manager' ) ) {
+			// Location Meta
+			$groups[] = array(
+				'label' => __( 'Location Meta', 'geodirectory' ),
+				'options' => array(
+					'location_image' => 'location_image'
+				)
+			);
+		}
+
 		return $groups;
 	}
-
 
 	/**
 	 * Get what fields are supported for this tag type.
