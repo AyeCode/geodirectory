@@ -119,12 +119,13 @@ class GeoDir_Post_Data {
 	 * Restore the post revision, here we are just restoring the post meta table info.
 	 *
 	 * @global int|null $geodir_post_author Post author.
+	 * @global array    $geodir_post_before Array of previous posts.
 	 *
 	 * @param $post_id
 	 * @param $revision_id
 	 */
 	public static function restore_post_revision( $post_id, $revision_id ) {
-		global $wpdb, $geodir_post_author;
+		global $wpdb, $geodir_post_author, $geodir_post_before;
 
 		$post_type = get_post_type( $post_id );
 
@@ -168,6 +169,13 @@ class GeoDir_Post_Data {
 					);
 
 					if ( $result ) {
+						if ( empty( $geodir_post_before ) ) {
+							$geodir_post_before = array();
+						}
+
+						// Set previous post data.
+						$geodir_post_before[ $post_id ] = geodir_get_post_info( (int) $revision_id, false );
+
 						// Save the revisions media values
 						$temp_media = get_post_meta( $post_id, "__" . $revision_id, true );
 
