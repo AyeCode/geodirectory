@@ -10,18 +10,20 @@
  * Get post custom fields.
  *
  * @since 1.0.0
+ * @since 2.3.14 Added $cached parameter.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
  *
  * @param int|string $post_id Optional. The post ID.
- *
+ * @param bool       $cached Cached data. Default True.
  * @return object|bool Returns full post details as an object. If no details returns false.
  */
-function geodir_get_post_info( $post_id = '' ) {
+function geodir_get_post_info( $post_id = '', $cached = true ) {
 	// Check for cache
 	$cache = wp_cache_get( "gd_post_" . $post_id, 'gd_post' );
-	if ( $cache ) {
+
+	if ( $cache && $cached ) {
 		return $cache;
 	}
 
@@ -80,7 +82,7 @@ function geodir_get_post_info( $post_id = '' ) {
 	$return = ! empty( $post_detail ) ? $post_info = $post_detail : $post_info = false;
 
 	// Set cache
-	if ( ! empty( $post_detail ) ) {
+	if ( ! empty( $post_detail ) && $cached ) {
 		wp_cache_set( "gd_post_" . $post_id, $post_detail, 'gd_post' );
 	}
 
