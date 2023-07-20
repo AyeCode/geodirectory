@@ -1168,3 +1168,124 @@ function geodir_conditional_field_icon( $attrs, $field = array() ) {
 	 */
 	return apply_filters( 'geodir_conditional_field_icon', $icon, $attrs, $field );
 }
+
+/**
+ * Get GD field options.
+ *
+ * @since 2.3.15
+ *
+ * @param array $args Arguments.
+ * @return array Field options.
+ * @todo move to core
+ */
+function geodir_get_field_key_options( $args = array() ) {
+	$defaults = array(
+		'context' => '',
+		'post_type' => 'all',
+		'default' => 'all',
+		'fields_location' => 'none',
+		'package_id' => '',
+		'frontend' => false,
+		'display_label' => ''
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$fields = geodir_post_custom_fields( $args['package_id'], $args['default'], $args['post_type'], $args['fields_location'] );
+
+	$options = array();
+
+	if ( ! empty( $fields ) ) {
+		foreach( $fields as $field ) {
+			if ( apply_filters( 'geodir_field_key_options_skip_field', false, $field, $args ) ) {
+				continue;
+			}
+
+			if ( ! empty( $args['frontend'] ) ) {
+				$title = ! empty( $field['frontend_title'] ) ? __( $field['frontend_title'], 'geodirectory' ) : __( $field['admin_title'], 'geodirectory' );
+			} else {
+				$title = ! empty( $field['admin_title'] ) ? __( $field['admin_title'], 'geodirectory' ) : __( $field['frontend_title'], 'geodirectory' );
+			}
+
+			if ( $args['display_label'] == 'key' ) {
+				$display_label = $field['htmlvar_name'];
+			} else if ( $args['display_label'] == 'title' ) {
+				$display_label = $title;
+			} else {
+				$display_label = $field['htmlvar_name'] . ' ( ' . $title . ' )';
+			}
+
+			$options[ $field['htmlvar_name'] ] = $display_label;
+
+			if ( $field['htmlvar_name'] == 'post_images' ) {
+				if ( $args['display_label'] == 'key' ) {
+					$options['featured_image'] = 'featured_image';
+				} else if ( $args['display_label'] == 'title' ) {
+					$options['featured_image'] = __( 'Featured Image', 'geodirectory' );
+				} else {
+					$options['featured_image'] = 'featured_image ( ' . __( 'Featured Image', 'geodirectory' ) . ' )';
+				}
+			}
+		}
+
+		$post_type = $args['post_type'] == 'all' ? '' : $args['post_type'];
+
+		$advance_fields = geodir_post_meta_advance_fields( $post_type );
+
+		foreach( $advance_fields as $field ) {
+			$continue = false;
+
+			if ( strpos( $field['htmlvar_name'] , 'business_hours_' ) === 0 && ! isset( $options[ 'business_hours' ] ) ) {
+				$continue = true;
+			} else if ( ( strpos( $field['htmlvar_name'] , 'event_start_' ) === 0 || strpos( $field['htmlvar_name'] , 'event_end_' ) === 0 ) && ! isset( $options[ 'event_dates' ] ) ) {
+				$continue = true;
+			}
+
+			if ( apply_filters( 'geodir_field_key_options_skip_field', $continue, $field, $args ) ) {
+				continue;
+			}
+
+			if ( ! empty( $args['frontend'] ) ) {
+				$title = ! empty( $field['frontend_title'] ) ? __( $field['frontend_title'], 'geodirectory' ) : __( $field['admin_title'], 'geodirectory' );
+			} else {
+				$title = ! empty( $field['admin_title'] ) ? __( $field['admin_title'], 'geodirectory' ) : __( $field['frontend_title'], 'geodirectory' );
+			}
+
+			if ( $args['display_label'] == 'key' ) {
+				$display_label = $field['htmlvar_name'];
+			} else if ( $args['display_label'] == 'title' ) {
+				$display_label = $title;
+			} else {
+				$display_label = $field['htmlvar_name'] . ' ( ' . $title . ' )';
+			}
+
+			$options[ $field['htmlvar_name'] ] = $display_label;
+		}
+	}
+
+	return apply_filters( 'geodir_get_field_key_options', $options, $args );
+}
+
+/**
+ * Get visibility field conditions options.
+ *
+ * @since 2.3.15
+ *
+ * @param array $args Arguments.
+ * @return array Field condition options.
+ * @todo move to core
+ */
+function geodir_get_field_condition_options( $args = array() ) {
+	$options = array(
+		'is_empty' => __( 'is empty', 'geodirectory' ),
+		'is_not_empty' => __( 'is not empty', 'geodirectory' ),
+		'is_equal' => __( 'is equal', 'geodirectory' ),
+		'is_not_equal' => __( 'is not equal', 'geodirectory' ),
+		'is_greater_than' => __( 'is greater than', 'geodirectory' ),
+		'is_less_than' => __( 'is less than', 'geodirectory' ),
+		'is_contains' => __( 'is contains', 'geodirectory' ),
+		'is_not_contains' => __( 'is not contains', 'geodirectory' ),
+	);
+
+	return apply_filters( 'geodir_get_field_condition_options', $options, $args );
+}

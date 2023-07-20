@@ -374,25 +374,31 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-				echo aui()->input(
-					array(
-						'id'                => $value['id'],
-						'name'              => $value['id'],
-						'label_type'        => $label_type,
-						'label_col'        => '3',
-						'label_class'=> 'font-weight-bold fw-bold',
-						'class' => !empty($value['class']) ? $value['class'] : '',
-						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
-						'label'              => $value['title'] . $tooltip_html,
-						'type'              =>  $value['type'] ?  $value['type']  : 'text',
-						'placeholder'       => $value['placeholder'],
-						'required'       => !empty($value['required']) ? true : false,
-						'value' => $option_value,
-						'help_text'  => isset($description) ? $description : '',
-						'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
-						'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
-					)
-				);
+					echo aui()->input(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'type'              => $value['type'] ?  $value['type']  : 'text',
+							'label'             => $value['title'] . $tooltip_html,
+							'label_type'        => $label_type,
+							'label_col'         => '3',
+							'label_class'       => 'font-weight-bold fw-bold',
+							'placeholder'       => $value['placeholder'],
+							'help_text'         => isset( $description ) ? $description : '',
+							'required'          => ! empty( $value['required'] ) ? true : false,
+							'value'             => $option_value,
+							'class'             => ! empty( $value['class'] ) ? $value['class'] : '',
+							'wrap_class'        => isset( $value['advanced'] ) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
+							'no_wrap'           => ! empty( $value['no_wrap'] ) ? true : false,
+							'form_group_class'  => ! empty( $value['form_group_class'] ) ? $value['form_group_class'] : '',
+							'input_group_left'  => ! empty( $value['input_group_left'] ) ? $value['input_group_left'] : '',
+							'input_group_right' => ! empty( $value['input_group_right'] ) ? $value['input_group_right'] : '',
+							'input_group_left_inside'  => ! empty( $value['input_group_left_inside'] ) ? $value['input_group_left_inside'] : '',
+							'input_group_right_inside' => ! empty( $value['input_group_right_inside'] ) ? $value['input_group_right_inside'] : '',
+							'extra_attributes'  => ! empty( $custom_attributes ) ? $custom_attributes : array(),
+							'element_require'   => ! empty( $value['element_require'] ) ? $value['element_require'] : '',
+						)
+					);
 
 					break;
 
@@ -522,12 +528,17 @@ class GeoDir_Admin_Settings {
 							'placeholder'       => $value['placeholder'],
 							'value'             => $option_value,
 							'help_text'         => isset( $description ) ? $description : '',
-							'extra_attributes'  => ! empty( $custom_attributes ) ? $custom_attributes : array(),
 							'rows'              => $rows,
 							'wysiwyg'           => $wysiwyg,
 							'allow_tags'        => isset( $value['allow_tags'] ) ? $value['allow_tags'] : true, // Allow HTML Tags. Default True.
+							'no_wrap'           => ! empty( $value['no_wrap'] ) ? true : false,
+							'form_group_class'  => ! empty( $value['form_group_class'] ) ? $value['form_group_class'] : '',
+							'input_group_left'  => ! empty( $value['input_group_left'] ) ? $value['input_group_left'] : '',
+							'input_group_right' => ! empty( $value['input_group_right'] ) ? $value['input_group_right'] : ( ! empty( $value['custom_desc'] ) ? "<div class='d-flex flex-wrap pt-3 text-muted'>" . $value['custom_desc'] . "</div>" : '' ),
+							'input_group_left_inside'  => ! empty( $value['input_group_left_inside'] ) ? $value['input_group_left_inside'] : '',
+							'input_group_right_inside' => ! empty( $value['input_group_right_inside'] ) ? $value['input_group_right_inside'] : '',
 							'element_require'   => ! empty( $value['element_require'] ) ? $value['element_require'] : '',
-							'input_group_right' => ! empty( $value['custom_desc'] ) ? "<div class='d-flex flex-wrap pt-3 text-muted'>" . $value['custom_desc'] . "</div>" : '',
+							'extra_attributes'  => ! empty( $custom_attributes ) ? $custom_attributes : array()
 						)
 					);
 
