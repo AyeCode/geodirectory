@@ -286,6 +286,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= = GeoDirectory Business Directory Plugin v2.3.15 =
+* File upload warning is not triggering in backend - FIXED
+
 = GeoDirectory Business Directory Plugin v2.3.14 - 2023-07-12 =
 * Images on add listing page are not sortable in touch devices - FIXED
 * Allow location image to set in elementor element background setting - ADDED

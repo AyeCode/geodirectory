@@ -365,7 +365,6 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			<div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox"
 			     style="border:1px solid #999999;padding:5px;text-align:center;">
 				<input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo esc_attr( $svalue ); ?>"/>
-
 				<div
 					class="plupload-upload-uic hide-if-no-js <?php if ( $multiple ): ?>plupload-upload-uic-multiple<?php endif; ?>"
 					id="<?php echo $id; ?>plupload-upload-ui">
@@ -376,12 +375,12 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 					      id="ajaxnonceplu<?php echo wp_create_nonce( $id . 'pluploadan' ); ?>"></span>
 					<div class="filelist"></div>
 				</div>
+				<?php if ( geodir_design_style() ) { ?><div class="bsui"><span id="<?php echo $id; ?>upload-error" class="d-none alert alert-danger" role="alert"></span></div><?php } ?>
 				<div class="plupload-thumbs <?php if ( $multiple ): ?>plupload-thumbs-multiple<?php endif; ?> clearfix"
 				     id="<?php echo $id; ?>plupload-thumbs" style="border-top:1px solid #ccc; padding-top:10px;">
 				</div>
 				<span id="upload-msg"><?php _e( 'Please drag & drop the images to rearrange the order', 'geodirectory' ); ?></span>
 				<span class="geodir-regenerate-thumbnails bsui" style="margin:25px 0 10px 0;display:block;"><button type="button" class="button-secondary" aria-label="<?php esc_attr_e( 'Regenerate Thumbnails', 'geodirectory' );?>" aria-expanded="false" data-action="geodir-regenerate-thumbnails" data-post-id="<?php echo $post_id; ?>"><?php _e( 'Regenerate Thumbnails', 'geodirectory' );?></button><span style="margin-top:5px;display:block;"><?php _e( 'Regenerate thumbnails & metadata.', 'geodirectory' ); ?></span></span>
-				<span id="<?php echo $id; ?>upload-error" style="display:none"></span>
 				<?php if ( geodir_design_style() ) { ?>
 				<div class="modal fade bsui" id="gd-image-meta-input" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
@@ -403,6 +402,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 					</div>
 				</div>
 				<?php } else { ?>
+				<span id="<?php echo $id; ?>upload-error" style="display:none"></span>
 				<span style="display: none" id="gd-image-meta-input" class="lity-hide lity-show"></span>
 				<?php } ?>
 			</div>
