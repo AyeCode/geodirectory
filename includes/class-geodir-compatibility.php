@@ -4105,19 +4105,5 @@ class GeoDir_Compatibility {
 		}
 
 		return $preview_url;
-	}/**
-	 * Filter Kallyas theme Zion builder preview url for GD page.
-	 *
-	 * @since 2.3.15
-	 *
-	 * @param string $preview_url Preview url.
-	 * @return string Filtered preview url.
-	 */
-	public static function znb_edit_url( $preview_url ) {
-		if ( geodir_is_page( 'single' ) && ( $page_id = (int) self::gd_page_id() ) ) {
-			$preview_url = get_preview_post_link( $page_id );
-		}
-
-		return $preview_url;
 	}
 }
