@@ -158,14 +158,16 @@ class GeoDir_Media {
 
 	/**
 	 * Create the image sizes and return the image metadata.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
+	 * @since GD 2.3.15 Added the `$attachment_id` argument.
 	 *
 	 * @param array $file File array.
+	 * @param int   $attachment_id The attachment post ID for the image.
 	 *
 	 * @return array $metadata.
 	 */
-	public static function create_image_sizes( $file ){
+	public static function create_image_sizes( $file, $attachment_id = 0 ) {
 		if ( ! function_exists( 'wp_read_image_metadata' ) ) {
 			include_once( ABSPATH . 'wp-admin/includes/image.php' );
 		}
@@ -176,13 +178,14 @@ class GeoDir_Media {
 		$metadata['height'] = $imagesize[1];
 
 		// Make the file path relative to the upload dir.
-		$metadata['file'] = _wp_relative_upload_path($file);
+		$metadata['file'] = _wp_relative_upload_path( $file );
 
 		// Make thumbnails and other intermediate sizes.
 		$_wp_additional_image_sizes = wp_get_additional_image_sizes();
+		$image_sizes = get_intermediate_image_sizes();
 
 		$sizes = array();
-		foreach ( get_intermediate_image_sizes() as $s ) {
+		foreach ( $image_sizes as $s ) {
 			$sizes[$s] = array( 'width' => '', 'height' => '', 'crop' => false );
 			if ( isset( $_wp_additional_image_sizes[$s]['width'] ) ) {
 				// For theme-added sizes
@@ -214,11 +217,13 @@ class GeoDir_Media {
 		 *
 		 * @since 2.9.0
 		 * @since 4.4.0 Added the `$metadata` argument.
+		 * @since GD 2.3.15, WP 5.3.0 Added the `$attachment_id` argument.
 		 *
 		 * @param array $sizes    An associative array of image sizes.
 		 * @param array $metadata An associative array of image metadata: width, height, file.
+		 * @param int   $attachment_id The attachment post ID for the image.
 		 */
-		$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes, $metadata );
+		$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes, $metadata, $attachment_id );
 
 		// Fetch additional metadata from EXIF/IPTC.
 		$image_meta = wp_read_image_metadata( $file );
@@ -232,17 +237,16 @@ class GeoDir_Media {
 					$rotated = $editor->maybe_exif_rotate();
 				}
 
-				// create sizes
+				// Create sizes
 				$metadata['sizes'] = $editor->multi_resize( $sizes );
 			}
-
 		} else {
 			$metadata['sizes'] = array();
 		}
 
-
-		if ( $image_meta )
+		if ( $image_meta ) {
 			$metadata['image_meta'] = $image_meta;
+		}
 
 		return $metadata;
 	}
@@ -282,7 +286,9 @@ class GeoDir_Media {
 			return new WP_Error( 'file_insert', __( "No post_id or file url, file insert failed.", "geodirectory" ) );
 		}
 
+		$attachment_id = 0;
 		$metadata = !empty($raw_metadata) ? $raw_metadata : '';
+
 		if ( $is_placeholder ) { // If a placeholder image, such as a image name that will be uploaded manually to the upload dir
 			$upload_dir = wp_upload_dir();
 
@@ -337,7 +343,7 @@ class GeoDir_Media {
 
 			if ( isset( $file['type'] ) && $file['type'] ) {
 				if ( self::is_image( $file['type'] ) ) {
-					$metadata = self::create_image_sizes( $file['file'] ); // Image
+					$metadata = self::create_image_sizes( $file['file'], $attachment_id ); // Image
 				} elseif ( in_array( $file['type'], wp_get_audio_extensions() ) ) {
 					$metadata =  wp_read_audio_metadata( $file['file'] ); // Audio
 				} elseif ( in_array( $file['type'], wp_get_video_extensions() ) ) {
