@@ -1004,6 +1004,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'brivona_setup' ) && strpos( $meta_key, '_themetechmount' ) === 0 ) // Brivona theme
 			 || ( defined( 'ZEEN_ENGINE_VER' ) && ( strpos( $meta_key, 'tipi_' ) === 0 || strpos( $meta_key, 'zeen_' ) === 0 || strpos( $meta_key, '_menu_zeen_' ) === 0 ) ) // Zeen Tipi Builder
 			 || ( defined( 'KADENCE_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, '_kad_' ) === 0 ) ) // Kadence theme
+			 || ( function_exists( 'znhg_kallyas_theme_config' ) && ( strpos( $meta_key, 'zn-' ) === 0 || strpos( $meta_key, 'zn_' ) === 0 || strpos( $meta_key, '_zn_' ) === 0 ) || in_array( $meta_key, array( 'show_header', 'show_footer' ) ) ) // Kallyas theme Zion Builder
 			 ) && geodir_is_gd_post_type( $object_post_type ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( $object_post_type );
@@ -1984,6 +1985,11 @@ class GeoDir_Compatibility {
 		if ( defined( 'BORLABS_COOKIE_VERSION' ) &&  ! is_admin() && geodir_get_option( 'borlabs_cookie' ) ) {
 			add_filter( 'geodir_lazy_load_map', array( __CLASS__, 'borlabs_cookie_setup' ), 999, 1 );
 			add_filter( 'wp_super_duper_widget_output', array( __CLASS__, 'borlabs_cookie_wrap' ), 999, 4 );
+		}
+
+		// Kallyas theme Zion page builder
+		if ( function_exists( 'znhg_kallyas_theme_config' ) ) {
+			add_filter( 'znb_edit_url', array( __CLASS__, 'znb_edit_url' ), 9, 1 );
 		}
 	}
 
@@ -4083,5 +4089,35 @@ class GeoDir_Compatibility {
 		}
 
 		return $default_request;
+	}
+
+	/**
+	 * Filter Kallyas theme Zion builder preview url for GD page.
+	 *
+	 * @since 2.3.15
+	 *
+	 * @param string $preview_url Preview url.
+	 * @return string Filtered preview url.
+	 */
+	public static function znb_edit_url( $preview_url ) {
+		if ( geodir_is_page( 'single' ) && ( $page_id = (int) self::gd_page_id() ) ) {
+			$preview_url = get_preview_post_link( $page_id );
+		}
+
+		return $preview_url;
+	}/**
+	 * Filter Kallyas theme Zion builder preview url for GD page.
+	 *
+	 * @since 2.3.15
+	 *
+	 * @param string $preview_url Preview url.
+	 * @return string Filtered preview url.
+	 */
+	public static function znb_edit_url( $preview_url ) {
+		if ( geodir_is_page( 'single' ) && ( $page_id = (int) self::gd_page_id() ) ) {
+			$preview_url = get_preview_post_link( $page_id );
+		}
+
+		return $preview_url;
 	}
 }
