@@ -326,7 +326,7 @@ class GeoDir_Post_Data {
 					$file_ids[] = $file_id;
 				} else { // its a new image we have to insert.
 					// If doing import and its not a full url then add placeholder attachment OR when finds # in strat of the url.
-					if ( defined( 'GEODIR_DOING_IMPORT' ) && ( ! geodir_is_full_url( $file_url ) || strpos( $file_url, '#' ) === 0 ) ) {
+					if ( ( defined( 'GEODIR_DOING_IMPORT' ) && ( ! geodir_is_full_url( $file_url ) || strpos( $file_url, '#' ) === 0 ) ) || ( ( strpos( $file_url, '#https://' ) === 0 || strpos( $file_url, '#http://' ) === 0 ) && GeoDir_API::is_rest() && geodir_get_option( 'rest_api_external_image' ) ) ) {
 						// insert the image
 						$file = GeoDir_Media::insert_attachment( $post_id, $field, $file_url, $file_title, $file_caption, $order, $approved, true );
 					} else {

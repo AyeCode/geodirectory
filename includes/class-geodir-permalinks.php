@@ -747,6 +747,10 @@ class GeoDir_Permalinks {
 				$comment_redirect = $redirect . '&cpage=$matches[' . $match . ']';
 				$this->add_rewrite_rule( $comment_regex, $comment_redirect, 'top' );
 
+				//if ( substr( $regex, -3 ) == ')/?' ) {
+					//$regex .= '$'; // Force single post urls to 404 error when it has unnecessary slugs after post slug. Ex: /POSTNAME/xyz/
+				//}
+
 				$this->add_rewrite_rule( $regex, $redirect, $after );
 
 				// Translate slug

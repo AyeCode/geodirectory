@@ -925,6 +925,19 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		// preview wrapper close
 		$content .= $is_preview ? '</div></div></div></div>' : '';
 
+		/**
+		 * Filter simple archive item hook before render.
+		 *
+		 * @since 2.3.15
+		 *
+		 * @param string $content Shortcode content.
+		 * @param array  $args Widget parameters.
+		 * @param array  $instance Widget instance.
+		 * @param array  $widget_args Widget arguements.
+		 * @param bool   $is_preview Current page is preview or not.
+		 */
+		$content = apply_filters( 'geodir_widget_simple_archive_item_shortcode', $content, $args, $instance, $widget_args, $is_preview );
+
 		$content = do_shortcode( $content );
 
 		return $content;

@@ -74,6 +74,14 @@ class GeoDir_Settings_Rest_API extends GeoDir_Settings_Page {
 				),
 
 				array(
+					'id'      => 'rest_api_external_image',
+					'type'    => 'checkbox',
+					'title'   => __( 'External Images', 'geodirectory' ),
+					'desc'    => __( 'Allow users to store external images without uploading to the site for the listing created via API. Image src starts with # will be used as an external image. Ex: #https://mysite.com/assets/myimage.png', 'geodirectory' ),
+					'default' => ''
+				),
+
+				array(
 					'type' => 'sectionend',
 					'id' => 'general_options',
 				),
