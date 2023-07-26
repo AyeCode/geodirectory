@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.14\n"
+"Project-Id-Version: GeoDirectory 2.3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 17:50+0530\n"
-"PO-Revision-Date: 2023-07-12 18:46+0530\n"
+"POT-Creation-Date: 2023-07-26 17:58+0530\n"
+"PO-Revision-Date: 2023-07-26 17:58+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -182,11 +182,11 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:852
 #: includes/admin/class-geodir-admin-dummy-data.php:1117
-#: includes/admin/class-geodir-admin-settings.php:1218
+#: includes/admin/class-geodir-admin-settings.php:1229
 #: includes/admin/settings/class-geodir-settings-general.php:830
 #: includes/api/class-geodir-rest-posts-controller.php:2198
 #: includes/class-geodir-location.php:365
-#: includes/class-geodir-location.php:419 includes/post-functions.php:2142
+#: includes/class-geodir-location.php:419 includes/post-functions.php:2144
 msgid "Country"
 msgstr ""
 
@@ -200,7 +200,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:820
 #: includes/api/class-geodir-rest-posts-controller.php:2212
 #: includes/class-geodir-location.php:384
-#: includes/class-geodir-location.php:431 includes/post-functions.php:2131
+#: includes/class-geodir-location.php:431 includes/post-functions.php:2133
 msgid "Region"
 msgstr ""
 
@@ -214,7 +214,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:810
 #: includes/api/class-geodir-rest-posts-controller.php:2226
 #: includes/class-geodir-location.php:404
-#: includes/class-geodir-location.php:440 includes/post-functions.php:2120
+#: includes/class-geodir-location.php:440 includes/post-functions.php:2122
 msgid "City"
 msgstr ""
 
@@ -235,7 +235,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1118
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
-#: includes/custom-fields/functions.php:672 includes/post-functions.php:2153
+#: includes/custom-fields/functions.php:677 includes/post-functions.php:2155
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -422,7 +422,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-blocks.php:231
 #: includes/admin/class-geodir-admin-menus.php:108
 #: includes/class-geodir-elementor.php:151 includes/class-geodir-privacy.php:24
-#: includes/core-functions.php:941
+#: includes/core-functions.php:942
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
 msgid "GeoDirectory"
 msgstr ""
@@ -500,7 +500,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:379
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:434
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:624
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:935
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:948
 #: includes/widgets/class-geodir-widget-simple-archive.php:180
 #: includes/widgets/class-geodir-widget-simple-archive.php:193
 #: includes/widgets/class-geodir-widget-simple-archive.php:426
@@ -538,6 +538,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-address.php:64
 #: includes/widgets/class-geodir-widget-post-address.php:221
 #: includes/widgets/class-geodir-widget-post-fav.php:79
+#: includes/widgets/class-geodir-widget-post-features.php:73
 #: includes/widgets/class-geodir-widget-post-meta.php:69
 #: includes/widgets/class-geodir-widget-post-rating.php:73
 #: includes/widgets/class-geodir-widget-post-rating.php:180
@@ -551,19 +552,19 @@ msgstr ""
 #: vendor/ayecode/wp-super-duper/sd-functions.php:356
 #: vendor/ayecode/wp-super-duper/sd-functions.php:396
 #: vendor/ayecode/wp-super-duper/sd-functions.php:986
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1188
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1223
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1248
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1636
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1689
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1743
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1797
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1867
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1915
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1945
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1975
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1998
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2025
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1189
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1224
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1249
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1637
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1690
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1744
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1798
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1868
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1916
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1946
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1976
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1999
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2026
 msgid "Wrapper Styles"
 msgstr ""
 
@@ -652,6 +653,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-loop.php:88
 #: includes/widgets/class-geodir-widget-ninja-forms.php:197
 #: includes/widgets/class-geodir-widget-output-location.php:78
+#: includes/widgets/class-geodir-widget-post-features.php:246
 #: includes/widgets/class-geodir-widget-post-images.php:148
 #: includes/widgets/class-geodir-widget-recent-reviews.php:175
 #: includes/widgets/class-geodir-widget-recently-viewed.php:114
@@ -681,18 +683,18 @@ msgstr ""
 #: vendor/ayecode/wp-super-duper/sd-functions.php:836
 #: vendor/ayecode/wp-super-duper/sd-functions.php:929
 #: vendor/ayecode/wp-super-duper/sd-functions.php:968
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1171
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1205
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1478
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1622
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1675
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1729
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1782
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1855
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1903
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1932
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1962
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2015
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1172
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1206
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1479
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1623
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1676
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1730
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1783
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1856
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1904
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1933
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1963
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2016
 msgid "Default"
 msgstr ""
 
@@ -708,6 +710,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-listings.php:523
 #: includes/widgets/class-geodir-widget-loop-paging.php:148
 #: includes/widgets/class-geodir-widget-loop.php:103
+#: includes/widgets/class-geodir-widget-post-features.php:375
 #: includes/widgets/class-geodir-widget-recently-viewed.php:165
 #: includes/widgets/class-geodir-widget-search.php:145
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:128
@@ -727,6 +730,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-loop-actions.php:103
 #: includes/widgets/class-geodir-widget-loop-paging.php:149
 #: includes/widgets/class-geodir-widget-loop.php:105
+#: includes/widgets/class-geodir-widget-post-features.php:377
 #: includes/widgets/class-geodir-widget-recently-viewed.php:167
 #: includes/widgets/class-geodir-widget-search.php:146
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:130
@@ -839,7 +843,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:52
 #: includes/widgets/class-geodir-widget-report-post.php:105
 #: vendor/ayecode/wp-super-duper/sd-functions.php:324
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1589
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1590
 msgid "Shadow"
 msgstr ""
 
@@ -891,7 +895,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:499
 #: includes/admin/settings/class-geodir-settings-general.php:542
 #: includes/admin/settings/class-geodir-settings-general.php:584
-#: includes/class-geodir-post-data.php:1632 includes/core-functions.php:380
+#: includes/class-geodir-post-data.php:1640 includes/core-functions.php:380
 #: includes/widgets/class-geodir-widget-add-listing.php:317
 #: includes/widgets/class-geodir-widget-categories.php:46
 #: includes/widgets/class-geodir-widget-categories.php:109
@@ -918,7 +922,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-page-title.php:134
 #: includes/widgets/class-geodir-widget-post-title.php:51
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:633
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1330
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1331
 msgid "Font size"
 msgstr ""
 
@@ -1200,21 +1204,21 @@ msgstr ""
 msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:249
-#: includes/class-geodir-frontend-scripts.php:870
+#: includes/admin/class-geodir-admin-assets.php:255
+#: includes/class-geodir-frontend-scripts.php:877
 msgid "Allowed Files"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:304
+#: includes/admin/class-geodir-admin-assets.php:310
 msgid "Are you sure you want to delete this log?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:319
+#: includes/admin/class-geodir-admin-assets.php:325
 #: includes/admin/views/html-admin-page-status-report.php:32
 msgid "Copying to clipboard failed. Please press Ctrl/Cmd+C to copy."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:320
+#: includes/admin/class-geodir-admin-assets.php:326
 msgid "Copied to clipboard!"
 msgstr ""
 
@@ -1261,7 +1265,7 @@ msgid "if"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:139
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4949
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4981
 msgid "Add Rule"
 msgstr ""
 
@@ -1278,14 +1282,14 @@ msgid "hide"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:170
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4862
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4863
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4894
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4895
 msgid "FIELD"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:194
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4884
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4885
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4916
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4917
 msgid "CONDITION"
 msgstr ""
 
@@ -1330,11 +1334,11 @@ msgstr ""
 #: includes/admin/class-geodir-admin-conditional-fields.php:258
 #: includes/class-geodir-privacy-exporters.php:344
 #: includes/custom-fields/input-functions-aui.php:1969
-#: includes/post-functions.php:1183 includes/post-functions.php:1935
+#: includes/post-functions.php:1185 includes/post-functions.php:1937
 #: includes/widgets/class-geodir-widget-dynamic-content.php:333
 #: includes/widgets/class-geodir-widget-dynamic-content.php:392
 #: includes/widgets/class-geodir-widget-post-badge.php:504
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2770
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2771
 msgid "Default Category"
 msgstr ""
 
@@ -1516,8 +1520,8 @@ msgstr ""
 #: includes/admin/dummy-data/freelancer.php:752
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:409
 #: includes/class-geodir-comments.php:95
-#: includes/class-geodir-post-data.php:963
-#: includes/class-geodir-post-data.php:984
+#: includes/class-geodir-post-data.php:971
+#: includes/class-geodir-post-data.php:992
 #: includes/widgets/class-geodir-widget-ninja-forms.php:424 language.php:35
 #: language.php:55 language.php:124 language.php:140
 msgid "Email"
@@ -1547,7 +1551,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:952
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:670
 #: includes/helper-functions.php:1908 language.php:57
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1102
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1103
 msgid "Twitter"
 msgstr ""
 
@@ -1560,7 +1564,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:967
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:641
 #: includes/helper-functions.php:1907 language.php:58
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1101
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1102
 msgid "Facebook"
 msgstr ""
 
@@ -1592,7 +1596,7 @@ msgid "Note: List out any special offers (optional)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1025
-#: includes/class-geodir-post-data.php:882
+#: includes/class-geodir-post-data.php:890
 msgid "Listing"
 msgstr ""
 
@@ -1619,6 +1623,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1076
 #: includes/admin/class-geodir-admin-post-view.php:87
 #: includes/widgets/class-geodir-widget-listings.php:165
+#: includes/widgets/class-geodir-widget-post-features.php:128
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:50
 msgid "Tags"
 msgstr ""
@@ -1630,8 +1635,8 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1081
 #: includes/admin/class-geodir-admin-dummy-data.php:1083
 #: includes/admin/class-geodir-admin-dummy-data.php:1092
-#: includes/class-geodir-post-data.php:1638
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:939
+#: includes/class-geodir-post-data.php:1646
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:952
 #: includes/widgets/class-geodir-widget-simple-archive.php:430 language.php:59
 #: language.php:175
 msgid "Category"
@@ -1644,8 +1649,8 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1101
 #: includes/admin/class-geodir-admin-dummy-data.php:1103
 #: includes/admin/class-geodir-admin-dummy-data.php:1113
-#: includes/class-geodir-post-data.php:1635
-#: includes/custom-fields/functions.php:662 includes/post-functions.php:2098
+#: includes/class-geodir-post-data.php:1643
+#: includes/custom-fields/functions.php:667 includes/post-functions.php:2100
 msgid "Address"
 msgstr ""
 
@@ -1658,7 +1663,7 @@ msgid "Address fields are required"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1119
-#: includes/admin/class-geodir-admin-settings.php:1315
+#: includes/admin/class-geodir-admin-settings.php:1326
 msgid "Set Address On Map"
 msgstr ""
 
@@ -1996,7 +2001,7 @@ msgid "Reviews"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-install.php:445
-#: includes/class-geodir-compatibility.php:256
+#: includes/class-geodir-compatibility.php:260
 msgid "Once Monthly"
 msgstr ""
 
@@ -2147,7 +2152,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:146
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:300
-#: includes/post-functions.php:2023
+#: includes/post-functions.php:2025
 msgid "Status"
 msgstr ""
 
@@ -2172,12 +2177,12 @@ msgid "CPT Add Listing"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:241
-#: includes/core-functions.php:682
+#: includes/core-functions.php:683
 msgid "GD Pages"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:275
-#: includes/admin/class-geodir-admin-settings.php:1226
+#: includes/admin/class-geodir-admin-settings.php:1237
 msgid "Select all"
 msgstr ""
 
@@ -2389,6 +2394,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:335
 #: includes/class-geodir-privacy-exporters.php:276
+#: includes/custom-fields/functions.php:1224
+#: includes/custom-fields/functions.php:1226
 msgid "Featured Image"
 msgstr ""
 
@@ -2409,11 +2416,11 @@ msgstr ""
 msgid "You can upload unlimited images with this package"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:372
+#: includes/admin/class-geodir-admin-post-view.php:371
 msgid "Drop files to upload"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:374
+#: includes/admin/class-geodir-admin-post-view.php:373
 #: templates/bootstrap/file-upload.php:29 templates/file-upload.php:27
 msgid "Select Files"
 msgstr ""
@@ -2432,7 +2439,7 @@ msgstr ""
 msgid "Regenerate thumbnails & metadata."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:390
+#: includes/admin/class-geodir-admin-post-view.php:389
 #: templates/bootstrap/file-upload.php:68
 msgid "Set Image Texts"
 msgstr ""
@@ -2555,7 +2562,7 @@ msgid "Unpublished"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-report-post-list-table.php:758
-#: includes/post-functions.php:1967 includes/post-functions.php:1978
+#: includes/post-functions.php:1969 includes/post-functions.php:1980
 #: includes/widgets/class-geodir-widget-author-actions.php:359
 msgid "Published"
 msgstr ""
@@ -2597,97 +2604,97 @@ msgstr ""
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:478
+#: includes/admin/class-geodir-admin-settings.php:484
 msgid "Upload Image"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:478
+#: includes/admin/class-geodir-admin-settings.php:484
 #: includes/admin/class-geodir-admin-taxonomies.php:486
 msgid "Remove Image"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:751
+#: includes/admin/class-geodir-admin-settings.php:762
 msgid ""
 "The settings of this image size have been disabled because its values are "
 "being overwritten by a filter."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:760
+#: includes/admin/class-geodir-admin-settings.php:771
 msgid "Hard crop?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:840
+#: includes/admin/class-geodir-admin-settings.php:851
 msgid "Edit Page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:851
-#: includes/admin/class-geodir-admin-settings.php:1044
+#: includes/admin/class-geodir-admin-settings.php:862
+#: includes/admin/class-geodir-admin-settings.php:1055
 msgid "View Page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:865
-#: includes/admin/class-geodir-admin-settings.php:1058
+#: includes/admin/class-geodir-admin-settings.php:876
+#: includes/admin/class-geodir-admin-settings.php:1069
 msgid "View Default Content"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:871
-#: includes/admin/class-geodir-admin-settings.php:1064
+#: includes/admin/class-geodir-admin-settings.php:882
+#: includes/admin/class-geodir-admin-settings.php:1075
 msgid "Default content has been modified by a plugin or theme."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:878
-#: includes/admin/class-geodir-admin-settings.php:1071
+#: includes/admin/class-geodir-admin-settings.php:889
+#: includes/admin/class-geodir-admin-settings.php:1082
 msgid "Original content below."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:892
-#: includes/admin/class-geodir-admin-settings.php:1086
+#: includes/admin/class-geodir-admin-settings.php:903
+#: includes/admin/class-geodir-admin-settings.php:1097
 msgid "Actions"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:915
+#: includes/admin/class-geodir-admin-settings.php:926
 msgid "Select a page&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1021
+#: includes/admin/class-geodir-admin-settings.php:1032
 msgid "Edit Template"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1081
+#: includes/admin/class-geodir-admin-settings.php:1092
 msgid "Create New Template"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1120
+#: includes/admin/class-geodir-admin-settings.php:1131
 msgid "Select a template&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1218
+#: includes/admin/class-geodir-admin-settings.php:1229
 msgid "Choose countries&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1226
+#: includes/admin/class-geodir-admin-settings.php:1237
 msgid "Select none"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1372
+#: includes/admin/class-geodir-admin-settings.php:1383
 msgid "Verify"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1372
-#: includes/admin/class-geodir-admin-settings.php:1402
+#: includes/admin/class-geodir-admin-settings.php:1383
+#: includes/admin/class-geodir-admin-settings.php:1413
 msgid "API Key Guide"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1372
-#: includes/admin/class-geodir-admin-settings.php:1402
+#: includes/admin/class-geodir-admin-settings.php:1383
+#: includes/admin/class-geodir-admin-settings.php:1413
 msgid "Generate Key"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1575
+#: includes/admin/class-geodir-admin-settings.php:1586
 msgid "Choose a city/timezone&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1636
+#: includes/admin/class-geodir-admin-settings.php:1647
 #: includes/admin/views/html-notice-v2-update.php:194
 #: includes/core-functions.php:361 includes/general-functions.php:2654
 msgid "Documentation"
@@ -2717,6 +2724,16 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-map.php:70
 #: includes/widgets/class-geodir-widget-post-address.php:42
 #: includes/widgets/class-geodir-widget-post-fav.php:55
+#: includes/widgets/class-geodir-widget-post-features.php:43
+#: includes/widgets/class-geodir-widget-post-features.php:47
+#: includes/widgets/class-geodir-widget-post-features.php:108
+#: includes/widgets/class-geodir-widget-post-features.php:119
+#: includes/widgets/class-geodir-widget-post-features.php:133
+#: includes/widgets/class-geodir-widget-post-features.php:146
+#: includes/widgets/class-geodir-widget-post-features.php:158
+#: includes/widgets/class-geodir-widget-post-features.php:170
+#: includes/widgets/class-geodir-widget-post-features.php:178
+#: includes/widgets/class-geodir-widget-post-features.php:196
 #: includes/widgets/class-geodir-widget-post-meta.php:43
 #: includes/widgets/class-geodir-widget-post-meta.php:47
 #: includes/widgets/class-geodir-widget-post-meta.php:104
@@ -3478,38 +3495,38 @@ msgid "The pages that should be included/excluded."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:115
-#: includes/core-functions.php:684
+#: includes/core-functions.php:685
 msgid "Add Listing Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:116
-#: includes/core-functions.php:685
+#: includes/core-functions.php:686
 msgid "Author Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:117
-#: includes/core-functions.php:686
+#: includes/core-functions.php:687
 msgid "Listing Detail Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:118
-#: includes/core-functions.php:689
+#: includes/core-functions.php:690
 msgid "Location Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:119
-#: includes/core-functions.php:691
+#: includes/core-functions.php:692
 msgid "Post Type Archive"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:120
 #: includes/admin/settings/class-geodir-settings-general.php:295
-#: includes/core-functions.php:692
+#: includes/core-functions.php:693
 msgid "Search Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:121
-#: includes/core-functions.php:693
+#: includes/core-functions.php:694
 msgid "Taxonomies Page"
 msgstr ""
 
@@ -3798,7 +3815,7 @@ msgstr ""
 #: includes/admin/dummy-data/standard_places.php:73
 #: includes/admin/dummy-data/standard_places.php:82
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:512
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:945
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:958
 #: includes/widgets/class-geodir-widget-simple-archive.php:436
 msgid "Business Hours"
 msgstr ""
@@ -4096,7 +4113,7 @@ msgstr ""
 #: includes/admin/dummy-data/standard_places.php:117
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:353
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:255
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:944
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:957
 #: includes/widgets/class-geodir-widget-simple-archive.php:435
 msgid "Rating"
 msgstr ""
@@ -4588,6 +4605,17 @@ msgstr ""
 msgid "Enable the REST API"
 msgstr ""
 
+#: includes/admin/settings/class-geodir-settings-api.php:79
+msgid "External Images"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-api.php:80
+msgid ""
+"Allow users to store external images without uploading to the site for the "
+"listing created via API. Image src starts with # will be used as an external "
+"image. Ex: #https://mysite.com/assets/myimage.png"
+msgstr ""
+
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:248
 msgid "Number Options"
 msgstr ""
@@ -4959,7 +4987,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:59
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:166
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:318
-#: includes/elementor/class-geodir-elementor-tag-image.php:252
+#: includes/elementor/class-geodir-elementor-tag-image.php:314
 #: includes/elementor/class-geodir-elementor-tag-text.php:244
 msgid "Custom Fields"
 msgstr ""
@@ -5137,7 +5165,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:699
 #: includes/helper-functions.php:1909
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1103
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1104
 msgid "Instagram"
 msgstr ""
 
@@ -5322,7 +5350,7 @@ msgid "Enter your date of birth."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1204
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:937
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:950
 #: includes/widgets/class-geodir-widget-simple-archive.php:428
 msgid "Featured"
 msgstr ""
@@ -5789,6 +5817,19 @@ msgid "Unlimited"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:468
+#: includes/widgets/class-geodir-widget-post-features.php:60
+#: includes/widgets/class-geodir-widget-post-features.php:451
+#: includes/widgets/class-geodir-widget-post-features.php:453
+#: includes/widgets/class-geodir-widget-post-features.php:455
+#: includes/widgets/class-geodir-widget-post-features.php:462
+#: includes/widgets/class-geodir-widget-post-features.php:472
+#: includes/widgets/class-geodir-widget-post-features.php:482
+#: includes/widgets/class-geodir-widget-post-features.php:489
+#: includes/widgets/class-geodir-widget-post-features.php:490
+#: includes/widgets/class-geodir-widget-post-features.php:491
+#: includes/widgets/class-geodir-widget-post-features.php:492
+#: includes/widgets/class-geodir-widget-post-features.php:504
+#: includes/widgets/class-geodir-widget-post-features.php:517
 msgid "Labels"
 msgstr ""
 
@@ -5796,8 +5837,8 @@ msgstr ""
 #: includes/admin/views/html-admin-page-status-report.php:578
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:23
 #: includes/class-geodir-comments.php:79
-#: includes/class-geodir-post-data.php:949
-#: includes/class-geodir-post-data.php:977 language.php:33 language.php:123
+#: includes/class-geodir-post-data.php:957
+#: includes/class-geodir-post-data.php:985 language.php:33 language.php:123
 msgid "Name"
 msgstr ""
 
@@ -6393,9 +6434,10 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-map.php:133
 #: includes/widgets/class-geodir-widget-map.php:401
 #: includes/widgets/class-geodir-widget-map.php:916
+#: includes/widgets/class-geodir-widget-post-features.php:711
 #: includes/widgets/class-geodir-widget-post-meta.php:293
-#: includes/widgets/class-geodir-widget-search.php:476
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1963
+#: includes/widgets/class-geodir-widget-search.php:481
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1964
 msgid "Auto"
 msgstr ""
 
@@ -7519,11 +7561,11 @@ msgstr ""
 msgid "Preparing export..."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-page.php:176
+#: includes/admin/settings/class-geodir-settings-page.php:180
 msgid "Show Advanced"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-page.php:177
+#: includes/admin/settings/class-geodir-settings-page.php:181
 msgid "Hide Advanced"
 msgstr ""
 
@@ -8304,7 +8346,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-color.php:99
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:260
 #: includes/elementor/class-geodir-elementor-tag-gallery.php:106
-#: includes/elementor/class-geodir-elementor-tag-image.php:211
+#: includes/elementor/class-geodir-elementor-tag-image.php:273
 #: includes/elementor/class-geodir-elementor-tag-number.php:93
 #: includes/elementor/class-geodir-elementor-tag-text.php:199
 #: includes/elementor/class-geodir-elementor-tag-url.php:152
@@ -8472,7 +8514,7 @@ msgstr ""
 #: includes/custom-fields/input-functions.php:1813
 #: includes/custom-fields/input-functions.php:1843
 #: includes/widgets/class-geodir-widget-archive-item-section.php:43
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3762
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3798
 msgid "Close"
 msgstr ""
 
@@ -8649,7 +8691,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-categories.php:211
 #: includes/admin/views/html-admin-settings-import-export-listings.php:197
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:193
-#: includes/core-functions.php:1117 language.php:174
+#: includes/core-functions.php:1118 language.php:174
 #: templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
 msgstr ""
@@ -9680,8 +9722,10 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-listings.php:581
 #: includes/widgets/class-geodir-widget-listings.php:623
 #: includes/widgets/class-geodir-widget-page-title.php:73
+#: includes/widgets/class-geodir-widget-post-features.php:141
+#: includes/widgets/class-geodir-widget-post-features.php:512
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:99
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1511
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1512
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:235
 msgid "Yes"
 msgstr ""
@@ -9697,8 +9741,12 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-listings.php:580
 #: includes/widgets/class-geodir-widget-listings.php:622
 #: includes/widgets/class-geodir-widget-page-title.php:72
+#: includes/widgets/class-geodir-widget-post-features.php:140
+#: includes/widgets/class-geodir-widget-post-features.php:336
+#: includes/widgets/class-geodir-widget-post-features.php:374
+#: includes/widgets/class-geodir-widget-post-features.php:511
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:98
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1510
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1511
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:235
 msgid "No"
 msgstr ""
@@ -10470,7 +10518,7 @@ msgid ""
 msgstr ""
 
 #: includes/class-geodir-ajax.php:226 includes/core-functions.php:355
-#: language.php:78 vendor/ayecode/wp-super-duper/wp-super-duper.php:3600
+#: language.php:78 vendor/ayecode/wp-super-duper/wp-super-duper.php:3636
 msgid "Cancel"
 msgstr ""
 
@@ -10508,15 +10556,15 @@ msgid "You have successfully deleted the Listing."
 msgstr ""
 
 #: includes/class-geodir-ajax.php:782
-#: includes/class-geodir-frontend-scripts.php:835
-#: includes/post-functions.php:395 language.php:82
+#: includes/class-geodir-frontend-scripts.php:842
+#: includes/post-functions.php:397 language.php:82
 msgid "Unfavorite"
 msgstr ""
 
 #: includes/class-geodir-ajax.php:787
-#: includes/class-geodir-frontend-scripts.php:833
-#: includes/post-functions.php:375
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:938
+#: includes/class-geodir-frontend-scripts.php:840
+#: includes/post-functions.php:377
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:951
 #: includes/widgets/class-geodir-widget-simple-archive.php:429 language.php:81
 msgid "Favorite"
 msgstr ""
@@ -10622,7 +10670,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1212
+#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1218
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -10988,85 +11036,85 @@ msgid_plural "%d reviews"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-geodir-compatibility.php:276
+#: includes/class-geodir-compatibility.php:280
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:278
+#: includes/class-geodir-compatibility.php:282
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:283
+#: includes/class-geodir-compatibility.php:287
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:284
+#: includes/class-geodir-compatibility.php:288
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:299
+#: includes/class-geodir-compatibility.php:303
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:301
+#: includes/class-geodir-compatibility.php:305
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:306
+#: includes/class-geodir-compatibility.php:310
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:307
+#: includes/class-geodir-compatibility.php:311
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:324
+#: includes/class-geodir-compatibility.php:328
 msgid "SEOPress SEO Detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:325
+#: includes/class-geodir-compatibility.php:329
 msgid ""
 "The SEOPress SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:330
+#: includes/class-geodir-compatibility.php:334
 msgid "Disable SEOPress"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:331
+#: includes/class-geodir-compatibility.php:335
 msgid "Disable overwrite by SEOPress titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:361
+#: includes/class-geodir-compatibility.php:365
 #, php-format
 msgid ""
 "Kleo theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:375
+#: includes/class-geodir-compatibility.php:379
 #, php-format
 msgid ""
 "Listimia theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:691
+#: includes/class-geodir-compatibility.php:695
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:834
+#: includes/class-geodir-compatibility.php:838
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -11074,37 +11122,37 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2951
+#: includes/class-geodir-compatibility.php:2961
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2962
+#: includes/class-geodir-compatibility.php:2972
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2969
+#: includes/class-geodir-compatibility.php:2979
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2970
+#: includes/class-geodir-compatibility.php:2980
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3675
+#: includes/class-geodir-compatibility.php:3685
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3886
+#: includes/class-geodir-compatibility.php:3896
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3887
+#: includes/class-geodir-compatibility.php:3897
 msgid "Enable Borlabs Cookie integration for GeoDirectory maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4013
+#: includes/class-geodir-compatibility.php:4023
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
@@ -11421,7 +11469,7 @@ msgstr ""
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1097 includes/post-functions.php:2011
+#: includes/class-geodir-email.php:1097 includes/post-functions.php:2013
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:246
 msgid "Author"
 msgstr ""
@@ -11476,76 +11524,76 @@ msgstr ""
 msgid "Location detection not supported in browser"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:832
-#: includes/post-functions.php:365 language.php:84
+#: includes/class-geodir-frontend-scripts.php:839
+#: includes/post-functions.php:367 language.php:84
 msgid "Add to Favorites"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:834
-#: includes/post-functions.php:385 language.php:85
+#: includes/class-geodir-frontend-scripts.php:841
+#: includes/post-functions.php:387 language.php:85
 msgid "Remove from Favorites"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:844
+#: includes/class-geodir-frontend-scripts.php:851
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2294
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:845
+#: includes/class-geodir-frontend-scripts.php:852
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2295
 msgctxt "enhanced select"
 msgid "No matches found"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:846
+#: includes/class-geodir-frontend-scripts.php:853
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2296
 msgctxt "enhanced select"
 msgid "Loading failed"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:847
+#: includes/class-geodir-frontend-scripts.php:854
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2297
 msgctxt "enhanced select"
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:848
+#: includes/class-geodir-frontend-scripts.php:855
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2298
 msgctxt "enhanced select"
 msgid "Please enter %item% or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:849
+#: includes/class-geodir-frontend-scripts.php:856
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2299
 msgctxt "enhanced select"
 msgid "Please delete 1 character"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:850
+#: includes/class-geodir-frontend-scripts.php:857
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2300
 msgctxt "enhanced select"
 msgid "Please delete %item% characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:851
+#: includes/class-geodir-frontend-scripts.php:858
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2301
 msgctxt "enhanced select"
 msgid "You can only select 1 item"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:852
+#: includes/class-geodir-frontend-scripts.php:859
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2302
 msgctxt "enhanced select"
 msgid "You can only select %item% items"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:853
+#: includes/class-geodir-frontend-scripts.php:860
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2303
 msgctxt "enhanced select"
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:854
+#: includes/class-geodir-frontend-scripts.php:861
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2304
 msgctxt "enhanced select"
 msgid "Searching&hellip;"
@@ -11677,65 +11725,65 @@ msgstr ""
 msgid "Load Map"
 msgstr ""
 
-#: includes/class-geodir-media.php:282
+#: includes/class-geodir-media.php:286
 msgid "No post_id or file url, file insert failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:373 includes/class-geodir-media.php:415
+#: includes/class-geodir-media.php:379 includes/class-geodir-media.php:421
 msgid "Failed to insert file info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:507
+#: includes/class-geodir-media.php:513
 msgid "No image_id, post_id or image url, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:590
+#: includes/class-geodir-media.php:596
 msgid "Failed to update image info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:721
+#: includes/class-geodir-media.php:727
 msgid "Invalid URL Provided."
 msgstr ""
 
-#: includes/class-geodir-media.php:727
+#: includes/class-geodir-media.php:733
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:1200
+#: includes/class-geodir-media.php:1206
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1212 includes/class-geodir-media.php:1214
+#: includes/class-geodir-media.php:1218 includes/class-geodir-media.php:1220
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1235
+#: includes/class-geodir-media.php:1241
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:1253
+#: includes/class-geodir-media.php:1259
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-media.php:1370 includes/class-geodir-media.php:1412
+#: includes/class-geodir-media.php:1376 includes/class-geodir-media.php:1418
 msgid "Generate attachment metadata"
 msgstr ""
 
-#: includes/class-geodir-media.php:1397
+#: includes/class-geodir-media.php:1403
 msgid "Invalid post id!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1438
+#: includes/class-geodir-media.php:1444
 msgid "Invalid attachment!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1443
+#: includes/class-geodir-media.php:1449
 msgid "Attachment metadata not generated for external image!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1461
+#: includes/class-geodir-media.php:1467
 #, php-format
 msgid "%s not exists!"
 msgstr ""
@@ -11765,21 +11813,21 @@ msgstr ""
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:687
+#: includes/class-geodir-post-data.php:695
 #, php-format
 msgid "Could not update post in the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:697
+#: includes/class-geodir-post-data.php:705
 #, php-format
 msgid "Could not insert post into the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:822
+#: includes/class-geodir-post-data.php:830
 msgid "You do not have permission to edit this post."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:840
+#: includes/class-geodir-post-data.php:848
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -11787,7 +11835,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:864
+#: includes/class-geodir-post-data.php:872
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -11795,91 +11843,91 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:941
-#: includes/class-geodir-post-data.php:974
+#: includes/class-geodir-post-data.php:949
+#: includes/class-geodir-post-data.php:982
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:954
-#: includes/class-geodir-post-data.php:980
+#: includes/class-geodir-post-data.php:962
+#: includes/class-geodir-post-data.php:988
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:968
-#: includes/class-geodir-post-data.php:987
+#: includes/class-geodir-post-data.php:976
+#: includes/class-geodir-post-data.php:995
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1013 language.php:36
+#: includes/class-geodir-post-data.php:1021 language.php:36
 msgid "Enter Listing Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1055
-#: includes/class-geodir-post-data.php:1061
+#: includes/class-geodir-post-data.php:1063
+#: includes/class-geodir-post-data.php:1069
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1072
+#: includes/class-geodir-post-data.php:1080
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1091
+#: includes/class-geodir-post-data.php:1099
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1285
+#: includes/class-geodir-post-data.php:1293
 msgid "You do not own this post"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1294
+#: includes/class-geodir-post-data.php:1302
 msgid "Delete revision failed."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1383
-#: includes/class-geodir-post-data.php:1625
+#: includes/class-geodir-post-data.php:1391
+#: includes/class-geodir-post-data.php:1633
 msgid "You do not have the privileges to perform this action."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1533
+#: includes/class-geodir-post-data.php:1541
 msgid "User name must have atleast 3 characters."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1535
+#: includes/class-geodir-post-data.php:1543
 msgid "Invalid user email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1561
+#: includes/class-geodir-post-data.php:1569
 msgid "Something wrong! Fail to register a new user."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1642
+#: includes/class-geodir-post-data.php:1650
 #, php-format
 msgid "%s is empty but is a mandatory field, please check and try again."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1735
+#: includes/class-geodir-post-data.php:1743
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1738
+#: includes/class-geodir-post-data.php:1746
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1745
+#: includes/class-geodir-post-data.php:1753
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1751
+#: includes/class-geodir-post-data.php:1759
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1839
+#: includes/class-geodir-post-data.php:1847
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -12111,7 +12159,7 @@ msgstr ""
 #: includes/class-geodir-privacy-exporters.php:85
 #: includes/widgets/class-geodir-widget-dynamic-content.php:406
 #: includes/widgets/class-geodir-widget-post-badge.php:506
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2772
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2773
 msgid "Post Status"
 msgstr ""
 
@@ -13003,7 +13051,7 @@ msgid "You may lose changes if you navigate away now!"
 msgstr ""
 
 #: includes/core-functions.php:348
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3600
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3636
 msgid "Are you sure?"
 msgstr ""
 
@@ -13033,7 +13081,7 @@ msgstr ""
 
 #: includes/core-functions.php:354
 #: includes/widgets/class-geodir-widget-author-actions.php:264 language.php:129
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3600
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3636
 msgid "Delete"
 msgstr ""
 
@@ -13183,69 +13231,149 @@ msgctxt "time ago"
 msgid "%d years"
 msgstr ""
 
-#: includes/core-functions.php:687
+#: includes/core-functions.php:688
 msgid "Listing Preview Page"
 msgstr ""
 
-#: includes/core-functions.php:688
+#: includes/core-functions.php:689
 msgid "Listing Success Page"
 msgstr ""
 
-#: includes/core-functions.php:690
+#: includes/core-functions.php:691
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1114
+#: includes/core-functions.php:1115
 msgid "Select search type"
 msgstr ""
 
-#: includes/core-functions.php:1310 includes/core-functions.php:1324
+#: includes/core-functions.php:1311 includes/core-functions.php:1325
 #: templates/bootstrap/search-bar/input-near.php:39
 #: templates/bootstrap/search-bar/input-search.php:38
 msgid "Clear field"
 msgstr ""
 
-#: includes/core-functions.php:1658
+#: includes/core-functions.php:1659
 msgid "Filesystem ERROR during mu-plugin file copy: "
 msgstr ""
 
-#: includes/core-functions.php:1660
+#: includes/core-functions.php:1661
 msgid ""
 "There was a problem accessing the filesystem during copy Fast AJAX mu-plugin "
 "file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1668
+#: includes/core-functions.php:1669
 #, php-format
 msgid ""
 "Unable to create directory %s. Make sure its parent directory writable by "
 "the server."
 msgstr ""
 
-#: includes/core-functions.php:1672
+#: includes/core-functions.php:1673
 #, php-format
 msgid "Must-plugin directory %s is not writable by the server."
 msgstr ""
 
-#: includes/core-functions.php:1680
+#: includes/core-functions.php:1681
 msgid ""
 "There was a problem in copy Fast AJAX mu-plugin file to mu-plugins folder."
 msgstr ""
 
-#: includes/custom-fields/functions.php:194
+#: includes/custom-fields/functions.php:198
 msgid "Auto Draft"
 msgstr ""
 
-#: includes/custom-fields/functions.php:665
+#: includes/custom-fields/functions.php:670
 msgid "Sort by address."
 msgstr ""
 
-#: includes/custom-fields/functions.php:675
+#: includes/custom-fields/functions.php:680
 msgid "Sort by zip/post code."
 msgstr ""
 
-#: includes/custom-fields/functions.php:1149
+#: includes/custom-fields/functions.php:1154
 msgid "Has hide conditions"
+msgstr ""
+
+#: includes/custom-fields/functions.php:1280
+#: includes/elementor/class-geodir-elementor-tag-css-class.php:276
+#: includes/widgets/class-geodir-widget-dynamic-content.php:422
+#: includes/widgets/class-geodir-widget-post-badge.php:522
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1257
+#: includes/widgets/class-geodir-widget-simple-archive.php:735
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2787
+msgid "is empty"
+msgstr ""
+
+#: includes/custom-fields/functions.php:1281
+#: includes/elementor/class-geodir-elementor-tag-css-class.php:277
+#: includes/widgets/class-geodir-widget-dynamic-content.php:423
+#: includes/widgets/class-geodir-widget-post-badge.php:523
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1258
+#: includes/widgets/class-geodir-widget-simple-archive.php:736
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2788
+msgid "is not empty"
+msgstr ""
+
+#: includes/custom-fields/functions.php:1282
+#: includes/elementor/class-geodir-elementor-tag-css-class.php:272
+#: includes/widgets/class-geodir-widget-dynamic-content.php:418
+#: includes/widgets/class-geodir-widget-post-badge.php:518
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1253
+#: includes/widgets/class-geodir-widget-simple-archive.php:731
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2789
+msgid "is equal"
+msgstr ""
+
+#: includes/custom-fields/functions.php:1283
+#: includes/elementor/class-geodir-elementor-tag-css-class.php:273
+#: includes/widgets/class-geodir-widget-dynamic-content.php:419
+#: includes/widgets/class-geodir-widget-post-badge.php:519
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1254
+#: includes/widgets/class-geodir-widget-simple-archive.php:732
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2790
+msgid "is not equal"
+msgstr ""
+
+#: includes/custom-fields/functions.php:1284
+#: includes/elementor/class-geodir-elementor-tag-css-class.php:274
+#: includes/widgets/class-geodir-widget-dynamic-content.php:420
+#: includes/widgets/class-geodir-widget-post-badge.php:520
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1255
+#: includes/widgets/class-geodir-widget-simple-archive.php:733
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2791
+msgid "is greater than"
+msgstr ""
+
+#: includes/custom-fields/functions.php:1285
+#: includes/elementor/class-geodir-elementor-tag-css-class.php:275
+#: includes/widgets/class-geodir-widget-dynamic-content.php:421
+#: includes/widgets/class-geodir-widget-post-badge.php:521
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1256
+#: includes/widgets/class-geodir-widget-simple-archive.php:734
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2792
+msgid "is less than"
+msgstr ""
+
+#: includes/custom-fields/functions.php:1286
+#: includes/elementor/class-geodir-elementor-tag-css-class.php:278
+#: includes/widgets/class-geodir-widget-dynamic-content.php:424
+#: includes/widgets/class-geodir-widget-post-badge.php:524
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1259
+#: includes/widgets/class-geodir-widget-simple-archive.php:737
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2793
+msgid "is contains"
+msgstr ""
+
+#: includes/custom-fields/functions.php:1287
+#: includes/elementor/class-geodir-elementor-tag-css-class.php:279
+#: includes/widgets/class-geodir-widget-dynamic-content.php:425
+#: includes/widgets/class-geodir-widget-post-badge.php:525
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1260
+#: includes/widgets/class-geodir-widget-simple-archive.php:738
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2794
+msgid "is not contains"
 msgstr ""
 
 #: includes/custom-fields/input-functions-aui.php:60
@@ -13623,6 +13751,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-number.php:114
 #: includes/elementor/class-geodir-elementor-tag-url.php:186
 #: includes/widgets/class-geodir-widget-post-content.php:306
+#: includes/widgets/class-geodir-widget-post-features.php:683
 #: includes/widgets/class-geodir-widget-post-meta.php:265
 msgid "Select Key"
 msgstr ""
@@ -13637,78 +13766,6 @@ msgstr ""
 
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:252
 msgid "If the conditions match the content will be hidden."
-msgstr ""
-
-#: includes/elementor/class-geodir-elementor-tag-css-class.php:272
-#: includes/widgets/class-geodir-widget-dynamic-content.php:418
-#: includes/widgets/class-geodir-widget-post-badge.php:518
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1240
-#: includes/widgets/class-geodir-widget-simple-archive.php:731
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2788
-msgid "is equal"
-msgstr ""
-
-#: includes/elementor/class-geodir-elementor-tag-css-class.php:273
-#: includes/widgets/class-geodir-widget-dynamic-content.php:419
-#: includes/widgets/class-geodir-widget-post-badge.php:519
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1241
-#: includes/widgets/class-geodir-widget-simple-archive.php:732
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2789
-msgid "is not equal"
-msgstr ""
-
-#: includes/elementor/class-geodir-elementor-tag-css-class.php:274
-#: includes/widgets/class-geodir-widget-dynamic-content.php:420
-#: includes/widgets/class-geodir-widget-post-badge.php:520
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1242
-#: includes/widgets/class-geodir-widget-simple-archive.php:733
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2790
-msgid "is greater than"
-msgstr ""
-
-#: includes/elementor/class-geodir-elementor-tag-css-class.php:275
-#: includes/widgets/class-geodir-widget-dynamic-content.php:421
-#: includes/widgets/class-geodir-widget-post-badge.php:521
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1243
-#: includes/widgets/class-geodir-widget-simple-archive.php:734
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2791
-msgid "is less than"
-msgstr ""
-
-#: includes/elementor/class-geodir-elementor-tag-css-class.php:276
-#: includes/widgets/class-geodir-widget-dynamic-content.php:422
-#: includes/widgets/class-geodir-widget-post-badge.php:522
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1244
-#: includes/widgets/class-geodir-widget-simple-archive.php:735
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2786
-msgid "is empty"
-msgstr ""
-
-#: includes/elementor/class-geodir-elementor-tag-css-class.php:277
-#: includes/widgets/class-geodir-widget-dynamic-content.php:423
-#: includes/widgets/class-geodir-widget-post-badge.php:523
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1245
-#: includes/widgets/class-geodir-widget-simple-archive.php:736
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2787
-msgid "is not empty"
-msgstr ""
-
-#: includes/elementor/class-geodir-elementor-tag-css-class.php:278
-#: includes/widgets/class-geodir-widget-dynamic-content.php:424
-#: includes/widgets/class-geodir-widget-post-badge.php:524
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1246
-#: includes/widgets/class-geodir-widget-simple-archive.php:737
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2792
-msgid "is contains"
-msgstr ""
-
-#: includes/elementor/class-geodir-elementor-tag-css-class.php:279
-#: includes/widgets/class-geodir-widget-dynamic-content.php:425
-#: includes/widgets/class-geodir-widget-post-badge.php:525
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1247
-#: includes/widgets/class-geodir-widget-simple-archive.php:738
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2793
-msgid "is not contains"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:288
@@ -13727,7 +13784,7 @@ msgid "Raw Values"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:359
-#: includes/elementor/class-geodir-elementor-tag-image.php:261
+#: includes/elementor/class-geodir-elementor-tag-image.php:323
 #: includes/elementor/class-geodir-elementor-tag-text.php:285
 msgid "Category meta"
 msgstr ""
@@ -13740,8 +13797,12 @@ msgstr ""
 msgid "Image Field"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-tag-image.php:220
+#: includes/elementor/class-geodir-elementor-tag-image.php:282
 msgid "Fallback"
+msgstr ""
+
+#: includes/elementor/class-geodir-elementor-tag-image.php:330
+msgid "Location Meta"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-tag-number.php:29
@@ -13749,6 +13810,7 @@ msgid "Number Field"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-tag-text.php:29
+#: includes/widgets/class-geodir-widget-post-features.php:188
 msgid "Field"
 msgstr ""
 
@@ -14364,158 +14426,158 @@ msgid "Dark"
 msgstr ""
 
 #: includes/helper-functions.php:1870
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1037
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1038
 msgid "White"
 msgstr ""
 
 #: includes/helper-functions.php:1871
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1038
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1039
 msgid "Purple"
 msgstr ""
 
 #: includes/helper-functions.php:1872
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1039
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1040
 msgid "Salmon"
 msgstr ""
 
 #: includes/helper-functions.php:1873
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1040
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1041
 msgid "Cyan"
 msgstr ""
 
 #: includes/helper-functions.php:1874
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1041
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1042
 msgid "Gray"
 msgstr ""
 
 #: includes/helper-functions.php:1875
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1044
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1045
 msgid "Indigo"
 msgstr ""
 
 #: includes/helper-functions.php:1876
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1045
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1046
 msgid "Orange"
 msgstr ""
 
 #: includes/helper-functions.php:1879
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1048
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1072
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1049
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1073
 msgid "(button only)"
 msgstr ""
 
 #: includes/helper-functions.php:1880
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1049
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1050
 msgid "Primary outline"
 msgstr ""
 
 #: includes/helper-functions.php:1881
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1050
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1051
 msgid "Secondary outline"
 msgstr ""
 
 #: includes/helper-functions.php:1882
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1051
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1052
 msgid "Success outline"
 msgstr ""
 
 #: includes/helper-functions.php:1883
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1052
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1053
 msgid "Danger outline"
 msgstr ""
 
 #: includes/helper-functions.php:1884
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1053
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1054
 msgid "Warning outline"
 msgstr ""
 
 #: includes/helper-functions.php:1885
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1054
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1055
 msgid "Info outline"
 msgstr ""
 
 #: includes/helper-functions.php:1886
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1055
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1056
 msgid "Light outline"
 msgstr ""
 
 #: includes/helper-functions.php:1887
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1056
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1057
 msgid "Dark outline"
 msgstr ""
 
 #: includes/helper-functions.php:1888
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1057
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1058
 msgid "White outline"
 msgstr ""
 
 #: includes/helper-functions.php:1889
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1058
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1059
 msgid "Purple outline"
 msgstr ""
 
 #: includes/helper-functions.php:1890
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1059
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1060
 msgid "Salmon outline"
 msgstr ""
 
 #: includes/helper-functions.php:1891
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1060
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1061
 msgid "Cyan outline"
 msgstr ""
 
 #: includes/helper-functions.php:1892
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1061
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1062
 msgid "Gray outline"
 msgstr ""
 
 #: includes/helper-functions.php:1893
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1063
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1064
 msgid "Indigo outline"
 msgstr ""
 
 #: includes/helper-functions.php:1894
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1064
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1065
 msgid "Orange outline"
 msgstr ""
 
 #: includes/helper-functions.php:1910
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1104
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1105
 msgid "Linkedin"
 msgstr ""
 
 #: includes/helper-functions.php:1911
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1105
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1106
 msgid "Flickr"
 msgstr ""
 
 #: includes/helper-functions.php:1912
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1106
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1107
 msgid "GitHub"
 msgstr ""
 
 #: includes/helper-functions.php:1913
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1107
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1108
 msgid "YouTube"
 msgstr ""
 
 #: includes/helper-functions.php:1914
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1108
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1109
 msgid "WordPress"
 msgstr ""
 
 #: includes/helper-functions.php:1915
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1109
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1110
 msgid "Google"
 msgstr ""
 
 #: includes/helper-functions.php:1916
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1110
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1111
 msgid "Yahoo"
 msgstr ""
 
 #: includes/helper-functions.php:1917
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1111
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1112
 msgid "Vkontakte"
 msgstr ""
 
@@ -14587,65 +14649,65 @@ msgstr ""
 msgid "Failed to retrieve GPS info from OpenStreetMap Nominatim server."
 msgstr ""
 
-#: includes/post-functions.php:686 includes/post-functions.php:715
+#: includes/post-functions.php:688 includes/post-functions.php:717
 msgctxt "Listing status"
 msgid "Closed down"
 msgstr ""
 
-#: includes/post-functions.php:720
+#: includes/post-functions.php:722
 #, php-format
 msgid "Closed down <span class=\"count\">(%s)</span>"
 msgid_plural "Closed down <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-functions.php:1251
+#: includes/post-functions.php:1253
 #: includes/widgets/class-geodir-widget-dynamic-content.php:347
 msgid "NEW"
 msgstr ""
 
-#: includes/post-functions.php:1253
+#: includes/post-functions.php:1255
 #: includes/widgets/class-geodir-widget-dynamic-content.php:349
 msgid "UPDATED"
 msgstr ""
 
-#: includes/post-functions.php:1451
+#: includes/post-functions.php:1453
 msgid "Watch Video"
 msgstr ""
 
-#: includes/post-functions.php:1946
+#: includes/post-functions.php:1948
 msgid "Overall Rating"
 msgstr ""
 
-#: includes/post-functions.php:1957
+#: includes/post-functions.php:1959
 msgid "Rating Count"
 msgstr ""
 
-#: includes/post-functions.php:1989 includes/post-functions.php:2000
+#: includes/post-functions.php:1991 includes/post-functions.php:2002
 msgid "Modified"
 msgstr ""
 
-#: includes/post-functions.php:2034
+#: includes/post-functions.php:2036
 msgid "ID"
 msgstr ""
 
-#: includes/post-functions.php:2045
+#: includes/post-functions.php:2047
 msgid "Post Link"
 msgstr ""
 
-#: includes/post-functions.php:2109
+#: includes/post-functions.php:2111
 msgid "Address line 2"
 msgstr ""
 
-#: includes/post-functions.php:2164
+#: includes/post-functions.php:2166
 msgid "Latitude"
 msgstr ""
 
-#: includes/post-functions.php:2175
+#: includes/post-functions.php:2177
 msgid "Longitude"
 msgstr ""
 
-#: includes/post-functions.php:2186
+#: includes/post-functions.php:2188
 msgid "Map Directions"
 msgstr ""
 
@@ -14765,7 +14827,7 @@ msgid "Page ID"
 msgstr ""
 
 #: includes/template-functions.php:1165
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4991
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5023
 msgid "Template Part"
 msgstr ""
 
@@ -14779,13 +14841,13 @@ msgid "Elementor Skin"
 msgstr ""
 
 #: includes/template-functions.php:1209
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2853
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2854
 msgid "Select Page..."
 msgstr ""
 
 #: includes/template-functions.php:1237
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2882
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4992
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2883
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5024
 msgid "Select Template Part..."
 msgstr ""
 
@@ -14884,7 +14946,7 @@ msgid "Floating"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-add-listing.php:119
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1964
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1965
 msgid "Hidden"
 msgstr ""
 
@@ -15072,6 +15134,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-categories.php:325
 #: includes/widgets/class-geodir-widget-listings.php:524
 #: includes/widgets/class-geodir-widget-loop.php:104
+#: includes/widgets/class-geodir-widget-post-features.php:376
 #: includes/widgets/class-geodir-widget-recently-viewed.php:166
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:129
 #: includes/widgets/class-geodir-widget-simple-archive.php:195
@@ -15130,7 +15193,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:72
 #: includes/widgets/class-geodir-widget-post-fav.php:173
 #: includes/widgets/class-geodir-widget-report-post.php:124
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1201
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1214
 #: includes/widgets/class-geodir-widget-simple-archive.php:692
 msgid "Custom colors"
 msgstr ""
@@ -15168,6 +15231,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-map.php:120
 #: includes/widgets/class-geodir-widget-post-address.php:93
 #: includes/widgets/class-geodir-widget-post-content.php:35
+#: includes/widgets/class-geodir-widget-post-features.php:101
 #: includes/widgets/class-geodir-widget-post-meta.php:97
 #: includes/widgets/class-geodir-widget-recent-reviews.php:101
 #: includes/widgets/class-geodir-widget-recently-viewed.php:52
@@ -15528,6 +15592,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-map.php:82
 #: includes/widgets/class-geodir-widget-post-address.php:55
 #: includes/widgets/class-geodir-widget-post-fav.php:70
+#: includes/widgets/class-geodir-widget-post-features.php:64
 #: includes/widgets/class-geodir-widget-post-meta.php:60
 #: includes/widgets/class-geodir-widget-post-rating.php:64
 #: includes/widgets/class-geodir-widget-recent-reviews.php:64
@@ -15550,6 +15615,8 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-address.php:68
 #: includes/widgets/class-geodir-widget-post-fav.php:80
 #: includes/widgets/class-geodir-widget-post-fav.php:83
+#: includes/widgets/class-geodir-widget-post-features.php:74
+#: includes/widgets/class-geodir-widget-post-features.php:77
 #: includes/widgets/class-geodir-widget-post-meta.php:70
 #: includes/widgets/class-geodir-widget-post-meta.php:73
 #: includes/widgets/class-geodir-widget-post-rating.php:74
@@ -15560,8 +15627,8 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-search.php:67
 #: includes/widgets/class-geodir-widget-single-tabs.php:81
 #: includes/widgets/class-geodir-widget-single-tabs.php:84
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1544
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1568
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1545
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1569
 msgid "Advanced"
 msgstr ""
 
@@ -15819,7 +15886,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:68
 #: includes/widgets/class-geodir-widget-post-fav.php:169
 #: includes/widgets/class-geodir-widget-report-post.php:120
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1197
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1210
 #: includes/widgets/class-geodir-widget-simple-archive.php:688
 msgid "Badge Color"
 msgstr ""
@@ -15892,11 +15959,11 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:509
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:540
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:571
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1183
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1196
 #: includes/widgets/class-geodir-widget-simple-archive.php:674
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:424
 #: vendor/ayecode/wp-super-duper/sd-functions.php:568
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1148
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1149
 msgid "Type"
 msgstr ""
 
@@ -15939,6 +16006,8 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-address.php:96
 #: includes/widgets/class-geodir-widget-post-content.php:36
 #: includes/widgets/class-geodir-widget-post-content.php:38
+#: includes/widgets/class-geodir-widget-post-features.php:102
+#: includes/widgets/class-geodir-widget-post-features.php:104
 #: includes/widgets/class-geodir-widget-post-meta.php:98
 #: includes/widgets/class-geodir-widget-post-meta.php:100
 msgid "Extra main title if needed."
@@ -16074,6 +16143,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-address.php:103
 #: includes/widgets/class-geodir-widget-post-badge.php:50
 #: includes/widgets/class-geodir-widget-post-content.php:44
+#: includes/widgets/class-geodir-widget-post-features.php:112
 #: includes/widgets/class-geodir-widget-post-images.php:45
 #: includes/widgets/class-geodir-widget-post-meta.php:108
 msgid "Post ID:"
@@ -16083,6 +16153,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-address.php:104
 #: includes/widgets/class-geodir-widget-post-badge.php:51
 #: includes/widgets/class-geodir-widget-post-content.php:45
+#: includes/widgets/class-geodir-widget-post-features.php:113
 #: includes/widgets/class-geodir-widget-post-images.php:46
 #: includes/widgets/class-geodir-widget-post-images.php:48
 #: includes/widgets/class-geodir-widget-post-meta.php:109
@@ -16091,7 +16162,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:53
 #: includes/widgets/class-geodir-widget-post-badge.php:59
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1116
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1129
 #: includes/widgets/class-geodir-widget-simple-archive.php:607
 msgid "Field Key:"
 msgstr ""
@@ -16100,35 +16171,35 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-badge.php:60
 #: includes/widgets/class-geodir-widget-post-content.php:55
 #: includes/widgets/class-geodir-widget-post-meta.php:120
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1117
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1130
 #: includes/widgets/class-geodir-widget-simple-archive.php:608
 msgid "This is the custom field key."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:63
 #: includes/widgets/class-geodir-widget-post-badge.php:69
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1129
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1142
 #: includes/widgets/class-geodir-widget-simple-archive.php:620
 msgid "Field condition:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:64
 #: includes/widgets/class-geodir-widget-post-badge.php:70
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1130
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1143
 #: includes/widgets/class-geodir-widget-simple-archive.php:621
 msgid "Select the custom field condition."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:73
 #: includes/widgets/class-geodir-widget-post-badge.php:79
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1141
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1154
 #: includes/widgets/class-geodir-widget-simple-archive.php:632
 msgid "Value to match:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:74
 #: includes/widgets/class-geodir-widget-post-badge.php:80
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1142
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1155
 #: includes/widgets/class-geodir-widget-simple-archive.php:633
 msgid ""
 "Match this text with field value to display post badge. For post date enter "
@@ -16157,6 +16228,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-address.php:349
 #: includes/widgets/class-geodir-widget-post-badge.php:412
 #: includes/widgets/class-geodir-widget-post-content.php:218
+#: includes/widgets/class-geodir-widget-post-features.php:805
 #: includes/widgets/class-geodir-widget-post-meta.php:378
 msgid "invalid post type"
 msgstr ""
@@ -16168,19 +16240,19 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:403
 #: includes/widgets/class-geodir-widget-post-badge.php:502
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2768
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2769
 msgid "post date"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:404
 #: includes/widgets/class-geodir-widget-post-badge.php:503
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2769
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2770
 msgid "post modified"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:405
 #: includes/widgets/class-geodir-widget-post-badge.php:505
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2771
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2772
 msgid "post id"
 msgstr ""
 
@@ -16536,7 +16608,7 @@ msgid "Default (primary outline)"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-loop-actions.php:117
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:955
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:968
 #: includes/widgets/class-geodir-widget-simple-archive.php:446
 msgid "Custom"
 msgstr ""
@@ -16676,7 +16748,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:86
 #: includes/widgets/class-geodir-widget-post-badge.php:89
 #: includes/widgets/class-geodir-widget-post-directions.php:48
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1152
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1165
 #: includes/widgets/class-geodir-widget-simple-archive.php:643
 msgid "Icon class:"
 msgstr ""
@@ -16685,7 +16757,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-badge.php:90
 #: includes/widgets/class-geodir-widget-post-directions.php:49
 #: includes/widgets/class-geodir-widget-report-post.php:175
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1153
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1166
 #: includes/widgets/class-geodir-widget-simple-archive.php:644
 msgid "You can show a font-awesome icon here by entering the icon class."
 msgstr ""
@@ -16695,7 +16767,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-directions.php:59
 #: includes/widgets/class-geodir-widget-post-distance.php:39
 #: includes/widgets/class-geodir-widget-post-fav.php:155
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1184
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1197
 #: includes/widgets/class-geodir-widget-simple-archive.php:675
 msgid "Select the badge type."
 msgstr ""
@@ -16707,7 +16779,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:42
 #: includes/widgets/class-geodir-widget-post-fav.php:159
 #: includes/widgets/class-geodir-widget-report-post.php:92
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1187
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1200
 #: includes/widgets/class-geodir-widget-simple-archive.php:678
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:80
 msgid "Badge"
@@ -16720,7 +16792,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:43
 #: includes/widgets/class-geodir-widget-post-fav.php:160
 #: includes/widgets/class-geodir-widget-report-post.php:93
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1188
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1201
 #: includes/widgets/class-geodir-widget-simple-archive.php:679
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:81
 msgid "Pill"
@@ -16769,7 +16841,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:69
 #: includes/widgets/class-geodir-widget-post-fav.php:170
 #: includes/widgets/class-geodir-widget-report-post.php:121
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1198
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1211
 #: includes/widgets/class-geodir-widget-simple-archive.php:689
 msgid "Select the the badge color."
 msgstr ""
@@ -16780,7 +16852,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-directions.php:101
 #: includes/widgets/class-geodir-widget-post-distance.php:81
 #: includes/widgets/class-geodir-widget-post-fav.php:183
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1211
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1224
 #: includes/widgets/class-geodir-widget-simple-archive.php:702
 msgid "Badge background color:"
 msgstr ""
@@ -16792,7 +16864,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:82
 #: includes/widgets/class-geodir-widget-post-fav.php:184
 #: includes/widgets/class-geodir-widget-report-post.php:135
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1212
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1225
 #: includes/widgets/class-geodir-widget-simple-archive.php:703
 msgid "Color for the badge background."
 msgstr ""
@@ -16803,7 +16875,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-directions.php:111
 #: includes/widgets/class-geodir-widget-post-distance.php:91
 #: includes/widgets/class-geodir-widget-post-fav.php:193
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1221
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1234
 #: includes/widgets/class-geodir-widget-simple-archive.php:712
 msgid "Badge text color:"
 msgstr ""
@@ -16815,7 +16887,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:92
 #: includes/widgets/class-geodir-widget-post-fav.php:194
 #: includes/widgets/class-geodir-widget-report-post.php:145
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1222
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1235
 #: includes/widgets/class-geodir-widget-simple-archive.php:713
 msgid "Color for the badge text."
 msgstr ""
@@ -17012,7 +17084,8 @@ msgid "Placeholder map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:46
-#: includes/widgets/class-geodir-widget-post-meta.php:519
+#: includes/widgets/class-geodir-widget-post-features.php:1147
+#: includes/widgets/class-geodir-widget-post-meta.php:522
 #: vendor/ayecode/wp-super-duper/hello-world.php:26
 msgid "Placeholder"
 msgstr ""
@@ -17582,12 +17655,12 @@ msgstr ""
 #: vendor/ayecode/wp-super-duper/sd-functions.php:805
 #: vendor/ayecode/wp-super-duper/sd-functions.php:941
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1009
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1334
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1363
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1396
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1459
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1490
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1520
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1335
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1364
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1397
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1460
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1491
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1521
 msgid "Typography"
 msgstr ""
 
@@ -17633,13 +17706,13 @@ msgid "Displays the post badge."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:98
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1162
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1175
 #: includes/widgets/class-geodir-widget-simple-archive.php:653
 msgid "Badge:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:99
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1163
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1176
 #: includes/widgets/class-geodir-widget-simple-archive.php:654
 #, php-format
 msgid ""
@@ -17649,13 +17722,13 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:107
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1173
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1186
 #: includes/widgets/class-geodir-widget-simple-archive.php:664
 msgid "Link url:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:108
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1174
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1187
 #: includes/widgets/class-geodir-widget-simple-archive.php:665
 #, php-format
 msgid ""
@@ -17928,6 +18001,171 @@ msgstr ""
 msgid "Color for the icon when set."
 msgstr ""
 
+#: includes/widgets/class-geodir-widget-post-features.php:28
+msgid "GD > Post Features"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:32
+msgid "This shows a list of post features."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:44
+#: includes/widgets/class-geodir-widget-post-meta.php:44
+#: includes/widgets/class-geodir-widget-post-meta.php:181
+#: includes/widgets/class-geodir-widget-post-meta.php:197
+msgid "List View Hide"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:56
+#: includes/widgets/class-geodir-widget-post-features.php:220
+#: includes/widgets/class-geodir-widget-post-features.php:228
+#: includes/widgets/class-geodir-widget-post-features.php:236
+#: includes/widgets/class-geodir-widget-post-features.php:261
+#: includes/widgets/class-geodir-widget-post-features.php:268
+#: includes/widgets/class-geodir-widget-post-features.php:278
+#: includes/widgets/class-geodir-widget-post-features.php:286
+#: includes/widgets/class-geodir-widget-post-features.php:294
+msgid "List Style"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:57
+#: includes/widgets/class-geodir-widget-post-features.php:305
+#: includes/widgets/class-geodir-widget-post-features.php:313
+#: includes/widgets/class-geodir-widget-post-features.php:320
+#: includes/widgets/class-geodir-widget-post-features.php:325
+#: includes/widgets/class-geodir-widget-post-features.php:329
+#: includes/widgets/class-geodir-widget-post-features.php:341
+#: includes/widgets/class-geodir-widget-post-features.php:347
+#: includes/widgets/class-geodir-widget-post-features.php:351
+msgid "List Item"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:58
+#: vendor/ayecode/wp-super-duper/sd-functions.php:435
+#: vendor/ayecode/wp-super-duper/sd-functions.php:451
+#: vendor/ayecode/wp-super-duper/sd-functions.php:466
+#: vendor/ayecode/wp-super-duper/sd-functions.php:479
+#: vendor/ayecode/wp-super-duper/sd-functions.php:489
+#: vendor/ayecode/wp-super-duper/sd-functions.php:502
+#: vendor/ayecode/wp-super-duper/sd-functions.php:515
+#: vendor/ayecode/wp-super-duper/sd-functions.php:526
+msgid "Background"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:59
+#: includes/widgets/class-geodir-widget-post-features.php:366
+#: includes/widgets/class-geodir-widget-post-features.php:382
+#: includes/widgets/class-geodir-widget-post-features.php:391
+#: includes/widgets/class-geodir-widget-post-features.php:395
+#: includes/widgets/class-geodir-widget-post-features.php:397
+#: includes/widgets/class-geodir-widget-post-features.php:399
+#: includes/widgets/class-geodir-widget-post-features.php:406
+#: includes/widgets/class-geodir-widget-post-features.php:416
+#: includes/widgets/class-geodir-widget-post-features.php:426
+#: includes/widgets/class-geodir-widget-post-features.php:432
+#: includes/widgets/class-geodir-widget-post-features.php:433
+#: includes/widgets/class-geodir-widget-post-features.php:434
+#: includes/widgets/class-geodir-widget-post-features.php:435
+#: includes/widgets/class-geodir-widget-post-features.php:447
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:62
+msgid "Icons"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:61
+#: includes/widgets/class-geodir-widget-post-features.php:521
+#: includes/widgets/class-geodir-widget-post-features.php:523
+#: includes/widgets/class-geodir-widget-post-features.php:525
+#: includes/widgets/class-geodir-widget-post-features.php:532
+#: includes/widgets/class-geodir-widget-post-features.php:542
+#: includes/widgets/class-geodir-widget-post-features.php:552
+#: includes/widgets/class-geodir-widget-post-features.php:559
+#: includes/widgets/class-geodir-widget-post-features.php:560
+#: includes/widgets/class-geodir-widget-post-features.php:561
+#: includes/widgets/class-geodir-widget-post-features.php:562
+#: includes/widgets/class-geodir-widget-post-features.php:574
+msgid "Values"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:123
+msgid "Source"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:126
+msgid "Custom fields (auto)"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:127
+msgid "Custom fields (manual)"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:137
+msgid "Link to tags"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:151
+msgid "Specific tags"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:152
+msgid ""
+"Enter a comma seperated list of tag slugs to only show them specifically "
+"(otherwise any tag will show)"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:163
+msgid "Tag count limit"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:164
+msgid "Limit the number of tags shown"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:176
+msgid "This uses the custom fields output locations."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:243
+msgid "Row gap"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:304
+msgid "Border Bottom Color"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:333
+msgid "Display Flex"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:337
+msgid "yes"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:359
+msgid "Icon Class"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:360
+msgid "Enter a Font Awesome icon class"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:371
+msgid "Show as iconbox"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:385
+msgid "Iconbox color"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:437
+#: includes/widgets/class-geodir-widget-post-features.php:494
+#: includes/widgets/class-geodir-widget-post-features.php:564
+msgid "Display order"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-features.php:508
+msgid "Remove label colon"
+msgstr ""
+
 #: includes/widgets/class-geodir-widget-post-images.php:27
 msgid "GD > Post Images"
 msgstr ""
@@ -18175,12 +18413,6 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-meta.php:32
 msgid "This shows a post single post meta."
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-post-meta.php:44
-#: includes/widgets/class-geodir-widget-post-meta.php:181
-#: includes/widgets/class-geodir-widget-post-meta.php:197
-msgid "List View Hide"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-meta.php:138
@@ -18654,52 +18886,52 @@ msgstr ""
 msgid "Author Image"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:936
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:949
 #: includes/widgets/class-geodir-widget-simple-archive.php:427
 msgid "New"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1082
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1095
 #: includes/widgets/class-geodir-widget-simple-archive.php:573
 msgid "Top Left Badge"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1083
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1096
 #: includes/widgets/class-geodir-widget-simple-archive.php:574
 msgid "Image Badge (top left)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1086
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1099
 #: includes/widgets/class-geodir-widget-simple-archive.php:577
 msgid "Top Right Badge"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1087
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1100
 #: includes/widgets/class-geodir-widget-simple-archive.php:578
 msgid "Image Badge (top right)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1090
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1103
 #: includes/widgets/class-geodir-widget-simple-archive.php:581
 msgid "Bottom Left Badge"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1091
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1104
 #: includes/widgets/class-geodir-widget-simple-archive.php:582
 msgid "Image Badge (bottom left)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1094
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1107
 #: includes/widgets/class-geodir-widget-simple-archive.php:585
 msgid "Bottom Right Badge"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1095
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1108
 #: includes/widgets/class-geodir-widget-simple-archive.php:586
 msgid "Image Badge (bottom right)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1104
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1117
 #: includes/widgets/class-geodir-widget-simple-archive.php:595
 msgid "Select the badge to show"
 msgstr ""
@@ -18955,10 +19187,6 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:61
 msgid "Taxonomy names"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:62
-msgid "Icons"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:76
@@ -21412,17 +21640,6 @@ msgstr ""
 msgid "Custom Gradient"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:435
-#: vendor/ayecode/wp-super-duper/sd-functions.php:451
-#: vendor/ayecode/wp-super-duper/sd-functions.php:466
-#: vendor/ayecode/wp-super-duper/sd-functions.php:479
-#: vendor/ayecode/wp-super-duper/sd-functions.php:489
-#: vendor/ayecode/wp-super-duper/sd-functions.php:502
-#: vendor/ayecode/wp-super-duper/sd-functions.php:515
-#: vendor/ayecode/wp-super-duper/sd-functions.php:526
-msgid "Background"
-msgstr ""
-
 #: vendor/ayecode/wp-super-duper/sd-functions.php:447
 #: vendor/ayecode/wp-super-duper/sd-functions.php:624
 #: vendor/ayecode/wp-super-duper/sd-functions.php:757
@@ -21536,7 +21753,7 @@ msgid "Parent element must be position `relative`"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/sd-functions.php:589
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1184
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1185
 msgid "Position"
 msgstr ""
 
@@ -21566,7 +21783,7 @@ msgstr ""
 
 #: vendor/ayecode/wp-super-duper/sd-functions.php:858
 #: vendor/ayecode/wp-super-duper/sd-functions.php:901
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1152
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1153
 msgid "Container"
 msgstr ""
 
@@ -21578,292 +21795,296 @@ msgstr ""
 msgid "Text justify"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1042
-msgid "Muted"
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1037
+msgid "Black"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1043
+msgid "Muted"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1044
 msgid "Gray dark"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1062
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1063
 msgid "Gray dark outline"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1073
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1074
 msgid "Primary translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1074
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1075
 msgid "Secondary translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1075
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1076
 msgid "Success translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1076
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1077
 msgid "Danger translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1077
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1078
 msgid "Warning translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1078
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1079
 msgid "Info translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1079
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1080
 msgid "Light translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1080
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1081
 msgid "Dark translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1081
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1082
 msgid "White translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1082
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1083
 msgid "Purple translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1083
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1084
 msgid "Salmon translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1084
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1085
 msgid "Cyan translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1085
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1086
 msgid "Gray translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1086
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1087
 msgid "Gray dark translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1087
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1088
 msgid "Indigo translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1088
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1089
 msgid "Orange translucent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1127
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1128
 msgid "container (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1143
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1144
 msgid "no container class"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1219
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1220
 msgid "Absolute Position"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1244
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1257
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1245
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1258
 msgid "Sticky offset"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1254
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1255
 msgid "Top offset"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1263
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1264
 msgid "Bottom offset"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1287
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1288
 msgid "Inherit from parent"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1325
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1326
 msgid "Custom size"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1354
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1355
 msgid "Font size (rem)"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1387
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1388
 msgid "Font Line Height"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1439
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1440
 msgid "Inherit"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1455
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1456
 msgid "Appearance"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1479
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1480
 msgid "lowercase"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1480
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1481
 msgid "UPPERCASE"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1481
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1482
 msgid "Capitalize"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1486
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1487
 msgid "Letter case"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1516
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1517
 msgid "Font italic"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1540
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1541
 msgid "HTML anchor"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1541
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1542
 msgid ""
 "Enter a word or two — without spaces — to make a unique web address just for "
 "this block, called an “anchor.” Then, you’ll be able to link directly to "
 "this section of your page."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1564
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1565
 msgid "Additional CSS class(es)"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1565
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1566
 msgid "Separate multiple classes with spaces."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1587
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1588
 msgid "none"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1588
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1589
 msgid "Zoom"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1590
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1591
 msgid "Move up"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1591
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1592
 msgid "Move down"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1592
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1593
 msgid "Move left"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1593
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1594
 msgid "Move right"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1599
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1603
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1600
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1604
 msgid "Hover Animations"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1632
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1633
 msgid "Vertical Align Items"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1685
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1686
 msgid "Justify content"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1739
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1740
 msgid "Align Self"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1793
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1794
 msgid "Flex Order"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1863
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1864
 msgid "Flex wrap"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1911
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1912
 msgid "Float"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1941
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1942
 msgid "Z-index"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1965
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1966
 msgid "Visible"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1966
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1967
 msgid "Scroll"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1971
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1972
 msgid "Overflow"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1993
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1994
 msgid "Max height"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2016
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2017
 msgid "IOS Style"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2021
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2022
 msgid "Scrollbars"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2681
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2682
 msgid "Block Visibility"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2682
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2683
 msgid "Set Block Visibility"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2685
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2686
 msgid "Visibility Conditions"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2728
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2729
 msgid "Logged In"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2729
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2730
 msgid "Logged Out"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2730
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2731
 msgid "Specific User Roles"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2734
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2735
 msgid "GD Field"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2808
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2809
 msgid "Hide Block"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2809
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2810
 msgid "Show Custom Message"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2810
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2811
 msgid "Show Page Content"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/sd-functions.php:2811
+#: vendor/ayecode/wp-super-duper/sd-functions.php:2812
 msgid "Show Template Part"
 msgstr ""
 
@@ -21893,63 +22114,63 @@ msgstr ""
 msgid "Placeholder for: "
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3762
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3798
 msgid "Reset"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3762
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3798
 msgid "Save Rules"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4833
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4865
 msgid "Remove Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4838
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4870
 msgid "Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4839
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4871
 msgid "Select Rule..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4846
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4878
 msgid "Rule:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4907
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4909
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4939
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4941
 msgid "VALUE TO MATCH"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4921
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4953
 msgid "Select User Roles:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4955
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4987
 msgid "What should happen if rules met."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4956
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4988
 msgid "Default Output"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4975
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5007
 msgid "Page Content"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4976
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5008
 msgid "Select Page ID..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5010
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5042
 msgid "Custom Message Type"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5011
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5043
 msgid "Default (none)"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5034
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5066
 msgid "CUSTOM MESSAGE TO SHOW"
 msgstr ""

@@ -3174,7 +3174,8 @@ function sd_block_check_rule_gd_field( $rule ) {
 				}
 			}
 
-			$search = sd_gd_field_rule_search( $args['search'], $find_post->post_type, $rule )
+			// Parse search.
+			$search = sd_gd_field_rule_search( $args['search'], $find_post->post_type, $rule );
 
 			// Address fields.
 			if ( in_array( $match_field, $address_fields ) && ( $address_fields = geodir_post_meta_address_fields( '' ) ) ) {
