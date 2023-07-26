@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.21' );
+	define( 'SUPER_DUPER_VER', '1.1.22' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -232,7 +232,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						if ( isset( $val['default'] ) && $val['default'] == '0' ) {
 							unset( $param['default'] );
 						}
-						$param['value'] = array( '' => __( "No" ), '1' => __( "Yes" ) );
+						$param['value'] = array( '0' => __( "No" ), '1' => __( "Yes" ) );
 					} elseif ( $param['type'] == 'select' || $param['type'] == 'multiple_select' ) {
 						$param['value'] = isset( $val['options'] ) ? $val['options'] : array();
 					} else {
@@ -4070,8 +4070,11 @@ if (confirmed) {
 		 * @param array $instance
 		 */
 		public function widget( $args, $instance ) {
+			if ( ! is_array( $args ) ) {
+				$args = array();
+			}
 
-			// get the filtered values
+			// Get the filtered values
 			$argument_values = $this->argument_values( $instance );
 			$argument_values = $this->string_to_bool( $argument_values );
 			$output          = $this->output( $argument_values, $args );
@@ -4250,6 +4253,23 @@ if (confirmed) {
 		}
 
 		/**
+		 * Check for Kallyas theme Zion builder preview.
+		 *
+		 * @since 1.1.22
+		 *
+		 * @return bool True when preview page otherwise false.
+		 */
+		public function is_kallyas_zion_preview() {
+			$result = false;
+
+			if ( function_exists( 'znhg_kallyas_theme_config' ) && ! empty( $_REQUEST['zn_pb_edit'] ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
 		 * General function to check if we are in a preview situation.
 		 *
 		 * @return bool
@@ -4270,6 +4290,8 @@ if (confirmed) {
 			} elseif ( $this->is_fusion_preview() ) {
 				$preview = true;
 			} elseif ( $this->is_oxygen_preview() ) {
+				$preview = true;
+			} elseif( $this->is_kallyas_zion_preview() ) {
 				$preview = true;
 			} elseif( $this->is_block_content_call() ) {
 				$preview = true;
