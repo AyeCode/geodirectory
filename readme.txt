@@ -290,6 +290,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * File upload warning is not triggering in backend - FIXED
 * Compatibility changes for Kallyas theme Zion builder - ADDED
 * Allow users to store external images for the listing created via API - ADDED
+* New GD > Post Features block/widget added - ADDED
+* Some blocks/widget settings updated - UPDATED
 
 = GeoDirectory Business Directory Plugin v2.3.14 - 2023-07-12 =
 * Images on add listing page are not sortable in touch devices - FIXED

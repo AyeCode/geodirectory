@@ -3174,7 +3174,7 @@ function sd_block_check_rule_gd_field( $rule ) {
 				}
 			}
 
-			$search = $args['search'];
+			$search = sd_gd_field_rule_search( $args['search'], $find_post->post_type, $rule )
 
 			// Address fields.
 			if ( in_array( $match_field, $address_fields ) && ( $address_fields = geodir_post_meta_address_fields( '' ) ) ) {
@@ -3237,4 +3237,61 @@ function sd_block_check_rule_gd_field( $rule ) {
 	}
 
 	return $match_found;
+}
+
+function sd_gd_field_rule_search( $search, $post_type, $rule ) {
+	if ( ! $search ) {
+		return $search;
+	}
+
+	$orig_search = $search;
+	$_search = strtolower( $search );
+
+	if ( $_search == 'date_today' ) {
+		$search = date( 'Y-m-d' );
+	} else if ( $_search == 'date_tomorrow' ) {
+		$search = date( 'Y-m-d', strtotime( "+1 day" ) );
+	} else if ( $_search == 'date_yesterday' ) {
+		$search = date( 'Y-m-d', strtotime( "-1 day" ) );
+	} else if ( $_search == 'time_his' ) {
+		$search = date( 'H:i:s' );
+	} else if ( $_search == 'time_hi' ) {
+		$search = date( 'H:i' );
+	} else if ( $_search == 'datetime_now' ) {
+		$search = date( 'Y-m-d H:i:s' );
+	} else if ( strpos( $_search, 'datetime_after_' ) === 0 ) {
+		$_searches = explode( 'datetime_after_', $_search, 2 );
+
+		if ( ! empty( $_searches[1] ) ) {
+			$search = date( 'Y-m-d H:i:s', strtotime( "+ " . str_replace( "_", " ", $_searches[1] ) ) );
+		} else {
+			$search = date( 'Y-m-d H:i:s' );
+		}
+	} else if ( strpos( $_search, 'datetime_before_' ) === 0 ) {
+		$_searches = explode( 'datetime_before_', $_search, 2 );
+
+		if ( ! empty( $_searches[1] ) ) {
+			$search = date( 'Y-m-d H:i:s', strtotime( "- " . str_replace( "_", " ", $_searches[1] ) ) );
+		} else {
+			$search = date( 'Y-m-d H:i:s' );
+		}
+	} else if ( strpos( $_search, 'date_after_' ) === 0 ) {
+		$_searches = explode( 'date_after_', $_search, 2 );
+
+		if ( ! empty( $_searches[1] ) ) {
+			$search = date( 'Y-m-d', strtotime( "+ " . str_replace( "_", " ", $_searches[1] ) ) );
+		} else {
+			$search = date( 'Y-m-d' );
+		}
+	} else if ( strpos( $_search, 'date_before_' ) === 0 ) {
+		$_searches = explode( 'date_before_', $_search, 2 );
+
+		if ( ! empty( $_searches[1] ) ) {
+			$search = date( 'Y-m-d', strtotime( "- " . str_replace( "_", " ", $_searches[1] ) ) );
+		} else {
+			$search = date( 'Y-m-d' );
+		}
+	}
+
+	return apply_filters( 'sd_gd_field_rule_search', $search, $post_type, $rule, $orig_search );
 }

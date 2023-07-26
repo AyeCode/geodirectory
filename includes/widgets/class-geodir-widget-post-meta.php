@@ -389,6 +389,9 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		}
 
 		if ( geodir_is_gd_post_type( $post_type ) ) {
+
+			$args['text_align'] = 'text-' . $args['text_alignment']; // set AUI preview
+
 			$args['id'] = apply_filters( 'geodir_widget_post_meta_set_id', $args['id'], $args );
 
 			$package_id = $this->is_preview() ? 0 : geodir_get_post_package_id( $args['id'], $post_type );
@@ -480,7 +483,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					$output = apply_filters( "geodir_custom_field_output_{$type}", '', $args['location'], $field, $args['id'], $args['show'] );
 
 					if ( ! $output && $this->is_preview() ) {
-						$output = $this->get_field_preview( $args );
+						$output = $this->get_field_preview( $args, $field );
 					}
 
 					// Return clean striped value.
@@ -494,7 +497,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			}
 
 			if ( ! $output && $this->is_preview() ) {
-				$output = $this->get_field_preview( $args );
+				$output = $this->get_field_preview( $args, $field );
 			}
 
 			$args['id'] = apply_filters( 'geodir_widget_post_meta_reset_id', $args['id'], $args );
@@ -511,7 +514,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 	 *
 	 * @return string
 	 */
-	public function get_field_preview( $args ) {
+	public function get_field_preview( $args, $field = array() ) {
 		$html = '';
 
 		if ( ! empty( $args ) ) {
@@ -521,7 +524,8 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			$view   = ! empty( $args['show'] ) ? esc_attr( $args['show'] ) : '';
 			$output = geodir_field_output_process( $view );
 
-			$wrap_class          = sd_build_aui_class( $args );
+
+			$wrap_class  = !empty( $field['css_class'] ) ? esc_attr( $field['css_class'] ) : sd_build_aui_class( $args );
 			$html = '<div class="geodir_post_meta  geodir-field-preview '.$wrap_class.'">';
 			if ( $output == '' || isset( $output['icon'] ) ) {
 				$html .= '<span class="geodir_post_meta_placeholder" >' . $icon;

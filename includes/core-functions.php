@@ -649,6 +649,7 @@ function geodir_get_widgets(){
 		'GeoDir_Widget_Page_Title',
 		'GeoDir_Widget_Simple_Archive_Item',
 		'GeoDir_Widget_Simple_Archive',
+		'GeoDir_Widget_Post_Features',
 	);
 
 	if ( geodir_design_style() ) {
