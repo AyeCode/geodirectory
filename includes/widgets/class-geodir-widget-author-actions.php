@@ -176,8 +176,8 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 
 		parent::__construct( $options );
 	}
-	
-	
+
+
 	/**
 	 * The Super block output function.
 	 *
@@ -224,12 +224,12 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		$is_preview = $this->is_preview();
 
 		$show = true;
-		if ( $args['author_page_only'] && ! self::is_author_page() && ! $is_preview ) {
+		if ( $args['author_page_only'] && ! self::is_author_page()  ) {
 			$show = false;
 		}
 
 		$output = '';
-		if ( $show && ! empty( $post->ID ) && geodir_listing_belong_to_current_user( $post->ID ) ) {
+		if ( $show && ! empty( $post->ID ) && geodir_listing_belong_to_current_user( $post->ID ) || $is_preview ) {
 			$post_id = $post->ID;
 
 			if ( isset( $_REQUEST['pid'] ) && $_REQUEST['pid'] != '' ) {
