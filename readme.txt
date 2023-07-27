@@ -286,7 +286,10 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= = GeoDirectory Business Directory Plugin v2.3.15 - 2023-07-26 =
+= GeoDirectory Business Directory Plugin v2.3.16 =
+* Duplicate permalink warning after update - FIXED
+
+= GeoDirectory Business Directory Plugin v2.3.15 - 2023-07-26 =
 * File upload warning is not triggering in backend - FIXED
 * Compatibility changes for Kallyas theme Zion builder - ADDED
 * Allow users to store external images for the listing created via API - ADDED

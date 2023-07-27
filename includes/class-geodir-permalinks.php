@@ -344,51 +344,41 @@ class GeoDir_Permalinks {
 		<?php
 	}
 
-	public function add_rewrite_rule($regex, $redirect, $after = ''){
-
-//		echo $regex . "\n";
-//		echo $redirect . "\n";
-
-		// check if there are double rules
-		if(isset($this->rewrite_rules[$regex])){
+	public function add_rewrite_rule( $regex, $redirect, $after = '' ) {
+		// Check if there are double rules
+		if ( isset( $this->rewrite_rules[ $regex ] ) ) {
 			global $geodirectory;
+
 			$parts = explode( '/([^/]*)/?$', $regex );
-			if(count($parts) == 2 && isset($geodirectory->settings['permalink_structure']) && $geodirectory->settings['permalink_structure']==''){}else{
+
+			if ( count( $parts ) == 2 && isset( $geodirectory->settings['permalink_structure'] ) && $geodirectory->settings['permalink_structure'] == '' ) {
+			} else {
 				$this->rewrite_rule_problem = $regex;
-				add_action( 'admin_notices', array($this,'rewrite_rule_problem_notice') );
+				add_action( 'admin_notices', array( $this, 'rewrite_rule_problem_notice' ) );
 			}
 		}
 
 		$static_sections = 0;
-		$sections = explode("/", str_replace('^/','',$regex));
-		if(!empty($sections)){
-			foreach ($sections as $section){
-				if(substr( $section, 0, 1 ) === "("){
+		$sections = explode( "/", str_replace( '^/', '', $regex ) );
 
-				}else{
+		if ( ! empty( $sections ) ) {
+			foreach ( $sections as $section ) {
+				if ( substr( $section, 0, 1 ) === "(" ) {
+				} else {
 					$static_sections++;
 				}
 			}
 		}
 
-		$count = ( 10 * count( explode( "/", str_replace( array( '([^/]+)','([^/]*)' ), '', $regex ) ) ) ) -
-		         ( substr_count( $regex, '([^/]+)' ) + substr_count( $regex,'([^/]*)' ) ) +
-				 ( $static_sections * 11 ) +
-				 ( substr( $regex, -3 ) == '/?$' ? 1 : 0 ); // High priority to "^places/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?$" than "^places/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?" to fix cpt + neighbourhood urls
+		$count = ( 10 * count( explode( "/", str_replace( array( '([^/]+)','([^/]*)' ), '', $regex ) ) ) ) - ( substr_count( $regex, '([^/]+)' ) + substr_count( $regex,'([^/]*)' ) ) + ( $static_sections * 11 ) + ( substr( $regex, -3 ) == '/?$' ? 1 : 0 ); // High priority to "^places/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?$" than "^places/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?" to fix cpt + neighbourhood urls
 
 		$this->rewrite_rules[$regex] = array(
 			'regex'     => $regex,
 			'redirect'  => $redirect,
 			'after'     => $after,
 			'count'     => $count
-			//'count'     => (10 * count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ) ) - (substr_count($regex,'([^/]+)') + substr_count($regex,'([^/]*)'))//count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
-			//'count'     => count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
-			//'countx'     => explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex))
 		);
 	}
-
-
-
 
 	/**
 	 * Add the locations page rewrite rules.
@@ -653,20 +643,18 @@ class GeoDir_Permalinks {
 		return $post_link;
 	}
 
-    /**
-     * Function get the post location slugs.
-     *
-     * @since 2.0.0
-     *
-     * @param object $post Post object.
-     * @return object Post location slugs.
-     */
-	private function get_post_location_slugs($gd_post){
-		//print_r($gd_post);echo '###';
+	/**
+	 * Function get the post location slugs.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param object $post Post object.
+	 * @return object Post location slugs.
+	 */
+	private function get_post_location_slugs( $gd_post ) {
 		global $geodirectory;
-		//return apply_filters('geodir_post_permalinks',geodir_get_default_location(), $gd_post);
-		return apply_filters('geodir_post_permalinks',$geodirectory->location->get_post_location($gd_post), $gd_post);
 
+		return apply_filters( 'geodir_post_permalinks', $geodirectory->location->get_post_location( $gd_post ), $gd_post );
 	}
 
 	/**
@@ -748,7 +736,7 @@ class GeoDir_Permalinks {
 				$this->add_rewrite_rule( $comment_regex, $comment_redirect, 'top' );
 
 				if ( substr( $regex, -3 ) == ')/?' ) {
-					$regex .= '$'; // Force single post urls to 404 error when it has unnecessary slugs after post slug. Ex: /POSTNAME/xyz/
+					$regex = str_replace( '*)/?', '*)?/?$', $regex ); // Force single post urls to 404 error when it has unnecessary slugs after post slug. Ex: /POSTNAME/xyz/
 				}
 
 				$this->add_rewrite_rule( $regex, $redirect, $after );
