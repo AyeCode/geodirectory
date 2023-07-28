@@ -1513,6 +1513,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			// Interval
 			if ( $instance['slide_interval'] === '0' ) {
 				$slide_interval = 'false';
+
+				// Disable auto slide.
+				if ( $aui_bs5 ) {
+					$instance['slide_ride'] = 'click';
+				}
 			} else {
 				$slide_interval = ! empty( $instance['slide_interval'] ) ? geodir_sanitize_float( $instance['slide_interval'] ) * 1000 : 5000;
 			}
