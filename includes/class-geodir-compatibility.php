@@ -124,6 +124,7 @@ class GeoDir_Compatibility {
 		add_filter( 'et_pb_enqueue_google_maps_script', '__return_false' );
 		add_filter( 'et_builder_load_actions', array( __CLASS__,'divi_builder_ajax_load_actions') );
 		add_filter( 'et_theme_builder_template_settings_options', array( __CLASS__, 'et_theme_builder_template_settings_options' ), 20, 1 );
+		add_filter( 'et_builder_default_post_types', array( __CLASS__, 'et_builder_default_post_types' ), 20, 1 );
 
 		/*######################################################
 		The7 (theme) :: rewind the posts, the_excerpt function call seems to set the current_post number and cause have_posts() to return false.
@@ -2305,6 +2306,7 @@ class GeoDir_Compatibility {
 		}
 
 		remove_action( 'wp_enqueue_scripts', 'et_divi_replace_stylesheet', 99999998 );
+		remove_action( 'wp_enqueue_scripts', 'et_divi_replace_parent_stylesheet', 99999998 );
 
 		add_action( 'wp_head', function() {
 			$custom_css = '@media only screen and (min-width:1350px){.et_pb_pagebuilder_layout.geodir-page.et-db #et-boc .et-l.et-l--header .et_pb_section{padding:0;}}.et_pb_pagebuilder_layout.geodir-page #et-main-area #main-content .entry-content .et-l > .et_pb_section{position: relative;z-index:1;}';
@@ -3705,6 +3707,22 @@ class GeoDir_Compatibility {
 	 */
 	public static function et_theme_builder_template_setting_validate_gd_search( $type, $subtype, $id, $setting ) {
 		return geodir_is_page( 'search' );
+	}
+
+	/**
+	 * Filter Divi default post types.
+	 *
+	 * @since 2.3.17
+	 *
+	 * @param array $post_types Post types
+	 * @return array Filtered post types.
+	 */
+	public static function et_builder_default_post_types( $post_types ) {
+		if ( geodir_is_geodir_page() && ( $_post_types = geodir_get_posttypes() ) ) {
+			$post_types = array_merge( $post_types, $_post_types );
+		}
+
+		return $post_types;
 	}
 
 	/**
