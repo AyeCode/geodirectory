@@ -447,6 +447,9 @@
                         _hookEvents: function(l) {
                             l.on("linetouched", function(e) {
                                 this._plan.dragNewWaypoint(e)
+                                if (e.afterIndex < this.getWaypoints().length - 1) {
+                                    this._plan.dragNewWaypoint(e);
+                                }
                             }, this)
                         },
                         _hookAltEvents: function(l) {
@@ -2706,7 +2709,7 @@
         },
         geocode: function(query, cb, context) {
             jQuery(context._elem).parent().removeClass("leaflet-routing-searching").addClass("leaflet-routing-searching");
-            L.Control.Geocoder.jsonp(this.options.serviceUrl + "search/", L.extend({
+            L.Control.Geocoder.jsonp(this.options.serviceUrl + "search", L.extend({
                 q: query,
                 limit: 5,
                 format: "json",
@@ -2730,7 +2733,7 @@
             }, this, "json_callback")
         },
         reverse: function(location, scale, cb, context) {
-            L.Control.Geocoder.jsonp(this.options.serviceUrl + "reverse/", L.extend({
+            L.Control.Geocoder.jsonp(this.options.serviceUrl + "reverse", L.extend({
                 lat: location.lat,
                 lon: location.lng,
                 zoom: Math.round(Math.log(scale / 256) / Math.log(2)),
