@@ -290,6 +290,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Sometimes CPT pages header style not working with Divi builder - FIXED
 * GD > Listings carousel is not working with BS 5 & interval "0" - FIXED
 * OSM Nominatim search url is no longer supporting trailing slash - CHANGED
+* 1 site membership key won't activate - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.16 - 2023-07-27 =
 * Duplicate permalink warning after update - FIXED
