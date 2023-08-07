@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.16\n"
+"Project-Id-Version: GeoDirectory 2.3.17\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-27 11:16+0530\n"
-"PO-Revision-Date: 2023-07-27 11:16+0530\n"
+"POT-Creation-Date: 2023-08-07 19:29+0530\n"
+"PO-Revision-Date: 2023-08-07 19:30+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1393,7 +1393,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dashboard.php:168
 #: includes/widgets/class-geodir-widget-best-of.php:774
-#: includes/widgets/class-geodir-widget-listings.php:1641
+#: includes/widgets/class-geodir-widget-listings.php:1646
 #: includes/widgets/class-geodir-widget-recently-viewed.php:327
 #: templates/bootstrap/map/map.php:55
 msgid "Loading..."
@@ -2001,7 +2001,7 @@ msgid "Reviews"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-install.php:445
-#: includes/class-geodir-compatibility.php:260
+#: includes/class-geodir-compatibility.php:261
 msgid "Once Monthly"
 msgstr ""
 
@@ -11036,85 +11036,85 @@ msgid_plural "%d reviews"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-geodir-compatibility.php:280
+#: includes/class-geodir-compatibility.php:281
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:282
+#: includes/class-geodir-compatibility.php:283
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:287
+#: includes/class-geodir-compatibility.php:288
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:288
+#: includes/class-geodir-compatibility.php:289
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:303
+#: includes/class-geodir-compatibility.php:304
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:305
+#: includes/class-geodir-compatibility.php:306
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:310
+#: includes/class-geodir-compatibility.php:311
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:311
+#: includes/class-geodir-compatibility.php:312
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:328
+#: includes/class-geodir-compatibility.php:329
 msgid "SEOPress SEO Detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:329
+#: includes/class-geodir-compatibility.php:330
 msgid ""
 "The SEOPress SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:334
+#: includes/class-geodir-compatibility.php:335
 msgid "Disable SEOPress"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:335
+#: includes/class-geodir-compatibility.php:336
 msgid "Disable overwrite by SEOPress titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:365
+#: includes/class-geodir-compatibility.php:366
 #, php-format
 msgid ""
 "Kleo theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:379
+#: includes/class-geodir-compatibility.php:380
 #, php-format
 msgid ""
 "Listimia theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:695
+#: includes/class-geodir-compatibility.php:696
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:838
+#: includes/class-geodir-compatibility.php:839
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -11122,37 +11122,37 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2961
+#: includes/class-geodir-compatibility.php:2963
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2972
+#: includes/class-geodir-compatibility.php:2974
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2979
+#: includes/class-geodir-compatibility.php:2981
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2980
+#: includes/class-geodir-compatibility.php:2982
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3685
+#: includes/class-geodir-compatibility.php:3687
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3896
+#: includes/class-geodir-compatibility.php:3914
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3897
+#: includes/class-geodir-compatibility.php:3915
 msgid "Enable Borlabs Cookie integration for GeoDirectory maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4023
+#: includes/class-geodir-compatibility.php:4041
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
@@ -15496,7 +15496,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:737
 #: includes/widgets/class-geodir-widget-best-of.php:766
-#: includes/widgets/class-geodir-widget-listings.php:1669
+#: includes/widgets/class-geodir-widget-listings.php:1674
 msgid "View all"
 msgstr ""
 
@@ -16516,7 +16516,7 @@ msgctxt "tag delimiter"
 msgid ","
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1571
+#: includes/widgets/class-geodir-widget-listings.php:1576
 #: includes/widgets/class-geodir-widget-loop.php:339
 msgid ""
 "This preview shows all content items to give an idea of layout. Dummy data "
