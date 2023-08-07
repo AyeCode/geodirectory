@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<p>
 						<?php
 						$wpeu_admin = new External_Updates_Admin('wpgeodirectory.com','2');
-						echo $wpeu_admin->render_licence_actions('wpgeodirectory.com', 'membership',array(66235,111330,111327));
+						echo $wpeu_admin->render_licence_actions('wpgeodirectory.com', 'membership',array(66235,111330,111327,3310305));
 						?>
 						<a href="https://wpgeodirectory.com/downloads/membership/"><?php echo _e( 'Don\'t have a membership key?', 'geodirectory' ); ?></a>
 					</p>

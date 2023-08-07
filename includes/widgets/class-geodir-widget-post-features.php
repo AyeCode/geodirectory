@@ -194,7 +194,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 				'default'                  => '',
 				'advanced'                 => false,
 				'group'                    => __( 'Content', 'geodirectory' ),
-				'element_require'          => $i === 1 ? '[%source%]=="meta_manual"' : '( [%source%]=="meta_manual" && [%key_' . $prev . '%]!="" )',
+				'element_require'          => $i === 1 ? '[%source%]=="meta_manual"' : '( [%source%]=="meta_manual" && [%key_' . $prev . '%]!=0 )',
 			);
 
 			$i++;
@@ -937,7 +937,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 			}
 
 			if ( ! empty( $fields ) ) {
-
+				$features = array();
 				foreach ( $fields as $field ) {
 
 					$field = stripslashes_deep( $field );
