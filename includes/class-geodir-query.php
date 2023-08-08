@@ -97,10 +97,10 @@ class GeoDir_Query {
 		return $is_main_query;
 	}
 
-    /**
-     * Set globals.
-     *
-     * @since 2.0.0
+	/**
+	 * Set globals.
+	 *
+	 * @since 2.0.0
 	 *
 	 * @param mixed $q query object
 	 */
@@ -116,34 +116,32 @@ class GeoDir_Query {
 
 	/**
 	 * Hook into pre_get_posts to do the main product query.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 *
 	 * @param mixed $q query object
 	 */
 	public function pre_get_posts( $q ) {
-
 		// We only want to affect the main query
 		if ( ! $q->is_main_query() ) {
 			return;
 		}
 
 		// We only want to affect GD pages.
-		if (!geodir_is_geodir_page()) {
+		if ( ! geodir_is_geodir_page() ) {
 			return;
 		}
 
-		/* remove all pre filters, controversial but should only affect our own queries. */
-		remove_all_filters('query');
-		remove_all_filters('posts_search');
-		remove_all_filters('posts_fields');
-		remove_all_filters('posts_join');
-		remove_all_filters('posts_groupby');
-		remove_all_filters('posts_orderby');
-		remove_all_filters('posts_where');
+		// Remove all pre filters, controversial but should only affect our own queries.
+		remove_all_filters( 'query' );
+		remove_all_filters( 'posts_search' );
+		remove_all_filters( 'posts_fields' );
+		remove_all_filters( 'posts_join' );
+		remove_all_filters( 'posts_groupby' );
+		remove_all_filters( 'posts_orderby' );
+		remove_all_filters( 'posts_where' );
 
-
-		// @todo for testing only
+		// @todo for testing only.
 //		if(geodir_is_page('add-listing')){echo "is page:add-listing ";}
 //		if(geodir_is_page('preview')){echo "is page:preview ";}
 //		if(geodir_is_page('single')){echo "is page:single ";}
@@ -158,20 +156,15 @@ class GeoDir_Query {
 //		if(geodir_is_page('checkout')){echo "is page:checkout ";}
 //		if(geodir_is_page('invoices')){echo "is page:invoices ";}
 
-
-		/*
-		 * If post_type or archive then add query filters
-		 */
-		if(geodir_is_page('post_type') || geodir_is_page('archive') ){
-
-			add_filter( 'posts_fields', array( $this, 'posts_fields' ),10,2 );
-			add_filter( 'posts_join', array( $this, 'posts_join' ),10,2 );
-			add_filter( 'posts_where', array( $this, 'posts_where' ),10,2);
-			add_filter( 'posts_where', array( $this, 'author_where' ),10,2 );
+		// If post_type or archive then add query filters.
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			add_filter( 'posts_fields', array( $this, 'posts_fields' ), 10, 2 );
+			add_filter( 'posts_join', array( $this, 'posts_join' ), 10, 2 );
+			add_filter( 'posts_where', array( $this, 'posts_where' ), 10, 2);
+			add_filter( 'posts_where', array( $this, 'author_where' ), 10, 2 );
 			//add_filter( 'posts_where', array( $this, 'posts_having' ), 10000, 2 ); // make sure its the last WHERE param
-			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ),10,2 );
-			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ),10,2 );
-
+			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 10, 2 );
+			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ), 10, 2 );
 		} elseif ( geodir_is_page( 'search' ) ) {
 			// Some page builders breaks editor.
 			if (
@@ -184,47 +177,46 @@ class GeoDir_Query {
 					)
 				) // Brizy
 			) {
-			} elseif ( ! isset( $_REQUEST['elementor-preview'] ) ) {
+			} else if ( ! isset( $_REQUEST['elementor-preview'] ) ) {
 				$q->is_page = false;
 				$q->is_singular = false;
 			}
+
 			$q->is_search = true;
 			$q->is_archive = true;
-			//$q->is_post_type_archive = true;
 			$q->is_paged = true;
-//			$q->in_the_loop = true; // this breaks elementor template
-
+			//$q->is_post_type_archive = true;
+			//$q->in_the_loop = true; // This breaks elementor template
 			//$q->set('is_page',false);
 			//$q->set('is_search',true);
 			//$q->set('post_type','gd_place');
+
 			add_filter( 'posts_join', array( $this, 'posts_join' ), 1, 2 );
 			add_filter( 'posts_fields', array( $this, 'posts_fields' ), 1, 2 );
 			add_filter( 'posts_where', array( $this, 'posts_where' ), 1, 2 );
-
 			//add_filter( 'posts_limits', array( $this, 'posts_limits' ),10,2 );
 			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 1, 2 );
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ), 1, 2 );
+			add_filter( 'posts_clauses', array( $this, 'posts_having' ), 99999, 2 ); // Make sure its the last WHERE param and after GROUP BY if there
 
-			add_filter( 'posts_clauses', array( $this, 'posts_having' ), 99999, 2 ); // make sure its the last WHERE param and after GROUP BY if there
-
-			// setup search globals
+			// Setup search globals
 			global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $s, $snear, $s, $s_A, $s_SA, $gd_exact_search;
 
-			if (isset($_REQUEST['scat']) && $_REQUEST['scat'] == 'all') $_REQUEST['scat'] = '';
-			//if(isset($_REQUEST['s']) && $_REQUEST['s'] == '+') $_REQUEST['s'] = '';
+			if ( isset( $_REQUEST['scat'] ) && $_REQUEST['scat'] == 'all' ) {
+				$_REQUEST['scat'] = '';
+			}
 
-			if (isset($_REQUEST['dist'])) {
-				($_REQUEST['dist'] != '0' && $_REQUEST['dist'] != '') ? $dist = esc_attr($_REQUEST['dist']) : $dist = 25000;
-			} elseif (geodir_get_option('search_radius') != '') {
-				$dist = geodir_get_option('search_radius');//search_radius
-
+			// Distance
+			if ( isset( $_REQUEST['dist'] ) ) {
+				$dist = ( $_REQUEST['dist'] != '0' && $_REQUEST['dist'] != '' ) ? esc_attr( $_REQUEST['dist'] ) : 25000;
+			} else if ( geodir_get_option( 'search_radius' ) != '' ) {
+				$dist = geodir_get_option( 'search_radius' );
 			} else {
 				$dist = 25000;
-			} //  Distance
+			}
 
-
-			if (isset($_REQUEST['snear'])) {
-				$snear = trim(esc_attr($_REQUEST['snear']));
+			if ( isset( $_REQUEST['snear'] ) ) {
+				$snear = trim( esc_attr( $_REQUEST['snear'] ) );
 			}
 
 			if ( isset( $_REQUEST['s'] ) ) {
@@ -235,8 +227,13 @@ class GeoDir_Query {
 				$s = trim( esc_attr( wp_strip_all_tags( $s ) ) );
 			}
 
+			if ( is_null( $s ) ) {
+				$s = '';
+			}
+
 			// Exact search with quotes
 			$gd_exact_search = false;
+
 			if ( $s != '' ) {
 				$search_keyword = trim( wp_specialchars_decode( stripslashes( $s ), ENT_QUOTES ), '"' );
 				$match_keyword = wp_specialchars_decode( stripslashes( $s ), ENT_QUOTES );
@@ -246,28 +243,25 @@ class GeoDir_Query {
 				}
 			}
 
-			if (strstr($s, ',')) {
-				$s_AA = str_replace(" ", "", $s);
-				$s_A = explode(",", $s_AA);
-				$s_A = implode('","', $s_A);
+			if ( $s !== '' && strstr( $s, ',' ) ) {
+				$s_AA = str_replace( " ", "", $s );
+				$s_A = explode( ",", $s_AA );
+				$s_A = implode( '","', $s_A );
 				$s_A = '"' . $s_A . '"';
 			} else {
 				$s_A = '"' . $s . '"';
 			}
 
-			if (strstr($s, ' ')) {
-				$s_SA = explode(" ", $s);
+			if ( $s !== '' && strstr( $s, ' ' ) ) {
+				$s_SA = explode( " ", $s );
 			} else {
 				$s_SA = '';
 			}
-		}elseif(is_author()){
+		} else if ( is_author() ) {
 			add_filter( 'posts_where', array( $this, 'author_where' ), 10, 2 );
 			//$q->is_archive = true;
 			//$q->is_post_type_archive = true;
 		}
-
-		//print_r($q);
-
 
 		if ( is_search() ) {
 			//add_filter( 'posts_where', array( $this, 'search_post_excerpt' ) );
@@ -276,7 +270,6 @@ class GeoDir_Query {
 
 		// And remove the pre_get_posts hook
 		$this->remove_product_query();
-
 	}
 
 	/**
