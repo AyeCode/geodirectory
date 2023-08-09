@@ -71,6 +71,7 @@ class GeoDir_SEO {
 
 		// SEOPress
 		add_filter( 'seopress_titles_title', array( __CLASS__ , 'replace_variables' ), 100, 1 );
+		add_filter( 'seopress_titles_desc', array( __CLASS__ , 'replace_variables' ), 100, 1 );
 		add_filter( 'seopress_social_og_title', array( __CLASS__ , 'replace_variables' ), 100, 1 );
 		add_filter( 'seopress_social_og_desc', array( __CLASS__ , 'replace_variables' ), 100, 1 );
 		add_filter( 'seopress_social_twitter_card_title', array( __CLASS__ , 'replace_variables' ), 100, 1 );
