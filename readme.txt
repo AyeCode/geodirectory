@@ -286,6 +286,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory Business Directory Plugin v2.3.18 =
+* GD SEO variables no longer working with SEOPress meta description - FIXED
+
 = GeoDirectory Business Directory Plugin v2.3.17 - 2023-08-07 =
 * Sometimes CPT pages header style not working with Divi builder - FIXED
 * GD > Listings carousel is not working with BS 5 & interval "0" - FIXED
