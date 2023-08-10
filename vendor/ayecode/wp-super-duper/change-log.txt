@@ -1,3 +1,6 @@
+= 1.1.23 =
+* Type missing ; causing error - FIXED
+
 = 1.1.22 =
 * Avada converts checkbox to select dropdown don't saves empty value - CHANGED
 * Check preview for Kallyas theme Zion builder editor - ADDED

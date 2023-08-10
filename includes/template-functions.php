@@ -726,7 +726,7 @@ function geodir_template_redirect() {
 							continue;
 						}
 
-						$args[ $key ] = geodir_clean( $value );
+						$args[ $key ] = rawurlencode( geodir_clean( $value ) );
 					}
 
 					if ( ! empty( $args ) ) {

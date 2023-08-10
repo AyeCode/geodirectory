@@ -1082,7 +1082,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 		$dom = new DOMDocument();
 
 		// Load the HTML into the DOMDocument
-		@$dom->loadHTML( $html );
+		/** @scrutinizer ignore-unhandled */ @$dom->loadHTML( $html );
 
 		// Create a new DOMXPath instance
 		$xpath = new DOMXPath( $dom );
