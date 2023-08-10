@@ -883,12 +883,11 @@ function geodir_post_is_closed( $post ) {
 function geodir_edit_post_link( $post_id = '' ) {
 	if ( ! $post_id ) {
 		global $post;
+
 		$post_id = $post->ID;
 	}
 
-	$postlink = geodir_add_listing_page_url( get_post_type( $post_id ) );
-
-	return geodir_getlink( $postlink, array( 'pid' => $post_id ), false );
+	return geodir_add_listing_page_url( get_post_type( $post_id ), $post_id );
 }
 
 /**

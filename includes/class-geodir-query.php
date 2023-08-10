@@ -1410,7 +1410,20 @@ class GeoDir_Query {
 	public function parse_request() {
 		global $wp;
 
-		if(isset( $_REQUEST['fl_builder'] )){return;} // fix for BB not working on search page
+		// Set add listing query parameters.
+		if ( ! empty( $wp ) && ! empty( $wp->query_vars['pagename'] ) && ! empty( $wp->query_vars['listing_type'] ) ) {
+			if ( geodir_is_gd_post_type( $wp->query_vars['listing_type'] ) ) {
+				$_REQUEST['listing_type'] = geodir_clean( $wp->query_vars['listing_type'] );
+
+				if ( ! empty( $wp->query_vars['pid'] ) ) {
+					$_REQUEST['pid'] = absint( $wp->query_vars['pid'] );
+				}
+			}
+		}
+
+		if ( isset( $_REQUEST['fl_builder'] ) ) {
+			return; // Fix for BB not working on search page
+		}
 
 		self::set_is_geodir_page( $wp );
 
@@ -1418,12 +1431,11 @@ class GeoDir_Query {
 		foreach ( $this->get_query_vars() as $key => $var ) {
 			if ( isset( $_GET[ $var ] ) ) {
 				$wp->query_vars[ $key ] = $_GET[ $var ];
-			} elseif ( isset( $wp->query_vars[ $var ] ) ) {
+			} else if ( isset( $wp->query_vars[ $var ] ) ) {
 				$wp->query_vars[ $key ] = $wp->query_vars[ $var ];
 			}
 		}
 	}
-
 
 	/**
 	 * Add the page id to the query variables.
@@ -1459,7 +1471,7 @@ class GeoDir_Query {
 	###############################################################################################################################
 
 	/**
-	 * Get any errors from querystring.
+	 * Get any errors from query string.
      *
      * @since 2.0.0
 	 */
@@ -1477,11 +1489,9 @@ class GeoDir_Query {
 	public function init_query_vars() {
 		// Query vars to add to WP.
 		$this->query_vars = array(
-			// Location vars.
-//			'country'           => 'country',
-//			'region'            => 'region',
-//			'city'              => 'city',
 			'gd_is_geodir_page' => 'gd_is_geodir_page',
+			'listing_type' => 'listing_type',
+			'pid' => 'pid'
 		);
 	}
 
@@ -1559,9 +1569,6 @@ class GeoDir_Query {
 	private function page_on_front_is( $page_id ) {
 		return absint( get_option( 'page_on_front' ) ) === absint( $page_id );
 	}
-
-
-
 
 	/**
 	 * Make custom field order by clause for custom sorting.

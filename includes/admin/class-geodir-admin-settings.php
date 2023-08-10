@@ -777,13 +777,12 @@ class GeoDir_Admin_Settings {
 				// Single page selects
 				case 'single_select_page' :
 					add_thickbox();
+
 					if ( isset( $value['value'] ) ) {
 						$option_value = $value['value'];
 					} else {
 						$option_value = self::get_option( $value['id'] );
 					}
-
-
 
 					$args = array(
 						'name'             => $value['id'],
@@ -811,7 +810,6 @@ class GeoDir_Admin_Settings {
 						$args = wp_parse_args( $value['args'], $args );
 					}
 
-
 					$defaults = array(
 						'depth'                 => 0,
 						'child_of'              => 0,
@@ -833,9 +831,9 @@ class GeoDir_Admin_Settings {
 
 					if ( ! empty( $pages ) ) {
 						foreach ( $pages as $page ) {
-							$id = !empty($page->ID) ? absint($page->ID) : '';
-							$title = !empty($page->post_title) ? esc_attr($page->post_title) : '';
-							$page_options[$id] = $title;
+							$id = ! empty( $page->ID ) ? absint( $page->ID ) : '';
+							$title = ! empty( $page->post_title ) ? esc_attr( $page->post_title ) : '';
+							$page_options[ $id ] = $title;
 						}
 					}
 
@@ -847,60 +845,64 @@ class GeoDir_Admin_Settings {
 					$buttons_links = array();
 
 					ob_start();
-					if($args['selected']){
-						$buttons_links[get_edit_post_link( $args['selected'] )] = __('Edit Page','geodirectory');
 
-					if ( empty( $value['is_template_page'] ) ) {
-						$page_url = get_permalink( $args['selected'] );
-						if ( ! empty( $value['view_page_args'] ) && is_array( $value['view_page_args'] ) ) {
-							foreach ( $value['view_page_args'] as $_key => $_value ) {
-								if ( ! empty( $_key ) && $_value != '' ) {
-									$page_url = add_query_arg( $_key, $_value, $page_url );
+					if ( $args['selected'] ) {
+						$buttons_links[get_edit_post_link( $args['selected'] )] = __( 'Edit Page', 'geodirectory' );
+
+						if ( empty( $value['is_template_page'] ) ) {
+							$page_url = get_permalink( $args['selected'] );
+
+							if ( ! empty( $value['view_page_args'] ) && is_array( $value['view_page_args'] ) ) {
+								if ( $value['id'] == 'page_add' && get_post_type( (int) $args['selected'] ) && get_option( 'permalink_structure' ) && ! empty( $value['view_page_args']['listing_type'] ) ) {
+									$page_url = trailingslashit( $page_url ) . geodir_cpt_permalink_rewrite_slug( $value['view_page_args']['listing_type'] ) . '/';
+
+									unset( $value['view_page_args']['listing_type'] );
 								}
-							}
-						}
-						$buttons_links[$page_url] = __('View Page','geodirectory');
-						}
-				}
 
-							if(!empty($value['default_content'])){
-
-								$raw_default_content = '';
-								$default_method = $value['id'].'_content';
-								$gutenberg = geodir_is_gutenberg();
-
-								// check if the default content has been filtered
-								if(method_exists('GeoDir_Defaults', $default_method) && GeoDir_Defaults::$default_method(true) != $value['default_content']){
-									$raw_default_content = GeoDir_Defaults::$default_method(true, $gutenberg);
-								}
-								$buttons_links["#TB_inline?&width=650&height=350&inlineId=gd_default_content_".esc_attr($value['id'])] = __('View Default Content','geodirectory');
-								?>
-								<div id="gd_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;display:none;" class="lity-hidex gd-notification ">
-									<?php
-									$height = "50";
-									if($raw_default_content && $raw_default_content !== $value['default_content']){
-										echo geodir_notification( array('gd-warn'=>__('Default content has been modified by a plugin or theme.','geodirectory')) );
-										$height = "25";
+								foreach ( $value['view_page_args'] as $_key => $_value ) {
+									if ( ! empty( $_key ) && $_value != '' ) {
+										$page_url = add_query_arg( $_key, $_value, $page_url );
 									}
-									?>
-									<textarea style="min-width: calc(50vw - 32px);min-height: <?php echo $height;?>vh; display:block;"><?php echo $value['default_content'];?></textarea>
-									<?php
-									if($raw_default_content && $raw_default_content !== $value['default_content']){
-										echo geodir_notification( array('gd-info'=>__('Original content below.','geodirectory')) );
-										?>
-										<textarea style="min-width: 50vw;min-height: <?php echo $height;?>vh;display:block;"><?php echo $raw_default_content;?></textarea>
-
-									<?php }
-									?>
-								</div>
-								<?php
+								}
 							}
+							$buttons_links[ $page_url ] = __( 'View Page', 'geodirectory' );
+						}
+					}
 
-					if(!empty($buttons_links)) {
+					if ( ! empty( $value['default_content'] ) ) {
+						$raw_default_content = '';
+						$default_method = $value['id'].'_content';
+						$gutenberg = geodir_is_gutenberg();
+
+						// check if the default content has been filtered
+						if ( method_exists( 'GeoDir_Defaults', $default_method ) && GeoDir_Defaults::$default_method( true ) != $value['default_content'] ) {
+							$raw_default_content = GeoDir_Defaults::$default_method( true, $gutenberg );
+						}
+						$buttons_links["#TB_inline?&width=650&height=350&inlineId=gd_default_content_".esc_attr($value['id'])] = __('View Default Content','geodirectory');
 						?>
-						<button class="btn btn-outline-primary dropdown-toggle" type="button" data-<?php echo $bs_prefix;?>toggle="dropdown"
-						        aria-haspopup="true"
-						        aria-expanded="false"><?php _e( "Actions", "geodirectory" ); ?></button>
+						<div id="gd_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;display:none;" class="lity-hidex gd-notification ">
+							<?php
+							$height = "50";
+							if($raw_default_content && $raw_default_content !== $value['default_content']){
+								echo geodir_notification( array('gd-warn'=>__('Default content has been modified by a plugin or theme.','geodirectory')) );
+								$height = "25";
+							}
+							?>
+							<textarea style="min-width: calc(50vw - 32px);min-height: <?php echo $height;?>vh; display:block;"><?php echo $value['default_content'];?></textarea>
+							<?php
+							if($raw_default_content && $raw_default_content !== $value['default_content']){
+								echo geodir_notification( array('gd-info'=>__('Original content below.','geodirectory')) );
+								?>
+								<textarea style="min-width: 50vw;min-height: <?php echo $height;?>vh;display:block;"><?php echo $raw_default_content;?></textarea>
+
+							<?php }
+							?>
+						</div>
+						<?php
+					}
+
+					if ( ! empty( $buttons_links ) ) { ?>
+						<button class="btn btn-outline-primary dropdown-toggle" type="button" data-<?php echo $bs_prefix;?>toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php _e( "Actions", "geodirectory" ); ?></button>
 						<div class="dropdown-menu">
 							<?php
 							foreach($buttons_links as $link => $title){
@@ -1045,6 +1047,12 @@ class GeoDir_Admin_Settings {
 							$page_url = get_permalink( $view_page_id );
 
 							if ( ! empty( $value['view_page_args'] ) && is_array( $value['view_page_args'] ) ) {
+								if ( $value['id'] == 'template_add' && get_option( 'permalink_structure' ) && ! empty( $value['view_page_args']['listing_type'] ) ) {
+									$page_url = trailingslashit( $page_url ) . geodir_cpt_permalink_rewrite_slug( $value['view_page_args']['listing_type'] ) . '/';
+
+									unset( $value['view_page_args']['listing_type'] );
+								}
+
 								foreach ( $value['view_page_args'] as $_key => $_value ) {
 									if ( ! empty( $_key ) ) {
 										$page_url = add_query_arg( $_key, $_value, $page_url );

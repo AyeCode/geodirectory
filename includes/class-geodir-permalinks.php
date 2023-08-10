@@ -33,6 +33,9 @@ class GeoDir_Permalinks {
 		// location page rewrite rules
 		add_action('init', array( $this, 'location_rewrite_rules'), 11,0);
 
+		// Add listing page rewrite rules
+		add_action( 'init', array( $this, 'add_listing_rewrite_rules' ), 11 );
+
 		// search page rewrite rules
 		add_action('init', array( $this, 'search_rewrite_rules'), 11,0);
 
@@ -63,6 +66,7 @@ class GeoDir_Permalinks {
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
 		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
+		add_filter( 'wp_setup_nav_menu_item', array( $this, 'wp_setup_nav_menu_item' ), 10, 1 );
 	}
 
 	// @todo remove after testing
@@ -388,6 +392,47 @@ class GeoDir_Permalinks {
 		$this->add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]&city=$matches[3]', 'top' );
 		$this->add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]', 'top' );
 		$this->add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]', 'top' );
+	}
+
+	/**
+	 * Setup add listing page rewrite rules.
+	 *
+	 * @since 2.3.18
+	 */
+	public function add_listing_rewrite_rules() {
+		$post_types = geodir_get_posttypes( 'array' );
+
+		if ( empty( $post_types ) ) {
+			return;
+		}
+
+		$page_slug = $this->add_listing_slug();
+		$rules = array();
+
+		foreach ( $post_types as $post_type => $cpt ) {
+			if ( empty( $cpt['rewrite']['slug'] ) ) {
+				continue;
+			}
+
+			$cpt_slug = $cpt['rewrite']['slug'];
+
+			$rules[ '^' . $page_slug . '/' . $cpt_slug . '/?$' ] = 'index.php?pagename=' . $page_slug . '&listing_type=' . $post_type;
+			$rules[ '^' . $page_slug . '/' . $cpt_slug . '/?([0-9]{1,})/?$' ] = 'index.php?pagename=' . $page_slug . '&listing_type=' . $post_type . '&pid=$matches[1]';
+
+			$cpt_page_slug = $this->add_listing_slug( $post_type );
+			if ( $cpt_page_slug != $cpt_slug ) {
+				$rules[ '^' . $cpt_page_slug . '/' . $cpt_slug . '/?$' ] = 'index.php?pagename=' . $cpt_page_slug . '&listing_type=' . $post_type;
+				$rules[ '^' . $cpt_page_slug . '/' . $cpt_slug . '/?([0-9]{1,})/?$' ] = 'index.php?pagename=' . $cpt_page_slug . '&listing_type=' . $post_type . '&pid=$matches[1]';
+			}
+		}
+
+		$rules = apply_filters( 'geodir_get_add_listing_rewrite_rules', $rules );
+
+		if ( ! empty( $rules ) ) {
+			foreach ( $rules as $regex => $redirect ) {
+				$this->add_rewrite_rule( $regex, $redirect, 'top' );
+			}
+		}
 	}
 
 	/**
@@ -815,6 +860,32 @@ class GeoDir_Permalinks {
 		return apply_filters('geodir_rewrite_location_slug',$location_slug);
 	}
 
+	/**
+	 * Get the add listing page slug.
+	 *
+	 * @since 2.3.18
+	 *
+	 * @param string $post_type Post type. Default empty.
+	 * @param string $slug      Add listing page slug. Default add-listing.
+	 * @return string Add listing page slug.
+	 */
+	public function add_listing_slug( $post_type = '', $slug = 'add-listing' ) {
+		if ( $post_type ) {
+			if ( $page_id = (int) geodir_add_listing_page_id( $post_type ) ) {
+				if ( $_slug = get_post_field( 'post_name', $page_id ) ) {
+					$slug = strpos( $_slug, '%' ) !== false ? urldecode( $_slug ) : $_slug;
+				}
+			}
+		} else {
+			if ( $page_id = (int) geodir_add_listing_page_id() ) {
+				if ( $_slug = get_post_field( 'post_name', $page_id ) ) {
+					$slug = strpos( $_slug, '%' ) !== false ? urldecode( $_slug ) : $_slug;
+				}
+			}
+		}
+
+		return apply_filters( 'geodir_rewrite_add_listing_slug', $slug, $post_type );
+	}
 
 	/**
 	 * Tell if the current core permalink structure ends with a slash or not.
@@ -929,5 +1000,47 @@ class GeoDir_Permalinks {
 				delete_option( 'geodir_rank_math_flush_rewrite' );
 			}
 		}
+	}
+
+	/**
+	 * Filters a navigation menu item object.
+	 *
+	 * Parse existing old add listing menu links.
+	 *
+	 * @since 2.3.18
+	 *
+	 * @param object $menu_item The menu item object.
+	 * @return object Filtered menu item.
+	 */
+	public static function wp_setup_nav_menu_item( $menu_item ) {
+		if ( ! empty( $menu_item->type ) && $menu_item->type == 'custom' && ! empty( $menu_item->url ) && ( strpos( $menu_item->url, '?listing_type=gd_' ) || strpos( $menu_item->url, '&listing_type=gd_' ) ) && get_option( 'permalink_structure' ) ) {
+			$parse_url = parse_url( $menu_item->url );
+
+			if ( ! empty( $parse_url['query'] ) ) {
+				$query_params = wp_parse_args( $parse_url['query'] );
+
+				if ( ! empty( $query_params['listing_type'] ) ) {
+					$url = geodir_add_listing_page_url( $query_params['listing_type'] );
+
+					$args = array();
+
+					foreach ( $query_params as $key => $value ) {
+						if ( in_array( $key, array( 'listing_type', 'pid' ) ) ) {
+							continue;
+						}
+
+						$args[ $key ] = $value;
+					}
+
+					if ( ! empty( $args ) ) {
+						$url = add_query_arg( $args, $url );
+					}
+
+					$menu_item->url = $url;
+				}
+			}
+		}
+
+		return $menu_item;
 	}
 }

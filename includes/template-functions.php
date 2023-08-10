@@ -712,7 +712,31 @@ function geodir_template_redirect() {
 			}
 
 			if ( ! empty( $post_type ) ) {
-				wp_redirect( add_query_arg( array( 'listing_type' => $post_type ) ) );
+				$post_id = ! empty( $_REQUEST['pid'] ) ? absint( $_REQUEST['pid'] ) : 0;
+
+				$redirect = geodir_add_listing_page_url( $post_type, $post_id );
+
+				if ( ! empty( $_GET ) ) {
+					$args = array();
+
+					foreach ( $_GET as $key => $value ) {
+						$key = geodir_clean( $key );
+
+						if ( in_array( $key, array( 'listing_type', 'pid' ) ) ) {
+							continue;
+						}
+
+						$args[ $key ] = geodir_clean( $value );
+					}
+
+					if ( ! empty( $args ) ) {
+						$redirect = add_query_arg( $args, $redirect );
+					}
+				}
+
+				$redirect = apply_filters( 'geodir_rescue_add_listing_page_redirect', $redirect, $post_type );
+
+				wp_redirect( $redirect );
 				exit;
 			}
 		}
