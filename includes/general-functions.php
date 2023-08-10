@@ -124,19 +124,42 @@ function geodir_getlink( $url, $params = array(), $use_existing_arguments = fals
 /**
  * Returns add listing page url.
  *
- * @since   2.0.0.97
+ * @since 2.0.0.97
+ * @since 2.3.18 Added $post_id parameter.
  *
  * @param string $post_type The post type.
+ * @param int $post_id The post ID. DEfault 0.
  * @return string Add listing page url.
  */
-function geodir_add_listing_page_url( $post_type = '' ) {
+function geodir_add_listing_page_url( $post_type = '', $post_id = 0 ) {
 	global $wpdb;
+
+	if ( empty( $post_type ) && ! empty( $post_id ) ) {
+		$post_type = get_post_type( $post_id );
+	}
 
 	$page_id = geodir_add_listing_page_id( $post_type );
 
-	$page_link = add_query_arg( array( 'listing_type' => $post_type ), get_page_link( $page_id ) );
+	$base_link = get_page_link( $page_id );
 
-	return apply_filters( 'geodir_add_listing_page_url', $page_link, $post_type );
+	if ( get_option( 'permalink_structure' ) != '' ) {
+		$page_link = trailingslashit( $base_link ) . geodir_cpt_permalink_rewrite_slug( $post_type ) . '/';
+
+		if ( $post_id > 0 ) {
+			$page_link .= $post_id . '/';
+		}
+	} else {
+		$args = array();
+		$args['listing_type'] = $post_type;
+
+		if ( $post_id > 0 ) {
+			$args['pid'] = $post_id;
+		}
+
+		$page_link = add_query_arg( $args, $base_link );
+	}
+
+	return apply_filters( 'geodir_add_listing_page_url', $page_link, $post_type, $post_id );
 }
 
 /**

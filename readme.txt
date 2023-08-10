@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.18 =
 * GD SEO variables no longer working with SEOPress meta description - FIXED
+* Use pretty permalinks for add listing link - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.17 - 2023-08-07 =
 * Sometimes CPT pages header style not working with Divi builder - FIXED
