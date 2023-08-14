@@ -143,39 +143,54 @@ function initMap(map_options) {
 }
 
 function geodir_build_static_map(map_canvas) {
+    var width, height, width_raw, height_raw, wrapWi, wrapHe, maptype;
+
     if (window.gdMaps != 'google') {
         build_map_ajax_search_param(map_canvas, false);
         return;
     }
     options = eval(map_canvas);
 
-    // width
-    var width_raw = options.width;
-    var width = width_raw.replace(/\D/g, '');
+    // Width
+    width_raw = options.width ? options.width : 0;
+    wrapWi = jQuery("#" + map_canvas).width();
 
-    // height
-    var height_raw = options.height;
-    var height = height_raw.replace(/\D/g, '');
+    if (wrapWi < 10) {
+        wrapWi = jQuery("#" + map_canvas).closest('.geodir-map-wrap').width();
+    }
+    if (width_raw.indexOf('%') !== -1) {
+        width = parseInt(parseInt(width_raw) * wrapWi / 100);
+    } else {
+        width = parseInt(width_raw.replace(/\D/g, ''));
+    }
+    if (width < 10) {
+        width = parseInt(wrapWi);
+    }
 
-    var img_url = "https://maps.googleapis.com/maps/api/staticmap?" +
-        "size=" + width + "x" + height +
-        "&maptype=" + options.maptype +
-        "&zoom=" + options.zoom +
-        "&center=" + options.latitude + "," + options.longitude +
-        "&markers=icon:" + options.icon_url + "|" + options.latitude + "," + options.longitude +
-        "&key=" + geodir_params.google_api_key;
+    // Height
+    height_raw = options.height ? options.height : 0;
+    wrapHe = jQuery("#" + map_canvas).height();
+    if (wrapHe < 10) {
+        wrapHe = jQuery("#" + map_canvas).closest('.geodir-map-wrap').height();
+    }
+    if (height_raw.indexOf('%') !== -1) {
+        height = parseInt(parseInt(height_raw) * wrapHe / 100);
+    } else {
+        height = parseInt(height_raw.replace(/\D/g, ''));
+    }
+    if (height < 10) {
+        height = parseInt(wrapHe);
+    }
+
+    maptype = options.maptype ? (options.maptype).toLowerCase() : 'roadmap';
+
+    var img_url = "https://maps.googleapis.com/maps/api/staticmap?" + "size=" + width + "x" + height + "&maptype=" + maptype + "&language=" + geodir_params.mapLanguage + "&zoom=" + options.zoom + "&center=" + options.latitude + "," + options.longitude + "&markers=icon:" + options.icon_url + "|" + options.latitude + "," + options.longitude + "&key=" + geodir_params.google_api_key;
 
     var img = "<img class='geodir-static-map-image' src='" + img_url + "' onclick='build_map_ajax_search_param(\"" + map_canvas + "\",false);' />";
 
     jQuery("#" + map_canvas).html(img);
     jQuery("." + map_canvas + "_TopLeft").hide();
     jQuery('#' + map_canvas + '_loading_div').hide();
-
-    //console.log(img);
-    // "center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap
-    // &markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318
-    // &markers=color:red%7Clabel:C%7C40.718217,-73.998284
-    // &key=YOUR_API_KEY";
 }
 
 function geodir_no_map_api(map_canvas) {
