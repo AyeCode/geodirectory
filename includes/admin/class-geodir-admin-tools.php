@@ -26,6 +26,7 @@ class GeoDir_Admin_Tools {
 		add_filter('geodir_load_db_language', array($this,'load_cpt_text_translation') );
 		add_filter('geodir_load_db_language', array($this,'load_gd_options_text_translation') );
 		add_filter('geodir_debug_tools', array( $this, 'extra_debug_tools' ), 99, 1 );
+		add_action('geodir_status_tool_after_desc', array( $this, 'tool_extra_content' ), 10, 2 );
 	}
 
 	/**
@@ -80,6 +81,12 @@ class GeoDir_Admin_Tools {
 				'name'    => __( 'DB text translation', 'geodirectory' ),
 				'button'  => __( 'Run', 'geodirectory' ),
 				'desc'    => __( 'This tool will collect any texts stored in the DB and put them in the file db-language.php so they can then be used to translate them by translations tools.', 'geodirectory' ),
+			),
+			'search_replace_cf' => array(
+				'name'    => __( 'Search & Replace Custom Field Value', 'geodirectory' ),
+				'button'  => __( 'Replace', 'geodirectory' ),
+				'desc'    => __( 'Search & replace custom field values in post type details database table for SELECT, MULTISELECT, RADIO, CHECKBOX field types.', 'geodirectory' ),
+				'link'    => '#search_replace_cf'
 			),
 		);
 
@@ -139,6 +146,14 @@ class GeoDir_Admin_Tools {
 				} else {
 					$message = __( 'There was a problem creating the file, please check file permissions: ', 'geodirectory' ). geodir_plugin_path() . 'db-language.php';
 					$ran     = false;
+				}
+				break;
+			case 'search_replace_cf' :
+				if ( $replaced = $this->search_replace_cf_value() ) {
+					$message = wp_sprintf( __( '%d items has been successfully updated.', 'geodirectory' ), $replaced );
+				} else {
+					$message = __( 'No matching items found.', 'geodirectory' );
+					$ran = false;
 				}
 				break;
 			case 'cleanup' :
@@ -686,5 +701,145 @@ class GeoDir_Admin_Tools {
 		delete_option( 'geodir_post_types' );
 
 		return true;
+	}
+
+	public function tool_extra_content( $action, $tool ) {
+		global $geodir_tool_render;
+
+		if ( empty( $geodir_tool_render ) ) {
+			$geodir_tool_render = array();
+		}
+
+		if ( ! empty( $geodir_tool_render[ $action ] ) ) {
+			return;
+		}
+
+		$geodir_tool_render[ $action ] = true;
+
+		if ( $action == 'search_replace_cf' ) {
+			$post_type = ! empty( $_REQUEST['srcf_pt'] ) ? sanitize_text_field( $_REQUEST['srcf_pt'] ) : '';
+			$field = ! empty( $_REQUEST['srcf_cf'] ) ? sanitize_text_field( $_REQUEST['srcf_cf'] ) : '';
+			$search = isset( $_REQUEST['srcf_s'] ) && $_REQUEST['srcf_s'] != "" ? sanitize_text_field( wp_unslash( $_REQUEST['srcf_s'] ) ) : '';
+			$replace = isset( $_REQUEST['srcf_r'] ) && $_REQUEST['srcf_r'] != "" ? sanitize_text_field( wp_unslash( $_REQUEST['srcf_r'] ) ) : '';
+
+			$output = '<div class="bsui">';
+				$output .= '<div class="row mt-3">';
+					$output .= '<div class="col col-md-3 col-sm-12">';
+					$output .= aui()->select(
+						array(
+							'id' => 'gd_srcf_pt',
+							'name' => 'gd_srcf_pt',
+							'placeholder' => esc_html__( 'Select Post Type...', 'geodirectory' ),
+							'title' => esc_html__( 'Post Type', 'geodirectory' ),
+							'label' => esc_html__( 'Post Type', 'geodirectory' ),
+							'label_type' => 'hidden',
+							'value' => $post_type,
+							'size' => 'sm',
+							'options' => geodir_get_posttypes( 'options-plural' ),
+							'required' => false
+						)
+					);
+					$output .= '</div>';
+					$output .= '<div class="col col-md-3 col-sm-12">';
+					$output .= aui()->select(
+						array(
+							'id' => 'gd_srcf_cf',
+							'name' => 'gd_srcf_cf',
+							'placeholder' => esc_html__( 'Select Field...', 'geodirectory' ),
+							'title' => esc_html__( 'Custom Field', 'geodirectory' ),
+							'label' => esc_html__( 'Custom Field', 'geodirectory' ),
+							'label_type' => 'hidden',
+							'value' => $field,
+							'size' => 'sm',
+							'options' => $this->get_cf_with_option_values(),
+							'required' => false
+						)
+					);
+					$output .= '</div>';
+					$output .= '<div class="col col-md-3 col-sm-12">';
+					$output .= aui()->input(
+						array(
+							'id' => 'gd_srcf_s',
+							'name' => 'gd_srcf_s',
+							'type' => 'text',
+							'placeholder' => esc_html__( 'Search Keyword', 'geodirectory' ),
+							'title' => esc_html__( 'Search', 'geodirectory' ),
+							'label' => esc_html__( 'Search', 'geodirectory' ),
+							'label_type' => 'hidden',
+							'value' => $search,
+							'size' => 'sm',
+							'required' => true
+						)
+					);
+					$output .= '</div>';
+					$output .= '<div class="col col-md-3 col-sm-12">';
+					$output .= aui()->input(
+						array(
+							'id' => 'gd_srcf_r',
+							'name' => 'gd_srcf_r',
+							'type' => 'text',
+							'placeholder' => esc_html__( 'Replace Keyword', 'geodirectory' ),
+							'title' => esc_html__( 'Replace', 'geodirectory' ),
+							'label' => esc_html__( 'Replace', 'geodirectory' ),
+							'label_type' => 'hidden',
+							'value' => $replace,
+							'size' => 'sm',
+							'required' => false
+						)
+					);
+					$output .= '</div>';
+				$output .= '</div>';
+			$output .= '</div>';
+			$output .= '<script type="text/javascript">jQuery(function() {jQuery("a.search_replace_cf").on("click", function(e){';
+				$output .= 'e.preventDefault();var srcf = "";';
+				$output .= 'if (!jQuery("select#gd_srcf_pt").val()) {jQuery("select#gd_srcf_pt").trigger("focus");return false;}srcf += "&srcf_pt=" + jQuery("select#gd_srcf_pt").val();';
+				$output .= 'if (!jQuery("select#gd_srcf_cf").val()) {jQuery("select#gd_srcf_cf").trigger("focus");return false;}srcf += "&srcf_cf=" + jQuery("select#gd_srcf_cf").val();';
+				$output .= 'if (!jQuery("input#gd_srcf_s").val() != "") {jQuery("input#gd_srcf_s").trigger("focus");return false;}srcf += "&srcf_s=" + jQuery("input#gd_srcf_s").val();';
+				$output .= 'if (!jQuery("input#gd_srcf_r").val() != "") {jQuery("input#gd_srcf_r").trigger("focus");return false;}srcf += "&srcf_r=" + jQuery("input#gd_srcf_r").val();';
+				$output .= 'window.location = "' . admin_url( 'admin.php?page=gd-status&tab=tools&action=search_replace_cf" + srcf + "&_wpnonce=' . esc_attr( wp_create_nonce( 'debug_action' ) ) ) . '";';
+			$output .= '});});</script>';
+
+			echo $output;
+		}
+	}
+
+	public function search_replace_cf_value() {
+		global $wpdb;
+
+		$post_type = ! empty( $_REQUEST['srcf_pt'] ) ? sanitize_text_field( $_REQUEST['srcf_pt'] ) : '';
+		$field = ! empty( $_REQUEST['srcf_cf'] ) ? sanitize_text_field( $_REQUEST['srcf_cf'] ) : '';
+		$search = isset( $_REQUEST['srcf_s'] ) && $_REQUEST['srcf_s'] != "" ? sanitize_text_field( wp_unslash( $_REQUEST['srcf_s'] ) ) : '';
+		$replace = isset( $_REQUEST['srcf_r'] ) && $_REQUEST['srcf_r'] != "" ? sanitize_text_field( wp_unslash( $_REQUEST['srcf_r'] ) ) : '';
+
+		$found = 0;
+
+		if ( geodir_is_gd_post_type( $post_type ) && ! empty( $field ) && ! empty( $search ) && geodir_column_exist( geodir_db_cpt_table( $post_type ), $field ) ) {
+			$found = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . geodir_db_cpt_table( $post_type ) ."` WHERE FIND_IN_SET( `" . esc_sql( $field ) . "`, %s )", array( $search ) ) );
+			if ( $found > 0 ) {
+				$found = $wpdb->query( $wpdb->prepare( "UPDATE `" . geodir_db_cpt_table( $post_type ) ."` SET `" . esc_sql( $field ) . "` = TRIM( BOTH ',' FROM ( SELECT REPLACE( CONCAT( ',', `" . esc_sql( $field ) . "`, ',' ), %s, %s ) ) ) WHERE FIND_IN_SET( %s, `" . esc_sql( $field ) . "` )", array( ',' . $search . ',', ',' . $replace . ',', $search ) ) );
+			}
+		}
+
+		return $found;
+	}
+
+	public function get_cf_with_option_values() {
+		global $wpdb;
+
+		$results = $wpdb->get_results( "SELECT DISTINCT `htmlvar_name`, `frontend_title`, `admin_title` FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE `option_values` != '' AND `option_values` IS NOT NULL AND `field_type` IN ('select', 'multiselect', 'radio', 'checkbox') ORDER BY `admin_title` ASC" );
+
+		$options = array();
+
+		if ( ! empty( $results ) ) {
+			foreach ( $results as $row ) {
+				if ( ! empty( $row->htmlvar_name ) ) {
+					$title = ! empty( $row->admin_title ) ? __( wp_unslash( $row->admin_title ), 'geodirectory' ) : __( wp_unslash( $row->frontend_title ), 'geodirectory' );
+
+					$options[ $row->htmlvar_name ] = $title . ' (' . $row->htmlvar_name . ')';
+				}
+			}
+		}
+
+		return $options;
 	}
 }

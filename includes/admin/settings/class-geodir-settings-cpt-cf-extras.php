@@ -78,9 +78,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			add_filter('geodir_cfa_extra_fields_multiselect',array( $this,'multiselect_input'),10,4);
 
 			// Multiple value option values
-			add_filter('geodir_cfa_extra_fields_multiselect', array( $this, 'option_values'),10,4);
-			add_filter('geodir_cfa_extra_fields_select',array( $this, 'option_values'),10,4);
-			add_filter('geodir_cfa_extra_fields_radio',array( $this, 'option_values'),10,4);
+			add_filter( 'geodir_cfa_extra_fields_multiselect', array( $this, 'option_values' ), 10, 4 );
+			add_filter( 'geodir_cfa_extra_fields_select', array( $this, 'option_values' ), 10, 4 );
+			add_filter( 'geodir_cfa_extra_fields_radio', array( $this, 'option_values' ), 10, 4 );
 
 			// Date picker date format
 			add_filter('geodir_cfa_extra_fields_datepicker',array( $this,'date_format'),10,4);
@@ -577,47 +577,47 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-        /**
-         * Multiple input option values.
-         *
-         * @since 2.0.0
-         *
-         * @param string $output Html output.
-         * @param string $result_str Results string.
-         * @param array $cf Input custom fields.
-         * @param object $field_info Fields information.
-         * @return string $output.
-         */
-		public static function option_values($output,$result_str,$cf,$field_info){
-
+		/**
+		 * Render select field option values.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $output Html output.
+		 * @param string $result_str Results string.
+		 * @param array  $cf Input custom fields.
+		 * @param object $field_info Fields information.
+		 * @return string $output.
+		 */
+		public function option_values( $output, $result_str, $cf, $field_info ) {
+			$field_type = isset( $field_info->field_type ) ? $field_info->field_type : '';
 			$value = '';
-			if (isset($field_info->option_values)) {
-				$value = esc_attr($field_info->option_values);
-			}elseif(isset($cf['defaults']['option_values']) && $cf['defaults']['option_values']){
-				$value = esc_attr($cf['defaults']['option_values']);
+
+			if ( isset( $field_info->option_values ) ) {
+				$value = $field_info->option_values;
+			} else if ( isset( $cf['defaults']['option_values'] ) && $cf['defaults']['option_values'] ) {
+				$value = $cf['defaults']['option_values'];
 			}
 
-			$field_type = isset($field_info->field_type) ? $field_info->field_type : '';
+			// Converts old option values format to new format.
+			$value = geodir_convert_old_option_values( $value );
 
-			$option_values_tool_top = __( 'Option Values should be separated by comma.', 'geodirectory' ).'<br/>';
-			$option_values_tool_top .= __( 'If using for a "tick filter" place a / and then either a 1 for true or 0 for false', 'geodirectory' ).'<br/>';
-			$option_values_tool_top .= __( 'eg: "No Dogs Allowed/0,Dogs Allowed/1" (Select only, not multiselect)', 'geodirectory' ).'<br/>';
-			if ($field_type == 'multiselect' || $field_type == 'select') {
-				$option_values_tool_top .= '<small><span>'.__( '- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'geodirectory' ).'</span>';
-				$option_values_tool_top .= '<span>'.__( '- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'geodirectory' ).'</span></small>';
-			}
+			$placeholder = esc_html__( 'For Sale 
+under-offer : Under Offer 
+optgroup : Electronics 
+TV
+Laptop
+optgroup-close', 'geodirectory' );
 
-
-			$output .= aui()->input(
+			$output .= aui()->textarea(
 				array(
-					'id'                => 'option_values',
-					'name'              => 'option_values',
-					'label_type'        => 'top',
-					'label'              => __('Option Values','geodirectory') . geodir_help_tip( $option_values_tool_top ),
-					'type'              => 'text',
-//					'wrap_class' => geodir_advanced_toggle_class(),
+					'id' => 'option_values',
+					'name' => 'option_values',
+					'label' => __( 'Option Values', 'geodirectory' ),
+					'help_text' => esc_html__( 'Enter each option on a new line with format "LABEL" OR "VALUE : LABEL". To grouping options use "optgroup : OPTGROUP-LABEL" & "optgroup-close".', 'geodirectory' ),
+					'label_type' => 'top',
+					'placeholder' => $placeholder,
 					'value' => $value,
-//					'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
+					'rows' => 4
 				)
 			);
 

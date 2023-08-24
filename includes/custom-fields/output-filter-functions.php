@@ -265,10 +265,14 @@ function geodir_post_badge_link( $link, $match_field, $args, $find_post, $field 
 }
 add_filter( 'geodir_post_badge_link', 'geodir_post_badge_link', 10, 5 );
 
-function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
-	// check we have the post value
+function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '', $the_post = array() ) {
+	// Check we have the post value
 	if ( is_numeric( $p ) ) {
-		$gd_post = geodir_get_post_info( $p );
+		if ( ! empty( $p ) && ! empty( $the_post ) && ! empty( $the_post->post_id ) && (int) $the_post->post_id == (int) $p ) {
+			$gd_post = $the_post;
+		} else {
+			$gd_post = geodir_get_post_info( $p );
+		}
 	} else {
 		global $gd_post;
 	}
@@ -403,7 +407,7 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
 
 	return $html;
 }
-add_filter( 'geodir_custom_field_output_custom', 'geodir_cf_custom', 10, 5 );
+add_filter( 'geodir_custom_field_output_custom', 'geodir_cf_custom', 10, 6 );
 
 /**
  * Filter map directions to custom field output.

@@ -1683,13 +1683,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field->field_icon = isset( $input['field_icon'] ) ? sanitize_text_field( $input['field_icon'] ) : '';
 			$field->show_in = isset( $input['show_in'] ) ? self::sanatize_show_in( $input['show_in'] ) : '';
 			$field->option_values = isset( $input['option_values'] ) ? self::sanitize_option_values( $input['option_values'] ) : '';
-			$field->packages = isset( $input['show_on_pkg'] ) ? self::sanatize_show_on_pkg( $input['show_on_pkg'] ) : ''; //@todo maybe have sanatize function
+			$field->packages = isset( $input['show_on_pkg'] ) ? self::sanatize_show_on_pkg( $input['show_on_pkg'] ) : '';
 			$field->cat_sort = isset( $input['cat_sort'] ) ? absint( $input['cat_sort'] ) : 0;
 			$field->cat_filter = isset( $input['cat_filter'] ) ? absint( $input['cat_filter'] ) : 0;
 			$field->data_type = isset( $input['data_type'] ) ? sanitize_text_field( $input['data_type'] ) : '';
-			$field->extra_fields = isset( $input['extra'] ) ? self::sanatize_extra( $input['extra'] ) : '';//@todo
+			$field->extra_fields = isset( $input['extra'] ) ? self::sanatize_extra( $input['extra'] ) : '';
 			$field->decimal_point = isset( $input['decimal_point'] ) ? absint( $input['decimal_point'] ) : 0;
-			$field->validation_pattern = isset( $input['validation_pattern'] ) ? sanitize_text_field( $input['validation_pattern'] ) : '';//@todo
+			$field->validation_pattern = isset( $input['validation_pattern'] ) ? sanitize_text_field( $input['validation_pattern'] ) : '';
 			$field->validation_msg = isset( $input['validation_msg'] ) ? sanitize_text_field( $input['validation_msg'] ) : '';
 			$field->for_admin_use = isset( $input['for_admin_use'] ) ? absint( $input['for_admin_use'] ) : 0;
 			$field->add_column = !empty( $input['add_column'] ) ? 1 : 0;
@@ -1876,9 +1876,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 *
 		 * @return mixed
 		 */
-		private static function sanitize_option_values( $value ){
+		private static function sanitize_option_values( $value ) {
+			if ( strpos( $value, PHP_EOL ) !== false ) {
+				$value = geodir_sanitize_textarea_field( $value );
+			} else {
+				$value = sanitize_text_field( $value);
+			}
 
-			return sanitize_text_field( $value);
+			return $value;
 		}
 
 		/**
