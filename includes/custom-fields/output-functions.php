@@ -946,7 +946,7 @@ function geodir_cf_radio($html,$location,$cf,$p='',$output=''){
         if (isset($gd_post->{$cf['htmlvar_name']}) && $gd_post->{$cf['htmlvar_name']} != ''):
 
             if (!empty($cf['option_values'])) {
-                $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);
+                $cf_option_values = geodir_string_to_options( $cf['option_values'], true );
 
                 if (!empty($cf_option_values)) {
                     foreach ($cf_option_values as $cf_option_value) {
@@ -1083,7 +1083,7 @@ function geodir_cf_select($html,$location,$cf,$p='',$output=''){
             }
 
             if (!empty($cf['option_values'])) {
-                $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);
+                $cf_option_values = geodir_string_to_options( $cf['option_values'], true );
 
                 if (!empty($cf_option_values)) {
                     foreach ($cf_option_values as $cf_option_value) {
@@ -1239,7 +1239,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
 
             $option_values = array();
             if (!empty($cf['option_values'])) {
-                $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);
+                $cf_option_values = geodir_string_to_options( $cf['option_values'], true );
 
                 if (!empty($cf_option_values)) {
                     foreach ($cf_option_values as $cf_option_value) {

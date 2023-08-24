@@ -480,7 +480,9 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 						$type = 'file';
 					}
 
-					$output = apply_filters( "geodir_custom_field_output_{$type}", '', $args['location'], $field, $args['id'], $args['show'] );
+					$the_post = ! empty( $args['id'] ) && ! empty( $gd_post ) && ! empty( $gd_post->post_id ) && (int) $gd_post->post_id == (int) $args['id'] ? $gd_post : array();
+
+					$output = apply_filters( "geodir_custom_field_output_{$type}", '', $args['location'], $field, $args['id'], $args['show'], $the_post );
 
 					if ( ! $output && $this->is_preview() ) {
 						$output = $this->get_field_preview( $args, $field );

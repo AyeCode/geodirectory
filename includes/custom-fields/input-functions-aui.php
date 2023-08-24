@@ -591,104 +591,102 @@ add_filter('geodir_custom_field_input_textarea','geodir_cfi_textarea',10,2);
 /**
  * Get the html input for the custom field: select
  *
- * @param string $html The html to be filtered.
- * @param array $cf The custom field array details.
  * @since 1.6.6
  *
+ * @param string $html The html to be filtered.
+ * @param array $cf The custom field array details.
  * @return string The html to output for the custom field.
  */
-function geodir_cfi_select($html,$cf){
+function geodir_cfi_select( $html, $cf ) {
+	$html_var = $cf['htmlvar_name'];
 
-    $html_var = $cf['htmlvar_name'];
+	// Check if there is a custom field specific filter.
+	if ( has_filter( "geodir_custom_field_input_select_{$html_var}" ) ) {
+		/**
+		 * Filter the select html by individual custom field.
+		 *
+		 * @param string $html The html to filter.
+		 * @param array $cf The custom field array.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_input_select_{$html_var}", $html, $cf );
+	}
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_input_select_{$html_var}")){
-        /**
-         * Filter the select html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_input_select_{$html_var}",$html,$cf);
-    }
+	// If no html then we run the standard output.
+	if ( empty( $html ) ) {
+		global $geodir_label_type;
 
-    // If no html then we run the standard output.
-    if(empty($html)) {
-        global $geodir_label_type;
+		$extra_attributes = array();
+		$value = geodir_get_cf_value( $cf );
+		$validation_text = '';
 
-        $extra_attributes = array();
-        $value = geodir_get_cf_value($cf);
-        $validation_text = '';
+		// Required
+		$required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
-        // Required
-        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+		// Required message
+		if ( $required && ! empty( $cf['required_msg'] ) ) {
+			$validation_text = __( $cf['required_msg'], 'geodirectory' );
+		}
 
-        // Required message
-        if ( $required && ! empty( $cf['required_msg'] ) ) {
-            $validation_text = __( $cf['required_msg'], 'geodirectory' );
-        }
+		// Validation message
+		if ( ! empty( $cf['validation_msg'] ) ) {
+			$validation_text = __( $cf['validation_msg'], 'geodirectory' );
+		}
 
-        // Validation message
-        if ( ! empty( $cf['validation_msg'] ) ) {
-            $validation_text = __( $cf['validation_msg'], 'geodirectory' );
-        }
+		// Validation
+		if ( ! empty( $cf['validation_pattern'] ) ) {
+			$extra_attributes['pattern'] = $cf['validation_pattern'];
+		}
 
-        // Validation
-        if ( ! empty( $cf['validation_pattern'] ) ) {
-            $extra_attributes['pattern'] = $cf['validation_pattern'];
-        }
+		$title = $validation_text;
 
-        $title = $validation_text;
+		// help text
+		$help_text = __( $cf['desc'], 'geodirectory' );
 
-        // help text
-        $help_text = __( $cf['desc'], 'geodirectory' );
+		// placeholder
+		$placeholder = esc_attr__( $cf['placeholder_value'], 'geodirectory' );
+		if ( empty( $placeholder ) ) {
+			$placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), __( $cf['frontend_title'], 'geodirectory' ) );
+		}
 
-        // placeholder
-        $placeholder = esc_attr__( $cf['placeholder_value'], 'geodirectory' );
-        if ( empty( $placeholder ) ) {
-            $placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), __($cf['frontend_title'], 'geodirectory'));
-        }
+		//extra
+		$extra_attributes['data-placeholder'] = esc_attr( $placeholder );
+		$extra_attributes['option-ajaxchosen'] = 'false';
 
-        //extra
-        $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
-        $extra_attributes['option-ajaxchosen'] = 'false';
+		// Set validation message
+		if ( ! empty( $validation_text ) ) {
+			$extra_attributes['oninvalid'] = 'try{this.setCustomValidity(\'' . esc_attr( addslashes( $validation_text ) ) . '\')}catch(e){}';
+			$extra_attributes['onchange'] = 'try{this.setCustomValidity(\'\')}catch(e){}';
+		}
 
-        // Set validation message
-        if ( ! empty( $validation_text ) ) {
-            $extra_attributes['oninvalid'] = 'try{this.setCustomValidity(\'' . esc_attr( addslashes( $validation_text ) ) . '\')}catch(e){}';
-            $extra_attributes['onchange'] = 'try{this.setCustomValidity(\'\')}catch(e){}';
-        }
+		// Admin only
+		$admin_only = geodir_cfi_admin_only( $cf );
+		$conditional_attrs = geodir_conditional_field_attrs( $cf );
 
-        // admin only
-        $admin_only = geodir_cfi_admin_only($cf);
-        $conditional_attrs = geodir_conditional_field_attrs( $cf );
+		$html .= aui()->select( array(
+			'id' => $cf['name'],
+			'name' => $cf['name'],
+			'title' => $title,
+			'placeholder' => $placeholder,
+			'value' => $value,
+			'required' => ! empty( $cf['is_required'] ) ? true : false,
+			'label_show' => true,
+			'label_type' => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
+			'label' => __( $cf['frontend_title'], 'geodirectory' ) . $admin_only . $required,
+			'validation_text' => $validation_text,
+			'validation_pattern' => ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
+			'help_text' => $help_text,
+			'extra_attributes' => $extra_attributes,
+			'options' => geodir_string_to_options( $cf['option_values'], true ),
+			'select2' => true,
+			'data-allow-clear' => true,
+			'wrap_attributes' => $conditional_attrs
+		) );
+	}
 
-        $html .= aui()->select( array(
-            'id'               => $cf['name'],
-            'name'               => $cf['name'],
-            'title'             => $title,
-            'placeholder'      => $placeholder,
-            'value'            => $value,
-            'required'   => !empty($cf['is_required']) ? true : false,
-            'label_show'       => true,
-            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
-            'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-            'validation_text'    => $validation_text,
-            'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
-            'help_text'        => $help_text,
-            'extra_attributes' => $extra_attributes,
-            'options'          => geodir_string_values_to_options($cf['option_values'], true),
-            'select2'       => true,
-            'data-allow-clear' => true,
-            'wrap_attributes' => $conditional_attrs
-        ) );
-
-    }
-
-    return $html;
+	return $html;
 }
-add_filter('geodir_custom_field_input_select','geodir_cfi_select',10,2);
+add_filter( 'geodir_custom_field_input_select', 'geodir_cfi_select', 10, 2 );
 
 
 /**
@@ -797,7 +795,7 @@ function geodir_cfi_multiselect( $html, $cf ) {
 				'validation_pattern' => ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
 				'help_text'          => $help_text,
 				'extra_attributes'   => $extra_attributes,
-				'options'            => geodir_string_values_to_options( $cf['option_values'], true ),
+				'options'            => geodir_string_to_options( $cf['option_values'], true ),
 				'select2'            => true,
 				'multiple'           => true,
 				'data-allow-clear'   => false,
@@ -854,12 +852,12 @@ function geodir_cfi_multiselect( $html, $cf ) {
 				echo "<div class='col-sm-10 mt-2' ><div class=' border rounded px-2 scrollbars-ios' style='max-height: 150px;overflow-y:auto;overflow-x: hidden;'>";
 			}
 
-			$option_values_arr = geodir_string_values_to_options( $cf['option_values'], true );
+			$option_values_arr = geodir_string_to_options( $cf['option_values'], true );
 
 			if ( ! empty( $option_values_arr ) ) {
 				foreach ( $option_values_arr as $i => $option_row ) {
 					if ( isset( $option_row['optgroup'] ) && ( $option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end' ) ) {
-						$option_label = isset($option_row['label']) ? $option_row['label'] : '';
+						$option_label = isset( $option_row['label'] ) ? $option_row['label'] : '';
 
 						echo $option_row['optgroup'] == 'start' ? '<h6>' . $option_label . '</h6>' : '';
 					} else {
@@ -1994,149 +1992,150 @@ add_filter('geodir_custom_field_input_categories','geodir_cfi_categories',10,2);
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_tags( $html, $cf ) {
-    global $gd_post;
+	global $gd_post;
 
-    // we use the standard WP tags UI in backend
-    if ( is_admin() ) {
-        return '';
-    }
+	// we use the standard WP tags UI in backend
+	if ( is_admin() ) {
+		return '';
+	}
 
-    $html_var = $cf['htmlvar_name'];
+	$html_var = $cf['htmlvar_name'];
 
-    // Check if there is a custom field specific filter.
-    if ( has_filter("geodir_custom_field_input_tags_{$html_var}" ) ) {
-        /**
-         * Filter the multiselect html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @since 1.6.6
-         */
-        $html = apply_filters( "geodir_custom_field_input_tags_{$html_var}", $html, $cf );
-    }
+	// Check if there is a custom field specific filter.
+	if ( has_filter("geodir_custom_field_input_tags_{$html_var}" ) ) {
+		/**
+		 * Filter the multiselect html by individual custom field.
+		 *
+		 * @param string $html The html to filter.
+		 * @param array $cf The custom field array.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_input_tags_{$html_var}", $html, $cf );
+	}
 
-    // If no html then we run the standard output.
-    if ( empty( $html ) ) {
-        global $geodir_label_type;
+	// If no html then we run the standard output.
+	if ( empty( $html ) ) {
+		global $geodir_label_type;
 
-        $extra_attributes = array();
-        $value = geodir_get_cf_value($cf);
-        $title = '';
+		$extra_attributes = array();
+		$value = geodir_get_cf_value($cf);
+		$title = '';
 
-        $cf['option_values'] = "tag1,tag2";
+		$cf['option_values'] = "tag1,tag2";
 
-        $package = geodir_get_post_package( $gd_post, $cf['post_type'] );
+		$package = geodir_get_post_package( $gd_post, $cf['post_type'] );
 
-        // Tag limit
-        $tag_limit = ! empty( $package ) && isset( $package->tag_limit ) ? absint( $package->tag_limit ) : 0;
-        $tag_limit = (int) apply_filters( 'geodir_cfi_post_tags_limit', $tag_limit, $gd_post, $package );
-        if ( $tag_limit > 0 ) {
-             $extra_attributes['data-maximum-selection-length'] = $tag_limit;
-        }
+		// Tag limit
+		$tag_limit = ! empty( $package ) && isset( $package->tag_limit ) ? absint( $package->tag_limit ) : 0;
+		$tag_limit = (int) apply_filters( 'geodir_cfi_post_tags_limit', $tag_limit, $gd_post, $package );
+		if ( $tag_limit > 0 ) {
+			 $extra_attributes['data-maximum-selection-length'] = $tag_limit;
+		}
 
-        //validation
-        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
-            $extra_attributes['pattern'] = $cf['validation_pattern'];
-        }
+		//validation
+		if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+			$extra_attributes['pattern'] = $cf['validation_pattern'];
+		}
 
-        // validation message
-        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
-            $title = $cf['validation_msg'];
-        }
+		// validation message
+		if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
+			$title = $cf['validation_msg'];
+		}
 
-        // required
-        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+		// required
+		$required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
-        // help text
-        $help_text = __( $cf['desc'], 'geodirectory' );
+		// help text
+		$help_text = __( $cf['desc'], 'geodirectory' );
 
-        // field type (used for validation)
-        $extra_attributes['field_type'] = $cf['type'];
+		// field type (used for validation)
+		$extra_attributes['field_type'] = $cf['type'];
 
-        // placeholder
-        $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter tags separated by a comma ,', 'geodirectory' );
+		// placeholder
+		$placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter tags separated by a comma ,', 'geodirectory' );
 
-        $extra_fields = maybe_unserialize( $cf['extra_fields'] );
+		$extra_fields = maybe_unserialize( $cf['extra_fields'] );
 
-        //extra
-        $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
-        $extra_attributes['option-ajaxchosen'] = 'false';
-        $extra_attributes['data-token-separators'] = "[',']";
-        $extra_attributes['data-tags'] = 'true';
-        $extra_attributes['spellcheck'] = 'false';
+		//extra
+		$extra_attributes['data-placeholder'] = esc_attr( $placeholder );
+		$extra_attributes['option-ajaxchosen'] = 'false';
+		$extra_attributes['data-token-separators'] = "[',']";
+		$extra_attributes['data-tags'] = 'true';
+		$extra_attributes['spellcheck'] = 'false';
 
-        if ( is_array( $extra_fields ) ) {
-            // Disable new tags
-            if ( ! empty( $extra_fields['disable_new_tags'] ) ) {
-                $extra_attributes['data-tags'] = 'false';
-            }
+		if ( is_array( $extra_fields ) ) {
+			// Disable new tags
+			if ( ! empty( $extra_fields['disable_new_tags'] ) ) {
+				$extra_attributes['data-tags'] = 'false';
+			}
 
-            // Enable spell check
-            if ( ! empty( $extra_fields['spellcheck'] ) && empty( $extra_fields['disable_new_tags'] ) ) {
-                $extra_attributes['spellcheck'] = 'true';
-            }
-        }
+			// Enable spell check
+			if ( ! empty( $extra_fields['spellcheck'] ) && empty( $extra_fields['disable_new_tags'] ) ) {
+				$extra_attributes['spellcheck'] = 'true';
+			}
+		}
 
-        $post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
-        $term_array = array();
-        $options = array();
-        if ( $post_type ) {
-            $tag_no       = 10;
-            if ( is_array( $extra_fields ) && ! empty( $extra_fields['no_of_tag'] ) ) {
-                $tag_no = absint( $extra_fields['no_of_tag'] );
-            }
-            $tag_filter = array(
-                'taxonomy'   => $post_type . '_tags',
-                'hide_empty' => false,
-                'orderby'    => 'count',
-                'order'      => 'DESC',
-                'number'     => $tag_no,
-            );
-            $tag_args   = apply_filters( 'geodir_custom_field_input_tag_args', $tag_filter );
-            $terms      = get_terms( $tag_args );
-            if ( ! empty( $terms ) ) {
-                foreach( $terms as $term ) {
-                    $term_array[] = $term->name;
-                }
-            }
+		$post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
+		$term_array = array();
+		$options = array();
+		if ( $post_type ) {
+			$tag_no       = 10;
+			if ( is_array( $extra_fields ) && ! empty( $extra_fields['no_of_tag'] ) ) {
+				$tag_no = absint( $extra_fields['no_of_tag'] );
+			}
+			$tag_filter = array(
+				'taxonomy'   => $post_type . '_tags',
+				'hide_empty' => false,
+				'orderby'    => 'count',
+				'order'      => 'DESC',
+				'number'     => $tag_no,
+			);
+			$tag_args   = apply_filters( 'geodir_custom_field_input_tag_args', $tag_filter );
+			$terms      = get_terms( $tag_args );
+			if ( ! empty( $terms ) ) {
+				foreach( $terms as $term ) {
+					$term_array[] = $term->name;
+				}
+			}
 
-            if ( ! empty( $term_array ) ) {
-                $cf['option_values'] = implode( ",", $term_array );
-            }
-        }
+			if ( ! empty( $term_array ) ) {
+				$cf['option_values'] = implode( ",", $term_array );
+			}
+		}
 
-        $value_array = array();
-        if(!empty($value)){
-            $value_array = array_map('trim',explode(",",$value));
-        }
+		$value_array = array();
+		if(!empty($value)){
+			$value_array = array_map('trim',explode(",",$value));
+		}
 
-        // popular tags
-        $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
-        if(!empty($option_values_arr)){
-            $options =  array_merge( array( array('label'=>__('Popular tags','geodirectory'),'optgroup'=>'start') ) ,  $option_values_arr );
-            $options =  array_merge( $options , array( array('optgroup'=>'end')));
+		// Popular tags
+		$option_values_arr = geodir_string_to_options( $cf['option_values'], true );
 
-            // remove from the popular list if already selected
-            foreach($options as $key => $val){
-                if(!empty($val['value']) && !empty($value_array) && in_array($val['value'],$value_array)){
-                    unset($options[$key]);
-                }
-            }
-        }
+		if ( ! empty( $option_values_arr ) ) {
+			$options =  array_merge( array( array( 'label' => __( 'Popular tags', 'geodirectory' ), 'optgroup' => 'start' ) ) ,  $option_values_arr );
+			$options =  array_merge( $options , array( array( 'optgroup' => 'end' ) ) );
 
-        // current tags
-        $current_tags_arr = geodir_string_values_to_options($value, true);
-        if(!empty($current_tags_arr)){
-            $current_options =  array_merge( array( array('label'=>__('Your tags','geodirectory'),'optgroup'=>'start') ) ,  $current_tags_arr );
-            $current_options =  array_merge( $current_options , array( array('optgroup'=>'end')));
-            $options = array_merge( $options, $current_options);
-        }
+			// remove from the popular list if already selected
+			foreach( $options as $key => $val ) {
+				if ( ! empty( $val['value'] ) && ! empty( $value_array ) && in_array( $val['value'], $value_array ) ) {
+					unset( $options[$key] );
+				}
+			}
+		}
 
-        // admin only
-        $admin_only = geodir_cfi_admin_only($cf);
-        $conditional_attrs = geodir_conditional_field_attrs( $cf );
+		// Current tags
+		$current_tags_arr = geodir_string_to_options( $value, true );
+		if ( ! empty( $current_tags_arr ) ) {
+			$current_options =  array_merge( array( array( 'label' => __( 'Your tags', 'geodirectory' ), 'optgroup' => 'start' ) ) , $current_tags_arr );
+			$current_options =  array_merge( $current_options , array( array( 'optgroup' => 'end' ) ) );
+			$options = array_merge( $options, $current_options );
+		}
 
-        $validation_text = '';
+		// admin only
+		$admin_only = geodir_cfi_admin_only($cf);
+		$conditional_attrs = geodir_conditional_field_attrs( $cf );
+
+		$validation_text = '';
 		// Required message
 		if ( $required && ! empty( $cf['required_msg'] ) ) {
 			$validation_text = __( $cf['required_msg'], 'geodirectory' );
@@ -2154,42 +2153,40 @@ function geodir_cfi_tags( $html, $cf ) {
 		}
 
 		/**
-         * Filter the post tags extra attributes.
-         *
-         * @since 2.2.4
-         *
-         * @param array $extra_attributes Tags attributes.
-         */
-        $extra_attributes = apply_filters( 'geodir_cfi_aui_post_tags_attributes', $extra_attributes, $cf );
+		 * Filter the post tags extra attributes.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param array $extra_attributes Tags attributes.
+		 */
+		$extra_attributes = apply_filters( 'geodir_cfi_aui_post_tags_attributes', $extra_attributes, $cf );
 
-        $html = aui()->select( array(
-            'id'                 => $cf['name'],
-            'name'               => "tax_input[".wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"."][]" ,
-            'title'              => $title,
-            'placeholder'        => $placeholder,
-            'value'              => $value_array,
-            'required'           => !empty($cf['is_required']) ? true : false,
-            'label_show'         => true,
-            'label_type'         => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
-            'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-            'validation_text'    => $validation_text,
-            'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
-            'help_text'          => $help_text,
-            'multiple'           => true,
-            'extra_attributes'   => $extra_attributes,
-            'options'            => $options, //geodir_string_values_to_options($cf['option_values'], true),
-            'select2'            => true,
-            'data-allow-clear'   => false,
-            'style'              => 'width:100%;height:inherit;',
-            'wrap_attributes'    => $conditional_attrs
-        ) );
+		$html = aui()->select( array(
+			'id'                 => $cf['name'],
+			'name'               => "tax_input[".wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"."][]" ,
+			'title'              => $title,
+			'placeholder'        => $placeholder,
+			'value'              => $value_array,
+			'required'           => !empty($cf['is_required']) ? true : false,
+			'label_show'         => true,
+			'label_type'         => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+			'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
+			'validation_text'    => $validation_text,
+			'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
+			'help_text'          => $help_text,
+			'multiple'           => true,
+			'extra_attributes'   => $extra_attributes,
+			'options'            => $options,
+			'select2'            => true,
+			'data-allow-clear'   => false,
+			'style'              => 'width:100%;height:inherit;',
+			'wrap_attributes'    => $conditional_attrs
+		) );
+	}
 
-    }
-
-    return $html;
+	return $html;
 }
-add_filter('geodir_custom_field_input_tags','geodir_cfi_tags',10,2);
-
+add_filter( 'geodir_custom_field_input_tags', 'geodir_cfi_tags', 10, 2 );
 
 /**
  * Get the html input for the custom field: business_hours

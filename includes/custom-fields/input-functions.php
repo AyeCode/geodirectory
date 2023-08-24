@@ -399,7 +399,7 @@ function geodir_cfi_radio($html,$cf){
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <?php if ($cf['option_values']) {
-                $option_values = geodir_string_values_to_options($cf['option_values'], true);
+                $option_values = geodir_string_to_options($cf['option_values'], true);
 
                 if (!empty($option_values)) {
                     foreach ($option_values as $option_value) {
@@ -628,7 +628,7 @@ function geodir_cfi_select($html,$cf){
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <?php
-            $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
+            $option_values_arr = geodir_string_to_options($cf['option_values'], true);
             $select_options = '';
             if (!empty($option_values_arr)) {
                 foreach ($option_values_arr as $key => $option_row) {
@@ -728,7 +728,7 @@ function geodir_cfi_multiselect($html,$cf){
                         echo '<ul class="gd_multi_choice gd-ios-scrollbars">';
                     }
 
-                    $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
+                    $option_values_arr = geodir_string_to_options($cf['option_values'], true);
                     $select_options = '';
                     if (!empty($option_values_arr)) {
                         foreach ($option_values_arr as $option_row) {
@@ -1694,10 +1694,10 @@ function geodir_cfi_tags( $html, $cf ) {
                 <select field_type="<?php echo $cf['type']; ?>" name="tax_input[<?php echo wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"; ?>][]" id="<?php echo $cf['name']; ?>" multiple="multiple" class="geodir_textfield textfield geodir-select-tags" data-placeholder="<?php echo esc_attr( $placeholder ); ?>" spellcheck="<?php echo $spellcheck; ?>">
                     <?php
                     // current tags
-                    $current_tags_arr = geodir_string_values_to_options($value, true);
+                    $current_tags_arr = geodir_string_to_options($value, true);
 
                     // popular tags
-                    $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
+                    $option_values_arr = geodir_string_to_options($cf['option_values'], true);
 
                     // add the popular tags
                     $select_options = '';

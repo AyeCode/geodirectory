@@ -771,110 +771,348 @@ if (!function_exists('geodir_check_field_visibility')) {
  *
  * @since 1.0.0
  * @since 1.5.7 New parameter $translated added.
- * @since 1.6.11 Input option value should not be translated.
- * @package GeoDirectory
- * @param string $input The string input.
- * @param bool $translated True if label needs to be translated.
+ *
+ * @param string $string The string input.
+ * @param bool   $translated True if label needs to be translated.
  * @return array Returns option array.
  */
-function geodir_string_to_options( $input = '', $translated = false ) {
-    $return = array();
+function geodir_string_to_options( $string = '', $translated = false ) {
+	$options = array();
 
-    if ( $input != '' ) {
-        $input = trim( $input );
-        $input = rtrim( $input, "," );
-        $input = ltrim( $input, "," );
-        $input = trim( $input );
-    }
+	if ( $string == '' ) {
+		return NULL;
+	}
 
-    $input_arr = explode( ',', $input );
+	if ( is_array( $string ) ) {
+		return $string;
+	} else if ( ! is_scalar( $string ) ) {
+		return $options;
+	}
 
-    if ( ! empty( $input_arr ) ) {
-        foreach ( $input_arr as $input_str ) {
-            $input_str = trim( stripslashes( $input_str ) );
+	// Check for old option values.
+	if ( geodir_is_old_option_values( $string ) ) {
+		return geodir_old_string_values_to_options( $string, $translated );
+	}
 
-            if ( strpos( $input_str, "/" ) !== false ) {
-                $input_str = explode( "/", $input_str, 2 );
-                $label = trim( $input_str[0] );
-                if ( $translated && $label != '' ) {
-                    $label = __( $label, 'geodirectory' );
-                }
-                $value = trim( $input_str[1] );
-            } else {
-                $value = $input_str;
-                if ( $translated && $input_str != '' ) {
-                    $input_str = __( $input_str, 'geodirectory' );
-                }
-                $label = $input_str;
-            }
+	$lines = explode( "\n", $string );
+	$optgroup_open = false;
 
-            if ( $label != '' ) {
-                $return[] = array( 'label' => $label, 'value' => $value, 'optgroup' => NULL );
-            }
-        }
-    }
+	foreach ( $lines as $line ) {
+		$line = trim( $line );
 
-    return $return;
+		if ( $line === "" ) {
+			continue;
+		}
+
+		$line = stripslashes( $line );
+
+		if ( strpos( $line, " : " ) !== false ) {
+			$line_exp = explode( " : ", $line, 2 );
+
+			$value = trim( $line_exp[0] );
+			$label = trim( $line_exp[1] );
+		} else if ( strpos( $line, ": " ) === 0 ) {
+			$line_exp = explode( ": ", $line, 2 );
+
+			$value = trim( $line_exp[0] );
+			$label = trim( $line_exp[1] );
+		} else {
+			$value = $line;
+			$label = $line;
+		}
+
+		$option = array();
+
+		if ( $value === "optgroup" ) {
+			if ( $optgroup_open ) {
+				$options[] = array( 'label' => '', 'value' => '', 'optgroup' => 'end' );
+				$optgroup_open = false; // Close optgroup
+			}
+
+			$option = array( 'label' => $label, 'value' => '', 'optgroup' => 'start' );
+			$optgroup_open = true;
+		} else if ( $value === "optgroup-close" ) {
+			if ( ! $optgroup_open ) {
+				continue;
+			}
+
+			$option = array( 'label' => '', 'value' => '', 'optgroup' => 'end' );
+			$optgroup_open = false; // Close optgroup
+		} else {
+			if ( $label === "" && $value !== "" ) {
+				$label = $value;
+			}
+
+			if ( $label !== "" ) {
+				$option = array( 'label' => $label, 'value' => $value, 'optgroup' => NULL );
+			}
+		}
+
+		if ( ! empty( $option ) ) {
+			if ( $translated && isset( $option['label'] ) && $option['label'] !== "" ) {
+				$option['label']  = __( $option['label'], 'geodirectory' );
+			}
+
+			$options[] = $option;
+		}
+	}
+
+	// Close if optgroup is still open.
+	if ( ! empty( $options ) && $optgroup_open ) {
+		$options[] = array( 'label' => '', 'value' => '', 'optgroup' => 'end' );
+	}
+
+	return $options;
 }
 
 /**
  * Parse option values string to array.
  *
  * @since 1.0.0
- * @since 1.5.7 New parameter $translated added.
- * @package GeoDirectory
+ *
  * @param string $option_values The option values.
+ * @param bool   $translated True if label needs to be translated.
+ * @return array Options array.
+ */
+function geodir_string_values_to_options( $option_values = '', $translated = false ) {
+	return geodir_string_to_options( $option_values, $translated );
+}
+
+/**
+ * Check option values are old format.
+ *
+ * @since 2.3.19.
+ *
+ * @param string $string The option values.
+ * @return bool True if options are in old format.
+ */
+function geodir_is_old_option_values( $string ) {
+	if ( empty( $string ) ) {
+		return false;
+	}
+
+	if ( is_scalar( $string ) ) {
+		if ( strpos( $string, "\n" ) !== false || strpos( $string, PHP_EOL ) !== false ) {
+			return false;
+		}
+
+		if ( strpos( $string, " : " ) !== false && strpos( $string, "," ) === false ) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Converts old string to options array.
+ *
+ * @since 2.3.19
+ *
+ * @param string $input The string input.
  * @param bool $translated True if label needs to be translated.
  * @return array Returns option array.
  */
-function geodir_string_values_to_options($option_values = '', $translated = false)
-{
-    $options = array();
-    if ($option_values == '') {
-        return NULL;
-    }
+function geodir_old_string_to_options( $input = '', $translated = false ) {
+	$return = array();
 
-    if (strpos($option_values, "{/optgroup}") !== false) {
-        $option_values_arr = explode("{/optgroup}", $option_values);
+	if ( $input != '' ) {
+		$input = trim( $input );
+		$input = rtrim( $input, "," );
+		$input = ltrim( $input, "," );
+		$input = trim( $input );
+	}
 
-        foreach ($option_values_arr as $optgroup) {
-            if (strpos($optgroup, "{optgroup}") !== false) {
-                $optgroup_arr = explode("{optgroup}", $optgroup);
+	$input_arr = explode( ',', $input );
 
-                $count = 0;
-                foreach ($optgroup_arr as $optgroup_str) {
-                    $count++;
-                    $optgroup_str = trim($optgroup_str);
+	if ( ! empty( $input_arr ) ) {
+		foreach ( $input_arr as $input_str ) {
+			$input_str = trim( stripslashes( $input_str ) );
 
-                    $optgroup_label = '';
-                    if (strpos($optgroup_str, "|") !== false) {
-                        $optgroup_str_arr = explode("|", $optgroup_str, 2);
-                        $optgroup_label = trim($optgroup_str_arr[0]);
-                        if ($translated && $optgroup_label != '') {
-                            $optgroup_label = __($optgroup_label, 'geodirectory');
-                        }
-                        $optgroup_str = $optgroup_str_arr[1];
-                    }
+			if ( strpos( $input_str, "/" ) !== false ) {
+				$input_str = explode( "/", $input_str, 2 );
+				$label = trim( $input_str[0] );
+				if ( $translated && $label != '' ) {
+					$label = __( $label, 'geodirectory' );
+				}
+				$value = trim( $input_str[1] );
+			} else {
+				$value = $input_str;
+				if ( $translated && $input_str != '' ) {
+					$input_str = __( $input_str, 'geodirectory' );
+				}
+				$label = $input_str;
+			}
 
-                    $optgroup3 = geodir_string_to_options($optgroup_str, $translated);
+			if ( $label != '' ) {
+				$return[] = array( 'label' => $label, 'value' => $value, 'optgroup' => NULL );
+			}
+		}
+	}
 
-                    if ($count > 1 && $optgroup_label != '' && !empty($optgroup3)) {
-                        $optgroup_start = array(array('label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'start'));
-                        $optgroup_end = array(array('label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'end'));
-                        $optgroup3 = array_merge($optgroup_start, $optgroup3, $optgroup_end);
-                    }
-                    $options = array_merge($options, $optgroup3);
-                }
-            } else {
-                $optgroup1 = geodir_string_to_options($optgroup, $translated);
-                $options = array_merge($options, $optgroup1);
-            }
-        }
-    } else {
-        $options = geodir_string_to_options($option_values, $translated);
-    }
+	return $return;
+}
 
-    return $options;
+/**
+ * Converts old option values string to options array.
+ *
+ * @since 2.3.19
+ *
+ * @param string $option_values The option values.
+ * @param bool   $translated True if label needs to be translated.
+ * @return array Returns option array.
+ */
+function geodir_old_string_values_to_options( $option_values = '', $translated = false ) {
+	$options = array();
+	if ( $option_values == '' ) {
+		return NULL;
+	}
+
+	if ( strpos( $option_values, "{/optgroup}" ) !== false ) {
+		$option_values_arr = explode( "{/optgroup}", $option_values );
+
+		foreach ( $option_values_arr as $optgroup ) {
+			if ( strpos( $optgroup, "{optgroup}" ) !== false ) {
+				$optgroup_arr = explode( "{optgroup}", $optgroup );
+
+				$count = 0;
+				foreach ( $optgroup_arr as $optgroup_str ) {
+					$count++;
+					$optgroup_str = trim( $optgroup_str );
+
+					$optgroup_label = '';
+					if ( strpos( $optgroup_str, "|" ) !== false ) {
+						$optgroup_str_arr = explode( "|", $optgroup_str, 2 );
+						$optgroup_label = trim( $optgroup_str_arr[0] );
+						if ( $translated && $optgroup_label != '' ) {
+							$optgroup_label = __( $optgroup_label, 'geodirectory' );
+						}
+						$optgroup_str = $optgroup_str_arr[1];
+					}
+
+					$optgroup3 = geodir_old_string_to_options( $optgroup_str, $translated );
+
+					if ( $count > 1 && $optgroup_label != '' && !empty( $optgroup3 ) ) {
+						$optgroup_start = array( array( 'label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'start' ) );
+						$optgroup_end = array( array( 'label' => $optgroup_label, 'value' => NULL, 'optgroup' => 'end' ) );
+						$optgroup3 = array_merge( $optgroup_start, $optgroup3, $optgroup_end );
+					}
+					$options = array_merge( $options, $optgroup3 );
+				}
+			} else {
+				$optgroup1 = geodir_old_string_to_options( $optgroup, $translated );
+				$options = array_merge( $options, $optgroup1 );
+			}
+		}
+	} else {
+		$options = geodir_old_string_to_options( $option_values, $translated );
+	}
+
+	return $options;
+}
+
+/**
+ * Converts old option values to new option values.
+ *
+ * @since 2.3.19.
+ *
+ * @param string $option_values The option values.
+ * @return array Returns option array.
+ */
+function geodir_convert_old_option_values( $option_values = '' ) {
+	if ( ! geodir_is_old_option_values ( $option_values ) ) {
+		return $option_values;
+	}
+
+	$options = array();
+
+	if ( strpos( $option_values, "{/optgroup}") !== false ) {
+		$option_values_arr = explode( "{/optgroup}", $option_values );
+
+		foreach ( $option_values_arr as $optgroup ) {
+			if ( strpos( $optgroup, "{optgroup}") !== false ) {
+				$optgroup_arr = explode( "{optgroup}", $optgroup );
+
+				$count = 0;
+				foreach ( $optgroup_arr as $optgroup_str ) {
+					$count++;
+					$optgroup_str = trim( $optgroup_str );
+
+					$optgroup_label = '';
+					if ( strpos( $optgroup_str, "|" ) !== false ) {
+						$optgroup_str_arr = explode( "|", $optgroup_str, 2 );
+						$optgroup_label = trim( $optgroup_str_arr[0] );
+						$optgroup_str = $optgroup_str_arr[1];
+					}
+
+					$optgroup3 = array( geodir_convert_old_string_options( $optgroup_str ) );
+
+					if ( $count > 1 && $optgroup_label != '' && ! empty( $optgroup3 ) ) {
+						$optgroup_start = array( 'optgroup : ' . $optgroup_label );
+						$optgroup_end = array( 'optgroup-close' );
+						$optgroup3 = array_merge( $optgroup_start, $optgroup3, $optgroup_end );
+					}
+					$options = array_merge( $options, $optgroup3 );
+				}
+			} else {
+				$optgroup1 = array( geodir_convert_old_string_options( $optgroup ) );
+				$options = array_merge( $options, $optgroup1 );
+			}
+		}
+	} else {
+		$options = array( geodir_convert_old_string_options( $option_values ) );
+	}
+
+	if ( ! empty( $options ) ) {
+		$options = implode( "\n", array_filter( $options ) );
+	} else {
+		$options = "";
+	}
+
+	return $options;
+}
+
+/**
+ * Converts old option to new option.
+ *
+ * @since 2.3.19
+ *
+ * @param string $input The string input.
+ * @return string Returns option string.
+ */
+function geodir_convert_old_string_options( $input = '' ) {
+	if ( $input != '' ) {
+		$input = trim( $input );
+		$input = rtrim( $input, "," );
+		$input = ltrim( $input, "," );
+		$input = trim( $input );
+	}
+
+	$input_arr = explode( ',', $input );
+
+	if ( ! empty( $input_arr ) ) {
+		foreach ( $input_arr as $input_str ) {
+			$input_str = trim( stripslashes( $input_str ) );
+
+			if ( strpos( $input_str, "/" ) !== false ) {
+				$input_str = explode( "/", $input_str, 2 );
+
+				$label = trim( $input_str[0] );
+				$value = trim( $input_str[1] );
+			} else {
+				$value = $input_str;
+				$label = '';
+			}
+
+			if ( $value !== "" || $label !== "" ) {
+				$return[] = $value . ( $label !== "" ? " : " . $label : "" );
+			}
+		}
+	}
+
+	$options = ! empty( $return ) ? implode( PHP_EOL, $return ) : "";
+
+	return $options;
 }
 
 /**

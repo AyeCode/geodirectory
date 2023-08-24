@@ -63,23 +63,7 @@ class GeoDir_Permalinks {
 		// Arrange rewrite rules to fix paged, feed permalinks on category pages.
 		add_filter( 'rewrite_rules_array', array( __CLASS__, 'arrange_rewrite_rules' ), 999, 1 );
 
-		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
-
-		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
 		add_filter( 'wp_setup_nav_menu_item', array( $this, 'wp_setup_nav_menu_item' ), 10, 1 );
-	}
-
-	// @todo remove after testing
-	public function temp_check_rules($rules){
-
-		if(is_admin()){return;}
-		global $wp_rewrite;
-		//print_r( $wp_rewrite );
-		print_r(get_option( 'rewrite_rules' ));
-
-		echo '###';exit;
-
-		return $rules;
 	}
 
 	public function maybe_404() {
@@ -866,25 +850,26 @@ class GeoDir_Permalinks {
 	 * @since 2.3.18
 	 *
 	 * @param string $post_type Post type. Default empty.
+	 * @param bool   $page_uri  True to build the URI path for a page.
 	 * @param string $slug      Add listing page slug. Default add-listing.
 	 * @return string Add listing page slug.
 	 */
-	public function add_listing_slug( $post_type = '', $slug = 'add-listing' ) {
-		if ( $post_type ) {
-			if ( $page_id = (int) geodir_add_listing_page_id( $post_type ) ) {
-				if ( $_slug = get_post_field( 'post_name', $page_id ) ) {
-					$slug = strpos( $_slug, '%' ) !== false ? urldecode( $_slug ) : $_slug;
-				}
-			}
-		} else {
-			if ( $page_id = (int) geodir_add_listing_page_id() ) {
-				if ( $_slug = get_post_field( 'post_name', $page_id ) ) {
-					$slug = strpos( $_slug, '%' ) !== false ? urldecode( $_slug ) : $_slug;
-				}
-			}
+	public function add_listing_slug( $post_type = '', $page_uri = true, $slug = 'add-listing' ) {
+		$_slug = '';
+
+		if ( $post_type && ( $page_id = (int) geodir_add_listing_page_id( $post_type ) ) ) {
+			$_slug = $page_uri ? get_page_uri( $page_id ) : get_post_field( 'post_name', $page_id );
 		}
 
-		return apply_filters( 'geodir_rewrite_add_listing_slug', $slug, $post_type );
+		if ( ! $_slug && ( $page_id = (int) geodir_add_listing_page_id() ) ) {
+			$_slug = $page_uri ? get_page_uri( $page_id ) : get_post_field( 'post_name', $page_id );
+		}
+
+		if ( $_slug ) {
+			$slug = strpos( $_slug, '%' ) !== false ? urldecode( $_slug ) : $_slug;
+		}
+
+		return apply_filters( 'geodir_rewrite_add_listing_slug', $slug, $post_type, $page_uri );
 	}
 
 	/**

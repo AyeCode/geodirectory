@@ -17,9 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<th>
 						<strong class="name"><?php echo esc_html( $tool['name'] ); ?></strong>
 						<p class="description"><?php echo wp_kses_post( $tool['desc'] ); ?></p>
+						<?php do_action( 'geodir_status_tool_after_desc', $action, $tool ); ?>
 					</th>
 					<td class="run-tool">
-						<a href="<?php echo wp_nonce_url( admin_url( 'admin.php?page=gd-status&tab=tools&action=' . $action ), 'debug_action' ); ?>" class="button button-large <?php echo esc_attr( $action ); ?>"><?php echo esc_html( $tool['button'] ); ?></a>
+						<a href="<?php echo ( ! empty( $tool['link'] ) ? $tool['link'] : wp_nonce_url( admin_url( 'admin.php?page=gd-status&tab=tools&action=' . $action ), 'debug_action' ) ); ?>" class="button button-large <?php echo esc_attr( $action ); ?>"><?php echo esc_html( $tool['button'] ); ?></a>
 					</td>
 				</tr>
 			<?php endforeach; ?>

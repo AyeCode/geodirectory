@@ -1375,6 +1375,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				}
 
 				if ( $design_style ) {
+					$bs_prefix = $aui_bs5 ? 'bs-' : '';
+
 					$btn_class = ' gd-badge';
 					// color
 					$color_custom = true;
@@ -1467,21 +1469,24 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 					// popover / tooltip
 					$pop_link = false;
-					if(!empty($args['popover_title']) || !empty($args['popover_text'])){
+
+					if ( ! empty( $args['popover_title'] ) || ! empty( $args['popover_text'] ) ) {
 						$btn_args['type'] = "button";
-						$btn_args['data-toggle'] = "popover-html";
-						$btn_args['data-placement'] = "top";
+						$btn_args['data-' . $bs_prefix . 'toggle'] = "popover-html";
+						$btn_args['data-' . $bs_prefix . 'placement'] = "top";
 						$pop_link = true;
-						if(!empty($args['popover_title'])){
-							$btn_args['title'] = !empty($args['link']) && $args['link']!='#'  ? "<a href='".esc_url($args['link'])."' $new_window $rel>".$args['popover_title']."</a>" : $args['popover_title'];
+
+						if ( ! empty( $args['popover_title'] ) ) {
+							$btn_args['title'] = ! empty( $args['link'] ) && $args['link'] != '#'  ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . $args['popover_title'] . "</a>" : $args['popover_title'];
 						}
-						if(!empty($args['popover_text'])){
-							$btn_args['data-content'] = !empty($args['link']) && $args['link']!='#'  ? "<a href='".esc_url($args['link'])."' $new_window $rel>".$args['popover_text']."</a>" : $args['popover_text'];
+
+						if ( ! empty( $args['popover_text'] ) ) {
+							$btn_args['data-' . $bs_prefix . 'content'] = ! empty( $args['link'] ) && $args['link'] != '#' ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . $args['popover_text'] . "</a>" : $args['popover_text'];
 						}
-					}elseif(!empty($args['tooltip_text'])){
-						$btn_args['data-toggle'] = "tooltip";
-						$btn_args['data-placement'] = "top";
-						$btn_args['title'] = esc_attr($args['tooltip_text']);
+					} else if ( ! empty( $args['tooltip_text'] ) ) {
+						$btn_args['data-' . $bs_prefix . 'toggle'] = "tooltip";
+						$btn_args['data-' . $bs_prefix . 'placement'] = "top";
+						$btn_args['title'] = esc_attr( $args['tooltip_text'] );
 					}
 
 					// hover content
