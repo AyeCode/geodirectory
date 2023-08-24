@@ -1,4 +1,7 @@
 jQuery(document).ready(function($) {
+	if (typeof geodir_params === 'undefined') {
+		geodir_params = [];
+	}
 	geodir_params.loader = null;
 	geodir_params.addPopup = null;
 
@@ -19,6 +22,7 @@ jQuery(document).ready(function($) {
 	gd_init_carousel_ajax();
 
 	// init things when new tab is shown
+	/* // Issue due to multiple active tab.
 	jQuery('.nav-tabs,.nav-pills').on('shown.bs.tab', 'a', function (e) {
 		// Greedy nav fix
 		if(jQuery(this).closest('.greedy').length){
@@ -31,6 +35,7 @@ jQuery(document).ready(function($) {
 
 		window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
 	});
+	*/
 
 	// fix tabs url hash on click and load
 	jQuery(function(){
@@ -38,9 +43,28 @@ jQuery(document).ready(function($) {
 		hash && jQuery('ul.nav a[href="' + hash + '"]').tab('show');
 
 		jQuery('.nav-tabs a').on("click",function (e) {
-			jQuery(this).tab('show');
+			var $greedyLink = '', greedyHash = '';
+			if(jQuery(this).closest('.greedy').length && jQuery(this).hasClass('greedy-nav-link')){
+				if (!jQuery(this).closest(".greedy").find(".greedy-links .nav-link.active").length) {
+					$greedyLink = jQuery(this).closest(".greedy").find(".greedy-links .nav-link:first");
+					$greedyLink.tab('show');
+					if ($greedyLink.attr('aria-controls')) {
+						greedyHash = $greedyLink.attr('aria-controls');
+					}
+				} else {
+					$greedyLink = jQuery(this).closest(".greedy").find(".greedy-links .nav-link.active");
+				}
+			} else {
+				jQuery(this).tab('show');
+			}
 			var scrollmem = jQuery('body').scrollTop() || jQuery('html').scrollTop();
-			window.location.hash = this.hash;
+			if($greedyLink){
+				if (greedyHash) {
+					window.location.hash = greedyHash;
+				}
+			} else {
+				window.location.hash = this.hash;
+			}
 			jQuery('html,body').scrollTop(scrollmem);
 		});
 	});
