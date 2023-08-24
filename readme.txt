@@ -290,6 +290,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * GD > Map widget maptype option is not working for static map - FIXED
 * Badge link not working with BS5 when popover text is set - FIXED
 * Enhance custom field option values save format - CHANGED
+* GD > Best Of block shows empty filters section in block settings - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.18 - 2023-08-10 =
 * GD SEO variables no longer working with SEOPress meta description - FIXED

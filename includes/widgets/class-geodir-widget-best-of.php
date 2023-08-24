@@ -67,7 +67,8 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'options'   =>  geodir_get_posttypes('options-plural'),
 				'default'  => 'gd_place',
 				'desc_tip' => true,
-				'advanced' => true
+				'advanced' => true,
+				'group' => __( 'Filters', 'geodirectory' )
 			);
 			$arguments['tab_layout'] = array(
 				'title' => __('Tabs layout:', 'geodirectory'),
@@ -81,7 +82,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'default'  => 'bestof-tabs-on-top',
 				'desc_tip' => true,
 				'advanced' => false,
-				'group'     => __("Design","geodirectory")
+				'group' => __( 'Design', 'geodirectory')
 			);
 
 		if ( $design_style ) {
@@ -98,7 +99,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'desc_tip' => true,
 				'advanced' => false,
 				'element_require' => '[%tab_layout%]=="top"',
-				'group'     => __("Design","geodirectory")
+				'group' => __( 'Design', 'geodirectory')
 			);
 		}
 
@@ -110,7 +111,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			'default'  => '0',
 			'desc_tip' => true,
 			'advanced' => false,
-			'group'     => __("Design","geodirectory")
+			'group' => __( 'Design', 'geodirectory')
 		);
 		$arguments['post_limit'] = array(
 			'title' => __('Posts to show:', 'geodirectory'),
@@ -119,7 +120,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			'default'  => '5',
 			'desc_tip' => true,
 			'advanced' => false,
-			'group'     => __("Design","geodirectory")
+			'group' => __( 'Design', 'geodirectory')
 
 		);
 
@@ -130,7 +131,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			'default'  => '3',
 			'desc_tip' => true,
 			'advanced' => false,
-			'group'     => __("Design","geodirectory")
+			'group' => __( 'Design', 'geodirectory')
 		);
 
 		$arguments['add_location_filter'] = array(
@@ -139,7 +140,8 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			'desc_tip' => true,
 			'value'  => '1',
 			'default'  => '1',
-			'advanced' => true
+			'advanced' => true,
+			'group' => __( 'Filters', 'geodirectory' )
 		);
 
 		$arguments['use_viewing_post_type'] = array(
@@ -148,7 +150,8 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			'desc_tip' => true,
 			'value'  => '1',
 			'default'  => '1',
-			'advanced' => true
+			'advanced' => true,
+			'group' => __( 'Filters', 'geodirectory' )
 		);
 
 		$arguments['template_type'] = array(
@@ -267,7 +270,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'default'  => '',
 				'desc_tip' => false,
 				'advanced' => false,
-				'group'     => __("Card Design","geodirectory")
+				'group' => __( 'Card Design', 'geodirectory' )
 			);
 
 			$arguments['column_gap'] = array(
@@ -285,7 +288,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'default'  => '',
 				'desc_tip' => false,
 				'advanced' => false,
-				'group'     => __("Card Design","geodirectory")
+				'group' => __( 'Card Design', 'geodirectory' )
 			);
 
 			$arguments['card_border'] = array(
@@ -299,7 +302,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'default'  => '',
 				'desc_tip' => false,
 				'advanced' => false,
-				'group'     => __("Card Design","geodirectory")
+				'group' => __( 'Card Design', 'geodirectory' )
 			);
 
 			$arguments['card_shadow'] = array(
@@ -315,7 +318,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'default'  => '',
 				'desc_tip' => false,
 				'advanced' => false,
-				'group'     => __("Card Design","geodirectory")
+				'group' => __( 'Card Design', 'geodirectory' )
 			);
 		}
 
@@ -589,7 +592,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		$nav_html = '';
 		$tabs_left = false;
 		if ( ! empty( $instance['tab_layout'] ) && $instance['tab_layout'] == 'left' ) {
-			$nav_html .= '<div class="row"><div class="col-3"> ';
+			$nav_html .= '<div class="row"><div class="col-12 col-md-3"> ';
 			$tabs_left = true;
 		}
 
@@ -712,7 +715,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			}
 
 			if ( ! empty( $instance['tab_layout'] ) && $instance['tab_layout'] == 'left' ) {
-				echo '<div class="col-9"> ';
+				echo '<div class="col-12 col-md-9"> ';
 			}
 
 			echo '<div id="geodir-bestof-places">';
