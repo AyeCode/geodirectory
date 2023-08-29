@@ -397,6 +397,16 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 						}
 					}
 
+					/**
+					 * Fires before the archive posts loop is rendered.
+					 *
+					 * @since 2.3.20
+					 *
+					 * @param array $widget_args Widget args.
+					 * @param object $this Current widget class.
+					 */
+					do_action( 'geodir_widget_archive_posts_loop_before', $widget_args, $this );
+
 					if ( $wrap_class ) {
 						echo "<div class='$wrap_class'>";
 					}
@@ -416,7 +426,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 					} else {
 						$template = $design_style ? $design_style . "/content-archive-listing.php" : "content-archive-listing.php";
 
-						 echo geodir_get_template_html( $template, array(
+						echo geodir_get_template_html( $template, array(
 							'column_gap_class' => $widget_args['column_gap'] ? 'mb-' . absint( $widget_args['column_gap'] ) : 'mb-4',
 							'row_gap_class' => $widget_args['row_gap'] ? 'px-' . absint( $widget_args['row_gap'] ) : '',
 							'card_border_class' => $card_border_class,
@@ -427,6 +437,16 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 					if ( $wrap_class ) {
 						echo "</div>";
 					}
+
+					/**
+					 * Fires after the archive posts loop is rendered.
+					 *
+					 * @since 2.3.20
+					 *
+					 * @param array $widget_args Widget args.
+					 * @param object $this Current widget class.
+					 */
+					do_action( 'geodir_widget_archive_posts_loop_after', $widget_args, $this );
 
 					// set loop as done @todo this needs testing
 					global $wp_query;

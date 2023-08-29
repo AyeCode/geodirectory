@@ -100,6 +100,9 @@ class GeoDir_Elementor {
 			add_filter( 'elementor/elements/categories_registered', array( __CLASS__,'add_elementor_widget_categories' ), 1, 1  );
 			add_filter( 'elementor/editor/localize_settings', array( __CLASS__,'alter_widget_config' ), 5, 1  );
 		}
+
+		add_action( 'geodir_widget_archive_posts_loop_before', array( __CLASS__, 'before_gd_loop_render_posts' ), 10, 2 );
+		add_action( 'geodir_widget_archive_posts_loop_after', array( __CLASS__, 'after_gd_loop_render_posts' ), 10, 2 );
 	}
 
 	/**
@@ -1239,11 +1242,17 @@ class GeoDir_Elementor {
 	 */
 	public static function overwrite_archive_template_content( $content, $original_content, $page_id ) {
 		if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) && $page_id && self::is_elementor( $page_id ) ) {
+			$_content = $content;
 			$content = \Elementor\Plugin::$instance->frontend->get_builder_content( $page_id, true );
 
 			if ( ! $content ) {
 				// Prevent showing default content when assigned blank template.
 				$content = '<!-- GD ARCHIVE TEMPLATE EMPTY ELEMENTOR CONTENT -->';
+
+				// GD page is converted to Elementor but not saved yet.
+				if ( ! self::is_elementor_view() && self::has_empty_elementor_data( $page_id ) ) {
+					$content = $_content;
+				}
 			}
 		}
 
@@ -1305,18 +1314,57 @@ class GeoDir_Elementor {
 	}
 
 	/**
+	 * Get the elementor document by page ID.
+	 *
+	 * @since 2.3.20
+	 *
+	 * @param int $page_id The current page ID.
+	 * @return object Elementor document.
+	 */
+	public static function get_elementor_document( $page_id ) {
+		$document = \Elementor\Plugin::$instance->documents->get( (int) $page_id );
+
+		return $document;
+	}
+
+	/**
 	 * Check if a page is being edited by elementor.
 	 *
 	 * @return bool
 	 */
 	public static function is_elementor( $post_id ) {
-		$document = \Elementor\Plugin::$instance->documents->get( $post_id );
+		$document = self::get_elementor_document( $post_id );
 
 		if ( empty( $document ) ) {
 			return false;
 		}
 
 		return $document->is_built_with_elementor();
+	}
+
+	/**
+	 * Check the GD page converted to elementor but not saved yet.
+	 *
+	 * @since 2.3.20
+	 *
+	 * @param int $page_id The current page ID.
+	 * @return bool True when empty data.
+	 */
+	public static function has_empty_elementor_data( $page_id ) {
+		$document = self::get_elementor_document( $page_id );
+
+		if ( empty( $document ) ) {
+			return true;
+		}
+
+		$ele_post_id = $document->get_main_id();
+		$_elementor_data = ! empty( $ele_post_id ) ? get_post_meta( (int) $ele_post_id, '_elementor_data', true ) : false;
+
+		if ( $_elementor_data === '' || $_elementor_data === null || $_elementor_data === false ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -1579,5 +1627,33 @@ class GeoDir_Elementor {
 		}
 
 		return $query_vars;
+	}
+
+	/**
+	 * Backup parameters before the archive posts loop is rendered.
+	 *
+	 * @since 2.3.20
+	 *
+	 * @param array  $widget_args Widget args.
+	 * @param object $widget Current widget class.
+	 */
+	public static function before_gd_loop_render_posts( $widget_args, $widget ) {
+		global $post, $gd_loop_backup_post;
+
+		$gd_loop_backup_post = $post;
+	}
+
+	/**
+	 * Unset backup-ed parameters after the archive posts loop is rendered.
+	 *
+	 * @since 2.3.20
+	 *
+	 * @param array  $widget_args Widget args.
+	 * @param object $widget Current widget class.
+	 */
+	public static function after_gd_loop_render_posts( $widget_args, $widget ) {
+		global $post, $gd_loop_backup_post;
+
+		$post = $gd_loop_backup_post;
 	}
 }
