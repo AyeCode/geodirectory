@@ -2398,9 +2398,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			 * Called after all custom fields are saved for a post.
 			 *
 			 * @since 1.0.0
-			 * @param int $lastid The post ID.
+			 * @param int $field_id The field ID.
+			 * @param object $field The field object.
 			 */
-			do_action('geodir_after_custom_fields_updated', $field->field_id);
+			do_action( 'geodir_after_custom_fields_updated', $field->field_id, $field );
 
 			// clear cache
 			delete_transient( 'geodir_post_custom_fields' );
