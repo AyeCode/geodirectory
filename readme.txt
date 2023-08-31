@@ -286,8 +286,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory Business Directory Plugin v2.3.20 - 2023-08-31 =
+= GeoDirectory Business Directory Plugin v2.3.21 - 2023-08-31 =
 * Elementor editor sometimes don't load GD archive template - FIXED
+* Logged out posting not working with new pretty add listing URLs - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.19 - 2023-08-24 =
 * GD > Map widget maptype option is not working for static map - FIXED

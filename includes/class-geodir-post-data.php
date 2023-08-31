@@ -68,7 +68,7 @@ class GeoDir_Post_Data {
 		add_filter( 'get_post_metadata', array( __CLASS__, 'dynamically_add_post_meta' ), 10, 4 );
 
 		// Init
-		add_action( 'init', array( __CLASS__, 'setup_guest_cookie' ), 1 );
+		add_action( 'pre_get_posts', array( __CLASS__, 'setup_guest_cookie' ), 1 );
 
 		// Set embed post thumbnail.
 		add_filter( 'embed_thumbnail_id', array( __CLASS__, 'embed_thumbnail_id' ), 20, 1 );
@@ -2321,7 +2321,7 @@ class GeoDir_Post_Data {
 		if ( ! get_current_user_id() ) {
 			$nonce = geodir_getcookie( '_gd_logged_out_post_author' );
 
-			if ( empty( $nonce ) && !empty($_REQUEST['listing_type'])  ) {
+			if ( empty( $nonce ) && geodir_is_page('add-listing') ) {
 				$nonce = substr( wp_hash( time(), 'nonce' ), -12, 10 );
 				geodir_setcookie( '_gd_logged_out_post_author', $nonce );
 				$nonce = geodir_getcookie( '_gd_logged_out_post_author' );
