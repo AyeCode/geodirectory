@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.19\n"
+"Project-Id-Version: GeoDirectory 2.3.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-24 21:58+0530\n"
-"PO-Revision-Date: 2023-08-24 21:58+0530\n"
+"POT-Creation-Date: 2023-08-31 15:43+0530\n"
+"PO-Revision-Date: 2023-08-31 15:43+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -421,7 +421,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-assets.php:120
 #: includes/admin/class-geodir-admin-blocks.php:231
 #: includes/admin/class-geodir-admin-menus.php:108
-#: includes/class-geodir-elementor.php:151 includes/class-geodir-privacy.php:24
+#: includes/class-geodir-elementor.php:154 includes/class-geodir-privacy.php:24
 #: includes/core-functions.php:942
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
 msgid "GeoDirectory"
@@ -11483,21 +11483,21 @@ msgstr ""
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:459 includes/core-functions.php:345
+#: includes/class-geodir-elementor.php:462 includes/core-functions.php:345
 #: includes/widgets/class-geodir-widget-single-next-prev.php:94
 #: templates/bootstrap/images/images.php:236
 #: templates/legacy/single/next-prev.php:12
 msgid "Previous"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:463 includes/core-functions.php:346
+#: includes/class-geodir-elementor.php:466 includes/core-functions.php:346
 #: includes/widgets/class-geodir-widget-single-next-prev.php:95
 #: templates/bootstrap/images/images.php:240
 #: templates/legacy/single/next-prev.php:13
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:1180
+#: includes/class-geodir-elementor.php:1183
 msgid "Could not retrieve template."
 msgstr ""
 
