@@ -1304,8 +1304,11 @@ function gd_settings_validation(){
     });
 }
 
-function geodir_fill_timezone(prefix) {
-	var $form = jQuery('[name="' + prefix + 'timezone_string"]').closest('form');
+function geodir_fill_timezone(prefix, tz_prefix) {
+	if (!tz_prefix) {
+		tz_prefix = prefix;
+	}
+	var $form = jQuery('[name="' + tz_prefix + 'timezone_string"]').closest('form');
 	var lat = jQuery('[name="' + prefix + 'latitude"]', $form).val();
 	var lng = jQuery('[name="' + prefix + 'longitude"]', $form).val();
 	lat = lat ? lat.trim() : '';
@@ -1327,7 +1330,7 @@ function geodir_fill_timezone(prefix) {
 				if (res.success) {
 					data = res.data;
 					if (typeof data.timeZoneId != 'undefined') {
-						jQuery('[name="' + prefix + 'timezone_string"]', $form).val(data.timeZoneId).trigger("change");
+						jQuery('[name="' + tz_prefix + 'timezone_string"]', $form).val(data.timeZoneId).trigger("change");
 					}
 				} else if (res.data) {
 					data = res.data;
