@@ -320,7 +320,27 @@ class GeoDir_Frontend_Scripts {
 						do_action( 'geodir_geocode_address_search_script', $near_address );
 						?>
 						if (window.gdMaps === 'google') {
-							Sgeocoder.geocode({'address': search_address<?php echo $google_geocode_properties; ?>},
+							var geocodeQueryParams = {'address': search_address<?php echo $google_geocode_properties; ?>};
+							if (geodirIsZipCode(address)) {
+								if (typeof geocodeQueryParams['componentRestrictions'] != 'undefined') {
+									if (typeof geocodeQueryParams['componentRestrictions']['postalCode'] == 'undefined') {
+										geocodeQueryParams['componentRestrictions']['postalCode'] = address;
+									}
+								} else {
+									geocodeQueryParams['componentRestrictions'] = {'postalCode': address};
+								}
+							}
+							<?php
+							/**
+							 * Execute before Google geocode address request.
+							 *
+							 * @since 2.3.23
+							 *
+							 * @param string $near_address Nearest address filter.
+							 */
+							do_action( 'geodir_google_geocode_address_request', $near_address );
+							?>
+							Sgeocoder.geocode(geocodeQueryParams,
 								function (results, status) {
 									<?php
 									/**
@@ -339,7 +359,18 @@ class GeoDir_Frontend_Scripts {
 									}
 								});
 						} else if (window.gdMaps === 'osm') {
-							geocodePositionOSM(false, search_address, false, false,
+							var osmCountryCodes = false;
+							<?php
+							/**
+							 * Execute before OpenStreetMap geocode address request.
+							 *
+							 * @since 2.3.23
+							 *
+							 * @param string $near_address Nearest address filter.
+							 */
+							do_action( 'geodir_osm_geocode_address_request', $near_address );
+							?>
+							geocodePositionOSM(false, search_address, osmCountryCodes, false,
 								function(geo) {
 									<?php
 									/**
@@ -362,6 +393,15 @@ class GeoDir_Frontend_Scripts {
 						}
 					}
 				}
+			}
+
+			function geodirIsZipCode(string) {
+				if (/^\d+$/.test(string)) {
+					if (string.length > 3 && string.length < 7) {
+						return true;
+					}
+				}
+				return false;
 			}
 
 			function initialise2() {
