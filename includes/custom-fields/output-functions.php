@@ -1759,7 +1759,13 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
 
     // Block demo content
     if ( geodir_is_block_demo() ) {
-        $gd_post->{$html_var} = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus metus, rutrum in nunc eu, vestibulum iaculis lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean tristique arcu et eros convallis elementum. Maecenas sit amet quam eu velit euismod viverra. Etiam magna augue, mollis id nisi sit amet, eleifend sagittis tortor. Suspendisse vitae dignissim arcu, ac elementum eros. Mauris hendrerit at massa ut pellentesque.';
+		if($html_var == 'video'){
+			$gd_post->{$html_var} = 'https://www.youtube.com/watch?v=eEzD-Y97ges';
+		}elseif($html_var == 'virtual_tour' || $html_var == 'cf360_tour'){
+		    $gd_post->{$html_var} = '<iframe border="0" loading="lazy" src="https://my.matterport.com/show/?m=Zh14WDtkjdC"></iframe>';
+	    }else{
+			$gd_post->{$html_var} = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus metus, rutrum in nunc eu, vestibulum iaculis lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean tristique arcu et eros convallis elementum. Maecenas sit amet quam eu velit euismod viverra. Etiam magna augue, mollis id nisi sit amet, eleifend sagittis tortor. Suspendisse vitae dignissim arcu, ac elementum eros. Mauris hendrerit at massa ut pellentesque.';
+		}
     }
 
     // Check if there is a location specific filter.
@@ -1934,12 +1940,19 @@ function geodir_cf_html($html,$location,$cf,$p='',$output=''){
         if(!$cf){return NULL;}
     }
 
-    // Block demo content
-    if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = '<b>This is some bold HTML</b>';
-    }
 
-    $html_var = $cf['htmlvar_name'];
+	$html_var = $cf['htmlvar_name'];
+
+	// Block demo content
+	if ( geodir_is_block_demo() ) {
+		if($html_var == 'video'){
+			$gd_post->{$html_var} = 'https://www.youtube.com/watch?v=eEzD-Y97ges';
+		}elseif($html_var == 'virtual_tour' ){
+			$gd_post->{$html_var} = '<iframe border="0" loading="lazy" src="https://my.matterport.com/show/?m=Zh14WDtkjdC"></iframe>';
+		}else{
+			$gd_post->{$cf['htmlvar_name']} = '<b>This is some bold HTML</b>';
+		}
+	}
 
     // Check if there is a location specific filter.
     if(has_filter("geodir_custom_field_output_html_loc_{$location}")){
