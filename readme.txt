@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.23 =
 * Some hooks added to filter Google geocode request & results - ADDED
+* Tags page don't renders archive item properly from Elementor core text widget - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.22 - 2023-08-31 =
 * Elementor editor sometimes don't load GD archive template - FIXED
