@@ -1219,8 +1219,14 @@ class GeoDir_Elementor {
 	 * @return bool|string Bypass archive content.
 	 */
 	public static function bypass_setup_archive_page_content( $bypass, $content ) {
-		if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) && geodir_is_page( 'search' ) ) {
-			$page_id = geodir_search_page_id();
+		if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) ) {
+			if ( geodir_is_page( 'search' ) ) {
+				$page_id = geodir_search_page_id();
+			} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+				$page_id = (int) GeoDir_Compatibility::gd_page_id();
+			} else {
+				$page_id = 0;
+			}
 
 			if ( $page_id && self::is_elementor( $page_id ) ) {
 				$bypass = false;
