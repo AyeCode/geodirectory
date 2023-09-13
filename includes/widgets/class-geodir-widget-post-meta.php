@@ -521,7 +521,15 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 		if ( ! empty( $args ) ) {
 			$title  = esc_attr( ucwords( str_replace( '_', ' ', $args['key'] ) ) );
-			$value  = __( 'Placeholder', 'geodirectory' );
+
+			if($args['key']== 'video'){
+				$value = 'https://www.youtube.com/watch?v=eEzD-Y97ges';
+			}elseif($args['key'] == 'virtual_tour' ){
+				$value = '<div class="ratio ratio-16x9"><iframe border="0"  loading="lazy" src="https://my.matterport.com/show/?m=Zh14WDtkjdC&amp;play=1"></iframe></div>';
+			}else{
+				$value  = __( 'Placeholder', 'geodirectory' );
+			}
+
 			$icon   = '<i class="fas fa-tools"></i> ';
 			$view   = ! empty( $args['show'] ) ? esc_attr( $args['show'] ) : '';
 			$output = geodir_field_output_process( $view );
