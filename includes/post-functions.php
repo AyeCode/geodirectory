@@ -497,6 +497,8 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		}
 	}
 
+	$text_color = ! empty( $args['txt_color'] ) ? esc_attr( $args['txt_color'] ) : '';
+
 	$output = geodir_get_template_html( $template, array(
 		// pass whats used
 		'post_id'   => $post_id,
@@ -509,6 +511,7 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		'link_style'      => $link_style,
 		'icon_style'      => $icon_style,
 		'text_style'      => $text_style,
+		'text_color'      => $text_color,
 		'text'      => $text,
 		'show'  => $show,
 		// pass everything so it can be customised easily.
