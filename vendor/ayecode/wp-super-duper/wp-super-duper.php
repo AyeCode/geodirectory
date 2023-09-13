@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.24' );
+	define( 'SUPER_DUPER_VER', '1.1.25' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -211,7 +211,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 
 					// heading
-					$param['heading'] = $val['title'];
+					$param['heading'] = isset( $val['title'] ) ? $val['title'] : '';
 
 					// description
 					$param['description'] = isset( $val['desc'] ) ? $val['desc'] : '';
