@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.20\n"
+"Project-Id-Version: GeoDirectory 2.3.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-31 15:43+0530\n"
-"PO-Revision-Date: 2023-08-31 15:43+0530\n"
+"POT-Creation-Date: 2023-09-13 13:56+0530\n"
+"PO-Revision-Date: 2023-09-13 13:56+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1205,7 +1205,7 @@ msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-assets.php:255
-#: includes/class-geodir-frontend-scripts.php:877
+#: includes/class-geodir-frontend-scripts.php:917
 msgid "Allowed Files"
 msgstr ""
 
@@ -10523,7 +10523,7 @@ msgid "Closed"
 msgstr ""
 
 #: includes/business-hours-functions.php:678 includes/core-functions.php:338
-#: includes/custom-fields/output-functions.php:2641
+#: includes/custom-fields/output-functions.php:2654
 msgid "Open now"
 msgstr ""
 
@@ -10601,13 +10601,13 @@ msgid "You have successfully deleted the Listing."
 msgstr ""
 
 #: includes/class-geodir-ajax.php:782
-#: includes/class-geodir-frontend-scripts.php:842
+#: includes/class-geodir-frontend-scripts.php:882
 #: includes/post-functions.php:397 language.php:82
 msgid "Unfavorite"
 msgstr ""
 
 #: includes/class-geodir-ajax.php:787
-#: includes/class-geodir-frontend-scripts.php:840
+#: includes/class-geodir-frontend-scripts.php:880
 #: includes/post-functions.php:377
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:951
 #: includes/widgets/class-geodir-widget-simple-archive.php:429 language.php:81
@@ -11536,109 +11536,109 @@ msgstr ""
 msgid "In:"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:338
+#: includes/class-geodir-frontend-scripts.php:358
 msgid "Search was not successful for the following reason :"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:357
+#: includes/class-geodir-frontend-scripts.php:388
 msgid "Search was not successful for the requested address."
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:403
+#: includes/class-geodir-frontend-scripts.php:443
 #: includes/core-functions.php:311
 msgid "Unable to find your location"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:406
+#: includes/class-geodir-frontend-scripts.php:446
 #: includes/core-functions.php:312
 msgid "Permission denied in finding your location"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:409
+#: includes/class-geodir-frontend-scripts.php:449
 #: includes/core-functions.php:313
 msgid "Your location is currently unknown"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:412
+#: includes/class-geodir-frontend-scripts.php:452
 #: includes/core-functions.php:314
 msgid "Attempt to find location took too long"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:415
+#: includes/class-geodir-frontend-scripts.php:455
 #: includes/core-functions.php:315
 msgid "Location detection not supported in browser"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:839
+#: includes/class-geodir-frontend-scripts.php:879
 #: includes/post-functions.php:367 language.php:84
 msgid "Add to Favorites"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:841
+#: includes/class-geodir-frontend-scripts.php:881
 #: includes/post-functions.php:387 language.php:85
 msgid "Remove from Favorites"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:851
+#: includes/class-geodir-frontend-scripts.php:891
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2294
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:852
+#: includes/class-geodir-frontend-scripts.php:892
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2295
 msgctxt "enhanced select"
 msgid "No matches found"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:853
+#: includes/class-geodir-frontend-scripts.php:893
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2296
 msgctxt "enhanced select"
 msgid "Loading failed"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:854
+#: includes/class-geodir-frontend-scripts.php:894
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2297
 msgctxt "enhanced select"
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:855
+#: includes/class-geodir-frontend-scripts.php:895
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2298
 msgctxt "enhanced select"
 msgid "Please enter %item% or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:856
+#: includes/class-geodir-frontend-scripts.php:896
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2299
 msgctxt "enhanced select"
 msgid "Please delete 1 character"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:857
+#: includes/class-geodir-frontend-scripts.php:897
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2300
 msgctxt "enhanced select"
 msgid "Please delete %item% characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:858
+#: includes/class-geodir-frontend-scripts.php:898
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2301
 msgctxt "enhanced select"
 msgid "You can only select 1 item"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:859
+#: includes/class-geodir-frontend-scripts.php:899
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2302
 msgctxt "enhanced select"
 msgid "You can only select %item% items"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:860
+#: includes/class-geodir-frontend-scripts.php:900
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2303
 msgctxt "enhanced select"
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:861
+#: includes/class-geodir-frontend-scripts.php:901
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2304
 msgctxt "enhanced select"
 msgid "Searching&hellip;"
@@ -13626,17 +13626,17 @@ msgstr ""
 msgid "Some demo text."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:1890
+#: includes/custom-fields/output-functions.php:1896
 #: includes/widgets/class-geodir-widget-post-content.php:102
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:326
 msgid "Read more..."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2548
+#: includes/custom-fields/output-functions.php:2561
 msgid "View on map"
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2702
+#: includes/custom-fields/output-functions.php:2715
 msgid "Expand opening hours"
 msgstr ""
 
@@ -17133,7 +17133,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:46
 #: includes/widgets/class-geodir-widget-post-features.php:1147
-#: includes/widgets/class-geodir-widget-post-meta.php:524
+#: includes/widgets/class-geodir-widget-post-meta.php:530
 #: vendor/ayecode/wp-super-duper/hello-world.php:26
 msgid "Placeholder"
 msgstr ""
