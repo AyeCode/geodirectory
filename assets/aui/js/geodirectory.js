@@ -1094,6 +1094,9 @@ function gd_fav_save(post_id) {
                         var $el = jQuery(this).find('.geodir-act-fav');
                         $icon_value = $el.data("icon");
                         $icon = $icon_value ? $icon_value : geodir_params.icon_fav;
+						var textColor = $el.data("text-color");
+						var textStyle = textColor ? 'color:' + textColor + ';' : '';
+						textStyle = textStyle ? ' style="' + textStyle + '"' : '';
 
                         if (ajax_action == 'remove') {
                             $color_value = $el.data("color-off");
@@ -1103,7 +1106,7 @@ function gd_fav_save(post_id) {
                                 .removeClass('geodir-removetofav-icon')
                                 .addClass('geodir-addtofav-icon')
                                 .attr("title", geodir_params.text_add_fav)
-                                .html('<i ' + $style + ' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + (action_text ? action_text : geodir_params.text_fav) + '</span>').tooltip('enable');
+                                .html('<i ' + $style + ' class="' + $icon + '"></i> <span class="' + $text_classes + '"' + textStyle + '>' + ' ' + (action_text ? action_text : geodir_params.text_fav) + '</span>').tooltip('enable');
                         } else {
                             $color_value = $el.data("color-on");
                             $text_classes = $el.find('.geodir-fav-text').attr('class');
@@ -1112,7 +1115,7 @@ function gd_fav_save(post_id) {
                                 .removeClass('geodir-addtofav-icon')
                                 .addClass('geodir-removetofav-icon')
                                 .attr("title", geodir_params.text_remove_fav)
-                                .html('<i ' + $style + ' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + (action_text ? action_text : geodir_params.text_unfav) + '</span>').tooltip('enable');
+                                .html('<i ' + $style + ' class="' + $icon + '"></i> <span class="' + $text_classes + '"' + textStyle + '>' + ' ' + (action_text ? action_text : geodir_params.text_unfav) + '</span>').tooltip('enable');
                         }
                     }
                 });
