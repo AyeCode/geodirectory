@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.24 =
 * Text color attribute is missing in Favorite / Unfavorite text in GD > Add To Fav - FIXED
+* Resize marker hook not working for add listing page map marker - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.23 - 2023-09-13 =
 * Some hooks added to filter Google geocode request & results - ADDED
