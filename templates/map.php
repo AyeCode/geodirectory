@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.14
+ * @version    2.3.24
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -71,6 +71,7 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
 $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
 $marker_icon = GeoDir_Maps::default_marker_icon( true );
 $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
+$resize_marker = apply_filters( 'geodir_map_marker_resize_marker', false );
 
 if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 <script type="text/javascript">
@@ -837,26 +838,23 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 
         if (window.gdMaps) {
             geocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : [];
-
+			icon = '<?php echo $marker_icon;?>';iconW = parseFloat('<?php echo $icon_size['w'];?>');iconH = parseFloat('<?php echo $icon_size['h'];?>');
+			<?php if ( $resize_marker ) { ?>iconMW=geodir_params.marker_max_width?parseFloat(geodir_params.marker_max_width):0;iconMH=geodir_params.marker_max_height?parseFloat(geodir_params.marker_max_height):0;if(geodir_params.resize_marker&&(iconW<iconMW||iconH<iconMH)&&icon.substr(icon.lastIndexOf(".")+1).toLowerCase()=="svg"){iconW=iconW*10;iconH=iconH*10}if(geodir_params.resize_marker&&iconW>5&&iconH>5&&(iconMW>5&&iconW>iconMW||iconMH>5&&iconH>iconMH)){resizeW=iconW;resizeH=iconH;resize=false;if(iconMH>5&&resizeH>iconMH){_resizeH=iconMH;_resizeW=Math.round(_resizeH*resizeW/resizeH*10)/10;resizeW=_resizeW;resizeH=_resizeH;resize=true}if(iconMW>5&&resizeW>iconMW){_resizeW=iconMW;_resizeH=Math.round(_resizeW*resizeH/resizeW*10)/10;resizeW=_resizeW;resizeH=_resizeH;resize=true}if(resize&&resizeW>5&&resizeH>5){if(window.gdMaps=='google'){icon={url:icon,scaledSize:new google.maps.Size(resizeW,resizeH),origin:new google.maps.Point(0,0),anchor:new google.maps.Point(Math.round(resizeW/2),resizeH)}}else{iconW=resizeW;iconH=resizeH}}}<?php } ?>
             baseMarker = $.goMap.createMarker({
                 latitude: <?php echo $prefix;?>CITY_MAP_CENTER_LAT,
                 longitude: <?php echo $prefix;?>CITY_MAP_CENTER_LNG,
                 id: 'baseMarker',
-                icon: '<?php echo $marker_icon;?>',
+                icon: icon,
                 draggable: true,
                 addToMap: true, // For OSM
-                w: parseFloat('<?php echo $icon_size['w'];?>'),
-                h: parseFloat('<?php echo $icon_size['h'];?>'),
+                w: iconW,
+                h: iconH,
             });
         } else {
-            jQuery('#<?php echo $prefix.'advmap_nofound';?>').hide();
-            jQuery('#<?php echo $prefix.'advmap_notloaded';?>').show();
+            jQuery('#<?php echo $prefix.'advmap_nofound';?>').hide();jQuery('#<?php echo $prefix.'advmap_notloaded';?>').show();
         }
 
-        $("#<?php echo $prefix;?>set_address_button").on("click",function () {
-            var set_on_map = true;
-            geodir_codeAddress(set_on_map);
-        });
+        $("#<?php echo $prefix;?>set_address_button").on("click",function(){var set_on_map=true;geodir_codeAddress(set_on_map)});
 
         if (window.gdMaps == 'google') {
             // Add dragging event listeners.
@@ -884,12 +882,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 
                 updateMarkerPosition(baseMarker.getPosition());
             });
-            google.maps.event.addListener($.goMap.map, 'zoom_changed', function () {
-				if (typeof $.goMap.map === 'undefined') {
-					$.goMap.map = $addressMap;
-				}
-                updateMapZoom($.goMap.map.zoom);
-            });
+            google.maps.event.addListener($.goMap.map,'zoom_changed',function(){if(typeof $.goMap.map==='undefined'){$.goMap.map=$addressMap;}updateMapZoom($.goMap.map.zoom);});
 
             var maxMap = document.getElementById('<?php echo $prefix;?>triggermap');
             maxMap.addEventListener('click', gdMaxMap);
