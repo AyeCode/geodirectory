@@ -413,6 +413,23 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
         $location_array = geodir_get_current_location_terms( 'query_vars' );
     }
 
+	if ( class_exists( 'GeoDir_Location_City' ) && geodir_get_option( 'lm_url_filter_archives_on_single', 'city' ) != 'city' && ! ( ! empty( $location_array ) && ! empty( $location_array['country'] ) && ! empty( $location_array['region'] ) && ! empty( $location_array['city'] ) ) && ! empty( $gd_post ) && ( $gd_page == 'single' || geodir_is_page( 'single' ) ) && GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) && ! empty( $gd_post->country ) && ! empty( $gd_post->region ) && ! empty( $gd_post->city ) ) {
+		if ( ! empty( $gd_post->neighbourhood ) && GeoDir_Location_Neighbourhood::is_active() && $instance['type'] == 'neighbourhood' ) {
+			$location = GeoDir_Location_Neighbourhood::get_info_by_slug( $gd_post->neighbourhood );
+			$neighbourhood = $gd_post->neighbourhood;
+		} else {
+			$location = GeoDir_Location_City::get_info_by_name( $gd_post->city, $gd_post->country, $gd_post->region );
+			$neighbourhood = '';
+		}
+
+		if ( ! empty( $location ) ) {
+			$location_array['country'] = isset( $location->country_slug ) ? $location->country_slug : '';
+			$location_array['region'] = isset( $location->region_slug ) ? $location->region_slug : '';
+			$location_array['city'] = isset( $location->city_slug ) ? $location->city_slug : '';
+			$location_array['neighbourhood'] = $neighbourhood;
+		}
+	}
+
     $location_terms = array();
     $location_terms['gd_neighbourhood'] = !empty($wp->query_vars['neighbourhood']) ? $wp->query_vars['neighbourhood'] : '';
     $location_terms['gd_city'] = !empty($wp->query_vars['city']) ? $wp->query_vars['city'] : '';

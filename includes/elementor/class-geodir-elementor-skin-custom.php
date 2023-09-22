@@ -22,6 +22,7 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 	private $template_cache = [];
 	private $pid;
 	public $settings;
+	public $used_templates = [];
 
 	public function get_id() {
 		return 'gd_custom';

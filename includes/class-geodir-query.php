@@ -49,6 +49,8 @@ class GeoDir_Query {
 			add_filter( 'pre_handle_404', array( __CLASS__, 'pre_handle_404' ), 20, 2 );
 		}
 
+		add_filter( 'split_the_query', array( $this, 'split_the_query' ), 100, 2 );
+
 		$this->init_query_vars();
 	}
 
@@ -1653,5 +1655,26 @@ class GeoDir_Query {
 		}
 
 		return $value;
+	}
+	
+	/**
+	 * Prevent split query to work sorting.
+	 *
+	 * Conflicts with Object Cache Pro.
+	 *
+	 * @since 2.3.24
+	 *
+	 * @global object $wp WordPress object.
+	 *
+	 * @param bool     $split_the_query Whether or not to split the query.
+     * @param WP_Query $query The WP_Query instance.
+	 * @return bool True to spilt query otherwise false.
+	 */
+	public function split_the_query( $split_the_query, $wp_query ) {
+		if ( $split_the_query && ! empty( $wp_query->request ) && strpos( $wp_query->request, 'geodir_gd_' ) !== false && strpos( $wp_query->request, '`_search_title`' ) !== false ) {
+			$split_the_query = false;
+		}
+
+		return $split_the_query;
 	}
 }

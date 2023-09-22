@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.23\n"
+"Project-Id-Version: GeoDirectory 2.3.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-13 13:56+0530\n"
-"PO-Revision-Date: 2023-09-13 13:56+0530\n"
+"POT-Creation-Date: 2023-09-22 11:23+0530\n"
+"PO-Revision-Date: 2023-09-22 11:23+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -186,7 +186,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:830
 #: includes/api/class-geodir-rest-posts-controller.php:2198
 #: includes/class-geodir-location.php:365
-#: includes/class-geodir-location.php:419 includes/post-functions.php:2148
+#: includes/class-geodir-location.php:419 includes/post-functions.php:2151
 msgid "Country"
 msgstr ""
 
@@ -200,7 +200,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:820
 #: includes/api/class-geodir-rest-posts-controller.php:2212
 #: includes/class-geodir-location.php:384
-#: includes/class-geodir-location.php:431 includes/post-functions.php:2137
+#: includes/class-geodir-location.php:431 includes/post-functions.php:2140
 msgid "Region"
 msgstr ""
 
@@ -214,7 +214,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:810
 #: includes/api/class-geodir-rest-posts-controller.php:2226
 #: includes/class-geodir-location.php:404
-#: includes/class-geodir-location.php:440 includes/post-functions.php:2126
+#: includes/class-geodir-location.php:440 includes/post-functions.php:2129
 msgid "City"
 msgstr ""
 
@@ -235,7 +235,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1118
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
-#: includes/custom-fields/functions.php:677 includes/post-functions.php:2159
+#: includes/custom-fields/functions.php:677 includes/post-functions.php:2162
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -634,8 +634,8 @@ msgstr ""
 #: includes/admin/admin-functions.php:925
 #: includes/admin/admin-functions.php:942
 #: includes/admin/class-geodir-admin-dummy-data.php:856
-#: includes/admin/class-geodir-admin-permalink-settings.php:67
-#: includes/admin/class-geodir-admin-permalink-settings.php:141
+#: includes/admin/class-geodir-admin-permalink-settings.php:66
+#: includes/admin/class-geodir-admin-permalink-settings.php:140
 #: includes/admin/class-geodir-admin-taxonomies.php:900
 #: includes/widgets/class-geodir-widget-archive-item-section.php:75
 #: includes/widgets/class-geodir-widget-archive-item-section.php:89
@@ -1265,7 +1265,7 @@ msgid "if"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:139
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4971
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4998
 msgid "Add Rule"
 msgstr ""
 
@@ -1282,14 +1282,14 @@ msgid "hide"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:170
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4884
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4885
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4911
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4912
 msgid "FIELD"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:194
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4906
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4907
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4933
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4934
 msgid "CONDITION"
 msgstr ""
 
@@ -1334,7 +1334,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-conditional-fields.php:258
 #: includes/class-geodir-privacy-exporters.php:344
 #: includes/custom-fields/input-functions-aui.php:1967
-#: includes/post-functions.php:1184 includes/post-functions.php:1941
+#: includes/post-functions.php:1187 includes/post-functions.php:1944
 #: includes/widgets/class-geodir-widget-dynamic-content.php:333
 #: includes/widgets/class-geodir-widget-dynamic-content.php:392
 #: includes/widgets/class-geodir-widget-post-badge.php:504
@@ -1458,9 +1458,9 @@ msgid "Dummy data has not fully installed yet!"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:674
-#: templates/bootstrap/map/map-add-listing.php:721
-#: templates/bootstrap/map/map-add-listing.php:891 templates/map.php:723
-#: templates/map.php:912
+#: templates/bootstrap/map/map-add-listing.php:722
+#: templates/bootstrap/map/map-add-listing.php:886 templates/map.php:724
+#: templates/map.php:905
 msgid "Geocode was not successful for the following reason:"
 msgstr ""
 
@@ -1650,7 +1650,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1103
 #: includes/admin/class-geodir-admin-dummy-data.php:1113
 #: includes/class-geodir-post-data.php:1643
-#: includes/custom-fields/functions.php:667 includes/post-functions.php:2104
+#: includes/custom-fields/functions.php:667 includes/post-functions.php:2107
 msgid "Address"
 msgstr ""
 
@@ -2091,7 +2091,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-api.php:43
 #: includes/admin/settings/class-geodir-settings-import-export.php:47
 #: includes/admin/views/html-admin-page-status-report.php:327
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3029
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3056
 msgid "Settings"
 msgstr ""
 
@@ -2152,7 +2152,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:146
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:300
-#: includes/post-functions.php:2029
+#: includes/post-functions.php:2032
 msgid "Status"
 msgstr ""
 
@@ -2238,74 +2238,74 @@ msgstr ""
 msgid "GeoDirectory permalinks"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:58
+#: includes/admin/class-geodir-admin-permalink-settings.php:59
 msgid ""
 "These settings control the permalinks used specifically for GeoDirectory CPTs"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:71
+#: includes/admin/class-geodir-admin-permalink-settings.php:70
 msgid "Full location"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:78
+#: includes/admin/class-geodir-admin-permalink-settings.php:77
 msgid "Full location with category"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:93
+#: includes/admin/class-geodir-admin-permalink-settings.php:92
 #, php-format
 msgid "%s (Country slug of the post. Ex: united-states.)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:95
+#: includes/admin/class-geodir-admin-permalink-settings.php:94
 #, php-format
 msgid "%s (Region slug of the post. Ex: pennsylvania.)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:97
+#: includes/admin/class-geodir-admin-permalink-settings.php:96
 #, php-format
 msgid "%s (City slug of the post. Ex: philadelphia.)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:99
+#: includes/admin/class-geodir-admin-permalink-settings.php:98
 #, php-format
 msgid ""
 "%s (Category slug. Nested sub-categories appear as nested directories in the "
 "URL.)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:101
+#: includes/admin/class-geodir-admin-permalink-settings.php:100
 #, php-format
 msgid "%s (The sanitized post title (slug).)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:103
+#: includes/admin/class-geodir-admin-permalink-settings.php:102
 #, php-format
 msgid "%s (The unique ID of the post. Ex: 423.)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:116
+#: includes/admin/class-geodir-admin-permalink-settings.php:115
 #, php-format
 msgid "%s added to permalink structure"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:119
+#: includes/admin/class-geodir-admin-permalink-settings.php:118
 #, php-format
 msgid "%s (already used in permalink structure)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:163
+#: includes/admin/class-geodir-admin-permalink-settings.php:162
 msgid "Custom base"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:175
+#: includes/admin/class-geodir-admin-permalink-settings.php:174
 msgid "Available tags:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:200
+#: includes/admin/class-geodir-admin-permalink-settings.php:199
 msgid "GeoDirectory Taxonomies"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:203
+#: includes/admin/class-geodir-admin-permalink-settings.php:202
 #, php-format
 msgid ""
 "If you like, you may enter custom structures for your category and tag URLs "
@@ -2314,25 +2314,25 @@ msgid ""
 "category can not be blank."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:207
+#: includes/admin/class-geodir-admin-permalink-settings.php:206
 msgid "Category base"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:211
+#: includes/admin/class-geodir-admin-permalink-settings.php:210
 msgid "Tag base"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:340
+#: includes/admin/class-geodir-admin-permalink-settings.php:339
 msgid ""
 "GeoDirectory permalinks must contain either `%postname%` or `%post_id%`, "
 "please check and try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:348
+#: includes/admin/class-geodir-admin-permalink-settings.php:347
 msgid "GeoDirectory tag base can not be blank, please check and try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:356
+#: includes/admin/class-geodir-admin-permalink-settings.php:355
 msgid ""
 "GeoDirectory category base can not be blank, please check and try again."
 msgstr ""
@@ -2562,7 +2562,7 @@ msgid "Unpublished"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-report-post-list-table.php:758
-#: includes/post-functions.php:1973 includes/post-functions.php:1984
+#: includes/post-functions.php:1976 includes/post-functions.php:1987
 #: includes/widgets/class-geodir-widget-author-actions.php:359
 msgid "Published"
 msgstr ""
@@ -8567,7 +8567,7 @@ msgstr ""
 #: includes/custom-fields/input-functions.php:1813
 #: includes/custom-fields/input-functions.php:1843
 #: includes/widgets/class-geodir-widget-archive-item-section.php:43
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3788
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3815
 msgid "Close"
 msgstr ""
 
@@ -10563,7 +10563,7 @@ msgid ""
 msgstr ""
 
 #: includes/class-geodir-ajax.php:226 includes/core-functions.php:355
-#: language.php:78 vendor/ayecode/wp-super-duper/wp-super-duper.php:3637
+#: language.php:78 vendor/ayecode/wp-super-duper/wp-super-duper.php:3664
 msgid "Cancel"
 msgstr ""
 
@@ -11514,7 +11514,7 @@ msgstr ""
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1097 includes/post-functions.php:2017
+#: includes/class-geodir-email.php:1097 includes/post-functions.php:2020
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:246
 msgid "Author"
 msgstr ""
@@ -13096,7 +13096,7 @@ msgid "You may lose changes if you navigate away now!"
 msgstr ""
 
 #: includes/core-functions.php:348
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3637
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3664
 msgid "Are you sure?"
 msgstr ""
 
@@ -13126,7 +13126,7 @@ msgstr ""
 
 #: includes/core-functions.php:354
 #: includes/widgets/class-geodir-widget-author-actions.php:264 language.php:129
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3637
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3664
 msgid "Delete"
 msgstr ""
 
@@ -13753,37 +13753,37 @@ msgstr ""
 msgid "GD Email Listing"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:31
-#: includes/elementor/class-geodir-elementor-skin-custom.php:441
+#: includes/elementor/class-geodir-elementor-skin-custom.php:32
+#: includes/elementor/class-geodir-elementor-skin-custom.php:442
 #: includes/elementor/class-geodir-elementor-template-archive-item.php:74
 msgid "GD Archive Item"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:55
+#: includes/elementor/class-geodir-elementor-skin-custom.php:56
 msgid "Select a default template"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:56
+#: includes/elementor/class-geodir-elementor-skin-custom.php:57
 msgid "Create/edit a Loop Template"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:67
+#: includes/elementor/class-geodir-elementor-skin-custom.php:68
 msgid "View"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:122
+#: includes/elementor/class-geodir-elementor-skin-custom.php:123
 msgid "Select a template"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:235
+#: includes/elementor/class-geodir-elementor-skin-custom.php:236
 msgid "Please select a default template! "
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:313
+#: includes/elementor/class-geodir-elementor-skin-custom.php:314
 msgid "Page"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:337
+#: includes/elementor/class-geodir-elementor-skin-custom.php:338
 msgid "Pagination"
 msgstr ""
 
@@ -14694,65 +14694,65 @@ msgstr ""
 msgid "Failed to retrieve GPS info from OpenStreetMap Nominatim server."
 msgstr ""
 
-#: includes/post-functions.php:688 includes/post-functions.php:717
+#: includes/post-functions.php:691 includes/post-functions.php:720
 msgctxt "Listing status"
 msgid "Closed down"
 msgstr ""
 
-#: includes/post-functions.php:722
+#: includes/post-functions.php:725
 #, php-format
 msgid "Closed down <span class=\"count\">(%s)</span>"
 msgid_plural "Closed down <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-functions.php:1252
+#: includes/post-functions.php:1255
 #: includes/widgets/class-geodir-widget-dynamic-content.php:347
 msgid "NEW"
 msgstr ""
 
-#: includes/post-functions.php:1254
+#: includes/post-functions.php:1257
 #: includes/widgets/class-geodir-widget-dynamic-content.php:349
 msgid "UPDATED"
 msgstr ""
 
-#: includes/post-functions.php:1454
+#: includes/post-functions.php:1457
 msgid "Watch Video"
 msgstr ""
 
-#: includes/post-functions.php:1952
+#: includes/post-functions.php:1955
 msgid "Overall Rating"
 msgstr ""
 
-#: includes/post-functions.php:1963
+#: includes/post-functions.php:1966
 msgid "Rating Count"
 msgstr ""
 
-#: includes/post-functions.php:1995 includes/post-functions.php:2006
+#: includes/post-functions.php:1998 includes/post-functions.php:2009
 msgid "Modified"
 msgstr ""
 
-#: includes/post-functions.php:2040
+#: includes/post-functions.php:2043
 msgid "ID"
 msgstr ""
 
-#: includes/post-functions.php:2051
+#: includes/post-functions.php:2054
 msgid "Post Link"
 msgstr ""
 
-#: includes/post-functions.php:2115
+#: includes/post-functions.php:2118
 msgid "Address line 2"
 msgstr ""
 
-#: includes/post-functions.php:2170
+#: includes/post-functions.php:2173
 msgid "Latitude"
 msgstr ""
 
-#: includes/post-functions.php:2181
+#: includes/post-functions.php:2184
 msgid "Longitude"
 msgstr ""
 
-#: includes/post-functions.php:2192
+#: includes/post-functions.php:2195
 msgid "Map Directions"
 msgstr ""
 
@@ -14872,7 +14872,7 @@ msgid "Page ID"
 msgstr ""
 
 #: includes/template-functions.php:1189
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5013
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5040
 msgid "Template Part"
 msgstr ""
 
@@ -14892,7 +14892,7 @@ msgstr ""
 
 #: includes/template-functions.php:1261
 #: vendor/ayecode/wp-super-duper/sd-functions.php:2883
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5014
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5041
 msgid "Select Template Part..."
 msgstr ""
 
@@ -19400,7 +19400,7 @@ msgstr ""
 msgid "Add custom feature"
 msgstr ""
 
-#: language.php:65 templates/legacy/map/map.php:46 templates/map.php:985
+#: language.php:65 templates/legacy/map/map.php:46 templates/map.php:978
 msgid ""
 "<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your "
 "search criteria and try again.</p>"
@@ -21112,20 +21112,20 @@ msgstr ""
 msgid "Loading categories..."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:471
-#: templates/bootstrap/map/map-add-listing.php:776 templates/map.php:473
-#: templates/map.php:798
+#: templates/bootstrap/map/map-add-listing.php:472
+#: templates/bootstrap/map/map-add-listing.php:777 templates/map.php:474
+#: templates/map.php:799
 #, php-format
 msgid "Please choose any address of the (%s) city only."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:490
-#: templates/bootstrap/map/map-add-listing.php:794 templates/map.php:492
-#: templates/map.php:816
+#: templates/bootstrap/map/map-add-listing.php:491
+#: templates/bootstrap/map/map-add-listing.php:795 templates/map.php:493
+#: templates/map.php:817
 msgid "Cannot determine address at this location."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:957
+#: templates/bootstrap/map/map-add-listing.php:936
 msgid ""
 "Click on \"Set Address on Map\" and then you can also drag map marker to "
 "locate the correct address"
@@ -21233,7 +21233,7 @@ msgstr ""
 msgid "reviewed"
 msgstr ""
 
-#: templates/map.php:986
+#: templates/map.php:979
 msgid "<h3>Map Not Loaded</h3><p>Sorry, unable to load Maps API."
 msgstr ""
 
@@ -22158,67 +22158,67 @@ msgstr ""
 msgid "Placeholder for: %s"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:2858
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:2885
 msgid "Placeholder for: "
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3788
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3815
 msgid "Reset"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3788
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3815
 msgid "Save Rules"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4855
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4882
 msgid "Remove Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4860
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4887
 msgid "Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4861
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4888
 msgid "Select Rule..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4868
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4895
 msgid "Rule:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4929
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4931
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4956
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4958
 msgid "VALUE TO MATCH"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4943
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4970
 msgid "Select User Roles:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4977
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5004
 msgid "What should happen if rules met."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4978
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5005
 msgid "Default Output"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4997
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5024
 msgid "Page Content"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4998
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5025
 msgid "Select Page ID..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5032
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5059
 msgid "Custom Message Type"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5033
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5060
 msgid "Default (none)"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5056
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5083
 msgid "CUSTOM MESSAGE TO SHOW"
 msgstr ""
