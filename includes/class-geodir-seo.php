@@ -219,6 +219,7 @@ class GeoDir_SEO {
 			add_filter( 'wpseo_title', array( __CLASS__, 'get_title' ), 10, 1 );
 			add_filter( 'wpseo_metadesc', array( __CLASS__, 'get_description' ), 10, 1 );
 		} elseif ( defined( 'RANK_MATH_VERSION' ) ) {
+			add_action( 'rank_math/vars/register_extra_replacements', array( __CLASS__, 'rank_math_vars_register_extra_replacements' ), 20 );
 			add_filter( 'rank_math/frontend/description', array( __CLASS__,'get_description' ), 10, 1 );
 			add_filter( 'rank_math/frontend/title', array( __CLASS__, 'get_title' ), 10, 1 );
 		} else {
