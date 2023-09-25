@@ -286,6 +286,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory Business Directory Plugin v2.3.25 =
+* Dynamic image tag is not working when Flexbox Container is active - FIXED
+
 = GeoDirectory Business Directory Plugin v2.3.24 - 2023-09-22 =
 * Text color attribute is missing in Favorite / Unfavorite text in GD > Add To Fav - FIXED
 * Resize marker hook not working for add listing page map marker - FIXED
