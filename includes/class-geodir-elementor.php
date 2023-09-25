@@ -95,6 +95,7 @@ class GeoDir_Elementor {
 		// Elementor 3
 		if ( version_compare( ELEMENTOR_VERSION, '3.0.0', '>=' ) ) {
 			add_action( 'elementor/frontend/section/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
+			add_action( 'elementor/frontend/container/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
 			add_action( 'elementor/frontend/column/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
 			add_action( 'elementor/frontend/widget/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
 			add_filter( 'elementor/elements/categories_registered', array( __CLASS__,'add_elementor_widget_categories' ), 1, 1  );
