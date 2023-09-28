@@ -55,22 +55,21 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 	 * Render the tag output.
 	 */
 	public function render() {
-
 		global $gd_post, $post;
 
 		$value = '';
-		$key   = $this->get_settings( 'key' );
+		$key = $this->get_settings( 'key' );
 
 		if ( $key == 'post_images' ) {
 			$key = 'featured_image';
 		}
 
-		$condition   = $this->get_settings( 'condition' );
-		$match   = $this->get_settings( 'match' );
+		$condition = $this->get_settings( 'condition' );
+		$match = $this->get_settings( 'match' );
 		$show = 'value-raw';
+
 		if ( ! empty( $key ) ) {
 			if ( isset( $gd_post->{$key} ) ) {
-
 				if ( $show == 'value-raw' ) {
 					$value = $gd_post->{$key};
 				} else {
@@ -125,7 +124,8 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 
 			// conditions
 			$match_found = false;
-			if($key){
+
+			if ( $key ) {
 				$search = $match;
 				$match_value = $value;
 
@@ -140,8 +140,7 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 						if ( $until_time >= $now_time ) {
 							$match_found = true;
 						}
-					}
-					else {
+					} else {
 						switch ( $condition ) {
 							case 'is_equal':
 								$match_found = (bool) ( $search != '' && $match_value == $search );
@@ -167,18 +166,37 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 							case 'is_not_contains':
 								$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) === false );
 								break;
+							case 'is_contains_any':
+							case 'is_not_contains_any':
+								if ( $match_value !== '' ) {
+									$match_value = geodir_strtolower( stripslashes( $match_value ) );
+									$search_value = geodir_strtolower( stripslashes( $search ) );
+									$match_value = explode( ",", $match_value );
+									$search_value = explode( ",", $search_value );
+
+									foreach ( $search_value as $value ) {
+										$value = trim( $value );
+
+										if ( $value !== '' && in_array( $value, $match_value ) ) {
+											$match_found = true;
+											break;
+										}
+									}
+
+									if ( $condition == 'is_not_contains_any' ) {
+										$match_found = $match_found ? false : true;
+									}
+								}
+								break;
 						}
 					}
 				}
-
 			}
 
-			if($match_found){
+			if ( $match_found ) {
 				echo "elementor-hidden gd-dont-render";
 			}
-
 		}
-
 	}
 
 	/**
@@ -269,14 +287,16 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 				'label'   => __( 'Condition', 'geodirectory' ),
 				'type'    => \Elementor\Controls_Manager::SELECT,
 				'options' => array(
-					"is_equal"            => __( 'is equal', 'geodirectory' ),
-					"is_not_equal"            => __( 'is not equal', 'geodirectory' ),
-					"is_greater_than"            => __( 'is greater than', 'geodirectory' ),
-					"is_less_than"            => __( 'is less than', 'geodirectory' ),
-					"is_empty"            => __( 'is empty', 'geodirectory' ),
-					"is_not_empty"            => __( 'is not empty', 'geodirectory' ),
-					"is_contains"            => __( 'is contains', 'geodirectory' ),
-					"is_not_contains"            => __( 'is not contains', 'geodirectory' ),
+					'is_equal' => __( 'is equal', 'geodirectory' ),
+					'is_not_equal' => __( 'is not equal', 'geodirectory' ),
+					'is_greater_than' => __( 'is greater than', 'geodirectory' ),
+					'is_less_than' => __( 'is less than', 'geodirectory' ),
+					'is_empty' => __( 'is empty', 'geodirectory' ),
+					'is_not_empty' => __( 'is not empty', 'geodirectory' ),
+					'is_contains' => __( 'is contains', 'geodirectory' ),
+					'is_not_contains' => __( 'is not contains', 'geodirectory' ),
+					'is_contains_any' => __( 'is contains any', 'geodirectory' ),
+					'is_not_contains_any' => __( 'is not contains any', 'geodirectory' )
 				),
 				'default' => 'is_empty'
 			]
