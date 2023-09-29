@@ -98,7 +98,6 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 		$design_style = geodir_design_style();
 
 		if ( $design_style ) {
-
 			// mid_size
 			$arguments['mid_size'] = array(
 				'type'     => 'select',
@@ -122,7 +121,31 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 				'desc_tip' => true,
 				'advanced' => false,
 				'group'    => __( 'Output', 'geodirectory' ),
+			);
 
+			// mid_size_sm
+			$arguments['mid_size_sm'] = array(
+				'type'     => 'select',
+				'title'    => __( 'Middle Pages Numbers (mobile):', 'geodirectory' ),
+				'desc'     => __( 'How many numbers to either side of the current pages on small screen like on mobile. Default 0.', 'geodirectory' ),
+				'options'  => array(
+					''   => __( 'Default (0)', 'geodirectory' ),
+					'0'  => '0',
+					'1'  => '1',
+					'2'  => '2',
+					'3'  => '3',
+					'4'  => '4',
+					'5'  => '5',
+					'6'  => '6',
+					'7'  => '7',
+					'8'  => '8',
+					'9'  => '9',
+					'10' => '10',
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'    => __( 'Output', 'geodirectory' ),
 			);
 
 			// paging style
@@ -142,6 +165,22 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 			// button size
 			$arguments['size'] = array(
 				'title'    => __( 'Size', 'geodirectory' ),
+				'type'     => 'select',
+				'options'  => array(
+					''      => __( 'Default', 'geodirectory' ),
+					'small' => __( 'Small', 'geodirectory' ),
+					'large' => __( 'Large', 'geodirectory' ),
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'    => __( 'Paging', 'geodirectory' ),
+				'element_require' => '[%paging_style%]==""',
+			);
+
+			$arguments['size_sm'] = array(
+				'title'    => __( 'Size (mobile)', 'geodirectory' ),
+				'desc'     => __( 'Pagination size to show on mobile.', 'geodirectory' ),
 				'type'     => 'select',
 				'options'  => array(
 					''      => __( 'Default', 'geodirectory' ),
@@ -274,6 +313,8 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 			'rounded_size'  => '',
 			'shadow'        => '',
 			'mid_size'      => '',
+			'size_sm'       => '',
+			'mid_size_sm'   => ''
 		);
 		$args     = wp_parse_args( $args, $defaults );
 		if ( ! empty( $args['show_advanced'] ) ) {
@@ -292,9 +333,19 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 			$args['mid_size'] = 2;
 		}
 
+		// paging size mobile
+		if ( ! empty( $args['size_sm'] ) && 'small' === $args['size_sm'] ) {
+			$args['size_sm'] = 'small';
+		} else if ( ! empty( $args['size_sm'] ) && 'large' === $args['size_sm'] ) {
+			$args['size_sm'] = 'large';
+		} else {
+			$args['size_sm'] = '';
+		}
+
 		// Mobile devices
 		if ( wp_is_mobile() ) {
-			$args['mid_size'] = 0; // On mobile devices.
+			$args['size'] = $args['size_sm'];
+			$args['mid_size'] = absint( $args['mid_size_sm'] ); // On mobile devices.
 		}
 
 		// paging size
