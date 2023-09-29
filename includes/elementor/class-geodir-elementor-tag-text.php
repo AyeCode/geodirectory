@@ -60,9 +60,12 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 		$value = '';
 		$key = $this->get_settings( 'key' );
 		$show = $this->get_settings( 'show' );
+		$raw_value = '';
 
 		if ( ! empty( $key ) ) {
 			if ( isset( $gd_post->{$key} ) ) {
+				$raw_value = $gd_post->{$key};
+
 				if ( $show == 'value-raw' ) {
 					$value = $gd_post->{$key};
 				} else {
@@ -105,7 +108,28 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 				$value = $this->get_category_meta( $key, $show );
 			}
 
-			$value = wp_kses_post( $value );
+			if ( ( ! empty( $raw_value ) && is_email( $raw_value ) ) || $key == 'email' ) {
+				$skip_wp_kses  = true;
+			} else {
+				$skip_wp_kses = false;
+			}
+
+			/*
+			 * Skip wp_kses for some values.
+			 *
+			 * @since 2.3.25
+			 *
+			 * @param bool   $skip_wp_kses To skip or not.
+			 * @param mixed  $value Tag value.
+			 * @param string $key Tag key.
+			 * @param object $this Tag object.
+			 */
+			$skip_wp_kses = apply_filters( 'geodir_elementor_tag_text_skip_wp_kses', $skip_wp_kses, $value, $key, $this );
+
+			if ( ! $skip_wp_kses ) {
+				$value = wp_kses_post( $value );
+			}
+
 			/*
 			 * Filter text render value.
 			 *

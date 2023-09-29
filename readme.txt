@@ -290,6 +290,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Dynamic image tag is not working when Flexbox Container is active - FIXED
 * Elementor CSS hide conditions is_contains_any, is_not_contains_any added - ADDED
 * GD > Loop Paging option added to set page numbers & size on mobile - ADDED
+* Filter added to skip wp_kses on elementor rander GD field - ADDED
 
 = GeoDirectory Business Directory Plugin v2.3.24 - 2023-09-22 =
 * Text color attribute is missing in Favorite / Unfavorite text in GD > Add To Fav - FIXED
