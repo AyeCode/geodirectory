@@ -2131,13 +2131,21 @@ function geodir_init_listings_carousel(el, index) {
             }
         }
         $el.html($html + '</div>');
-		var pdLeft = $el.find(wEl + ' > ' + rEl).css('padding-left'), pdRight = $el.find(wEl + ' > ' + rEl).css('padding-right');
-		if (pdLeft && pdRight) {
-			$el.find('.bs-carousel-item').css({
-				'padding-left' : pdLeft,
-				'padding-right' : pdRight
-			});
-		}
+        var pdLeft = $el.find(wEl + ' > ' + rEl).css('padding-left'), pdRight = $el.find(wEl + ' > ' + rEl).css('padding-right');
+        if (pdLeft && pdRight) {
+            if (!$el.data('center-slide')) {
+                $carousel.css({
+                    'padding-left' : pdLeft,
+                    'padding-right' : pdRight
+                });
+                pdLeft = 0;
+                pdRight = 0;
+            }
+            $el.find('.bs-carousel-item').css({
+                'padding-left' : pdLeft,
+                'padding-right' : pdRight
+            });
+        }
         // Indicators
         if ($el.data('with-controls')) {
             var indicators = '<ol class="carousel-indicators position-relative">';
@@ -2151,8 +2159,18 @@ function geodir_init_listings_carousel(el, index) {
         }
         // Controls
         if ($el.data('with-indicators')) {
-			var i_mb = $el.data(bsDash + 'indicators-class');
-            var controls = '<a class="carousel-control-prev text-dark mr-2 ml-n2 me-2 ms-n4 w-auto '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="prev"><i class="fas fa-chevron-left fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_previous + '</span></a><a class="carousel-control-next text-dark ml-2 w-auto mr-n2 me-n4 ms-2 '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="next"><i class="fas fa-chevron-right fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_next + '</span></a>';
+            var winW = parseFloat(jQuery(window).outerWidth()), mN,i_mb = $el.data(bsDash + 'indicators-class');
+            if (winW > 0 && winW <= 576) {
+                mN = 'n2';
+                $carousel.parent().addClass('px-3');
+            } else if (winW > 576 && winW < 992) {
+                mN = 'n3';
+                $carousel.parent().addClass('px-3');
+            } else {
+                mN = 'n4';
+                $carousel.parent().addClass('px-4');
+            }
+            var controls = '<a class="carousel-control-prev text-dark mr-2 ml-n2 me-2 ms-' + mN + ' w-auto '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="prev"><i class="fas fa-chevron-left fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_previous + '</span></a><a class="carousel-control-next text-dark ml-2 w-auto mr-n2 me-' + mN + ' ms-2 '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="next"><i class="fas fa-chevron-right fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_next + '</span></a>';
             jQuery(el).after(controls);
         }
 
@@ -2162,13 +2180,13 @@ function geodir_init_listings_carousel(el, index) {
         $el.find('.geodir-image-container .carousel-item.active').removeClass('active');
         $el.find('.geodir-image-container .carousel-item').removeClass('carousel-item');
 
-		if (bsDash && $el.data('center-slide') && slides > 1 && fWidth >= 576) {
-			jQuery(document).trigger("geodir.init-posts-carousel", [{
-				element: el,
-				index: index,
-				slides: slides
-			}]);
-		}
+        if (bsDash && $el.data('center-slide') && slides > 1 && fWidth >= 576) {
+            jQuery(document).trigger("geodir.init-posts-carousel", [{
+                element: el,
+                index: index,
+                slides: slides
+            }]);
+        }
     }
 }
 
