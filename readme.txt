@@ -292,6 +292,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * GD > Loop Paging option added to set page numbers & size on mobile - ADDED
 * Filter added to skip wp_kses on elementor rander GD field - ADDED
 * Business hours in google map bubble is too small when expanded - FIXED
+* Post slider overflow issue on mobile - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.24 - 2023-09-22 =
 * Text color attribute is missing in Favorite / Unfavorite text in GD > Add To Fav - FIXED
