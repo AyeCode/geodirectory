@@ -243,6 +243,15 @@ class GeoDir_Compatibility {
 		// Relevanssi compatibility
 		add_filter( 'relevanssi_search_ok', array( __CLASS__, 'relevanssi_search_ok' ), 10, 2 );
 		add_filter( 'relevanssi_prevent_default_request', array( __CLASS__, 'relevanssi_prevent_default_request' ), 10, 2 );
+
+		// Apply filters to textarea output before display.
+		add_filter( 'geodir_filter_textarea_output', 'make_clickable', 9 );
+		add_filter( 'geodir_filter_textarea_output', 'wptexturize' );
+		add_filter( 'geodir_filter_textarea_output', 'convert_chars' );
+		add_filter( 'geodir_filter_textarea_output', 'convert_smilies', 20 );
+		add_filter( 'geodir_filter_textarea_output', 'force_balance_tags', 25 );
+		add_filter( 'geodir_filter_textarea_output', 'wpautop', 30 );
+		add_filter( 'geodir_filter_textarea_output', 'capital_P_dangit', 31 );
 	}
 
 	/**
