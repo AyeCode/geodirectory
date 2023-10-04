@@ -1327,12 +1327,12 @@ class GeoDir_Admin_Import_Export {
 		$cat_info_fixed['name']                = isset( $cat_info['cat_name'] ) && $cat_info['cat_name'] ? esc_attr( $cat_info['cat_name'] ) : '';
 		$cat_info_fixed['slug']                = isset( $cat_info['cat_slug'] ) && $cat_info['cat_slug'] ? esc_attr( $cat_info['cat_slug'] ) : '';
 		$cat_info_fixed['parent']              = isset( $cat_info['cat_parent'] ) && $cat_info['cat_parent'] ? $cat_info['cat_parent'] : '';
-		$cat_info_fixed['description']         = isset( $cat_info['cat_description'] ) && $cat_info['cat_description'] ? esc_attr( $cat_info['cat_description'] ) : '';
+		$cat_info_fixed['description']         = isset( $cat_info['cat_description'] ) && $cat_info['cat_description'] ? geodir_sanitize_textarea_field( $cat_info['cat_description'] ) : '';
 		$cat_info_fixed['cat_schema']          = isset( $cat_info['cat_schema'] ) && $cat_info['cat_schema'] ? esc_attr( $cat_info['cat_schema'] ) : '';
 		$cat_info_fixed['cat_font_icon']       = isset( $cat_info['cat_font_icon'] ) && $cat_info['cat_font_icon'] ? esc_attr( $cat_info['cat_font_icon'] ) : '';
 		$cat_info_fixed['cat_color']           = isset( $cat_info['cat_color'] ) && $cat_info['cat_color'] ? esc_attr( $cat_info['cat_color'] ) : '';
-		$cat_info_fixed['cat_top_description'] = isset( $cat_info['cat_top_description'] ) && $cat_info['cat_top_description'] ? esc_attr( $cat_info['cat_top_description'] ) : '';
-		$cat_info_fixed['cat_bottom_description'] = isset( $cat_info['cat_bottom_description'] ) && $cat_info['cat_bottom_description'] ? esc_attr( $cat_info['cat_bottom_description'] ) : '';
+		$cat_info_fixed['cat_top_description'] = isset( $cat_info['cat_top_description'] ) && $cat_info['cat_top_description'] ? geodir_sanitize_html_field( $cat_info['cat_top_description'] ) : '';
+		$cat_info_fixed['cat_bottom_description'] = isset( $cat_info['cat_bottom_description'] ) && $cat_info['cat_bottom_description'] ? geodir_sanitize_html_field( $cat_info['cat_bottom_description'] ) : '';
 		$cat_info_fixed['cat_image']           = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
 		$cat_info_fixed['cat_icon']            = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
 

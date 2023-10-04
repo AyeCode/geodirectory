@@ -1025,6 +1025,10 @@ class GeoDir_Admin_Taxonomies {
 			$description = self::get_cat_top_description( $term_id );
 		}
 
+		if ( ! empty( $description ) && $type != 'main' ) {
+			$description = geodir_filter_textarea_output( $description, 'category_description', array( 'type' => $type, 'term_id' => $term_id ) );
+		}
+
 		return apply_filters( 'geodir_get_category_description', $description, $term_id, $type );
 	}
 
