@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.3.24
+ * @version    2.3.25
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -940,7 +940,7 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
 <?php } ?>
 </div>
 <?php } ?>
-<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row d-block">
+<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> d-block">
 
     <?php
     /**

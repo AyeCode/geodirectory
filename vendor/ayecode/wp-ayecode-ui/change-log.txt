@@ -1,3 +1,7 @@
+= 0.1.99 =
+* color-scheme-flip-on-scroll feature should flip when mobile menu opened even if not scrolled - FIXED
+* Font awesome icon-picker searcher updated to latest 5.x - UPDATED
+
 = 0.1.98 =
 * Greedy tab links not showing properly in mobile device - FIXED
 
