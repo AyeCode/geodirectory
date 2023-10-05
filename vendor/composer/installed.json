@@ -53,8 +53,8 @@
     },
     {
         "name": "ayecode/wp-ayecode-ui",
-        "version": "0.1.98",
-        "version_normalized": "0.1.98.0",
+        "version": "0.1.99",
+        "version_normalized": "0.1.99.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
@@ -66,7 +66,7 @@
             "reference": "24295b88f00766d9fff5909d9d9e08d3cf9ca6c4",
             "shasum": ""
         },
-        "time": "2023-08-24T16:00:13+00:00",
+        "time": "2023-10-04T16:21:17+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
