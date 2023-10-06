@@ -286,6 +286,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory Business Directory Plugin v2.3.26 - TBD =
+* Validate revision ID belongs to parent on revision save - FIXED
+
 = GeoDirectory Business Directory Plugin v2.3.25 - 2023-10-05 =
 * Dynamic image tag is not working when Flexbox Container is active - FIXED
 * Elementor CSS hide conditions is_contains_any, is_not_contains_any added - ADDED
