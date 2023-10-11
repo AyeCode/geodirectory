@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.27 =
 * OSM map do not load properly when rendered in hidden element - FIXED
+* Changed taxonomy icon selector to new version where icon class can be pasted in - CHANGED
 
 = GeoDirectory Business Directory Plugin v2.3.26 - 2023-10-06 =
 * Validate revision ID belongs to parent on revision save or the wrong media files can be removed - FIXED

@@ -49,6 +49,7 @@ abstract class GeoDir_Settings_Page {
      * Get font awesome selectbox.
      *
      * @since 2.0.0
+	 * @deprecated 2.3.26
      */
 	public function font_awesome_select(){
 		?>
