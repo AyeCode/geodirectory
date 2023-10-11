@@ -422,7 +422,7 @@ class GeoDir_Query {
      * @return string $limits.
      */
 	public function posts_limits($limits,$query){
-		echo '###limit###'.$limits;
+	//	echo '###limit###'.$limits;
 
 		$limits = " LIMIT 0,10 ";
 
@@ -1656,7 +1656,7 @@ class GeoDir_Query {
 
 		return $value;
 	}
-	
+
 	/**
 	 * Prevent split query to work sorting.
 	 *
