@@ -21,21 +21,13 @@ jQuery(document).ready(function($) {
 	// Maybe ajax load the next slide
 	gd_init_carousel_ajax();
 
-	// init things when new tab is shown
-	/* // Issue due to multiple active tab.
 	jQuery('.nav-tabs,.nav-pills').on('shown.bs.tab', 'a', function (e) {
-		// Greedy nav fix
-		if(jQuery(this).closest('.greedy').length){
-			if(jQuery(this).closest('.greedy-btn').length){
-				jQuery(this).closest('.greedy-btn').find('> .nav-link').addClass('active');
-			}else{
-				jQuery(this).closest(".greedy").find(".greedy-links .nav-link").removeClass("active");
+		if (this.hash && jQuery(this.hash).length) {
+			if (jQuery(this.hash).find('.geodir-map-wrap').length) {
+				window.dispatchEvent(new Event('resize')); // OSM do not load properly when rendered in hidden tab.
 			}
 		}
-
-		window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
 	});
-	*/
 
 	// fix tabs url hash on click and load
 	jQuery(function(){
