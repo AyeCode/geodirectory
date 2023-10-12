@@ -612,6 +612,12 @@ $tab_class .= ( isset( $field->field_type ) && $field->field_type == 'fieldset' 
 						'type'              =>   'iconpicker',
 						'wrap_class'        => geodir_advanced_toggle_class(),
 						'value' => $value,
+						'extra_attributes' => defined('FAS_PRO') && FAS_PRO ? array(
+							'data-fa-icons'   => true,
+							'data-bs-toggle'  => "tooltip",
+							'data-bs-trigger' => "focus",
+							'title'           => __('For pro icon variants (light, thin, duotone), paste the class here','geodirectory'),
+						) : array(),
 					)
 				);
 

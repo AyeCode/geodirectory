@@ -1428,7 +1428,6 @@ class GeoDir_Admin_Settings {
 				// Select boxes
 				case 'font-awesome' :
 					// include the font-awesome data
-					include_once( dirname( __FILE__ ) . '/settings/data_fontawesome.php' );
 					$value['options'] = geodir_font_awesome_array();
 					$rating_color = geodir_get_option('rating_color','#ff9900');
 
@@ -1438,22 +1437,17 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-					$options = array();
 
-//					print_r( $value['options'] );exit;
 
-					foreach ( $value['options'] as $key => $val ) {
-						$options[] = array(
-							'label' => esc_attr($key),
-							'value' => esc_attr($key),
-							'extra_attributes' => array(
-								'data-fa-icon' => esc_attr( $key )
-							)
-						);
+					// if Font Awesome pro is enabled then add a notice other variants can be used.
+					if ( defined( 'FAS_PRO' ) && FAS_PRO ) {
+						$value['custom_attributes'] = $value['custom_attributes'] + array(
+								'data-fa-icons'   => true,
+								'data-bs-toggle'  => "tooltip",
+								'data-bs-trigger' => "focus",
+								'title'           => __( 'For pro icon variants (light, thin, duotone), paste the class here', 'geodirectory' ),
+							);
 					}
-
-
-					//@todo we should change this to a better icon picker
 
 					echo aui()->input(
 						array(
@@ -1463,11 +1457,7 @@ class GeoDir_Admin_Settings {
 							'label_type'        => $label_type,
 							'label_col'        => '3',
 							'label_class'=> 'font-weight-bold fw-bold',
-							//'multiple'   => 'multiselect' == $value['type'] ? true : false,
 							'class'             => $value['class'],
-							//'required'          => true,
-							//'select2'   => false,//strpos($value['class'], 'geodir-select') !== false ? true : false,
-//							'options'       => $options,
 							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'placeholder'       => $value['placeholder'],

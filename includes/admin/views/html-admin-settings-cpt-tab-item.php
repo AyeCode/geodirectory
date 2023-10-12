@@ -11,7 +11,6 @@
 		</div>
 		<script type="text/template" class="dd-setting <?php echo 'dd-type-'.esc_attr( $tab->tab_type );?> d-none ">
 			<?php
-			//include_once( dirname( __FILE__ ) . '/../settings/data_fontawesome.php' );
 			echo geodir_notification( array('info'=>__('Name and Icon settings are not used for sub items except fieldset.','geodirectory')) );
 
 			echo aui()->input(
@@ -36,6 +35,12 @@
 					'label'              => __('Icon','geodirectory'),
 					'type'              =>   'iconpicker',
 					'value' => esc_attr($tab->tab_icon),
+					'extra_attributes' => defined('FAS_PRO') && FAS_PRO ? array(
+						'data-fa-icons'   => true,
+						'data-bs-toggle'  => "tooltip",
+						'data-bs-trigger' => "focus",
+						'title'           => __('For pro icon variants (light, thin, duotone), paste the class here','geodirectory'),
+					) : array(),
 				)
 			);
 
