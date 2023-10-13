@@ -1428,6 +1428,9 @@ class GeoDir_Admin_Settings {
 				// Select boxes
 				case 'font-awesome' :
 					// include the font-awesome data
+					if ( ! function_exists( 'geodir_font_awesome_array' ) ) {
+						include_once( dirname( __FILE__ ) . '/settings/data_fontawesome.php' );
+					}
 					$value['options'] = geodir_font_awesome_array();
 					$rating_color = geodir_get_option('rating_color','#ff9900');
 
