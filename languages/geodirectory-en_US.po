@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.27\n"
+"Project-Id-Version: GeoDirectory 2.3.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-12 19:15+0530\n"
-"PO-Revision-Date: 2023-10-12 19:15+0530\n"
+"POT-Creation-Date: 2023-10-13 10:55+0530\n"
+"PO-Revision-Date: 2023-10-13 10:55+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -435,8 +435,8 @@ msgstr ""
 #: includes/admin/admin-functions.php:943
 #: includes/admin/admin-functions.php:963
 #: includes/admin/admin-functions.php:995
-#: includes/admin/class-geodir-admin-taxonomies.php:573
-#: includes/admin/settings/class-geodir-settings-page.php:61
+#: includes/admin/class-geodir-admin-taxonomies.php:575
+#: includes/admin/settings/class-geodir-settings-page.php:63
 #: includes/widgets/class-geodir-widget-archive-item-section.php:90
 #: includes/widgets/class-geodir-widget-best-of.php:300
 #: includes/widgets/class-geodir-widget-best-of.php:313
@@ -638,7 +638,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:856
 #: includes/admin/class-geodir-admin-permalink-settings.php:66
 #: includes/admin/class-geodir-admin-permalink-settings.php:140
-#: includes/admin/class-geodir-admin-taxonomies.php:922
+#: includes/admin/class-geodir-admin-taxonomies.php:924
 #: includes/widgets/class-geodir-widget-archive-item-section.php:75
 #: includes/widgets/class-geodir-widget-archive-item-section.php:89
 #: includes/widgets/class-geodir-widget-archive-item-section.php:104
@@ -2695,18 +2695,18 @@ msgstr ""
 msgid "Generate Key"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1448
+#: includes/admin/class-geodir-admin-settings.php:1451
 #: includes/admin/class-geodir-admin-taxonomies.php:560
 #: includes/admin/views/html-admin-settings-cpt-cf-setting-item.php:619
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:42
 msgid "For pro icon variants (light, thin, duotone), paste the class here"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1584
+#: includes/admin/class-geodir-admin-settings.php:1587
 msgid "Choose a city/timezone&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1645
+#: includes/admin/class-geodir-admin-settings.php:1648
 #: includes/admin/views/html-notice-v2-update.php:194
 #: includes/core-functions.php:361 includes/general-functions.php:2677
 msgid "Documentation"
@@ -3252,36 +3252,36 @@ msgid ""
 "auto-generated. (if this field is empty)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:584
+#: includes/admin/class-geodir-admin-taxonomies.php:586
 msgid "Select a category icon"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:614
+#: includes/admin/class-geodir-admin-taxonomies.php:616
 msgid "Select the color to use for this category"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:643
+#: includes/admin/class-geodir-admin-taxonomies.php:645
 msgid "Select the schema to use for this category"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:790
+#: includes/admin/class-geodir-admin-taxonomies.php:792
 msgid "Default Image"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:791
+#: includes/admin/class-geodir-admin-taxonomies.php:793
 msgid "Cat ID"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:922
+#: includes/admin/class-geodir-admin-taxonomies.php:924
 #, php-format
 msgid "Make %s default category"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:922
+#: includes/admin/class-geodir-admin-taxonomies.php:924
 msgid "Make default"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:961
+#: includes/admin/class-geodir-admin-taxonomies.php:963
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:185
 #: includes/helper-functions.php:1681 includes/helper-functions.php:1781
 #: includes/widgets/class-geodir-widget-categories.php:163
@@ -3293,7 +3293,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:986
+#: includes/admin/class-geodir-admin-taxonomies.php:988
 msgid "Default (LocalBusiness)"
 msgstr ""
 
@@ -7626,11 +7626,11 @@ msgstr ""
 msgid "Preparing export..."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-page.php:181
+#: includes/admin/settings/class-geodir-settings-page.php:183
 msgid "Show Advanced"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-page.php:182
+#: includes/admin/settings/class-geodir-settings-page.php:184
 msgid "Hide Advanced"
 msgstr ""
 
