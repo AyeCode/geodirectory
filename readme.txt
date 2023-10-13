@@ -286,6 +286,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory Business Directory Plugin v2.3.28 =
+* Add / Edit CPT package shows error on update plugin - FIXED
+
 = GeoDirectory Business Directory Plugin v2.3.27 - 2023-10-12 =
 * OSM map do not load properly when rendered in hidden element - FIXED
 * Changed taxonomy icon selector to new version where icon class can be pasted in - CHANGED

@@ -569,7 +569,9 @@ class GeoDir_Admin_Taxonomies {
             data-fa-icons="1"  tabindex="-1" aria-hidden="true"
         >
             <?php
-            include_once( dirname( __FILE__ ) . '/settings/data_fontawesome.php' );
+            if ( ! function_exists( 'geodir_font_awesome_array' ) ) {
+                include_once( dirname( __FILE__ ) . '/settings/data_fontawesome.php' );
+            }
             echo "<option value=''>".__('None','geodirectory')."</option>";
             foreach ( geodir_font_awesome_array() as $key => $val ) {
                 ?>
