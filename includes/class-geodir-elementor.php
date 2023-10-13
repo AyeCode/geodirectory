@@ -507,16 +507,14 @@ class GeoDir_Elementor {
 	 *
 	 * @return string
 	 */
-	public static function render_pro_gallery($widget,$settings){
+	public static function render_pro_gallery( $widget, $settings ) {
 		global $gd_post;
-		$is_multiple = 'multiple' === $settings['gallery_type'] && ! empty( $settings['galleries'] );
 
-		$is_single = 'single' === $settings['gallery_type'] && ! empty( $settings['gallery'] );
+		$is_multiple = 'multiple' === $settings['gallery_type'] && ! empty( $settings['galleries'] );
+		$is_single = 'single' === $settings['gallery_type'] && ( ! empty( $settings['gallery'] ) || ( ! empty( $settings['__dynamic__']['gallery'] ) && strpos( $settings['__dynamic__']['gallery'], 'name="gd-gallery"' ) !== false ) );
 
 		$has_description = ! empty( $settings['overlay_description'] );
-
 		$has_title = ! empty( $settings['overlay_title'] );
-
 		$has_animation = ! empty( $settings['image_hover_animation'] ) || ! empty( $settings['content_hover_animation'] ) || ! empty( $settings['background_overlay_hover_animation'] );
 
 		$gallery_item_tag = ! empty( $settings['link_to'] ) ? 'a' : 'div';
@@ -583,20 +581,10 @@ class GeoDir_Elementor {
 		$thumbnail_size = $settings['thumbnail_image_size'];
 		foreach ( $galleries as $gallery_index => $gallery ) {
 			foreach ( $gallery as $index => $item ) {
-//				if ( in_array( $item['id'], array_keys( $gallery_items ), true ) ) {
-//					$gallery_items[ $item['id'] ][] = $gallery_index;
-//				} else {
-//					$gallery_items[ $item['id'] ] = [ $gallery_index ];
-//				}
-
-//				$gallery_items[] = $item;
 				$gallery_items[$item->ID] = $gallery_index;
 				$all_items[$item->ID] = $item;
-
 			}
 		}
-
-//		echo '###';print_r($gallery_items);exit;
 
 		if ( 'random' === $settings['order_by'] ) {
 			$shuffled_items = [];
@@ -614,32 +602,19 @@ class GeoDir_Elementor {
 			foreach ( $gallery_items as $id => $tags ) :
 				$tags = array($tags);
 				$item = $all_items[$id];
-				$unique_index = $id; //$gallery_index . '_' . $index;
+				$unique_index = $id;
 				$img_src      = geodir_get_image_src( $item, $thumbnail_size );
-//				$img_src      = geodir_get_image_src( $item, 'full' );
 				if ( ! $img_src ) {
 					continue;
 				}
 
 				$image_meta = isset( $item->metadata ) ? maybe_unserialize( $item->metadata ) : '';
 
-//				print_r($image_meta);
-
 				$attributes = array(
 					'data-elementor-lightbox-description' => stripslashes_deep( $item->caption ),
-//					'title' => $item->title,
-//					'alt' => $item->caption,
 					'data-elementor-lightbox-title' => stripslashes_deep( $item->title ),
 				);
 
-//				$image_data = [
-//					'alt' => get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ),
-//					'caption' => $attachment->post_excerpt,
-//					'description' => $attachment->post_content,
-//					'title' => $attachment->post_title,
-//				];
-
-//				$attachment = get_post( $id );
 				$image_data = [
 					'alt' => stripslashes_deep( $item->caption ),
 					'media' => geodir_get_image_src( $item, 'full' ),
@@ -674,7 +649,6 @@ class GeoDir_Elementor {
 							'href' => $href,
 						] );
 
-//						$widget->add_lightbox_data_attributes( 'gallery_item_' . $unique_index, null, 'yes', 'all-' . $widget->get_id() );
 						$widget->add_render_attribute( 'gallery_item_' . $unique_index, $attributes, null );
 					} elseif ( 'custom' === $settings['link_to'] ) {
 						$widget->add_link_attributes( 'gallery_item_' . $unique_index, $settings['url'] );
