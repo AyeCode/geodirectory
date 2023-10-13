@@ -288,6 +288,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory Business Directory Plugin v2.3.29 - TBD =
 * Hook added to filter display day name in business hours slot output - ADDED
+* Elementor Pro Gallery not working with single gallery type - FIXED
 
 = GeoDirectory Business Directory Plugin v2.3.28 - 2023-10-13 =
 * Add / Edit CPT package shows error on update plugin - FIXED
