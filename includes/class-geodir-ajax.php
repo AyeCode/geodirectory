@@ -200,25 +200,35 @@ class GeoDir_AJAX {
 
 		add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
 
-		if(!$design_style ){
-			echo "<style>.lity-show #" . $prefix . "set_address_button,.lity-show .TopLeft,.lity-show .TopRight,.lity-show .BottomRight,.lity-show .BottomLeft{display:none}.lity-show .geodir_map_container{margin-top:0 !important}</style>";
-		}
-
-		if($design_style ){
+		if ( $design_style ) {
 			echo aui()->alert(array(
 					'type'=> 'info',
 					'content'=> __("Auto location detection failed, please manually set your location below by dragging the map / marker.","geodirectory")
 				)
 			);
-			include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map/map-add-listing.php' );
-		}else{
+
+			$template = $design_style . '/map/map-add-listing.php';
+
+			$tmpl_args = array(
+				'prefix' => $prefix,
+				'map_title' => $map_title,
+				'country' => $country,
+				'region' => $region,
+				'city' => $city,
+				'lat' => $lat,
+				'lng' => $lng,
+				'design_style' => $design_style
+			);
+
+			echo geodir_get_template_html( $template, $tmpl_args );
+		} else {
+			echo "<style>.lity-show #" . $prefix . "set_address_button,.lity-show .TopLeft,.lity-show .TopRight,.lity-show .BottomRight,.lity-show .BottomLeft{display:none}.lity-show .geodir_map_container{margin-top:0 !important}</style>";
+
 			include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
 		}
-
 		?>
 		<input type="hidden" id="<?php echo $prefix . 'latitude'; ?>">
 		<input type="hidden" id="<?php echo $prefix . 'longitude'; ?>">
-
 		<?php
 		if( $design_style ) {
 			?>

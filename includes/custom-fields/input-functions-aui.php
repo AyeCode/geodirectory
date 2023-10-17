@@ -1525,6 +1525,8 @@ function geodir_cfi_address( $html, $cf ) {
                     add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
                 }
 
+				$design_style   = geodir_design_style();
+
 				/**
 				 * Move add listing JavaScript to inline script.
 				 *
@@ -1534,13 +1536,21 @@ function geodir_cfi_address( $html, $cf ) {
 				 */
 				$gd_move_inline_script = apply_filters( 'geodir_add_listing_move_inline_script', true );
 
-                /**
-                 * Contains add listing page map functions.
-                 *
-                 * @since 1.0.0
-                 */
-                include( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map/map-add-listing.php' );
-                if ($lat_lng_blank) {
+				$tmpl_args = array(
+					'prefix' => $prefix,
+					'map_title' => $map_title,
+					'country' => $country,
+					'region' => $region,
+					'city' => $city,
+					'lat' => $lat,
+					'lng' => $lng,
+					'design_style' => $design_style
+				);
+				$template = $design_style . '/map/map-add-listing.php';
+
+				echo geodir_get_template_html( $template, $tmpl_args );
+
+                if ( $lat_lng_blank ) {
                     $lat = '';
                     $lng = '';
                 }
