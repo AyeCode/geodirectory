@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.3.25
+ * @version    2.3.29
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -20,7 +20,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-global $aui_bs5, $mapzoom, $geodir_manual_map, $geodir_label_type, $gd_move_inline_script;
+global $aui_bs5, $geodirectory, $mapzoom, $geodir_manual_map, $geodir_label_type, $gd_move_inline_script;
 
 /**
  * Filter the map restriction for specific address only
@@ -29,7 +29,7 @@ global $aui_bs5, $mapzoom, $geodir_manual_map, $geodir_label_type, $gd_move_inli
  *
  * @param bool $var Whether to restrict the map for specific address only.
  */
-$is_map_restrict = apply_filters('geodir_add_listing_map_restrict', true);
+$is_map_restrict = apply_filters( 'geodir_add_listing_map_restrict', true );
 
 /**
  * Filter the auto change address fields values when moving the map pin
@@ -38,25 +38,25 @@ $is_map_restrict = apply_filters('geodir_add_listing_map_restrict', true);
  *
  * @param bool $var Whether to change the country, state, city values in fields.
  */
-$auto_change_address_fields_pin_move = apply_filters('geodir_auto_change_address_fields_pin_move', true);
-global $geodirectory;
+$auto_change_address_fields_pin_move = apply_filters( 'geodir_auto_change_address_fields_pin_move', true );
+
 $default_location = $geodirectory->location->get_default_location();
-$defaultcity = isset($default_location->city) ? $default_location->city : '';
+$defaultcity = isset( $default_location->city ) ? $default_location->city : '';
+$default_lng = isset( $default_location->longitude ) ? $default_location->longitude : '';
+$default_lat = isset( $default_location->latitude ) ? $default_location->latitude : '';
 $lat_lng_blank = false;
-if ( (!isset($lat) || $lat == '' ) && (!isset($lat) || $lng == '')) {
-    $lat_lng_blank = true;
-    $city = $defaultcity;
-    $region = isset($default_location->region) ? $default_location->region : '';
-    $country = isset($default_location->country) ? $default_location->country : '';
-    $lng = isset($default_location->longitude) ? $default_location->longitude : '';
-    $lat = isset($default_location->latitude) ? $default_location->latitude : '';
+
+if ( ( ! isset( $lat ) || $lat == '' ) && ( ! isset( $lng ) || $lng == '' ) ) {
+	$lat_lng_blank = true;
+	$city = $defaultcity;
+	$region = isset( $default_location->region ) ? $default_location->region : '';
+	$country = isset( $default_location->country ) ? $default_location->country : '';
+	$lng = isset( $default_location->longitude ) ? $default_location->longitude : '';
+	$lat = isset( $default_location->latitude ) ? $default_location->latitude : '';
 }
-$default_lng = isset($default_location->longitude) ? $default_location->longitude : '';
-$default_lat = isset($default_location->latitude) ? $default_location->latitude : '';
-if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
-    $mapzoom = 4;
-    if (isset($_REQUEST['add_hood']))
-        $mapzoom = 10;
+
+if ( is_admin() && isset( $_REQUEST['tab'] ) && $mapzoom == '' ) {
+	$mapzoom = isset( $_REQUEST['add_hood'] ) ? 10 : 4;
 }
 
 /**
@@ -66,9 +66,11 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
  *
  * @param bool $var Whether to auto fill country, state, city values in fields.
  */
-$auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
+$auto_change_map_fields = apply_filters( 'geodir_auto_change_map_fields', true );
+
 $marker_icon = GeoDir_Maps::default_marker_icon( true );
-$icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
+$icon_size = GeoDir_Maps::get_marker_size( $marker_icon, array( 'w' => 20, 'h' => 34 ) );
+
 $resize_marker = apply_filters( 'geodir_map_marker_resize_marker', false );
 
 if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
@@ -82,7 +84,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 	 * @since 1.0.0
 	 * @param string $prefix The prefix for all elements.
 	 */
-	do_action('geodir_add_listing_js_start', $prefix);
+	do_action( 'geodir_add_listing_js_start', $prefix );
 	?>
     if ((window.gdSetMap=='google' || window.gdSetMap=='auto') && window.google && typeof google.maps!=='undefined') {
         gdMaps = 'google';
@@ -93,17 +95,17 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
     }
     window.gdMaps = window.gdMaps || gdMaps;
 
-    var user_address = false;
+    user_address = false;
     jQuery('#<?php echo $prefix.'street';?>').on("keypress",function () {
         user_address = true;
     });
 
-    var baseMarker = '';
-    var geocoder = '';
+    baseMarker = '';
+    geocoder = '';
     var <?php echo $prefix;?>CITY_MAP_CENTER_LAT = <?php echo ( $lat ? geodir_sanitize_float( $lat ) : '39.952484' ); ?>;
     var <?php echo $prefix;?>CITY_MAP_CENTER_LNG = <?php echo ( $lng ? geodir_sanitize_float( $lng ) : '-75.163786' ); ?>;
     <?php if($lat_lng_blank){$lat='';$lng='';}?>
-    var <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT = <?php echo ($mapzoom) ? absint( $mapzoom ) : 12;?>;
+    var <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT = <?php echo ( $mapzoom ) ? absint( $mapzoom ) : 12;?>;
     var minZoomLevel = <?php echo ($is_map_restrict) ? 5 : 0; ?>;
     var mapLang = '<?php echo esc_js( GeoDir_Maps::map_language() ); ?>';
     var oldstr_address;
@@ -326,7 +328,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
              *
              * @since 1.6.16
              */
-            echo apply_filters("geodir_geocode_region_level",'["GB","ES"]');?>;
+            echo apply_filters( "geodir_geocode_region_level", '["GB","ES"]' ); ?>;
             if (jQuery.inArray(rr, $country_arr) !== -1) {
                 if (administrative_area_level_2.long_name) {
                     getState = administrative_area_level_2.long_name;
@@ -816,7 +818,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 
         if (window.gdMaps) {
             geocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : [];
-			var icon = '<?php echo $marker_icon;?>';var iconW = parseFloat('<?php echo $icon_size['w'];?>');var iconH = parseFloat('<?php echo $icon_size['h'];?>');
+			icon = '<?php echo $marker_icon;?>';iconW = parseFloat('<?php echo $icon_size['w'];?>');iconH = parseFloat('<?php echo $icon_size['h'];?>');
 			<?php if ( $resize_marker ) { ?>iconMW=geodir_params.marker_max_width?parseFloat(geodir_params.marker_max_width):0;iconMH=geodir_params.marker_max_height?parseFloat(geodir_params.marker_max_height):0;if(geodir_params.resize_marker&&(iconW<iconMW||iconH<iconMH)&&icon.substr(icon.lastIndexOf(".")+1).toLowerCase()=="svg"){iconW=iconW*10;iconH=iconH*10}if(geodir_params.resize_marker&&iconW>5&&iconH>5&&(iconMW>5&&iconW>iconMW||iconMH>5&&iconH>iconMH)){resizeW=iconW;resizeH=iconH;resize=false;if(iconMH>5&&resizeH>iconMH){_resizeH=iconMH;_resizeW=Math.round(_resizeH*resizeW/resizeH*10)/10;resizeW=_resizeW;resizeH=_resizeH;resize=true}if(iconMW>5&&resizeW>iconMW){_resizeW=iconMW;_resizeH=Math.round(_resizeW*resizeH/resizeW*10)/10;resizeW=_resizeW;resizeH=_resizeH;resize=true}if(resize&&resizeW>5&&resizeH>5){if(window.gdMaps=='google'){icon={url:icon,scaledSize:new google.maps.Size(resizeW,resizeH),origin:new google.maps.Point(0,0),anchor:new google.maps.Point(Math.round(resizeW/2),resizeH)}}else{iconW=resizeW;iconH=resizeH}}}<?php } ?>
             baseMarker = $.goMap.createMarker({
                 latitude: <?php echo $prefix;?>CITY_MAP_CENTER_LAT,
@@ -930,40 +932,47 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
     <div class="col-sm-2 col-form-label"></div>
     <div class="col-sm-10">
         <?php } ?>
-        <input type="button" id="<?php echo $prefix; ?>set_address_button" class=" btn btn-primary text-center mx-auto" value="<?php esc_attr_e($map_title, 'geodirectory'); ?>" />
+        <input type="button" id="<?php echo $prefix; ?>set_address_button" class=" btn btn-primary text-center mx-auto" value="<?php esc_attr_e( $map_title, 'geodirectory' ); ?>" />
         <?php
         aui();
-        echo AUI_Component_Helper::help_text(stripslashes( __( 'Click on "Set Address on Map" and then you can also drag map marker to locate the correct address', 'geodirectory' ) ));
+        echo AUI_Component_Helper::help_text( stripslashes( __( 'Click on "Set Address on Map" and then you can also drag map marker to locate the correct address', 'geodirectory' ) ) );
         ?>
-        <?php if($geodir_label_type=='horizontal'){ ?>
+        <?php if ( $geodir_label_type == 'horizontal' ) { ?>
     </div>
 <?php } ?>
 </div>
 <?php } ?>
 <div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> d-block">
+	<?php
+	/**
+	 * Variables.
+	 *
+	 * @var array $map_options The map settings options.
+	 * @var string $map_type The map type.
+	 * @var string $map_canvas The map canvas string.
+	 * @var string $height The map height setting.
+	 * @var string $width The map width setting.
+	 */
+	$map_type = 'add_listing';
+	$map_canvas = $prefix .'map' ;
+	$height = '350px';
+	$width = '100%';
+	$wrap_class = '';
+	$hide_expand_map = true;
 
-    <?php
-    /**
-     * Variables.
-     *
-     * @var array $map_options The map settings options.
-     * @var string $map_type The map type.
-     * @var string $map_canvas The map canvas string.
-     * @var string $height The map height setting.
-     * @var string $width The map width setting.
-     */
-    $map_type = 'add_listing';
-    $map_canvas = $prefix .'map' ;
-    $height = '350px';
-    $width = '100%';
-    $wrap_class = '';
-    $hide_expand_map = true;
-    $map_options = array(
-        'map_canvas' => $map_canvas,
-        'map_type' => $map_type,
-        'height' => $height,
-        'width' => $width
-    );
-    include( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map/map.php' );
-    ?>
+	$_tmpl_args = array(
+		'map_type' => $map_type,
+		'wrap_class' => $wrap_class,
+		'map_canvas' => $map_canvas,
+		'width' => $width,
+		'height' => $height,
+		'hide_expand_map' => $hide_expand_map,
+		'extra_attribs' => ( isset( $extra_attribs ) ? $extra_attribs : '' )
+	);
+
+	$_tmpl_args['map_options'] = $_tmpl_args;
+	$_template = $design_style . '/map/map.php';
+
+	echo geodir_get_template_html( $_template, $_tmpl_args );
+?>
 </div>
