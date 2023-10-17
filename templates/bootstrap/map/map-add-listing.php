@@ -95,13 +95,13 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
     }
     window.gdMaps = window.gdMaps || gdMaps;
 
-    user_address = false;
+    var user_address = false;
     jQuery('#<?php echo $prefix.'street';?>').on("keypress",function () {
         user_address = true;
     });
 
-    baseMarker = '';
-    geocoder = '';
+    var baseMarker = '';
+    var geocoder = '';
     var <?php echo $prefix;?>CITY_MAP_CENTER_LAT = <?php echo ( $lat ? geodir_sanitize_float( $lat ) : '39.952484' ); ?>;
     var <?php echo $prefix;?>CITY_MAP_CENTER_LNG = <?php echo ( $lng ? geodir_sanitize_float( $lng ) : '-75.163786' ); ?>;
     <?php if($lat_lng_blank){$lat='';$lng='';}?>
@@ -818,7 +818,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 
         if (window.gdMaps) {
             geocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : [];
-			icon = '<?php echo $marker_icon;?>';iconW = parseFloat('<?php echo $icon_size['w'];?>');iconH = parseFloat('<?php echo $icon_size['h'];?>');
+			var icon = '<?php echo $marker_icon;?>';var iconW = parseFloat('<?php echo $icon_size['w'];?>');var iconH = parseFloat('<?php echo $icon_size['h'];?>');
 			<?php if ( $resize_marker ) { ?>iconMW=geodir_params.marker_max_width?parseFloat(geodir_params.marker_max_width):0;iconMH=geodir_params.marker_max_height?parseFloat(geodir_params.marker_max_height):0;if(geodir_params.resize_marker&&(iconW<iconMW||iconH<iconMH)&&icon.substr(icon.lastIndexOf(".")+1).toLowerCase()=="svg"){iconW=iconW*10;iconH=iconH*10}if(geodir_params.resize_marker&&iconW>5&&iconH>5&&(iconMW>5&&iconW>iconMW||iconMH>5&&iconH>iconMH)){resizeW=iconW;resizeH=iconH;resize=false;if(iconMH>5&&resizeH>iconMH){_resizeH=iconMH;_resizeW=Math.round(_resizeH*resizeW/resizeH*10)/10;resizeW=_resizeW;resizeH=_resizeH;resize=true}if(iconMW>5&&resizeW>iconMW){_resizeW=iconMW;_resizeH=Math.round(_resizeW*resizeH/resizeW*10)/10;resizeW=_resizeW;resizeH=_resizeH;resize=true}if(resize&&resizeW>5&&resizeH>5){if(window.gdMaps=='google'){icon={url:icon,scaledSize:new google.maps.Size(resizeW,resizeH),origin:new google.maps.Point(0,0),anchor:new google.maps.Point(Math.round(resizeW/2),resizeH)}}else{iconW=resizeW;iconH=resizeH}}}<?php } ?>
             baseMarker = $.goMap.createMarker({
                 latitude: <?php echo $prefix;?>CITY_MAP_CENTER_LAT,
