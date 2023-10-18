@@ -35,7 +35,7 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 			array(
 				'plural'   => 'report-posts',
 				'singular' => 'report-post',
-				'ajax'     => true
+				'ajax'     => true,
 			)
 		);
 	}
@@ -67,10 +67,10 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 	 */
 	protected function get_sortable_columns() {
 		$sortable_columns = array(
-			'post_title' => array( 'post_title', false ),
+			'post_title'  => array( 'post_title', false ),
 			'post_author' => array( 'post_author', false ),
-			'post_date' => array( 'post_date', true ),
-			'user_name' => array( 'user_name', false ),
+			'post_date'   => array( 'post_date', true ),
+			'user_name'   => array( 'user_name', false ),
 			'report_date' => array( 'report_date', true ),
 		);
 		return $sortable_columns;
@@ -87,24 +87,37 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 
 		$table = GEODIR_POST_REPORTS_TABLE;
 
-		$status = isset( $_REQUEST['status'] ) ? sanitize_text_field( $_REQUEST['status'] ) : 'pending';
+		$nonce = ! empty( $_REQUEST['_wpnonce'] ) ? sanitize_text_field( $_REQUEST['_wpnonce'] ) : '';
+
+		if ( ! empty( $nonce ) && ! check_admin_referer( 'bulk-' . $this->_args['plural'] ) ) {
+			wp_die();
+		}
+
+			$status = isset( $_REQUEST['status'] ) ? sanitize_text_field( $_REQUEST['status'] ) : 'pending';
 		if ( ! in_array( $status, array( 'all', 'resolved', 'pending', 'rejected' ), true ) ) {
 			$status = 'pending';
 		}
 
-		$reason = ! empty( $_REQUEST['reason'] ) ? sanitize_text_field( $_REQUEST['reason'] ) : '';
-		$search = ( isset( $_REQUEST['s'] ) ) ? sanitize_text_field( $_REQUEST['s'] ) : '';
-		$reason = ( isset( $_REQUEST['reason'] ) ) ? sanitize_text_field( $_REQUEST['reason'] ) : '';
+		$allowed_orderby = array(
+			'post_title',
+			'post_author',
+			'post_date',
+			'user_name',
+			'report_date',
+		);
+
+		$reason  = ! empty( $_REQUEST['reason'] ) ? sanitize_text_field( $_REQUEST['reason'] ) : '';
+		$search  = ( isset( $_REQUEST['s'] ) ) ? sanitize_text_field( $_REQUEST['s'] ) : '';
 		$user_id = ( isset( $_REQUEST['user_id'] ) ) ? absint( $_REQUEST['user_id'] ) : '';
-		$orderby = ( isset( $_REQUEST['orderby'] ) ) ? esc_sql( $_REQUEST['orderby'] ) : 'report_date';
-		$order   = ( isset( $_REQUEST['order'] ) ) ? esc_sql( $_REQUEST['order'] ) : 'DESC';
+		$orderby = ( isset( $_REQUEST['orderby'] ) && in_array( $_REQUEST['orderby'], $allowed_orderby, true ) ) ? sanitize_sql_orderby( $_REQUEST['orderby'] ) : 'report_date';
+		$order   = ( isset( $_REQUEST['order'] ) && 'ASC' === $_REQUEST['order'] ) ? 'ASC' : 'DESC';
 
 		$reports_per_page = $this->get_per_page( $status );
 
 		$doing_ajax = wp_doing_ajax();
 
 		$number = ! empty( $_REQUEST['number'] ) ? absint( $_REQUEST['number'] ) : $reports_per_page;
-		$page = $this->get_pagenum();
+		$page   = $this->get_pagenum();
 
 		if ( isset( $_REQUEST['start'] ) ) {
 			$start = absint( $_REQUEST['start'] );
@@ -117,16 +130,16 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 		}
 
 		$args = array(
-			'status'    => $status,
-			'search'    => $search,
-			'user_id'   => $user_id,
-			'offset'    => $start,
-			'number'    => $number,
-			'post_id'   => $post_id,
-			'type'      => $reason,
-			'orderby'   => $orderby,
-			'order'     => $order,
-			'reason'    => $reason,
+			'status'  => $status,
+			'search'  => $search,
+			'user_id' => $user_id,
+			'offset'  => $start,
+			'number'  => $number,
+			'post_id' => $post_id,
+			'type'    => $reason,
+			'orderby' => $orderby,
+			'order'   => $order,
+			'reason'  => $reason,
 		);
 
 		/**
@@ -138,45 +151,45 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 		 */
 		$args = apply_filters( 'geodir_admin_post_reports_list_table_query_args', $args );
 
-		$where = "";
+		$where = '';
 		// post_id
 		if ( ! empty( $args['post_id'] ) ) {
-			$where .= $wpdb->prepare( " AND r.post_id = %d", array( absint( $args['post_id'] ) ) );
+			$where .= $wpdb->prepare( ' AND r.post_id = %d', array( absint( $args['post_id'] ) ) );
 		}
 
 		// status
-		if ( ! empty( $args['status'] ) && $args['status'] != 'all' ) {
-			if ( $args['status'] == 'pending' ) {
+		if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
+			if ( 'pending' === $args['status'] ) {
 				$args['status'] = '';
 			}
-			$where .= $wpdb->prepare( " AND r.status = %s", array( $args['status'] ) );
+			$where .= $wpdb->prepare( ' AND r.status = %s', array( $args['status'] ) );
 		}
 
 		// reason
 		if ( ! empty( $args['reason'] ) ) {
-			$where .= $wpdb->prepare( " AND r.reason LIKE %s", array( $args['reason'] ) );
+			$where .= $wpdb->prepare( ' AND r.reason LIKE %s', array( $args['reason'] ) );
 		}
 
 		if ( ! empty( $args['search'] ) ) {
 			if ( is_email( $args['search'] ) ) {
-				$where .= $wpdb->prepare( " AND r.user_email LIKE %s", array( $args['search'] ) );
+				$where .= $wpdb->prepare( ' AND r.user_email LIKE %s', array( $args['search'] ) );
 			} else {
 				$keyword = '%' . $wpdb->esc_like( $args['search'] ) . '%';
-				$where .= $wpdb->prepare( " AND ( r.user_ip = %s OR r.user_name LIKE %s OR p.post_title LIKE %s OR r.user_email LIKE %s OR r.message LIKE %s )", array( $args['search'], $keyword, $keyword, $keyword, $keyword ) );
+				$where  .= $wpdb->prepare( ' AND ( r.user_ip = %s OR r.user_name LIKE %s OR p.post_title LIKE %s OR r.user_email LIKE %s OR r.message LIKE %s )', array( $args['search'], $keyword, $keyword, $keyword, $keyword ) );
 			}
 		}
 
-		$count_sql = "SELECT COUNT(*)";
-		$sql = "SELECT p.post_title, p.post_author, p.post_status, p.post_date, r.*";
-		
 		$commmon_sql = "FROM {$table} AS r LEFT JOIN {$wpdb->posts} AS p ON p.ID = r.post_id WHERE p.ID IS NOT NULL {$where}";
 
-		$total_items = $wpdb->get_var( "SELECT COUNT(*) {$commmon_sql}" );
+		$total_items = $wpdb->get_var( "SELECT COUNT(*) {$commmon_sql}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $common_sql uses prepare above.
 
-		$_orderby = ! empty( $orderby ) && ! empty( $order ) ? "ORDER BY {$orderby} {$order}" : '';
-		$_limit = $wpdb->prepare( "LIMIT %d, %d", array( $args['offset'], $args['number'] ) );
 
-		$this->items = $wpdb->get_results( "SELECT p.post_title, p.post_author, p.post_status, p.post_date, r.* {$commmon_sql} {$_orderby} {$_limit}" );
+		$_orderby = ! empty( $orderby ) ? "ORDER BY {$orderby} {$order}" : '';
+		$_orderby = sanitize_sql_orderby( $_orderby ) ? sanitize_sql_orderby( $_orderby ) : 'ORDER BY report_date DESC';
+
+		$_limit = $wpdb->prepare( 'LIMIT %d, %d', array( $args['offset'], $args['number'] ) );
+
+		$this->items = $wpdb->get_results( "SELECT p.post_title, p.post_author, p.post_status, p.post_date, r.* {$commmon_sql} {$_orderby} {$_limit}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- All items secure.
 
 		$this->set_pagination_args(
 			array(
@@ -195,7 +208,7 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 		global $wpdb;
 
 		$doaction = $this->current_action();
-		
+
 		if ( ! $doaction || ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
@@ -211,10 +224,10 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 		$resolved = 0;
 		$rejected = 0;
 		$deleted_ = 0;
-		$pending = 0;
-		$draft = 0;
-		$trash = 0;
-		$deleted = 0;
+		$pending  = 0;
+		$draft    = 0;
+		$trash    = 0;
+		$deleted  = 0;
 
 		$pagenum = $this->get_pagenum();
 
@@ -313,14 +326,14 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 		global $post_id, $status, $reason;
 
 		$status_links = array();
-		$post_id = ! empty( $post_id ) ? absint( $post_id ) : 0;
-		$num_reports = GeoDir_Report_Post::get_counts( $post_id );
+		$post_id      = ! empty( $post_id ) ? absint( $post_id ) : 0;
+		$num_reports  = GeoDir_Report_Post::get_counts( $post_id );
 		if ( empty( $status ) ) {
 			$status = 'all';
 		}
 
 		$stati = array(
-			'all'       => _nx_noop(
+			'all'      => _nx_noop(
 				'All <span class="count">(%s)</span>',
 				'All <span class="count">(%s)</span>',
 				'reported posts',
@@ -332,7 +345,7 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 				'reported posts',
 				'geodirectory'
 			),
-			'resolved'  => _nx_noop(
+			'resolved' => _nx_noop(
 				'Resolved <span class="count">(%s)</span>',
 				'Resolved <span class="count">(%s)</span>',
 				'reported posts',
@@ -343,7 +356,7 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 				'Rejected <span class="count">(%s)</span>',
 				'reported posts',
 				'geodirectory'
-			)
+			),
 		);
 
 		$link = admin_url( 'admin.php?page=gd-settings&tab=general&section=report_post' );
@@ -377,7 +390,9 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 				$link = add_query_arg( 'p', absint( $post_id ), $link );
 			}
 
-			$status_links[ $_status ] = "<a href='$link'$current_link_attributes>" . wp_sprintf( translate_nooped_plural( $label, $num_reports->{$_status} ), wp_sprintf( '<span class="%s-count">%s</span>', 'pending', number_format_i18n( $num_reports->{$_status} ) )
+			$status_links[ $_status ] = "<a href='$link'$current_link_attributes>" . wp_sprintf(
+				translate_nooped_plural( $label, $num_reports->{$_status} ),
+				wp_sprintf( '<span class="%s-count">%s</span>', 'pending', number_format_i18n( $num_reports->{$_status} ) )
 			) . '</a>';
 		}
 
@@ -393,13 +408,13 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 		global $status;
 
 		$actions = array(
-			'pending' => __( 'Unpublish', 'geodirectory' ),
-			'draft' => __( 'Move to Draft', 'geodirectory' ),
-			'trash' => __( 'Move to Trash', 'geodirectory' ),
-			'delete' => __( 'Delete Permanently', 'geodirectory' ),
-			'resolved' => __( 'Mark as Resolved', 'geodirectory' ),
-			'rejected' => __( 'Mark as Rejected', 'geodirectory' ),
-			'delete-reports' => __( 'Delete Reports', 'geodirectory' )
+			'pending'        => __( 'Unpublish', 'geodirectory' ),
+			'draft'          => __( 'Move to Draft', 'geodirectory' ),
+			'trash'          => __( 'Move to Trash', 'geodirectory' ),
+			'delete'         => __( 'Delete Permanently', 'geodirectory' ),
+			'resolved'       => __( 'Mark as Resolved', 'geodirectory' ),
+			'rejected'       => __( 'Mark as Rejected', 'geodirectory' ),
+			'delete-reports' => __( 'Delete Reports', 'geodirectory' ),
 		);
 
 		return $actions;
@@ -538,7 +553,7 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 
 	<tbody id="the-extra-report-post-list" data-wp-lists="list:report-post" style="display: none;">
 		<?php
-			$items       = $this->items;
+			$items = $this->items;
 			$this->display_rows_or_placeholder();
 			$this->items = $items;
 		?>
@@ -659,13 +674,13 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 		$out = '';
 
 		$actions = array(
-			'id' => '',
+			'id'   => '',
 			'view' => '',
 		);
 
 		// Not looking at all comments.
 		if ( $post->post_status != 'trash' ) {
-			$actions['id'] = wp_sprintf( __( 'ID: %s', 'geodirectory' ), $post->ID );
+			$actions['id']   = wp_sprintf( __( 'ID: %s', 'geodirectory' ), $post->ID );
 			$actions['view'] = wp_sprintf( '<a href="%s" rel="bookmark" aria-label="%s">%s</a>', get_permalink( $post->ID ), esc_attr( wp_sprintf( __( 'View &#8220;%s&#8221;', 'geodirectory' ), _draft_or_post_title( (int) $post->ID ) ) ), wp_sprintf( __( 'View %s', 'geodirectory' ), geodir_post_type_singular_name( $post->post_type, true ) ) );
 		}
 
@@ -707,8 +722,8 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 	}
 
 	public function column_post_title( $item ) {
-		$title = _draft_or_post_title( (int) $item->post_id );
-		$post = get_post( (int) $item->post_id );
+		$title         = _draft_or_post_title( (int) $item->post_id );
+		$post          = get_post( (int) $item->post_id );
 		$can_edit_post = current_user_can( 'edit_post', $post->ID );
 
 		$value = '<strong>';
@@ -716,7 +731,7 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 		if ( $can_edit_post && 'trash' !== $post->post_status ) {
 			$value .= wp_sprintf( '<a class="row-title" href="%s" aria-label="%s">%s</a>', get_edit_post_link( $post->ID ), esc_attr( sprintf( __( '&#8220;%s&#8221; (Edit)', 'geodirectory' ), $title ) ), $title );
 		} else {
-			$value .=wp_sprintf( '<span>%s</span>', $title );
+			$value .= wp_sprintf( '<span>%s</span>', $title );
 		}
 
 		$value .= "</strong>\n";
@@ -731,7 +746,7 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 
 		if ( current_user_can( 'edit_user', $post->post_author ) ) {
 			$edit_link = get_edit_user_link( $post->post_author );
-			$value = "<strong><a href=\"{$edit_link}\">{$label}</a></strong>";
+			$value     = "<strong><a href=\"{$edit_link}\">{$label}</a></strong>";
 		} else {
 			$value = "<strong>{$label}</strong>";
 		}
@@ -780,7 +795,7 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 
 		if ( ! empty( $item->user_id ) && current_user_can( 'edit_user', (int) $item->user_id ) ) {
 			$edit_link = get_edit_user_link( (int) $item->user_id );
-			$value = "<strong><a href=\"{$edit_link}\">{$label}</a></strong><br>";
+			$value     = "<strong><a href=\"{$edit_link}\">{$label}</a></strong><br>";
 		} else {
 			$value = "<strong>{$label}</strong><br>";
 		}

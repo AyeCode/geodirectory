@@ -291,6 +291,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Elementor Pro Gallery not working with single gallery type - FIXED
 * GD Details page admin hints don't show link from CPT template settings - FIXED
 * Allow to customize add listing map via theme template - CHANGED
+* Admin users had the ability to alter the report posts table orderby SQL - FIXED/SECURITY
 
 = GeoDirectory Business Directory Plugin v2.3.28 - 2023-10-13 =
 * Add / Edit CPT package shows error on update plugin - FIXED
