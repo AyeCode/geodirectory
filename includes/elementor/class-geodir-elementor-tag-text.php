@@ -67,40 +67,38 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 				$raw_value = $gd_post->{$key};
 
 				if ( $show == 'value-raw' ) {
-					$value = $gd_post->{$key};
+					$value = $raw_value;
 				} else {
-					if ( $key == 'default_category' ) {
-						$term_id = isset( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
-						$term = get_term_by( 'id', $term_id, $post->post_type . "category" );
-						if ( $show == 'value' ) {
-							$term_url = get_term_link( $term_id, $post->post_type . "category" );
-							if ( $term_url && ! is_wp_error( $term_url ) ) {
-								$value = '<a href="' . $term_url . '" >' . esc_attr( $term->name ) . '</a>';
-							}
-						} elseif ( $show == 'value-strip' ) {
-							if ( ! empty( $term->name ) ) {
-								$value = esc_attr( $term->name );
-							}
-						}
-					} else {
-						$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
-					}
+					$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
 				}
-			} elseif ( $key == 'latitude,longitude' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
+			} else if ( $key == 'latitude,longitude' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
 				$value = geodir_sanitize_float( $gd_post->latitude ) . "," . geodir_sanitize_float( $gd_post->longitude );
-			} elseif ( $key == 'address' && ! empty( $gd_post->city ) ) {
+			} else if ( $key == 'address' && ! empty( $gd_post->city ) ) {
 				$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
-			} elseif ( $key == 'address_raw' && ! empty( $gd_post->city ) ) {
+			} else if ( $key == 'address_raw' && ! empty( $gd_post->city ) ) {
 				$address_parts = array();
-				if(!empty($gd_post->street)){$address_parts[] = esc_attr($gd_post->street);}
-				if(!empty($gd_post->street2)){$address_parts[] = esc_attr($gd_post->street2);}
-				if(!empty($gd_post->city)){$address_parts[] = esc_attr($gd_post->city);}
-				if(!empty($gd_post->region)){$address_parts[] = esc_attr($gd_post->region);}
-				if(!empty($gd_post->country)){$address_parts[] = esc_attr($gd_post->country);}
-				if(!empty($gd_post->zip)){$address_parts[] = esc_attr($gd_post->zip);}
+
+				if ( ! empty( $gd_post->street ) ) {
+					$address_parts[] = esc_attr( $gd_post->street );
+				}
+				if ( ! empty( $gd_post->street2 ) ) {
+					$address_parts[] = esc_attr( $gd_post->street2 );
+				}
+				if ( ! empty( $gd_post->city ) ) {
+					$address_parts[] = esc_attr( $gd_post->city );
+				}
+				if ( ! empty( $gd_post->region ) ) {
+					$address_parts[] = esc_attr( $gd_post->region );
+				}
+				if ( ! empty( $gd_post->country ) ) {
+					$address_parts[] = esc_attr( $gd_post->country );
+				}
+				if ( ! empty( $gd_post->zip ) ) {
+					$address_parts[] = esc_attr( $gd_post->zip );
+				}
 
 				if ( ! empty( $address_parts ) ) {
-					$value = implode( ", ",$address_parts );
+					$value = implode( ", ", $address_parts );
 				}
 
 				$value = geodir_post_address( $value, 'address', $gd_post );
@@ -162,8 +160,8 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 		if ( geodir_is_page( 'archive' ) ) {
 			$current_category = get_queried_object();
 			$term_id = isset( $current_category->term_id ) ?  absint( $current_category->term_id ) : '';
-		} else if ( geodir_is_page( 'single' ) ) {
-			$term_id = isset( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
+		} else if ( ! empty( $gd_post ) ) {
+			$term_id = ! empty( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
 		}
 
 		if ( $term_id ) {
@@ -177,7 +175,7 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 				$value = get_term_meta( $term_id, 'ct_cat_font_icon', true );
 
 				if ( $show == 'value' ) {
-					$value = "<i class='" . esc_attr( $value ) . "'></i>";
+					$value = "<i class='" . esc_attr( $value ) . "' aria-hidden='true'></i>";
 				}
 			} else if ( $key == 'category_map_icon' ) {
 				$value = esc_url_raw( geodir_get_term_icon( $term_id ) );
