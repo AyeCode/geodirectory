@@ -148,39 +148,41 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 	 *
 	 * @return mixed|string|void
 	 */
-	public function get_category_meta($key){
+	public function get_category_meta( $key ) {
 		global $gd_post;
+
 		$image_data = [
 			'id' => null,
 			'url' => '',
 		];
 
 		$term_id = '';
-		if( geodir_is_page('archive') ){
+
+		if ( geodir_is_page('archive' ) ) {
 			$current_category = get_queried_object();
-			$term_id = isset($current_category->term_id) ?  absint($current_category->term_id) : '';
-		}elseif(geodir_is_page('single')){
-			$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
+			$term_id = isset($current_category->term_id) ?  absint( $current_category->term_id ) : '';
+		} else if ( ! empty( $gd_post ) ) {
+			$term_id = ! empty( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
 		}
 
-		if($term_id) {
-
-			if($key == 'category_map_icon'){
-//				$value = esc_url_raw( geodir_get_term_icon( $term_id ) );
-
+		if ( $term_id ) {
+			if ( $key == 'category_map_icon' ) {
 				$cat_img = get_term_meta( $term_id, 'ct_cat_icon', true );
-				if(!empty($cat_img)){
+
+				if ( ! empty( $cat_img ) ) {
 					$value = esc_url_raw( geodir_get_cat_icon( $term_id, true ) );
+
 					$image_data = [
 						'id' => $cat_img['id'],
 						'url' => $value,
 					];
 				}
-
-			}elseif($key == 'category_image'){
+			} else if ( $key == 'category_image' ) {
 				$cat_img = get_term_meta( $term_id, 'ct_cat_default_img', true );
-				if(!empty($cat_img)){
+
+				if ( ! empty( $cat_img ) ) {
 					$value = esc_url_raw( geodir_get_cat_image( $term_id, true ) );
+
 					$image_data = [
 						'id' => $cat_img['id'],
 						'url' => $value,

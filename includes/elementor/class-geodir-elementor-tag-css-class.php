@@ -73,27 +73,16 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 				if ( $show == 'value-raw' ) {
 					$value = $gd_post->{$key};
 				} else {
-					if ( $key == 'default_category' ) {
-						$term_id = isset( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
-						$term    = get_term_by( 'id', $term_id, $post->post_type . "category" );
-						if ( $show == 'value' ) {
-							$term_url = get_term_link( $term_id, $post->post_type . "category" );
-							$value    = '<a href="' . $term_url . '" >' . esc_attr( $term->name ) . '</a>';
-						} elseif ( $show == 'value-strip' ) {
-							$value = esc_attr( $term->name );
-						}
-
-					} else {
-						$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
-					}
+					$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
 				}
 
-			} elseif ( $key == 'latitude,longitude' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
+			} else if ( $key == 'latitude,longitude' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
 				$value = geodir_sanitize_float( $gd_post->latitude ) . "," . geodir_sanitize_float( $gd_post->longitude );
-			} elseif ( $key == 'address' && ! empty( $gd_post->city ) ) {
+			} else if ( $key == 'address' && ! empty( $gd_post->city ) ) {
 				$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
-			} elseif ( $key == 'address_raw' && ! empty( $gd_post->city ) ) {
+			} else if ( $key == 'address_raw' && ! empty( $gd_post->city ) ) {
 				$address_parts = array();
+
 				if ( ! empty( $gd_post->street ) ) {
 					$address_parts[] = esc_attr( $gd_post->street );
 				}
@@ -209,33 +198,34 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 	 */
 	public function get_category_meta( $key) {
 		global $gd_post;
+
 		$value   = '';
 		$term_id = '';
+
 		if ( geodir_is_page( 'archive' ) ) {
 			$current_category = get_queried_object();
 			$term_id          = isset( $current_category->term_id ) ? absint( $current_category->term_id ) : '';
-		} elseif ( geodir_is_page( 'single' ) ) {
-			$term_id = isset( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
+		} else if ( ! empty( $gd_post ) ) {
+			$term_id = ! empty( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
 		}
 
 
 		if ( $term_id ) {
-
 			if ( $key == 'category_top_description' ) {
 				$cat_desc = do_shortcode( "[gd_category_description]" );
 				$value    = $cat_desc ? trim( $cat_desc ) : '';
-			} elseif ( $key == 'category_bottom_description' ) {
+			} else if ( $key == 'category_bottom_description' ) {
 				$cat_desc = do_shortcode( "[gd_category_description type='bottom']" );
 				$value    = $cat_desc ? trim( $cat_desc ) : '';
-			} elseif ( $key == 'category_icon' ) {
+			} else if ( $key == 'category_icon' ) {
 				$value = get_term_meta( $term_id, 'ct_cat_font_icon', true );
-			} elseif ( $key == 'category_map_icon' ) {
+			} else if ( $key == 'category_map_icon' ) {
 				$value = esc_url_raw( geodir_get_term_icon( $term_id ) );
-			} elseif ( $key == 'category_color' ) {
+			} else if ( $key == 'category_color' ) {
 				$value = get_term_meta( $term_id, 'ct_cat_color', true );
-			} elseif ( $key == 'category_schema' ) {
+			} else if ( $key == 'category_schema' ) {
 				$value = get_term_meta( $term_id, 'ct_cat_schema', true );
-			} elseif ( $key == 'category_image' ) {
+			} else if ( $key == 'category_image' ) {
 				$value = esc_url_raw( geodir_get_cat_image( $term_id, true ) );
 			}
 		}
@@ -243,7 +233,6 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 		if ( $value ) {
 			$value = wp_strip_all_tags( $value );
 		}
-
 
 		return $value;
 	}

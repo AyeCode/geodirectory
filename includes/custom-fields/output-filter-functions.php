@@ -583,11 +583,18 @@ function geodir_custom_field_output_default_category( $html, $location, $cf, $ou
 		$class = "geodir-i-custom";
 		$field_icon = geodir_field_icon_proccess( $cf );
 		$output = geodir_field_output_process( $output );
+
 		if ( strpos( $field_icon, 'http' ) !== false ) {
 			$field_icon_af = '';
-		} elseif ( $field_icon == '' ) {
+		} else if ( $field_icon == '' ) {
 			$field_icon_af = '';
 		} else {
+			$cat_font_icon = get_term_meta( (int) $gd_post->{$htmlvar_name}, 'ct_cat_font_icon', true );
+
+			if ( $cat_font_icon ) {
+				$field_icon = geodir_design_style() ? '<i class="' . esc_attr( $cat_font_icon ) . ' fa-fw" aria-hidden="true"></i> ' : '<i class="' . esc_attr( $cat_font_icon ) . '" aria-hidden="true"></i>';
+			}
+
 			$field_icon_af = $field_icon;
 			$field_icon = '';
 		}
