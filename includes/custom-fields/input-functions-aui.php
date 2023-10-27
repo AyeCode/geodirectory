@@ -2260,7 +2260,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
         ob_start();
         ?>
         <script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
-        <div id="<?php echo $name;?>_row" class="gd-bh-row<?php echo ( $geodir_label_type == 'horizontal' ? ' row' : '' ); ?> <?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>"<?php echo $conditional_attrs; ?>>
+        <div id="<?php echo $name;?>_row" class="gd-bh-row<?php echo ( $horizontal ? ' row' : '' ); ?> <?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>"<?php echo $conditional_attrs; ?>>
             <label for="<?php echo $htmlvar_name; ?>_f_active_1" class="<?php echo ( $horizontal ? 'pt-0 col-sm-2 col-form-label' : ( $aui_bs5 ? 'form-label' : '' ) ); ?>"><?php echo $label; ?></label>
             <div class="gd-bh-field<?php echo ( $horizontal ? ' col-sm-10' : '' ); ?>" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
                 <?php echo aui()->radio(

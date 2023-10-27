@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.3.29
+ * @version    2.3.30
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -21,6 +21,8 @@
 defined( 'ABSPATH' ) || exit;
 
 global $aui_bs5, $geodirectory, $mapzoom, $geodir_manual_map, $geodir_label_type, $gd_move_inline_script;
+
+$horizontal = empty( $geodir_label_type ) || $geodir_label_type == 'horizontal' ? true : false;
 
 /**
  * Filter the map restriction for specific address only
@@ -927,8 +929,8 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
     /* ]]> */
 </script>
 <?php } if ( ! wp_doing_ajax() ) { ?>
-<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> <?php if($geodir_label_type=='horizontal'){ echo "row";}?>">
-    <?php if($geodir_label_type=='horizontal'  ){ ?>
+<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?><?php echo ( $horizontal ? ' row' : '' ); ?>">
+    <?php if ( $horizontal  ) { ?>
     <div class="col-sm-2 col-form-label"></div>
     <div class="col-sm-10">
         <?php } ?>
@@ -937,7 +939,7 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
         aui();
         echo AUI_Component_Helper::help_text( stripslashes( __( 'Click on "Set Address on Map" and then you can also drag map marker to locate the correct address', 'geodirectory' ) ) );
         ?>
-        <?php if ( $geodir_label_type == 'horizontal' ) { ?>
+        <?php if ( $horizontal ) { ?>
     </div>
 <?php } ?>
 </div>
