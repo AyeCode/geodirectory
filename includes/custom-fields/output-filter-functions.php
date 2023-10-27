@@ -203,7 +203,7 @@ function geodir_post_badge_match_value( $match_value, $match_field, $args, $find
 			if ( ! empty( $attachments ) ) {
 				$upload_dir = wp_upload_dir();
 				$upload_baseurl = $upload_dir['baseurl'];
-				
+
 				$attachment_urls = array();
 
 				foreach ( $attachments as $attachment ) {
@@ -680,7 +680,9 @@ function geodir_custom_field_output_business_hours_day( $html, $location, $cf, $
 			global $gd_post;
 		}
 
-		if ( ! ( ! empty( $gd_post ) && ! empty( $gd_post->{$htmlvar_name} ) && geodir_check_field_visibility( $gd_post->package_id, $htmlvar_name, $gd_post->post_type ) ) ) {
+		$package_id = ! empty( $gd_post->package_id ) ? $gd_post->package_id : '';
+
+		if ( ! ( ! empty( $gd_post ) && ! empty( $gd_post->{$htmlvar_name} ) && geodir_check_field_visibility( $package_id, $htmlvar_name, $gd_post->post_type ) ) ) {
 			return $html;
 		}
 
