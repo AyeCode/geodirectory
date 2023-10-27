@@ -653,7 +653,7 @@ class GeoDir_Post_Data {
 
 
 			// set post images
-			$i_post_id = ! empty( $gd_post['revision_ID'] ) ? $gd_post['revision_ID'] : $post_id;
+			$i_post_id = ! empty( $gd_post['revision_ID'] ) && wp_is_post_revision( absint( $gd_post['revision_ID'] ) ) === $post_id ? absint( $gd_post['revision_ID'] ) : $post_id;
 			if ( isset( $gd_post['post_images'] ) && ! wp_is_post_revision( absint( $post_id ) ) ) {
 				$featured_image = self::save_files( $i_post_id, $gd_post['post_images'], 'post_images', $is_dummy );
 

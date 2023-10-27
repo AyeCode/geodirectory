@@ -1309,3 +1309,23 @@ function geodir_get_template_part_by_slug( $slug ) {
 
 	return $template_part;
 }
+
+/**
+ * Filter the textarea output.
+ *
+ * @since 2.3.25
+ *
+ * @param string $text Text content.
+ * @param string $context The context.
+ * @param array  $args Array of arguements.
+ * @return string Filtered text.
+ */
+function geodir_filter_textarea_output( $text, $context = '', $args = array() ) {
+	$orig_text = $text;
+
+	if ( $text != "" ) {
+		$text = apply_filters( 'geodir_filter_textarea_output', $text );
+	}
+
+	return apply_filters( 'geodir_filtered_textarea_output', $text, $orig_text, $context, $args );
+}

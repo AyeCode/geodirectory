@@ -2582,93 +2582,99 @@ add_filter('geodir_custom_field_output_address','geodir_cf_address',10,5);
  * @since 2.0.0
  * @return string The html to output.
  */
-function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
+function geodir_cf_business_hours( $html, $location, $cf, $p = '', $output = '' ) {
 	global $aui_bs5;
 
-    // check we have the post value
-    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
-    else{ global $gd_post;}
+	// Check we have the post value.
+	if ( is_numeric( $p ) ) {
+		$gd_post = geodir_get_post_info( $p );
+	} else {
+		global $gd_post;
+	}
 
-    if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
-        if(!$cf){return NULL;}
-    }
+	if ( ! is_array( $cf ) && $cf != '' ) {
+		$cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
 
-    // Block demo content
-    if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["UTC":"+0"]';
-    }
+		if ( ! $cf ) {
+			return NULL;
+		}
+	}
 
-    $html_var = $cf['htmlvar_name'];
+	// Block demo content
+	if ( geodir_is_block_demo() ) {
+		$gd_post->{$cf['htmlvar_name']} = '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["UTC":"+0"]';
+	}
 
-    // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_business_hours_loc_{$location}")){
-        /**
-         * Filter the business hours html by location.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 2.0.0
-         */
-        $html = apply_filters("geodir_custom_field_output_business_hours_loc_{$location}",$html,$cf,$output);
-    }
+	$html_var = $cf['htmlvar_name'];
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_business_hours_var_{$html_var}")){
-        /**
-         * Filter the business hours html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param string $location The location to output the html.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 2.0.0
-         */
-        $html = apply_filters("geodir_custom_field_output_business_hours_var_{$html_var}",$html,$location,$cf,$output);
-    }
+	// Check if there is a location specific filter.
+	if ( has_filter( "geodir_custom_field_output_business_hours_loc_{$location}" ) ) {
+		/**
+		 * Filter the business hours html by location.
+		 *
+		 * @param string $html The html to filter.
+		 * @param array $cf The custom field array.
+		 * @param string $output The output string that tells us what to output.
+		 * @since 2.0.0
+		 */
+		$html = apply_filters( "geodir_custom_field_output_business_hours_loc_{$location}", $html, $cf, $output );
+	}
 
-    // Check if there is a custom field key specific filter.
-    if(has_filter("geodir_custom_field_output_business_hours_key_{$cf['field_type_key']}")){
-        /**
-         * Filter the business hours html by field type key.
-         *
-         * @param string $html The html to filter.
-         * @param string $location The location to output the html.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 2.0.0
-         */
-        $html = apply_filters("geodir_custom_field_output_business_hours_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
-    }
+	// Check if there is a custom field specific filter.
+	if ( has_filter( "geodir_custom_field_output_business_hours_var_{$html_var}" ) ) {
+		/**
+		 * Filter the business hours html by individual custom field.
+		 *
+		 * @param string $html The html to filter.
+		 * @param string $location The location to output the html.
+		 * @param array $cf The custom field array.
+		 * @param string $output The output string that tells us what to output.
+		 * @since 2.0.0
+		 */
+		$html = apply_filters( "geodir_custom_field_output_business_hours_var_{$html_var}", $html, $location, $cf, $output );
+	}
 
-    // If not html then we run the standard output.
-    if ( empty( $html ) ) {
-        if ( ! empty( $gd_post->{$cf['htmlvar_name']} ) ) {
-            $value = stripslashes_deep( $gd_post->{$cf['htmlvar_name']} );
-            $business_hours = geodir_get_business_hours( $value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
+	// Check if there is a custom field key specific filter.
+	if ( has_filter( "geodir_custom_field_output_business_hours_key_{$cf['field_type_key']}" ) ) {
+		/**
+		 * Filter the business hours html by field type key.
+		 *
+		 * @param string $html The html to filter.
+		 * @param string $location The location to output the html.
+		 * @param array $cf The custom field array.
+		 * @param string $output The output string that tells us what to output.
+		 * @since 2.0.0
+		 */
+		$html = apply_filters( "geodir_custom_field_output_business_hours_key_{$cf['field_type_key']}", $html, $location, $cf, $output );
+	}
 
-            if ( empty( $business_hours['days'] ) ) {
-                return $html;
-            }
-            $show_value = geodir_is_block_demo() ? __("Open now","geodirectory") : $business_hours['extra']['today_range'];
-            $preview_class = geodir_is_block_demo() ? 'text-success' : '';
-                $offset = isset( $business_hours['extra']['offset'] ) ? (int) $business_hours['extra']['offset'] : '';
-            $utc_offset = isset( $business_hours['extra']['utc_offset'] ) ? $business_hours['extra']['utc_offset'] : '';
-            if ( ! empty( $business_hours['extra']['is_dst'] ) ) {
-                $offset = isset( $business_hours['extra']['offset_dst'] ) ? (int) $business_hours['extra']['offset_dst'] : $offset;
-                $utc_offset = isset( $business_hours['extra']['utc_offset_dst'] ) ? $business_hours['extra']['utc_offset_dst'] : $utc_offset;
-            }
+	// If not html then we run the standard output.
+	if ( empty( $html ) ) {
+		if ( ! empty( $gd_post->{$cf['htmlvar_name']} ) ) {
+			$value = stripslashes_deep( $gd_post->{$cf['htmlvar_name']} );
+			$business_hours = geodir_get_business_hours( $value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
 
-            if (!empty($show_value)) {
+			if ( empty( $business_hours['days'] ) ) {
+				return $html;
+			}
 
-                $bh_expanded = $location == 'owntab' || strpos($cf['css_class'], 'gd-bh-expanded') !== false ? true : false;
+			$show_value = geodir_is_block_demo() ? __( "Open now","geodirectory" ) : $business_hours['extra']['today_range'];
+			$preview_class = geodir_is_block_demo() ? 'text-success' : '';
+			$offset = isset( $business_hours['extra']['offset'] ) ? (int) $business_hours['extra']['offset'] : '';
+			$utc_offset = isset( $business_hours['extra']['utc_offset'] ) ? $business_hours['extra']['utc_offset'] : '';
 
-                $design_style = geodir_design_style();
-                $dropdown_class =  $design_style ? ' dropdown ' : '';
-                $dropdown_toggle_class =  $design_style ? ' dropdown-toggle ' : '';
-                $dropdown_item_class =  $design_style ? ' dropdown-item py-1 ' : '';
-                $dropdown_item_inline_class =  $design_style ? ' d-inline-block ' : '';
+			if ( ! empty( $business_hours['extra']['is_dst'] ) ) {
+				$offset = isset( $business_hours['extra']['offset_dst'] ) ? (int) $business_hours['extra']['offset_dst'] : $offset;
+				$utc_offset = isset( $business_hours['extra']['utc_offset_dst'] ) ? $business_hours['extra']['utc_offset_dst'] : $utc_offset;
+			}
+
+			if ( ! empty( $show_value ) ) {
+				$bh_expanded = $location == 'owntab' || strpos( $cf['css_class'], 'gd-bh-expanded' ) !== false ? true : false;
+				$design_style = geodir_design_style();
+				$dropdown_class =  $design_style ? ' dropdown ' : '';
+				$dropdown_toggle_class =  $design_style ? ' dropdown-toggle ' : '';
+				$dropdown_item_class =  $design_style ? ' dropdown-item py-1 ' : '';
+				$dropdown_item_inline_class =  $design_style ? ' d-inline-block ' : '';
 				if ( $aui_bs5 ) {
 					$dropdown_item_mr_class =  $design_style ? ' me-3 ' : '';
 					$dropdown_item_float_class =  $design_style ? ' float-end' : '';
@@ -2676,75 +2682,82 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
 					$dropdown_item_mr_class =  $design_style ? ' mr-3 ' : '';
 					$dropdown_item_float_class =  $design_style ? ' float-right' : '';
 				}
-                $dropdown_menu_class =  $design_style ? ' dropdown-menu dropdown-caret-0 my-3 ' : '';
+				$dropdown_menu_class =  $design_style ? ' dropdown-menu dropdown-caret-0 my-3 ' : '';
 
-                if($design_style && $bh_expanded ){
-                    $dropdown_class = '';
-                    $dropdown_menu_class = '';
-                    $dropdown_toggle_class = '';
-                }
+				if ( $design_style && $bh_expanded ) {
+					$dropdown_class = '';
+					$dropdown_menu_class = '';
+					$dropdown_toggle_class = '';
+				}
 
-                $cf['field_icon'] = $design_style ? $cf['field_icon'] : $cf['field_icon'];
+				$cf['field_icon'] = $design_style ? $cf['field_icon'] : $cf['field_icon'];
 
-                $field_icon = geodir_field_icon_proccess($cf);
-                $output = geodir_field_output_process($output);
-                if (strpos($field_icon, 'http') !== false) {
-                    $field_icon_af = '';
-                } else if ($field_icon == '') {
-                    $field_icon_af = '';
-                } else {
-                    $field_icon_af = $field_icon;
-                    $field_icon = '';
-                }
+				$field_icon = geodir_field_icon_proccess( $cf );
+				$output = geodir_field_output_process( $output );
 
-                // Database value.
-                if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                    return $value;
-                }
+				if ( strpos( $field_icon, 'http' ) !== false ) {
+					$field_icon_af = '';
+				} else if ( $field_icon == '' ) {
+					$field_icon_af = '';
+				} else {
+					$field_icon_af = $field_icon;
+					$field_icon = '';
+				}
 
-                $extra_class = $location == 'owntab' || strpos($cf['css_class'], 'gd-bh-expanded') !== false ? ' gd-bh-expanded' : ' gd-bh-toggled';
-                if ( ! empty( $business_hours['extra']['has_closed'] ) ) {
-                    $extra_class .= ' gd-bh-closed';
-                }
+				// Database value.
+				if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+					return $value;
+				}
 
+				$extra_class = $location == 'owntab' || strpos($cf['css_class'], 'gd-bh-expanded') !== false ? ' gd-bh-expanded' : ' gd-bh-toggled';
+				if ( ! empty( $business_hours['extra']['has_closed'] ) ) {
+					$extra_class .= ' gd-bh-closed';
+				}
 
+				$html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . $dropdown_class. '" style="">';
+				$html .= $design_style ? '<a class=" text-reset ' . $dropdown_toggle_class . ' d-block text-truncate" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' : '';
+				$html .= '<span class="geodir-i-business_hours geodir-i-biz-hours '.$preview_class.'" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
+				$html .= '<span class="gd-bh-expand-range '.$preview_class.'" data-offset="' . $utc_offset  . '" data-offsetsec="' . $offset . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range gv-secondary">' . $show_value . '</span>';
+				$html .= $design_style ? '' : '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span>';
+				$html .= '</span>';
+				$html .= $design_style ? '</a>' : '';
+				$html .= '<div class="gd-bh-open-hours ' . $dropdown_menu_class . '" style="min-width:250px;">';
 
-                $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . $dropdown_class. '" style="">';
-                $html .= $design_style ? '<a class=" text-reset '.$dropdown_toggle_class.' d-block text-truncate" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' : '';
-                $html .= '<span class="geodir-i-business_hours geodir-i-biz-hours '.$preview_class.'" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
-                $html .= '<span class="gd-bh-expand-range '.$preview_class.'" data-offset="' . $utc_offset  . '" data-offsetsec="' . $offset . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range gv-secondary">' . $show_value . '</span>';
-                $html .= $design_style ? '' : '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span>';
-                $html .= '</span>';
-                $html .= $design_style ? '</a>' : '';
-                $html .= '<div class="gd-bh-open-hours '.$dropdown_menu_class.'" style="min-width:250px;">';
-                foreach ( $business_hours['days'] as $day => $slots ) {
-                    $class = '';
-                    if ( ! empty( $slots['closed'] ) ) {
-                        $class .= 'gd-bh-days-closed ';
-                    }
-                    $html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="'.$dropdown_item_class.' gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d '.$dropdown_item_inline_class.$dropdown_item_mr_class.'">' . $slots['day_short'] . '</div><div class="gd-bh-slots '.$dropdown_item_inline_class.$dropdown_item_float_class.'">';
-                    foreach ( $slots['slots'] as $i => $slot ) {
-                        $attrs = '';
+				foreach ( $business_hours['days'] as $day => $slots ) {
+					/**
+					 * Filter business hours slot display day name.
+					 *
+					 * @since 2.3.29
+					 */
+					$day_name = apply_filters( 'geodir_output_business_hours_slot_day_name', $slots['day_short'], $day, $slots, $location, $cf );
+
+					$class = '';
+					if ( ! empty( $slots['closed'] ) ) {
+						$class .= 'gd-bh-days-closed ';
+					}
+					$html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="' . $dropdown_item_class . ' gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d ' . $dropdown_item_inline_class . $dropdown_item_mr_class . '">' . $day_name . '</div><div class="gd-bh-slots ' . $dropdown_item_inline_class . $dropdown_item_float_class . '">';
+
+					foreach ( $slots['slots'] as $i => $slot ) {
+						$attrs = '';
 						$class = '';
-                        if ( ! empty( $slot['time'] ) ) {
+						if ( ! empty( $slot['time'] ) ) {
 							$attrs .= 'data-open="' . $slot['time'][0] . '"  data-close="' . $slot['time'][1] . '"';
 							// Next day close
-							if ( (int)$slot['time'][0] == (int)$slot['time'][1] || (int)$slot['time'][1] < (int)$slot['time'][0] ) {
+							if ( (int) $slot['time'][0] == (int)$slot['time'][1] || (int) $slot['time'][1] < (int) $slot['time'][0] ) {
 								$class .= ' gd-bh-next-day';
 							}
-                        }
-                        $html .= '<div ' . $attrs . ' class="gd-bh-slot' . $class . '"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
-                        $html .= '</div>';
-                    }
-                    $html .= '</div></div>';
-                }
-                $html .= '</div></div>';
+						}
+						$html .= '<div ' . $attrs . ' class="gd-bh-slot' . $class . '"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
+						$html .= '</div>';
+					}
+					$html .= '</div></div>';
+				}
+				$html .= '</div></div>';
+			}
+		}
+	}
 
-            }
-        }
-    }
-
-    return $html;
+	return $html;
 }
 add_filter( 'geodir_custom_field_output_business_hours', 'geodir_cf_business_hours', 10 , 5 );
 

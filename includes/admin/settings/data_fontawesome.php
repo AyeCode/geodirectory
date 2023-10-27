@@ -1,4 +1,5 @@
 <?php
+// @todo i don't think this is used in core anymore, we should check extensions and remove if not.
 // Font Awesome v. 5
 
 function geodir_font_awesome_array() {
@@ -17,10 +18,10 @@ function geodir_font_awesome_array() {
 }
 
 /**
- * Free Icons 
+ * Free Icons
  */
 function geodir_font_awesome_free_array() {
-	return 	array( 
+	return 	array(
 		'fab fa-500px' => 'f26e',
 		'fab fa-accessible-icon' => 'f368',
 		'fab fa-accusoft' => 'f369',
@@ -1614,10 +1615,10 @@ function geodir_font_awesome_free_array() {
 }
 
 /**
- * Pro Icons 
+ * Pro Icons
  */
 function geodir_font_awesome_pro_array() {
-	return array( 
+	return array(
 		'fas fa-abacus' => 'f640',
 		'far fa-abacus' => 'f640',
 		'fal fa-abacus' => 'f640',

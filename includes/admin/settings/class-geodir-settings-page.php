@@ -49,6 +49,7 @@ abstract class GeoDir_Settings_Page {
      * Get font awesome selectbox.
      *
      * @since 2.0.0
+	 * @deprecated 2.3.26
      */
 	public function font_awesome_select(){
 		?>
@@ -56,7 +57,9 @@ abstract class GeoDir_Settings_Page {
 		<div  id="gd-font-awesome-select" class="gd-notification lity-hide noti-white">
 		<select name="tab_icon" class="regular-text geodir-select" data-fa-icons="1"  tabindex="-1" aria-hidden="true" onchange="jQuery('.gd-tabs-sortable li #field_icon').filter(':visible').val(jQuery(this).val()).trigger('change');jQuery('.lity-close').trigger('click');">
 			<?php
-			include_once( dirname( __FILE__ ) . '/../settings/data_fontawesome.php' );
+			if ( ! function_exists( 'geodir_font_awesome_array' ) ) {
+				include_once( dirname( __FILE__ ) . '/../settings/data_fontawesome.php' );
+			}
 			echo "<option value=''>".__('None','geodirectory')."</option>";
 			//$tab_icon = str_replace("fas ","",$tab->tab_icon);
 			foreach ( geodir_font_awesome_array() as $key => $val ) {

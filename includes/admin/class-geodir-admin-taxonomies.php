@@ -22,7 +22,7 @@ class GeoDir_Admin_Taxonomies {
      * @since 2.0.0
      */
     private $taxonomy = '';
-    
+
     /**
      * Taxonomy type.
      *
@@ -55,24 +55,24 @@ class GeoDir_Admin_Taxonomies {
         if ( empty( $_REQUEST['taxonomy'] ) ) {
             return;
         }
-        
-        $this->taxonomy = $_REQUEST['taxonomy'];
+
+        $this->taxonomy = esc_attr( $_REQUEST['taxonomy'] );
 
         if ( !geodir_is_gd_taxonomy( $this->taxonomy ) ) {
             return;
         }
-        
+
         $this->type = geodir_taxonomy_type( $this->taxonomy );
 
         if ( $this->type == 'category' ) {
             // Add fields
             add_action( $this->taxonomy . '_add_form_fields', array( $this, 'add_category_fields' ), 10, 1 );
             add_action( $this->taxonomy . '_edit_form_fields', array( $this, 'edit_category_fields' ), 10, 2 );
-            
+
             // Save fields
             add_action( 'create_term', array( $this, 'save_category_fields' ), 10, 3 );
             add_action( 'edit_term', array( $this, 'save_category_fields' ), 10, 3 );
-            
+
             // Add columns
             add_filter( 'manage_edit-' . $this->taxonomy . '_columns', array( $this, 'get_columns' ) );
             add_filter( 'manage_edit-' . $this->taxonomy . '_sortable_columns', array( $this, 'get_sortable_columns' ), 10, 1 );
@@ -82,6 +82,7 @@ class GeoDir_Admin_Taxonomies {
             add_action( 'created_term', array( $this, 'update_term_icons'), 10, 3 );
             add_action( 'edited_term', array( $this, 'update_term_icons'), 10, 3 );
         }
+
     }
 
     /**
@@ -318,7 +319,7 @@ class GeoDir_Admin_Taxonomies {
             <?php echo $this->render_cat_icon(); ?>
         </div>
         <?php do_action( 'geodir_add_category_after_cat_icon', $taxonomy ); ?>
-        
+
         <div class="form-field term-ct_cat_font_icon-wrap gd-term-form-field">
             <label for="ct_cat_font_icon"><?php _e( 'Category Icon', 'geodirectory' ); ?></label>
             <?php echo $this->render_cat_font_icon(); ?>
@@ -330,7 +331,7 @@ class GeoDir_Admin_Taxonomies {
             <?php echo $this->render_cat_color(); ?>
         </div>
         <?php do_action( 'geodir_add_category_after_cat_color', $taxonomy ); ?>
-        
+
         <div class="form-field term-ct_cat_schema-wrap gd-term-form-field ">
             <label for="ct_cat_schema"><?php _e( 'Schema Type', 'geodirectory' ); ?></label>
             <?php echo $this->render_cat_schema(); ?>
@@ -470,11 +471,11 @@ class GeoDir_Admin_Taxonomies {
         if ( empty( $name ) ) {
             $name = $id;
         }
-        
+
         $img_id = !empty( $default_img['id'] ) ? $default_img['id'] : '';
         $img_src = !empty( $default_img['src'] ) ? $default_img['src'] : '';
         $show_img = !empty( $default_img['full'] ) ? $default_img['full'] : admin_url( 'images/media-button-image.gif' );
-         
+
         ob_start();
         ?>
         <div class="gd-upload-img" data-field="<?php echo $name; ?>">
@@ -505,11 +506,11 @@ class GeoDir_Admin_Taxonomies {
         if ( empty( $name ) ) {
             $name = $id;
         }
-        
+
         $img_id = !empty( $cat_icon['id'] ) ? $cat_icon['id'] : '';
         $img_src = !empty( $cat_icon['src'] ) ? $cat_icon['src'] : '';
         $show_img = !empty( $cat_icon['full'] ) ? $cat_icon['full'] : admin_url( 'images/media-button-image.gif' );
-         
+
         ob_start();
         ?>
         <div class="gd-upload-img" data-field="<?php echo $name; ?>">
@@ -541,6 +542,26 @@ class GeoDir_Admin_Taxonomies {
             $name = $id;
         }
         ob_start();
+
+		if ( geodir_design_style() ) {
+			echo aui()->input(
+				array(
+					'type'              =>  'iconpicker',
+					'id'                => $id,
+					'name'              => $name,
+					'label_col'        => '3',
+					'label_class'=> 'font-weight-bold fw-bold',
+					'wrap_class'        =>  'bsui',
+					'value'         => $cat_icon,
+					'extra_attributes' => defined('FAS_PRO') && FAS_PRO ? array(
+						'data-fa-icons'   => true,
+						'data-bs-toggle'  => "tooltip",
+						'data-bs-trigger' => "focus",
+						'title'           => __('For pro icon variants (light, thin, duotone), paste the class here','geodirectory'),
+					) : array(),
+				)
+			);
+		}else{
         ?>
         <select
             name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>"
@@ -548,7 +569,9 @@ class GeoDir_Admin_Taxonomies {
             data-fa-icons="1"  tabindex="-1" aria-hidden="true"
         >
             <?php
-            include_once( dirname( __FILE__ ) . '/settings/data_fontawesome.php' );
+            if ( ! function_exists( 'geodir_font_awesome_array' ) ) {
+                include_once( dirname( __FILE__ ) . '/settings/data_fontawesome.php' );
+            }
             echo "<option value=''>".__('None','geodirectory')."</option>";
             foreach ( geodir_font_awesome_array() as $key => $val ) {
                 ?>
@@ -559,6 +582,7 @@ class GeoDir_Admin_Taxonomies {
             }
             ?>
         </select>
+		<?php } ?>
         <p class="description clear"><?php _e( 'Select a category icon', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
@@ -606,11 +630,11 @@ class GeoDir_Admin_Taxonomies {
      */
     public function render_cat_schema( $cat_schema = '', $id = 'ct_cat_schema', $name = ''  ) {
         $schemas = self::get_schemas();
-        
+
         if ( empty( $name ) ) {
             $name = $id;
         }
-        
+
         ob_start();
         ?>
         <select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" class="postform geodir-select">
@@ -646,20 +670,20 @@ class GeoDir_Admin_Taxonomies {
         // Category listing default image.
         if ( isset( $_POST['ct_cat_default_img'] ) ) {
             $cat_default_img = $_POST['ct_cat_default_img'];
-            
+
             if ( !empty( $cat_default_img['src'] ) ) {
                 $cat_default_img['src'] = geodir_file_relative_url( $cat_default_img['src'] );
             } else {
                 $cat_default_img = array();
             }
-            
+
             update_term_meta( $term_id, 'ct_cat_default_img', $cat_default_img );
         }
-        
+
         // Category icon.
         if ( isset( $_POST['ct_cat_icon'] ) ) {
             $cat_icon = $_POST['ct_cat_icon'];
-            
+
             if ( !empty( $cat_icon['src'] ) ) {
                 $cat_icon['src'] = geodir_file_relative_url( $cat_icon['src'] );
             } elseif(!empty($_POST['ct_cat_font_icon'])) {
@@ -680,12 +704,12 @@ class GeoDir_Admin_Taxonomies {
         if ( isset( $_POST['ct_cat_color'] ) ) {
             update_term_meta( $term_id, 'ct_cat_color', sanitize_hex_color( $_POST['ct_cat_color'] ) );
         }
-        
+
         // Category schema.
         if ( isset( $_POST['ct_cat_schema'] ) ) {
             update_term_meta( $term_id, 'ct_cat_schema', sanitize_text_field( $_POST['ct_cat_schema'] ) );
         }
-        
+
         do_action( 'geodir_term_save_category_fields', $term_id, $tt_id, $taxonomy );
     }
 
@@ -702,7 +726,7 @@ class GeoDir_Admin_Taxonomies {
             $this->generate_cat_icon($icon,$color);
             return true;
         }
-        
+
         return false;
     }
 
@@ -741,7 +765,7 @@ class GeoDir_Admin_Taxonomies {
             }
         }
 
-        
+
         return $cat_icon;
     }
 
@@ -770,7 +794,7 @@ class GeoDir_Admin_Taxonomies {
 
         return $columns;
     }
-    
+
     /**
      * Get sortable columns.
      *
@@ -779,7 +803,7 @@ class GeoDir_Admin_Taxonomies {
      */
     public function get_sortable_columns( $columns ) {
         $columns['cat_ID_num'] = 'term_id';
-        
+
         return $columns;
     }
 
@@ -795,7 +819,7 @@ class GeoDir_Admin_Taxonomies {
         if ( $column == 'cat_ID_num' ) {
             $columns .= $id;
         }
-        
+
         if ( $column == 'cat_icon' && $icon = geodir_get_cat_icon( $id, true, true ) ) {
             $columns .= '<img src="' . esc_url( $icon ) . '" />';
         }
@@ -955,7 +979,7 @@ class GeoDir_Admin_Taxonomies {
 
     /**
      * Return the schemas options as an array.
-     * 
+     *
      * @return mixed|void
      */
     public static function get_schemas(){
@@ -1023,6 +1047,10 @@ class GeoDir_Admin_Taxonomies {
 			}
 		} else {
 			$description = self::get_cat_top_description( $term_id );
+		}
+
+		if ( ! empty( $description ) && $type != 'main' ) {
+			$description = geodir_filter_textarea_output( $description, 'category_description', array( 'type' => $type, 'term_id' => $term_id ) );
 		}
 
 		return apply_filters( 'geodir_get_category_description', $description, $term_id, $type );
@@ -1115,7 +1143,7 @@ class GeoDir_Admin_Taxonomies {
 
 			if ( $post_type ) {
 				$table = geodir_db_cpt_table( $post_type );
-			
+
 				foreach ( $object_ids as $post_id ) {
 					$post_tags = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'names' ) );
 					$post_tags = ! empty( $post_tags ) && ! is_wp_error( $post_tags ) ? array_map( 'trim', $post_tags ) : '';

@@ -541,6 +541,11 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 		if ( $content != '' ) {
 			$content = trim( $content );
+
+			if ( $content != '' && ! empty( $_REQUEST['_gdmap'] ) && $_REQUEST['_gdmap'] == 'google' ) {
+				// Google map popup style.
+				$content .= '<style>.geodir-map-canvas .gm-style .gm-style-iw-c{max-height:211px!important;min-width:260px!important}.geodir-map-canvas .gm-style .gm-style-iw-d{max-height:175px!important}.geodir-map-canvas .gm-style .gd-bh-open-hours.dropdown-menu{position:relative!important;transform:none!important;left:-.25rem!important;min-width:calc(100% + .5rem)!important;font-size:100%!important}.geodir-map-canvas .gm-style .geodir-output-location .list-group-item{padding:.6rem .5rem!important}.geodir-map-canvas .gm-style .gd-bh-open-hours.dropdown-menu .dropdown-item{padding-left:.75rem!important;padding-right:.75rem!important}</style>';
+			}
 		}
 
 		return $content;

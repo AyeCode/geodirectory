@@ -370,8 +370,8 @@ function gd_osm_parse_item(item) {
             }
         }
 
-        // Bermuda, Sweden
-        if ((address.country_code == 'bm' || address.country_code == 'no' || address.country_code == 'se') && ! address.state) {
+        // Bermuda, Norway, Sweden, Romania
+        if ((address.country_code == 'bm' || address.country_code == 'no' || address.country_code == 'se' || address.country_code == 'ro') && ! address.state) {
             if (address.county) {
                 address.state = address.county;
             } else if (address.state_district) {
@@ -404,6 +404,10 @@ function gd_osm_parse_item(item) {
         } else if (address.town) {
             item.city = address.town;
             formated = gd_osm_parse_name(formated, address.town);
+        } else if (address.municipality && address.country_code == 'ro') {
+            /* Romania */
+            item.city = address.municipality;
+            formated = gd_osm_parse_name(formated, address.municipality);
         }
         if (address.country_code == 'gb' && item.city) {
             item.city = item.city.replace("City of ", ""); 

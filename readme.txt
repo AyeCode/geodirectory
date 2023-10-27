@@ -1,19 +1,19 @@
-=== GeoDirectory - Business Directory, Listings or Classified Directory ===
+=== GeoDirectory - WordPress Business Directory Plugin, or Classified Directory ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory, member directory, company directory, team directory, chamber of commerce business directory, church directory, address book, contact directory, local business directory, listings directory, link directory
 Requires at least: 4.5
 Tested up to: 6.3
-Stable tag: 2.3.24
+Stable tag: 2.3.29
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Create a Business Directory, Classified Ads Directory, Job Listings Directory, or Member Directory with the best WordPress Business Directory plugin.
+Top WordPress Directory plugin Create a Business Directory, Classified Ads Directory, Job Listings Directory, or Member Directory.
 
 == Description ==
 
-GeoDirectory is the leading Business Directory Plugin for WordPress. Help businesses everywhere get found through their listings by your Geo directory website visitors. 
+GeoDirectory is the leading WordPress Business Directory Plugin. Help businesses everywhere get found through their listings by your Geo directory website visitors. 
 
 No matter what you need to build, be it a City Directory, a Job Board, a Real Estate Listings Directory, or a Classifieds Website, GeoDirectory turns any WordPress theme into a robust search network for users. 
 
@@ -23,9 +23,13 @@ Do it all stress-free and in style with 100% compatible WordPress page builders 
 
 ✅ [Addons](https://wpgeodirectory.com/downloads/category/addons/) ✅ [Themes](https://wpgeodirectory.com/downloads/category/themes/) ✅ [Demos](https://demos.ayecode.io/) ✅ [Docs](https://docs.wpgeodirectory.com/) ✅ [Showcase](https://wpgeodirectory.com/category/showcase/)
 
-== ⚡ TOP RATED BUSINESS DIRECTORY PLUGIN WITH +450 5 STARS REVIEWS ==
+== ⚡ THE ONLY PROFESSIONAL WORDPRESS BUSINESS DIRECTORY PLUGIN ==
 
-= READ WHAT USERS SAY ABOUT OUR BUSINESS DIRECTORY PLUGIN =
+GeoDirectory stands out as the most robust and scalable directory plugin for WordPress, offering advanced features tailored for listing websites. Its intuitive design and extensive customizability make it the top choice for professionals seeking a reliable WordPress directory solution.
+
+== ⚡ TOP RATED WORDPRESS BUSINESS DIRECTORY PLUGIN WITH +500 5 STARS REVIEWS ==
+
+= READ WHAT USERS SAY ABOUT OUR WORDPRESS BUSINESS DIRECTORY PLUGIN =
 
 >👉 __Fantastic Plugin w/ An Awesome Team Behind It__
 >⭐⭐⭐⭐⭐
@@ -108,6 +112,7 @@ No matter what kind of business you're in, use our free WordPress directory plug
 * **Therapists Directory** Just like doctors, you can easily create a directory of Therapists. No matter if they are massage therapists or psychologists.  
 
 * **Pets Directory** The pet industry is growing at unprecedented speed. Users need a directory to locate veterinarians, pet shops, pet groomers, pet parks and more.  
+
 * **Church Directory** You can list churches, temples, religious retreats and events. Or create a directory of your church members.
 
 * **Service Directory** A directory of freelancers for digital services similar to Fiverr or one for home service professionals like Angi.co or Homeadvisor.com
@@ -187,6 +192,20 @@ Your friends at AyeCode work to continuously refine the best directory plugin in
 * [Directory Starter - Free Directory Starter Theme](https://wpgeodirectory.com/downloads/directory-starter/ "A Free Starter Theme for custom designed directories")
 * [Supreme Directory - A beautiful city directory](https://wpgeodirectory.com/downloads/supreme-directory/ "A Free Theme for city and local directories")
 * [Listimia - 3rd party premium Business Directory Theme](https://wpgeodirectory.com/downloads/listimia/ "3rd party premium Theme")
+
+== ⚡ TOP THEMES & PAGE BUILDERS TUTORIALS ==
+
+Our WordPress Directory Plugin works with any theme. 
+
+See these tutorials to see how you can build:
+
+👉 [Divi Directory Website](https://wpgeodirectory.com/building-a-directory-website-with-divi/)
+👉 [Elementor Directory Website](https://wpgeodirectory.com/directory-website-elementor/)
+👉 [Astra Directory Website](https://wpgeodirectory.com/directory-website-astra-theme-spectra/)
+👉 [KadenceWP](https://wpgeodirectory.com/directory-website-astra-theme-spectra/)
+👉 [OceanWP](https://wpgeodirectory.com/oceanwp-directory-website/)
+👉 [Ollie](https://wpgeodirectory.com/creating-a-directory-website-with-the-olliewp-theme/)
+👉 [GeneratePress](https://wpgeodirectory.com/directory-website-generatepress-theme/)
 
 == ⚡ FREE ELEMENTOR DIRECTORY TEMPLATES ==
 * [GeoEvents - Events Directory with ticket marketplace](https://demos.ayecode.io/elementor-events-directory "Events portal with ticket marketplace")
@@ -286,117 +305,144 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory Business Directory Plugin v2.3.25 =
-* Dynamic image tag is not working when Flexbox Container is active - FIXED
+= GeoDirectory v2.3.30 - TBD =
+* Elementor Loop Carousel don't show post category image - FIXED
+* OpenStreetMap don't populates region for Romania – FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.24 - 2023-09-22 =
+= GeoDirectory v2.3.29 - 2023-10-18 =
+* Hook added to filter display day name in business hours slot output - ADDED
+* Elementor Pro Gallery not working with single gallery type - FIXED
+* GD Details page admin hints don't show link from CPT template settings - FIXED
+* Allow to customize add listing map via theme template - CHANGED
+* Admin users had the ability to alter the report posts table orderby SQL - FIXED/SECURITY
+
+= GeoDirectory v2.3.28 - 2023-10-13 =
+* Add / Edit CPT package shows error on update plugin - FIXED
+
+= GeoDirectory v2.3.27 - 2023-10-12 =
+* OSM map do not load properly when rendered in hidden element - FIXED
+* Changed taxonomy icon selector to new version where icon class can be pasted in - CHANGED
+
+= GeoDirectory v2.3.26 - 2023-10-06 =
+* Validate revision ID belongs to parent on revision save or the wrong media files can be removed - FIXED
+
+= GeoDirectory v2.3.25 - 2023-10-05 =
+* Dynamic image tag is not working when Flexbox Container is active - FIXED
+* Elementor CSS hide conditions is_contains_any, is_not_contains_any added - ADDED
+* GD > Loop Paging option added to set page numbers & size on mobile - ADDED
+* Filter added to skip wp_kses on elementor render GD field - ADDED
+* Business hours in google map bubble is too small when expanded - FIXED
+* Post slider overflow issue on mobile - FIXED
+* Allow HTML tags in import category top / bottom description - CHANGED
+
+= GeoDirectory v2.3.24 - 2023-09-22 =
 * Text color attribute is missing in Favorite / Unfavorite text in GD > Add To Fav - FIXED
 * Resize marker hook not working for add listing page map marker - FIXED
 * Permalink base example url shows WPML language domain without slash - FIXED
 * Some plugins uses split WP query on search page that breaks GD sorting - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.23 - 2023-09-13 =
+= GeoDirectory v2.3.23 - 2023-09-13 =
 * Some hooks added to filter Google geocode request & results - ADDED
 * Tags page don't renders archive item properly from Elementor core text widget - FIXED
 * Post meta widget will now display a placeholder video in block preview - ADDED
 
-= GeoDirectory Business Directory Plugin v2.3.22 - 2023-08-31 =
+= GeoDirectory v2.3.22 - 2023-08-31 =
 * Elementor editor sometimes don't load GD archive template - FIXED
 * Logged out posting not working with new pretty add listing URLs - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.19 - 2023-08-24 =
+= GeoDirectory v2.3.19 - 2023-08-24 =
 * GD > Map widget maptype option is not working for static map - FIXED
 * Badge link not working with BS5 when popover text is set - FIXED
 * Enhance custom field option values save format - CHANGED
 * GD > Best Of block shows empty filters section in block settings - FIXED
 * Greedy tab link not rendered properly in mobile device - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.18 - 2023-08-10 =
+= GeoDirectory v2.3.18 - 2023-08-10 =
 * GD SEO variables no longer working with SEOPress meta description - FIXED
 * Use pretty permalinks for add listing link - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.17 - 2023-08-07 =
+= GeoDirectory v2.3.17 - 2023-08-07 =
 * Sometimes CPT pages header style not working with Divi builder - FIXED
 * GD > Listings carousel is not working with BS 5 & interval "0" - FIXED
 * OSM Nominatim search url is no longer supporting trailing slash - CHANGED
 * 1 site membership key won't activate - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.16 - 2023-07-27 =
+= GeoDirectory v2.3.16 - 2023-07-27 =
 * Duplicate permalink warning after update - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.15 - 2023-07-26 =
+= GeoDirectory v2.3.15 - 2023-07-26 =
 * File upload warning is not triggering in backend - FIXED
 * Compatibility changes for Kallyas theme Zion builder - ADDED
 * Allow users to store external images for the listing created via API - ADDED
 * New GD > Post Features block/widget added - ADDED
 * Some blocks/widget settings updated - UPDATED
 
-= GeoDirectory Business Directory Plugin v2.3.14 - 2023-07-12 =
+= GeoDirectory v2.3.14 - 2023-07-12 =
 * Images on add listing page are not sortable in touch devices - FIXED
 * Allow location image to set in elementor element background setting - ADDED
 * Fix conflict with Relevanssi plugin - CHANGED
 
-= GeoDirectory Business Directory Plugin v2.3.13 - 2023-06-19 =
+= GeoDirectory v2.3.13 - 2023-06-19 =
 * PHP deprecated notice "Creation of dynamic property" - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.12 - 2023-06-14 =
+= GeoDirectory v2.3.12 - 2023-06-14 =
 * JavaScript error when latitude/longitude are empty - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.11 - 2023-06-01 =
+= GeoDirectory v2.3.11 - 2023-06-01 =
 * Change CSV extension mime type to prevent upload issue - FIXED
 * Email function will not send if message body is empty to allow for filtering email out - ADDED
 * Emails not adding $email_name, $email_vars to the call which are used in filters later - FIXED
 * GD Map don't filters markers for near search on search page - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.10 - 2023-05-25 =
+= GeoDirectory v2.3.10 - 2023-05-25 =
 * Added monthly cron schedule to prevent issue with Kadence blocks - ADDED
 * Complianz compatibility affects backend maps – CHANGED
 * Added some keys in reserved fields list - CHANGED
 
-= GeoDirectory Business Directory Plugin v2.3.9 - 2023-05-04 =
+= GeoDirectory v2.3.9 - 2023-05-04 =
 * PHP warning undefined array key "HTTP_HOST" with WP-CLI - FIXED
 * Show the file url via GD > Post Meta value-strip option - CHANGED
 * GD > Categories category text style is not working - FIXED
 * Fast Ajax setting conflict with fusion builder - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.8 - 2023-04-27 =
+= GeoDirectory v2.3.8 - 2023-04-27 =
 * Hook added to enable/disable who can reply reviews - ADDED
 
-= GeoDirectory Business Directory Plugin v2.3.7 - 2023-04-19 =
+= GeoDirectory v2.3.7 - 2023-04-19 =
 * CPT settings option added to set post owner label for review - ADDED
 * Remove from Favorites is not working - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.6 - 2023-04-13 =
+= GeoDirectory v2.3.6 - 2023-04-13 =
 * Custom base tag in permalink breaks pagination on category page - FIXED
 * Rank Math breadcrumb shows untranslated post type label - FIXED
 * Post fav widget changed from using a tag to span tag for better page speed SEO score - CHANGED
 
-= GeoDirectory Business Directory Plugin v2.3.5 - 2023-04-06 =
+= GeoDirectory v2.3.5 - 2023-04-06 =
 * Astra Theme v4.1.x compatibility - CHANGED
 
-= GeoDirectory Business Directory Plugin v2.3.4 - 2023-04-04 =
+= GeoDirectory v2.3.4 - 2023-04-04 =
 * Unable to save empty value for multi-checkbox via REST API - FIXED
 * GD > Listings results cache not cleared on add/delete listing - FIXED
 * Conflicts with JetElements plugin breaks elementor template - FIXED
 * GD > Categories first category is not clickable - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3.3 - 2023-03-29 =
+= GeoDirectory v2.3.3 - 2023-03-29 =
 * Show business hours timepicker in 24 hours format as per WordPress setting - CHANGED
 * GD Search widget hide near search input option not working - FIXED
 * Open Map Directions link on Google Maps with address in destination point - CHANGED
 * SD and AUI packages updated - UPDATED
 * Listing widget queries now cached for speed improvement when used multiple times on the same page - ADDED
 
-= GeoDirectory Business Directory Plugin v2.3.2 - 2023-03-21 =
+= GeoDirectory v2.3.2 - 2023-03-21 =
 * Clear attachment title & caption cache on title & caption update - FIXED
 * GD Listings next page not working when no center page links in pagination - FIXED
 * Allow to choose GD > Listings template type for legacy mode - CHANGED
 * Added filter for wysiwyg textarea input arguments - ADDED
 
-= GeoDirectory Business Directory Plugin v2.3.1 - 2023-03-17 =
+= GeoDirectory v2.3.1 - 2023-03-17 =
 * Changed order of block and shortcode rendering calls to fix output bug in blockthemes - FIXED
 
-= GeoDirectory Business Directory Plugin v2.3 - 2023-03-16 =
+= GeoDirectory v2.3 - 2023-03-16 =
 * Changes for AUI Bootstrap 5 compatibility - ADDED
 * Approve comment link should redirect to login page for non-logged author - FIXED
 * Several block improvements for BS5 changes - ADDED
@@ -405,14 +451,14 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Listings carousel sometimes skips one slide - FIXED
 * Several widgets/blocks changed for BS5 compatibility - CHANGED
 
-= GeoDirectory Business Directory Plugin v2.2.25 - 2023-01-26 =
+= GeoDirectory v2.2.25 - 2023-01-26 =
 * Search form CPT change fails to AJAX load new search form - FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.24 - 2023-01-25 =
+= GeoDirectory v2.2.24 - 2023-01-25 =
 * Map popup not opening for OSM on click from GD > Map Pinpoint - FIXED
 * delete_dummy_posts() function sanitization from admin user - ADDED
 
-= GeoDirectory Business Directory Plugin v2.2.23 - 2023-01-23 =
+= GeoDirectory v2.2.23 - 2023-01-23 =
 * Prevent auto save when images are being uploading - FIXED
 * Search page shows wrong content on free elementor plugin - FIXED
 * GD listings layout broken in Astra WP search results - FIXED
@@ -423,29 +469,29 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Template Library don't show GD templates after Elementor v3.10 update - FIXED
 * Added callback function to Google Maps JavaScript API - CHANGED
 
-= GeoDirectory Business Directory Plugin v2.2.22 - 2022-12-29 =
+= GeoDirectory v2.2.22 - 2022-12-29 =
 * Post meta widget CSS class sanitation - FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.21 - 2022-12-22 =
+= GeoDirectory v2.2.21 - 2022-12-22 =
 * Replace dummy images CDN url - CHANGED
 
-= GeoDirectory Business Directory Plugin v2.2.20 - 2022-12-20 =
+= GeoDirectory v2.2.20 - 2022-12-20 =
 * CSV formula injection sanitation - ADDED
 * New field added to set category bottom description - ADDED
 * Option added to select archive item template for listings loop - ADDED
 
-= GeoDirectory Business Directory Plugin v2.2.19 - 2022-12-15 =
+= GeoDirectory v2.2.19 - 2022-12-15 =
 * Map directions link from listings is not working when multiple post map on the page - FIXED
 * Move add listing JS in footer in backend - CHANGED
 * Rank Math description meta snippet not replaces location vars - FIXED
 * GeneratePress blocks dynamic css not added on GD archive pages - FIXED
 * Avada v7.9 is breaking the GD pages - FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.18 - 2022-11-09 =
+= GeoDirectory v2.2.18 - 2022-11-09 =
 * GD Single should show blank content when assigned empty elementor template - CHANGED
 * Allowing to set comment author cookies option not working with reviews - FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.17 - 2022-11-02 =
+= GeoDirectory v2.2.17 - 2022-11-02 =
 * Tweak to permalinks order to fix some obscure 404 conditions - FIXED
 * `Simple Archive` widget/block added for quick and easy setups - ADDED
 * Editing search page via Elementor (free) can cause errors - FIXED
@@ -455,18 +501,18 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Published listing preview is not showing updated data - FIXED
 * GD > Post Meta breaks output when showing stripped value for empty multiselect value - FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.16 - 2022-10-20 =
+= GeoDirectory v2.2.16 - 2022-10-20 =
 * Astra Pro page layout setting is not working for search page - FIXED
 * Archive item Top and Bottom badge is not supporting custom badge - FIXED
 * Radio field value is not saved with API request - FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.15 - 2022-10-13 =
+= GeoDirectory v2.2.15 - 2022-10-13 =
 * Yoast SEO breadcrumbs are not showing the default post category - FIXED
 * Drag post images are not working on Safari browser - FIXED
 * Customize > Widgets section doesn't show advanced settings toggle button - FIXED
 * Map block only selectable via tree view - FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.14 - 2022-10-6 =
+= GeoDirectory v2.2.14 - 2022-10-6 =
 * Use WP function to avoid PHP compatibility issue - ADDED
 * Option added to split the UK into England, Northern Ireland, Scotland & Wales to create a regional directory- ADDED
 * Business Hours preview in GD Listings block looks broken - FIXED
@@ -475,23 +521,23 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Add Listing page shows JS error on block theme - FIXED
 * Support _featured_image & _post_images in as SEO variables - CHANGED
 
-= GeoDirectory Business Directory Plugin v2.2.13 - 2022-09-29 =
+= GeoDirectory v2.2.13 - 2022-09-29 =
 * During import, it doesn't delete the previous attachment when adding the new attachment - FIXED
 * Elementor Archive Item not rendered properly on best of listings widget - FIXED
 * Allow playing video in popup from badge with AUI style - FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.12 - 2022-09-22 =
+= GeoDirectory v2.2.12 - 2022-09-22 =
 * Custom date is not saved with REST API when uses custom format - FIXED
 * Business Hours post meta shows incorrect hours for today - FIXED
 * Yoast SEO open graph image use category or post type default image as when no post image found - CHANGED
 
-= GeoDirectory Business Directory Plugin v2.2.11 - 2022-09-12 =
+= GeoDirectory v2.2.11 - 2022-09-12 =
 * Custom date is not saved with REST API when uses custom format - FIXED
 * Add route in REST API to add/update category & tag - ADDED
 * Plugin `Page Optimizer` can break maps - FIXED
 * OSM set address can sometimes use the county as the city - FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.10 - 2022-09-07 =
+= GeoDirectory v2.2.10 - 2022-09-07 =
 Report post popup doesn’t open on 2nd click once closed – FIXED
 GeneratePress layout default setting not working on GD pages – FIXED
 Elementor v3.5 deprecated actions break template loading – FIXED
@@ -503,7 +549,7 @@ Some jQuery version shows JS error on edit custom field – FIXED
 Hook added to filter map geocode address search results – ADDED
 TEXT field DB column data type does not change when data type changes in field settings – FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.9 - 2022-08-9 =
+= GeoDirectory v2.2.9 - 2022-08-9 =
 * Show actual DB error on custom field creation fail – CHANGED
 * Add address fields support to gd_post_badge & gd_dynamic_content shortcodes – ADDED
 * Use file src url as a badge link for file fields – CHANGED
@@ -516,7 +562,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * GD > Listings: option added show nearest listings to the GPS – ADDED
 * GD > Map: options added to hide street view & zoom controls on map – ADDED
 
-= GeoDirectory Business Directory Plugin v2.2.8 - 2022-07-7 =
+= GeoDirectory v2.2.8 - 2022-07-7 =
 * Some timezone shows difference of day in a date for custom date format – FIXED
 * Old Elementor image setting shows error – FIXED
 * File limit not applied to GD > Post Meta when showing files – FIXED
@@ -528,7 +574,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Yoast SEO noindex option is not working on single listing page – FIXED
 * Hide active & admin edit only option for some default fields – FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.7 - 2022-05-26 =
+= GeoDirectory v2.2.7 - 2022-05-26 =
 * SEO title conflicts with SEOPress – FIXED
 * GD > Loop option added to choose Elementor skin – ADDED
 * Category field shows legacy radio input to set default category – FIXED
@@ -540,14 +586,14 @@ TEXT field DB column data type does not change when data type changes in field s
 * Import address geocode not using set language – FIXED
 * Better Messages plugin can cause PHP error if buddypress not installed – FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.6 - 2022-05-05 =
+= GeoDirectory v2.2.6 - 2022-05-05 =
 * Float value parsing shows comma with pl_PL locale – FIXED
 * Elementor custom tag shows country name untranslated – FIXED
 * GD events widgets not showing in elementor – FIXED
 * Option added to hide search & near inputs in search form – ADDED
 * AJAX search compatibility changes – ADDED
 
-= GeoDirectory Business Directory Plugin v2.2.5 - 2022-03-28 =
+= GeoDirectory v2.2.5 - 2022-03-28 =
 * Neighbourhood SEO variable not working on single page – FIXED
 * GD Categories widget option include categories is not working for child categories – FIXED
 * Prevent add/delete column for reserved fields like city, region etc – CHANGED
@@ -568,21 +614,21 @@ TEXT field DB column data type does not change when data type changes in field s
 * Price validation pattern looses slashes on save field – FIXED
 * Comment notification rating allow variables – ADDED
 
-= GeoDirectory Business Directory Plugin v2.2.3 - 2022-03-07 =
+= GeoDirectory v2.2.3 - 2022-03-07 =
 * CPT sorting unable to save descending order – FIXED
 * Custom fields setting Price Options should not visible on all field types – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.2.2 - 2022-03-01 =
+= GeoDirectory v2.2.2 - 2022-03-01 =
 * CPT pages options show default option as a placeholder – CHANGED
 * Select field required error option not working – FIXED
 * Backend setting style broken for legacy mode – FIXED
 
-= GeoDirectory Business Directory Plugin v2.2.1 - 2022-02-22 =
+= GeoDirectory v2.2.1 - 2022-02-22 =
 * Brave browser can cause API verify function to return false positive (warning added)- FIXED
 * Place settings checkboxes not all showing correct setting – FIXED
 * Setup wizard lightbox membership shows empty cart – FIXED/CHANGED
 
-= GeoDirectory Business Directory Plugin v2.2 - 2022-02-22 =
+= GeoDirectory v2.2 - 2022-02-22 =
 * Long file names can cause overflow issues on mobile – FIXED
 * Admin settings screen UI changed to AUI style (UI breaking change to older addons) – CHANGED
 * Setup Wizard updated – CHANGED
@@ -590,11 +636,11 @@ TEXT field DB column data type does not change when data type changes in field s
 * Multiselect checkbox required error option not working – FIXED
 * Chrome Autofill covers Google Autocomplete address search – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.13 - 2022-01-27 =
+= GeoDirectory v2.1.1.13 - 2022-01-27 =
 * Hide new line break for empty address in post address – CHANGED
 * WordPress v5.9 update breaks custom fields drag and drop – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.12 - 2022-01-20 =
+= GeoDirectory v2.1.1.12 - 2022-01-20 =
 * Yoast SEO select2 conflicts on backend add listing page – FIXED
 * Comment link from recent reviews don’t scrolls to comment – FIXED
 * Hook added to filter preview action text – ADDED
@@ -608,17 +654,17 @@ TEXT field DB column data type does not change when data type changes in field s
 * Address with comma and without line break – FIXED
 * Avada builder sidebar setting is not working – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.11 - 2021-12-07 =
+= GeoDirectory v2.1.1.11 - 2021-12-07 =
 * Date range is not working in date field – FIXED
 * Elementor Pro theme builder doesn’t show GD layout types – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.10 - 2021-12-02 =
+= GeoDirectory v2.1.1.10 - 2021-12-02 =
 * OpenStreetMap don’t populates region for Sweden – FIXED
 * Avada builder not working for search page – FIXED
 * Lazyload images don’t work in elementor popup – FIXED
 * GD show/hide widget option not working on Widget Block – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.9 - 2021-11-03 =
+= GeoDirectory v2.1.1.9 - 2021-11-03 =
 * GD > Badge is not showing default category link – FIXED
 * Use category image title & caption on fallback image title & caption – CHANGED
 * Preview option added to attachments icon to show attachment preview – ADDED
@@ -630,40 +676,40 @@ TEXT field DB column data type does not change when data type changes in field s
 * GD Simple Archive Item block added (not yet default) – ADDED
 * Several blocks have more design options added – ADDED
 
-= GeoDirectory Business Directory Plugin v2.1.1.8 - 2021-10-09 =
+= GeoDirectory v2.1.1.8 - 2021-10-09 =
 * Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.7 - 2021-10-07 =
+= GeoDirectory v2.1.1.7 - 2021-10-07 =
 * Backend image editing broken due to error in minified JS file – FIXED
 * Elementor Pro can cause fatal error with Super Duper v2 if widget called the v1 way – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.5 - 2021-10-07 =
+= GeoDirectory v2.1.1.5 - 2021-10-07 =
 * Multiselect custom field checkbox type shows wrong color for required astrik – FIXED
 * Dynamic condition shortcode not working for a new field – FIXED
 * Classifieds/Real-estate Sold Functionality – ADDED
 
-= GeoDirectory Business Directory Plugin v2.1.1.4 - 2021-09-28 =
+= GeoDirectory v2.1.1.4 - 2021-09-28 =
 * Near me map marker changes – CHANGED
 * Don’t create custom field entry if DB column creation fails – FIXED
 * Option added in GD > Categories to adjust card shadow – ADDED
 * Sometimes CPT custom fields settings section rendered twice – FIXED
 * fallback image for cat_image is not working – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.3 - 2021-09-10 =
+= GeoDirectory v2.1.1.3 - 2021-09-10 =
 * Single post tab is not working when tab id starts with number – FIXED
 * Unable to customize reviews template from child theme – FIXED
 * Extra sanitization added to backend default location inputs – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.2 - 2021-08-27 =
+= GeoDirectory v2.1.1.2 - 2021-08-27 =
 * Show alert if title, category fields are hidden & empty on submit add listing – CHANGED
 * Best of & categories widgets AJAX params no longer using serialized data for location – CHANGED
 * Sanitize email in output email field – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.1.1 - 2021-08-26 =
+= GeoDirectory v2.1.1.1 - 2021-08-26 =
 * Show icon in CF setting when the field has hide conditions – CHANGED
 * Improved backend sensitization changes – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.1.1.0 - 2021-08-24 =
+= GeoDirectory v2.1.1.0 - 2021-08-24 =
 * GD Categories & search blocks shows validation errors in console – FIXED
 * Conditional fields feature for the custom fields for AUI style – ADDED
 * Kadence starter templates page is broken when monthly schedule option is set – FIXED
@@ -671,7 +717,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Fix conflicts with select2 library with BuddyBoss theme – FIXED
 * Show/hide widget option not working with block widgets – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.20 - 2021-08-04 =
+= GeoDirectory v2.1.0.20 - 2021-08-04 =
 * Distance to post badge don’t set direction on map from ajax loaded listing – FIXED
 * Add listing page shows JS error when shortcode used with Elementor text editor – FIXED
 * Fix conflicts with select2 library with BuddyBoss theme – FIXED
@@ -680,19 +726,19 @@ TEXT field DB column data type does not change when data type changes in field s
 * Images object cache not cleared on attachment update – FIXED
 * [gd_post_meta] now supports the post link – ADDED
 
-= GeoDirectory Business Directory Plugin v2.1.0.19 - 2021-07-28 =
+= GeoDirectory v2.1.0.19 - 2021-07-28 =
 * Hide select layout view button on non-GD layouts – FIXED
 * Image slider & lightbox not working in map popup – FIXED
 * Add listing zip required option no working with AUI – FIXED
 * Region missing for address within Norway with OSM – FIXED
 * GD > Listings widget carousel slider option added – ADDED
 
-= GeoDirectory Business Directory Plugin v2.1.0.18 - 2021-07-14 =
+= GeoDirectory v2.1.0.18 - 2021-07-14 =
 * GD listings author page not working when author permalink contains custom link – FIXED
 * Compatibility changes for Jetpack v8.1+ – CHANGED
 * Map markers for custom loop filtering current location on single listing page – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.17 - 2021-06-29 =
+= GeoDirectory v2.1.0.17 - 2021-06-29 =
 * Complianz | GDPR/CCPA Cookie Consent plugin integration added for GD maps – ADDED
 * Show admin notices on GD pages templates for Divi Builder – ADDED
 * Add listing map view field shows incorrect placeholder with AUI style – FIXED
@@ -710,7 +756,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Auto save custom field setting feature added – ADDED
 * Redirect search page to search for default CPT listings – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.1.0.16 - 2021-06-09 =
+= GeoDirectory v2.1.0.16 - 2021-06-09 =
 * Progressbar not moving during the demo content installation step – FIXED
 * Hook added to filter GeoDirectory admin menu capability – ADDED
 * Admin users are not allowed to access wp-admin area when they contains restricted user role – FIXED
@@ -727,11 +773,11 @@ TEXT field DB column data type does not change when data type changes in field s
 * Map CPT filter only visible when search filter is active – FIXED
 * Checkbox field description is not wrapped in a container ( Legacy design ) – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.15 - 2021-05-13 =
+= GeoDirectory v2.1.0.15 - 2021-05-13 =
 * OpenStreetMap popup not working with AUI – FIXED
 * Multi-select list out broken if not using ‘gd-comma-list’ class – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.14 - 2021-05-11 =
+= GeoDirectory v2.1.0.14 - 2021-05-11 =
 * Overwrite by Rank Math don’t renders GD variables – FIXED
 * v1 to v2 upgrade shows missing Events plugin – FIXED
 * Post meta output `gd-comma-list` not working with bootstrap styles – FIXED
@@ -746,12 +792,12 @@ TEXT field DB column data type does not change when data type changes in field s
 * Value not saved for the field which contains integer as field name – FIXED
 * Pagination looks messed in mobile devices – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.13 - 2021-04-19 =
+= GeoDirectory v2.1.0.13 - 2021-04-19 =
 * Small fix for the way some addresses are geocoded if “postal_town” is present – FIXED
 * Borlabs Cookie plugin integration added for GD maps – ADDED
 * Chrome prevents saving integer number for upload max size – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.12 - 2021-04-07 =
+= GeoDirectory v2.1.0.12 - 2021-04-07 =
 * GD > Categories option added to choose image size – ADDED
 * Frontend delete listing don’t prompt any response message with AUI – FIXED
 * Option added GD > Loop Actions to hide layouts for frontend list view – ADDED
@@ -761,7 +807,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Allow to set marker z-index via hook – ADDED
 * Tool added to removed unused GDv1 options – ADDED
 
-= GeoDirectory Business Directory Plugin v2.1.0.11 - 2021-03-23 =
+= GeoDirectory v2.1.0.11 - 2021-03-23 =
 * Conflict of select2 basic version loaded – FIXED
 * Brizy page builder compatibility – ADDED
 * Featured field always shows checked – FIXED
@@ -779,7 +825,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Tabs list as pills does not switch active class – FIXED
 * Custom field price options are working properly – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.10 - 2021-03-03 =
+= GeoDirectory v2.1.0.10 - 2021-03-03 =
 * Show x stars back instead of rating type name on hover of ratings – CHANGED
 * Field description is missing for radio/checkbox multiselect fields – FIXED
 * Tool added to regenerate thumbnails for the post images – ADDED
@@ -789,7 +835,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * GD Listings elementor skin element missing background image – FIXED
 * Add post ID in gd_post_meta,gd_post_badges and gd_dynamic_content – ADDED
 
-= GeoDirectory Business Directory Plugin v2.1.0.9 - 2021-02-24 =
+= GeoDirectory v2.1.0.9 - 2021-02-24 =
 * Show markers for custom Elementor posts loop not working – FIXED
 * Export CSV opens in browser instead of download on some sites – FIXED
 * Search keyword don’t matches with the word start with new line character – FIXED
@@ -799,7 +845,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Pending post shows 404 to logged in post author – FIXED
 * OpenGraph settings not working properly with recent Yoast SEO – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.8 - 2021-02-09 =
+= GeoDirectory v2.1.0.8 - 2021-02-09 =
 * Sometimes published email shows broken post link when cache is enabled – FIXED
 * Badge class not added to post class with AUI Bootstrap style – FIXED
 * Add setting to allow users to set no. of tags to show in tags list in add/edit listing form – ADDED
@@ -818,7 +864,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Custom field user defined validation is not working with AUI – FIXED
 * Divi theme builder custom page template layout for search page breaking the search result layout – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.7 - 2021-01-13 =
+= GeoDirectory v2.1.0.7 - 2021-01-13 =
 * OpenStreetMap routing add more languages support including Russian language – CHANGED
 * Listing sets CPT default image instead of category default image as fallback – FIXED
 * Listing generate image alt attribute when empty to prevent web accessibility issue – CHANGED
@@ -833,7 +879,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Option added to allow to add listing outside default city – ADDED
 * Clear existing map route when searched with a new route – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.6 - 2020-12-11 =
+= GeoDirectory v2.1.0.6 - 2020-12-11 =
 * Detail page image slider is not working with Divi theme – FIXED
 * Default category always shows first option selected with Bootstrap style – FIXED
 * Unable to translate street field default placeholder – FIXED
@@ -847,7 +893,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Multiselect checkbox field with AUI is not working in add listing – FIXED
 * GD Listings pagination next page link is not working with AUI style – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.5 - 2020-11-12 =
+= GeoDirectory v2.1.0.5 - 2020-11-12 =
 * JavaScript error breaks Divi visual builder when bootstrap style enabled – FIXED
 * Edit image title/caption is not working in backend edit post page – FIXED
 * Lightbox gallery on mobile can vertically stretch images – FIXED
@@ -862,7 +908,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Fix import csv error “Sorry, this file type is not permitted for security reasons.” – FIXED
 * Near search not working when lazy load map active and no map on the page – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.4 - 2020-10-27 =
+= GeoDirectory v2.1.0.4 - 2020-10-27 =
 * Load categories on map via AJAX – CHANGED
 * Map with full page width shows scroll bar when toggle categories – FIXED
 * OpenStreetMap add touchZoom map option – ADDED
@@ -874,12 +920,12 @@ TEXT field DB column data type does not change when data type changes in field s
 * Package category limit validation is not working – FIXED
 * OpenStreetMap disable single finger dragging on touch devices – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.1.0.3 - 2020-10-14 =
+= GeoDirectory v2.1.0.3 - 2020-10-14 =
 * Kleo & Listimia themes not compatible with new AUI styles, revert to legacy styles if active – FIXED
 * Hide latitude/longitude still shows field labels – FIXED
 * Business Hours field input mobile compatibility – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.2 - 2020-10-12 =
+= GeoDirectory v2.1.0.2 - 2020-10-12 =
 * Sort by options in GD > Listings widget not updating with post type change – FIXED
 * Hummingbird object cache does not clears feature image cache – FIXED
 * Post distance is not showing rounded value – FIXED
@@ -890,7 +936,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Lazyload map category images natively – CHANGED
 * Category widget CPT switcher not retaining all AUI styles on AJAX load – FIXED
 
-= GeoDirectory Business Directory Plugin v2.1.0.0 - 2020-10-08 =
+= GeoDirectory v2.1.0.0 - 2020-10-08 =
 * AyeCode UI Bootstrap design – ADDED
 * GD Archive template not rendered correctly for Enfold Builder – FIXED
 * Only main image rotated if needed, smaller sizes fail to rotate based on metadata – FIXED
@@ -904,23 +950,23 @@ TEXT field DB column data type does not change when data type changes in field s
 * Lazy Load map feature added – ADDED
 * Events – upcoming filter not working on Best of widget – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.101 - 2020-08-27 =
+= GeoDirectory v2.0.0.101 - 2020-08-27 =
 * Elementor dynamic tag style is not working with Elementor v3 – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.100 - 2020-08-26 =
+= GeoDirectory v2.0.0.100 - 2020-08-26 =
 * Scroll to sticky map jumps the page – FIXED
 * Allow %%category%% & %%in_category%% on search page meta titles – CHANGED
 * Set viewport width & height in mshots screenshot generator for images – CHANGED
 * Resize marker does not supports .svg images – FIXED
 * Update to Elementor 3.x brakes archive pages – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.99 - 2020-08-11 =
+= GeoDirectory v2.0.0.99 - 2020-08-11 =
 * Hide frontpage & blog page from select GD pages dropdown list – CHANGED
 * WordPress v5.5 compatibility changes – CHANGED
 * Yoast SEO 14+ renders single listing as a noindex if all pages set to noindex – FIXED
 * Clear LeafLet deprecated warnings – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.98 - 2020-07-30=
+= GeoDirectory v2.0.0.98 - 2020-07-30=
 * OpenStreetMap don’t populates region for Bermuda – FIXED
 * GD Listings filter posts by current category/tag – ADDED
 * Unable to select exact time in timepicker on touch screen device – FIXED
@@ -930,7 +976,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Limit max. number of CPT posts per user – ADDED
 * Leaflet map JavaScript library updated to 1.6.0 – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.97 - 2020-07-16 =
+= GeoDirectory v2.0.0.97 - 2020-07-16 =
 * Adjust timezone for listings saved with different offset for same timezone – FIXED
 * Allow to setup separate add listing page for each CPT – ADDED
 * Rank Math breadcrumb shows multiple categories on detail page – FIXED
@@ -944,7 +990,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Business Hours UI changes for small screen devices – CHANGED
 * GD Listings pagination on detail page don’t filter category – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.96 - 2020-07-1 =
+= GeoDirectory v2.0.0.96 - 2020-07-1 =
 * Option added to make zip/post code as a required field – FIXED
 * The Open Graph image does not work from geodirectory categories – FIXED
 * Skip duplicate slug checking for WP post categories & tags – CHANGED
@@ -961,7 +1007,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Text changes for Elementor Template Publish Settings – CHANGED
 * Add Filter to change submit listing button text – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.95 - 2020-06-9 =
+= GeoDirectory v2.0.0.95 - 2020-06-9 =
 * Changes for Ninja Forms fix related to API requests – CHANGED
 * [gd_post_meta] add support for default category & post status – ADDED
 * [gd_post_meta] allow option to show icon only – ADDED
@@ -978,7 +1024,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * GD custom field SEO variables not working in Yoast meta title & description – FIXED
 * Warning added to setting `Allow posting without logging in` when WP Engine hosting is used that an extra step is needed – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.94 - 2020-05-20 =
+= GeoDirectory v2.0.0.94 - 2020-05-20 =
 * Image lightbox can show image id if title is empty – FIXED
 * Switching package shows all images instead of package image limit – FIXED
 * Able to set default zoom level on add listing page map – ADDED
@@ -991,7 +1037,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * select2 dropdown style conflict after Yoast 14.1 – FIXED
 * Constrain the proportions on preview of uploaded image – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.93 - 2020-05-12 =
+= GeoDirectory v2.0.0.93 - 2020-05-12 =
 * Elementor archive items not always given an ID so sometime map is not limited to current listings – FIXED
 * Image title & caption with apostrophes shows slash after saved – FIXED
 * Elementor social icons phone number displays even when empty – FIXED
@@ -1005,13 +1051,13 @@ TEXT field DB column data type does not change when data type changes in field s
 * Form containing email & password fields has unique id – FIXED
 * Add body class geodir-page-cpt-POST_TYPE on search page – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.92 - 2020-05-1 =
+= GeoDirectory v2.0.0.92 - 2020-05-1 =
 * Static map sometimes not resizing on mobile view – FIXED
 * Fix recent review filter by location – FIXED
 * Rank Math sitemap shows 404 error after each GeoDirectory plugin update – FIXED
 * Yoast SEO v14.4 compatibility changes – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.91 - 2020-04-30 =
+= GeoDirectory v2.0.0.91 - 2020-04-30 =
 * Category font awesome icons have extra fas class on output which break few icons – FIXED
 * Post badge widget shows excluded fields from package – FIELD
 * GD Archive map with elementor loop might not filter markers if map is before loop – FIXED
@@ -1021,14 +1067,14 @@ TEXT field DB column data type does not change when data type changes in field s
 * Option added to restrict user to submit one review per post – ADDED
 * Yoast SEO v14.x compatibility changes – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.90 - 2020-04-22 =
+= GeoDirectory v2.0.0.90 - 2020-04-22 =
 * Customize map popup template for the post type – ADDED
 * Detail page tabs & dropdown is not working on mobile device – FIXED
 * GD > Listings widget elementor skin select not working – FIXED
 * Use default location offset as a business hours default offset – CHANGED
 * Response header shows 404 status when on results found on GD search page – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.89 - 2020-04-16 =
+= GeoDirectory v2.0.0.89 - 2020-04-16 =
 * Badge shortcode for file field %%input%% return file array – FIXED
 * Yoast SEO OpenGraph meta not working on GD pages – FIXED
 * Elementor Pro Utils class moved which can cause errors in older vers of Elementor – FIXED
@@ -1036,16 +1082,16 @@ TEXT field DB column data type does not change when data type changes in field s
 * Elementor Star Rating needs to be rounded to one decimal place – FIXED
 * Elementor CSS hide conditions now remove content instead of just hiding with CSS – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.88 - 2020-04-14 =
+= GeoDirectory v2.0.0.88 - 2020-04-14 =
 * Comment images can now be used in Elementor Pro galleries – ADDED
 * Post Images widget can show logo if not specifically set not to – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.87 - 2020-04-10 =
+= GeoDirectory v2.0.0.87 - 2020-04-10 =
 * Allow show / hide categories in GD > Categories widget – ADDED
 * Incorrect validation message attribute on url type custom fields – FIXED
 * GD > Listings widget can now use Elementor Pro Archive item template – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.85 - 2020-04-08 =
+= GeoDirectory v2.0.0.85 - 2020-04-08 =
 * Embed post not working for GD listing – FIXED
 * Add address fields in post meta keys list – ADDED
 * [gd_cpt_meta] widget/shortcode added to show cpt meta title, meta description, description, image etc – ADDED
@@ -1055,7 +1101,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Elementor CSS Class display options to be able to hide content dependent on field values – ADDED
 * Elementor templates now updated via API call – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.84 - 2020-04-02 =
+= GeoDirectory v2.0.0.84 - 2020-04-02 =
 * Listing Widget – Exclude Current Post – FIXED
 * GD title is not working on beaver themer archive template – FIXED
 * Font awesome settings icons updated to 5.13.0- UPDATED
@@ -1075,12 +1121,12 @@ TEXT field DB column data type does not change when data type changes in field s
 * Save to favorites now has custom color and icon options – ADDED
 * A couple of simple Elementor templates added for testing – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.83 - 2020-03-23 =
+= GeoDirectory v2.0.0.83 - 2020-03-23 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) – ADDED
 * New temp_closed pre-defined field for setting listing as temporarily closed – ADDED
 * Set business hours as closed and show a business closed message on the details page if temp_closed is set – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.82 - 2020-03-21 =
+= GeoDirectory v2.0.0.82 - 2020-03-21 =
 * Added GenerateBlocks plugin compatibility – ADDED
 * Search with category and tag keyword combination not showing correct results – FIXED
 * Avada theme blog global sidebar issue – FIXED
@@ -1097,7 +1143,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Changes for scheme Event Status – CHANGED
 * Image function can add wrong sizes to image tag – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.81 - 2020-03-04 =
+= GeoDirectory v2.0.0.81 - 2020-03-04 =
 * Remove title/meta-variables not related to location page – CHANGED
 * Translation missing in OSM map routing search input description – FIXED
 * Style issues on iphone – FIXED
@@ -1107,7 +1153,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Near search not clearing GPS when only core is active – FIXED
 * Show “time ago” for post date – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.80 - 2020-02-27 =
+= GeoDirectory v2.0.0.80 - 2020-02-27 =
 * Unable to save empty value for date field – FIXED
 * Porto theme compatibility – FIXED
 * Export post edit date value in CSV – ADDED
@@ -1115,21 +1161,21 @@ TEXT field DB column data type does not change when data type changes in field s
 * Genesis theme simple menus & simple sidebars compatibility – ADDED
 * Page Builder Framework theme compatibility – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.79 - 2020-02-15 =
+= GeoDirectory v2.0.0.79 - 2020-02-15 =
 * OceanWP theme & Elementor plugin compatibility – FIXED
 * Ninja Forms still have not fixed their bug, we have added a more permanent fix until they fix it – FIXED
 * Recipe schema option added – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.77 - 2020-02-12 =
+= GeoDirectory v2.0.0.77 - 2020-02-12 =
 * Avada v6.2 theme compatibility – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.76 - 2020-02-06 =
+= GeoDirectory v2.0.0.76 - 2020-02-06 =
 * Location page og:url for rank math – FIXED
 * File field shows required field error twice – FIXED
 * GD Listings widgets should show pending listings on author page – CHANGED
 * Ninja Forms recent update breaks maps & API requests – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.75 - 2020-01-29 =
+= GeoDirectory v2.0.0.75 - 2020-01-29 =
 * Longitude validation fails to validate longitude with minus sign – FIXED
 * Static map loads Google Map API even OSM API is enabled – FIXED
 * Show formatted post date & post modified date in a badge – ADDED
@@ -1144,14 +1190,14 @@ TEXT field DB column data type does not change when data type changes in field s
 * archive map show all posts param not working- FIXED
 * Fix class name typo for geodir-dashboard class – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.74 - 2019-12-19 =
+= GeoDirectory v2.0.0.74 - 2019-12-19 =
 * Ninja Forms bug can cause PHP warnings on search page – TEMP FIX ADDED
 * Map marker popup is not working for non-logged users with WP 5.3.1 – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.73 - 2019-12-18 =
+= GeoDirectory v2.0.0.73 - 2019-12-18 =
 * Map marker popup is not working for non-logged users with WP 5.3.1 – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.72 - 2019-12-14 =
+= GeoDirectory v2.0.0.72 - 2019-12-14 =
 * REST API rating stars & images upload not working – ADDED
 * Elementor archive title element not rendering correct title on GD pages – FIXED
 * Not able to setup GD search page with recent Divi page builder – FIXED
@@ -1161,17 +1207,17 @@ TEXT field DB column data type does not change when data type changes in field s
 * Post content shortcode looping when Newspaper theme & tagDiv addons active – FIXED
 * Ninja Forms bug can cause PHP warnings to show in API response which can break some maps functionality – TEMP FIX ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.70 - 2019-11-20 =
+= GeoDirectory v2.0.0.70 - 2019-11-20 =
 * REST API allow search posts by GPS, IP and near address – ADDED
 * GD Search Themer Layout overwrites the WordPress search page – FIXED
 * Decode special character in email title – FIXED
 * Limit embed wrap to videos – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.69 - 2019-11-11 =
+= GeoDirectory v2.0.0.69 - 2019-11-11 =
 * Fixed some W3 validation issues – FIXED
 * Admin tooltips can break image upload buttons – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.68 - 2019-10-31 =
+= GeoDirectory v2.0.0.68 - 2019-10-31 =
 * Validate register user during add listing from frontend – FIXED
 * Enfold theme default layout & sidebar settings is not working – FIXED
 * WPML translation not working for strings defined via variable – FIXED
@@ -1189,7 +1235,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Ninja contact form sometimes not finding the post id and email fails – FIXED
 * Better integration with Fusion builder, all items now also fusion items – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.67 - 2019-09-17 =
+= GeoDirectory v2.0.0.67 - 2019-09-17 =
 * Fail to save feature image for new listing when post revision is enabled – FIXED
 * Post link not working in email sent to admin on post edit – FIXED
 * Post badge does not supports category and tags – FIXED
@@ -1208,7 +1254,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Enfold theme builder color section not working on GD template – FIXED
 * Custom field option values always shows option uppercase first – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.66 - 2019-08-19 =
+= GeoDirectory v2.0.0.66 - 2019-08-19 =
 * GD post favourites widget issue for icon option – FIXED
 * Timezone API requests exposes the API key – FIXED
 * Setup wizard moved to later hook so is_block_editor() method can be used – FIXED
@@ -1228,7 +1274,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * The7 theme compatibility for GD pages – FIXED
 * Ninja forms widget now has option to output the form direct, can be used in sidebar or in tab – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.65 - 2019-07-30 =
+= GeoDirectory v2.0.0.65 - 2019-07-30 =
 * Jarida theme compatibility for GD page sidebars – FIXED
 * Business hours timepicker translation not working on first load – FIXED
 * GeneratePress theme not showing correct SEO meta on detail page – FIXED
@@ -1243,7 +1289,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Helper function to check if a given listing has a custom field – ADDED
 * Rank Math SEO plugin compatibility settings – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.64 - 2019-07-10 =
+= GeoDirectory v2.0.0.64 - 2019-07-10 =
 * Beaver Builder content does not work for archive item template – FIXED
 * Autocomplete search result selection looses street number for some locations – FIXED
 * Option added to add Geocoding API key – ADDED
@@ -1257,7 +1303,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Changes for location queries for GPS position – CHANGED
 * Post SMTP plugin conflicts with GD post save – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.63 - 2019-06-27 =
+= GeoDirectory v2.0.0.63 - 2019-06-27 =
 * Image import for old posts can set the wrong image url for the featured image – FIXED
 * Ability to add captions to the images slider – ADDED
 * Recent reviews widget does not display the correct number of reviews – FIXED
@@ -1279,13 +1325,13 @@ TEXT field DB column data type does not change when data type changes in field s
 * New GeoDir_Hints class introduced which will show setup hints to admins throughout the site – ADDED
 * Some WP_POST_REVISIONS settings can cause issues with first save on post added from wp-admin – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.62 - 2019-06-06 =
+= GeoDirectory v2.0.0.62 - 2019-06-06 =
 * GD Archive pages not rendering shortcodes when Elementor is active – FIXED
 * Ratings in listing view should be on its own line if placed after a gd_post_badge – CHANGED
 * Location filter enabled on location page default content gd_listings – CHANGED
 * Default view for archive page on install changed to Grid view 2 – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.61 - 2019-06-05 =
+= GeoDirectory v2.0.0.61 - 2019-06-05 =
 * Polifill for CSS object-fit in browsers that don’t support it – Added
 * Prevent saving custom fields found in array of standard fields – ADDED
 * Optional Address line 2 field added, can be enabled under address field – ADDED
@@ -1314,7 +1360,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Category font awesome icons have extra fas class on output which can break brands – FIXED
 * Category widget not respecting max_level param – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.59 - 2019-05-16 =
+= GeoDirectory v2.0.0.59 - 2019-05-16 =
 * GD Listings widget title not working with pagination – FIXED
 * Some fields are not stripping slashes – FIXED
 * Include post date in exported files – ADDED
@@ -1326,7 +1372,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Post images gallery has empty whitespace on the right in mobile – FIXED
 * Business hours default offset should not account for DST – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.58 - 2019-05-09 =
+= GeoDirectory v2.0.0.58 - 2019-05-09 =
 * Sometimes distance value not showing on search page – FIXED
 * Search with zip returns wrong address with OpenStreetMap – FIXED
 * Badge not working for address field – FIXED
@@ -1338,12 +1384,12 @@ TEXT field DB column data type does not change when data type changes in field s
 * Class geodir-featured added to body class if post is featured – ADDED
 * Under certain settings configurations a user without editor privileges can set post status to revision – SECURITY
 
-= GeoDirectory Business Directory Plugin v2.0.0.57 - 2019-05-01 =
+= GeoDirectory v2.0.0.57 - 2019-05-01 =
 * Image extension with uppercase not showing in backend – FIXED
 * Recently viewed widget can break single page slider in some cases – FIXED
 * Recently viewed widget setting added to load slider script if archive item has slider – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.56 - 2019-04-29 =
+= GeoDirectory v2.0.0.56 - 2019-04-29 =
 * Genesis theme not using h1 tags for archive page titles – FIXED
 * GD SEO titles should still be used even if Yoast is installed – CHANGED
 * Update jQuery FlexSlider to v2.0.2 – CHANGED
@@ -1384,7 +1430,7 @@ TEXT field DB column data type does not change when data type changes in field s
 * Issue in rescue old tags url to prevent 404 error – FIXED
 * Search page is broken when Flatsome theme active – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.55 - 2019-04-05 =
+= GeoDirectory v2.0.0.55 - 2019-04-05 =
 * “Elvyre – Retina Ready WordPress Theme” layout compatibility for detail & archive pages – ADDED
 * Geodir_Session class called in other addons can cause issues on frontend before upgrade – FIXED
 * Transparent image multiratings not displaying right on less than full score – FIXED
@@ -1393,24 +1439,24 @@ TEXT field DB column data type does not change when data type changes in field s
 * OpenStreetMap map icon position not relative to zoom level – FIXED
 * Conversion script can set categories to select instead of multiselect – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.54 - 2019-04-03 =
+= GeoDirectory v2.0.0.54 - 2019-04-03 =
 * Ninja Form looses post id and shows incorrect post title – FIXED
 * Added some more deprecated functions to prevent undefined function errors – ADDED
 * Update warning text added to readme change log section – ADDED
 * Changed .hidden class to .gd-hidden to prevent conflicts – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.53 - 2019-04-02 =
+= GeoDirectory v2.0.0.53 - 2019-04-02 =
 * Post author meta info missing closing wrapper div – FIXED
 * Meta excerpt not being trimmed, now trimmed to default excerpt length of 55 words – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.52 - 2019-04-02 =
+= GeoDirectory v2.0.0.52 - 2019-04-02 =
 * Added some deprecated functions to prevent re-declare function error after update – FIXED
 * Bumped PHP min version to 5.6 (new WP standard) – INFO
 
-= GeoDirectory Business Directory Plugin v2.0.0.51 - 2019-04-02 =
+= GeoDirectory v2.0.0.51 - 2019-04-02 =
 * First release of v2 on wp.org – INFO
 
-= GeoDirectory Business Directory Plugin v2.0.0.50 - 
+= GeoDirectory v2.0.0.50 - 
 “Clear version numbers” tool should clear countries db version – ADDED
 GD Listings block advanced settings breaks due to paging settings – FIXED
 GD Listings view all link not working if multiple categories set – FIXED
@@ -1423,7 +1469,7 @@ Avada theme not using GD titles – FIXED
 Recently viewed widget not checking for deleted post IDs – FIXED
 Child fields disappears after saving fieldset – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.49 =
+= GeoDirectory v2.0.0.49 =
 Front end author actions – After delete, page is 404 – FIXED
 No map icon validation on edit cat – FIXED
 Rating input not working from admin area edit comment screen – FIXED
@@ -1463,7 +1509,7 @@ Some standard post meta added to GD post meta widget like, post_author, post_dat
 v1 to v2 conversion now gives the option to downgrade back to v1 if customer is not ready yet – ADDED
 Allow business hours input format to use WP time format settings – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.48 =
+= GeoDirectory v2.0.0.48 =
 Customify theme page layout compatibility settings added – ADDED
 Ninja Forms conflicts backend on add/edit pages – FIXED
 Listings + Location pages shows extra comma in meta title – FIXED
@@ -1474,13 +1520,13 @@ Enfold theme page layout compatibility settings added – ADDED
 Kleo theme page layout compatibility settings added – ADDED
 Genesis theme page layout compatibility settings added – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.47 =
+= GeoDirectory v2.0.0.47 =
 Edit post permalink button missing so not able to edit single permalink – FIXED
 Radio button and text overlap on add listing page – FIXED
 Twitter feed custom field no longer working – FIXED
 Latest compatibility settings caused issue with some builders – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.46 =
+= GeoDirectory v2.0.0.46 =
 Some custom fields should store is_default = 0 during v1 to v2 conversion – FIXED
 Map markers not loading on tags page when show all posts enabled – FIXED
 _x() does not translates string – FIXED
@@ -1512,7 +1558,7 @@ Font awesome settings icons updated to 5.7.2 – UPDATED
 Beaver Builder not working on search page – FIXED
 Option added in textarea fields to allow embed media urls – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.45 =
+= GeoDirectory v2.0.0.45 =
 Listing without author assigned always shows author actions widget – FIXED
 Video not rendering from video link – FIXED
 Post preview not showing new images added – FIXED
@@ -1535,7 +1581,7 @@ X theme archive titles not working – FIXED
 API for posts not filtering for location params – FIXED
 Tags with spaces can now be searched for in quotes ex: “Sample Tags” – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.44 =
+= GeoDirectory v2.0.0.44 =
 Astra theme archive page layout compatibility – ADDED
 Astra theme GD search page meta title setting not working – FIXED
 Load default template if page is 404 – FIXED
@@ -1567,12 +1613,12 @@ the7 theme Search page not working due to the_content filter and current_post va
 Pricing Manager can cause no post author for posting while logged out – FIXED
 GD Extension screen now fully enabled, with our WP Easy Updates, any addon or theme can be installed with just your membership key – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.43 =
+= GeoDirectory v2.0.0.43 =
 Post badge and is_empty check not working in some cases – FIXED
 Post badge post_class now also adds class with condition – ADDED
 Permalinks category base now required to keep permalinks to WordPress standards and avoid conflicts – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.42 =
+= GeoDirectory v2.0.0.42 =
 Selecting detail custom page template shows comment box twice – FIXED
 Added editor styles to help Gutenberg Blocks UI – ADDED
 Newly added Blocks have checkbox values ticked by default even if not set to do so – FIXED
@@ -1586,14 +1632,14 @@ Added geodirectory-single.php as option to override single template – ADDED
 Post badge now has option to open link in new window and input or class wrapper – ADDED
 Changes for Marker Cluster addon v2 – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.41 =
+= GeoDirectory v2.0.0.41 =
 GD Listings widget sorting not showing custom sorting options – FIXED
 Category import does not assign parent category – FIXED
 Full screen map not working properly – FIXED
 Archive item section block not working as its being wrapped in a div – FIXED
 Some changes for Elementor page builder compatibility added – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.40 =
+= GeoDirectory v2.0.0.40 =
 Font Awesome Setting class updated to check if url is CSS or JS – UPDATED
 Custom field icon output prefixing `fas` as a class which can break branding icons – FIXED
 CPT default image not being used as a fallback image – FIXED
@@ -1604,7 +1650,7 @@ Add srcset to lightbox images to allow it to user larger images if available –
 Changes for reCaptcha addon integration – ADDED
 Recently viewed widget/block/shortcode added that shows the listings the user has recently viewed – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.39 =
+= GeoDirectory v2.0.0.39 =
 Hook added to validate frontend add listing – ADDED
 Link posts data not converted during v1 to v2 conversion – FIXED
 Map pinpoint not working – FIXED
@@ -1615,7 +1661,7 @@ post_author option added in [gd_listings] to filter listings by author – ADDED
 [gd_output_location] shortcode not escaping square brackets – FIXED
 Font Awesome settings class added, now support both CSS and JS versions – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.38 =
+= GeoDirectory v2.0.0.38 =
 File upload limit issue – FIXED
 PHP allow_url_fopen = off may break import csv – FIXED
 Error checking if wp_insert_term fails during dummy data insertion – ADDED
@@ -1632,12 +1678,12 @@ First image of slider not loading srcset which can make it load the wrong size i
 WP5.0 changed hook name which made GD post types not editable from backend – FIXED
 Shortcode [gd_single_closed_text] depreciated, use [gd_notifications] instead – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.37 =
+= GeoDirectory v2.0.0.37 =
 If reviews not used in tabs then the #reviews anchor links no longer work – FIXED
 gd_listings related_to can still show the current listing – FIXED
 Import csv shows invalid csv file error – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.36 =
+= GeoDirectory v2.0.0.36 =
 v1 to v2 conversion instructions improved – UPDATED
 Edit add listing page not loading with Beaver Builder – FIXED
 Countries table lib checking empty on non variable – FIXED
@@ -1653,14 +1699,14 @@ Some title and meta SEO %%tags%% not showing – FIXED
 No way to change title separator for GD pages title – FIXED
 Map child categories show/hide toggle not working – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.34 =
+= GeoDirectory v2.0.0.34 =
 Added extra checks for pre_get_posts filters that were breaking some beaver builder template queries – CHANGED
 Status tool check is countries table is geodir prefixed when it should not – FIXED
 Search radius settings not filtering the results – FIXED
 Search can set lat/lon when not needed – FIXED
 Map popup CSS changes to allow content to fully scroll – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.33 =
+= GeoDirectory v2.0.0.33 =
 Image slider fade effect not floating the images left – FIXED
 Map widget now has option to use post map zoom and type set on add listing page – ADDED
 Options added to make authors post and favorites public or private – ADDED
@@ -1677,7 +1723,7 @@ Changes for payment manager compatibility – ADDED
 Details design setting using user email settings filter slug – FIXED
 Upgrade from v1->v2 could cause the add listing page to have tow add listing shortcodes – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.32 =
+= GeoDirectory v2.0.0.32 =
 Switching CPT on directory map not working – FIXED
 GD page template hierarchy not working with some themes and not following WP defaults – FIXED
 Added check for an fix for PHP bug #44780 for rendering timezone names wrong in +/-10 hours – FIXED
@@ -1685,7 +1731,7 @@ Changed for payment manager addon – CHANGED
 Revisions can not be removed by user if an admin has started a revision of the same post – FIXED
 Non-location cpt db table key error – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.30 =
+= GeoDirectory v2.0.0.30 =
 Comments count sometimes only updated on edit not initial save – FIXED
 Tags sometimes not searched for – FIXED
 WP_POST_REVISIONS disabled or limited can cause backend saving to fail on new post – FIXED
@@ -1695,7 +1741,7 @@ Leave comment link sometimes added to GD archive pages – FIXED
 Close comments on GD archive pages – CHANGED
 Categories widget/shortcode now uses max_count as the main limit and mac_count_child for sub cats – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.29 =
+= GeoDirectory v2.0.0.29 =
 Custom fields order can be broken if saved-moved-saved – FIXED
 Add listing shortcode using default CPT instead of selected one – FIXED
 Hiding the CPT on search can make advanced search use wrong post type – FIXED
@@ -1703,7 +1749,7 @@ Comment count can be cached when a new comment is posted – FIXED
 Added theme support options for top sidebar – ADDED
 Option added to maps widget to enable mouse-scroll zoom – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.28 =
+= GeoDirectory v2.0.0.28 =
 Search adds all terms to query if search field is blank – FIXED
 Category widget, hide icon option not working – FIXED
 Sort by options added to dummy data insert – ADDED
@@ -1711,7 +1757,7 @@ Only show sort option is there are more than one – CHANGED
 Deleted tag still displayed on the listing detail page – FIXED
 Options added to select archive, archive item & details pages for each cpt from the cpt settings – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.27 =
+= GeoDirectory v2.0.0.27 =
 Search not searching tags – FIXED
 Comments section can sometimes show on the search page – FIXED
 Show CPT selector options in search widget settings if more than one CPT exists – ADDED
@@ -1723,17 +1769,17 @@ Column looses the value after converting ENUM to TINYINT data type on upgrade �
 404 rescue function added to try and automatically redirect GD 404s to their new permalink url – ADDED
 Details page url can use wrong locations or category in url without showing a 404 – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.26 =
+= GeoDirectory v2.0.0.26 =
 GD > Listings widget can sometimes add “View All” links to other widgets – FIXED
 Changes for CPT addon compatibility – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.25 =
+= GeoDirectory v2.0.0.25 =
 is_slash() permalink method not working which could cause some urls to not end with a slash – FIXED
 Listings published from wp-admin can send wrong category in url of email to users – FIXED
 New post preview going to 404 for logged in users – FIXED
 Kleo theme not using GD titles – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.24 =
+= GeoDirectory v2.0.0.24 =
 Changing CPT slug does not change the slug in the search bar for API – FIXED
 Media table added `other_id` column which can be used to filter things quickly – ADDED
 Genesis theme archive pages broken if excerpt limited – FIXED
@@ -1741,19 +1787,19 @@ Favourites not showing on author page if the user is not the author – FIXED
 Will now auto use OSM if no Google API key is set – CHANGED
 Child terms should not contain the parent term slug – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.23 =
+= GeoDirectory v2.0.0.23 =
 Search page can sometimes show no title if no results – FIXED
 Single page SEO can now use any custom field by using the field key prefixed with an _underscore eg: %%_email%% – ADDED
 Changes for Ratings and CPTs addons – CHANGED
 Media not downloading all external media urls – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.22 =
+= GeoDirectory v2.0.0.22 =
 Business hours not taking into account daylight savings time (DST) – FIXED
 Inline quick save resets the location to default – FIXED
 Problems with permalinks that have no trialing slash – FIXED
 Added category font icon & font icon color values in api response – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.21 =
+= GeoDirectory v2.0.0.21 =
 Some dummy category icons not updated to FA5 – FIXED
 Installed dummy data type not reflected on settings screen – FIXED
 Don’t show add listing `we found a post` message if no main info has been added – CHANGED
@@ -1763,7 +1809,7 @@ Business hours now shows timezone input to be able to adjust manually – ADDED
 Author favs and listing links lead to 404 – FIXED
 Sorting not working if set as default – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.18 =
+= GeoDirectory v2.0.0.18 =
 Image slider widget not working on listing pages – FIXED
 Single image slider will now output as just an image – CHANGED
 Apple devices use different kind of apostrophe which does not work for search – FIXED
@@ -1777,7 +1823,7 @@ Added conversion script to be able to convert listings from v1 to v2 – ADDED
 Added support for Location Manager v2 beta – ADDED
 Added option to allow beta addons to be installed/updated via WP Easy Updates – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.16-rc =
+= GeoDirectory v2.0.0.16-rc =
 Updated from font-awesome v4 to v5 – CHANGED
 Rest api route & endpoints for fields – ADDED
 priceRange custom field added and schema output added – ADDED
@@ -1790,7 +1836,7 @@ WP Session removed – CHANGED
 Remove GeoDirectory data on uninstall if set to do so – ADDED
 WP_Country_Database Class implemented to replace own country DB table – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.14-beta =
+= GeoDirectory v2.0.0.14-beta =
 Map default language setting is not working for OpenStreetMap – FIXED
 GDPR compliance – ADDED
 Remove send to friend functionality as it against the GDPR policy – CHANGED
@@ -1811,7 +1857,7 @@ Sorting settings converted to new style to be more WP like – CHANGED
 Sorting settings refactored to use sub queries (delete and re-add sort options recommended) – ADDED
 OpenStreetMap populates wrong region for UK – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.13-beta =
+= GeoDirectory v2.0.0.13-beta =
 Page templates for building layouts now restricted from frontend viewing – CHANGED
 GD page settings now contains link to edit/view pages when set – ADDED
 Custom fields icon now has option to select font awesome icon from a list – ADDED
@@ -1832,13 +1878,13 @@ Details slider initial load height very tall, max-height set – CHANGED
 Review output given GD specific basic styles – ADDED
 Some CSS changes to simplify and improve the basics – CHANGED
 
-= GeoDirectory Business Directory Plugin v2.0.0.12-beta =
+= GeoDirectory v2.0.0.12-beta =
 Attachment table date_gmt field added – ADDED
 Widget show/hide settings improved for better UI – CHANGED
 Post meta widget refactored to give the `show` options more flexibility – CHANGED
 Tabs Layout section added to be able to drag/drop create the details page tabs – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.11-beta =
+= GeoDirectory v2.0.0.11-beta =
 gd_listings shortcode/widget sort_by can now use custom sort_by options – CHANGED
 Some predefined custom fields are single use only and now show a warning if attempting to add again – CHANGED
 Search still looks for featured column even if missing – FIXED
@@ -1850,7 +1896,7 @@ Email custom field not showing in map bubble if set to do so – FIXED
 Multiselect custom field not resizing DB varchar value on options change – FIXED
 General style and spelling corrections – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.10-beta =
+= GeoDirectory v2.0.0.10-beta =
 gd_map shortcode should not show “Enable marker cluster?” if plugin not active – FIXED
 Business Hours: add a text if place is closed whole day – ADDED
 Shortcode builder not working with WooCommerce products – FIXED
@@ -1862,7 +1908,7 @@ Shortcode builder not using 100% height on large displays – FIXED
 Category widget output slightly changed for title_tag – CHANGED
 Default image not checking for default category image – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.9-beta =
+= GeoDirectory v2.0.0.9-beta =
 Add listing page shows info might be lost even after save – FIXED
 Favorites not adding/removing due to var rename – FIXED
 Favorites not adding/removing in map info window – FIXED
@@ -1870,14 +1916,14 @@ Some custom fields not allowing sort by option – FIXED
 Added warning if changing default city when listings are present – ADDED
 Backend edit review rating missing – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.8-beta =
+= GeoDirectory v2.0.0.8-beta =
 Sorting options not working on archive pages – FIXED
 Schema markup updated and activated – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.7-beta =
+= GeoDirectory v2.0.0.7-beta =
 Ninja Forms template used wrong format for to field – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.6-beta =
+= GeoDirectory v2.0.0.6-beta =
 If categories are removed via quick edit we try to add default category – ADDED
 Quick edit screen breaks layout of columns – FIXED
 CPT settings, required toggle now shown as standard – CHANGED
@@ -1886,7 +1932,7 @@ CPT settings, opening one setting will now close all others – CHANGED
 Email output mailto spam prevention link not working – FIXED
 New setup wizard step added to install recommend plugins – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.5-beta =
+= GeoDirectory v2.0.0.5-beta =
 Double five star bars in dashboard activity box – FIXED
 Select2 updated to v4.0.5 – CHANGED
 Post badge feature implemented – CHANGED
@@ -1896,7 +1942,7 @@ WP dashboard recent GD reviews block – FIXED
 Ninja Forms can now be used to create contact forms and more (install wizard step remains) – ADDED
 KLEO theme deprecated_function problem – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.4-beta =
+= GeoDirectory v2.0.0.4-beta =
 Tooltips on CPT settings can become stuck when adding a new field – FIXED
 Search and archive pages, if no listings found, page is blank – FIXED
 Added developer settings section, added setting to disable advanced settings toggle – ADDED
@@ -1906,10 +1952,10 @@ Export button on FireFox causes page refresh which means no access to CSV – FI
 We now add a uncategorized category on install so you can go straight from the install wizard to add a new post – ADDED
 Changing CPT name does not change taxonomies names – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.3-beta =
+= GeoDirectory v2.0.0.3-beta =
 Shortcode builder button added to pages/posts – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.2-beta =
+= GeoDirectory v2.0.0.2-beta =
 Business Hours not working on map popup – FIXED
 Backend author field should show all users not only authors – FIXED
 Backend Directory add listing has no validation – FIXED
@@ -1918,7 +1964,7 @@ submit_ip is varchar(20) which will not support IPv6 address – FIXED
 Tab description does not respect non-HTML line breaks – FIXED
 Added directory design setting to be able to change what page template file the directory details page uses for theme compatibility – ADDED
 
-= GeoDirectory Business Directory Plugin v2.0.0.1-beta =
+= GeoDirectory v2.0.0.1-beta =
 More then one image slider with same id on same page not working – FIXED
 Directory Reviews count not showing on listing – FIXED
 Category ID settings column too wide – FIXED
@@ -1926,7 +1972,7 @@ GD > Listings widget now used Archive item page template – FIXED
 CPT custom fields settings show unused save button – FIXED
 Directory Default location setting missing the “Set address on map” button – FIXED
 
-= GeoDirectory Business Directory Plugin v2.0.0.0-beta =
+= GeoDirectory v2.0.0.0-beta =
 Initial Business Directory Plugin BETA release – INFO
 
 = Older Changelogs =
