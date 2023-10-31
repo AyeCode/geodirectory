@@ -70,6 +70,7 @@ class GeoDir_SEO {
 		}
 
 		// SEOPress
+		add_filter( 'seopress_pro_breadcrumbs_crumbs', array( __CLASS__, 'seopress_pro_breadcrumbs_crumbs' ), 20, 1 );
 		add_filter( 'seopress_titles_title', array( __CLASS__ , 'replace_variables' ), 100, 1 );
 		add_filter( 'seopress_titles_desc', array( __CLASS__ , 'replace_variables' ), 100, 1 );
 		add_filter( 'seopress_social_og_title', array( __CLASS__ , 'replace_variables' ), 100, 1 );
@@ -1918,5 +1919,49 @@ class GeoDir_SEO {
 		}
 
 		return $query_args;
+	}
+
+	/**
+	 * Filter SEOPress breadcrumbs links.
+	 *
+	 * @since 2.3.30
+	 *
+	 * @param $crumbs
+	 *
+	 * @return mixed
+	 */
+	public static function seopress_pro_breadcrumbs_crumbs( $crumbs ) {
+		if ( ! empty( $crumbs ) ) {
+			if ( geodir_is_page('archive') || geodir_is_page('post_type') ) {
+				$post_type = geodir_get_current_posttype();
+				$cpt_link = get_post_type_archive_link( $post_type );
+				$post_type_object = get_post_type() == 'page' ? get_post_type_object( 'page' ) : array();
+
+				$_crumbs = array();
+
+				foreach ( $crumbs as $i => $crumb ) {
+					if ( ! empty( $crumb[1] ) && $crumb[1] == $cpt_link && ! empty( $crumbs[ $i + 1 ] ) && ! empty( $crumbs[ $i + 1 ][1] ) && $crumbs[ $i + 1 ][1] == $crumb[1] ) {
+						continue;
+					}
+
+					if ( ! empty( $post_type_object ) && ! empty( $crumb[0] ) && empty( $crumb[1] ) && $crumb[0] == wp_strip_all_tags( $post_type_object->labels->name ) ) {
+						if ( ! empty( $crumbs[ $i + 1 ] ) && ! empty( $crumbs[ $i + 1 ][1] ) && $crumbs[ $i + 1 ][1] == $cpt_link ) {
+							continue;
+						}
+
+						$_crumbs[]= array(
+							wp_strip_all_tags( geodir_post_type_name( $post_type, true ) ),
+							$cpt_link
+						);
+					} else {
+						$_crumbs[] = $crumb;
+					}
+				}
+
+				$crumbs = $_crumbs;
+			}
+		}
+
+		return $crumbs;
 	}
 }
