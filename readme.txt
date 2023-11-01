@@ -309,6 +309,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Elementor Loop Carousel don't show post category image - FIXED
 * OpenStreetMap don't populates region for Romania – FIXED
 * SEOPress breadcrumbs compatibility - ADDED
+* Compatibility with Astra v4.2 - FIXED
 
 = GeoDirectory v2.3.29 - 2023-10-18 =
 * Hook added to filter display day name in business hours slot output - ADDED

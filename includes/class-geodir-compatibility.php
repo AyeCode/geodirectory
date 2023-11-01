@@ -110,6 +110,8 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_filter( 'astra_page_layout', array( __CLASS__, 'astra_page_layout' ) );
 		add_filter( 'astra_get_content_layout', array( __CLASS__, 'astra_get_content_layout' ) );
+		add_filter( 'astra_is_content_layout_boxed', array( __CLASS__, 'astra_is_content_layout_boxed' ), 10, 1 );
+		add_filter( 'astra_is_sidebar_layout_boxed', array( __CLASS__, 'astra_is_sidebar_layout_boxed' ), 10, 1 );
 		add_action( 'wp', array( __CLASS__, 'astra_wp' ), 20, 1 );
 
 		// Astra Theme v4.1 compatibility
@@ -226,13 +228,22 @@ class GeoDir_Compatibility {
 				'ast-hfb-above-header-display',
 				'ast-hfb-below-header-display',
 				'footer-adv-display',
+				'footer-sml-layout',
 				'header-above-stick-meta',
 				'header-below-stick-meta',
 				'header-main-stick-meta',
 				'stick-header-meta',
 				'sticky-header-on-devices',
 				'sticky-header-style',
-				'sticky-hide-on-scroll'
+				'sticky-hide-on-scroll',
+				'theme-transparent-header-meta',
+				'ast-page-background-enabled',
+				'ast-page-background-meta',
+				'ast-banner-title-visibility',
+				'ast-main-header-display',
+				'site-post-title',
+				'ast-breadcrumbs-content',
+				'ast-featured-img'
 			);
 
 			foreach ( $astra_meta as $meta_key ) {
@@ -1015,6 +1026,7 @@ class GeoDir_Compatibility {
 			 || ( defined( 'ZEEN_ENGINE_VER' ) && ( strpos( $meta_key, 'tipi_' ) === 0 || strpos( $meta_key, 'zeen_' ) === 0 || strpos( $meta_key, '_menu_zeen_' ) === 0 ) ) // Zeen Tipi Builder
 			 || ( defined( 'KADENCE_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, '_kad_' ) === 0 ) ) // Kadence theme
 			 || ( function_exists( 'znhg_kallyas_theme_config' ) && ( strpos( $meta_key, 'zn-' ) === 0 || strpos( $meta_key, 'zn_' ) === 0 || strpos( $meta_key, '_zn_' ) === 0 ) || in_array( $meta_key, array( 'show_header', 'show_footer' ) ) ) // Kallyas theme Zion Builder
+			 || ( defined( 'ASTRA_THEME_VERSION' ) && ( strpos( $meta_key, 'ast-' ) === 0 ) ) // Astra theme
 			 ) && geodir_is_gd_post_type( $object_post_type ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( $object_post_type );
@@ -1188,8 +1200,28 @@ class GeoDir_Compatibility {
 		if ( $page_id = self::gd_page_id() ) {
 			$content_layout = get_post_meta( $page_id, 'site-content-layout', true );
 
-			if ( 'default' == $content_layout || empty( $content_layout ) ) {
-				$content_layout = 'boxed-container';
+			if ( function_exists( 'astra_toggle_layout' ) ) {
+				if ( empty( $content_layout ) || $content_layout == 'default' ) {
+					$content_layout = get_post_meta( $page_id, 'ast-site-content-layout', true );
+				}
+
+				// If post meta value is present, apply new layout option.
+				if ( ! ( empty( $content_layout ) || $content_layout == 'default' ) ) {
+					$content_layout = astra_toggle_layout( 'ast-site-content-layout', 'meta', $page_id );
+				}
+
+				if ( ( empty( $content_layout ) || $content_layout == 'default' ) && ( geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) ) && ( $post_type = geodir_get_current_posttype() ) ) {
+					$content_layout = astra_toggle_layout( 'archive-' . $post_type . '-ast-content-layout', 'archive', false );
+				}
+
+				if ( empty( $content_layout ) || $content_layout == 'default' ) {
+					// Get the GLOBAL content layout value.
+					$content_layout = astra_toggle_layout( 'ast-site-content-layout', 'global' );
+				}
+			} else {
+				if ( 'default' == $content_layout || empty( $content_layout ) ) {
+					$content_layout = 'boxed-container';
+				}
 			}
 
 			$layout = $content_layout;
@@ -1210,13 +1242,62 @@ class GeoDir_Compatibility {
 			$page_layout = get_post_meta( $page_id, 'site-sidebar-layout', true );
 
 			if ( 'default' == $page_layout || empty( $page_layout ) ) {
-				$page_layout = 'no-sidebar';
+				// Get the global sidebar value.
+				$page_layout = astra_get_option( 'site-sidebar-layout' );
 			}
 
 			$layout = $page_layout;
 		}
 
 		return $layout;
+	}
+
+	/**
+	 * Filter Astra content style.
+	 *
+	 * @since 2.3.30
+	 *
+	 * @param bool $is_content_boxed True when boxed.
+	 * @return bool
+	 */
+	public static function astra_is_content_layout_boxed( $is_content_boxed ) {
+		if ( $page_id = self::gd_page_id() ) {
+			$meta_content_style = get_post_meta( $page_id, 'site-content-style', true );
+
+			if ( ! ( empty( $meta_content_style ) || 'default' === $meta_content_style ) ) {
+				if ( 'boxed' === $meta_content_style ) {
+					$is_content_boxed = true;
+				} else {
+					$is_content_boxed = false;
+				}
+			}
+		}
+
+		return $is_content_boxed;
+	}
+
+	/**
+	 * Filter Astra sidebar style.
+	 *
+	 * @since 2.3.30
+	 *
+	 * @param bool $is_sidebar_boxed True when boxed.
+	 * @return bool
+	 */
+	public static function astra_is_sidebar_layout_boxed( $is_sidebar_boxed ) {
+		if ( $page_id = self::gd_page_id() ) {
+			$meta_sidebar_style = get_post_meta( $page_id, 'site-sidebar-style', true );
+
+			if ( ! ( empty( $meta_sidebar_style ) || 'default' === $meta_sidebar_style ) ) {
+				if ( 'boxed' === $meta_sidebar_style ) {
+					$is_sidebar_boxed = true;
+				} else {
+					$is_sidebar_boxed = false;
+				}
+			}
+		}
+
+		return $is_sidebar_boxed;
 	}
 
 	/**
