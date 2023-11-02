@@ -314,7 +314,7 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $instance = array(), $widget_args = array(), $content = '' ) {
-		global $gd_post, $post;
+		global $aui_bs5, $gd_post, $post;
 
 		$is_preview = $this->is_preview();
 
@@ -358,8 +358,6 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 		// ratios
 		$ratios = ! empty( $instance['ratio'] ) ? explode( '/', $instance['ratio'] ) : array( 50, 50 );
 
-		//      print_r( $ratios );
-
 		$listing_ratio = 'col-12 col-lg-6';
 		$map_ratio     = 'col-12 col-lg-6';
 		if ( 'map' === $instance['output'] || 'listings' === $instance['output'] ) {
@@ -385,13 +383,12 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 		$responsive_buttons = '';
 		if ( empty( $instance['output'] ) ) {
 			$responsive_buttons .= '<div class="d-lg-none mb-3">';
-			$responsive_buttons .= '<button class="btn btn-primary  gd-sa-button-map" onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' ); if (window.gdMaps == \'osm\') {jQuery.goMap.map._onResize();}else{jQuery(window).trigger(\'resize\'); }"> ' . __( 'Show Map', 'geodirectory' ) . ' <i class="fas fa-map-marked ' . ( $aui_bs5 ? 'ms-2' : 'ml-2' ) . '"></i></button>';
-			$responsive_buttons .= '<button class="btn btn-primary gd-sa-button-list d-none"  onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' ); if (window.gdMaps == \'osm\') {jQuery.goMap.map._onResize();}else{jQuery(window).trigger(\'resize\'); }">' . __( 'Show Listings', 'geodirectory' ) . ' <i class="fas fa-th-list ' . ( $aui_bs5 ? 'ms-2' : 'ml-2' ) . '"></i></button>';
+			$responsive_buttons .= '<button class="btn btn-primary w-100 gd-sa-button-map" onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' );if(!jQuery(this).hasClass(\'geodir-map-rendered\')){window.setTimeout(function(){if(jQuery.goMap.map){if(window.gdMaps==\'osm\'){jQuery.goMap.map._onResize();jQuery.goMap.map.invalidateSize()}else{google.maps.event.trigger(jQuery.goMap.map,\'resize\');}if(typeof keepBounds!=\'undefined\'&&keepBounds){jQuery.goMap.map.fitBounds(keepBounds);setZoom=jQuery.goMap.map.getZoom();if(setZoom>13){jQuery.goMap.map.setZoom(13)}}}},100);}jQuery(this).addClass(\'geodir-map-rendered\');"> ' . __( 'Show Map', 'geodirectory' ) . ' <i class="fas fa-map-marked ' . ( $aui_bs5 ? 'ms-2' : 'ml-2' ) . '"></i></button>';
+			$responsive_buttons .= '<button class="btn btn-primary w-100 gd-sa-button-list d-none"  onclick="jQuery( \'.gd-sa-list, .gd-sa-map, .gd-sa-button-map, .gd-sa-button-list\' ).toggleClass( \'d-none d-lg-block\' );jQuery(window).trigger(\'resize\');">' . __( 'Show Listings', 'geodirectory' ) . ' <i class="fas fa-th-list ' . ( $aui_bs5 ? 'ms-2' : 'ml-2' ) . '"></i></button>';
 			$responsive_buttons .= '</div>';
 		}
 
 		if ( empty( $instance['output'] ) ) {
-
 			// responsive buttons
 			$content .= '<div class="col col-12 gd-sa-buttons">' . $responsive_buttons . '</div>';
 
@@ -483,7 +480,7 @@ class GeoDir_Widget_Simple_Archive extends WP_Super_Duper {
 
 		$output = '';
 
-		// possition
+		// position
 		$position_args = '';
 		$position      = ! empty( $args['position'] ) ? esc_attr( $args['position'] ) : '';
 		$mb            = $type == 'favorite' ? 'n1' : '0';
