@@ -310,6 +310,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * OpenStreetMap don't populates region for Romania – FIXED
 * SEOPress breadcrumbs compatibility - ADDED
 * Compatibility with Astra v4.2 - FIXED
+* GD > Simple Archive - OSM map zoom issue on mobile - FIXED
 
 = GeoDirectory v2.3.29 - 2023-10-18 =
 * Hook added to filter display day name in business hours slot output - ADDED
