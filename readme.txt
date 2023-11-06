@@ -312,6 +312,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Compatibility with Astra v4.2 - FIXED
 * GD > Simple Archive - OSM map zoom issue on mobile - FIXED
 * Closed down notification is not working on FSE site - FIXED
+* Category map marker auto generation updated to use SVG if using Font Awesome using v6 - UPDATED
 
 = GeoDirectory v2.3.29 - 2023-10-18 =
 * Hook added to filter display day name in business hours slot output - ADDED

@@ -654,7 +654,7 @@ class GeoDir_Media {
 
 			// make sure its an image
 			$file_type = !empty($dangerously_set_filetype) ? $dangerously_set_filetype : wp_check_filetype(basename( parse_url( $url, PHP_URL_PATH ) ));
-			
+
 			// Set an array containing a list of acceptable formats
 			if ( ! empty( $file_type['ext'] ) && ! empty( $file_type['type'] ) && ( in_array( '*', $allowed_file_types ) || in_array( $file_type['type'], $allowed_file_types ) || in_array( strtolower ( $file_type['ext'] ), $allowed_file_types ) ) ) {
 			} else {
@@ -854,7 +854,7 @@ class GeoDir_Media {
 
 	/**
 	 * Get attachments by type.
-	 * 
+	 *
 	 * @param $post_id
 	 * @param mixed $type
 	 * @param string $limit
@@ -962,7 +962,7 @@ class GeoDir_Media {
 
 	/**
 	 * Get preview attachments by type.
-	 * 
+	 *
 	 * @param $post_id
 	 * @param mixed $type
 	 * @param string $limit
@@ -1126,7 +1126,7 @@ class GeoDir_Media {
 
 	/**
 	 * Delete files from the attachment table.
-	 * 
+	 *
 	 * @param $files
 	 */
 	public static function delete_file($files){
@@ -1170,7 +1170,7 @@ class GeoDir_Media {
 
 	/**
 	 * Update the revision images IDs to the parent post on save.
-	 * 
+	 *
 	 * @param $post_id
 	 * @param $revision_id
 	 */
