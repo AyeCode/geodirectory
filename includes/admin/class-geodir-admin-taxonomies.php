@@ -740,29 +740,90 @@ class GeoDir_Admin_Taxonomies {
         $cat_icon = array();
 
         if($icon && $color){
+
+	        $v6 = false;
+
+            $api_url = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/icon-stack?";
+
+	        if ( class_exists( 'WP_Font_Awesome_Settings' ) ) {
+		        $wp_font_awesome = WP_Font_Awesome_Settings::instance();
+		        $settings = $wp_font_awesome->get_settings();
+		        $version = $settings['version'];
+		        if( !$version || version_compare($version,'5.999','>')){
+			        $api_url = "https://mapmarker.io/api/v3/font-awesome/v6/icon-stack?";
+			        $v6 = true;
+		        }
+	        }
+
+
             $background = !empty($color) ? ltrim (sanitize_hex_color($color),'#') : 'ef5646';
             $fa_icon_parts = explode(" ",$icon);
             $fa_icon = !empty($fa_icon_parts[1]) ? sanitize_html_class($fa_icon_parts[0])." ".sanitize_html_class($fa_icon_parts[1]) : 'fas fa-star';
-            $icon_url = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/icon-stack?";
-            $icon_url .= "icon=".$fa_icon;
-            $icon_url .= "&size=50";
-            $icon_url .= "&color=fff";
-            $icon_url .= "&on=fas fa-map-marker";
-            $icon_url .= "&hoffset=0";
-            $icon_url .= "&voffset=-4";
-            // $icon_url .= "&iconSize=20"; //goes off center if you set a size
-            $icon_url .= "&oncolor=".$background;
 
-            $image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon,array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp'),array('ext'=>'png','type'=>'image/png') );
+	        if ( $v6 ) {
+		        $fa_icon = str_replace(
+			        array(
+				        'fas ',
+				        'far ',
+				        'fal ',
+				        'fad ',
+				        'fat ',
+                    ),
+			        array(
+				        'fa-solid ',
+				        'fa-regular ',
+				        'fa-light ',
+				        'fa-duotone ',
+				        'fa-thin ',
+                    ),
+			        $fa_icon
+		        );
+	        }
+            $icon_url = $api_url;
+            $icon_url .= "icon=".$fa_icon;
+            $icon_url .= $v6 ? "&size=40" : "&size=50";
+            $icon_url .= "&color=fff";
+            $icon_url .= $v6 ? '&on=fa-solid fa-location-pin' : "&on=fas fa-map-marker";
+            $icon_url .= "&hoffset=0";
+	        $icon_url .= $v6 ? "&voffset=-5" : "&voffset=-4";
+	        $icon_url .= $v6 ? "&iconsize=16" : "";
+	        $icon_url .= "&oncolor=".$background;
+
+
+            $remove_svg = false;
+	        if ( $v6 ) {
+
+                // temp allow SVG
+                $types = get_allowed_mime_types();
+		        if ( ! isset( $types['svg'] ) ) {$remove_svg = true;}
+		        add_filter('upload_mimes', function ( $mimes ) {
+			        $mimes['svg'] = 'image/svg';
+			        return $mimes;
+		        });
+
+		        $image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon,array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp', 'image/svg'),array('ext'=>'svg','type'=>'image/svg') );
+
+
+	        }else{
+		        $image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon,array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp'),array('ext'=>'png','type'=>'image/png') );
+
+	        }
 
             if(!empty($image['url'])){
                 $attachment_id = GeoDir_Media::set_uploaded_image_as_attachment($image);
                 if( $attachment_id ){
                     $cat_icon['id'] = $attachment_id;
                     $cat_icon['src'] = geodir_file_relative_url( $image['url'] );
-
                 }
             }
+
+	        // maybe remove
+	        if (  $remove_svg ) {
+		        add_filter('upload_mimes', function ( $mimes ) {
+			        unset($mimes['svg']);
+			        return $mimes;
+		        });
+	        }
         }
 
 
