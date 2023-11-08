@@ -22,5 +22,10 @@
     "ayecode/ayecode-connect-helper": "^1.0",
     "ayecode/wp-ayecode-ui": "^0.2"
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  }
 }

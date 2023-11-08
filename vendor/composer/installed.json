@@ -1,441 +1,460 @@
-[
-    {
-        "name": "ayecode/ayecode-connect-helper",
-        "version": "1.0.3",
-        "version_normalized": "1.0.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/ayecode-connect-helper.git",
-            "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/ayecode-connect-helper/zipball/1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
-            "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "*",
-            "squizlabs/php_codesniffer": "^3.2",
-            "wp-coding-standards/wpcs": "*"
-        },
-        "time": "2020-02-26T18:53:58+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "ayecode-connect-helper.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "Provides helper functionality for installing AyeCode Connect.",
-        "homepage": "https://github.com/AyeCode/ayecode-connect-helper",
-        "keywords": [
-            "AyeCode Connect",
-            "ayecode",
-            "wp"
-        ]
-    },
-    {
-        "name": "ayecode/wp-ayecode-ui",
-        "version": "0.2.0",
-        "version_normalized": "0.2.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-            "reference": "e84efbc7d23b96dc74d782a99645a69561775f31"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/e84efbc7d23b96dc74d782a99645a69561775f31",
-            "reference": "e84efbc7d23b96dc74d782a99645a69561775f31",
-            "shasum": ""
-        },
-        "time": "2023-10-12T13:04:18+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "ayecode-ui-loader.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "A Bootstrap UI for WordPress plugins and themes.",
-        "homepage": "https://github.com/AyeCode/wp-ayecode-ui",
-        "keywords": [
-            "ayecode",
-            "boot",
-            "bootstrap"
-        ]
-    },
-    {
-        "name": "ayecode/wp-country-database",
-        "version": "1.0.4",
-        "version_normalized": "1.0.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-country-database.git",
-            "reference": "c23ae6061fe373525ecd069a5069e376ed9b8178"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-country-database/zipball/c23ae6061fe373525ecd069a5069e376ed9b8178",
-            "reference": "c23ae6061fe373525ecd069a5069e376ed9b8178",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "*",
-            "squizlabs/php_codesniffer": "^3.2",
-            "wp-coding-standards/wpcs": "*"
-        },
-        "time": "2019-05-28T12:18:45+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "wp-country-database.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "A WordPress class that stores and retrieves world country information.",
-        "homepage": "https://github.com/AyeCode/wp-country-database",
-        "keywords": [
-            "countries",
-            "wordpress"
-        ]
-    },
-    {
-        "name": "ayecode/wp-deactivation-survey",
-        "version": "1.0.6",
-        "version_normalized": "1.0.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-deactivation-survey.git",
-            "reference": "4edfd24e58ee27ecb6bab08a4e15bed5dd012bda"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-deactivation-survey/zipball/4edfd24e58ee27ecb6bab08a4e15bed5dd012bda",
-            "reference": "4edfd24e58ee27ecb6bab08a4e15bed5dd012bda",
-            "shasum": ""
-        },
-        "time": "2023-04-13T12:44:54+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "wp-deactivation-survey.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "Adds a deactivation survey on plugin deactivation.",
-        "homepage": "https://github.com/AyeCode/wp-deactivation-survey",
-        "keywords": [
-            "deactivation",
-            "survey",
-            "wordpress"
-        ]
-    },
-    {
-        "name": "ayecode/wp-font-awesome-settings",
-        "version": "1.1.6",
-        "version_normalized": "1.1.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
-            "reference": "37c34c29dfbe3e37a4cd5bf5d902c0498acc2c4c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/37c34c29dfbe3e37a4cd5bf5d902c0498acc2c4c",
-            "reference": "37c34c29dfbe3e37a4cd5bf5d902c0498acc2c4c",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "time": "2023-10-12T13:17:30+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "wp-font-awesome-settings.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "Settings page for Font Awesome in WordPress",
-        "homepage": "https://github.com/AyeCode/wp-font-awesome-settings",
-        "keywords": [
-            "FontAwesome",
-            "font-awesome"
-        ]
-    },
-    {
-        "name": "ayecode/wp-super-duper",
-        "version": "1.1.27",
-        "version_normalized": "1.1.27.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "7f6db407f48f6ca43fee84c4cd85ac9500b3a700"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/7f6db407f48f6ca43fee84c4cd85ac9500b3a700",
-            "reference": "7f6db407f48f6ca43fee84c4cd85ac9500b3a700",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "time": "2023-10-11T15:07:27+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "sd-functions.php"
+{
+    "packages": [
+        {
+            "name": "ayecode/ayecode-connect-helper",
+            "version": "1.0.3",
+            "version_normalized": "1.0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AyeCode/ayecode-connect-helper.git",
+                "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AyeCode/ayecode-connect-helper/zipball/1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
+                "reference": "1af7cdefdbd20d4443a3ab4834e4c1cd8fe57fb4",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
+                "squizlabs/php_codesniffer": "^3.2",
+                "wp-coding-standards/wpcs": "*"
+            },
+            "time": "2020-02-26T18:53:58+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "ayecode-connect-helper.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
             ],
-            "classmap": [
-                "wp-super-duper.php"
-            ]
+            "authors": [
+                {
+                    "name": "AyeCode Ltd",
+                    "email": "contact@ayecode.io",
+                    "homepage": "https://ayecode.io/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Provides helper functionality for installing AyeCode Connect.",
+            "homepage": "https://github.com/AyeCode/ayecode-connect-helper",
+            "keywords": [
+                "AyeCode Connect",
+                "ayecode",
+                "wp"
+            ],
+            "install-path": "../ayecode/ayecode-connect-helper"
         },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "Lets you create a widget, block and shortcode all from the one file .",
-        "homepage": "https://github.com/AyeCode/wp-super-duper",
-        "keywords": [
-            "super duper",
-            "wordpress",
-            "wp"
-        ]
-    },
-    {
-        "name": "composer/installers",
-        "version": "1.x-dev",
-        "version_normalized": "1.9999999.9999999.9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/composer/installers.git",
-            "reference": "894a0b5c5d34c88b69b097f2aae1439730fa6836"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/composer/installers/zipball/894a0b5c5d34c88b69b097f2aae1439730fa6836",
-            "reference": "894a0b5c5d34c88b69b097f2aae1439730fa6836",
-            "shasum": ""
-        },
-        "require": {
-            "composer-plugin-api": "^1.0 || ^2.0"
-        },
-        "replace": {
-            "roundcube/plugin-installer": "*",
-            "shama/baton": "*"
-        },
-        "require-dev": {
-            "composer/composer": "1.6.* || ^2.0",
-            "composer/semver": "^1 || ^3",
-            "phpstan/phpstan": "^0.12.55",
-            "phpstan/phpstan-phpunit": "^0.12.16",
-            "symfony/phpunit-bridge": "^4.2 || ^5",
-            "symfony/process": "^2.3"
-        },
-        "time": "2022-03-15T21:23:54+00:00",
-        "type": "composer-plugin",
-        "extra": {
-            "class": "Composer\\Installers\\Plugin",
-            "branch-alias": {
-                "dev-main": "1.x-dev"
+        {
+            "name": "ayecode/wp-ayecode-ui",
+            "version": "0.2.1",
+            "version_normalized": "0.2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
+                "reference": "1cef8e437f380112a1dbec5deefdd3f96d582934"
             },
-            "plugin-modifies-install-path": true
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-4": {
-                "Composer\\Installers\\": "src/Composer/Installers"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Kyle Robinson Young",
-                "email": "kyle@dontkry.com",
-                "homepage": "https://github.com/shama"
-            }
-        ],
-        "description": "A multi-framework Composer library installer",
-        "homepage": "https://composer.github.io/installers/",
-        "keywords": [
-            "Craft",
-            "Dolibarr",
-            "Eliasis",
-            "Hurad",
-            "ImageCMS",
-            "Kanboard",
-            "Lan Management System",
-            "MODX Evo",
-            "MantisBT",
-            "Mautic",
-            "Maya",
-            "OXID",
-            "Plentymarkets",
-            "Porto",
-            "RadPHP",
-            "SMF",
-            "Starbug",
-            "Thelia",
-            "Whmcs",
-            "WolfCMS",
-            "agl",
-            "aimeos",
-            "annotatecms",
-            "attogram",
-            "bitrix",
-            "cakephp",
-            "chef",
-            "cockpit",
-            "codeigniter",
-            "concrete5",
-            "croogo",
-            "dokuwiki",
-            "drupal",
-            "eZ Platform",
-            "elgg",
-            "expressionengine",
-            "fuelphp",
-            "grav",
-            "installer",
-            "itop",
-            "joomla",
-            "known",
-            "kohana",
-            "laravel",
-            "lavalite",
-            "lithium",
-            "magento",
-            "majima",
-            "mako",
-            "mediawiki",
-            "miaoxing",
-            "modulework",
-            "modx",
-            "moodle",
-            "osclass",
-            "pantheon",
-            "phpbb",
-            "piwik",
-            "ppi",
-            "processwire",
-            "puppet",
-            "pxcms",
-            "reindex",
-            "roundcube",
-            "shopware",
-            "silverstripe",
-            "sydes",
-            "sylius",
-            "symfony",
-            "tastyigniter",
-            "typo3",
-            "wordpress",
-            "yawik",
-            "zend",
-            "zikula"
-        ],
-        "support": {
-            "issues": "https://github.com/composer/installers/issues",
-            "source": "https://github.com/composer/installers/tree/1.x"
-        },
-        "funding": [
-            {
-                "url": "https://packagist.com",
-                "type": "custom"
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/1cef8e437f380112a1dbec5deefdd3f96d582934",
+                "reference": "1cef8e437f380112a1dbec5deefdd3f96d582934",
+                "shasum": ""
             },
-            {
-                "url": "https://github.com/composer",
-                "type": "github"
+            "time": "2023-11-08T12:15:48+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "ayecode-ui-loader.php"
+                ]
             },
-            {
-                "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                "type": "tidelift"
-            }
-        ]
-    }
-]
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "AyeCode Ltd",
+                    "email": "contact@ayecode.io",
+                    "homepage": "https://ayecode.io/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Bootstrap UI for WordPress plugins and themes.",
+            "homepage": "https://github.com/AyeCode/wp-ayecode-ui",
+            "keywords": [
+                "ayecode",
+                "boot",
+                "bootstrap"
+            ],
+            "support": {
+                "issues": "https://github.com/AyeCode/wp-ayecode-ui/issues",
+                "source": "https://github.com/AyeCode/wp-ayecode-ui/tree/0.2.1"
+            },
+            "install-path": "../ayecode/wp-ayecode-ui"
+        },
+        {
+            "name": "ayecode/wp-country-database",
+            "version": "1.0.4",
+            "version_normalized": "1.0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AyeCode/wp-country-database.git",
+                "reference": "c23ae6061fe373525ecd069a5069e376ed9b8178"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AyeCode/wp-country-database/zipball/c23ae6061fe373525ecd069a5069e376ed9b8178",
+                "reference": "c23ae6061fe373525ecd069a5069e376ed9b8178",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
+                "squizlabs/php_codesniffer": "^3.2",
+                "wp-coding-standards/wpcs": "*"
+            },
+            "time": "2019-05-28T12:18:45+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "wp-country-database.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "AyeCode Ltd",
+                    "email": "contact@ayecode.io",
+                    "homepage": "https://ayecode.io/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A WordPress class that stores and retrieves world country information.",
+            "homepage": "https://github.com/AyeCode/wp-country-database",
+            "keywords": [
+                "countries",
+                "wordpress"
+            ],
+            "install-path": "../ayecode/wp-country-database"
+        },
+        {
+            "name": "ayecode/wp-deactivation-survey",
+            "version": "1.0.6",
+            "version_normalized": "1.0.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AyeCode/wp-deactivation-survey.git",
+                "reference": "4edfd24e58ee27ecb6bab08a4e15bed5dd012bda"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AyeCode/wp-deactivation-survey/zipball/4edfd24e58ee27ecb6bab08a4e15bed5dd012bda",
+                "reference": "4edfd24e58ee27ecb6bab08a4e15bed5dd012bda",
+                "shasum": ""
+            },
+            "time": "2023-04-13T12:44:54+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "wp-deactivation-survey.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "AyeCode Ltd",
+                    "email": "contact@ayecode.io",
+                    "homepage": "https://ayecode.io/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Adds a deactivation survey on plugin deactivation.",
+            "homepage": "https://github.com/AyeCode/wp-deactivation-survey",
+            "keywords": [
+                "deactivation",
+                "survey",
+                "wordpress"
+            ],
+            "install-path": "../ayecode/wp-deactivation-survey"
+        },
+        {
+            "name": "ayecode/wp-font-awesome-settings",
+            "version": "1.1.6",
+            "version_normalized": "1.1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
+                "reference": "37c34c29dfbe3e37a4cd5bf5d902c0498acc2c4c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/37c34c29dfbe3e37a4cd5bf5d902c0498acc2c4c",
+                "reference": "37c34c29dfbe3e37a4cd5bf5d902c0498acc2c4c",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.0"
+            },
+            "time": "2023-10-12T13:17:30+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "wp-font-awesome-settings.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "AyeCode Ltd",
+                    "email": "contact@ayecode.io",
+                    "homepage": "https://ayecode.io/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Settings page for Font Awesome in WordPress",
+            "homepage": "https://github.com/AyeCode/wp-font-awesome-settings",
+            "keywords": [
+                "FontAwesome",
+                "font-awesome"
+            ],
+            "install-path": "../ayecode/wp-font-awesome-settings"
+        },
+        {
+            "name": "ayecode/wp-super-duper",
+            "version": "1.1.28",
+            "version_normalized": "1.1.28.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AyeCode/wp-super-duper.git",
+                "reference": "46d9f6dd41545d2a64f78d2cb8b2d444a5d07428"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/46d9f6dd41545d2a64f78d2cb8b2d444a5d07428",
+                "reference": "46d9f6dd41545d2a64f78d2cb8b2d444a5d07428",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.0"
+            },
+            "time": "2023-10-31T14:00:21+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "sd-functions.php"
+                ],
+                "classmap": [
+                    "wp-super-duper.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "AyeCode Ltd",
+                    "email": "contact@ayecode.io",
+                    "homepage": "https://ayecode.io/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Lets you create a widget, block and shortcode all from the one file .",
+            "homepage": "https://github.com/AyeCode/wp-super-duper",
+            "keywords": [
+                "super duper",
+                "wordpress",
+                "wp"
+            ],
+            "support": {
+                "issues": "https://github.com/AyeCode/wp-super-duper/issues",
+                "source": "https://github.com/AyeCode/wp-super-duper/tree/1.1.28"
+            },
+            "install-path": "../ayecode/wp-super-duper"
+        },
+        {
+            "name": "composer/installers",
+            "version": "1.x-dev",
+            "version_normalized": "1.9999999.9999999.9999999-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/installers.git",
+                "reference": "894a0b5c5d34c88b69b097f2aae1439730fa6836"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/installers/zipball/894a0b5c5d34c88b69b097f2aae1439730fa6836",
+                "reference": "894a0b5c5d34c88b69b097f2aae1439730fa6836",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0 || ^2.0"
+            },
+            "replace": {
+                "roundcube/plugin-installer": "*",
+                "shama/baton": "*"
+            },
+            "require-dev": {
+                "composer/composer": "1.6.* || ^2.0",
+                "composer/semver": "^1 || ^3",
+                "phpstan/phpstan": "^0.12.55",
+                "phpstan/phpstan-phpunit": "^0.12.16",
+                "symfony/phpunit-bridge": "^4.2 || ^5",
+                "symfony/process": "^2.3"
+            },
+            "time": "2022-03-15T21:23:54+00:00",
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Composer\\Installers\\Plugin",
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                },
+                "plugin-modifies-install-path": true
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Installers\\": "src/Composer/Installers"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
+                }
+            ],
+            "description": "A multi-framework Composer library installer",
+            "homepage": "https://composer.github.io/installers/",
+            "keywords": [
+                "Craft",
+                "Dolibarr",
+                "Eliasis",
+                "Hurad",
+                "ImageCMS",
+                "Kanboard",
+                "Lan Management System",
+                "MODX Evo",
+                "MantisBT",
+                "Mautic",
+                "Maya",
+                "OXID",
+                "Plentymarkets",
+                "Porto",
+                "RadPHP",
+                "SMF",
+                "Starbug",
+                "Thelia",
+                "Whmcs",
+                "WolfCMS",
+                "agl",
+                "aimeos",
+                "annotatecms",
+                "attogram",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "cockpit",
+                "codeigniter",
+                "concrete5",
+                "croogo",
+                "dokuwiki",
+                "drupal",
+                "eZ Platform",
+                "elgg",
+                "expressionengine",
+                "fuelphp",
+                "grav",
+                "installer",
+                "itop",
+                "joomla",
+                "known",
+                "kohana",
+                "laravel",
+                "lavalite",
+                "lithium",
+                "magento",
+                "majima",
+                "mako",
+                "mediawiki",
+                "miaoxing",
+                "modulework",
+                "modx",
+                "moodle",
+                "osclass",
+                "pantheon",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "processwire",
+                "puppet",
+                "pxcms",
+                "reindex",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "sydes",
+                "sylius",
+                "symfony",
+                "tastyigniter",
+                "typo3",
+                "wordpress",
+                "yawik",
+                "zend",
+                "zikula"
+            ],
+            "support": {
+                "issues": "https://github.com/composer/installers/issues",
+                "source": "https://github.com/composer/installers/tree/1.x"
+            },
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": "./installers"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}
