@@ -1406,7 +1406,7 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
                  * @param array $cf Custom field variables array.
                  */
                 $email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
-                $value .= '<a href="javascript:window.location.href=\'mailto:\'+([\'' . $e_split[0] . '\',\'' . $e_split[1] . '\']).join(\'@\')">' . str_replace( "@", "<!---->@<!---->", $email_name ) . '</a>';
+                $value .= '<a href="javascript:void(0)" onclick="javascript:window.open(\'mailto:\'+([\'' . $e_split[0] . '\',\'' . $e_split[1] . '\']).join(\'@\'),\'_blank\')">' . str_replace( "@", "<!---->@<!---->", $email_name ) . '</a>';
             } elseif ( ! empty( $email ) && ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || $is_elementor_preview || wp_doing_ajax() ) && !isset( $output['strip'] ) ) {
                 /**
                  * Filter email custom field name output.
@@ -1417,10 +1417,12 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
                  * @param array $cf Custom field variables array.
                  */
                 $email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
-                $value .= "<a href='mailto:$email'>$email_name</a>";
+                $value .= "<a href='mailto:$email' target='_blank'>$email_name</a>";
             } else {
                 $value .= $email;
             }
+
+            $value = apply_filters( 'geodir_custom_field_output_email_value', $value, $gd_post, $location, $cf, $output );
 
             if ( ! empty( $output ) && isset( $output['raw'] ) ) {
                 // Database value.
@@ -1441,9 +1443,6 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
 
             $html .= '</div>';
         }
-
-
-
     }
 
     return $html;
