@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory, member directory, company directory, team directory, chamber of commerce business directory, church directory, address book, contact directory, local business directory, listings directory, link directory
 Requires at least: 4.5
-Tested up to: 6.3
-Stable tag: 2.3.29
+Tested up to: 6.4
+Stable tag: 2.3.30
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -305,7 +305,7 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory v2.3.30 - TBD =
+= GeoDirectory v2.3.30 - 2023-11-08 =
 * Elementor Loop Carousel don't show post category image - FIXED
 * OpenStreetMap don't populates region for Romania – FIXED
 * SEOPress breadcrumbs compatibility - ADDED
@@ -313,6 +313,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * GD > Simple Archive - OSM map zoom issue on mobile - FIXED
 * Closed down notification is not working on FSE site - FIXED
 * Category map marker auto generation updated to use SVG if using Font Awesome using v6 - UPDATED
+* Open mailto in a new tab for email field - CHANGED
 
 = GeoDirectory v2.3.29 - 2023-10-18 =
 * Hook added to filter display day name in business hours slot output - ADDED
