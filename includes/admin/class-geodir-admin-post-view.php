@@ -564,7 +564,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		 * @return array An array of row action links.
 		 */
 		public static function post_row_actions( $actions, $post ) {
-			if ( ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) {
+			if ( ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) && current_user_can( 'manage_options' ) ) {
 				$actions['geodir-regenerate-thumbnails bsui'] = '<button type="button" class="button-link" aria-label="' . esc_attr__( 'Regenerate Thumbnails', 'geodirectory' ) . '" aria-expanded="false" data-action="geodir-regenerate-thumbnails" data-post-id="' . $post->ID . '">' . __( 'Regenerate Thumbnails', 'geodirectory' ) . '</button>';
 			}
 
