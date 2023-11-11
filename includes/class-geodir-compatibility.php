@@ -789,6 +789,11 @@ class GeoDir_Compatibility {
 			remove_filter( 'the_content', 'flatsome_contentfix' );
 			add_filter( 'the_content', 'flatsome_contentfix', 11 );
 		}
+
+		// Astra + Spectra
+		if ( class_exists( 'UAGB_Post_Assets' ) ) {
+			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'spectra_uagb_post_assets_enqueue_scripts' ), 99 );
+		}
 	}
 
 	/**
@@ -1027,6 +1032,7 @@ class GeoDir_Compatibility {
 			 || ( defined( 'KADENCE_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, '_kad_' ) === 0 ) ) // Kadence theme
 			 || ( function_exists( 'znhg_kallyas_theme_config' ) && ( strpos( $meta_key, 'zn-' ) === 0 || strpos( $meta_key, 'zn_' ) === 0 || strpos( $meta_key, '_zn_' ) === 0 ) || in_array( $meta_key, array( 'show_header', 'show_footer' ) ) ) // Kallyas theme Zion Builder
 			 || ( defined( 'ASTRA_THEME_VERSION' ) && ( strpos( $meta_key, 'ast-' ) === 0 ) ) // Astra theme
+			 || ( defined( 'UAGB_FILE' ) && ( strpos( $meta_key, 'spectra' ) === 0 || strpos( $meta_key, '_uag_' ) === 0 || strpos( $meta_key, '_uagb_' ) === 0 ) ) // Spectra
 			 ) && geodir_is_gd_post_type( $object_post_type ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( $object_post_type );
@@ -4213,5 +4219,17 @@ class GeoDir_Compatibility {
 		}
 
 		return $preview_url;
+	}
+
+	/**
+	 * Astra + Spectra enqueue post assets on archive pages.
+	 *
+	 * @since 2.3.31
+	 */
+	public static function spectra_uagb_post_assets_enqueue_scripts() {
+		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = self::gd_page_id() ) ) {
+			$current_post_assets = new UAGB_Post_Assets( $page_id );
+			$current_post_assets->enqueue_scripts();
+		}
 	}
 }
