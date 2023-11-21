@@ -2519,19 +2519,23 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             // Render private address.
             $address_fields = geodir_post_address( $address_fields, 'address', $gd_post );
 
+            $plain_value = wp_strip_all_tags( $address_fields, true );
+            if ( $plain_value == '' ) {
+                return $html;
+            }
+
             // Database value.
             if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                $address_fields = str_replace("<br>","",$address_fields);
-                return stripslashes( wp_strip_all_tags($address_fields) );
+                $address_fields = str_replace( "<br>", "", $address_fields );
+                return stripslashes( wp_strip_all_tags( $address_fields, true ) );
             }
 
             // Stripped value.
             if ( ! empty( $output ) && isset( $output['strip'] ) ) {
-                $address_fields = str_replace("<br>",",",$address_fields);
-                return stripslashes( wp_strip_all_tags($address_fields) );
+                $address_fields = str_replace( "<br>", ",", $address_fields );
+                return stripslashes( wp_strip_all_tags( $address_fields, true ) );
             }
 
-//			print_r($cf);exit;
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" itemscope itemtype="http://schema.org/PostalAddress">';
 
             $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
