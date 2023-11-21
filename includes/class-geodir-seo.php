@@ -277,6 +277,8 @@ class GeoDir_SEO {
 	public static function output_title( $title = '', $id = 0 ) {
 		global $wp_query, $gdecs_render_loop, $geodir_query_object_id;
 
+		$ajax_search = ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'geodir_ajax_search' && ! empty( $_REQUEST['geodir_search'] ) && wp_doing_ajax() ? true : false;
+
 		if ( ! empty( $geodir_query_object_id ) ) {
 			$query_object_id = $geodir_query_object_id;
 		} else {
@@ -295,7 +297,7 @@ class GeoDir_SEO {
 		if ( self::$title && empty( $id ) && ! self::$doing_menu ) {
 			$normalize = true;
 			$title = self::$title;
-		} elseif ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu && ! $gdecs_render_loop ) {
+		} else if ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu && ( ! $gdecs_render_loop || ( $ajax_search && get_post_type( $id ) == 'page' ) ) ) {
 			$normalize = true;
 			$title = self::$title;
 			/**

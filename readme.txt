@@ -307,6 +307,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.31 - TBD =
 * Astra + Spectra category pages compatibility - FIXED
+* AJAX search page title not updating on Elementor template - FIXED
 
 = GeoDirectory v2.3.30 - 2023-11-08 =
 * Elementor Loop Carousel don't show post category image - FIXED
