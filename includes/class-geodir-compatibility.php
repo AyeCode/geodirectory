@@ -4159,14 +4159,15 @@ class GeoDir_Compatibility {
 	 * Block theme like Twenty Twenty Two has issue in loading scripts.
 	 *
 	 * @since 2.1.1.14
+	 * @since 2.3.30   Breakdance Page Builder(themeless) compatibility.
 	 *
-	 * @param array $options Super Duper block options.
+	 * @param array  $options Super Duper block options.
 	 * @param object $super_duper Super Duper object.
 	 */
 	public static function block_theme_load_scripts( $options, $super_duper ) {
 		global $geodir_frontend_scripts_loaded;
 
-		if ( ! $geodir_frontend_scripts_loaded && function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() && ! wp_script_is( 'geodir', 'registered' ) ) {
+		if ( ! $geodir_frontend_scripts_loaded && ( ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) || defined( '__BREAKDANCE_VERSION' ) ) && ! wp_script_is( 'geodir', 'registered' ) ) {
 			$geodir_frontend_scripts_loaded = true;
 
 			GeoDir_Frontend_Scripts::load_scripts();

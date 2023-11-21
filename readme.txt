@@ -309,6 +309,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Astra + Spectra category pages compatibility - FIXED
 * AJAX search page title not updating on Elementor template - FIXED
 * Elementor Pro native lightbox slideshow not working with GD post images - FIXED
+* Breakdance Page Builder(themeless) compatibility - FIXED
 
 = GeoDirectory v2.3.30 - 2023-11-08 =
 * Elementor Loop Carousel don't show post category image - FIXED
