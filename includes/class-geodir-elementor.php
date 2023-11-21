@@ -610,11 +610,6 @@ class GeoDir_Elementor {
 
 				$image_meta = isset( $item->metadata ) ? maybe_unserialize( $item->metadata ) : '';
 
-				$attributes = array(
-					'data-elementor-lightbox-description' => stripslashes_deep( $item->caption ),
-					'data-elementor-lightbox-title' => stripslashes_deep( $item->title ),
-				);
-
 				$image_data = [
 					'alt' => stripslashes_deep( $item->caption ),
 					'media' => geodir_get_image_src( $item, 'full' ),
@@ -649,7 +644,11 @@ class GeoDir_Elementor {
 							'href' => $href,
 						] );
 
-						$widget->add_render_attribute( 'gallery_item_' . $unique_index, $attributes, null );
+						if ( \ElementorPro\Plugin::elementor()->editor->is_edit_mode() ) {
+							$widget->add_render_attribute( 'gallery_item_' . $unique_index, 'class', 'elementor-clickable' );
+						}
+
+						self::add_lightbox_data_attributes( 'gallery_item_' . $unique_index, $id, $widget, $settings, $item );
 					} elseif ( 'custom' === $settings['link_to'] ) {
 						$widget->add_link_attributes( 'gallery_item_' . $unique_index, $settings['url'] );
 					}
@@ -665,6 +664,7 @@ class GeoDir_Elementor {
 						'data-width' => $image_data['width'],
 						'data-height' => $image_data['height'],
 						'alt' => $image_data['alt'],
+						'role' => 'img'
 					]
 				);?>
 				<<?php echo $gallery_item_tag; ?> <?php echo $widget->get_render_attribute_string( 'gallery_item_' . $unique_index ); ?>>
@@ -697,7 +697,7 @@ class GeoDir_Elementor {
 		return ob_get_clean();
 	}
 
-		/**
+	/**
 	 * Render the WP Gallery with our own images.
 	 *
 	 * @param $attr
@@ -1636,5 +1636,71 @@ class GeoDir_Elementor {
 		global $post, $gd_loop_backup_post;
 
 		$post = $gd_loop_backup_post;
+	}
+
+	/**
+	 * Add Elementor Light-Box attributes.
+	 *
+	 * @since 2.3.30
+	 *
+	 * @param array|string $element The link HTML element.
+	 * @param int    $id The ID of the image.
+	 * @param object $widget Widget element object.
+	 * @param array  $settings The settings.
+	 * @param object $attachment Image item.
+	 * @param bool   $overwrite Optional. Whether to overwrite existing
+	 *                          attribute. Default is false, not to overwrite.
+	 *
+	 * @return Widget_Base Current instance of the widget.
+	 */
+	public static function add_lightbox_data_attributes( $element, $id, $widget, $settings, $attachment, $overwrite = false ) {
+		$lightbox_setting_key = $settings['open_lightbox'];
+		$group_id = $widget->get_id();
+
+		$kit = \Elementor\Plugin::$instance->kits_manager->get_active_kit();
+
+		$is_global_image_lightbox_enabled = 'yes' === $kit->get_settings( 'global_image_lightbox' );
+
+		if ( 'no' === $lightbox_setting_key ) {
+			if ( $is_global_image_lightbox_enabled ) {
+				$widget->add_render_attribute( $element, 'data-elementor-open-lightbox', 'no', $overwrite );
+			}
+
+			return $widget;
+		}
+
+		if ( 'yes' !== $lightbox_setting_key && ! $is_global_image_lightbox_enabled ) {
+			return $widget;
+		}
+
+		$attributes = array();
+		$attributes['data-elementor-open-lightbox'] = 'yes';
+
+		$action_hash_params = [];
+
+		if ( $id && ! empty( $attachment ) ) {
+			$action_hash_params['id'] = $id;
+			$action_hash_params['url'] = geodir_get_image_src( $attachment, 'full' );
+		}
+
+		if ( $group_id ) {
+			$attributes['data-elementor-lightbox-slideshow'] = $group_id;
+
+			$action_hash_params['slideshow'] = $group_id;
+		}
+
+		if ( isset( $attachment->caption ) ) {
+			$attributes['data-elementor-lightbox-title'] = stripslashes_deep( $attachment->caption );
+		}
+
+		if ( isset( $attachment->title ) ) {
+			$attributes['data-elementor-lightbox-description'] = stripslashes_deep( $attachment->title );
+		}
+
+		$attributes['data-e-action-hash'] = \Elementor\Plugin::$instance->frontend->create_action_hash( 'lightbox', $action_hash_params );
+
+		$widget->add_render_attribute( $element, $attributes, null, $overwrite );
+
+		return $widget;
 	}
 }
