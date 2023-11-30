@@ -4070,11 +4070,10 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		 * @return mixed
 		 */
 		public function block_props_replace( $string, $no_wrap = false ) {
-
 			if ( $no_wrap ) {
-				$string = str_replace( array( "[%", "%]" ), array( "props.attributes.", "" ), $string );
+				$string = str_replace( array( "[%", "%]", "%:checked]" ), array( "props.attributes.", "", "" ), $string );
 			} else {
-				$string = str_replace( array( "[%", "%]" ), array( "'+props.attributes.", "+'" ), $string );
+				$string = str_replace( array( "![%", "[%", "%]", "%:checked]" ), array( "'+!props.attributes.", "'+props.attributes.", "+'", "+'" ), $string );
 			}
 
 			return $string;
@@ -4424,36 +4423,41 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 			}
 		}
 
-		public function widget_inputs_row_start($key, $args){
-			if(!empty($args['row'])){
-				// maybe open
-				if(!empty($args['row']['open'])){
+		public function widget_inputs_row_start( $key, $args ) {
+			if ( ! empty( $args['row'] ) ) {
+				// Maybe open
+				if ( ! empty( $args['row']['open'] ) ) {
 					?>
-					<div class='bsui sd-argument ' data-argument='<?php echo esc_attr( $args['row']['key'] ); ?>' data-element_require='<?php if ( !empty($args['row']['element_require'])) {
-						echo $this->convert_element_require( $args['row']['element_require'] );
-					} ?>'>
-					<?php if(!empty($args['row']['title'])){ ?>
-					<label class="mb-0 "><?php echo esc_attr( $args['row']['title'] ); ?><?php echo $this->widget_field_desc( $args['row'] ); ?></label>
-					<?php }?>
-					<div class='row <?php if(!empty($args['row']['class'])){ echo esc_attr($args['row']['class']);} ?>'>
+					<div class='bsui sd-argument' data-argument='<?php echo esc_attr( $args['row']['key'] ); ?>' data-element_require='<?php echo ( ! empty( $args['row']['element_require'] ) ? $this->convert_element_require( $args['row']['element_require'] ) : '' ); ?>'>
+					<?php if ( ! empty( $args['row']['title'] ) ) { ?>
+					<?php 
+						if ( isset( $args['row']['icon'] ) ) {
+							$args['row']['icon'] = '';
+						}
+
+						if ( ! isset( $args['row']['device_type'] ) && isset( $args['device_type'] ) ) {
+							$args['row']['device_type'] = $args['device_type'];
+						}
+					?>
+					<label class="mb-0"><?php echo $this->widget_field_title( $args['row'] ); ?><?php echo $this->widget_field_desc( $args['row'] ); ?></label>
+					<?php } ?>
+					<div class='row<?php echo ( ! empty( $args['row']['class'] ) ? ' ' . esc_attr( $args['row']['class'] ) : '' ); ?>'>
 					<div class='col pr-2'>
 					<?php
-				}elseif(!empty($args['row']['close'])){
+				} else if ( ! empty( $args['row']['close'] ) ) {
 					echo "<div class='col pl-0 ps-0'>";
-				}else{
+				} else {
 					echo "<div class='col pl-0 ps-0 pr-2 pe-2'>";
 				}
 			}
 		}
 
-		public function widget_inputs_row_end($key, $args){
-
-			if(!empty($args['row'])){
-				// maybe close
-				if(!empty($args['row']['close'])){
+		public function widget_inputs_row_end( $key, $args ) {
+			if ( ! empty( $args['row'] ) ) {
+				// Maybe close
+				if ( ! empty( $args['row']['close'] ) ) {
 					echo "</div></div>";
 				}
-
 				echo "</div>";
 			}
 		}
