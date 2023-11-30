@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.28' );
+	define( 'SUPER_DUPER_VER', '1.1.29' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -4487,12 +4487,12 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		 *
 		 */
 		public function convert_element_require( $input ) {
-
 			$input = str_replace( "'", '"', $input );// we only want double quotes
 
-			$output = esc_attr( str_replace( array( "[%", "%]" ), array(
+			$output = esc_attr( str_replace( array( "[%", "%]", "%:checked]" ), array(
 				"jQuery(form).find('[data-argument=\"",
-				"\"]').find('input,select,textarea').val()"
+				"\"]').find('input,select,textarea').val()",
+				"\"]').find('input:checked').val()"
 			), $input ) );
 
 			return $output;
@@ -4657,13 +4657,17 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		 * @return string
 		 */
 		public function widget_field_title( $args ) {
-
 			$title = '';
+
 			if ( isset( $args['title'] ) && $args['title'] ) {
+				if ( ! empty( $args['device_type'] ) ) {
+					$args['title'] .= ' (' . $args['device_type'] . ')'; // Append device type to title.
+				}
+
 				if ( isset( $args['icon'] ) && $args['icon'] ) {
 					$title = self::get_widget_icon( $args['icon'], $args['title']  );
 				} else {
-					$title = esc_attr($args['title']);
+					$title = esc_attr( $args['title'] );
 				}
 			}
 
