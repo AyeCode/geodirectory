@@ -307,6 +307,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.32 - 2023-11-30 =
 * GD > Post Features text align multi-device setting is not working - FIXED
+* FontAwesome v6.5.0 broken the icons - FIXED
 
 = GeoDirectory v2.3.31 - 2023-11-23 =
 * Astra + Spectra category pages compatibility - FIXED

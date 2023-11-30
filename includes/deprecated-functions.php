@@ -488,3 +488,40 @@ function get_post_type_singular_label( $post_type, $echo = false, $translate = f
 //    _deprecated_function( '', '2.0.0' );
 //}
 
+/**
+ * Fix icons broken by FontAwesome v6.5.0.
+ *
+ * Download link is broken for FontAwesome v6.5.0.
+ * @see https://github.com/FortAwesome/Font-Awesome/issues/20018
+ *
+ * @todo Remove once downland link fixed by FontAwesome.
+ */
+function geodir_fa_6_5_0_fix_get_option( $value, $option ) {
+	if ( ! ( $option == 'wp-font-awesome-settings' && ! empty( $value ) && is_array( $value ) ) ) {
+		return $value;
+	}
+
+	if ( ! ( ! empty( $value['version'] ) && version_compare( $value['version'], '6.5.0', '<' ) ) ) {
+		$value['version'] = '6.4.2';
+	}
+
+	return $value;
+}
+add_filter( 'option_wp-font-awesome-settings', 'geodir_fa_6_5_0_fix_get_option', 21, 2 );
+
+function geodir_fa_6_5_0_fix_update_option( $value, $old_value, $option ) {
+	if ( ! ( $option == 'wp-font-awesome-settings' && ! empty( $value ) && is_array( $value ) ) ) {
+		return $value;
+	}
+
+	if ( empty( $value['version'] ) ) {
+		return $value;
+	}
+
+	if ( ! version_compare( $value['version'], '6.5.0', '<' ) ) {
+		$value['version'] = '';
+	}
+
+	return $value;
+}
+add_filter( 'pre_update_option_wp-font-awesome-settings', 'geodir_fa_6_5_0_fix_update_option', 21, 3 );
