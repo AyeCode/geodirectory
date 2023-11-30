@@ -149,7 +149,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 
 		$arguments['tag_include'] = array(
 			'title'       => __( 'Specific tags', 'geodirectory' ),
-			'desc'        => __( 'Enter a comma seperated list of tag slugs to only show them specifically (otherwise any tag will show)', 'geodirectory' ),
+			'desc'        => __( 'Enter a comma separated list of tag slugs to only show them specifically (otherwise any tag will show)', 'geodirectory' ),
 			'type'        => 'number',
 			'placeholder' => 'parking,cafe,swimming-pool',
 			'desc_tip'    => true,
@@ -274,7 +274,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 			'text_align',
 			array(
 				'device_type'     => 'Mobile',
-				'element_require' => '[%text_justify%]==""',
+				'element_require' => '![%text_justify%:checked]',
 				'group'           => __( 'List Style', 'geodirectory' ),
 			)
 		);
@@ -282,7 +282,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 			'text_align',
 			array(
 				'device_type'     => 'Tablet',
-				'element_require' => '[%text_justify%]==""',
+				'element_require' => '![%text_justify%:checked]',
 				'group'           => __( 'List Style', 'geodirectory' ),
 			)
 		);
@@ -290,15 +290,12 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 			'text_align',
 			array(
 				'device_type'     => 'Desktop',
-				'element_require' => '[%text_justify%]==""',
+				'element_require' => '![%text_justify%:checked]',
 				'group'           => __( 'List Style', 'geodirectory' ),
 			)
 		);
 
 		// list item
-
-
-
 		// border
 		$arguments['item_border']         = sd_get_border_input( 'item_border', array(
 			'title'           => __( 'Border Bottom Color', 'geodirectory' ),
