@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.29' );
+	define( 'SUPER_DUPER_VER', '1.1.31' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -4286,6 +4286,23 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 		}
 
 		/**
+		 * Check for Bricks theme builder preview.
+		 *
+		 * @since 1.1.31
+		 *
+		 * @return bool True when preview page otherwise false.
+		 */
+		public function is_bricks_preview() {
+			$result = false;
+
+			if ( function_exists( 'bricks_is_builder' ) && ( bricks_is_builder() || bricks_is_builder_call() ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
 		 * General function to check if we are in a preview situation.
 		 *
 		 * @return bool
@@ -4310,6 +4327,8 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 			} elseif( $this->is_kallyas_zion_preview() ) {
 				$preview = true;
 			} elseif( $this->is_block_content_call() ) {
+				$preview = true;
+			} elseif( $this->is_bricks_preview() ) {
 				$preview = true;
 			}
 
