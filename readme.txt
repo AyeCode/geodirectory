@@ -307,6 +307,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.33 - TBD =
 * Scroll to loop container results on AJAX pagination click - CHANGED
+* Bricks builder compatibility - ADDED
 
 = GeoDirectory v2.3.32 - 2023-11-30 =
 * GD > Post Features text align multi-device setting is not working - FIXED
