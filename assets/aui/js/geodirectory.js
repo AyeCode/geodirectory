@@ -1952,8 +1952,13 @@ function geodir_widget_listings_pagination(id, params) {
 			success: function(res) {
 				if (res.success && res.data) {
 					if (res.data.content) {
+						var pagiScroll = $widget.offset().top;
+						if (pagiScroll > 100) {
+							jQuery("html,body").animate({
+								scrollTop: pagiScroll - 100
+							},500);
+						}
 						$widget.find('.geodir_locations.geodir-wgt-pagination').replaceWith(res.data.content);
-
 						init_read_more();
 						geodir_init_lazy_load();
 						geodir_refresh_business_hours();
