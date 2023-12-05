@@ -1033,6 +1033,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'znhg_kallyas_theme_config' ) && ( strpos( $meta_key, 'zn-' ) === 0 || strpos( $meta_key, 'zn_' ) === 0 || strpos( $meta_key, '_zn_' ) === 0 ) || in_array( $meta_key, array( 'show_header', 'show_footer' ) ) ) // Kallyas theme Zion Builder
 			 || ( defined( 'ASTRA_THEME_VERSION' ) && ( strpos( $meta_key, 'ast-' ) === 0 ) ) // Astra theme
 			 || ( defined( 'UAGB_FILE' ) && ( strpos( $meta_key, 'spectra' ) === 0 || strpos( $meta_key, '_uag_' ) === 0 || strpos( $meta_key, '_uagb_' ) === 0 ) ) // Spectra
+			  || ( defined( 'BRICKS_VERSION' ) && strpos( $meta_key, '_bricks_' ) === 0 ) // Bricks Theme
 			 ) && geodir_is_gd_post_type( $object_post_type ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( $object_post_type );
@@ -2431,7 +2432,7 @@ class GeoDir_Compatibility {
 		return $args;
 	}
 
-	public static function gd_page_id() {
+	public static function gd_page_id( $post_type = '' ) {
 		global $gd_post;
 
 		$page_id = 0;
@@ -2440,9 +2441,17 @@ class GeoDir_Compatibility {
 			return $page_id;
 		}
 
-		global $gd_post;
+		if ( $post_type == 'current' ) {
+			$post_type = geodir_get_current_posttype();
+		}
 
-		$post_type = ! empty( $gd_post ) && ! empty( $gd_post->ID ) ? get_post_type( $gd_post->ID ) : '';
+		if ( empty( $post_type ) ) {
+			if ( ! empty( $gd_post ) && ! empty( $gd_post->post_type ) ) {
+				$post_type = $gd_post->post_type;
+			} else {
+				$post_type = geodir_get_current_posttype();
+			}
+		}
 
 		if ( geodir_is_page( 'detail' ) ) {
 			$page_id = geodir_details_page_id( $post_type );

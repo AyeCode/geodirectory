@@ -274,7 +274,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 			'text_align',
 			array(
 				'device_type'     => 'Mobile',
-				'element_require' => '[%text_justify%]==""',//'![%text_justify%:checked]', // @todo update after SD v1.1.29 release with UWP
+				'element_require' => '[%text_justify%]==""',//'![%text_justify%:checked]', // @todo update after SD v1.1.30 release with UWP
 				'group'           => __( 'List Style', 'geodirectory' ),
 			)
 		);

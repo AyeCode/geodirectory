@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'ayecode/wp-ayecode-ui' => array(
-            'pretty_version' => '0.2.1',
-            'version' => '0.2.1.0',
+            'pretty_version' => '0.2.3',
+            'version' => '0.2.3.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ayecode/wp-ayecode-ui',
             'aliases' => array(),
-            'reference' => '1cef8e437f380112a1dbec5deefdd3f96d582934',
+            'reference' => '615ef25ad78835048f5d0da730532c67fc6e8f5a',
             'dev_requirement' => false,
         ),
         'ayecode/wp-country-database' => array(
@@ -65,12 +65,12 @@
             'dev_requirement' => false,
         ),
         'ayecode/wp-super-duper' => array(
-            'pretty_version' => '1.1.29',
-            'version' => '1.1.29.0',
+            'pretty_version' => '1.1.31',
+            'version' => '1.1.31.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ayecode/wp-super-duper',
             'aliases' => array(),
-            'reference' => 'acb0a0d6da6487ef6fb4812480f5d77713a5688b',
+            'reference' => 'f559d295d8da92e5843d2d0779fb233dbf624867',
             'dev_requirement' => false,
         ),
         'composer/installers' => array(

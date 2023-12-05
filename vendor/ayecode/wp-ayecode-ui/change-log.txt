@@ -1,3 +1,6 @@
+= 0.2.3 =
+* iOS add listing add images button not working - FIXED
+
 = 0.2.1 =
 * Manage native mobile datepicker for date or time input on mobile - CHANGED
 * plupload button on safari can overflow and block other page elements - FIXED

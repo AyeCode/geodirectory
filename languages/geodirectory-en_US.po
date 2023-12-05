@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.32\n"
+"Project-Id-Version: GeoDirectory 2.3.33\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-30 16:37+0530\n"
-"PO-Revision-Date: 2023-11-30 16:37+0530\n"
+"POT-Creation-Date: 2023-12-05 23:07+0530\n"
+"PO-Revision-Date: 2023-12-05 23:07+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1270,7 +1270,7 @@ msgid "if"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:139
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5006
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5025
 msgid "Add Rule"
 msgstr ""
 
@@ -1287,14 +1287,14 @@ msgid "hide"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:170
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4919
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4920
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4938
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4939
 msgid "FIELD"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:194
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4941
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4942
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4960
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4961
 msgid "CONDITION"
 msgstr ""
 
@@ -3185,11 +3185,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:303
 #: includes/admin/class-geodir-admin-taxonomies.php:368
+#: includes/integrations/bricks/provider-geodir.php:147
 msgid "Category Top Description"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:308
 #: includes/admin/class-geodir-admin-taxonomies.php:373
+#: includes/integrations/bricks/provider-geodir.php:148
 msgid "Category Bottom Description"
 msgstr ""
 
@@ -3205,11 +3207,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:324
 #: includes/admin/class-geodir-admin-taxonomies.php:389
+#: includes/integrations/bricks/provider-geodir.php:149
 msgid "Category Icon"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:330
 #: includes/admin/class-geodir-admin-taxonomies.php:395
+#: includes/integrations/bricks/provider-geodir.php:151
 msgid "Category Color"
 msgstr ""
 
@@ -11179,37 +11183,37 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3059
+#: includes/class-geodir-compatibility.php:3068
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3070
+#: includes/class-geodir-compatibility.php:3079
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3077
+#: includes/class-geodir-compatibility.php:3086
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3078
+#: includes/class-geodir-compatibility.php:3087
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3783
+#: includes/class-geodir-compatibility.php:3792
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4010
+#: includes/class-geodir-compatibility.php:4019
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4011
+#: includes/class-geodir-compatibility.php:4020
 msgid "Enable Borlabs Cookie integration for GeoDirectory maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4137
+#: includes/class-geodir-compatibility.php:4146
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
@@ -13969,10 +13973,12 @@ msgid "%s Tags Archive"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-template-archive.php:59
+#: includes/integrations/bricks/class-geodir-bricks.php:105
 msgid "Search Results"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-template-archive.php:63
+#: includes/integrations/bricks/class-geodir-bricks.php:103
 msgid "Archive"
 msgstr ""
 
@@ -14662,6 +14668,31 @@ msgstr ""
 msgid "Placeholder image"
 msgstr ""
 
+#: includes/integrations/bricks/class-geodir-bricks.php:102
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:144
+msgid "Single"
+msgstr ""
+
+#: includes/integrations/bricks/provider-geodir.php:36
+msgid "GD Post Meta"
+msgstr ""
+
+#: includes/integrations/bricks/provider-geodir.php:46
+msgid "GD Category Meta"
+msgstr ""
+
+#: includes/integrations/bricks/provider-geodir.php:150
+msgid "Category Map Icon"
+msgstr ""
+
+#: includes/integrations/bricks/provider-geodir.php:152
+msgid "Category Image"
+msgstr ""
+
+#: includes/integrations/bricks/provider-geodir.php:153
+msgid "Category Schema"
+msgstr ""
+
 #: includes/libraries/wp-background-process.php:423
 #, php-format
 msgid "Every %d Minutes"
@@ -14892,7 +14923,7 @@ msgid "Page ID"
 msgstr ""
 
 #: includes/template-functions.php:1189
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5048
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5067
 msgid "Template Part"
 msgstr ""
 
@@ -14912,7 +14943,7 @@ msgstr ""
 
 #: includes/template-functions.php:1261
 #: vendor/ayecode/wp-super-duper/sd-functions.php:2883
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5049
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5068
 msgid "Select Template Part..."
 msgstr ""
 
@@ -18852,10 +18883,6 @@ msgstr ""
 msgid "Set the image type"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:144
-msgid "Single"
-msgstr ""
-
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:146
 msgid "No image"
 msgstr ""
@@ -22217,55 +22244,55 @@ msgstr ""
 msgid "Save Rules"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4890
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4909
 msgid "Remove Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4895
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4914
 msgid "Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4896
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4915
 msgid "Select Rule..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4903
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4922
 msgid "Rule:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4964
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4966
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4983
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4985
 msgid "VALUE TO MATCH"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4978
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4997
 msgid "Select User Roles:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5012
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5031
 msgid "What should happen if rules met."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5013
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5032
 msgid "Default Output"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5032
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5051
 msgid "Page Content"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5033
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5052
 msgid "Select Page ID..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5067
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5086
 msgid "Custom Message Type"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5068
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5087
 msgid "Default (none)"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5091
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5110
 msgid "CUSTOM MESSAGE TO SHOW"
 msgstr ""
