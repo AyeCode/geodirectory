@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'ayecode/wp-ayecode-ui' => array(
-            'pretty_version' => '0.2.3',
-            'version' => '0.2.3.0',
+            'pretty_version' => '0.2.4',
+            'version' => '0.2.4.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ayecode/wp-ayecode-ui',
             'aliases' => array(),
-            'reference' => '615ef25ad78835048f5d0da730532c67fc6e8f5a',
+            'reference' => '752b7d843ecbd2fd6697a3ae5e152ff4e6d31ae7',
             'dev_requirement' => false,
         ),
         'ayecode/wp-country-database' => array(
