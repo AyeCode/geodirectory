@@ -1,3 +1,6 @@
+= 0.2.4 =
+* Last ios fix broke standard image select from library - FIXED
+
 = 0.2.3 =
 * iOS add listing add images button not working - FIXED
 
