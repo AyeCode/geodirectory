@@ -2733,9 +2733,19 @@ class GeoDir_Compatibility {
 	 * @return string Filtered page layout content.
 	 */
 	public static function beaver_archive_item_template_content( $content, $original_content, $page_id ) {
+		global $geodir_beaver_archive_item;
+
 		$enabled = FLBuilderModel::is_builder_enabled( $page_id );
 
 		if ( $enabled ) {
+			if ( empty( $geodir_beaver_archive_item ) ) {
+				$geodir_beaver_archive_item = array();
+			}
+
+			if ( isset( $_GET['fl_builder'] ) && ! empty( $geodir_beaver_archive_item[ $page_id ] ) ) {
+				return $geodir_beaver_archive_item[ $page_id ];
+			}
+
 			$rendering = $page_id === FLBuilder::$post_rendering;
 
 			// Allow the builder's render_content filter to run again.
@@ -2756,6 +2766,8 @@ class GeoDir_Compatibility {
 
 				// Clear the post rendering ID.
 				FLBuilder::$post_rendering = null;
+
+				$geodir_beaver_archive_item[ $page_id ] = $content;
 			}
 
 			remove_filter( 'fl_builder_do_render_content', '__return_true', 11 );

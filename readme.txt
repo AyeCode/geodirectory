@@ -305,6 +305,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.3.35 - TBD =
+* Beaver Builder preview broken sometimes when archive item designed with BB - FIXED
+
 = GeoDirectory v2.3.34 - 2023-12-06 =
 * iOS fix broke standard image select from library - FIXED
 
