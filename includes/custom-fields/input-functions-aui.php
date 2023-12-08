@@ -2411,12 +2411,20 @@ function geodir_cfi_files( $html, $cf ) {
         $extra_fields = maybe_unserialize( $cf['extra_fields'] );
         $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? absint( $extra_fields['file_limit'] ) : 0;
         $file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
+        $file_types = isset( $extra_fields['gd_file_types'] ) ? maybe_unserialize( $extra_fields['gd_file_types'] ) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
 
-        $allowed_file_types = isset( $extra_fields['gd_file_types'] ) ? maybe_unserialize( $extra_fields['gd_file_types'] ) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
-        $display_file_types = $allowed_file_types != '' ? '.' . implode( ", .", $allowed_file_types ) : '';
-        if ( ! empty( $allowed_file_types ) ) {
-            $allowed_file_types = implode( ",", $allowed_file_types );
+        if ( ! empty( $file_types ) ) {
+            if ( is_scalar( $file_types ) ) {
+                $file_types = explode( ",", $file_types );
+            }
+
+            $file_types = array_filter( $file_types );
+        } else {
+            $file_types = array();
         }
+
+        $display_file_types = ! empty( $file_types ) ? '.' . implode( ", .", $file_types ) : '';
+        $allowed_file_types = ! empty( $file_types ) ? implode( ",", $file_types ) : '';
 
         // adjust values here
         $id = $cf['htmlvar_name']; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls

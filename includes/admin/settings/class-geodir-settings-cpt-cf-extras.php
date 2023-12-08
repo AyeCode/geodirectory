@@ -664,7 +664,6 @@ optgroup-close', 'geodirectory' );
 			return $output;
 		}
 
-
         /**
          * The address setting fields.
          *
@@ -676,13 +675,14 @@ optgroup-close', 'geodirectory' );
          * @param object $field_info Fields information.
          * @return string $output.
          */
-		public static function address_fields($output,$result_str,$cf,$field_info){
-
-			ob_start();
-			if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
-				$address = stripslashes_deep(maybe_unserialize($field_info->extra_fields));
+		public static function address_fields( $output, $result_str, $cf, $field_info ) {
+			if ( isset( $field_info->extra_fields ) && $field_info->extra_fields != '' ) {
+				$address = stripslashes_deep( maybe_unserialize( $field_info->extra_fields ) );
+			} else {
+				$address = array();
 			}
 
+			ob_start();
 			/**
 			 * Called on the add custom fields settings page before the address field is output.
 			 *
@@ -691,7 +691,6 @@ optgroup-close', 'geodirectory' );
 			 * @param object $field_info Extra fields info.
 			 */
 			do_action('geodir_address_extra_admin_fields', $address, $field_info);
-
 
 			// setup address line 2 if not set
 			if(!isset($address['show_street2'])){
