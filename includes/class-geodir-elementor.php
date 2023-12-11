@@ -1303,9 +1303,16 @@ class GeoDir_Elementor {
 	 * @return object Elementor document.
 	 */
 	public static function get_elementor_document( $page_id ) {
-		$document = \Elementor\Plugin::$instance->documents->get( (int) $page_id );
-
-		return $document;
+		// Check if Elementor Plugin class exists to ensure compatibility
+		if ( class_exists( '\Elementor\Plugin' ) ) {
+			// If Elementor is available, get the document
+			$document = \Elementor\Plugin::$instance->documents->get( (int) $page_id );
+			return $document;
+		} else {
+			// Return null if Elementor is not active or installed
+			// This prevents errors and ensures graceful degradation
+			return null;
+		}
 	}
 
 	/**
