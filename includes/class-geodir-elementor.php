@@ -1303,7 +1303,11 @@ class GeoDir_Elementor {
 	 * @return object Elementor document.
 	 */
 	public static function get_elementor_document( $page_id ) {
-		$document = \Elementor\Plugin::$instance->documents->get( (int) $page_id );
+		if ( defined( 'ELEMENTOR_VERSION' ) && class_exists( '\Elementor\Plugin' ) ) {
+			$document = \Elementor\Plugin::$instance->documents->get( (int) $page_id );
+		} else {
+			$document = null;
+		}
 
 		return $document;
 	}
