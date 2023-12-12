@@ -33,11 +33,16 @@ class GeoDir_Bricks {
 		add_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'overwrite_archive_item_template_content' ), 10, 3 );
 
 		// Bricks
+		add_filter( 'bricks/builder/i18n', array( __CLASS__, 'builder_i18n' ), 10, 1 );
 		add_filter( 'bricks/dynamic_data/register_providers', array( __CLASS__, 'register_provider' ), 10, 1 );
 		add_filter( 'bricks/setup/control_options', array( __CLASS__, 'add_template_types' ), 10, 1 );
 		add_filter( 'bricks/database/content_type', array( __CLASS__, 'set_content_type' ), 10, 2 );
 		add_filter( 'bricks/builder/data_post_id', array( __CLASS__, 'maybe_set_post_id' ), 11, 1 );
 		add_filter( 'bricks/active_templates', array( __CLASS__, 'set_active_templates' ), 11, 3 );
+
+		// Bricks Elements
+		add_filter( 'bricks/builder/elements', array( __CLASS__, 'setup_elements' ), 10, 1 );
+		add_action( 'init', array( __CLASS__, 'register_elements' ), 11 );
 	}
 
 	public static function init_hooks() {
@@ -239,6 +244,38 @@ class GeoDir_Bricks {
 		}
 
 		return $active_templates;
+	}
+
+	public static function setup_elements( $elements ) {
+		$elements[] = 'geodir-image-gallery';
+
+		return $elements;
+	}
+
+	public static function register_elements() {
+		$element_files = array(
+			GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-image-gallery.php'
+		);
+
+		foreach ( $element_files as $file ) {
+			\Bricks\Elements::register_element( $file );
+		}
+	}
+
+	public static function is_bricks_preview() {
+		$result = false;
+
+		if ( function_exists( 'bricks_is_builder' ) && ( bricks_is_builder() || bricks_is_builder_call() ) ) {
+			$result = true;
+		}
+
+		return $result;
+	}
+
+	public static function builder_i18n( $i18n ) {
+		$i18n['geodirectory'] = esc_html__( 'GeoDirectory', 'geodirectory' );
+
+		return $i18n;
 	}
 }
 
