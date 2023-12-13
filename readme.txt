@@ -308,6 +308,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.3.35 - TBD =
 * Beaver Builder preview broken sometimes when archive item designed with BB - FIXED
 * Bricks > GD Image Gallery element added to show post images - ADDED
+* Exclude GD templates from WP search results - ADDED
 
 = GeoDirectory v2.3.34 - 2023-12-06 =
 * iOS fix broke standard image select from library - FIXED
