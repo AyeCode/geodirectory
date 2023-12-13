@@ -131,6 +131,18 @@ class GeoDir_Query {
 
 		// We only want to affect GD pages.
 		if ( ! geodir_is_geodir_page() ) {
+			// Exclude GD templates from WP search.
+			$exclude_posts = ! empty( $q->is_search ) && ( ! is_admin() || wp_doing_ajax() ) ? true : false;
+			$exclude_posts = apply_filters( 'geodir_wp_search_exclude_posts', $exclude_posts, $q );
+
+			if ( $exclude_posts ) {
+				$exclude_ids = GeoDir_SEO::get_noindex_page_ids();
+
+				if ( ! empty( $exclude_ids ) && is_array( $exclude_ids ) ) {
+					$q->set( 'post__not_in', $exclude_ids );
+				}
+			}
+
 			return;
 		}
 
