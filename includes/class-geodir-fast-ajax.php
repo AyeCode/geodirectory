@@ -165,7 +165,7 @@ class GeoDir_Fast_AJAX {
 			}
 
 			// GD plugins
-			if ( strpos( $plugin, 'geodir' ) === 0 || strpos( $plugin, 'geodirectory' ) !== false ) {
+			if ( strpos( $plugin, 'geodir' ) === 0 || strpos( $plugin, 'blockstrap' ) === 0 || strpos( $plugin, 'geodirectory' ) !== false ) {
 				$allowed_plugins[] = $plugin;
 				continue;
 			}
