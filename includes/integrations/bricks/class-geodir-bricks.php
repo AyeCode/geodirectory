@@ -104,10 +104,10 @@ class GeoDir_Bricks {
 	public static function add_template_types( $control_options ) {
 		$template_types = $control_options['templateTypes'];
 
-		$template_types['gd_single'] = 'GD - ' . esc_html__( 'Single', 'bricks' );
-		$template_types['gd_archive'] = 'GD - ' . esc_html__( 'Archive', 'bricks' );
-		//$template_types['gd_archive_item'] = 'GD - ' . esc_html__( 'Archive Item', 'bricks' );
-		$template_types['gd_search'] = 'GD - ' . esc_html__( 'Search Results', 'bricks' );
+		$template_types['gd_single'] = 'GD - ' . esc_html__( 'Single', 'geodirectory' );
+		$template_types['gd_archive'] = 'GD - ' . esc_html__( 'Archive', 'geodirectory' );
+		//$template_types['gd_archive_item'] = 'GD - ' . esc_html__( 'Archive Item', 'geodirectory' );
+		$template_types['gd_search'] = 'GD - ' . esc_html__( 'Search Results', 'geodirectory' );
 
 		$control_options['templateTypes'] = $template_types;
 
