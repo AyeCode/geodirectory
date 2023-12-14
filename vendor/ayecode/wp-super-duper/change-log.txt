@@ -1,3 +1,8 @@
+= 1.1.32 - 2023-12-14 =
+* Update textdomain - CHANGED
+* Escape placeholder t o prevent JS error - FIXED
+* Site editor sidebar navigation auto closed - FIXED
+
 = 1.1.31 =
 * Detect Bricks builder preview - ADDED
 

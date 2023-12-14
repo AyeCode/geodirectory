@@ -1,3 +1,7 @@
+= 0.2.5 - 2023-12-14 =
+* Update textdomain - CHANGED
+* Inline CSS breaks p element in block editor - FIXED
+
 = 0.2.4 =
 * Last ios fix broke standard image select from library - FIXED
 

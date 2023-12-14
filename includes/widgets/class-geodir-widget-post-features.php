@@ -175,7 +175,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 			'type'            => 'notice',
 			'desc'            => __( 'This uses the custom fields output locations.', 'geodirectory' ),
 			'status'          => 'info',
-			'group'           => __( 'Content', 'super-duper' ),
+			'group'           => __( 'Content', 'geodirectory' ),
 			'element_require' => '[%source%]=="meta_auto"',
 		);
 

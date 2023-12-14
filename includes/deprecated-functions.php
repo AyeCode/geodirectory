@@ -507,7 +507,7 @@ function geodir_fa_6_5_0_fix_get_option( $value, $option ) {
 
 	return $value;
 }
-add_filter( 'option_wp-font-awesome-settings', 'geodir_fa_6_5_0_fix_get_option', 21, 2 );
+//add_filter( 'option_wp-font-awesome-settings', 'geodir_fa_6_5_0_fix_get_option', 21, 2 );
 
 function geodir_fa_6_5_0_fix_update_option( $value, $old_value, $option ) {
 	if ( ! ( $option == 'wp-font-awesome-settings' && ! empty( $value ) && is_array( $value ) ) ) {
@@ -524,4 +524,4 @@ function geodir_fa_6_5_0_fix_update_option( $value, $old_value, $option ) {
 
 	return $value;
 }
-add_filter( 'pre_update_option_wp-font-awesome-settings', 'geodir_fa_6_5_0_fix_update_option', 21, 3 );
+//add_filter( 'pre_update_option_wp-font-awesome-settings', 'geodir_fa_6_5_0_fix_update_option', 21, 3 );
