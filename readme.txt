@@ -307,6 +307,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.36 - TBD =
 * GD > Categories category text style not working for image design type - FIXED
+* Meta title separator normal dash replaced to en dash when RankMath active - FIXED
 
 = GeoDirectory v2.3.35 - 2023-12-14 =
 * Beaver Builder preview broken sometimes when archive item designed with BB - FIXED

@@ -838,21 +838,28 @@ class GeoDir_SEO {
 	}
 
 	/**
-     * Document title separator.
-     *
-     * @since 2.0.0.35
-     *
-     * @return string $sep.
-     */
+	 * Document title separator.
+	 *
+	 * @since 2.0.0.35
+	 *
+	 * @return string $sep.
+	 */
 	public static function separator() {
+		$sep = '-';
+
+		// Use RankMath setting separator.
+		if ( defined( 'RANK_MATH_VERSION' ) && class_exists( 'RankMath', false ) ) {
+			$sep = RankMath\Helper::get_settings( 'titles.title_separator' );
+		}
+
 		/**
 		 * Filters the separator for the document title.
 		 *
 		 * @since 2.0.0.35
 		 *
-		 * @param string $sep Document title separator. Default '-'.
+		 * @param string $sep Document title separator.
 		 */
-		return apply_filters( 'document_title_separator', '-' );
+		return apply_filters( 'document_title_separator', $sep );
 	}
 
 	/**
