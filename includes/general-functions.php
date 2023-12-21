@@ -2106,9 +2106,14 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 		$title     = str_replace( "%%postcount%%", $postcount, $title );
 	}
 
+	// Prevents replace - to &#8211;
+	$title = str_replace( '-', 'GEODIRENDASH', $title );
+
 	$title = wptexturize( $title );
 	$title = convert_chars( $title );
 	$title = esc_html( $title );
+
+	$title = str_replace( 'GEODIRENDASH', '-', $title );
 
 	/**
 	 * Filter the title variables after standard ones have been filtered.
