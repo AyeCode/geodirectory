@@ -794,6 +794,13 @@ class GeoDir_Compatibility {
 		if ( class_exists( 'UAGB_Post_Assets' ) ) {
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'spectra_uagb_post_assets_enqueue_scripts' ), 99 );
 		}
+
+		// Blocksy Theme
+		if ( class_exists( 'Blocksy_Manager', false ) ) {
+			add_filter( 'theme_mod_search_hero_elements', array( __CLASS__, 'blocksy_get_theme_mod' ), 11, 1 );
+			add_filter( 'theme_mod_custom_description', array( __CLASS__, 'blocksy_get_theme_mod' ), 11, 1 );
+			add_filter( 'theme_mod_hero_custom_description', array( __CLASS__, 'blocksy_get_theme_mod' ), 11, 1 );
+		}
 	}
 
 	/**
@@ -4253,5 +4260,35 @@ class GeoDir_Compatibility {
 			$current_post_assets = new UAGB_Post_Assets( $page_id );
 			$current_post_assets->enqueue_scripts();
 		}
+	}
+
+	/**
+	 * Filter Blocksy theme options.
+	 *
+	 * @since 2.3.36
+	 *
+	 * @param mixed $value Option value.
+	 * @return mixed Filtered value.
+	 */
+	public static function blocksy_get_theme_mod( $value ) {
+		if ( ! ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) ) {
+			return $value;
+		}
+
+		$current_filter = current_filter();
+
+		if ( $current_filter == 'theme_mod_search_hero_elements' && ! empty( $value ) && is_array( $value ) ) {
+			foreach ( $value as $key => $option ) {
+				if ( is_array( $option ) && isset( $option['id'] ) && $option['id'] == 'custom_description' ) {
+					$option['enabled'] = false;
+
+					$value[ $key ] = $option;
+				}
+			}
+		} else if ( in_array( $current_filter, array( 'theme_mod_custom_description', 'theme_mod_hero_custom_description' ) ) && ! empty( $value ) && is_scalar( $value ) ) {
+			$value = false;
+		}
+
+		return $value;
 	}
 }
