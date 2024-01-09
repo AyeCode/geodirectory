@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.35\n"
+"Project-Id-Version: GeoDirectory 2.3.36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-14 23:25+0530\n"
-"PO-Revision-Date: 2023-12-14 23:25+0530\n"
+"POT-Creation-Date: 2024-01-09 19:17+0530\n"
+"PO-Revision-Date: 2024-01-09 19:17+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1588,7 +1588,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:974
 #: includes/admin/class-geodir-admin-dummy-data.php:982
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:756
-#: includes/general-functions.php:2678
+#: includes/general-functions.php:2683
 msgid "Video"
 msgstr ""
 
@@ -2716,7 +2716,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:1648
 #: includes/admin/views/html-notice-v2-update.php:194
-#: includes/core-functions.php:361 includes/general-functions.php:2677
+#: includes/core-functions.php:361 includes/general-functions.php:2682
 #: vendor/ayecode/wp-deactivation-survey/wp-deactivation-survey.php:69
 msgid "Documentation"
 msgstr ""
@@ -4546,7 +4546,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:380
 #: includes/elementor/class-geodir-elementor-form-contact.php:96
 #: includes/elementor/class-geodir-elementor-form-contact.php:404
-#: includes/general-functions.php:2582 language.php:53
+#: includes/general-functions.php:2587 language.php:53
 msgid "Time"
 msgstr ""
 
@@ -11186,7 +11186,7 @@ msgid ""
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:864
+#: includes/class-geodir-compatibility.php:871
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -11194,37 +11194,37 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3080
+#: includes/class-geodir-compatibility.php:3087
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3091
+#: includes/class-geodir-compatibility.php:3098
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3098
+#: includes/class-geodir-compatibility.php:3105
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3099
+#: includes/class-geodir-compatibility.php:3106
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3804
+#: includes/class-geodir-compatibility.php:3811
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4031
+#: includes/class-geodir-compatibility.php:4038
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4032
+#: includes/class-geodir-compatibility.php:4039
 msgid "Enable Borlabs Cookie integration for GeoDirectory maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4158
+#: includes/class-geodir-compatibility.php:4165
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
@@ -14040,7 +14040,7 @@ msgstr ""
 msgid "First"
 msgstr ""
 
-#: includes/general-functions.php:248 includes/general-functions.php:2585
+#: includes/general-functions.php:248 includes/general-functions.php:2590
 msgid "Second"
 msgstr ""
 
@@ -14060,122 +14060,122 @@ msgstr ""
 msgid "Given image size is not valid"
 msgstr ""
 
-#: includes/general-functions.php:2191
+#: includes/general-functions.php:2196
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: includes/general-functions.php:2581
+#: includes/general-functions.php:2586
 msgid "Choose Time"
 msgstr ""
 
-#: includes/general-functions.php:2583
+#: includes/general-functions.php:2588
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2181
 msgid "Hour"
 msgstr ""
 
-#: includes/general-functions.php:2584
+#: includes/general-functions.php:2589
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2182
 msgid "Minute"
 msgstr ""
 
-#: includes/general-functions.php:2586
+#: includes/general-functions.php:2591
 msgid "Millisecond"
 msgstr ""
 
-#: includes/general-functions.php:2587
+#: includes/general-functions.php:2592
 msgid "Microsecond"
 msgstr ""
 
-#: includes/general-functions.php:2588
+#: includes/general-functions.php:2593
 msgid "Time Zone"
 msgstr ""
 
-#: includes/general-functions.php:2589
+#: includes/general-functions.php:2594
 msgid "Now"
 msgstr ""
 
-#: includes/general-functions.php:2590
+#: includes/general-functions.php:2595
 msgid "Done"
 msgstr ""
 
-#: includes/general-functions.php:2591 includes/helper-functions.php:693
+#: includes/general-functions.php:2596 includes/helper-functions.php:693
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2176
 msgid "AM"
 msgstr ""
 
-#: includes/general-functions.php:2592 includes/helper-functions.php:694
+#: includes/general-functions.php:2597 includes/helper-functions.php:694
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2177
 msgid "PM"
 msgstr ""
 
-#: includes/general-functions.php:2620
+#: includes/general-functions.php:2625
 msgid "View: Grid 1"
 msgstr ""
 
-#: includes/general-functions.php:2620
+#: includes/general-functions.php:2625
 msgid "Grid View (One Column)"
 msgstr ""
 
-#: includes/general-functions.php:2621
+#: includes/general-functions.php:2626
 msgid "View: Grid 2"
 msgstr ""
 
-#: includes/general-functions.php:2621
+#: includes/general-functions.php:2626
 msgid "Grid View (Two Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2622
+#: includes/general-functions.php:2627
 msgid "View: Grid 3"
 msgstr ""
 
-#: includes/general-functions.php:2622
+#: includes/general-functions.php:2627
 msgid "Grid View (Three Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2623
+#: includes/general-functions.php:2628
 msgid "View: Grid 4"
 msgstr ""
 
-#: includes/general-functions.php:2623
+#: includes/general-functions.php:2628
 msgid "Grid View (Four Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2624
+#: includes/general-functions.php:2629
 msgid "View: Grid 5"
 msgstr ""
 
-#: includes/general-functions.php:2624
+#: includes/general-functions.php:2629
 msgid "Grid View (Five Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2625
+#: includes/general-functions.php:2630
 #: templates/bootstrap/loop/select-layout.php:108
 #: templates/loop/select-layout.php:118
 msgid "View: List"
 msgstr ""
 
-#: includes/general-functions.php:2625
+#: includes/general-functions.php:2630
 msgid "List view"
 msgstr ""
 
-#: includes/general-functions.php:2676
+#: includes/general-functions.php:2681
 msgid "Disable hints"
 msgstr ""
 
-#: includes/general-functions.php:2679
+#: includes/general-functions.php:2684
 msgid "Feedback"
 msgstr ""
 
-#: includes/general-functions.php:2680
+#: includes/general-functions.php:2685
 msgid "Admin Hints:"
 msgstr ""
 
-#: includes/general-functions.php:2740 includes/general-functions.php:2754
+#: includes/general-functions.php:2745 includes/general-functions.php:2759
 msgid "meters"
 msgstr ""
 
-#: includes/general-functions.php:2743 includes/general-functions.php:2757
+#: includes/general-functions.php:2748 includes/general-functions.php:2762
 msgid "feet"
 msgstr ""
 
@@ -21140,6 +21140,7 @@ msgstr ""
 
 #: templates/bootstrap/categories/icon-left.php:90
 #: templates/bootstrap/categories/icon-top.php:96
+#: templates/bootstrap/categories/image.php:96
 #: templates/bootstrap/categories/sub-item.php:103
 #, php-format
 msgid "%s option"
@@ -21149,6 +21150,7 @@ msgstr[1] ""
 
 #: templates/bootstrap/categories/icon-left.php:93
 #: templates/bootstrap/categories/icon-top.php:99
+#: templates/bootstrap/categories/image.php:99
 #: templates/bootstrap/categories/sub-item.php:106
 #, php-format
 msgid "%s listing"
@@ -21158,6 +21160,7 @@ msgstr[1] ""
 
 #: templates/bootstrap/categories/icon-left.php:96
 #: templates/bootstrap/categories/icon-top.php:102
+#: templates/bootstrap/categories/image.php:102
 #: templates/bootstrap/categories/sub-item.php:109
 #, php-format
 msgid "%s item"
