@@ -195,9 +195,9 @@ function geodirGoMapInit() {
             if (myOptions.defaultBaseLayer) {
                 try {
                     baseLayer = L.tileLayer.provider(myOptions.defaultBaseLayer);
-                    var apikey = typeof opts.osmApiKey !== 'undefined' && opts.osmApiKey ? opts.osmApiKey : '';
-                    if(apikey){
-                        baseLayer._url += "?apikey=5e8a41b90fc240c09f61eb6bbbfb8395";
+                    if (baseLayer && baseLayer._url && baseLayer._url.indexOf('apikey=') === -1 && !(baseLayer.options && baseLayer.options.apiKey)) {
+                        var apikey = typeof opts.osmApiKey !== 'undefined' && opts.osmApiKey ? opts.osmApiKey : '5e8a41b90fc240c09f61eb6bbbfb8395';
+                        baseLayer._url += (baseLayer._url.indexOf("?") === -1 ? '?' : "&") + "apikey=" + apikey;
                     }
                     customMap = true;
                 } catch(e) {
