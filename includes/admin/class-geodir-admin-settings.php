@@ -1440,16 +1440,20 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-
-
 					// if Font Awesome pro is enabled then add a notice other variants can be used.
 					if ( defined( 'FAS_PRO' ) && FAS_PRO ) {
-						$value['custom_attributes'] = $value['custom_attributes'] + array(
-								'data-fa-icons'   => true,
-								'data-bs-toggle'  => "tooltip",
-								'data-bs-trigger' => "focus",
-								'title'           => __( 'For pro icon variants (light, thin, duotone), paste the class here', 'geodirectory' ),
-							);
+						$custom_attributes = array(
+							'data-fa-icons'   => true,
+							'data-bs-toggle'  => "tooltip",
+							'data-bs-trigger' => "focus",
+							'title'           => __( 'For pro icon variants (light, thin, duotone), paste the class here', 'geodirectory' ),
+						);
+
+						if ( ! empty( $value['custom_attributes'] ) && is_array( $value['custom_attributes'] ) ) {
+							$value['custom_attributes'] = $value['custom_attributes'] + $custom_attributes;
+						} else {
+							$value['custom_attributes'] = $custom_attributes;
+						}
 					}
 
 					echo aui()->input(
