@@ -360,15 +360,26 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 	 * @return string Rating stars html.
 	 */
 	public function get_short_style( $show_count = true ) {
-		global $post,$gd_post;
+		global $post, $gd_post;
+
+		if ( ! empty( $gd_post ) && ! empty( $gd_post->ID ) ) {
+			$post_id = (int) $gd_post->ID;
+			$post_type = $gd_post->post_type;
+		} else if ( ! empty( $post ) && ! empty( $post->ID ) ) {
+			$post_id = (int) $post->ID;
+			$post_type = $post->post_type;
+		} else {
+			$post_id = 0;
+			$post_type = '';
+		}
+
 		ob_start();
 		?>
 		<div class="gd-list-rating-stars d-inline-block">
 			<?php
-
 			// icon
-			if ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
-				$number = get_comments_number( $post->ID );
+			if ( ! empty( $post_type ) && geodir_cpt_has_rating_disabled( $post_type ) ) {
+				$number = get_comments_number( $post_id );
 				echo '<i class="fas fa-comments" aria-hidden="true"></i> ';
 				echo '<span class="text-muted">(' . absint( $number ) . ')</span>';
 			} else {
@@ -376,13 +387,11 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 					$post_rating = '5';
 					$number      = 123;
 				} else {
-					$post_rating = geodir_get_post_rating( $post->ID );
+					$post_rating = geodir_get_post_rating( $post_id );
 					$number      = ! empty( $gd_post->rating_count ) ? $gd_post->rating_count : 0;
 				}
 
 				$this->post_rating = $post_rating;
-				//              $rating_texts      = GeoDir_Comments::rating_texts();
-				//              print_r( $rating_texts );
 				$rating_title = '';
 				$icon_class   = esc_attr( geodir_get_option( 'rating_icon', 'fas fa-star' ) );
 				$color        = $post_rating > 0 ? esc_attr( geodir_get_option( 'rating_color' ) ) : esc_attr( geodir_get_option( 'rating_color_off' ) );
@@ -390,7 +399,6 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 				echo '<b class="">' . esc_attr( number_format( $post_rating, 1 ) ) . '</b>';
 				echo $show_count ? '<span class="text-muted ml-1 ms-1">(' . absint( $number ) . ')</span>' : '';
 			}
-
 			?>
 		</div>
 		<?php
@@ -405,12 +413,24 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 	 * @return string Rating stars html.
 	 */
 	public function get_rating_stars() {
-		global $post;
+		global $post, $gd_post;
+
+		if ( ! empty( $gd_post ) && ! empty( $gd_post->ID ) ) {
+			$post_id = (int) $gd_post->ID;
+			$post_type = $gd_post->post_type;
+		} else if ( ! empty( $post ) && ! empty( $post->ID ) ) {
+			$post_id = (int) $post->ID;
+			$post_type = $post->post_type;
+		} else {
+			$post_id = 0;
+			$post_type = '';
+		}
+
 		ob_start();
 		?>
 		<div class="gd-list-rating-stars d-inline-block">
 			<?php
-			if ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
+			if ( ! empty( $post_type ) && geodir_cpt_has_rating_disabled( $post_type ) ) {
 				echo '<i class="fas fa-comments" aria-hidden="true"></i>';
 			} else {
 				if ( geodir_is_block_demo() ) {
@@ -418,10 +438,10 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 				} elseif ( isset( $post->ID ) && ( geodir_details_page_id() == $post->ID || geodir_details_page_id( $post->post_type ) == $post->ID ) ) {
 					$post_rating = '5';
 				} else {
-					$post_rating = geodir_get_post_rating( $post->ID );
+					$post_rating = geodir_get_post_rating( $post_id );
 				}
 				$this->post_rating = $post_rating;
-				echo geodir_get_rating_stars( $post_rating, $post->ID );
+				echo geodir_get_rating_stars( $post_rating, $post_id );
 			}
 			?>
 		</div>
