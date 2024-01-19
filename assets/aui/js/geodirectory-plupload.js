@@ -380,7 +380,7 @@ function plu_show_thumbs(imgId) {
                 image_caption_html +
                 '<div class="gd-thumb-actions position-absolute text-white w-100  d-flex justify-content-around" style="bottom: 0;background: #00000063;top: auto; height:20px;">' +
                 '<a class="thumbpreviewlink text-white" title="' + geodir_esc_entities( geodir_params.txt_preview ) + '" id="thumbpreviewlink' + imgId + i + '" href="' + image_url + '" target="_blank"><i class="far fa-eye" aria-hidden="true"></i></a> ' +
-                '<span class="thumbeditlink c-pointer" title="' + geodir_esc_entities( geodir_params.txt_edit ) + '" onclick="gd_edit_image_meta(' + imgId + ',' + i + ');"><i class="far fa-edit" aria-hidden="true"></i></span>' +
+                '<span class="thumbeditlink c-pointer" title="' + geodir_esc_entities( geodir_params.txt_edit ) + '" onclick="gd_edit_image_meta(\'' + imgId + '\',' + i + ');"><i class="far fa-edit" aria-hidden="true"></i></span>' +
                 '<span class="thumbremovelink c-pointer" title="' + geodir_esc_entities( geodir_params.txt_delete ) + '" id="thumbremovelink' + imgId + i + '"><i class="fas fa-trash-alt" aria-hidden="true"></i></span>' +
                 '</div>' +
                 '</div></div>');
@@ -444,39 +444,22 @@ function plu_show_thumbs(imgId) {
     });
 }
 
-function gd_edit_image_meta(input, order_id) {
-    var imagesS = jQuery("#" + input.id, jQuery('#' + input.id + 'plupload-upload-ui').parent()).val();
-    var images = imagesS.split("::");
-    var img_arr = images[order_id].split("|");
-    var image_title = geodir_esc_entities(img_arr[2]);
-    var image_caption = geodir_esc_entities(img_arr[3]);
-    var html = '';
-    var button = '';
+function gd_edit_image_meta(inputId, orderId) {
+    var imagesS = jQuery("#" + inputId, jQuery('#' + inputId + 'plupload-upload-ui').parent()).val(), images = imagesS.split("::"), img_arr = images[orderId].split("|"), image_title = geodir_esc_entities(img_arr[2]), image_caption = geodir_esc_entities(img_arr[3]), html = '', hBtn = '';
 
     html = html + "<div class='form-group mb-3'><label for='gd-image-meta-title' class='text-left text-start form-label'>" + geodir_params.label_title + "</label><input id='gd-image-meta-title' value='" + image_title + "' class='form-control'></div>"; // title value
     html = html + "<div class='form-group mb-3'><label for='gd-image-meta-caption' class='text-left text-start form-label'>" + geodir_params.label_caption + "</label><input id='gd-image-meta-caption' value='" + image_caption + "' class='form-control'></div>"; // caption value
-    button = "<span class='btn btn-primary c-pointer' onclick='gd_set_image_meta(\"" + input.id + "\"," + order_id + ")'>" + geodir_params.button_set + "</span>"; // set button
+    hBtn = "<span class='btn btn-primary c-pointer' onclick='gd_set_image_meta(\"" + inputId + "\"," + orderId + ")'>" + geodir_params.button_set + "</span>"; // set button
     jQuery('#gd-image-meta-input .modal-body').html(html);
-    jQuery('#gd-image-meta-input .modal-footer').html(button);
-    // lity('#gd-image-meta-input');
+    jQuery('#gd-image-meta-input .modal-footer').html(hBtn);
     jQuery('#gd-image-meta-input').modal('show');
-
 }
 
-function gd_set_image_meta(input_id, order_id) {
-    //alert(order_id);
-    var imagesS = jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val();
-    var images = imagesS.split("::");
-    var img_arr = images[order_id].split("|");
-    var image_url = img_arr[0];
-    var image_id = img_arr[1];
-    var image_title = geodir_esc_entities(jQuery('#gd-image-meta-title').val());
-    var image_caption = geodir_esc_entities(jQuery('#gd-image-meta-caption').val());
-    images[order_id] = image_url + "|" + image_id + "|" + image_title + "|" + image_caption;
+function gd_set_image_meta(inputId, orderId) {
+    var imagesS = jQuery("#" + inputId, jQuery('#' + inputId + 'plupload-upload-ui').parent()).val(), images = imagesS.split("::"), img_arr = images[orderId].split("|"), image_url = img_arr[0], image_id = img_arr[1], image_title = geodir_esc_entities(jQuery('#gd-image-meta-title').val()), image_caption = geodir_esc_entities(jQuery('#gd-image-meta-caption').val());
+    images[orderId] = image_url + "|" + image_id + "|" + image_title + "|" + image_caption;
     imagesS = images.join("::");
-    jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val(imagesS).trigger('change');
-    plu_show_thumbs(input_id);
-    // jQuery('[data-lity-close]', window.parent.document).trigger('click');
-
+    jQuery("#" + inputId, jQuery('#' + inputId + 'plupload-upload-ui').parent()).val(imagesS).trigger('change');
+    plu_show_thumbs(inputId);
     jQuery('#gd-image-meta-input').modal('hide');
 }
