@@ -1430,6 +1430,10 @@ class GeoDir_Compatibility {
 		if ( $value && defined( 'ASTRA_THEME_VERSION' ) && version_compare( ASTRA_THEME_VERSION, '4.1', '>=' ) && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) ) {
 			$gd_astra_41_fix = true;
 			$gd_skip_the_content = true;
+
+			if ( geodir_is_page( 'search' ) ) {
+				$value = false;
+			}
 		}
 
 		return $value;
