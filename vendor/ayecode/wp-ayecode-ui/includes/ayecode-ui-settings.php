@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.5';
+		public $version = '0.2.6';
 
 		/**
 		 * Class textdomain.
@@ -1097,14 +1097,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						echo self::bs3_compat_css();
 					}
 
+                    $current_screen = function_exists('get_current_screen' ) ? get_current_screen() : '';
+                    $is_fse = false;
+                    if ( is_admin() && ( !empty($_REQUEST['postType']) || $current_screen->is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
+                        $is_fse = true;
+                    }
+
 					if(!empty($colors)){
 						$d_colors = self::get_colors(true);
-
-                        $current_screen = function_exists('get_current_screen' ) ? get_current_screen() : '';
-                        $is_fse = false;
-                        if ( is_admin() && ( !empty($_REQUEST['postType']) || $current_screen->is_block_editor() ) && ( defined( 'BLOCKSTRAP_VERSION' ) || defined( 'AUI_FSE' ) )  ) {
-                            $is_fse = true;
-                        }
 
 //						$is_fse = !empty($_REQUEST['postType']) && $_REQUEST['postType']=='wp_template';
 						foreach($colors as $key => $color ){
@@ -1124,9 +1124,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						echo ' body.modal-open #adminmenuwrap{z-index:999} body.modal-open #wpadminbar{z-index:1025}';
 					}
 
-                    if( $aui_bs5 && defined( 'BLOCKSTRAP_VERSION' ) ){
+                    if( $aui_bs5 && defined( 'BLOCKSTRAP_VERSION' )  ){
                         $css = '';
                         $theme_settings = wp_get_global_styles();
+
+//                        print_r( $theme_settings);exit;
 
                         // font face
                         if( !empty( $theme_settings['typography']['fontFamily'] ) ){
@@ -1135,12 +1137,106 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                         }
 
                         // font size
-                        $css .= '--bs-body-font-size: var(--wp--preset--font-size--small);';
+                        if( !empty( $theme_settings['typography']['fontSize'] ) ){
+                            $css .= '--bs-body-font-size: ' . esc_attr( $theme_settings['typography']['fontSize'] ) . ' ;';
+                        }
+
+                        // line height
+                         if( !empty( $theme_settings['typography']['lineHeight'] ) ){
+                            $css .= '--bs-body-line-height: ' . esc_attr( $theme_settings['typography']['lineHeight'] ) . ';';
+                        }
+
+
+                           // font weight
+                         if( !empty( $theme_settings['typography']['fontWeight'] ) ){
+                            $css .= '--bs-body-font-weight: ' . esc_attr( $theme_settings['typography']['fontWeight'] ) . ';';
+                        }
+
+                        // Background
+                         if( !empty( $theme_settings['color']['background'] ) ){
+                            $css .= '--bs-body-bg: ' . esc_attr( $theme_settings['color']['background'] ) . ';';
+                        }
+
+                         // Background Gradient
+                         if( !empty( $theme_settings['color']['gradient'] ) ){
+                            $css .= 'background: ' . esc_attr( $theme_settings['color']['gradient'] ) . ';';
+                        }
+
+                           // Background Gradient
+                         if( !empty( $theme_settings['color']['gradient'] ) ){
+                            $css .= 'background: ' . esc_attr( $theme_settings['color']['gradient'] ) . ';';
+                        }
+
+                        // text color
+                        if( !empty( $theme_settings['color']['text'] ) ){
+                            $css .= '--bs-body-color: ' . esc_attr( $theme_settings['color']['text'] ) . ';';
+                        }
+
+
+                        // link colors
+                        if( !empty( $theme_settings['elements']['link']['color']['text'] ) ){
+                            $css .= '--bs-link-color: ' . esc_attr( $theme_settings['elements']['link']['color']['text'] ) . ';';
+                        }
+                        if( !empty( $theme_settings['elements']['link'][':hover']['color']['text'] ) ){
+                            $css .= '--bs-link-hover-color: ' . esc_attr( $theme_settings['elements']['link'][':hover']['color']['text'] ) . ';';
+                        }
+
 
 
                         if($css){
-                            echo 'body{' . $css . '}';
+                            echo  $is_fse ? 'body.editor-styles-wrapper{' . $css . '}' : 'body{' . $css . '}';
                         }
+
+                        $bep = $is_fse ? 'body.editor-styles-wrapper ' : '';
+
+
+                        // Headings
+                        $headings_css = '';
+                        if( !empty( $theme_settings['elements']['heading']['color']['text'] ) ){
+                            $headings_css .= "color: " . esc_attr( $theme_settings['elements']['heading']['color']['text'] ) . ";";
+                        }
+
+                        // heading background
+                        if( !empty( $theme_settings['elements']['heading']['color']['background'] ) ){
+                            $headings_css .= 'background: ' . esc_attr( $theme_settings['elements']['heading']['color']['background'] ) . ';';
+                        }
+
+                         // heading font family
+                        if( !empty( $theme_settings['elements']['heading']['typography']['fontFamily'] ) ){
+                            $headings_css .= 'font-family: ' . esc_attr( $theme_settings['elements']['heading']['typography']['fontFamily']  ) . ';';
+                        }
+
+                        if( $headings_css ){
+                            echo "$bep h1,$bep h2,$bep h3, $bep h4,$bep h5,$bep h6{ " . $headings_css . "}";
+                        }
+
+                        $hs = array('h1','h2','h3','h4','h5','h6');
+
+                        foreach($hs as $hn){
+                            $h_css = '';
+                             if( !empty( $theme_settings['elements'][$hn]['color']['text'] ) ){
+                                $h_css .= 'color: ' . esc_attr( $theme_settings['elements'][$hn]['color']['text'] ) . ';';
+                             }
+
+                              if( !empty( $theme_settings['elements'][$hn]['typography']['fontSize'] ) ){
+                                $h_css .= 'font-size: ' . esc_attr( $theme_settings['elements'][$hn]['typography']['fontSize']  ) . ';';
+                             }
+
+                              if( !empty( $theme_settings['elements'][$hn]['typography']['fontFamily'] ) ){
+                                $h_css .= 'font-family: ' . esc_attr( $theme_settings['elements'][$hn]['typography']['fontFamily']  ) . ';';
+                             }
+
+                             if($h_css){
+                                echo $bep . $hn . '{'.$h_css.'}';
+                             }
+                        }
+
+//                        wp_mail('x@x.com','ss',print_r($_SERVER,true).'@@@');
+//                        print_r($_SERVER);exit;
+
+
+
+
                     }
 				?>
             </style>
@@ -2634,9 +2730,25 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                                 $keys[condition.key][index] = false;
                             }
                         } else if (condition.condition === 'contains') {
+                            var avalues = condition.value;
+                            if (!Array.isArray(avalues)) {
+                                if (jQuery.isNumeric(avalues)) {
+                                    avalues = [avalues];
+                                } else {
+                                    avalues = avalues.split(",");
+                                }
+                            }
                             switch (field_type) {
                                 case 'multiselect':
-                                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
+                                    var found = false;
+                                    for (var key in avalues) {
+                                        var svalue = jQuery.isNumeric(avalues[key]) ? avalues[key] : (avalues[key]).trim();
+                                        if (!found && current_value && ((!Array.isArray(current_value) && current_value.indexOf(svalue) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(svalue, current_value)))) {
+                                            found = true;
+                                        }
+                                    }
+                    
+                                    if (found) {
                                         $keys[condition.key][index] = true;
                                     } else {
                                         $keys[condition.key][index] = false;

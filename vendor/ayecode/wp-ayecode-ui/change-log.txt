@@ -1,3 +1,7 @@
+= 0.2.6 - 2024-01-25 =
+* Single quote breaks validation message - FIXED
+* WP Editor Styles can now style headings, links, typography - ADDED
+
 = 0.2.5 - 2023-12-14 =
 * Update textdomain - CHANGED
 * Inline CSS breaks p element in block editor - FIXED
