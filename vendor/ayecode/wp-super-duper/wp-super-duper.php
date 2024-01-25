@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.32' );
+	define( 'SUPER_DUPER_VER', '1.1.33' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -3743,7 +3743,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					if ( ! empty( $args['options'] ) ) {
 						$options .= "options: [";
 						foreach ( $args['options'] as $option_val => $option_label ) {
-							$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+							$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . esc_js( addslashes( $option_label ) ) . "' },";
 						}
 						$options .= "],";
 					}
