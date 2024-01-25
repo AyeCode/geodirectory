@@ -311,6 +311,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Edit logo image title is not working on Chrome browser - FIXED
 * PHP Deprecated: mb_convert_encoding() - FIXED
 * Astra theme conflicts on search page - FIXED
+* Setting changed for Borlabs Cookie v3 - CHANGED
 
 = GeoDirectory v2.3.36 - 2024-01-09 =
 * GD > Categories category text style not working for image design type - FIXED

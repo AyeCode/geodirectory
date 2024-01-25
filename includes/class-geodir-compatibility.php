@@ -2091,7 +2091,7 @@ class GeoDir_Compatibility {
 		}
 
 		// Borlabs Cookie Integration
-		if ( defined( 'BORLABS_COOKIE_VERSION' ) &&  ! is_admin() && geodir_get_option( 'borlabs_cookie' ) ) {
+		if ( defined( 'BORLABS_COOKIE_VERSION' ) && version_compare( BORLABS_COOKIE_VERSION, '3.0', '<' ) &&  ! is_admin() && geodir_get_option( 'borlabs_cookie' ) ) {
 			add_filter( 'geodir_lazy_load_map', array( __CLASS__, 'borlabs_cookie_setup' ), 999, 1 );
 			add_filter( 'wp_super_duper_widget_output', array( __CLASS__, 'borlabs_cookie_wrap' ), 999, 4 );
 		}
@@ -4038,7 +4038,7 @@ class GeoDir_Compatibility {
 			$_settings[] = $setting;
 
 			if ( ! empty( $setting['id'] ) && $setting['id'] == 'map_cache' ) {
-				$_settings[] = array(
+				$_setting = array(
 					'name' => __( 'Borlabs Cookie Integration', 'geodirectory'),
 					'desc' => __( 'Enable Borlabs Cookie integration for GeoDirectory maps.', 'geodirectory' ),
 					'id' => 'borlabs_cookie',
@@ -4047,6 +4047,14 @@ class GeoDir_Compatibility {
 					'desc_tip' => false,
 					'advanced' => true
 				);
+
+				if ( defined( 'BORLABS_COOKIE_VERSION' ) && version_compare( BORLABS_COOKIE_VERSION, '3.0', '>=' ) ) {
+					$_setting['desc'] = __( 'NOTE: Go to Borlabs Cookie > Settings to enable Borlabs Cookie integration for GeoDirectory maps.', 'geodirectory' );
+					$_setting['custom_attributes'] = array(
+						'disabled' => 'disabled'
+					);
+				}
+				$_settings[] = $_setting;
 			}
 		}
 
