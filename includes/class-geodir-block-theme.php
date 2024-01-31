@@ -952,11 +952,10 @@ class GeoDir_Block_Theme {
 		$template_is_from_theme = 'theme' === $template_file->source;
 		$theme_name             = wp_get_theme()->get( 'TextDomain' );
 
-		$template_content  = file_get_contents( $template_file->path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$template          = new \WP_Block_Template();
-		$template->id      = $template_is_from_theme ? $theme_name . '//' . $template_file->slug : self::PLUGIN_SLUG . '//' . $template_file->slug;
-		$template->theme   = $template_is_from_theme ? $theme_name : self::PLUGIN_SLUG;
-		$template->content = _inject_theme_attribute_in_block_template_content( $template_content );
+		$template                 = new \WP_Block_Template();
+		$template->id             = $template_is_from_theme ? $theme_name . '//' . $template_file->slug : self::PLUGIN_SLUG . '//' . $template_file->slug;
+		$template->theme          = $template_is_from_theme ? $theme_name : self::PLUGIN_SLUG;
+		$template->content        = @file_get_contents( $template_file->path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$template->source         = $template_file->source ? $template_file->source : 'plugin';
 		$template->slug           = $template_file->slug;
 		$template->type           = $template_type;
@@ -968,6 +967,20 @@ class GeoDir_Block_Theme {
 		$template->post_types     = array();
 		if ( 'wp_template_part' === $template_type ) {
 			$template->area = 'uncategorized';
+		}
+
+		if ( function_exists( '_inject_theme_attribute_in_template_part_block' ) ) {
+			$before_block_visitor = '_inject_theme_attribute_in_template_part_block';
+			$after_block_visitor  = null;
+			$hooked_blocks        = get_hooked_blocks();
+			if ( ! empty( $hooked_blocks ) || has_filter( 'hooked_block_types' ) ) {
+				$before_block_visitor = make_before_block_visitor( $hooked_blocks, $template );
+				$after_block_visitor  = make_after_block_visitor( $hooked_blocks, $template );
+			}
+			$blocks            = parse_blocks( $template->content );
+			$template->content = traverse_and_serialize_blocks( $blocks, $before_block_visitor, $after_block_visitor );
+		} else if ( function_exists( '_inject_theme_attribute_in_block_template_content' ) ) {
+			$template->content = _inject_theme_attribute_in_block_template_content( $template->content );
 		}
 
 		return $template;
@@ -1255,7 +1268,15 @@ class GeoDir_Block_Theme {
 			$content = @file_get_contents( $template_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
 			if ( $content ) {
-				$content = _inject_theme_attribute_in_block_template_content( $content );
+				if ( function_exists( '_inject_theme_attribute_in_template_part_block' ) ) {
+					$before_block_visitor = '_inject_theme_attribute_in_template_part_block';
+					$after_block_visitor  = null;
+
+					$blocks  = parse_blocks( $content );
+					$content = traverse_and_serialize_blocks( $blocks, $before_block_visitor, $after_block_visitor );
+				} else if ( function_exists( '_inject_theme_attribute_in_block_template_content' ) ) {
+					$content = _inject_theme_attribute_in_block_template_content( $content );
+				}
 			}
 		}
 
