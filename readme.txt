@@ -307,6 +307,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.38 - TBD =
 * GD > Post Features shows fields label special chars encoded incorrectly - FIXED
+* Category icon not generated from FontAweosme icons for some sites - FIXED
 
 = GeoDirectory v2.3.37 - 2024-01-25 =
 * OSM layer url shows apikey parameter twice for custom style map - FIXED
