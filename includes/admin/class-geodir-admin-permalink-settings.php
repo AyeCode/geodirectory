@@ -213,11 +213,23 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 			</table>
 
 			<?php
-			// @todo only show if a CPT has addresses set to not be required
 
-			// Check if address is required
-			$address_field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type, false );
-			$address_required = isset($address_field['is_required']) && $address_field['is_required'];
+			// Check if any CTP has address et to not be required.
+			$post_types = geodir_get_posttypes( 'array' );
+			$show_missing_location_settings = false;
+			if ( ! empty( $post_types ) ) {
+				foreach ( $post_types as $post_type => $pt ) {
+					// Check if address is required
+					$address_field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type, false );
+					if ( ! empty( $address_field ) ) {
+						$show_missing_location_settings = isset($address_field['is_required']) && ! $address_field['is_required'];
+						break;
+					}
+				}
+			}
+
+			// Only show the required settings if at least one CPT has the address set to not be required.
+			if($show_missing_location_settings){
 			?>
 			<h2 class="title"><?php _e('GeoDirectory Location Base (when not set)','geodirectory'); ?></h2>
 			<p><?php
@@ -241,6 +253,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 				</tr>
 
 			</table>
+			<?php } ?>
 
 
 			<style>.form-table.gd-permalink-structure .gd-available-structure-tags li{float:left;margin-right:5px}</style>
