@@ -220,9 +220,8 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 			if ( ! empty( $post_types ) ) {
 				foreach ( $post_types as $post_type => $pt ) {
 					// Check if address is required
-					$address_field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type, false );
-					if ( ! empty( $address_field ) ) {
-						$show_missing_location_settings = isset($address_field['is_required']) && ! $address_field['is_required'];
+					if ( ! geodir_cpt_requires_address( $post_type ) ) {
+						$show_missing_location_settings = true;
 						break;
 					}
 				}

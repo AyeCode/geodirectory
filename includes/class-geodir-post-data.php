@@ -620,8 +620,7 @@ class GeoDir_Post_Data {
 				$postarr['city'] = sanitize_text_field( stripslashes( $gd_post['city'] ) );
 			} else {
 				// Check if address is required
-				$address_field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type, false );
-				$address_required = isset($address_field['is_required']) && $address_field['is_required'];
+				$address_required = geodir_cpt_requires_address( $post_type );
 				if ( ! $update && $address_required ) {
 					$default_location   = $geodirectory->location->get_default_location();
 					$postarr['city']    = stripslashes( $default_location->city );
@@ -1639,8 +1638,7 @@ class GeoDir_Post_Data {
 
 		// Check if address is required
 		$post_type = isset( $post_data['post_type'] ) ? esc_attr( $post_data['post_type'] ) : '';
-		$address_field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type, false );
-		$address_required = isset($address_field['is_required']) && $address_field['is_required'] ? true : false;
+		$address_required = geodir_cpt_requires_address( $post_type );
 
 		// Pre validation
 		$has_error = false;

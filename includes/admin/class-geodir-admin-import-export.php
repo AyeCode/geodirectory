@@ -321,7 +321,7 @@ class GeoDir_Admin_Import_Export {
 							geodir_error_log( $line_error . ' ' . $result->get_error_message() );
 						}
 					}
-					
+
 					/**
 					 * @since 2.0.0.68
 					 */
@@ -493,7 +493,8 @@ class GeoDir_Admin_Import_Export {
 			}
 		}
 
-		if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+
+		if ( GeoDir_Post_types::supports( $post_type, 'location' ) && geodir_cpt_requires_address( $post_type ) ) {
 			// Fill in the GPS info from address if missing
 			if ( ( isset( $post_info['latitude'] ) && empty( $post_info['latitude'] ) ) || ( isset( $post_info['longitude'] ) && empty( $post_info['longitude'] ) ) ) {
 				$post_info = self::get_post_gps_from_address( $post_info );
@@ -972,7 +973,7 @@ class GeoDir_Admin_Import_Export {
 		} else {
 			foreach ( $csv_data as $csv_row ) {
 				// Escape data to prevent injection.
-				$csv_row = array_map( 'geodir_escape_csv_data', $csv_row ); 
+				$csv_row = array_map( 'geodir_escape_csv_data', $csv_row );
 				$wp_filesystem->put_contents( $file_path, $csv_row );
 			}
 		}
@@ -1364,7 +1365,7 @@ class GeoDir_Admin_Import_Export {
 
 		return apply_filters( 'geodir_import_category_validate_item', $cat_info_fixed, $cat_info );
 	}
-	
+
 	/**
 	 * Validate the review info.
 	 *
@@ -1392,7 +1393,7 @@ class GeoDir_Admin_Import_Export {
 		$review_data['comment_author_email']	= isset( $data['comment_author_email'] ) && is_email( $data['comment_author_email'] ) ? $data['comment_author_email'] : '';
 		$review_data['comment_author_url'] 		= isset( $data['comment_author_url'] ) ? $data['comment_author_url'] : '';
 		$review_data['comment_author_IP'] 		= isset( $data['comment_author_IP'] ) ? $data['comment_author_IP'] : '';
-		
+
 		if ( empty( $gd_cache_user ) ) {
 			$gd_cache_user = array();
 		}
@@ -1773,7 +1774,7 @@ class GeoDir_Admin_Import_Export {
 	public static function restore_locale( $locale ) {
 		return apply_filters( 'geodir_restore_locale', $locale );
 	}
-	
+
 	/**
 	 * Prepare export reviews.
 	 */
@@ -1817,7 +1818,7 @@ class GeoDir_Admin_Import_Export {
 
 		return apply_filters( 'geodir_export_reviews_comment_args', $comment_args );
 	}
-	
+
 	/**
 	 * Prepare export reviews.
 	 */
@@ -1841,7 +1842,7 @@ class GeoDir_Admin_Import_Export {
 
 		return $clauses;
 	}
-	
+
 	/**
 	 * Retrieve reviews.
 	 *
@@ -1909,7 +1910,7 @@ class GeoDir_Admin_Import_Export {
 
 		return $csv_rows;
 	}
-	
+
 	/**
 	 * Prepare export reviews.
 	 */
@@ -1928,7 +1929,7 @@ class GeoDir_Admin_Import_Export {
 
 		return $json;
 	}
-	
+
 	/**
 	 * Set filter reviews.
 	 */
@@ -2022,7 +2023,7 @@ class GeoDir_Admin_Import_Export {
 
 		return $json;
 	}
-	
+
 	/**
 	 * Import reviews.
 	 *
@@ -2050,7 +2051,7 @@ class GeoDir_Admin_Import_Export {
 				$line_no = $processed + $i + 1;
 				$line_error = wp_sprintf( $log_error, $line_no );
 				$row = self::validate_review( $row );
-				
+
 				if ( empty( $row ) ) {
 					geodir_error_log( $line_error . ' ' . __( 'data is empty.', 'geodirectory' ) );
 					$invalid++;
@@ -2061,7 +2062,7 @@ class GeoDir_Admin_Import_Export {
 					$skipped++;
 					continue;
 				}
-				
+
 				$valid = true;
 				if ( empty( $row['comment_content'] ) ) {
 					$valid = false;
@@ -2079,7 +2080,7 @@ class GeoDir_Admin_Import_Export {
 					$valid = false;
 					geodir_error_log( $line_error . ' ' . __( 'invalid rating.', 'geodirectory' ) );
 				}
-				
+
 				if ( ! $valid ) {
 					$invalid++;
 					continue;
@@ -2164,7 +2165,7 @@ class GeoDir_Admin_Import_Export {
 
 		return compact( 'ext', 'type', 'proper_filename' );
 	}
-	
+
 	public static function generate_attachment_id( $image_url ) {
 		if ( empty( $image_url ) ) {
 			return '';
