@@ -86,7 +86,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 			);
 
 			$is_default = false;
-			
+
 			$available_tags = array(
 				/* translators: %s: permalink structure tag */
 				'country'     => __( '%s (Country slug of the post. Ex: united-states.)', 'geodirectory' ),
@@ -110,7 +110,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 			 * @param array $available_tags A key => value pair of available permalink structure tags.
 			 */
 			$available_tags = apply_filters( 'geodir_available_permalink_structure_tags', $available_tags );
-			
+
 			/* translators: %s: permalink structure tag */
 			$structure_tag_added = __( '%s added to permalink structure', 'geodirectory' );
 
@@ -196,7 +196,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 				</tbody>
 			</table>
 
-			<h2 class="title"><?php _e('GeoDirectory Taxonomies'); ?></h2>
+			<h2 class="title"><?php _e('GeoDirectory Taxonomies','geodirectory'); ?></h2>
 			<p><?php
 				/* translators: %s: placeholder that must come at the start of the URL */
 				printf( __( 'If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/attractions/</code>. Tags and category can not be blank.','geodirectory' ),  $url_base .  $base_slug  ); ?></p>
@@ -210,6 +210,36 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 					<th><label for="geodirectory_tag_base"><?php _e('Tag base','geodirectory' ); ?></label></th>
 					<td><input name="geodirectory_tag_base" id="geodirectory_tag_base" type="text" value="<?php echo esc_attr(geodir_get_option('permalink_tag_base','tags')); ?>" class="regular-text code" /></td>
 				</tr>
+			</table>
+
+			<?php
+			// @todo only show if a CPT has addresses set to not be required
+
+			// Check if address is required
+			$address_field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type, false );
+			$address_required = isset($address_field['is_required']) && $address_field['is_required'];
+			?>
+			<h2 class="title"><?php _e('GeoDirectory Location Base (when not set)','geodirectory'); ?></h2>
+			<p><?php
+				/* translators: %s: placeholder that must come at the start of the URL */
+				printf( __( 'When the address field is NOT be required, the location URL slug must have a replacement. For example: <code>%s/%s/%s/CITY-BASE-SLUG/sample-place/</code>','geodirectory' ),  $url_base .  $base_slug,$default_location->country_slug,$default_location->region_slug );
+				?></p>
+			<p><code><?php _e('Other suggestions: find, online, virtual, go, see','geodirectory') ?></code></p>
+
+			<table class="form-table">
+				<tr>
+					<th><label for="geodirectory_missing_country_base"><?php /* translators: prefix for country base permalinks */ _e('Country base','geodirectory'); ?></label></th>
+					<td><input name="geodirectory_missing_country_base" id="geodirectory_missing_country_base" type="text" value="<?php echo esc_attr( geodir_get_option('permalink_missing_country_base','global') ); ?>" class="regular-text code" /></td>
+				</tr>
+				<tr>
+					<th><label for="geodirectory_missing_region_base"><?php /* translators: prefix for region base permalinks */ _e('Region base','geodirectory'); ?></label></th>
+					<td><input name="geodirectory_missing_region_base" id="geodirectory_missing_region_base" type="text" value="<?php echo esc_attr( geodir_get_option('permalink_missing_region_base','discover') ); ?>" class="regular-text code" /></td>
+				</tr>
+				<tr>
+					<th><label for="geodirectory_missing_city_base"><?php /* translators: prefix for city base permalinks */ _e('City base','geodirectory'); ?></label></th>
+					<td><input name="geodirectory_missing_city_base" id="geodirectory_missing_city_base" type="text" value="<?php echo esc_attr( geodir_get_option('permalink_missing_city_base','explore') ); ?>" class="regular-text code" /></td>
+				</tr>
+
 			</table>
 
 
@@ -351,7 +381,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 					// check category base
 					if(jQuery('#geodirectory_category_base').val()==''){
 
-						
+
 						alert("<?php _e('GeoDirectory category base can not be blank, please check and try again.','geodirectory'); ?>");
 						$return = false;
 
@@ -409,6 +439,18 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 					$tag_base = !empty($_POST['geodirectory_tag_base']) ? sanitize_title_with_dashes($_POST['geodirectory_tag_base']) : 'tags';
 					geodir_update_option('permalink_tag_base',$tag_base);
 				}
+
+				// Missing location base
+				if ( isset( $_POST['geodirectory_missing_country_base'] ) ) {
+					geodir_update_option( 'permalink_missing_country_base', sanitize_title_with_dashes( $_POST['geodirectory_missing_country_base'] ) );
+				}
+				if ( isset( $_POST['geodirectory_missing_region_base'] ) ) {
+					geodir_update_option( 'permalink_missing_region_base', sanitize_title_with_dashes( $_POST['geodirectory_missing_region_base'] ) );
+				}
+				if ( isset( $_POST['geodirectory_missing_city_base'] ) ) {
+					geodir_update_option( 'permalink_missing_city_base', sanitize_title_with_dashes( $_POST['geodirectory_missing_city_base'] ) );
+				}
+
 
 				if ( function_exists( 'restore_current_locale' ) ) {
 					restore_current_locale();

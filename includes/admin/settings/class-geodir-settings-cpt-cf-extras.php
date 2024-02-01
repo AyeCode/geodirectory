@@ -70,7 +70,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			// category display type
 			add_filter( 'geodir_cfa_extra_fields_categories', array( $this, 'category_input_type' ), 10, 4 );
-			
+
 			// extra address fields
 			add_filter('geodir_cfa_extra_fields_address',array( $this, 'address_fields' ),10,4);
 
@@ -130,10 +130,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			add_filter( 'geodir_cfa_cat_sort_taxonomy', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_cat_sort_address', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_cat_sort_business_hours', '__return_empty_string', 10, 4 );
-			
+
 			// address field is always required
-			add_filter( 'geodir_cfa_is_required_address', array($this,'is_required'), 10, 4 );
-			
+			//add_filter( 'geodir_cfa_is_required_address', array($this,'is_required'), 10, 4 );
+
 			// No of tags.
 			add_filter( 'geodir_cfa_extra_fields_tags', array( $this, 'no_of_tags_input_type' ), 10, 4 );
 		}
@@ -605,9 +605,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			// Converts old option values format to new format.
 			$value = geodir_convert_old_option_values( $value );
 
-			$placeholder = esc_html__( 'For Sale 
-under-offer : Under Offer 
-optgroup : Electronics 
+			$placeholder = esc_html__( 'For Sale
+under-offer : Under Offer
+optgroup : Electronics
 TV
 Laptop
 optgroup-close', 'geodirectory' );

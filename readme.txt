@@ -305,9 +305,12 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.3.39 - 2024-02-TBD =
+* Address custom field can now be set as optional - CHANGED
+ 
 = GeoDirectory v2.3.38 - 2024-02-01 =
 * GD > Post Features shows fields label special chars encoded incorrectly - FIXED
-* Category icon not generated from FontAweosme icons for some sites - FIXED
+* Category icon not generated from FontAwesome icons for some sites - FIXED
 * Function _inject_theme_attribute_in_block_template_content is deprecated - FIXED
 
 = GeoDirectory v2.3.37 - 2024-01-25 =

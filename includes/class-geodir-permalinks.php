@@ -78,21 +78,21 @@ class GeoDir_Permalinks {
 
 			// check country
 			if(isset($wp_query->query_vars['country']) && isset($gd_post->country) && $wp_query->query_vars['country']){
-				if(isset($post_locations->country_slug) && $post_locations->country_slug!=$wp_query->query_vars['country']){
+				if(isset($post_locations->country_slug) && $post_locations->country_slug && $post_locations->country_slug!=$wp_query->query_vars['country']){
 					$should_404 = true;
 				}
 			}
 
 			// check region
 			if(!$should_404 && isset($wp_query->query_vars['region']) && isset($gd_post->region) && $wp_query->query_vars['region']){
-				if(isset($post_locations->region_slug) && $post_locations->region_slug!=$wp_query->query_vars['region']){
+				if(isset($post_locations->region_slug) && $post_locations->region_slug && $post_locations->region_slug!=$wp_query->query_vars['region']){
 					$should_404 = true;
 				}
 			}
 
 			// check city
 			if(!$should_404 && isset($wp_query->query_vars['city']) && isset($gd_post->city) && $wp_query->query_vars['city']){
-				if(isset($post_locations->city_slug) && $post_locations->city_slug!=$wp_query->query_vars['city']){
+				if(isset($post_locations->city_slug) && $post_locations->city_slug && $post_locations->city_slug!=$wp_query->query_vars['city']){
 					$should_404 = true;
 				}
 			}
@@ -581,6 +581,8 @@ class GeoDir_Permalinks {
 
 				if ( isset( $locations->country_slug ) && $locations->country_slug ) {
 					$permalink = str_replace( '%country%', $locations->country_slug, $permalink );
+				}else{
+					$permalink = str_replace( '%country%', geodir_get_option('permalink_missing_country_base','global'), $permalink );
 				}
 			}
 
@@ -592,6 +594,8 @@ class GeoDir_Permalinks {
 
 				if ( isset( $locations->region_slug ) && $locations->region_slug ) {
 					$permalink = str_replace( '%region%', $locations->region_slug, $permalink );
+				}else{
+					$permalink = str_replace( '%region%', geodir_get_option('permalink_missing_region_base','discover'), $permalink );
 				}
 			}
 
@@ -603,6 +607,8 @@ class GeoDir_Permalinks {
 
 				if ( isset( $locations->city_slug ) && $locations->city_slug ) {
 					$permalink = str_replace( '%city%', $locations->city_slug, $permalink );
+				}else{
+					$permalink = str_replace( '%city%', geodir_get_option('permalink_missing_city_base','explore'), $permalink );
 				}
 			}
 

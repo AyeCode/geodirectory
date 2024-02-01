@@ -355,14 +355,20 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                 }
             }
 
+
+
             /* Fix some countries without regions, Isle of Man, Singapore, Greece. */
             if (getCountryISO=='IM'){
                 getState = "Isle of Man";
             }else if(getCountryISO=='SG'){
                 getState = "Singapore";
+            }else if(getCountryISO=='VA'){
+                getState = "Vatican City State";
             } else if(getCountryISO == 'GR' && !getState && administrative_area_level_3.long_name) {
                 getState = administrative_area_level_3.long_name;
             }
+
+
 
             /* Fix region name for ‎Belgium */
             if (getState == 'Brussels Hoofdstedelijk Gewest') {
@@ -462,6 +468,15 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                 }
                 getAddress = _formatted_address.length > 1 ? _formatted_address[((_formatted_address.length)-1)] : formatted_address;
             }
+
+
+            // Fix vatican city returning as Italy
+            if ( getCity == 'Vatican City') {
+                getCountryISO = rr = 'VA';
+                getState = "Vatican City State";
+                getCountry = "Holy See";
+            }
+
             console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
             <?php
             /**
