@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.37\n"
+"Project-Id-Version: GeoDirectory 2.3.38\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-25 21:24+0530\n"
-"PO-Revision-Date: 2024-01-25 21:25+0530\n"
+"POT-Creation-Date: 2024-02-01 18:46+0530\n"
+"PO-Revision-Date: 2024-02-01 18:46+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -644,7 +644,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:856
 #: includes/admin/class-geodir-admin-permalink-settings.php:66
 #: includes/admin/class-geodir-admin-permalink-settings.php:140
-#: includes/admin/class-geodir-admin-taxonomies.php:985
+#: includes/admin/class-geodir-admin-taxonomies.php:995
 #: includes/widgets/class-geodir-widget-archive-item-section.php:75
 #: includes/widgets/class-geodir-widget-archive-item-section.php:89
 #: includes/widgets/class-geodir-widget-archive-item-section.php:104
@@ -1874,121 +1874,121 @@ msgstr ""
 msgid "Your favorite color is neither red, blue, nor green!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:208
+#: includes/admin/class-geodir-admin-import-export.php:216
 msgid "The uploaded file is not a valid csv file. Please try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:232
-#: includes/admin/class-geodir-admin-import-export.php:328
-#: includes/admin/class-geodir-admin-import-export.php:1296
-#: includes/admin/class-geodir-admin-import-export.php:2121
+#: includes/admin/class-geodir-admin-import-export.php:240
+#: includes/admin/class-geodir-admin-import-export.php:336
+#: includes/admin/class-geodir-admin-import-export.php:1304
+#: includes/admin/class-geodir-admin-import-export.php:2129
 msgid "No data found in csv file."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:267
+#: includes/admin/class-geodir-admin-import-export.php:275
 #, php-format
 msgid "GD IMPORT LISTING [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:301
-#: includes/admin/class-geodir-admin-import-export.php:312
-#: includes/admin/class-geodir-admin-import-export.php:324
+#: includes/admin/class-geodir-admin-import-export.php:309
+#: includes/admin/class-geodir-admin-import-export.php:320
+#: includes/admin/class-geodir-admin-import-export.php:332
 #, php-format
 msgid "Row %d Error: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:430
+#: includes/admin/class-geodir-admin-import-export.php:438
 #, php-format
 msgid "Invalid post type - %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:433
+#: includes/admin/class-geodir-admin-import-export.php:441
 msgid "Post type missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:438
+#: includes/admin/class-geodir-admin-import-export.php:446
 msgid "Title missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:499
+#: includes/admin/class-geodir-admin-import-export.php:507
 msgid "Address city, region or country missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:537
+#: includes/admin/class-geodir-admin-import-export.php:545
 #: includes/location-functions.php:819
 msgid "Failed to retrieve GPS data from a address using API."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:561
+#: includes/admin/class-geodir-admin-import-export.php:569
 msgid "Not enough GPS info for address."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:584
-#: includes/admin/class-geodir-admin-import-export.php:602
+#: includes/admin/class-geodir-admin-import-export.php:592
+#: includes/admin/class-geodir-admin-import-export.php:610
 #: includes/location-functions.php:928 includes/location-functions.php:953
 msgid "Failed to reach Google geocode server."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:599
+#: includes/admin/class-geodir-admin-import-export.php:607
 #: includes/location-functions.php:951
 #, php-format
 msgid "Google geocode failed: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:697
-#: includes/admin/class-geodir-admin-import-export.php:1012
-#: includes/admin/class-geodir-admin-import-export.php:1964
+#: includes/admin/class-geodir-admin-import-export.php:705
+#: includes/admin/class-geodir-admin-import-export.php:1020
+#: includes/admin/class-geodir-admin-import-export.php:1972
 #: includes/admin/settings/class-geodir-settings-import-export.php:903
 msgid "No records to export."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:743
-#: includes/admin/class-geodir-admin-import-export.php:1054
-#: includes/admin/class-geodir-admin-import-export.php:2008
+#: includes/admin/class-geodir-admin-import-export.php:751
+#: includes/admin/class-geodir-admin-import-export.php:1062
+#: includes/admin/class-geodir-admin-import-export.php:2016
 msgid ""
 "ERROR: Could not create csv file. This is usually due to inconsistent file "
 "permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1601
+#: includes/admin/class-geodir-admin-import-export.php:1609
 msgid "json file is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1603
+#: includes/admin/class-geodir-admin-import-export.php:1611
 msgid "json file is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1615
+#: includes/admin/class-geodir-admin-import-export.php:1623
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2039
+#: includes/admin/class-geodir-admin-import-export.php:2047
 #, php-format
 msgid "GD IMPORT REVIEW [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2047
+#: includes/admin/class-geodir-admin-import-export.php:2055
 msgid "data is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2060
+#: includes/admin/class-geodir-admin-import-export.php:2068
 msgid "invalid comment content."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2064
+#: includes/admin/class-geodir-admin-import-export.php:2072
 msgid "invalid comment post ID."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2068
+#: includes/admin/class-geodir-admin-import-export.php:2076
 msgid "invalid user details(user id or author name, author email)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2072
+#: includes/admin/class-geodir-admin-import-export.php:2080
 msgid "invalid rating."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2098
-#: includes/admin/class-geodir-admin-import-export.php:2115
+#: includes/admin/class-geodir-admin-import-export.php:2106
+#: includes/admin/class-geodir-admin-import-export.php:2123
 msgid "invalid data."
 msgstr ""
 
@@ -3277,24 +3277,24 @@ msgstr ""
 msgid "Select the schema to use for this category"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:853
+#: includes/admin/class-geodir-admin-taxonomies.php:863
 msgid "Default Image"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:854
+#: includes/admin/class-geodir-admin-taxonomies.php:864
 msgid "Cat ID"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:985
+#: includes/admin/class-geodir-admin-taxonomies.php:995
 #, php-format
 msgid "Make %s default category"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:985
+#: includes/admin/class-geodir-admin-taxonomies.php:995
 msgid "Make default"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:1024
+#: includes/admin/class-geodir-admin-taxonomies.php:1034
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:185
 #: includes/helper-functions.php:1681 includes/helper-functions.php:1781
 #: includes/widgets/class-geodir-widget-categories.php:163
@@ -3306,7 +3306,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:1049
+#: includes/admin/class-geodir-admin-taxonomies.php:1059
 msgid "Default (LocalBusiness)"
 msgstr ""
 
@@ -10879,26 +10879,26 @@ msgstr ""
 msgid "Displays GD single page content."
 msgstr ""
 
-#: includes/class-geodir-block-theme.php:1194
+#: includes/class-geodir-block-theme.php:1207
 msgid "Invalid page."
 msgstr ""
 
-#: includes/class-geodir-block-theme.php:1200
+#: includes/class-geodir-block-theme.php:1213
 msgid "Page template not found."
 msgstr ""
 
-#: includes/class-geodir-block-theme.php:1205
+#: includes/class-geodir-block-theme.php:1218
 #, php-format
 msgid "%s (Custom)"
 msgstr ""
 
-#: includes/class-geodir-block-theme.php:1208
-#: includes/class-geodir-block-theme.php:1212
+#: includes/class-geodir-block-theme.php:1221
+#: includes/class-geodir-block-theme.php:1225
 #, php-format
 msgid "%s ("
 msgstr ""
 
-#: includes/class-geodir-block-theme.php:1235
+#: includes/class-geodir-block-theme.php:1248
 msgid "Unable to create new template."
 msgstr ""
 
@@ -17348,7 +17348,7 @@ msgid "Placeholder map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:46
-#: includes/widgets/class-geodir-widget-post-features.php:1144
+#: includes/widgets/class-geodir-widget-post-features.php:1143
 #: includes/widgets/class-geodir-widget-post-meta.php:530
 #: vendor/ayecode/wp-super-duper/hello-world.php:26
 msgid "Placeholder"

@@ -289,6 +289,9 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
     // /MC
 
     search = jQuery('#' + map_canvas + '_search_string').val();
+    if (!search && options.searchKeyword) {
+        search = options.searchKeyword;
+    }
 
     // Terms
     var terms_filters = false;
@@ -391,7 +394,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 
     search = search ? search.trim() : '';
     if (search && search != options.inputText) {
-        query_string += '&search=' + jQuery('#' + map_canvas + '_search_string').val();
+        query_string += '&search=' + search;
     }
 
     map_ajax_search(map_canvas, query_string, '', hide_loading);
