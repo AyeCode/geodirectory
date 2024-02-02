@@ -69,8 +69,8 @@ class GeoDir_Location {
 
 		// is_default
 		$location->is_default = 1;
-		
-		
+
+
 		// set search values
 		if(isset($_REQUEST['geodir_search']) && $_REQUEST['geodir_search'] && geodir_is_page('search')){
 			$location->city = '';
@@ -90,7 +90,7 @@ class GeoDir_Location {
 			if(!empty($latlon['lat'])){$location->latitude = $latlon['lat'];}
 			if(!empty($latlon['lon'])){$location->longitude = $latlon['lon'];}
 		}
-		
+
 
 		/**
 		 * Filter the default location.
@@ -113,7 +113,7 @@ class GeoDir_Location {
 		$this->type = $location_result->type;
 		$this->is_default = $location_result->is_default;
 		$this->id = $location_result->id;
-		
+
 	}
 
 	/**
@@ -324,11 +324,11 @@ class GeoDir_Location {
 		$location = $this->get_default_location();
 		$name = $field['name'];
 		$prefix = $name . '_';
-		$is_required = true;
+		$is_required = ! empty( $field['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
 		if ( ! empty( $gd_post->country ) ) {
 			$country = $gd_post->country;
-		}  else if ( ! empty( $location->country ) ) {
+		}  else if ( ! empty( $location->country ) && $is_required ) {
 			$country = $location->country;
 		} else {
 			$country = '';
@@ -336,7 +336,7 @@ class GeoDir_Location {
 
 		if ( ! empty( $gd_post->region ) ) {
 			$region = $gd_post->region;
-		}  else if ( ! empty( $location->region ) ) {
+		}  else if ( ! empty( $location->region ) && $is_required ) {
 			$region = $location->region;
 		} else {
 			$region = '';
@@ -344,7 +344,7 @@ class GeoDir_Location {
 
 		if ( ! empty( $gd_post->city ) ) {
 			$city = $gd_post->city;
-		} else if ( ! empty( $location->city ) ) {
+		} else if ( ! empty( $location->city ) && $is_required ) {
 			$city = $location->city;
 		} else {
 			$city = '';

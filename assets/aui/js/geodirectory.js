@@ -160,7 +160,7 @@ function geodir_lightbox_embed($link,ele){
 	// remove it first
 	jQuery('.geodir-carousel-modal').remove();
 
-	var $modal = '<div class="modal fade geodir-carousel-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-xl mw-100"><div class="modal-content bg-transparent border-0"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
+	var $modal = '<div class="modal fade geodir-carousel-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-xl mw-100"><div class="modal-content bg-transparent border-0 shadow-none"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
 	jQuery('body').append($modal);
 
 	jQuery('.geodir-carousel-modal').on('shown.bs.modal', function (e) {

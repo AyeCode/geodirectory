@@ -619,7 +619,9 @@ class GeoDir_Post_Data {
 			} elseif ( isset( $gd_post['city'] ) ) {
 				$postarr['city'] = sanitize_text_field( stripslashes( $gd_post['city'] ) );
 			} else {
-				if ( ! $update ) {
+				// Check if address is required
+				$address_required = geodir_cpt_requires_address( $post_type );
+				if ( ! $update && $address_required ) {
 					$default_location   = $geodirectory->location->get_default_location();
 					$postarr['city']    = stripslashes( $default_location->city );
 					$postarr['region']  = stripslashes( $default_location->region );
@@ -1626,6 +1628,7 @@ class GeoDir_Post_Data {
 	 * @return int|WP_Error $result
 	 */
 	public static function ajax_save_post( $post_data ) {
+
 		// Check if user has privileges to edit the post
 		$post_id   = isset( $post_data['ID'] ) ? absint( $post_data['ID'] ) : '';
 		$parent_id = isset( $post_data['post_parent'] ) ? absint( $post_data['post_parent'] ) : '';
@@ -1633,12 +1636,16 @@ class GeoDir_Post_Data {
 			return new WP_Error( 'save_post', __( "You do not have the privileges to perform this action.", "geodirectory" ) );
 		}
 
+		// Check if address is required
+		$post_type = isset( $post_data['post_type'] ) ? esc_attr( $post_data['post_type'] ) : '';
+		$address_required = geodir_cpt_requires_address( $post_type );
+
 		// Pre validation
 		$has_error = false;
 		if ( isset( $post_data['post_title'] ) && sanitize_text_field( $post_data['post_title'] ) == '' ) {
 			$has_error = true;
 			$field_title = __( 'Title', 'geodirectory' );
-		} elseif ( isset( $post_data['street'] ) && sanitize_text_field( $post_data['street'] ) == '' && isset( $post_data['post_type'] ) && GeoDir_Post_types::supports( sanitize_text_field( $post_data['post_type'] ), 'location' ) ) {
+		} elseif ( $address_required && isset( $post_data['street'] ) && sanitize_text_field( $post_data['street'] ) == '' && isset( $post_data['post_type'] ) && GeoDir_Post_types::supports( sanitize_text_field( $post_data['post_type'] ), 'location' ) ) {
 			$has_error = true;
 			$field_title = __( 'Address', 'geodirectory' );
 		} elseif ( isset( $post_data['cat_limit'] ) && isset( $post_data['post_type'] ) && isset( $post_data['tax_input'] ) && empty( $post_data['tax_input'][ $post_data['post_type'] . 'category' ][0] ) ) {

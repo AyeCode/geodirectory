@@ -289,7 +289,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 					array(
 						'name' => __('Enable email', 'geodirectory'),
-						'desc' => __('Send an email when a listing is edited by a user.', 'geodirectory'),
+						'desc' => __('Send an email when a listing is edited by a user. (this will not send email when edited by an admin)', 'geodirectory'),
 						'id' => 'email_admin_post_edit',
 						'type' => 'checkbox',
 						'default' => 0,
@@ -409,7 +409,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 
 					array('type' => 'sectionend', 'id' => 'email_settings_bcc'),
-	
+
 				));
 			}
 
@@ -417,7 +417,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 			return apply_filters( 'geodir_get_settings_' . $this->id, $settings, $current_section );
 		}
-		
+
 
 
 
@@ -431,15 +431,15 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
          * @param bool $inline Optional. Email tag inline value. Default true.
          * @return array|string $tags.
          */
-		public function global_email_tags( $inline = true ) { 
+		public function global_email_tags( $inline = true ) {
 			$tags = array( '[#blogname#]', '[#site_name#]', '[#site_url#]', '[#site_name_url#]', '[#login_url#]', '[#login_link#]', '[#date#]', '[#time#]', '[#date_time#]', '[#current_date#]', '[#to_name#]', '[#to_email#]', '[#from_name#]', '[#from_email#]' );
-			
+
 			$tags = apply_filters( 'geodir_email_global_email_tags', $tags );
 
 			if ( $inline ) {
 				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 			}
-			
+
 			return $tags;
 		}
 
@@ -453,17 +453,17 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
          *
          * @return array|string $tags.
          */
-		public function user_pending_post_email_tags( $inline = true ) { 
+		public function user_pending_post_email_tags( $inline = true ) {
 			$global_tags = $this->global_email_tags( false );
 
 			$tags = array_merge( $global_tags, array( '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]' ) );
-			
+
 			$tags = apply_filters( 'geodir_email_user_pending_post_email_tags', $tags );
 
 			if ( $inline ) {
 				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 			}
-			
+
 			return $tags;
 		}
 
@@ -476,17 +476,17 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
          *
          * @return array|string $tags.
          */
-		public function user_publish_post_email_tags( $inline = true ) { 
+		public function user_publish_post_email_tags( $inline = true ) {
 			$global_tags = $this->global_email_tags( false );
 
 			$tags = array_merge( $global_tags, array( '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]' ) );
-			
+
 			$tags = apply_filters( 'geodir_email_user_publish_post_email_tags', $tags );
 
 			if ( $inline ) {
 				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 			}
-			
+
 			return $tags;
 		}
 
@@ -499,17 +499,17 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
          *
          * @return array|string $tags.
          */
-		public function owner_comment_submit_email_tags( $inline = true ) { 
+		public function owner_comment_submit_email_tags( $inline = true ) {
 			$global_tags = $this->global_email_tags( false );
 
 			$tags = array_merge( $global_tags, array( '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]', '[#comment_ID#]', '[#comment_author#]', '[#comment_author_IP#]', '[#comment_author_email#]', '[#comment_date#]', '[#comment_content#]', '[#comment_post_ID#]', '[#comment_post_title#]', '[#comment_post_url#]', '[#comment_approve_link#]', '[#comment_trash_link#]', '[#comment_spam_link#]', '[#review_rating_star#]', '[#review_rating_title#]', '[#review_city#]', '[#review_region#]', '[#review_country#]', '[#review_latitude#]', '[#review_longitude#]' ) );
-			
+
 			$tags = apply_filters( 'geodir_email_owner_comment_submit_email_tags', $tags );
 
 			if ( $inline ) {
 				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 			}
-			
+
 			return $tags;
 		}
 
@@ -522,17 +522,17 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
          *
          * @return array|string $tags.
          */
-		public function owner_comment_approved_email_tags( $inline = true ) { 
+		public function owner_comment_approved_email_tags( $inline = true ) {
 			$global_tags = $this->global_email_tags( false );
 
 			$tags = array_merge( $global_tags, array( '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]', '[#comment_ID#]', '[#comment_author#]', '[#comment_author_IP#]', '[#comment_author_email#]', '[#comment_date#]', '[#comment_content#]', '[#comment_post_ID#]', '[#comment_post_title#]', '[#comment_post_url#]', '[#review_rating_star#]', '[#review_rating_title#]', '[#review_city#]', '[#review_region#]', '[#review_country#]', '[#review_latitude#]', '[#review_longitude#]' ) );
-			
+
 			$tags = apply_filters( 'geodir_email_owner_comment_approved_email_tags', $tags );
 
 			if ( $inline ) {
 				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 			}
-			
+
 			return $tags;
 		}
 
@@ -545,17 +545,17 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
          *
          * @return array|string $tags.
          */
-		public function author_comment_approved_email_tags( $inline = true ) { 
+		public function author_comment_approved_email_tags( $inline = true ) {
 			$global_tags = $this->global_email_tags( false );
 
 			$tags = array_merge( $global_tags, array( '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]', '[#comment_ID#]', '[#comment_author#]', '[#comment_author_IP#]', '[#comment_author_email#]', '[#comment_date#]', '[#comment_content#]', '[#comment_post_ID#]', '[#comment_post_title#]', '[#comment_post_url#]', '[#review_rating_star#]', '[#review_rating_title#]', '[#review_city#]', '[#review_region#]', '[#review_country#]', '[#review_latitude#]', '[#review_longitude#]' ) );
-			
+
 			$tags = apply_filters( 'geodir_email_author_comment_approved_email_tags', $tags );
 
 			if ( $inline ) {
 				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 			}
-			
+
 			return $tags;
 		}
 
@@ -568,17 +568,17 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
          *
          * @return array|string $tags.
          */
-		public function admin_pending_post_email_tags( $inline = true ) { 
+		public function admin_pending_post_email_tags( $inline = true ) {
 			$global_tags = $this->global_email_tags( false );
 
 			$tags = array_merge( $global_tags, array( '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]' ) );
-			
+
 			$tags = apply_filters( 'geodir_email_admin_pending_post_email_tags', $tags );
 
 			if ( $inline ) {
 				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 			}
-			
+
 			return $tags;
 		}
 
@@ -591,17 +591,17 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
          *
          * @return array|string $tags.
          */
-		public function admin_post_edit_email_tags( $inline = true ) { 
+		public function admin_post_edit_email_tags( $inline = true ) {
 			$global_tags = $this->global_email_tags( false );
 
 			$tags = array_merge( $global_tags, array( '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]' ) );
-			
+
 			$tags = apply_filters( 'geodir_email_admin_post_edit_email_tags', $tags );
 
 			if ( $inline ) {
 				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 			}
-			
+
 			return $tags;
 		}
 
@@ -614,17 +614,17 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
          *
          * @return array|string $tags.
          */
-		public function admin_moderate_comment_email_tags( $inline = true ) { 
+		public function admin_moderate_comment_email_tags( $inline = true ) {
 			$global_tags = $this->global_email_tags( false );
 
 			$tags = array_merge( $global_tags, array( '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]', '[#comment_ID#]', '[#comment_author#]', '[#comment_author_IP#]', '[#comment_author_email#]', '[#comment_date#]', '[#comment_content#]', '[#comment_post_ID#]', '[#comment_post_title#]', '[#comment_post_url#]', '[#comment_approve_link#]', '[#comment_trash_link#]', '[#comment_spam_link#]', '[#comment_moderation_link#]', '[#review_rating_star#]', '[#review_rating_title#]', '[#review_city#]', '[#review_region#]', '[#review_country#]', '[#review_latitude#]', '[#review_longitude#]' ) );
-			
+
 			$tags = apply_filters( 'geodir_email_admin_moderate_comment_email_tags', $tags );
 
 			if ( $inline ) {
 				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 			}
-			
+
 			return $tags;
 		}
 	}

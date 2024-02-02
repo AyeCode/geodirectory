@@ -928,3 +928,32 @@ function geodir_show_in_locations($field = '', $field_type=''){
      */
     return apply_filters( 'geodir_show_in_locations', $show_in_locations, $field, $field_type );
 }
+
+/**
+ * Check if a post type requires an address.
+ *
+ * @param string $post_type The post type to check.
+ *
+ * @return bool Whether the post type requires an address or not.
+ * @since 2.3.39
+ */
+function geodir_cpt_requires_address( $post_type ) {
+	global $geodir_cpt_requires_address;
+
+	// check if we have done this before so we don't hit the DB again.
+	if ( isset( $geodir_cpt_requires_address[ $post_type ] ) ) {
+		return $geodir_cpt_requires_address[$post_type];
+	}
+
+	// set it as default true
+	$result = true;
+
+	if ( ! empty( $post_type ) ) {
+		$address_field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type, false );
+		$result = isset($address_field['is_required']) && $address_field['is_required'];
+		$geodir_cpt_requires_address[$post_type] = $result;
+	}
+
+
+	return $result;
+}
