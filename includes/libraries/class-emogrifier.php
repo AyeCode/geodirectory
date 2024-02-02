@@ -342,11 +342,32 @@ class Emogrifier {
 			/*if ( function_exists( 'mb_convert_encoding' ) ) {
 				return mb_convert_encoding( $xmlDocument->saveHTML(), self::ENCODING, 'HTML-ENTITIES' );
 			} else {*/
-				return htmlspecialchars_decode( utf8_encode( html_entity_decode( $xmlDocument->saveHTML(), ENT_COMPAT, self::ENCODING ) ) );
+				return htmlspecialchars_decode( $this->utf8_encode( html_entity_decode( $xmlDocument->saveHTML(), ENT_COMPAT, self::ENCODING ) ) );
 			//}
 		} else {
 			return $xmlDocument->saveHTML();
 		}
+	}
+
+	private function utf8_encode( $s ) {
+		if ( version_compare( PHP_VERSION, '8.2', '<' ) && function_exists( 'utf8_encode' ) ) {
+			return utf8_encode( $s );
+		} else if ( function_exists( 'iconv' ) ) {
+			return iconv( 'ISO-8859-1', self::ENCODING, $s );
+		}
+
+		$s .= $s;
+		$len = \strlen($s);
+
+		for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
+			switch (true) {
+				case $s[$i] < "\x80": $s[$j] = $s[$i]; break;
+				case $s[$i] < "\xC0": $s[$j] = "\xC2"; $s[++$j] = $s[$i]; break;
+				default: $s[$j] = "\xC3"; $s[++$j] = \chr(\ord($s[$i]) - 64); break;
+			}
+		}
+
+		return substr($s, 0, $j);
 	}
 
     /**
