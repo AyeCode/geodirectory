@@ -544,8 +544,43 @@ class Emogrifier {
 		/*if ( function_exists( 'mb_convert_encoding' ) ) {
 			return mb_convert_encoding( $bodyWithoutUnprocessableTags, 'HTML-ENTITIES', self::ENCODING );
 		} else {*/
-			return htmlspecialchars_decode( utf8_decode( htmlentities( $bodyWithoutUnprocessableTags, ENT_COMPAT, self::ENCODING, false ) ) );
+			return htmlspecialchars_decode( $this->utf8_decode( htmlentities( $bodyWithoutUnprocessableTags, ENT_COMPAT, self::ENCODING, false ) ) );
 		//}
+	}
+
+	private function utf8_decode( $s ) {
+		if ( version_compare( PHP_VERSION, '8.2', '<' ) && function_exists( 'utf8_decode' ) ) {
+			return utf8_decode( $s );
+		} else if ( function_exists( 'iconv' ) ) {
+			return iconv( self::ENCODING, 'ISO-8859-1', $s );
+		}
+
+		$s = (string) $s;
+		$len = \strlen($s);
+
+		for ( $i = 0, $j = 0; $i < $len; ++$i, ++$j ) {
+			switch ($s[$i] & "\xF0") {
+				case "\xC0":
+				case "\xD0":
+					$c = (\ord($s[$i] & "\x1F") << 6) | \ord($s[++$i] & "\x3F");
+					$s[$j] = $c < 256 ? \chr($c) : '?';
+					break;
+
+				case "\xF0":
+					++$i;
+					// no break
+
+				case "\xE0":
+					$s[$j] = '?';
+					$i += 2;
+					break;
+
+				default:
+					$s[$j] = $s[$i];
+			}
+		}
+
+		return substr($s, 0, $j);
 	}
 
 	/**
