@@ -308,6 +308,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.3.39 - 2024-02-TBD =
 * Address custom field can now be set as optional - CHANGED
 * Function utf8_decode is deprecated - FIXED
+* Google API Key generation shows apiid is missing error - FIXED
 
 = GeoDirectory v2.3.38 - 2024-02-01 =
 * GD > Post Features shows fields label special chars encoded incorrectly - FIXED

@@ -1368,7 +1368,7 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-					$gm_api_url = 'https://console.cloud.google.com/apis/enableflow?apiid=maps_backend,static_maps_backend,street_view_image_backend,maps_embed_backend,places_backend,geocoding_backend,directions_backend,distance_matrix_backend,geolocation,elevation_backend,timezone_backend&keyType=CLIENT_SIDE&reusekey=true&pli=1';
+					$gm_api_url = 'https://console.cloud.google.com/apis/enableflow?apiid=maps-backend.googleapis.com,static-maps-backend.googleapis.com,street-view-image-backend.googleapis.com,maps-embed-backend.googleapis.com,places-backend.googleapis.com,geocoding-backend.googleapis.com,directions-backend.googleapis.com,distance-matrix-backend.googleapis.com,geolocation.googleapis.com,elevation-backend.googleapis.com,timezone-backend.googleapis.com&keyType=CLIENT_SIDE&reusekey=true&pli=1';
 
 
 					$custom_attributes['data-key-original'] = esc_attr($option_value);
@@ -1402,7 +1402,7 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-					$gm_api_url = 'https://console.cloud.google.com/apis/enableflow?apiid=geocoding_backend,timezone_backend&keyType=CLIENT_SIDE&reusekey=true&pli=1';
+					$gm_api_url = 'https://console.cloud.google.com/apis/enableflow?apiid=geocoding-backend.googleapis.com,timezone-backend.googleapis.com&keyType=CLIENT_SIDE&reusekey=true&pli=1';
 					echo aui()->input(
 						array(
 							'id'                => $value['id'],
