@@ -1577,13 +1577,13 @@ class GeoDir_SEO {
 	 */
 	public static function wpseo_twitter_title( $title, $presentation ) {
 		if ( geodir_is_page( 'search' ) && ! empty( $presentation ) ) {
-			$title = isset( $presentation->model->twitter_title ) ? $presentation->model->twitter_title : '';
+			$title = isset( $presentation->model->twitter_title ) && ! is_null( $presentation->model->twitter_title ) ? $presentation->model->twitter_title : '';
 
-			if ( strpos( $title, '%%' ) !== false ) {
+			if ( $title && strpos( $title, '%%' ) !== false ) {
 				$title = wpseo_replace_vars( $title, get_post( (int) GeoDir_Compatibility::gd_page_id() ) );
 			}
 
-			if ( strpos( $title, '%%' ) !== false ) {
+			if ( $title && strpos( $title, '%%' ) !== false ) {
 				$title = self::replace_variable( $title, 'search' );
 			}
 		}
