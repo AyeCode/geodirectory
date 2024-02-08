@@ -1,3 +1,4 @@
+window.gdJSMap = true;
 var is_zooming = false;
 var zoom_listener = '';
 var gd_current_query = '';
@@ -936,8 +937,8 @@ function geodir_map_sticky(map_options) {
 var rendererOptions = {
     draggable: true
 };
-var directionsDisplay = (typeof google !== 'undefined' && typeof google.maps !== 'undefined') ? new google.maps.DirectionsRenderer(rendererOptions) : {};
-var directionsService = (typeof google !== 'undefined' && typeof google.maps !== 'undefined') ? new google.maps.DirectionsService() : {};
+var directionsDisplay = (typeof google !== 'undefined' && typeof google.maps !== 'undefined' && typeof google.maps.DirectionsRenderer !== 'undefined') ? new google.maps.DirectionsRenderer(rendererOptions) : {};
+var directionsService = (typeof google !== 'undefined' && typeof google.maps !== 'undefined' && typeof google.maps.DirectionsService !== 'undefined') ? new google.maps.DirectionsService() : {};
 var renderedDirections = [];
 
 function geodirFindRoute(map_canvas) {

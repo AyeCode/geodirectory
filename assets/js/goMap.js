@@ -6,6 +6,7 @@
  * @version    1.3.2 2011.07.01
  * This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
+window.geodirJSGoMap = true;
 function geodirGoMapInit() {
 (function ($) {
     if ((window.gdSetMap=='google' || window.gdSetMap=='auto') && window.google && typeof google.maps!=='undefined') {
@@ -30,7 +31,7 @@ function geodirGoMapInit() {
     console.log(window.gdSetMap);
     console.log(gdMaps);
 
-    var geocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : {};
+    var geocoder = window.gdMaps == 'google' && (typeof google !== 'undefined' && typeof google.maps !== 'undefined' && typeof google.maps.Geocoder !== 'undefined') ? new google.maps.Geocoder() : {};
 
     function MyOverlay(map, $this) {
         if (typeof $this !== 'undefined') {
@@ -39,7 +40,7 @@ function geodirGoMapInit() {
             this.setMap(map);
         }
     };
-    MyOverlay.prototype = window.gdMaps == 'google' ? new google.maps.OverlayView() : {};
+    MyOverlay.prototype = window.gdMaps == 'google' && (typeof google !== 'undefined' && typeof google.maps !== 'undefined' && typeof google.maps.OverlayView !== 'undefined') ? new google.maps.OverlayView() : {};
     MyOverlay.prototype.onAdd = function () {
     };
     MyOverlay.prototype.onRemove = function () {
@@ -1631,7 +1632,17 @@ function geodirGoMapInit() {
 
 /* Do not load for lazy load */
 if ( ! window.gdLoadMap ) {
-	geodirGoMapInit();
+    /*if (window.gdSetMap=='google' || window.gdSetMap=='auto') {
+        var igMapCheck = 0, gMapCheck = setInterval(function(e) {
+            igMapCheck++;
+            if (window.geodirGoogleMapsCallback || igMapCheck >= 300) {
+                clearInterval(gMapCheck);
+                geodirGoMapInit();
+            }
+        }, 50);
+    } else {*/
+         geodirGoMapInit();
+    /*}*/
 }
 
 function gdGeoLocateMe(el, type) {
