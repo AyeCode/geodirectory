@@ -95,10 +95,9 @@ class GeoDir_Post_Data {
 	 * @return bool|mixed|null|string
 	 */
 	public static function dynamically_add_post_meta( $metadata, $object_id, $meta_key, $single ) {
-
-		if ( strpos( $meta_key, 'geodir_' ) === 0 ) { //strpos is faster and since we have to do it with every query we do the fast one first and the slower now only if we have to
+		if ( $meta_key && strpos( $meta_key, 'geodir_' ) === 0 ) { //strpos is faster and since we have to do it with every query we do the fast one first and the slower now only if we have to
 			$meta_key = substr( $meta_key, 7 );
-			//use $wpdb to get the value
+
 			global $post, $gd_post;
 
 			// first check we have the info in the global (means no DB query)
