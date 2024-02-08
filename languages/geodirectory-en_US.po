@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.38\n"
+"Project-Id-Version: GeoDirectory 2.3.39\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 18:46+0530\n"
-"PO-Revision-Date: 2024-02-01 18:46+0530\n"
+"POT-Creation-Date: 2024-02-08 18:59+0530\n"
+"PO-Revision-Date: 2024-02-08 18:59+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -907,7 +907,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:499
 #: includes/admin/settings/class-geodir-settings-general.php:542
 #: includes/admin/settings/class-geodir-settings-general.php:584
-#: includes/class-geodir-post-data.php:1640 includes/core-functions.php:380
+#: includes/class-geodir-post-data.php:1646 includes/core-functions.php:380
 #: includes/widgets/class-geodir-widget-add-listing.php:317
 #: includes/widgets/class-geodir-widget-categories.php:46
 #: includes/widgets/class-geodir-widget-categories.php:109
@@ -1470,8 +1470,8 @@ msgid "Dummy data has not fully installed yet!"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:674
-#: templates/bootstrap/map/map-add-listing.php:726
-#: templates/bootstrap/map/map-add-listing.php:890 templates/map.php:724
+#: templates/bootstrap/map/map-add-listing.php:741
+#: templates/bootstrap/map/map-add-listing.php:905 templates/map.php:724
 #: templates/map.php:905
 msgid "Geocode was not successful for the following reason:"
 msgstr ""
@@ -1532,8 +1532,8 @@ msgstr ""
 #: includes/admin/dummy-data/freelancer.php:752
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:408
 #: includes/class-geodir-comments.php:95
-#: includes/class-geodir-post-data.php:971
-#: includes/class-geodir-post-data.php:992
+#: includes/class-geodir-post-data.php:972
+#: includes/class-geodir-post-data.php:993
 #: includes/widgets/class-geodir-widget-ninja-forms.php:424 language.php:35
 #: language.php:55 language.php:124 language.php:140
 msgid "Email"
@@ -1608,7 +1608,7 @@ msgid "Note: List out any special offers (optional)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1025
-#: includes/class-geodir-post-data.php:890
+#: includes/class-geodir-post-data.php:891
 msgid "Listing"
 msgstr ""
 
@@ -1647,7 +1647,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1081
 #: includes/admin/class-geodir-admin-dummy-data.php:1083
 #: includes/admin/class-geodir-admin-dummy-data.php:1092
-#: includes/class-geodir-post-data.php:1646
+#: includes/class-geodir-post-data.php:1652
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:952
 #: includes/widgets/class-geodir-widget-simple-archive.php:427 language.php:59
 #: language.php:175
@@ -1661,7 +1661,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1101
 #: includes/admin/class-geodir-admin-dummy-data.php:1103
 #: includes/admin/class-geodir-admin-dummy-data.php:1113
-#: includes/class-geodir-post-data.php:1643
+#: includes/class-geodir-post-data.php:1649
 #: includes/custom-fields/functions.php:667 includes/post-functions.php:2107
 msgid "Address"
 msgstr ""
@@ -1880,8 +1880,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:240
 #: includes/admin/class-geodir-admin-import-export.php:336
-#: includes/admin/class-geodir-admin-import-export.php:1304
-#: includes/admin/class-geodir-admin-import-export.php:2129
+#: includes/admin/class-geodir-admin-import-export.php:1305
+#: includes/admin/class-geodir-admin-import-export.php:2130
 msgid "No data found in csv file."
 msgstr ""
 
@@ -1910,85 +1910,85 @@ msgstr ""
 msgid "Title missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:507
+#: includes/admin/class-geodir-admin-import-export.php:508
 msgid "Address city, region or country missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:545
+#: includes/admin/class-geodir-admin-import-export.php:546
 #: includes/location-functions.php:819
 msgid "Failed to retrieve GPS data from a address using API."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:569
+#: includes/admin/class-geodir-admin-import-export.php:570
 msgid "Not enough GPS info for address."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:592
-#: includes/admin/class-geodir-admin-import-export.php:610
+#: includes/admin/class-geodir-admin-import-export.php:593
+#: includes/admin/class-geodir-admin-import-export.php:611
 #: includes/location-functions.php:928 includes/location-functions.php:953
 msgid "Failed to reach Google geocode server."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:607
+#: includes/admin/class-geodir-admin-import-export.php:608
 #: includes/location-functions.php:951
 #, php-format
 msgid "Google geocode failed: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:705
-#: includes/admin/class-geodir-admin-import-export.php:1020
-#: includes/admin/class-geodir-admin-import-export.php:1972
+#: includes/admin/class-geodir-admin-import-export.php:706
+#: includes/admin/class-geodir-admin-import-export.php:1021
+#: includes/admin/class-geodir-admin-import-export.php:1973
 #: includes/admin/settings/class-geodir-settings-import-export.php:903
 msgid "No records to export."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:751
-#: includes/admin/class-geodir-admin-import-export.php:1062
-#: includes/admin/class-geodir-admin-import-export.php:2016
+#: includes/admin/class-geodir-admin-import-export.php:752
+#: includes/admin/class-geodir-admin-import-export.php:1063
+#: includes/admin/class-geodir-admin-import-export.php:2017
 msgid ""
 "ERROR: Could not create csv file. This is usually due to inconsistent file "
 "permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1609
+#: includes/admin/class-geodir-admin-import-export.php:1610
 msgid "json file is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1611
+#: includes/admin/class-geodir-admin-import-export.php:1612
 msgid "json file is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1623
+#: includes/admin/class-geodir-admin-import-export.php:1624
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2047
+#: includes/admin/class-geodir-admin-import-export.php:2048
 #, php-format
 msgid "GD IMPORT REVIEW [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2055
+#: includes/admin/class-geodir-admin-import-export.php:2056
 msgid "data is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2068
+#: includes/admin/class-geodir-admin-import-export.php:2069
 msgid "invalid comment content."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2072
+#: includes/admin/class-geodir-admin-import-export.php:2073
 msgid "invalid comment post ID."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2076
+#: includes/admin/class-geodir-admin-import-export.php:2077
 msgid "invalid user details(user id or author name, author email)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2080
+#: includes/admin/class-geodir-admin-import-export.php:2081
 msgid "invalid rating."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2106
-#: includes/admin/class-geodir-admin-import-export.php:2123
+#: includes/admin/class-geodir-admin-import-export.php:2107
+#: includes/admin/class-geodir-admin-import-export.php:2124
 msgid "invalid data."
 msgstr ""
 
@@ -2335,17 +2335,44 @@ msgstr ""
 msgid "Tag base"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:339
+#: includes/admin/class-geodir-admin-permalink-settings.php:233
+msgid "GeoDirectory Location Base (when not set)"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-permalink-settings.php:236
+#, php-format
+msgid ""
+"When the address field is NOT be required, the location URL slug must have a "
+"replacement. For example: <code>%s/%s/%s/CITY-BASE-SLUG/sample-place/</code>"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-permalink-settings.php:238
+msgid "Other suggestions: find, online, virtual, go, see"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-permalink-settings.php:242
+msgid "Country base"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-permalink-settings.php:246
+msgid "Region base"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-permalink-settings.php:250
+msgid "City base"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-permalink-settings.php:381
 msgid ""
 "GeoDirectory permalinks must contain either `%postname%` or `%post_id%`, "
 "please check and try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:347
+#: includes/admin/class-geodir-admin-permalink-settings.php:389
 msgid "GeoDirectory tag base can not be blank, please check and try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:355
+#: includes/admin/class-geodir-admin-permalink-settings.php:397
 msgid ""
 "GeoDirectory category base can not be blank, please check and try again."
 msgstr ""
@@ -4850,9 +4877,9 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:608
 msgid ""
-"For Sale \n"
-"under-offer : Under Offer \n"
-"optgroup : Electronics \n"
+"For Sale\n"
+"under-offer : Under Offer\n"
+"optgroup : Electronics\n"
 "TV\n"
 "Laptop\n"
 "optgroup-close"
@@ -5922,8 +5949,8 @@ msgstr ""
 #: includes/admin/views/html-admin-page-status-report.php:578
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:22
 #: includes/class-geodir-comments.php:79
-#: includes/class-geodir-post-data.php:957
-#: includes/class-geodir-post-data.php:985 language.php:33 language.php:123
+#: includes/class-geodir-post-data.php:958
+#: includes/class-geodir-post-data.php:986 language.php:33 language.php:123
 msgid "Name"
 msgstr ""
 
@@ -6518,7 +6545,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-listings.php:608
 #: includes/widgets/class-geodir-widget-map.php:133
 #: includes/widgets/class-geodir-widget-map.php:401
-#: includes/widgets/class-geodir-widget-map.php:916
+#: includes/widgets/class-geodir-widget-map.php:922
 #: includes/widgets/class-geodir-widget-post-features.php:708
 #: includes/widgets/class-geodir-widget-post-meta.php:293
 #: includes/widgets/class-geodir-widget-search.php:481
@@ -6666,7 +6693,9 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-emails.php:292
-msgid "Send an email when a listing is edited by a user."
+msgid ""
+"Send an email when a listing is edited by a user. (this will not send email "
+"when edited by an admin)"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-emails.php:326
@@ -11891,21 +11920,21 @@ msgstr ""
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:695
+#: includes/class-geodir-post-data.php:696
 #, php-format
 msgid "Could not update post in the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:705
+#: includes/class-geodir-post-data.php:706
 #, php-format
 msgid "Could not insert post into the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:830
+#: includes/class-geodir-post-data.php:831
 msgid "You do not have permission to edit this post."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:848
+#: includes/class-geodir-post-data.php:849
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -11913,7 +11942,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:872
+#: includes/class-geodir-post-data.php:873
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -11921,91 +11950,91 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:949
-#: includes/class-geodir-post-data.php:982
+#: includes/class-geodir-post-data.php:950
+#: includes/class-geodir-post-data.php:983
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:962
-#: includes/class-geodir-post-data.php:988
+#: includes/class-geodir-post-data.php:963
+#: includes/class-geodir-post-data.php:989
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:976
-#: includes/class-geodir-post-data.php:995
+#: includes/class-geodir-post-data.php:977
+#: includes/class-geodir-post-data.php:996
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1021 language.php:36
+#: includes/class-geodir-post-data.php:1022 language.php:36
 msgid "Enter Listing Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1063
-#: includes/class-geodir-post-data.php:1069
+#: includes/class-geodir-post-data.php:1064
+#: includes/class-geodir-post-data.php:1070
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1080
+#: includes/class-geodir-post-data.php:1081
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1099
+#: includes/class-geodir-post-data.php:1100
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1293
+#: includes/class-geodir-post-data.php:1294
 msgid "You do not own this post"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1302
+#: includes/class-geodir-post-data.php:1303
 msgid "Delete revision failed."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1391
-#: includes/class-geodir-post-data.php:1633
+#: includes/class-geodir-post-data.php:1392
+#: includes/class-geodir-post-data.php:1635
 msgid "You do not have the privileges to perform this action."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1541
+#: includes/class-geodir-post-data.php:1542
 msgid "User name must have atleast 3 characters."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1543
+#: includes/class-geodir-post-data.php:1544
 msgid "Invalid user email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1569
+#: includes/class-geodir-post-data.php:1570
 msgid "Something wrong! Fail to register a new user."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1650
+#: includes/class-geodir-post-data.php:1656
 #, php-format
 msgid "%s is empty but is a mandatory field, please check and try again."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1743
+#: includes/class-geodir-post-data.php:1749
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1746
+#: includes/class-geodir-post-data.php:1752
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1753
+#: includes/class-geodir-post-data.php:1759
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1759
+#: includes/class-geodir-post-data.php:1765
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1847
+#: includes/class-geodir-post-data.php:1853
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -21301,20 +21330,20 @@ msgstr ""
 msgid "Loading categories..."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:476
-#: templates/bootstrap/map/map-add-listing.php:781 templates/map.php:474
+#: templates/bootstrap/map/map-add-listing.php:491
+#: templates/bootstrap/map/map-add-listing.php:796 templates/map.php:474
 #: templates/map.php:799
 #, php-format
 msgid "Please choose any address of the (%s) city only."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:495
-#: templates/bootstrap/map/map-add-listing.php:799 templates/map.php:493
+#: templates/bootstrap/map/map-add-listing.php:510
+#: templates/bootstrap/map/map-add-listing.php:814 templates/map.php:493
 #: templates/map.php:817
 msgid "Cannot determine address at this location."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:940
+#: templates/bootstrap/map/map-add-listing.php:955
 msgid ""
 "Click on \"Set Address on Map\" and then you can also drag map marker to "
 "locate the correct address"
