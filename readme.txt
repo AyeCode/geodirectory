@@ -307,6 +307,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.40 - TBD =
 * Custom single post map is not loading on non GD pages - FIXED
+* PHP 8.2 compatibility changes in Emogrifier class - CHANGED
 
 = GeoDirectory v2.3.39 - 2024-02-08 =
 * Address custom field can now be set as optional - CHANGED
