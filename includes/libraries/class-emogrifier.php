@@ -339,35 +339,15 @@ class Emogrifier {
 
 		if ($this->preserveEncoding) {
 			// Deprecated since PHP 8.2
-			/*if ( function_exists( 'mb_convert_encoding' ) ) {
+			if ( version_compare( PHP_VERSION, '8.2', '<' ) && function_exists( 'mb_convert_encoding' ) ) {
 				return mb_convert_encoding( $xmlDocument->saveHTML(), self::ENCODING, 'HTML-ENTITIES' );
-			} else {*/
-				return htmlspecialchars_decode( $this->utf8_encode( html_entity_decode( $xmlDocument->saveHTML(), ENT_COMPAT, self::ENCODING ) ) );
-			//}
+			} else {
+				return mb_encode_numericentity( $xmlDocument->saveHTML(), [0x80, 0x10FFFF, 0, ~0], self::ENCODING );
+				//return htmlspecialchars_decode( utf8_encode( html_entity_decode( $xmlDocument->saveHTML(), ENT_COMPAT, self::ENCODING ) ) );
+			}
 		} else {
 			return $xmlDocument->saveHTML();
 		}
-	}
-
-	private function utf8_encode( $s ) {
-		if ( version_compare( PHP_VERSION, '8.2', '<' ) && function_exists( 'utf8_encode' ) ) {
-			return utf8_encode( $s );
-		} else if ( function_exists( 'iconv' ) ) {
-			return iconv( 'ISO-8859-1', self::ENCODING, $s );
-		}
-
-		$s .= $s;
-		$len = \strlen($s);
-
-		for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
-			switch (true) {
-				case $s[$i] < "\x80": $s[$j] = $s[$i]; break;
-				case $s[$i] < "\xC0": $s[$j] = "\xC2"; $s[++$j] = $s[$i]; break;
-				default: $s[$j] = "\xC3"; $s[++$j] = \chr(\ord($s[$i]) - 64); break;
-			}
-		}
-
-		return substr($s, 0, $j);
 	}
 
     /**
@@ -562,46 +542,12 @@ class Emogrifier {
 		}
 
 		// Deprecated since PHP 8.2
-		/*if ( function_exists( 'mb_convert_encoding' ) ) {
+		if ( version_compare( PHP_VERSION, '8.2', '<' ) && function_exists( 'mb_convert_encoding' ) ) {
 			return mb_convert_encoding( $bodyWithoutUnprocessableTags, 'HTML-ENTITIES', self::ENCODING );
-		} else {*/
-			return htmlspecialchars_decode( $this->utf8_decode( htmlentities( $bodyWithoutUnprocessableTags, ENT_COMPAT, self::ENCODING, false ) ) );
-		//}
-	}
-
-	private function utf8_decode( $s ) {
-		if ( version_compare( PHP_VERSION, '8.2', '<' ) && function_exists( 'utf8_decode' ) ) {
-			return utf8_decode( $s );
-		} else if ( function_exists( 'iconv' ) ) {
-			return iconv( self::ENCODING, 'ISO-8859-1', $s );
+		} else {
+			return mb_encode_numericentity( $bodyWithoutUnprocessableTags, [0x80, 0x10FFFF, 0, ~0], self::ENCODING );
+			//return htmlspecialchars_decode( utf8_decode( htmlentities( $bodyWithoutUnprocessableTags, ENT_COMPAT, self::ENCODING, false ) ) );
 		}
-
-		$s = (string) $s;
-		$len = \strlen($s);
-
-		for ( $i = 0, $j = 0; $i < $len; ++$i, ++$j ) {
-			switch ($s[$i] & "\xF0") {
-				case "\xC0":
-				case "\xD0":
-					$c = (\ord($s[$i] & "\x1F") << 6) | \ord($s[++$i] & "\x3F");
-					$s[$j] = $c < 256 ? \chr($c) : '?';
-					break;
-
-				case "\xF0":
-					++$i;
-					// no break
-
-				case "\xE0":
-					$s[$j] = '?';
-					$i += 2;
-					break;
-
-				default:
-					$s[$j] = $s[$i];
-			}
-		}
-
-		return substr($s, 0, $j);
 	}
 
 	/**
