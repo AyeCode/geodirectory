@@ -581,6 +581,11 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				}
 				break;
 			case 'post':
+				if ( $map_args['default_map_type'] == 'post' && ! empty( $map_args['post_id'] ) ) {
+					if ( ! ( ! empty( $gd_post ) && ! empty( $gd_post->ID ) && $gd_post->ID == (int) $map_args['post_id'] ) ) {
+						$gd_post = geodir_get_post_info( (int) $map_args['post_id'] );
+					}
+				}
 
 				// bail if no GPS.
 				if ( empty( $gd_post->latitude ) || empty( $gd_post->longitude ) ) {
