@@ -101,6 +101,7 @@ function geodirGoMapInit() {
             disableDoubleClickZoom: false,
             touchZoom: '*', // Boolean|String. Default: *. Whether the map can be zoomed by touch-dragging with two fingers.
             streetViewControl: true,
+            maxClusterRadius: 80,
             streetViewControlOptions: {
                 position: 'bottomleft'
             },
@@ -248,7 +249,7 @@ function geodirGoMapInit() {
                         jQuery('#gdOSMprogress').hide();
                     }
                 }
-                this.gdlayers = new L.markerClusterGroup({spiderfyOnMaxZoom: true, showCoverageOnHover: false, zoomToBoundsOnClick: true, chunkedLoading: true, chunkProgress: gdOSMUpdateProgressBar});
+                this.gdlayers = new L.markerClusterGroup({spiderfyOnMaxZoom: true, showCoverageOnHover: false, zoomToBoundsOnClick: true, chunkedLoading: true, maxClusterRadius: (parseInt(opts.maxClusterRadius) > 0 ? parseInt(opts.maxClusterRadius) : 80), chunkProgress: gdOSMUpdateProgressBar});
             } else {
                 this.gdlayers = new L.featureGroup([]);
             }
