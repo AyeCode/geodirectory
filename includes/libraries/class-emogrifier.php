@@ -518,7 +518,8 @@ class Emogrifier {
 		$xmlDocument->strictErrorChecking = false;
 		$xmlDocument->formatOutput = true;
 		$libXmlState = libxml_use_internal_errors(true);
-		$xmlDocument->loadHTML($this->getUnifiedHtml());
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		/** @scrutinizer ignore-unhandled */ @$xmlDocument->loadHTML($this->getUnifiedHtml());
 		libxml_clear_errors();
 		libxml_use_internal_errors($libXmlState);
 		$xmlDocument->normalizeDocument();
