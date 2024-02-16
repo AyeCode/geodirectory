@@ -305,6 +305,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.3.41 - TBD =
+* OSM directions route should use listing location as an end point - CHANGED
+
 = GeoDirectory v2.3.40 - 2024-02-15 =
 * Custom single post map is not loading on non GD pages - FIXED
 * PHP 8.2 compatibility changes in Emogrifier class - CHANGED
