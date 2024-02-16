@@ -2235,9 +2235,13 @@
                                 if (!this._waypoints[i].latLng) return false;
                             return true
                         },
-                        getWaypoints: function() {
-                            var i, wps = [];
-                            for (i = 0; i < this._waypoints.length; i++) wps.push(this._waypoints[i]);
+                        getWaypoints: function() {/* CHANGE: Switch inttial to destination */
+                            var i, wps = [], gdReverse = 0;
+                            for (i = 0; i < this._waypoints.length; i++) {
+                                wps.push(this._waypoints[i]);
+                                if (i > 0 && this._waypoints[i].latLng) gdReverse++;
+                            }
+                            if (gdReverse > 0) wps.reverse();
                             return wps
                         },
                         setWaypoints: function(waypoints) {
