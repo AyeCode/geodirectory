@@ -171,7 +171,7 @@ class GeoDir_Fast_AJAX {
 			}
 
 			// Non GD plugins
-			if ( strpos( $plugin, 'sitepress-multilingual-cms' ) !== false || strpos( $plugin, 'wpml-' ) === 0 || strpos( $plugin, 'loco-translate' ) !== false ) {
+			if ( strpos( $plugin, 'sitepress-multilingual-cms' ) !== false || strpos( $plugin, 'wpml-' ) === 0 || strpos( $plugin, 'loco-translate' ) !== false || strpos( $plugin, 'translatepress-' ) !== false ) {
 				$allowed_plugins[] = $plugin;
 				continue;
 			}
