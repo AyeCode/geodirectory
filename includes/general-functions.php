@@ -1044,6 +1044,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	$statuses = geodir_get_post_stati( $context, $query_args );
 
+
 	if ( count( $statuses ) > 1 ) {
 		$where = "AND {$wpdb->posts}.post_status IN( '" . implode( "', '", $statuses ) . "' )";
 	} else {
@@ -1078,7 +1079,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$where = apply_filters( 'geodir_filter_widget_listings_where', $where, $post_type );
 	$where = $where != '' ? " WHERE 1=1 " . $where : '';
 
-	$groupby = " GROUP BY $wpdb->posts.ID "; //@todo is this needed? faster without
+	$groupby = ""; //" GROUP BY $wpdb->posts.ID "; //@todo is this needed? faster without (commented out by stiofan 2024-02-16, if it breaks anything we can add it back here with a comment)
 	/**
 	 * Filter widget listing groupby clause string part that is being used for query.
 	 *

@@ -801,7 +801,7 @@ function geodir_get_post_stati( $context, $args = array() ) {
 			$statuses = $publish_statuses;
 
 			if ( current_user_can( 'manage_options' ) ) {
-				$statuses[] = 'private';
+				//$statuses[] = 'private'; // i don't see how this is useful on the front end, it really slows the query down for admins doing testing (stiofan)
 			}
 			break;
 		case 'import':
@@ -1600,25 +1600,25 @@ add_filter( 'get_next_post_join', 'geodir_previous_next_post_join', 10, 5 );
  * @return string Filtered SQL WHERE clause.
  */
 function geodir_previous_next_post_where( $where, $in_same_term, $excluded_terms, $taxonomy, $post ) {
-	global $wpdb, $plugin_prefix;
+	global $wpdb, $plugin_prefix, $gd_post;
 
-	if ( ! empty( $post->post_type ) && ( ! empty( $post->country_slug ) || ! empty( $post->region_slug ) || ! empty( $post->city_slug ) ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
+	if ( ! empty( $post->post_type ) && ( ! empty( $gd_post->country ) || ! empty( $gd_post->region ) || ! empty( $gd_post->city ) ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
 		$post_locations     = '';
 		$post_locations_var = array();
 
-		if ( ! empty( $post->country_slug ) ) {
-			$post_locations .= " AND post_locations LIKE %s";
-			$post_locations_var[] = "%,[" . $post->country_slug . "]";
+		if ( ! empty( $gd_post->country ) ) {
+			$post_locations .= " AND gd.country = %s";
+			$post_locations_var[] = esc_attr( $gd_post->country );
 		}
 
-		if ( ! empty( $post->region_slug ) ) {
-			$post_locations .= " AND post_locations LIKE %s";
-			$post_locations_var[] = "%,[" . $post->region_slug . "],%";
+		if ( ! empty( $gd_post->region ) ) {
+			$post_locations .= " AND gd.region = %s";
+			$post_locations_var[] = esc_attr( $gd_post->region );
 		}
 
-		if ( ! empty( $post->city_slug ) ) {
-			$post_locations .= " AND post_locations LIKE %s";
-			$post_locations_var[] = "[" . $post->city_slug . "],%";
+		if ( ! empty( $gd_post->city ) ) {
+			$post_locations .= " AND gd.city = %s";
+			$post_locations_var[] = esc_attr( $gd_post->city );
 		}
 
 		$where .= $wpdb->prepare( $post_locations, $post_locations_var );

@@ -299,7 +299,7 @@ public function setup_wizard_header() {
 
 	<div id="gd-setup-container" class="gd-setup wp-core-ui bg-whitex mx-auto mt-4x modal fade show overflow-auto"  style="display: block;z-index: inherit;">
 
-		<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm <?php echo $aui_bs5 ? 'px-3' : '';?>">
+		<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm <?php echo $aui_bs5 ? 'px-3 py-2' : '';?>">
 			<a class="navbar-brand" href="#">
 				<h1 class="h5 p-0 m-0">
 					<i class="fas fa-globe-americas text-primary bg-white rounded-circle" style="color:#ff8333 !important;"></i>
@@ -369,12 +369,13 @@ public function setup_wizard_header() {
 			<?php foreach ( $ouput_steps as $step_key => $step ) : ?>
 				<li class="nav-link border-0 d-flex align-content-center justify-content-center <?php
 				if ( $step_key === $this->step ) {
-					echo 'active ' . ( $aui_bs5 ? 'text-dark' : 'text-white' );
+					echo 'active ' . ( $aui_bs5 ? 'bg-primary text-white rounded fw-bold' : 'text-white' );
 					$tick_class = '';
 				} elseif ( array_search( $this->step, array_keys( $this->steps ) ) > array_search( $step_key, array_keys( $this->steps ) ) ) {
 					$tick_class = 'text-primary';
+					echo $aui_bs5 ? 'bg-white rounded shadow-0 fw-bold' : '' ;
 				}else{
-					echo 'text-muted';
+					echo 'text-muted ' . ( $aui_bs5 ? 'bg-white rounded shadow-0 fw-bold' : '' );
 				}
 				?>"><span class="h5 p-0 m-0"><i class="fas fa-check-circle <?php echo $tick_class;?>"></i></span> <span class="pl-1 ps-1 align-self-center"><?php echo esc_html( $step['name'] ); ?></span>
 

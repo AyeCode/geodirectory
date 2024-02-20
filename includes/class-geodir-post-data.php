@@ -2193,6 +2193,27 @@ class GeoDir_Post_Data {
 			$schema['priceRange'] = esc_attr( $gd_post->price_range );
 		}
 
+		// VacationRental
+		if ( 'VacationRental' === $schema_type ) {
+			$schema['identifier'] = absint( $gd_post->ID );
+
+			$accommodation = array();
+
+			$accommodation['@type'] = "Accommodation";
+
+			if ( ! empty( $gd_post->accommodates ) ) {
+				$accommodation['occupancy'] = array(
+					"@type"=> "QuantitativeValue",
+					"value" => esc_attr( $gd_post->accommodates ),
+
+				);
+			}
+
+			$schema['containsPlace'] = $accommodation;
+
+
+		}
+
 		/**
 		 * Allow the schema JSON-LD info to be filtered.
 		 *
