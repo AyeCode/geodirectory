@@ -176,7 +176,7 @@ class GeoDir_API {
 		if ( geodir_api_enabled() ) {
             $gd_post_types = geodir_get_posttypes();
 
-            foreach ( $wp_post_types as $post_type ) { 
+            foreach ( $wp_post_types as $post_type ) {
 				if ( ! in_array( $post_type->name, $gd_post_types ) ) {
                     continue;
                 }
@@ -264,7 +264,7 @@ class GeoDir_API {
 					$wp_post_types[$post_type]->show_in_rest = true;
 					$wp_post_types[$post_type]->rest_base = $data['has_archive'];
 					$wp_post_types[$post_type]->rest_controller_class = 'GeoDir_REST_Posts_Controller';
-					
+
 					if ( ! empty( $data['taxonomies'] ) ) {
 						foreach ( $data['taxonomies'] as $taxonomy ) {
 							if ( isset( $wp_taxonomies[$taxonomy] ) ) {

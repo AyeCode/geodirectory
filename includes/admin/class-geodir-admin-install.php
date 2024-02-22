@@ -176,7 +176,7 @@ class GeoDir_Admin_Install {
 		//()->query->add_endpoints();
 		//_API::add_endpoint();
 		//_Auth::add_endpoint();
-		
+
 		self::create_cron_jobs();
 
 		// Queue upgrades/setup wizard
@@ -194,7 +194,7 @@ class GeoDir_Admin_Install {
 		// Trigger action
 		do_action( 'geodirectory_installed' );
 	}
-	
+
 	/**
 	 * Reset any notices added to admin.
 	 *
@@ -203,7 +203,7 @@ class GeoDir_Admin_Install {
 	private static function remove_admin_notices() {
 		GeoDir_Admin_Notices::remove_all_notices();
 	}
-	
+
 	/**
 	 * Is this a brand new GeoDirectory install?
 	 *
@@ -290,7 +290,7 @@ class GeoDir_Admin_Install {
      */
 	public static function insert_default_tabs($post_type = 'gd_place'){
 		$fields = array();
-		
+
 		// Profile / description
 		$fields[] = array(
 			'post_type'     => $post_type,
@@ -358,7 +358,7 @@ class GeoDir_Admin_Install {
 			}
 		}
 	}
-	
+
 	/**
 	 * See if we need to show or run database updates during install.
 	 *
@@ -435,7 +435,7 @@ class GeoDir_Admin_Install {
 	 * @return array
 	 */
 	public static function cron_schedules( $schedules ) {
-		// Kadence starter templates page is broken when monthly schedule option is set. 
+		// Kadence starter templates page is broken when monthly schedule option is set.
 		if ( ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'kadence-starter-templates' ) || ( ! empty( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'kadence_check_plugin_data', 'kadence_import_get_template_data', 'kadence_import_install_plugins' ) ) ) ) {
 			return $schedules;
 		}
@@ -504,7 +504,7 @@ class GeoDir_Admin_Install {
 				'content' => GeoDir_Defaults::page_details_content(false, $gutenberg),
 			),
 
-			
+
 		) );
 
 		foreach ( $pages as $key => $page ) {
@@ -553,7 +553,7 @@ class GeoDir_Admin_Install {
 
 		// Include settings so that we can run through defaults
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-settings.php' );
-		
+
 		$current_settings = geodir_get_settings();
 
 		$settings = GeoDir_Admin_Settings::get_settings_pages();
@@ -695,14 +695,14 @@ class GeoDir_Admin_Install {
 			// Table for storing place attribute - these are user defined
 			$tables .= " CREATE TABLE " . $plugin_prefix . "gd_place_detail (
 						".implode (", \n",self::db_cpt_default_columns()).",
-						".implode (", \n",self::db_cpt_default_keys())." 
+						".implode (", \n",self::db_cpt_default_keys())."
 						) $collate; ";
 		}else{
 			foreach($post_types as $post_type => $cpt){
 				// Table for storing place attribute - these are user defined
 				$tables .= " CREATE TABLE " . $plugin_prefix . $post_type . "_detail (
 						".implode (", \n",self::db_cpt_default_columns($cpt, $post_type)).",
-						".implode (", \n",self::db_cpt_default_keys($cpt, $post_type))." 
+						".implode (", \n",self::db_cpt_default_keys($cpt, $post_type))."
 						) $collate; ";
 			}
 
@@ -713,20 +713,22 @@ class GeoDir_Admin_Install {
 		// Table for storing place images - these are user defined
 		$tables .= " CREATE TABLE " . GEODIR_ATTACHMENT_TABLE . " (
 						ID int(11) NOT NULL AUTO_INCREMENT,
-						post_id int(11) NOT NULL,
+						post_id bigint(20) NOT NULL,
 						date_gmt datetime NULL default null,
 						user_id int(11) DEFAULT NULL,
 						other_id int(11) DEFAULT NULL,
 						title varchar(254) NULL DEFAULT NULL,
 						caption varchar(254) NULL DEFAULT NULL,
-						file varchar(254) NOT NULL, 
+						file varchar(254) NOT NULL,
 						mime_type varchar(150) NOT NULL,
 						menu_order int(11) NOT NULL DEFAULT '0',
 						featured tinyint(1) NULL DEFAULT '0',
 						is_approved tinyint(1) NULL DEFAULT '1',
 						metadata text NULL DEFAULT NULL,
 					    type varchar(254) NULL DEFAULT 'post_images',
-						PRIMARY KEY  (ID)
+						PRIMARY KEY  (ID),
+						KEY post_id (post_id),
+                        KEY type (type)
 						) $collate ; ";
 
 		// Table for storing custom sort fields
@@ -749,7 +751,7 @@ class GeoDir_Admin_Install {
 		// Table for storing review info
 		/**
 		 * UNIQUE KEY replaced to PRIMARY KEY to prevent database error:
-		 * "Percona-XtraDB-Cluster prohibits use of DML command on a table without an explicit 
+		 * "Percona-XtraDB-Cluster prohibits use of DML command on a table without an explicit
 		 * primary key with pxc_strict_mode = ENFORCING or MASTER"
 		 */
 		$tables .= " CREATE TABLE " . GEODIR_REVIEW_TABLE . " (
@@ -767,7 +769,7 @@ class GeoDir_Admin_Install {
 		  longitude varchar(22) DEFAULT '',
 		  PRIMARY KEY (comment_id)
 		) $collate; ";
-			
+
 		// Table to store api keys
 		$tables .= " CREATE TABLE " . GEODIR_API_KEYS_TABLE . " (
 			  key_id BIGINT UNSIGNED NOT NULL auto_increment,
@@ -1130,7 +1132,7 @@ class GeoDir_Admin_Install {
 		$columns = array();
 
 		// Standard fields
-		$columns['post_id'] = "post_id int(11) NOT NULL";
+		$columns['post_id'] = "post_id bigint(20) NOT NULL";
 		$columns['post_title'] = "post_title text NULL DEFAULT NULL";
 		$columns['_search_title'] = "_search_title text NOT NULL";
 		$columns['post_status'] = "post_status varchar(20) NULL DEFAULT NULL";

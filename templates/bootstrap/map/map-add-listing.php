@@ -132,8 +132,27 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
         });
     }
 
+	function geodirGetAnyZip(responses) {
+		var zip = '';
+
+		// Use a standard for loop instead of forEach
+		for (var j = 0; j < responses.length; j++) {
+			var response = responses[j];
+			console.log(response);
+			for (var i = 0; i < response.address_components.length; i++) {
+				var addr = response.address_components[i];
+				if (addr.types[0] == 'postal_code' && addr.short_name) {
+					return addr.short_name; // This will now return from geodirGetAnyZip
+				}
+			}
+		}
+
+		return zip; // This will only be reached if no postal_code is found
+	}
+
     function geocodeResponse(responses) {
-        console.log(responses);//keep this for debugging
+		console.log(responses);//keep this for debugging
+		console.log('###');//keep this for debugging
         if (responses && responses.length > 0) {
             var getAddress = '';
             var getAddress2 = '';
@@ -186,10 +205,10 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                             locality = addr;
                         }
                         if (addr.types[0] == 'premise') {
-                            premise = addr;alert(4);
+                            premise = addr;
                         }
                         if (addr.types[0] == 'establishment') {
-                            establishment = addr;alert(5);
+                            establishment = addr;
                         }
                     }
                 }
@@ -197,7 +216,9 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 
             for (var i = 0; i < responses[0].address_components.length; i++) {
                 var addr = responses[0].address_components[i];
-                if (addr.types[0] == 'street_number') {
+
+
+				if (addr.types[0] == 'street_number') {
                     street_number = addr;
                 }
                 if (addr.types[0] == 'route') {
@@ -307,7 +328,16 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                     getAddress += route.long_name;//route
             }
 
-            getZip = postal_code.long_name;//postal_code
+			getZip = postal_code.long_name;//postal_code
+
+			// maybe try and get zip alternative if region is missing so we can use our zip arrays to find the region later
+			if (!getState && !getZip) {
+				var zipFound = geodirGetAnyZip( responses );
+				if (zipFound) {
+					getZip = zipFound;
+					postal_code.long_name = getZip;
+				}
+			}
 
             //getCountry
             if (country.long_name) {
@@ -477,7 +507,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                 getCountry = "Holy See";
             }
 
-            console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
+            console.log(getAddress+', '+getCity+', '+getState+', '+getCountry+', '+getZip);
             <?php
             /**
              * Fires to add javascript variable to use in google map.

@@ -43,9 +43,9 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
         $this->namespace    = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION;
         $obj                = get_post_type_object( $post_type );
         $this->rest_base    = ! empty( $obj->rest_base ) ? $obj->rest_base : $obj->name;
-        
+
         $this->meta         = new WP_REST_Post_Meta_Fields( $this->post_type );
-        
+
         $this->cat_taxonomy = $this->post_type . 'category';
         $this->tag_taxonomy = $this->post_type . '_tags';
     }
@@ -109,7 +109,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			'schema' => array( $this, 'get_public_item_schema' ),
 		) );
 	}
-    
+
 	/**
 	 * Checks if a given post type can be viewed or managed.
 	 *
@@ -129,7 +129,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		return false;
 	}
-    
+
 	/**
 	 * Retrieves the query params for the posts collection.
 	 *
@@ -312,7 +312,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		 */
 		return apply_filters( "rest_{$this->post_type}_collection_params", $params, $post_type_obj );
 	}
-    
+
 	/**
 	 * Prepares links for the request.
 	 *
@@ -418,48 +418,48 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				);
 			}
 		}
-        
+
         if ( !empty( $post->post_location_id ) && geodir_rest_is_active( 'location' ) && $location = geodir_get_location_by_id( NULL, $post->post_location_id ) ) {
             $location_links = array();
-            
+
             $location_links[] = array(
                 'href'          => rest_url( sprintf( '%s/%s/%s/%s', $this->namespace, 'locations', 'countries', $location->country_slug ) ),
                 'location'      => 'country',
                 'embeddable'    => true,
             );
-            
+
             $add_query_args = array( 'country' => $location->country_slug );
-            
+
             $location_links[] = array(
                 'href'          => add_query_arg( $add_query_args, rest_url( sprintf( '%s/%s/%s/%s', $this->namespace, 'locations', 'regions', $location->region_slug ) ) ),
                 'location'      => 'region',
                 'embeddable'    => true,
             );
-            
+
             $add_query_args['region'] = $location->region_slug;
-            
+
             $location_links[] = array(
                 'href'          => add_query_arg( $add_query_args, rest_url( sprintf( '%s/%s/%s/%s', $this->namespace, 'locations', 'cities', $location->city_slug ) ) ),
                 'location'      => 'city',
                 'embeddable'    => true,
             );
-            
+
             if ( !empty( $post->gd_neighbourhood ) && geodir_rest_is_active( 'neighbourhood' ) ) {
                 $add_query_args['city'] = $location->city_slug;
-                
+
                 $location_links[] = array(
                     'href'          => add_query_arg( $add_query_args, rest_url( sprintf( '%s/%s/%s/%s', $this->namespace, 'locations', 'neighbourhoods', $post->gd_neighbourhood ) ) ),
                     'location'      => 'neighbourhood',
                     'embeddable'    => true,
                 );
             }
-            
+
             $links['https://api.w.org/location'] = $location_links;
         }
 
 		return $links;
 	}
-    
+
 	/**
 	 * Creates a single post.
 	 *
@@ -470,7 +470,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	 */
 	public function create_item( $request ) {
         global $post, $wpdb, $gd_permalink_cache;
-        
+
 		if ( ! empty( $request['id'] ) ) {
 			return new WP_Error( 'rest_post_exists', __( 'Cannot create existing post.' ), array( 'status' => 400 ) );
 		}
@@ -484,15 +484,15 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		$prepared_post->post_type = $this->post_type;
 
 		$post_id = wp_insert_post( wp_slash( (array) $prepared_post ), true );
-        
+
         if ( !is_wp_error( $post_id ) ) {
             if ( !empty( $gd_permalink_cache ) && isset( $gd_permalink_cache[$post_id] ) ) {
                 unset( $gd_permalink_cache[$post_id] );
             }
             $post = get_post( $post_id );
-            
+
             $gd_post = $this->prepare_item_for_geodir_database( $request, $post_id );
-            
+
             $post_id = geodir_save_listing( $gd_post, null, true );
         }
 
@@ -576,7 +576,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		return $response;
 	}
-    
+
 	/**
 	 * Updates a single post.
 	 *
@@ -587,7 +587,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	 */
 	public function update_item( $request ) {
         global $post, $wpdb;
-        
+
 		$id   = (int) $request['id'];
 		$post = get_post( $id );
 
@@ -603,10 +603,10 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		// convert the post object to an array, otherwise wp_update_post will expect non-escaped input.
 		$post_id = wp_update_post( wp_slash( (array) $post ), true );
-        
+
         if ( !is_wp_error( $post_id ) ) {
             $gd_post = $this->prepare_item_for_geodir_database( $request, $post_id );
-            
+
             $post_id = geodir_save_listing( $gd_post, null, true );
         }
 
@@ -676,7 +676,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		return rest_ensure_response( $response );
 	}
-    
+
 	/**
 	 * Prepares a single post for create or update.
 	 *
@@ -687,12 +687,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	 */
 	protected function prepare_item_for_geodir_database( $request, $post_id = 0 ) {
         $prepared_post = $request->get_params();
-        
+
         // Post ID.
         if ( isset( $request['id'] ) ) {
             $prepared_post['post_id'] = absint( $request['id'] );
         }
-        
+
         $schema = $this->get_item_schema();
 
         // Post title.
@@ -712,7 +712,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                 $prepared_post['content'] = $request['content']['raw'];
             }
         }
-        
+
         // Post category.
         if ( isset( $request[ $this->cat_taxonomy ] ) ) {
             if ( empty( $request[ $this->cat_taxonomy ] ) ) {
@@ -722,16 +722,16 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             } else {
                 $post_category = $request[ $this->cat_taxonomy ];
             }
-            
+
             $prepared_post['post_category'][ $this->cat_taxonomy ] = $post_category;
         }
-        
+
         // Post tags.
         if ( isset( $request[ $this->tag_taxonomy ] ) ) {
             $post_tags = empty( $request[ $this->tag_taxonomy ] ) || is_array( $request[ $this->tag_taxonomy ] ) ? $request[ $this->tag_taxonomy ] : explode( ',', $request[ $this->tag_taxonomy ] );
-            
+
             $prepared_post['post_tags'] = $post_tags;
-            
+
             wp_set_object_terms( $post_id, $prepared_post['post_tags'], $this->tag_taxonomy );
         }
 
@@ -767,13 +767,13 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
      */
     public function register_listing_fields() {
         $listing_schema = $this->geodir_get_item_schema();
-        
+
         foreach ( $listing_schema as $name => $schema ) {
             $args = array();
             //$args['get_callback']      = array( $this, 'geodir_get_callback' );
             //$args['update_callback']   = array( $this, 'geodir_update_callback' );
             $args['schema']            = $schema;
-            
+
             register_rest_field( $this->post_type, $name, $args );
         }
     }
@@ -790,23 +790,23 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
     public function geodir_get_item_schema( $package_id = '', $default = 'all' ) {
 	    global $geodirectory;
         $custom_fields  = geodir_post_custom_fields( $package_id, $default, $this->post_type );
-        
+
         $schema = array();
-        
+
         $schema[ 'post_images' ] = array(
             'type'          => 'string',
             'context'       => array( 'view', 'edit' ),
             'title'         => __( 'Listing images', 'geodirectory' ),
             'description'   => __( 'Comma separated list of listing images urls. First image will be set as a featured image for the listing.', 'geodirectory' ),
         );
-        
+
         foreach ( $custom_fields as $id => $field ) {
             $admin_use              = (bool)$field['for_admin_use'];
-            
+
             if ( $admin_use ) {
                 continue;
             }
-            
+
             $name                   = $field['htmlvar_name'];
             $data_type              = $field['data_type'];
             $field_type             = $field['field_type'];
@@ -818,11 +818,11 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             $options                = !empty( $field['option_values'] ) ? stripslashes_deep( $field['options'] ) : array();
             $rendered_options       = !empty( $field['option_values'] ) ? stripslashes_deep( geodir_string_values_to_options( $field['option_values'], true ) ) : array();
             $enum                   = $rendered_options ? geodir_rest_get_enum_values( $rendered_options ) : array();
-            $arg_options            = array( 
-                'validate_callback' => 'geodir_rest_validate_request_arg' 
+            $arg_options            = array(
+                'validate_callback' => 'geodir_rest_validate_request_arg'
             );
             $prefix                 = '';
-            
+
             $args                   = array();
             $args['type']           = 'string';
             $args['context']        = array( 'view', 'edit' );
@@ -830,9 +830,9 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             $args['description']    = !empty( $description ) ? $description : $title;
             $args['required']       = (bool)$required;
             $args['default']        = $default;
-            
+
             $continue = false;
-            
+
             switch ( $field_type ) {
                 case 'address':
                     $prefix     = $name . '_';
@@ -843,9 +843,9 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     $city       = !empty( $location->city ) ? $location->city : '';
                     $latitude   = !empty( $location->latitude ) ? $location->latitude : '';
                     $longitude  = !empty( $location->longitude ) ? $location->longitude : '';
-                    
+
                     $schema[ $prefix . $name ]    = $args;
-                    
+
                     $schema[ $prefix . 'country' ] = array(
                         'type'          => 'string',
                         'context'       => array( 'view', 'edit' ),
@@ -854,7 +854,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         'required'      => (bool)$required,
                         'default'       => $country,
                     );
-                    
+
                     $schema[ $prefix . 'region' ] = array(
                         'type'          => 'string',
                         'context'       => array( 'view', 'edit' ),
@@ -863,7 +863,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         'required'      => (bool)$required,
                         'default'       => $region,
                     );
-                    
+
                     $schema[ $prefix . 'city' ] = array(
                         'type'          => 'string',
                         'context'       => array( 'view', 'edit' ),
@@ -872,7 +872,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         'required'      => (bool)$required,
                         'default'       => $city,
                     );
-                    
+
                     if ( geodir_rest_is_active( 'neighbourhood' ) ) {
                         $schema[ $prefix . 'neighbourhood' ] = array(
                             'type'          => 'string',
@@ -882,7 +882,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'required'      => (bool)$required,
                         );
                     }
-                    
+
                     if ( !empty( $extra_fields['show_zip'] ) ) {
                         $schema[ $prefix . 'zip' ] = array(
                             'type'          => 'string',
@@ -891,7 +891,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'required'      => ! empty( $extra_fields['zip_required'] ) ? true : false,
                         );
                     }
-                    
+
                     if ( !empty( $extra_fields['show_map'] ) ) {
                         $schema[ $prefix . 'map' ] = array(
                             'type'          => 'string',
@@ -900,7 +900,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'description'   => __( 'Click on "Set Address on Map" and then you can also drag pinpoint to locate the correct address', 'geodirectory' ),
                             'readonly'      => true,
                         );
-                        
+
                         $schema[ $prefix . 'latitude' ] = array(
                             'type'          => 'string',
                             'context'       => array( 'view', 'edit' ),
@@ -910,7 +910,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'default'       => $latitude,
                             'readonly'      => empty( $extra_fields['show_latlng'] ) ? true : false,
                         );
-                        
+
                         $schema[ $prefix . 'longitude' ] = array(
                             'type'          => 'string',
                             'context'       => array( 'view', 'edit' ),
@@ -921,7 +921,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'readonly'      => empty( $extra_fields['show_latlng'] ) ? true : false,
                         );
                     }
-                    
+
                     if ( !empty( $extra_fields['show_mapview'] ) ) {
                         $schema[ $prefix . 'mapview' ] = array(
                             'type'          => 'string',
@@ -931,7 +931,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'enum'          => array( 'ROADMAP', 'SATELLITE', 'HYBRID', 'TERRAIN' ),
                         );
                     }
-                    
+
                     if ( !empty( $extra_fields['show_mapzoom'] ) ) {
                         $schema[ $prefix . 'mapzoom' ] = array(
                             'type'          => 'string',
@@ -985,7 +985,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'readonly'    => true,
                         ),
                     );
-                    
+
                     if ( !empty( $extra_fields['gd_file_types'] ) ) {
                         $arg_options['file_types'] = $extra_fields['gd_file_types'];
                     }
@@ -1071,24 +1071,24 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     $continue = true;
                     break;
             }
-            
+
             if ( $continue ) {
                 continue;
             }
-            
+
             if ( !empty( $rendered_options ) ) {
                 $arg_options['rendered_options']   = $rendered_options;
             }
-            
+
             $args['field_type']     = $field_type;
             $args['data_type']      = $data_type;
             $args['extra_fields']   = $extra_fields;
             if ( !empty( $options ) ) {
                 $args['field_options']   = $options;
             }
-            
+
             $args['arg_options']   = $arg_options;
-            
+
             $schema[ $prefix . $name ]    = apply_filters( 'geodir_listing_fields_args', $args, $field );
         }
 

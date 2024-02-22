@@ -1,7 +1,7 @@
 <?php
 /**
  * Addons Page
- * 
+ *
  *
  * @author   AyeCode
  * @category Admin
@@ -33,7 +33,7 @@ class GeoDir_Admin_Addons {
 			'membership' => __("Membership", "geodirectory"),
 		);
 
-		
+
 
 		return $tabs;
 	}
@@ -449,7 +449,7 @@ class GeoDir_Admin_Addons {
 			}
 		}
 
-		
+
 		// filter the button arguments
 		$button_args = apply_filters('edd_api_button_args',$button_args);
 
@@ -525,7 +525,7 @@ class GeoDir_Admin_Addons {
 				'slug'   => 'ayecode-connect',
 				'name'   => 'AyeCode Connect',
 				'file'  => 'ayecode-connect/ayecode-connect.php',
-				'desc'   => __( 'Allows you to install any purchased AyeCode Ltd product add-ons without a zip file. It also installs and activates licences automatically, so there is no need to copy/paste licenses.', 'geodirectory' ),
+				'desc'   => __( 'Support & documentation right from your dashboard, easily install any purchased add-ons without a zip file or license key.', 'geodirectory' ),
 			),
 			'ninja-forms' => array(
 				'url'   => 'https://wordpress.org/plugins/ninja-forms/',
@@ -541,22 +541,15 @@ class GeoDir_Admin_Addons {
 				'file'  => 'userswp/userswp.php',
 				'desc'   => __('Allow frontend user login and registration as well as have slick profile pages.','geodirectory'),
 			),
-			// just testing script for below plugins
-//			'ewww-image-optimizer' => array(
-//				'url'   => 'https://wordpress.org/plugins/ewww-image-optimizer/',
-//				'slug'   => 'ewww-image-optimizer',
-//				'name'   => 'EWWW Image Optimizer',
-//				'desc'   => __('testing','geodirectory'),
-//			),
-//			'hide-admin-bar' => array(
-//				'url'   => 'https://wordpress.org/plugins/hide-admin-bar/',
-//				'slug'   => 'hide-admin-bar',
-//				'name'   => 'Hide admin bar',
-//				'desc'   => __('testing','geodirectory'),
-//			),
 		);
 
-		return $plugins;
+
+		/**
+		 * A collection of WP plugins to recommend.
+		 *
+		 * @var array $plugins An array containing all the plugins.
+		 */
+		return apply_filters('geodir_recommend_wp_plugins', $plugins );
 	}
 
 	/**
@@ -585,7 +578,7 @@ class GeoDir_Admin_Addons {
 
 	public static function get_wizard_paid_addons(){
 		$addons = self::get_section_data( 'addons' );
-		
+
 		return $addons;
 	}
 }

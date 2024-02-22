@@ -308,6 +308,10 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.3.41 - TBD =
 * OSM directions route should use listing location as an end point - CHANGED
 * Skip TranslatePress plugin from Fast AJAX request - CHANGED
+* Several SQL Query optimizations reducing some query times even further - ADDED
+* GD > Single Next Prev not filtering by same location - FIXED
+* Add listing zip and region discovery improvements - ADDED
+* Setup Wizard fields not showing tooltips with BS5 styles - FIXED
 
 = GeoDirectory v2.3.40 - 2024-02-15 =
 * Custom single post map is not loading on non GD pages - FIXED
