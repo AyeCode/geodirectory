@@ -24,9 +24,9 @@ class GeoDir_Admin_Dummy_Data {
 	public function __construct() {
 
 	}
-	
+
 	public static function create_sort_fields(){
-		
+
 	}
 
 	/**
@@ -342,7 +342,7 @@ class GeoDir_Admin_Dummy_Data {
 
 		$total_count = 0;
 		$dummy_post_index = $item_index;
-		
+
 		$dummy_categories = array();
 		$dummy_custom_fields = array();
 		$dummy_sort_fields = array();
@@ -409,13 +409,13 @@ class GeoDir_Admin_Dummy_Data {
 
 			/**
 			 * Fires action before each dummy data item.
-			 * 
+			 *
 			 * @since 2.0.0
-			 * 
+			 *
 			 */
 			do_action( 'geodir_insert_dummy_data_loop', $post_type, $data_type, $item_index );
 		}
-		
+
 		// Do the data insert
 		if($dummy_post_index === 0){
 
@@ -509,6 +509,7 @@ class GeoDir_Admin_Dummy_Data {
 	 * @param string $post_type The post type.
 	 */
 	public static function dummy_data_ui() {
+		global $aui_bs5;
 		wp_enqueue_script( 'jquery-ui-progressbar' );
 		global $wpdb, $plugin_prefix,$geodirectory;
 
@@ -531,11 +532,17 @@ class GeoDir_Admin_Dummy_Data {
 
 				$nonce = wp_create_nonce( 'geodir_dummy_data' );
 
+
+				$bs_select_class = $aui_bs5 ? 'form-select form-select-sm' : ' form-control form-control-sm';
+				$data_tooltip = $aui_bs5 ? 'data-bs-toggle="tooltip"' : 'data-toggle="tooltip"';
+
 				foreach ( $cpts as $post_type => $cpt ) {
 
 					$data_types = self::dummy_data_types( $post_type );
 
 					$set_dt = geodir_get_option( $post_type . '_dummy_data_type' );
+
+					$set_dt = apply_filters( 'geodir_default_dummy_data_type', $set_dt, $post_type );
 
 					$count = 30;
 
@@ -552,7 +559,7 @@ class GeoDir_Admin_Dummy_Data {
 
 					$select_disabled = $post_counts > 0 ? 'disabled' : '';
 					echo "<td class='d-flex flex-row mb-0'>";
-					echo "<select title='".__( "Select the data type", "geodirectory" )."' data-toggle=\"tooltip\" id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='flex-fill form-control form-control-sm' style='min-width:180px'>";
+					echo "<select title='".__( "Select the data type", "geodirectory" )."' $data_tooltip id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='flex-fill $bs_select_class' style='min-width:180px'>";
 
 					$c = 0;
 					foreach ( $data_types as $key => $val ) {
@@ -566,25 +573,29 @@ class GeoDir_Admin_Dummy_Data {
 					echo "</select>";
 
 					$select_display = $post_counts > 0 ? 'display:none;' : '';
-					echo "<span title='".__( "Set the number of listings", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-count flex-shrink-1 flex-fill ml-1 ms-1' style='$select_display'><select id='" . $post_type . "_data_type_count' style='min-width:65px;' class='form-control form-control-sm '>";
+					$select_display_bs5 = $aui_bs5 && $select_display ? 'display:none;' : '';
+					$select_count_class_bs5 = $aui_bs5 ? 'mx-1' : '';
+					echo $aui_bs5 ? '' : "<span title='".__( "Set the number of listings", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-count flex-shrink-1 flex-fill ml-1 ms-1' style='$select_display'>";
+					echo "<select id='" . $post_type . "_data_type_count' style='min-width:65px;$select_display_bs5 ' class='$bs_select_class gd-data-type-count $select_count_class_bs5' data-bs-toggle=\"tooltip\" data-bs-title='".__( "Set the number of listings", "geodirectory" )."'>";
 					$x = 1;
 					while ( $x <= $count ) {
 						$selected = ( $x == $count ) ? "selected='selected'" : '';
 						echo "<option $selected value='$x'>" . $x . "</option>";
 						$x ++;
 					}
-					echo "</select></span>";
+					echo "</select>";
+					echo $aui_bs5 ? '' : "</span>";
 
 					// Page templates styles
-					echo "<span title='".__( "Overwrite the template designs to suit the data type", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-templates ml-1 ms-1 flex-fill' style='$select_display'>";
-					echo "<label>";
+					echo $aui_bs5 ? '' : "<span title='".__( "Overwrite the template designs to suit the data type", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-templates ml-1 ms-1 flex-fill' style='$select_display'>";
+					//echo "<label>";
 //					echo "<input value='1' style='width: auto;height: 16px;' id='" . $post_type . "_data_type_templates' type='checkbox' name='gd-data-templates' checked />".__("(Update page templates)","geodirectory");
-					echo "<select style=''  id='" . $post_type . "_data_type_templates' name='gd-data-templates' class='form-control form-control-sm'>";
+					echo "<select style='$select_display_bs5'  id='" . $post_type . "_data_type_templates' name='gd-data-templates' class='$bs_select_class gd-data-type-templates' data-bs-toggle=\"tooltip\" data-bs-title='".__( "Overwrite the template designs to suit the data type", "geodirectory" )."'>";
 					echo "<option value='1'>".__("Update page templates","geodirectory")."</option>";
 					echo "<option value='0'>".__("Do not update page templates","geodirectory")."</option>";
 					echo "</select>";
-					echo "</label>";
-					echo "</span>";
+					//echo "</label>";
+					echo $aui_bs5 ? '' : "</span>";
 
 					echo "</td>";
 
@@ -729,6 +740,8 @@ class GeoDir_Admin_Dummy_Data {
 								jQuery(obj).removeClass('gd-remove-data btn-danger').addClass('btn-primary');
 								jQuery(obj).val('<?php esc_attr_e( 'Insert posts', 'geodirectory' );?>');
 								jQuery(obj).prop('disabled', false);
+								jQuery('#' + posttype + '_data_type_count.gd-data-type-count').show();
+								jQuery('#' + posttype + '_data_type_templates.gd-data-type-templates').show();
 								jQuery('#' + posttype + '_data_type_count').closest('.gd-data-type-count').show();
 								jQuery('#' + posttype + '_data_type_templates').closest('.gd-data-type-templates').show();
 								jQuery('#' + posttype + '_data_type_count').prop('disabled', false);
@@ -752,6 +765,7 @@ class GeoDir_Admin_Dummy_Data {
 					jQuery(obj).prop('disabled', true);
 					jQuery('#' + posttype + '_data_type').prop('disabled', true);
 					jQuery('#' + posttype + '_data_type_count').prop('disabled', true);
+					jQuery('#' + posttype + '_data_type_count.gd-data-type-count').hide();
 					jQuery('#' + posttype + '_data_type_count').closest('.gd-data-type-count').hide();
 					jQuery('#' + posttype + '_data_type_templates').closest('.gd-data-type-templates').hide();
 

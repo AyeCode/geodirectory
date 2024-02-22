@@ -537,17 +537,18 @@ public function setup_wizard_header() {
 
 		$recommend_wp_plugins = GeoDir_Admin_Addons::get_recommend_wp_plugins();
 		$paid_types = GeoDir_Admin_Addons::get_wizard_paid_addons();
+
+		$installed_text = "<i class=\"fas fa-check-circle\" aria-hidden=\"true\"></i> " . __( 'Installed', 'geodirectory' );
+		echo "<input type='hidden' id='gd-installing-text' value='<i class=\"fas fa-sync fa-spin\" aria-hidden=\"true\"></i> " . __( 'Installing', 'geodirectory' ) . "' >";
+		echo "<input type='hidden' id='gd-installed-text' value='$installed_text' >";
 		?>
-		<div class="text-center mb-4">
+		<div class="text-center mb-5">
 			<h1 class="h3"><?php _e("What Directory features do you need?","geodirectory");?></h1>
-			<small class="text-muted"><?php _e("Select any that apply","geodirectory");?></small>
 		</div>
 
 		<div class="list-group mb-5" >
 			<?php
-			$installed_text = "<i class=\"fas fa-check-circle\" aria-hidden=\"true\"></i> " . __( 'Installed', 'geodirectory' );
-			echo "<input type='hidden' id='gd-installing-text' value='<i class=\"fas fa-sync fa-spin\" aria-hidden=\"true\"></i> " . __( 'Installing', 'geodirectory' ) . "' >";
-			echo "<input type='hidden' id='gd-installed-text' value='$installed_text' >";
+
 
 			// recommended
 			foreach ( $recommend_wp_plugins as $product ) {
@@ -587,10 +588,20 @@ public function setup_wizard_header() {
 						</div>
 						<small class="">
 							<span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-secondary' : 'badge-pill badge-secondary' ); ?> gd-plugin-status d-none"><?php _e( "Installing", "geodirectory" ); ?></span>
-							<?php echo $active_badge;?>
+							<?php
+							echo $active_badge;
+
+							if ( ! empty( $product['required'] ) ) {
+								?>
+								<span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-warning' : 'badge-pill badge-warning' ); ?>"><?php _e("Required","geodirectory");?></span>
+								<?php
+							}
+
+							?>
 							<span class="badge <?php echo ( $aui_bs5 ? 'rounded-pill bg-success' : 'badge-pill badge-success' ); ?>"><?php _e("Free","geodirectory");?></span>
 						</small>
 					</div>
+					<small class="text-muted"><?php echo !empty( $product['desc'] ) ? esc_attr($product['desc']) : ''; ?></small>
 				</div>
 			<?php } ?>
 		</div>
@@ -1261,6 +1272,12 @@ public function setup_wizard_header() {
 			'menus'   => __( "Menus", "geodirectory" ),
 		);
 
+		// If a block theme remove some parts that don't apply
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			unset( $wizard_content['sidebars'] );
+			unset( $wizard_content['menus'] );
+		}
+
 		$wizard_content = apply_filters( 'geodir_wizard_content', $wizard_content );
 
 		$page_counts = wp_count_posts( 'page' );
@@ -1687,6 +1704,7 @@ public function setup_wizard_header() {
 	public static function content_sidebars() {
 		global $aui_bs5;
 
+		$bs_select_class = $aui_bs5 ? 'form-select form-select-sm' : ' form-control form-control-sm';
 		$gd_sidebar_top = get_theme_support( 'geodirectory-sidebar-top' );
 		if ( isset( $gd_sidebar_top[0] ) ) {
 			?>
@@ -1695,7 +1713,7 @@ public function setup_wizard_header() {
 					<div class="pb-1 flex-fill">
 						<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>">
 							<label for="geodir-wizard-widgets-top"><?php _e( "Select the theme top sidebar", "geodirectory" ); ?></label>
-							<select id='geodir-wizard-widgets-top' class="geodir-select form-control form-control-sm w-100 mw-100 ">
+							<select id='geodir-wizard-widgets-top' class="geodir-select <?php echo $bs_select_class; ?> w-100 mw-100 ">
 								<?php
 								$is_sidebar    = '';
 								$maybe_sidebar = '';
@@ -1771,7 +1789,7 @@ public function setup_wizard_header() {
 				<div class="pb-1 flex-fill">
 					<div class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>">
 						<label for="geodir-wizard-widgets"><?php _e( "Select the theme sidebar", "geodirectory" ); ?></label>
-						<select id='geodir-wizard-widgets' class="geodir-select form-control form-control-sm w-100 mw-100">
+						<select id='geodir-wizard-widgets' class="geodir-select <?php echo $bs_select_class; ?> w-100 mw-100">
 							<?php
 							$is_sidebar    = '';
 							$maybe_sidebar = '';
@@ -1843,6 +1861,7 @@ public function setup_wizard_header() {
 	 */
 	public static function content_menus() {
 		global $aui_bs5;
+		$bs_select_class = $aui_bs5 ? 'form-select form-select-sm' : ' form-control form-control-sm';
 		?>
 		<div class="form-table gd-dummy-table gd-dummy-widgets gd-dummy-posts">
 			<div class="d-flex justify-content-between">
@@ -1858,7 +1877,7 @@ public function setup_wizard_header() {
 
 						if ( ! empty( $set_menus ) ) {
 							//echo '##1';
-							echo "<select id='geodir-wizard-menu-id' data-type='add' class='geodir-select form-control form-control-sm w-100 mw-100' >";
+							echo "<select id='geodir-wizard-menu-id' data-type='add' class='geodir-select $bs_select_class w-100 mw-100' >";
 
 							foreach ( $set_menus as $menu_location => $menu_id ) {
 								$selected = '';
@@ -1890,7 +1909,7 @@ public function setup_wizard_header() {
 							//print_r($menus );
 
 							if ( ! empty( $menus ) ) {
-								echo "<select id='geodir-wizard-menu-location' data-type='create' class='geodir-select form-control form-control-sm w-100 mw-100' >";
+								echo "<select id='geodir-wizard-menu-location' data-type='create' class='geodir-select $bs_select_class w-100 mw-100' >";
 
 								foreach ( $menus as $menu_slug => $menu_name ) {
 									$selected = '';
