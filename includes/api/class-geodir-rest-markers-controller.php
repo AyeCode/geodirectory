@@ -444,33 +444,70 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		}
 
 		if ( ! empty( $request['term'] ) && is_array( $request['term'] ) ) {
-			$terms_where = array();
+			$terms_include_where = array();
+			$terms_exclude_where = array();
+
 			foreach ( $request['term'] as $term_id ) {
 				if ( ! empty( $term_id ) ) {
-					$term = get_term( $term_id );
+					$term_id = trim( $term_id );
+					$term = get_term( absint( $term_id ) );
+
 					if ( is_wp_error( $term ) || empty( $term ) ) {
 						continue;
 					}
-					if ( $term->taxonomy == $request['post_type'] . 'category' && (int) $term_id > 0 ) {
-						$terms_where[] = $wpdb->prepare( "FIND_IN_SET( %d, pd.post_category )", array( $term_id ) );
 
-						// Include child for parent term.
-						$children = geodir_get_term_children( $term_id, $term->taxonomy );
-						if ( ! empty( $children ) ) {
-							foreach ( $children as $id => $child_term ) {
-								if ( ! empty( $child_term->count ) ) {
-									$terms_where[] = $wpdb->prepare( "FIND_IN_SET( %d, pd.post_category )", array( $child_term->term_id ) );
+					$req_term_id = absint( $term->term_id );
+
+					if ( $term->taxonomy == $request['post_type'] . 'category' && $req_term_id > 0 ) {
+						if ( (int) $term_id > 0 ) {
+							// Include category.
+							$terms_include_where[] = $wpdb->prepare( "FIND_IN_SET( %d, pd.post_category )", array( $req_term_id ) );
+
+							// Include child for parent term.
+							$children = geodir_get_term_children( $req_term_id, $term->taxonomy );
+
+							if ( ! empty( $children ) ) {
+								foreach ( $children as $id => $child_term ) {
+									if ( ! empty( $child_term->count ) ) {
+										$terms_include_where[] = $wpdb->prepare( "FIND_IN_SET( %d, pd.post_category )", array( $child_term->term_id ) );
+									}
+								}
+							}
+						} else {
+							// Exclude category.
+							$terms_exclude_where[] = $wpdb->prepare( "NOT FIND_IN_SET( %d, pd.post_category )", array( $req_term_id ) );
+
+							// Exclude child for parent term.
+							$children = geodir_get_term_children( $req_term_id, $term->taxonomy );
+
+							if ( ! empty( $children ) ) {
+								foreach ( $children as $id => $child_term ) {
+									if ( ! empty( $child_term->count ) ) {
+										$terms_exclude_where[] = $wpdb->prepare( "NOT FIND_IN_SET( %d, pd.post_category )", array( $child_term->term_id ) );
+									}
 								}
 							}
 						}
 					} else if ( $term->taxonomy == $request['post_type'] . '_tags' ) {
-						$terms_where[] = $wpdb->prepare( "FIND_IN_SET( %s, pd.post_tags )", array( $term->name ) );
+						if ( (int) $term_id > 0 ) {
+							// Include tag.
+							$terms_include_where[] = $wpdb->prepare( "FIND_IN_SET( %s, pd.post_tags )", array( $term->name ) );
+						} else {
+							// Exclude tag.
+							$terms_exclude_where[] = $wpdb->prepare( "NOT FIND_IN_SET( %s, pd.post_tags )", array( $term->name ) );
+						}
 					}
 				}
 			}
-			if ( ! empty( $terms_where ) ) {
-				$terms_where = array_unique( $terms_where );
-				$where .= " AND ( " . implode( " OR ", $terms_where ) . " )";
+
+			if ( ! empty( $terms_include_where ) ) {
+				$terms_include_where = array_unique( $terms_include_where );
+				$where .= count( $terms_include_where ) > 1 ? " AND ( " . implode( " OR ", $terms_include_where ) . " )" : " AND " . implode( " OR ", $terms_include_where );
+			}
+
+			if ( ! empty( $terms_exclude_where ) ) {
+				$terms_exclude_where = array_unique( $terms_exclude_where );
+				$where .= count( $terms_exclude_where ) > 1 ? " AND ( " . implode( " AND ", $terms_exclude_where ) . " )" : " AND " . implode( " AND ", $terms_exclude_where );
 			}
 		}
 
