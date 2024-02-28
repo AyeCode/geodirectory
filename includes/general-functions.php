@@ -1023,7 +1023,9 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	 */
 	$fields = apply_filters( 'geodir_filter_widget_listings_fields', $fields, $table, $post_type );
 
-	$join = "INNER JOIN " . $table . " ON (" . $table . ".post_id = " . $wpdb->posts . ".ID)";
+	$join = $join_original = "INNER JOIN " . $table . " ON (" . $table . ".post_id = " . $wpdb->posts . ".ID)";
+
+
 
 	/**
 	 * Filter widget listing join clause string part that is being used for query.
@@ -1082,8 +1084,10 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	/**
 	 * @todo is this needed? faster without (commented out by stiofan 2024-02-16, if it breaks anything we can add it back here with a comment).
 	 * UPDATE: this is required when joining the taxonomy table for filtering, maybe we can look into not joining the table and just filtering by our custom fields?
+	 * For now we add it back if joining another table.
 	 */
-	$groupby = " GROUP BY $wpdb->posts.ID ";
+	$groupby = $join !== $join_original ? " GROUP BY $wpdb->posts.ID " : '';
+
 	/**
 	 * Filter widget listing groupby clause string part that is being used for query.
 	 *
