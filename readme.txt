@@ -307,6 +307,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.42 - TBD =
 * Negative category id don't exclude listings from map markers - FIXED
+* GD > Listings block can show duplicate listings when filtered by taxonomies - FIXED
 
 = GeoDirectory v2.3.41 - 2024-02-22 =
 * OSM directions route should use listing location as an end point - CHANGED

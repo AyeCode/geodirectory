@@ -1079,7 +1079,11 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$where = apply_filters( 'geodir_filter_widget_listings_where', $where, $post_type );
 	$where = $where != '' ? " WHERE 1=1 " . $where : '';
 
-	$groupby = ""; //" GROUP BY $wpdb->posts.ID "; //@todo is this needed? faster without (commented out by stiofan 2024-02-16, if it breaks anything we can add it back here with a comment)
+	/**
+	 * @todo is this needed? faster without (commented out by stiofan 2024-02-16, if it breaks anything we can add it back here with a comment).
+	 * UPDATE: this is required when joining the taxonomy table for filtering, maybe we can look into not joining the table and just filtering by our custom fields?
+	 */
+	$groupby = " GROUP BY $wpdb->posts.ID ";
 	/**
 	 * Filter widget listing groupby clause string part that is being used for query.
 	 *
