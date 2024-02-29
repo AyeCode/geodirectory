@@ -793,7 +793,7 @@ public function setup_wizard_header() {
 							$count ++;
 						}
 						?>
-						<a href="#" class="list-group-item gd-addon list-group-item-action gd-addons-show-more" data-<?php echo $bs_prefix;?>toggle="collapse" role="button" aria-expanded="false" data-target=".gd-paid-product-collapse" onclick="jQuery(this).find('span').toggleClass('d-none');">
+						<a href="#" class="list-group-item gd-addon list-group-item-action gd-addons-show-more" data-<?php echo $bs_prefix;?>toggle="collapse" role="button" aria-expanded="false" data-<?php echo $bs_prefix;?>target=".gd-paid-product-collapse" onclick="jQuery(this).find('span').toggleClass('d-none');">
 							<div class=" w-100  text-center">
 								<span class="gd-show-more"><?php _e( 'Show more', 'geodirectory' ); ?> <i class="fas fa-angle-down"></i></span>
 								<span class="gd-show-less d-none"><?php _e( 'Show less', 'geodirectory' ); ?> <i class="fas fa-angle-up"></i></span>
@@ -806,9 +806,9 @@ public function setup_wizard_header() {
 				<?php
 				if($membership_status != 'active') {
 					?>
-					<div class="text-center" onclick="gd_price_display()">
+					<div class="text-centerx" onclick="gd_price_display()">
 						<div class="<?php echo ( $aui_bs5 ? 'form-check form-switch' : 'custom-control custom-switch' ); ?> custom-switch-md ">
-							<input type="checkbox" class="<?php echo ( $aui_bs5 ? 'form-check-input' : 'custom-control-input' ); ?>" id="gd-price-show-month" checked>
+							<input type="checkbox" class="<?php echo ( $aui_bs5 ? 'form-check-input' : 'custom-control-input' ); ?> c-pointer" id="gd-price-show-month" checked>
 							<label class="<?php echo ( $aui_bs5 ? 'form-check-label' : 'custom-control-label' ); ?> c-pointer" for="gd-price-show-month"><?php _e( 'Display monthly prices', 'geodirectory' ); ?></label>
 						</div>
 					</div>
