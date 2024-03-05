@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.41\n"
+"Project-Id-Version: GeoDirectory 2.3.42\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-22 17:04+0530\n"
-"PO-Revision-Date: 2024-02-22 17:06+0530\n"
+"POT-Creation-Date: 2024-03-05 18:47+0530\n"
+"PO-Revision-Date: 2024-03-05 18:47+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1588,7 +1588,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:988
 #: includes/admin/class-geodir-admin-dummy-data.php:996
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:756
-#: includes/general-functions.php:2684
+#: includes/general-functions.php:2692
 msgid "Video"
 msgstr ""
 
@@ -2743,7 +2743,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:1652
 #: includes/admin/views/html-notice-v2-update.php:194
-#: includes/core-functions.php:361 includes/general-functions.php:2683
+#: includes/core-functions.php:361 includes/general-functions.php:2691
 #: vendor/ayecode/wp-deactivation-survey/wp-deactivation-survey.php:69
 msgid "Documentation"
 msgstr ""
@@ -4576,7 +4576,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:380
 #: includes/elementor/class-geodir-elementor-form-contact.php:96
 #: includes/elementor/class-geodir-elementor-form-contact.php:404
-#: includes/general-functions.php:2588 language.php:53
+#: includes/general-functions.php:2596 language.php:53
 msgid "Time"
 msgstr ""
 
@@ -12636,18 +12636,18 @@ msgstr ""
 msgid "Could not save report post."
 msgstr ""
 
-#: includes/class-geodir-seo.php:601 includes/general-functions.php:1958
+#: includes/class-geodir-seo.php:601 includes/general-functions.php:1966
 #, php-format
 msgctxt "in category"
 msgid "in %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:660 includes/general-functions.php:2049
+#: includes/class-geodir-seo.php:660 includes/general-functions.php:2057
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:676 includes/general-functions.php:2062
+#: includes/class-geodir-seo.php:676 includes/general-functions.php:2070
 #, php-format
 msgid "near %s"
 msgstr ""
@@ -14078,7 +14078,7 @@ msgstr ""
 msgid "First"
 msgstr ""
 
-#: includes/general-functions.php:248 includes/general-functions.php:2591
+#: includes/general-functions.php:248 includes/general-functions.php:2599
 msgid "Second"
 msgstr ""
 
@@ -14098,122 +14098,122 @@ msgstr ""
 msgid "Given image size is not valid"
 msgstr ""
 
-#: includes/general-functions.php:2197
+#: includes/general-functions.php:2205
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: includes/general-functions.php:2587
+#: includes/general-functions.php:2595
 msgid "Choose Time"
 msgstr ""
 
-#: includes/general-functions.php:2589
+#: includes/general-functions.php:2597
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2312
 msgid "Hour"
 msgstr ""
 
-#: includes/general-functions.php:2590
+#: includes/general-functions.php:2598
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2313
 msgid "Minute"
 msgstr ""
 
-#: includes/general-functions.php:2592
+#: includes/general-functions.php:2600
 msgid "Millisecond"
 msgstr ""
 
-#: includes/general-functions.php:2593
+#: includes/general-functions.php:2601
 msgid "Microsecond"
 msgstr ""
 
-#: includes/general-functions.php:2594
+#: includes/general-functions.php:2602
 msgid "Time Zone"
 msgstr ""
 
-#: includes/general-functions.php:2595
+#: includes/general-functions.php:2603
 msgid "Now"
 msgstr ""
 
-#: includes/general-functions.php:2596
+#: includes/general-functions.php:2604
 msgid "Done"
 msgstr ""
 
-#: includes/general-functions.php:2597 includes/helper-functions.php:693
+#: includes/general-functions.php:2605 includes/helper-functions.php:693
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2307
 msgid "AM"
 msgstr ""
 
-#: includes/general-functions.php:2598 includes/helper-functions.php:694
+#: includes/general-functions.php:2606 includes/helper-functions.php:694
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2308
 msgid "PM"
 msgstr ""
 
-#: includes/general-functions.php:2626
+#: includes/general-functions.php:2634
 msgid "View: Grid 1"
 msgstr ""
 
-#: includes/general-functions.php:2626
+#: includes/general-functions.php:2634
 msgid "Grid View (One Column)"
 msgstr ""
 
-#: includes/general-functions.php:2627
+#: includes/general-functions.php:2635
 msgid "View: Grid 2"
 msgstr ""
 
-#: includes/general-functions.php:2627
+#: includes/general-functions.php:2635
 msgid "Grid View (Two Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2628
+#: includes/general-functions.php:2636
 msgid "View: Grid 3"
 msgstr ""
 
-#: includes/general-functions.php:2628
+#: includes/general-functions.php:2636
 msgid "Grid View (Three Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2629
+#: includes/general-functions.php:2637
 msgid "View: Grid 4"
 msgstr ""
 
-#: includes/general-functions.php:2629
+#: includes/general-functions.php:2637
 msgid "Grid View (Four Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2630
+#: includes/general-functions.php:2638
 msgid "View: Grid 5"
 msgstr ""
 
-#: includes/general-functions.php:2630
+#: includes/general-functions.php:2638
 msgid "Grid View (Five Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2631
+#: includes/general-functions.php:2639
 #: templates/bootstrap/loop/select-layout.php:108
 #: templates/loop/select-layout.php:118
 msgid "View: List"
 msgstr ""
 
-#: includes/general-functions.php:2631
+#: includes/general-functions.php:2639
 msgid "List view"
 msgstr ""
 
-#: includes/general-functions.php:2682
+#: includes/general-functions.php:2690
 msgid "Disable hints"
 msgstr ""
 
-#: includes/general-functions.php:2685
+#: includes/general-functions.php:2693
 msgid "Feedback"
 msgstr ""
 
-#: includes/general-functions.php:2686
+#: includes/general-functions.php:2694
 msgid "Admin Hints:"
 msgstr ""
 
-#: includes/general-functions.php:2746 includes/general-functions.php:2760
+#: includes/general-functions.php:2754 includes/general-functions.php:2768
 msgid "meters"
 msgstr ""
 
-#: includes/general-functions.php:2749 includes/general-functions.php:2763
+#: includes/general-functions.php:2757 includes/general-functions.php:2771
 msgid "feet"
 msgstr ""
 
