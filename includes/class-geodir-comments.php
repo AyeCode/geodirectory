@@ -286,7 +286,7 @@ class GeoDir_Comments {
 		);
 
 		// clear cache
-		wp_cache_delete( 'gd_comment_rating_' . $comment_id );
+		wp_cache_delete( 'gd_comment_rating_' . $comment_id, 'gd_comment_rating' );
 	}
 
 	/**
@@ -331,7 +331,7 @@ class GeoDir_Comments {
 				);
 
 				// clear cache
-				wp_cache_delete( 'gd_comment_rating_' . $comment_id );
+				wp_cache_delete( 'gd_comment_rating_' . $comment_id, 'gd_comment_rating' );
 
 				$wpdb->query( $sqlqry );
 
@@ -388,7 +388,7 @@ class GeoDir_Comments {
 				);
 
 				// clear cache
-				wp_cache_delete( 'gd_comment_rating_' . $comment_id );
+				wp_cache_delete( 'gd_comment_rating_' . $comment_id, 'gd_comment_rating' );
 
 				$wpdb->query( $sqlqry );
 
