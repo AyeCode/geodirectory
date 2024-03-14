@@ -1096,6 +1096,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					font-weight: bold;
 					margin-bottom: 1px;
 				}
+				.elementor-control .sd-argument select[multiple]{height:100px}
+				.elementor-control .sd-argument select[multiple] option{padding:3px}
 			</style>
 			<?php
 			$output = ob_get_clean();
