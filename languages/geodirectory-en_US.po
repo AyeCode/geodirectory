@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.42\n"
+"Project-Id-Version: GeoDirectory 2.3.43\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-05 18:47+0530\n"
-"PO-Revision-Date: 2024-03-05 18:47+0530\n"
+"POT-Creation-Date: 2024-03-14 15:41+0530\n"
+"PO-Revision-Date: 2024-03-14 15:41+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1276,7 +1276,7 @@ msgid "if"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:139
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5025
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5027
 msgid "Add Rule"
 msgstr ""
 
@@ -1293,14 +1293,14 @@ msgid "hide"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:170
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4938
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4939
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4940
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4941
 msgid "FIELD"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:194
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4960
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4961
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4962
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4963
 msgid "CONDITION"
 msgstr ""
 
@@ -2012,134 +2012,134 @@ msgstr ""
 msgid "Reviews"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:445
+#: includes/admin/class-geodir-admin-install.php:444
 #: includes/class-geodir-compatibility.php:281
 msgid "Once Monthly"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:472
+#: includes/admin/class-geodir-admin-install.php:470
 msgctxt "Page slug"
 msgid "add-listing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:473
+#: includes/admin/class-geodir-admin-install.php:471
 msgctxt "Page title"
 msgid "Add Listing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:477
+#: includes/admin/class-geodir-admin-install.php:475
 msgctxt "Page slug"
 msgid "search"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:478
+#: includes/admin/class-geodir-admin-install.php:476
 msgctxt "Page title"
 msgid "Search page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:482
+#: includes/admin/class-geodir-admin-install.php:480
 msgctxt "Page slug"
 msgid "terms-and-conditions"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:483
+#: includes/admin/class-geodir-admin-install.php:481
 msgctxt "Page title"
 msgid "Terms and Conditions"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:484
+#: includes/admin/class-geodir-admin-install.php:482
 #: includes/admin/settings/class-geodir-settings-general.php:310
 #: includes/class-geodir-block-theme.php:160
 msgid "ENTER YOUR SITE TERMS AND CONDITIONS HERE"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:487
+#: includes/admin/class-geodir-admin-install.php:485
 msgctxt "Page slug"
 msgid "location"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:488
+#: includes/admin/class-geodir-admin-install.php:486
 msgctxt "Page title"
 msgid "Location"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:492
+#: includes/admin/class-geodir-admin-install.php:490
 msgctxt "Page slug"
 msgid "gd-archive"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:493
+#: includes/admin/class-geodir-admin-install.php:491
 msgctxt "Page title"
 msgid "GD Archive"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:497
+#: includes/admin/class-geodir-admin-install.php:495
 msgctxt "Page slug"
 msgid "gd-archive-item"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:498
+#: includes/admin/class-geodir-admin-install.php:496
 msgctxt "Page title"
 msgid "GD Archive Item"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:502
+#: includes/admin/class-geodir-admin-install.php:500
 msgctxt "Page slug"
 msgid "gd-details"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:503
+#: includes/admin/class-geodir-admin-install.php:501
 msgctxt "Page title"
 msgid "GD Details"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:885
+#: includes/admin/class-geodir-admin-install.php:881
 msgid "View GeoDirectory settings"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:885
+#: includes/admin/class-geodir-admin-install.php:881
 #: includes/admin/class-geodir-admin-menus.php:129
 #: includes/admin/class-geodir-admin-menus.php:138
 #: includes/admin/settings/class-geodir-settings-api.php:43
 #: includes/admin/settings/class-geodir-settings-import-export.php:47
 #: includes/admin/views/html-admin-page-status-report.php:327
 #: includes/integrations/bricks/element-image-gallery.php:71
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3056
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3058
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:901
+#: includes/admin/class-geodir-admin-install.php:897
 msgid "View GeoDirectory documentation"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:901
+#: includes/admin/class-geodir-admin-install.php:897
 msgid "Docs"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:902
+#: includes/admin/class-geodir-admin-install.php:898
 msgid "Visit GeoDirectory support"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:902
+#: includes/admin/class-geodir-admin-install.php:898
 msgid "Support"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:903
+#: includes/admin/class-geodir-admin-install.php:899
 msgid "View translations"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:903
+#: includes/admin/class-geodir-admin-install.php:899
 msgid "Translations"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:1085
+#: includes/admin/class-geodir-admin-install.php:1081
 #, php-format
 msgid ""
 "%1$s could not be installed (%2$s). <a href=\"%3$s\">Please install it "
 "manually by clicking here.</a>"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:1111
+#: includes/admin/class-geodir-admin-install.php:1107
 #, php-format
 msgid ""
 "%1$s was installed but could not be activated. <a href=\"%2$s\">Please "
@@ -5713,7 +5713,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-images.php:94
 #: includes/widgets/class-geodir-widget-post-images.php:104
 #: includes/widgets/class-geodir-widget-post-images.php:115
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1692
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1694
 msgid "General"
 msgstr ""
 
@@ -8624,7 +8624,7 @@ msgstr ""
 #: includes/custom-fields/input-functions.php:1813
 #: includes/custom-fields/input-functions.php:1843
 #: includes/widgets/class-geodir-widget-archive-item-section.php:43
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3815
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3817
 msgid "Close"
 msgstr ""
 
@@ -10622,7 +10622,7 @@ msgstr ""
 #: includes/class-geodir-ajax.php:236 includes/core-functions.php:355
 #: language.php:78
 #: vendor/ayecode/wp-deactivation-survey/wp-deactivation-survey.php:64
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3664
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3666
 msgid "Cancel"
 msgstr ""
 
@@ -13162,7 +13162,7 @@ msgid "You may lose changes if you navigate away now!"
 msgstr ""
 
 #: includes/core-functions.php:348
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3664
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3666
 msgid "Are you sure?"
 msgstr ""
 
@@ -13192,7 +13192,7 @@ msgstr ""
 
 #: includes/core-functions.php:354
 #: includes/widgets/class-geodir-widget-author-actions.php:264 language.php:129
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3664
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3666
 msgid "Delete"
 msgstr ""
 
@@ -15103,7 +15103,7 @@ msgid "Page ID"
 msgstr ""
 
 #: includes/template-functions.php:1189
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5067
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5069
 msgid "Template Part"
 msgstr ""
 
@@ -15123,7 +15123,7 @@ msgstr ""
 
 #: includes/template-functions.php:1261
 #: vendor/ayecode/wp-super-duper/sd-functions.php:2924
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5068
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5070
 msgid "Select Template Part..."
 msgstr ""
 
@@ -22442,76 +22442,76 @@ msgid "Copy shortcode"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:531
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1177
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1179
 msgid "Advanced Settings"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1470
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1472
 #, php-format
 msgid "Placeholder for: %s"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:2885
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:2887
 msgid "Placeholder for:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3815
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3817
 msgid "Reset"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3815
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3817
 msgid "Save Rules"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4909
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4911
 msgid "Remove Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4914
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4916
 msgid "Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4915
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4917
 msgid "Select Rule..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4922
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4924
 msgid "Rule:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4983
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:4985
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4987
 msgid "VALUE TO MATCH"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4997
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4999
 msgid "Select User Roles:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5031
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5033
 msgid "What should happen if rules met."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5032
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5034
 msgid "Default Output"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5051
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5053
 msgid "Page Content"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5052
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5054
 msgid "Select Page ID..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5086
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5088
 msgid "Custom Message Type"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5087
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5089
 msgid "Default (none)"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5110
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5112
 msgid "CUSTOM MESSAGE TO SHOW"
 msgstr ""
