@@ -246,24 +246,24 @@
         },
         {
             "name": "ayecode/wp-super-duper",
-            "version": "1.1.34",
-            "version_normalized": "1.1.34.0",
+            "version": "1.1.35",
+            "version_normalized": "1.1.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-super-duper.git",
-                "reference": "f6976c9fefe24d00a8faa00c23a629fbbe376889"
+                "reference": "a03101249e96eaa6d26f04142c65606b2e9166fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/f6976c9fefe24d00a8faa00c23a629fbbe376889",
-                "reference": "f6976c9fefe24d00a8faa00c23a629fbbe376889",
+                "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/a03101249e96eaa6d26f04142c65606b2e9166fe",
+                "reference": "a03101249e96eaa6d26f04142c65606b2e9166fe",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.3.0"
             },
-            "time": "2024-02-15T13:54:48+00:00",
+            "time": "2024-03-13T13:22:32+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
