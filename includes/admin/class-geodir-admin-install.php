@@ -78,8 +78,8 @@ class GeoDir_Admin_Install {
 	 */
 	public static function maybe_downgrade_v1( $options ) {
 		if (
-			!empty($_REQUEST['geodir_downgrade'])
-			&& !empty($options['package'])
+			! empty( $_REQUEST['geodir_downgrade'] )
+			&& ! empty( $options['package'] )
 			&& strpos( $options['package'], "https://downloads.wordpress.org/plugin/geodirectory." ) === 0
 //			&& strpos( $options['package'], "https://downloads.wordpress.org/plugin/advanced-cron-manager." ) === 0 // @todo remove after testing
 			&& version_compare( get_option( 'geodirectory_db_version' ), '2.0.0.0', '<' )
@@ -259,13 +259,13 @@ class GeoDir_Admin_Install {
 		}
 	}
 
-    /**
-     * Insert the default field for the CPTs.
-     *
-     * @since 2.0.0
-     *
-     * @param string $post_type Optional. Post type. Default gd_place.
-     */
+	/**
+	 * Insert the default field for the CPTs.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $post_type Optional. Post type. Default gd_place.
+	 */
 	public static function insert_default_fields($post_type = 'gd_place'){
 		$fields = GeoDir_Admin_Dummy_Data::default_custom_fields($post_type);
 
@@ -281,13 +281,13 @@ class GeoDir_Admin_Install {
 		}
 	}
 
-    /**
-     * Insert the default field for the CPTs.
-     *
-     * @since 2.0.0
-     *
-     * @param string $post_type Optional. Post type. Default gd_place.
-     */
+	/**
+	 * Insert the default field for the CPTs.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $post_type Optional. Post type. Default gd_place.
+	 */
 	public static function insert_default_tabs($post_type = 'gd_place'){
 		$fields = array();
 
@@ -343,7 +343,6 @@ class GeoDir_Admin_Install {
 			'tab_level'     => '0'
 		);
 
-
 		/**
 		 * Filter the array of default tabs DB table data.
 		 *
@@ -378,8 +377,8 @@ class GeoDir_Admin_Install {
 
 	/**
 	 * Update GeoDirectory version to current.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 */
 	private static function update_gd_version() {
 		delete_option( 'geodirectory_version' );
@@ -398,8 +397,8 @@ class GeoDir_Admin_Install {
 
 	/**
 	 * Push all needed DB updates to the queue for processing.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 */
 	private static function update() {
 		$current_db_version = get_option( 'geodirectory_db_version' );
@@ -449,8 +448,8 @@ class GeoDir_Admin_Install {
 
 	/**
 	 * Create cron jobs (clear them first).
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 */
 	private static function create_cron_jobs() {
 		//@todo add crons here
@@ -460,11 +459,10 @@ class GeoDir_Admin_Install {
 
 	/**
 	 * Create pages that the plugin relies on, storing page IDs in variables.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 */
 	public static function create_pages() {
-
 		$gutenberg = geodir_is_gutenberg();
 
 		$pages = apply_filters( 'geodirectory_create_pages', array(
@@ -503,8 +501,6 @@ class GeoDir_Admin_Install {
 				'title'   => _x( 'GD Details', 'Page title', 'geodirectory'),
 				'content' => GeoDir_Defaults::page_details_content(false, $gutenberg),
 			),
-
-
 		) );
 
 		foreach ( $pages as $key => $page ) {
@@ -518,8 +514,8 @@ class GeoDir_Admin_Install {
 	 * Create a category for each CPT.
 	 *
 	 * So users can start adding posts right away.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 */
 	public static function create_uncategorized_categories(){
 		$post_types = geodir_get_posttypes();
@@ -544,8 +540,8 @@ class GeoDir_Admin_Install {
 	 * Default options.
 	 *
 	 * Sets up the default options used on the settings page.
-     *
-     * @since 2.0.0
+	 *
+	 * @since 2.0.0
 	 */
 	private static function create_options() {
 		// Before set default options.
@@ -572,7 +568,6 @@ class GeoDir_Admin_Install {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -585,9 +580,9 @@ class GeoDir_Admin_Install {
 	 *		geodir_custom_fields - Custom fields table.
 	 *		geodir_custom_sort_fields - Custom fields sorting table.
 	 *		geodir_post_review - Listing reviews table.
-     *
-     * @global object $wpdb WordPress Database object.
-     * @since 2.0.0
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 * @since 2.0.0
 	 */
 	public static function create_tables() {
 		global $wpdb;
@@ -597,7 +592,6 @@ class GeoDir_Admin_Install {
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 		dbDelta( self::get_schema() );
-
 	}
 
 	/**
@@ -610,21 +604,21 @@ class GeoDir_Admin_Install {
 	 * Changing indexes may cause duplicate index notices in logs due to https://core.trac.wordpress.org/ticket/34870 but dropping
 	 * indexes first causes too much load on some servers/larger DB.
 	 *
-     * @since 2.0.0
-     *
-     * @global object $wpdb WordPress Database object.
-     * @global object $plugin_prefix WordPress plugin prefix.
-     *
+	 * @since 2.0.0
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 * @global object $plugin_prefix WordPress plugin prefix.
+	 *
 	 * @return string $tables.
 	 */
 	public static function get_schema() {
 		global $wpdb, $plugin_prefix;
 
 		/*
-         * Indexes have a maximum size of 767 bytes. Historically, we haven't need to be concerned about that.
-         * As of 4.2, however, we moved to utf8mb4, which uses 4 bytes per character. This means that an index which
-         * used to have room for floor(767/3) = 255 characters, now only has room for floor(767/4) = 191 characters.
-         */
+		 * Indexes have a maximum size of 767 bytes. Historically, we haven't need to be concerned about that.
+		 * As of 4.2, however, we moved to utf8mb4, which uses 4 bytes per character. This means that an index which
+		 * used to have room for floor(767/3) = 255 characters, now only has room for floor(767/4) = 191 characters.
+		 */
 		$max_index_length = 191;
 
 		$collate = '';
@@ -634,119 +628,119 @@ class GeoDir_Admin_Install {
 		}
 
 		// Table for storing post custom fields - these are user defined
-		$tables = " CREATE TABLE " . GEODIR_CUSTOM_FIELDS_TABLE . " (
-							  id int(11) NOT NULL AUTO_INCREMENT,
-							  post_type varchar(100) NULL,
-							  data_type varchar(100) NULL DEFAULT NULL,
-							  field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
-							  field_type_key varchar(255) NOT NULL,
-							  admin_title varchar(255) NULL DEFAULT NULL,
-							  frontend_desc text NULL DEFAULT NULL,
-							  frontend_title varchar(255) NULL DEFAULT NULL,
-							  htmlvar_name varchar(255) NULL DEFAULT NULL,
-							  default_value text NULL DEFAULT NULL,
-							  placeholder_value text NULL DEFAULT NULL,
-							  sort_order int(11) NOT NULL,
-							  tab_parent varchar(100) NOT NULL DEFAULT '0',
-							  tab_level int(11) NOT NULL DEFAULT '0',
-							  option_values text NULL DEFAULT NULL,
-							  clabels text NULL DEFAULT NULL,
-							  is_active tinyint(1) NOT NULL DEFAULT '1',
-							  is_default tinyint(1) NOT NULL DEFAULT '0',
-							  is_required tinyint(1) NOT NULL DEFAULT '0',
-							  required_msg varchar(255) NULL DEFAULT NULL,
-							  show_in text NULL DEFAULT NULL,
-							  for_admin_use tinyint(1) NOT NULL DEFAULT '0',
-							  packages text NULL DEFAULT NULL,
-							  cat_sort text NULL DEFAULT NULL,
-							  cat_filter text NULL DEFAULT NULL,
-							  extra_fields text NULL DEFAULT NULL,
-							  field_icon varchar(255) NULL DEFAULT NULL,
-							  css_class varchar(255) NULL DEFAULT NULL,
-							  decimal_point varchar( 10 ) NOT NULL,
-							  validation_pattern varchar( 255 ) NOT NULL,
-							  validation_msg text NULL DEFAULT NULL,
-							  PRIMARY KEY  (id)
-							  ) $collate; ";
-
+		$tables = "
+CREATE TABLE " . GEODIR_CUSTOM_FIELDS_TABLE . " (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	post_type varchar(100) NULL,
+	data_type varchar(100) NULL DEFAULT NULL,
+	field_type varchar(255) NOT NULL COMMENT 'text,checkbox,radio,select,textarea',
+	field_type_key varchar(255) NOT NULL,
+	admin_title varchar(255) NULL DEFAULT NULL,
+	frontend_desc text NULL DEFAULT NULL,
+	frontend_title varchar(255) NULL DEFAULT NULL,
+	htmlvar_name varchar(255) NULL DEFAULT NULL,
+	default_value text NULL DEFAULT NULL,
+	placeholder_value text NULL DEFAULT NULL,
+	sort_order int(11) NOT NULL,
+	tab_parent varchar(100) NOT NULL DEFAULT '0',
+	tab_level int(11) NOT NULL DEFAULT '0',
+	option_values text NULL DEFAULT NULL,
+	clabels text NULL DEFAULT NULL,
+	is_active tinyint(1) NOT NULL DEFAULT '1',
+	is_default tinyint(1) NOT NULL DEFAULT '0',
+	is_required tinyint(1) NOT NULL DEFAULT '0',
+	required_msg varchar(255) NULL DEFAULT NULL,
+	show_in text NULL DEFAULT NULL,
+	for_admin_use tinyint(1) NOT NULL DEFAULT '0',
+	packages text NULL DEFAULT NULL,
+	cat_sort text NULL DEFAULT NULL,
+	cat_filter text NULL DEFAULT NULL,
+	extra_fields text NULL DEFAULT NULL,
+	field_icon varchar(255) NULL DEFAULT NULL,
+	css_class varchar(255) NULL DEFAULT NULL,
+	decimal_point varchar( 10 ) NOT NULL,
+	validation_pattern varchar( 255 ) NOT NULL,
+	validation_msg text NULL DEFAULT NULL,
+	PRIMARY KEY  (id)
+) $collate;";
 
 		// Table for storing tabs layout settings
-		$tables .= " CREATE TABLE " . GEODIR_TABS_LAYOUT_TABLE . " (
-							  id int(11) NOT NULL AUTO_INCREMENT,
-							  post_type varchar(100) NULL,
-							  sort_order int(11) NOT NULL,
-							  tab_layout varchar(100) NOT NULL,
-							  tab_parent varchar(100) NOT NULL,
-							  tab_type varchar(100) NOT NULL,
-							  tab_level int(11) NOT NULL,
-							  tab_name varchar(255) NOT NULL,
-							  tab_icon varchar(255) NOT NULL,
-							  tab_key varchar(255) NOT NULL,
-							  tab_content text NULL DEFAULT NULL,
-							  PRIMARY KEY  (id)
-							  ) $collate; ";
+		$tables .= "
+CREATE TABLE " . GEODIR_TABS_LAYOUT_TABLE . " (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	post_type varchar(100) NULL,
+	sort_order int(11) NOT NULL,
+	tab_layout varchar(100) NOT NULL,
+	tab_parent varchar(100) NOT NULL,
+	tab_type varchar(100) NOT NULL,
+	tab_level int(11) NOT NULL,
+	tab_name varchar(255) NOT NULL,
+	tab_icon varchar(255) NOT NULL,
+	tab_key varchar(255) NOT NULL,
+	tab_content text NULL DEFAULT NULL,
+	PRIMARY KEY  (id)
+) $collate;";
 
-
-		// run through all GD CPTs
-
+		// Run through all GD CPTs
 		$post_types = geodir_get_option( 'post_types', array() );
 
-		if(empty($post_types)){
+		if ( empty( $post_types ) ) {
 			// Table for storing place attribute - these are user defined
-			$tables .= " CREATE TABLE " . $plugin_prefix . "gd_place_detail (
-						".implode (", \n",self::db_cpt_default_columns()).",
-						".implode (", \n",self::db_cpt_default_keys())."
-						) $collate; ";
-		}else{
-			foreach($post_types as $post_type => $cpt){
+			$tables .= "
+CREATE TABLE " . $plugin_prefix . "gd_place_detail (
+	" . implode( ", \n	", self::db_cpt_default_columns() ) . ",
+	" . implode( ", \n	", self::db_cpt_default_keys() ) . "
+) $collate;";
+		} else {
+			foreach ( $post_types as $post_type => $cpt ) {
 				// Table for storing place attribute - these are user defined
-				$tables .= " CREATE TABLE " . $plugin_prefix . $post_type . "_detail (
-						".implode (", \n",self::db_cpt_default_columns($cpt, $post_type)).",
-						".implode (", \n",self::db_cpt_default_keys($cpt, $post_type))."
-						) $collate; ";
+				$tables .= "
+CREATE TABLE " . $plugin_prefix . $post_type . "_detail (
+	" . implode( ", \n	", self::db_cpt_default_columns( $cpt, $post_type ) ) . ",
+	" . implode( ", \n	", self::db_cpt_default_keys( $cpt, $post_type ) ) . "
+) $collate;";
 			}
-
-			//print_r($tables);exit;
 		}
 
-
 		// Table for storing place images - these are user defined
-		$tables .= " CREATE TABLE " . GEODIR_ATTACHMENT_TABLE . " (
-						ID int(11) NOT NULL AUTO_INCREMENT,
-						post_id bigint(20) NOT NULL,
-						date_gmt datetime NULL default null,
-						user_id int(11) DEFAULT NULL,
-						other_id int(11) DEFAULT NULL,
-						title varchar(254) NULL DEFAULT NULL,
-						caption varchar(254) NULL DEFAULT NULL,
-						file varchar(254) NOT NULL,
-						mime_type varchar(150) NOT NULL,
-						menu_order int(11) NOT NULL DEFAULT '0',
-						featured tinyint(1) NULL DEFAULT '0',
-						is_approved tinyint(1) NULL DEFAULT '1',
-						metadata text NULL DEFAULT NULL,
-					    type varchar(254) NULL DEFAULT 'post_images',
-						PRIMARY KEY  (ID),
-						KEY post_id (post_id),
-                        KEY type (type)
-						) $collate ; ";
+		$tables .= "
+CREATE TABLE " . GEODIR_ATTACHMENT_TABLE . " (
+	ID int(11) NOT NULL AUTO_INCREMENT,
+	post_id bigint(20) NOT NULL,
+	date_gmt datetime NULL default null,
+	user_id int(11) DEFAULT NULL,
+	other_id int(11) DEFAULT NULL,
+	title varchar(254) NULL DEFAULT NULL,
+	caption varchar(254) NULL DEFAULT NULL,
+	file varchar(254) NOT NULL,
+	mime_type varchar(150) NOT NULL,
+	menu_order int(11) NOT NULL DEFAULT '0',
+	featured tinyint(1) NULL DEFAULT '0',
+	is_approved tinyint(1) NULL DEFAULT '1',
+	metadata text NULL DEFAULT NULL,
+	`type` varchar(254) NULL DEFAULT 'post_images',
+	PRIMARY KEY  (ID),
+	KEY post_id (post_id),
+	KEY `type` (`type`($max_index_length))
+) $collate;";
 
 		// Table for storing custom sort fields
-		$tables .= " CREATE TABLE " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " (
-			id int(11) NOT NULL AUTO_INCREMENT,
-			post_type varchar(255) NOT NULL,
-			data_type varchar(255) NOT NULL,
-			field_type varchar(255) NOT NULL,
-			frontend_title varchar(255) NOT NULL,
-			htmlvar_name varchar(255) NOT NULL,
-			sort_order int(11) NOT NULL,
-			tab_parent varchar(100) NOT NULL DEFAULT '0',
-			tab_level int(11) NOT NULL DEFAULT '0',
-			is_active int(11) NOT NULL,
-			is_default int(11) NOT NULL,
-			sort varchar(5) DEFAULT 'asc',
-			PRIMARY KEY  (id)
-			) $collate; ";
+		$tables .= "
+CREATE TABLE " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	post_type varchar(255) NOT NULL,
+	data_type varchar(255) NOT NULL,
+	field_type varchar(255) NOT NULL,
+	frontend_title varchar(255) NOT NULL,
+	htmlvar_name varchar(255) NOT NULL,
+	sort_order int(11) NOT NULL,
+	tab_parent varchar(100) NOT NULL DEFAULT '0',
+	tab_level int(11) NOT NULL DEFAULT '0',
+	is_active int(11) NOT NULL,
+	is_default int(11) NOT NULL,
+	sort varchar(5) DEFAULT 'asc',
+	PRIMARY KEY  (id)
+) $collate;";
 
 		// Table for storing review info
 		/**
@@ -754,70 +748,72 @@ class GeoDir_Admin_Install {
 		 * "Percona-XtraDB-Cluster prohibits use of DML command on a table without an explicit
 		 * primary key with pxc_strict_mode = ENFORCING or MASTER"
 		 */
-		$tables .= " CREATE TABLE " . GEODIR_REVIEW_TABLE . " (
-		  comment_id bigint(20) UNSIGNED NOT NULL,
-		  post_id bigint(20) DEFAULT '0',
-		  user_id bigint(20) DEFAULT '0',
-		  rating float DEFAULT '0',
-		  ratings text DEFAULT '',
-		  attachments text DEFAULT '',
-		  post_type varchar(20) DEFAULT '',
-		  city varchar(50) DEFAULT '',
-		  region varchar(50) DEFAULT '',
-		  country varchar(50) DEFAULT '',
-		  latitude varchar(22) DEFAULT '',
-		  longitude varchar(22) DEFAULT '',
-		  PRIMARY KEY (comment_id)
-		) $collate; ";
+		$tables .= "
+CREATE TABLE " . GEODIR_REVIEW_TABLE . " (
+	comment_id bigint(20) UNSIGNED NOT NULL,
+	post_id bigint(20) DEFAULT '0',
+	user_id bigint(20) DEFAULT '0',
+	rating float DEFAULT '0',
+	ratings text DEFAULT '',
+	attachments text DEFAULT '',
+	post_type varchar(20) DEFAULT '',
+	city varchar(50) DEFAULT '',
+	region varchar(50) DEFAULT '',
+	country varchar(50) DEFAULT '',
+	latitude varchar(22) DEFAULT '',
+	longitude varchar(22) DEFAULT '',
+	PRIMARY KEY  (comment_id)
+) $collate;";
 
 		// Table to store api keys
-		$tables .= " CREATE TABLE " . GEODIR_API_KEYS_TABLE . " (
-			  key_id BIGINT UNSIGNED NOT NULL auto_increment,
-			  user_id BIGINT UNSIGNED NOT NULL,
-			  description varchar(200) NULL,
-			  permissions varchar(10) NOT NULL,
-			  consumer_key char(64) NOT NULL,
-			  consumer_secret char(43) NOT NULL,
-			  nonces longtext NULL,
-			  truncated_key char(7) NOT NULL,
-			  last_access datetime NULL default null,
-			  PRIMARY KEY  (key_id),
-			  KEY consumer_key (consumer_key),
-			  KEY consumer_secret (consumer_secret)
-			) $collate; ";
+		$tables .= "
+CREATE TABLE " . GEODIR_API_KEYS_TABLE . " (
+	key_id BIGINT UNSIGNED NOT NULL auto_increment,
+	user_id BIGINT UNSIGNED NOT NULL,
+	description varchar(200) NULL,
+	permissions varchar(10) NOT NULL,
+	consumer_key char(64) NOT NULL,
+	consumer_secret char(43) NOT NULL,
+	nonces longtext NULL,
+	truncated_key char(7) NOT NULL,
+	last_access datetime NULL default null,
+	PRIMARY KEY  (key_id),
+	KEY consumer_key (consumer_key),
+	KEY consumer_secret (consumer_secret)
+) $collate;";
 
-		$tables .= " CREATE TABLE " . GEODIR_POST_REPORTS_TABLE . " (
-			`id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-			  `post_id` bigint(20) UNSIGNED NOT NULL,
-			  `user_id` bigint(20) UNSIGNED NOT NULL,
-			  `user_ip` varchar(200) DEFAULT NULL,
-			  `user_name` varchar(100) NOT NULL,
-			  `user_email` varchar(100) NOT NULL,
-			  `reason` varchar(200) NOT NULL,
-			  `message` text NOT NULL,
-			  `status` varchar(50) NOT NULL,
-			  `report_date` datetime DEFAULT NULL,
-			  `updated_date` datetime DEFAULT NULL,
-			  PRIMARY KEY (`id`),
-			  KEY `post_id` (`post_id`),
-			  KEY `user_id` (`user_id`)
-			) $collate; ";
+		$tables .= "
+CREATE TABLE " . GEODIR_POST_REPORTS_TABLE . " (
+	`id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`post_id` bigint(20) UNSIGNED NOT NULL,
+	`user_id` bigint(20) UNSIGNED NOT NULL,
+	`user_ip` varchar(200) DEFAULT NULL,
+	`user_name` varchar(100) NOT NULL,
+	`user_email` varchar(100) NOT NULL,
+	`reason` varchar(200) NOT NULL,
+	`message` text NOT NULL,
+	`status` varchar(50) NOT NULL,
+	`report_date` datetime DEFAULT NULL,
+	`updated_date` datetime DEFAULT NULL,
+	PRIMARY KEY  (`id`),
+	KEY `post_id` (`post_id`),
+	KEY `user_id` (`user_id`)
+) $collate;";
 
 		return $tables;
 	}
 
-
-    /**
-     * Show plugin changes. Code adapted from W3 Total Cache.
-     *
-     * @since 2.0.0
-     *
-     * @param array $args {
-     *      An array to update message arguments.
-     *
-     *      @type string $Version Plugin version.
-     * }
-     */
+	/**
+	 * Show plugin changes. Code adapted from W3 Total Cache.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $args {
+	 *      An array to update message arguments.
+	 *
+	 *      @type string $Version Plugin version.
+	 * }
+	 */
 	public static function in_plugin_update_message( $args ) {
 		$transient_name = 'gd_upgrade_notice_' . $args['Version'];
 
@@ -1171,38 +1167,29 @@ class GeoDir_Admin_Install {
 	 *
 	 * @return array The array of default fields.
 	 */
-	public static function db_cpt_default_keys($cpt = array(), $post_type = ''){
-
-		/*
-		 * Indexes have a maximum size of 767 bytes. Historically, we haven't need to be concerned about that.
-		 * As of 4.2, however, we moved to utf8mb4, which uses 4 bytes per character. This means that an index which
-		 * used to have room for floor(767/3) = 255 characters, now only has room for floor(767/4) = 191 characters.
-		 */
-		$max_index_length = 191;
-
+	public static function db_cpt_default_keys( $cpt = array(), $post_type = '' ) {
 		$keys = array();
 
 		// Standard keys
 		$keys['post_id'] = "PRIMARY KEY  (post_id)";
-		//$keys['featured'] = "KEY featured (featured)";
 
 		// Location keys
-		if(!isset($cpt['disable_location']) || !$cpt['disable_location']){
+		if ( ! isset( $cpt['disable_location'] ) || ! $cpt['disable_location'] ) {
 			$keys['country'] = "KEY country (country(50))";
 			$keys['region'] = "KEY region (region(50))";
 			$keys['city'] = "KEY city (city(50))";
 		}
 
-		return apply_filters('geodir_db_cpt_default_keys',$keys,$cpt,$post_type);
+		return apply_filters( 'geodir_db_cpt_default_keys', $keys, $cpt, $post_type );
 	}
 
-    /**
-     * Run some upgrade scripts.
-     *
-     * @since 2.0.0
-     *
-     * @global object $wpdb WordPress Database object.
-     */
+	/**
+	 * Run some upgrade scripts.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 */
 	public static function upgrades() {
 		/**
 		 * DB type change for post_images
