@@ -159,6 +159,9 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		 */
 		$instance = wp_parse_args( $instance, $defaults );
 
+
+		$allowed_tags = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' );
+		$tag          = in_array( $instance['tag'], $allowed_tags ) ? esc_attr( $instance['tag'] ) : 'h2';
 		/**
 		 * Filter listing title tag.
 		 *
@@ -169,7 +172,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		 * @param array $args Widget arguments.
 		 * @param object $this The GeoDir_Widget_Post_Title object.
 		 */
-		$title_tag = empty( $instance['tag'] ) ? 'h2' : apply_filters( 'geodir_widget_gd_post_title_tag', $instance['tag'], $instance, $args, $this );
+		$title_tag = empty( $instance['tag'] ) ? 'h2' : apply_filters( 'geodir_widget_gd_post_title_tag', $tag, $instance, $args, $this );
 
 		$design_style = geodir_design_style();
 		$classes = '';
