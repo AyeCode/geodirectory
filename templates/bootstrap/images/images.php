@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory/Templates
- * @version    2.1.0.12
+ * @version    2.3.45
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -44,248 +44,242 @@ defined( 'ABSPATH' ) || exit;
  * @var string $aspect
  * @var string $responsive_image_class
  */
-global $gd_post;
+
+global $gd_post, $aui_bs5;
+
 ?>
-<div class="<?php echo $main_wrapper_class;?> " >
+<div class="<?php echo esc_attr( $main_wrapper_class ); ?>">
 	<?php
+	// Slider stuff
+	if ( $type == 'slider' ) {
+		if ( $limit_show ) {
+			$second_wrapper_class .= ' carousel-multiple-items';
+		}
 
-
-	// slider stuff
-	if($type=='slider'){
-	//echo '<div class="geodir_flex-loader"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';?>
-	<div id="<?php echo $slider_id; ?>" class="carousel <?php if($limit_show){echo 'carousel-multiple-items';} ?> slide <?php if($animation =='fade'){echo "carousel-fade ";} echo $second_wrapper_class;?>" <?php
-	if($controlnav==1){echo " data-controlnav='1' ";}
-	if($animation =='fade'){echo " data-animation='fade' ";}
-	if($slideshow){echo " data-ride='carousel' ";}
-	if($limit_show){echo " data-limit_show='".absint($limit_show)."' ";}
-	?>>
+		if ( $animation == 'fade' ) {
+			$second_wrapper_class .= ' carousel-fade';
+		}
+	?>
+	<div id="<?php echo esc_attr( $slider_id ); ?>" class="carousel slide <?php echo esc_attr( trim( $second_wrapper_class ) ); ?>"<?php echo ( ( $controlnav == 1 ? " data-controlnav='1'" : "" ) . ( $animation == 'fade' ? " data-animation='fade'" : "" ) . ( $slideshow ? " data-ride='carousel'" : "" ) . ( $limit_show ? " data-limit_show='" . absint( $limit_show ) . "'" : "" ) ); ?>>
 	<?php
 	}
-	?>
 
-		<?php
-		$inner_wrapper_class = '';
-		if($type=='slider' || $type=='image'){
-			$limit_show_row = '';//$limit_show && $type=='slider' ? 'row' : '';
-			$inner_wrapper_class = 'carousel-inner '.$limit_show_row;
-		}elseif($type=='gallery'){
-			$inner_wrapper_class = 'row row-cols-1 row-cols-md-3';
-		}elseif($type=='masonry'){
-			$inner_wrapper_class = 'card-columns';
+	$inner_wrapper_class = '';
+	if ( $type == 'slider' || $type == 'image' ) {
+		$limit_show_row = '';
+		$inner_wrapper_class = 'carousel-inner ' . $limit_show_row;
+	} else if ( $type == 'gallery' || $type == 'masonry' ) {
+		$inner_wrapper_class = 'row row-cols-1 row-cols-md-3 g-2';
+	}
+
+	$image_total = count( (array) $post_images );
+
+	if ( $limit_show > 0 && $limit_show > $image_total ) {
+		$limit_show = $image_total;
+	}
+
+	$image_count = 0;
+	$max_width_percent = $limit_show ? 100 / absint( $limit_show ) : '';
+
+	// Image cover class
+	if ( $type == 'masonry' ) {
+		$image_class = 'h-auto';
+	} else {
+		$image_class = 'embed-responsive-item';
+
+		if ( $cover =='x' ) {
+			$image_class .= ' embed-item-cover-x';
+		} else if ( $cover == 'y' ) {
+			$image_class .= ' embed-item-cover-y';
+		} else if ( $cover == 'n' ) {
+			$image_class .= ' embed-item-contain';
+		} else {
+			$image_class .= ' embed-item-cover-xy';
 		}
+	}
+	?>
+		<div class="geodir-images aui-gallery geodir-images-n-<?php echo (int) $image_total; ?> geodir-images-<?php echo esc_attr( $type . " " . $inner_wrapper_class ); ?>"<?php echo ( $type == 'masonry' ? 'data-masonry=\'{"itemSelector":".geodir-masonry-item","percentPosition":"true"}\'' : '' ); ?>>
+		<?php
+		foreach ( $post_images as $i => $image ) {
+			// Reset temp tags
+			$link_tag_open_ss = '';
+			$link_tag_close_ss = '';
 
-		$image_total = count( (array) $post_images );
+			if ( $type == 'slider' || $type == 'image' ) {
+				echo '<div class="carousel-item' . ( $image_count == 0 ? ' active' : '' ) . '"' . ( $image_count == 0 && $limit_show ? ' style="width:' . (float) $max_width_percent . '%"' : '' ) . '>';
+			} else if( $type == 'gallery' ) {
+				echo '<div class="col' . ( $aui_bs5 ? '' : ' mb-4' ) . '"' . ( $limit_show && $image_count >= $limit_show ? ' style="display:none"' : '' ) . '><div class="card m-0 p-0 overflow-hidden">';
+			} else if ( $type == 'masonry' ) {
+				echo '<div class="col' . ( $aui_bs5 ? '' : ' mb-4' ) . ' geodir-masonry-item"><div class="card m-0 p-0 overflow-hidden">';
+			}
 
-		if ( $limit_show > 0 && $limit_show > $image_total ) {
-			$limit_show = $image_total;
+			$img_tag = geodir_get_image_tag( $image, $image_size, '', $image_class );
+			$meta = isset( $image->metadata ) ? maybe_unserialize( $image->metadata ) : '';
+
+			// Only set different sizes if not thumbnail
+			if ( $image_size != 'thumbnail' ) {
+				$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
+			}
+
+			// Image link
+			if ( $link_to == 'lightbox' ) {
+				$link = geodir_get_image_src( $image, 'large' );
+			}
+
+			// Check if screenshot link is different
+			if ( $link_screenshot_to != '' && $link_screenshot_to != $link_to && ! $image->ID && stripos( strrev( $image->type ), "tohsneercs_" ) === 0 ) {
+				$lightbox_attrs = apply_filters( 'geodir_link_to_lightbox_attrs', '' );
+
+				if ( $link_screenshot_to == 'post' ) {
+					$link = get_the_permalink( $post->ID );
+					$link_tag_open_ss = '<a href="%s" class="' . esc_attr( $responsive_image_class ) . '">';
+					$link_tag_close_ss = '</a>';
+				} else if ( $link_screenshot_to == 'lightbox' ) {
+					$link = geodir_get_image_src( $image, 'large' );
+					$link_tag_open_ss = '<a href="%s" class="aui-lightbox-image ' . esc_attr( $responsive_image_class ) . '" ' . $lightbox_attrs . '>';
+					$link_tag_close_ss = "<i class=\"fas fa-search-plus  w-auto h-auto\" aria-hidden=\"true\"></i></a>";
+				} else if ( $link_screenshot_to == 'lightbox_url' ) {
+					$field_key = str_replace( "_screenshot", "", $image->type );
+					$link = isset( $gd_post->{$field_key} ) ? $gd_post->{$field_key} : '';
+					$fa_icon = 'fas fa-link';
+
+					// Check if youtube
+					$screenshot_base_url = 'https://www.youtube.com/embed/%s';
+
+					// Check if its a video URL
+					if ( ! empty( $link ) && preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $link , $matches ) ) {
+						if ( ! empty( $matches[1] ) ) {
+							$link = sprintf( $screenshot_base_url, esc_attr( $matches[1] ) );
+							$fa_icon = 'fas fa-video';
+						}
+					}
+
+					$link_tag_open_ss = '<a href="%s" class="geodir-lightbox-iframe ' . esc_attr( $responsive_image_class ) . '">';
+					$link_tag_close_ss = '<i class="' . esc_attr( $fa_icon ) . ' w-auto h-auto" aria-hidden="true"></i></a>';
+				} else if ( $link_screenshot_to == 'url' || $link_screenshot_to == 'url_same' ) {
+					$field_key = str_replace( "_screenshot", "", $image->type );
+					$link_icon = $link_screenshot_to == 'url' ? "fas fa-external-link-alt" : 'fas fa-link';
+					$link = isset( $gd_post->{$field_key} ) ? $gd_post->{$field_key} : '';
+					$link_tag_open_ss = '<a href="%s" class="' . esc_attr( $responsive_image_class ) . '" rel="nofollow noopener noreferrer"' . ( $link_screenshot_to == 'url' ? " target='_blank'" : '' ) . '>';
+					$link_tag_close_ss = '<i class="' . esc_attr( $link_icon ) . ' w-auto h-auto" aria-hidden="true"></i></a>';
+				}
+			}
+
+			// Ajaxify images
+			if ( $type == 'slider' && $ajax_load ) {
+				if ( ! $image_count && geodir_is_page( 'single' ) ) {
+					// Don't ajax the first image for a details page slider to improve the FCP pagespeed score.
+				} else {
+					$img_tag = geodir_image_tag_ajaxify( $img_tag );
+				}
+			} else if ( $ajax_load ) {
+				$img_tag = geodir_image_tag_ajaxify( $img_tag );
+			}
+
+			$img_tag_output = '';
+			if ( $link_tag_open_ss ) {
+				$img_tag_output .= sprintf( $link_tag_open_ss, esc_url( $link ) );
+			} else if ( $link_tag_open ) {
+				$img_tag_output .= sprintf( $link_tag_open, esc_url( $link ) );
+			}
+
+			$img_tag_output .= $img_tag;
+
+			if ( $link_tag_close_ss ) {
+				$img_tag_output .= $link_tag_close_ss;
+			} else {
+				$img_tag_output .= $link_tag_close;
+			}
+
+			// Output image
+			echo $img_tag_output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+			if ( $show_title && ! empty( $image->title ) ) {
+				$title = stripslashes( $image->title );
+			} else {
+				$title = '';
+			}
+
+			/**
+			 * Filters whether or not the caption should be displayed.
+			 *
+			 * @since   2.0.0.63
+			 * @package GeoDirectory
+			 */
+			$show_caption = apply_filters( 'geodir_post_images_show_caption', $show_caption );
+
+			if ( $show_caption && ! empty( $image->caption ) ) {
+				$caption = stripslashes( $image->caption );
+			} else {
+				$caption = '';
+			}
+
+			if ( $title || $caption ) {
+				?>
+				<div class="carousel-caption d-none d-md-block p-0 m-0 py-1 w-100 rounded-bottom<?php echo ( $type == 'gallery' ? ' sr-only visually-hidden' : '' ); ?>" style="bottom:0;left:0;background:#00000060">
+					<h5 class="m-0 p-0 h6 font-weight-bold fw-bold text-white"><?php echo esc_html( $title );?></h5>
+					<p class="m-0 p-0 h6 text-white"><?php echo esc_textarea( $caption );?></p>
+				</div>
+				<?php
+			}
+
+			if ( $type == 'gallery' || $type == 'masonry' ) {
+				echo "</div></div>";
+			} else {
+				echo "</div>";
+			}
+
+			$image_count++;
 		}
 		?>
-		<div class="geodir-images aui-gallery geodir-images-n-<?php echo $image_total; ?> geodir-images-<?php echo $type . " " .$inner_wrapper_class ; ?> "><?php
-			$image_count = 0;
-			$max_width_percent = $limit_show ? 100 / absint( $limit_show ) : '';
-
-			foreach($post_images as $image){
-				// Reset temp tags
-				$link_tag_open_ss = '';
-				$link_tag_close_ss = '';
-
-				$active = $image_count == 0 ? 'active' : '';
-				$max_width = $active && $limit_show ? "style='width:$max_width_percent%'" : '';
-
-				if($type=='slider' || $type=='image' ){
-					echo "<div class='carousel-item  $active' $max_width>";
-				}
-				elseif($type=='gallery'){
-					$limit_show_style = !empty($limit_show) && $image_count >= $limit_show ? "style='display:none;'" : '';
-					echo '<div class="col mb-4" '.$limit_show_style.'><div class="card m-0 p-0 overflow-hidden">';
-				}elseif($type=='masonry'){
-					$limit_show_style = !empty($limit_show) && $image_count >= $limit_show ? "style='display:none;'" : '';
-					echo '<div class="card m-0 mb-3 p-0 overflow-hidden">';
-				}
-
-				$image_class = 'embed-responsive-item';
-
-				// image cover class
-				if($cover =='x'){$image_class .= " embed-item-cover-x ";}
-				elseif($cover =='y'){$image_class .= " embed-item-cover-y ";}
-				elseif($cover=='n'){$image_class .= " embed-item-contain ";}
-				else{$image_class .= " embed-item-cover-xy ";}
-
-				if($type=='masonry'){
-					$image_class = '';
-				}
-
-				$img_tag = geodir_get_image_tag($image,$image_size,'',$image_class );
-				$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
-
-				// only set different sizes if not thumbnail
-				if($image_size!='thumbnail'){
-					$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
-				}
-
-				// image link
-				if($link_to=='lightbox'){
-					$link = geodir_get_image_src($image, 'large');
-				}
-
-
-				// check if screenshot link is different
-				if($link_screenshot_to!='' && $link_screenshot_to!=$link_to && !$image->ID && stripos(strrev($image->type), "tohsneercs_") === 0){
-					$lightbox_attrs = apply_filters( 'geodir_link_to_lightbox_attrs', '' );
-
-					if($link_screenshot_to=='post'){
-						$link = get_the_permalink($post->ID);
-						$link_tag_open_ss = "<a href='%s' class='$responsive_image_class'>";
-						$link_tag_close_ss = "</a>";
-					}elseif($link_screenshot_to=='lightbox'){
-						$link = geodir_get_image_src($image, 'large');
-						$link_tag_open_ss = "<a href='%s' class='aui-lightbox-image $responsive_image_class' {$lightbox_attrs}>";
-						$link_tag_close_ss = "<i class=\"fas fa-search-plus  w-auto h-auto\" aria-hidden=\"true\"></i></a>";
-					}elseif($link_screenshot_to=='lightbox_url'){
-						$field_key = str_replace("_screenshot","",$image->type);
-						$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
-						$fa_icon = 'fas fa-link';
-						// check if youtube
-						$screenshot_base_url = 'https://www.youtube.com/embed/%s';
-						// check if its a video URL
-						if (!empty($link) && preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $link , $matches) ) {
-							if(!empty($matches[1])){
-								$link = esc_url( sprintf($screenshot_base_url, esc_attr($matches[1])) );
-								$fa_icon = 'fas fa-video';
-							}
-						}
-
-						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-iframe $responsive_image_class' >";
-						$link_tag_close_ss = "<i class=\"$fa_icon w-auto h-auto\" aria-hidden=\"true\"></i></a>";
-					}elseif($link_screenshot_to=='url' || $link_screenshot_to=='url_same'){
-						$field_key = str_replace("_screenshot","",$image->type);
-						$target = $link_screenshot_to=='url' ? "target='_blank'" : '';
-						$link_icon = $link_screenshot_to=='url' ? "fas fa-external-link-alt" : 'fas fa-link';
-						$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
-						$link_tag_open_ss = "<a href='%s' $target class=' $responsive_image_class' rel='nofollow noopener noreferrer'>";
-						$link_tag_close_ss = "<i class=\"$link_icon w-auto h-auto\" aria-hidden=\"true\"></i></a>";
-					}
-
-				}
-
-				// ajaxify images
-				if($type=='slider' && $ajax_load ){
-					if( !$image_count && geodir_is_page('single') ){
-						// don't ajax the first image for a details page slider to improve the FCP pagespeed score.
-					}else{
-						$img_tag = geodir_image_tag_ajaxify($img_tag);
-					}
-				}elseif($ajax_load){
-					$img_tag = geodir_image_tag_ajaxify($img_tag);
-				}
-				// output image
-				if($link_tag_open_ss){
-					echo $link_tag_open_ss ? sprintf($link_tag_open_ss,esc_url($link)) : '';
-				}else{
-					echo $link_tag_open ? sprintf($link_tag_open,esc_url($link)) : '';
-				}
-				echo $img_tag;
-				if($link_tag_close_ss){
-					echo $link_tag_close_ss;
-				}else{
-					echo $link_tag_close;
-				}
-
-				$title = '';
-				$caption = '';
-				if( $show_title && !empty($image->title)){
-					$title = esc_attr( stripslashes_deep( $image->title ) );
-				}
-
-				/**
-				 * Filters whether or not the caption should be displayed.
-				 *
-				 * @since   2.0.0.63
-				 * @package GeoDirectory
-				 */
-				$show_caption = apply_filters( 'geodir_post_images_show_caption', $show_caption );
-
-				if( $show_caption && !empty( $image->caption ) ) {
-					$caption .= esc_attr( stripslashes_deep( $image->caption ) );
-				}
-
-
-				if($title || $caption){
-					?>
-					<div class="carousel-caption d-none d-md-block p-0 m-0 py-1 w-100 rounded-bottom <?php if($type=='gallery'){echo 'sr-only visually-hidden';}?>" style="bottom: 0;left:0;background: #00000060">
-						<h5 class="m-0 p-0 h6 font-weight-bold fw-bold text-white"><?php echo $title;?></h5>
-						<p class="m-0 p-0 h6 text-white"><?php echo $caption;?></p>
-					</div>
-					<?php
-				}
-
-				if($type=='gallery'){ echo "</div></div>"; }
-				else{echo "</div>";}
-
-				$image_count++;
-			}
-			?>
 		</div>
-
-
 		<?php
-		if($type=='slider') {
+		if ( $type == 'slider' ) {
 			?>
-			<a class="carousel-control-prev" href="#<?php echo $slider_id; ?>" role="button" data-slide="prev">
+			<a class="carousel-control-prev" href="#<?php echo esc_attr( $slider_id ); ?>" role="button" data-slide="prev">
 				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="sr-only visually-hidden"><?php _e( 'Previous', 'geodirectory' ); ?></span>
+				<span class="sr-only visually-hidden"><?php esc_html_e( 'Previous', 'geodirectory' ); ?></span>
 			</a>
-			<a class="carousel-control-next" href="#<?php echo $slider_id; ?>" role="button" data-slide="next">
+			<a class="carousel-control-next" href="#<?php echo esc_attr( $slider_id ); ?>" role="button" data-slide="next">
 				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="sr-only visually-hidden"><?php _e( 'Next', 'geodirectory' ); ?></span>
+				<span class="sr-only visually-hidden"><?php esc_html_e( 'Next', 'geodirectory' ); ?></span>
 			</a>
 			<?php
 		}
 
-		if($type=='slider' && $controlnav==1 && $image_count > 1) {
+		if ( $type == 'slider' && $controlnav == 1 && $image_count > 1 ) {
 			$image_count = 0;
 			?>
 			<ol class="carousel-indicators w-100 position-relative mx-0 my-1">
 				<?php
-				foreach($post_images as $image){
-					$active = $image_count == 0 ? 'active' : '';
-					$limit_show_break = !empty($limit_show) && $image_count >= $limit_show ? true : false;
-					//if($limit_show_break){break;}
-					echo '<li data-target="#'.$slider_id.'" data-slide-to="'.$image_count.'" class="my-1 mx-1 bg-dark '.$active.'"></li>';
+				foreach ( $post_images as $image ) {
+					echo '<li data-target="#' . esc_attr( $slider_id ) . '" data-slide-to="' . esc_attr( $image_count ) . '" class="my-1 mx-1 bg-dark' . ( $image_count == 0 ? ' active' : '' ) . '"></li>';
 					$image_count++;
 				}
 				?>
 			</ol>
 			<?php
-		}elseif($type=='slider' && $controlnav==2 && $image_count > 1){
+		} else if ( $type == 'slider' && $controlnav == 2 && $image_count > 1 ) {
 			$image_count = 0;
 			?>
 			<ul class="carousel-indicators w-100 position-relative mx-0 my-1 list-unstyled overflow-auto scrollbars-ios">
 				<?php
-				foreach($post_images as $image){
-					$active = $image_count == 0 ? 'active' : '';
-					$limit_show_break = !empty($limit_show) && $image_count >= $limit_show ? true : false;
-					//if($limit_show_break){break;}
-					echo '<li data-target="#'.$slider_id.'" data-slide-to="'.$image_count.'" class="my-1 mx-1 bg-dark list-unstyled border-0 '.$active.'"" style="text-indent:0;height:60px;width:60px;min-width:60px;">';
-					$img_tag = geodir_get_image_tag($image,'thumbnail','','embed-item-cover-xy');
-					$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
-					echo $img_tag;
+				foreach ( $post_images as $image ) {
+					$img_tag = geodir_get_image_tag( $image, 'thumbnail', '', 'embed-item-cover-xy' );
+
+					echo '<li data-target="#' . esc_attr( $slider_id ) . '" data-slide-to="' . esc_attr( $image_count ) . '" class="my-1 mx-1 bg-dark list-unstyled border-0' . ( $image_count == 0 ? ' active' : '' ) . '" style="text-indent:0;height:60px;width:60px;min-width:60px;">';
+					echo $img_tag; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo '</li>';
+
 					$image_count++;
 				}
 				?>
 			</ul>
 			<?php
 		}
-		?>
 
-		<?php
-
-		// slider close
-		if($type=='slider'){
-		?>
+		// Slider close
+		if ( $type == 'slider' ) { ?>
 	</div>
-<?php
-}
-	?>
+	<?php } ?>
 </div>
