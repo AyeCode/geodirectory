@@ -1,12 +1,10 @@
 <?php
-
 /**
  * GeoDir_Widget_Post_Image class.
  *
  * @since 2.0.0
  */
 class GeoDir_Widget_Post_Images extends WP_Super_Duper {
-
 
 	public $arguments;
 	/**
@@ -15,20 +13,19 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	public function __construct() {
 
 		$options = array(
-			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
-			'block-icon'    => 'format-image',
-			'block-category'=> 'geodirectory',
-			'block-keywords'=> "['images','geo','geodir']",
-			'block-supports'=> array(
-				'customClassName'   => false
+			'textdomain' => GEODIRECTORY_TEXTDOMAIN,
+			'block-icon' => 'format-image',
+			'block-category' => 'geodirectory',
+			'block-keywords' => "['images','geo','geodir']",
+			'block-supports' => array(
+				'customClassName' => false
 			),
-			'class_name'    => __CLASS__,
-			'base_id'       => 'gd_post_images', // this us used as the widget id and the shortcode id.
-			'name'          => __('GD > Post Images','geodirectory'), // the name of the widget.
-			//'disable_widget'=> true,
-			'widget_ops'    => array(
-				'classname'   => 'geodir-post-slider '.geodir_bsui_class(), // widget class
-				'description' => esc_html__('This shows a GD post image.','geodirectory'), // widget description
+			'class_name' => __CLASS__,
+			'base_id' => 'gd_post_images',
+			'name' => esc_html__( 'GD > Post Images', 'geodirectory' ),
+			'widget_ops' => array(
+				'classname' => 'geodir-post-slider ' . geodir_bsui_class(),
+				'description' => esc_html__( 'This shows a GD post image.', 'geodirectory' ),
 				'geodirectory' => true,
 			),
 			'arguments' => array(
@@ -302,7 +299,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		parent::__construct( $options );
 	}
 
-
 	/**
 	 * The Super block output function.
 	 *
@@ -312,8 +308,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 *
 	 * @return mixed|string|void
 	 */
-	public function output($args = array(), $widget_args = array(),$content = ''){
-
+	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		/**
 		 * @var bool $ajax_load Ajax load or not.
 		 * @var string $animation Fade or slide.
@@ -322,10 +317,9 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		 * @var bool $show_title If the title should be shown or not.
 		 * @var int/empty $limit If the number of images should be limited.
 		 */
-		extract($args, EXTR_SKIP);
+		extract( $args, EXTR_SKIP );
 
-		return $this->output_images($args);
-
+		return $this->output_images( $args );
 	}
 
 	/**
@@ -335,7 +329,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 *
 	 * @param $options
 	 */
-	public function output_images($options){
+	public function output_images( $options ) {
 		global $post, $gd_post, $geodir_carousel_open;
 
 		// options
@@ -349,16 +343,16 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'show_title'=> '1',
 			'show_caption' => '0',
 			'limit'     => '',
-			'limit_show'     => '',
-			'link_to'     => '',
-			'link_screenshot_to'     => '',
-			'image_size'     => 'medium',
-			'show_logo'     => '0',
-			'cover'   => '', // image cover type
-			'aspect'    => '', // image aspect ratio
-			'id' => '',
-			'types'   => '', // types to show, post_images,comment_images,logo
-			'fallback_types'   => 'logo,cat_default,cpt_default,listing_default,website_screenshot', //logo,cat_default,cpt_default,listing_default
+			'limit_show'=> '',
+			'link_to'   => '',
+			'link_screenshot_to' => '',
+			'image_size'=> 'medium',
+			'show_logo' => '0',
+			'cover' => '', // image cover type
+			'aspect'=> '', // image aspect ratio
+			'id'    => '',
+			'types' => '', // types to show, post_images,comment_images,logo
+			'fallback_types' => 'logo,cat_default,cpt_default,listing_default,website_screenshot', //logo,cat_default,cpt_default,listing_default
 			'css_class' => '',
 			'bg'    => '',
 			'mt'    => '',
@@ -369,10 +363,10 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'pb'    => '',
 			'pr'    => '',
 			'pl'    => '',
-			'border'    => '',
-			'rounded'    => '',
-			'rounded_size'    => '',
-			'shadow'    => '',
+			'border' => '',
+			'rounded' => '',
+			'rounded_size' => '',
+			'shadow' => '',
 		);
 
 		/**
@@ -388,30 +382,30 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$options['limit'] = 1;
 		}
 
-		$design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
+		$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : geodir_design_style();
 
-		if($this->is_preview()){
+		if ( $this->is_preview() ) {
 			$options['ajax_load'] = false;
 		}
 
-		if($options['type']=='image'){
+		if ( $options['type'] == 'image' ) {
 			$options['limit'] = 1;
 		}
 
-		$revision_id = is_preview() && !empty($gd_post->ID) ? absint($gd_post->ID) : '';
+		$revision_id = is_preview() && ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : '';
 
-		// types
-		if(!empty($options['types'])){
-			$options['types'] = explode(",",$options['types']);
+		// Types
+		if ( ! empty( $options['types'] ) ) {
+			$options['types'] = explode( ",", $options['types'] );
 		}
 
-		// fallback types
-		if(!empty($options['fallback_types'])){
-			$options['fallback_types'] = explode(",",$options['fallback_types']);
-		}elseif($options['fallback_types']=='0'){
+		// Fallback types
+		if ( ! empty( $options['fallback_types'] ) ) {
+			$options['fallback_types'] = explode( ",", $options['fallback_types'] );
+		} else if ( $options['fallback_types'] == '0' ) {
 			$options['fallback_types'] = array();
-		}else{
-			$options['fallback_types'] = array('logo','cat_default','cpt_default','listing_default');
+		} else {
+			$options['fallback_types'] = array( 'logo', 'cat_default', 'cpt_default', 'listing_default' );
 		}
 
 		// check if block preview
@@ -448,41 +442,46 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$post_images = geodir_get_images( $post_id, $options['limit'], $options['show_logo'], $revision_id, $options['types'], $options['fallback_types'], $status );
 		}
 
-		// make it just a image if only one
-		if($options['type']=='slider' && count($post_images) == 1 && $options['limit_show']){
-			$options['type']='image';
+		// Make it just a image if only one
+		if ( $options['type'] == 'slider' && count( $post_images ) == 1 && $options['limit_show'] ) {
+			$options['type'] = 'image';
 		}
 
 		ob_start();
+		if ( ! empty( $post_images ) ) {
+			if ( $options['type'] == 'masonry' ) {
+				// Enqueue masonry.
+				wp_enqueue_script( 'masonry' );
+			}
 
-		if (!empty($post_images)) {
 			$main_wrapper_class = "geodir-image-container";
 			$second_wrapper_class = "geodir-image-wrapper";
 			$ul_class = "geodir-post-image";
-			$image_size = isset($options['image_size']) && $options['image_size'] ? $options['image_size'] : 'medium_large';
-			$main_wrapper_class .= " geodir-image-sizes-".$image_size;
+			$image_size = isset( $options['image_size'] ) && $options['image_size'] ? $options['image_size'] : 'medium_large';
+			$main_wrapper_class .= " geodir-image-sizes-" . $image_size;
 
-			// margin_bottom
 			if ( !empty( $options ) ) {
-				// wrap class
-				$main_wrapper_class .= " ".geodir_build_aui_class($options);
+				// Wrap class
+				$main_wrapper_class .= " " . geodir_build_aui_class( $options );
 			}
 
-			if($options['type']=='slider'){
-				if(!$design_style){
+			if ( $options['type'] == 'slider' ) {
+				if ( ! $design_style ) {
 					// enqueue flexslider JS
 					GeoDir_Frontend_Scripts::enqueue_script( 'jquery-flexslider' );
 				}
 
-
 				$main_wrapper_class .= " geodir_flex-container ";
 				$second_wrapper_class .= " geodir_flexslider geodir-slider geodir-slider-loading ";
 				$ul_class = "geodir-slides";
-				if($options['limit_show']){
+
+				if ( $options['limit_show'] ) {
 					$second_wrapper_class .= " geodir-carousel ";
 				}
-			}elseif($options['type']=='gallery' || $options['type']=='masonry'){
-				if(!$image_size){$image_size = 'medium_large';}
+			} else if ( $options['type'] == 'gallery' || $options['type'] == 'masonry' ) {
+				if ( ! $image_size ) {
+					$image_size = 'medium_large';
+				}
 				$ul_class = "geodir-gallery";
 			}
 
@@ -490,111 +489,98 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$slider_id = wp_doing_ajax() ? "geodir_images_ajax" : "geodir_images";
 			$slider_id .= '_' . uniqid() . '_' . $post_id; // Generate unique slider id. //@todo this is not cache friendly
 
-			// responsive image class
-			$aspect = $options['type']=='masonry' ? 'none' : $options['aspect'];
+			// Responsive image class
+			$aspect = $options['type'] == 'masonry' ? 'none' : $options['aspect'];
 			$responsive_image_class = '';
-			if($design_style){
+
+			if ( $design_style ) {
 				$embed_action_class = $options['link_to'] ? 'embed-has-action ' : '';
-				if(!$aspect || $aspect=='16x9'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-16by9 ratio ratio-16x9';
-				}elseif($aspect=='21x9'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-21by9 ratio ratio-21x9';
-				}elseif($aspect=='4x3'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-4by3 ratio ratio-4x3';
-				}elseif($aspect=='1x1'){
-					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-1by1 ratio ratio-1x1';
-				}else{
+
+				if ( ! $aspect || $aspect == '16x9' ) {
+					$responsive_image_class = $embed_action_class . 'embed-responsive embed-responsive-16by9 ratio ratio-16x9';
+				} else if ( $aspect == '21x9' ) {
+					$responsive_image_class = $embed_action_class . 'embed-responsive embed-responsive-21by9 ratio ratio-21x9';
+				} else if ( $aspect == '4x3' ) {
+					$responsive_image_class = $embed_action_class . 'embed-responsive embed-responsive-4by3 ratio ratio-4x3';
+				} else if ( $aspect == '1x1' ) {
+					$responsive_image_class = $embed_action_class . 'embed-responsive embed-responsive-1by1 ratio ratio-1x1';
+				} else {
 					$responsive_image_class = $embed_action_class;
 				}
 			}
 
-
-			// image link
+			// Image link
 			$link = '';
 			$link_tag_open = "";
 			$link_tag_close = "";
-			if($options['link_to']=='post'){
-				$link = get_the_permalink($post_id);
+
+			if ( $options['link_to'] == 'post' ) {
+				$link = get_the_permalink( $post_id );
 				$link_tag_open = "<a href='%s' class='geodir-link-image $responsive_image_class d-block'>";
 				$link_tag_close = "<i class=\"fas fa-link w-auto h-auto\" aria-hidden=\"true\"></i></a>";
-			}elseif($options['link_to']=='lightbox'){
+			} else if ( $options['link_to'] == 'lightbox' ) {
 				$link = '';
 				$lightbox_attrs = apply_filters( 'geodir_link_to_lightbox_attrs', '' );
 				$link_tag_open = "<a href='%s' class='geodir-lightbox-image $responsive_image_class d-block' data-lity {$lightbox_attrs}>";
 				$link_tag_close = "<i class=\"fas fa-search-plus w-auto h-auto\" aria-hidden=\"true\"></i></a>";
-			}elseif($responsive_image_class){
-				$link_tag_open = '<span class="'.$responsive_image_class.'">';
+			} else if ( $responsive_image_class ) {
+				$link_tag_open = '<span class="' . esc_attr( $responsive_image_class ) . '">';
 				$link_tag_close = '</span>';
 			}
 
-			// image_cover
-			if(!empty($options['cover'])){
-				if($options['cover']=='x'){$main_wrapper_class .= " gd-image-cover-x ";}
-				if($options['cover']=='y'){$main_wrapper_class .= " gd-image-cover-y ";}
-				if($options['cover']=='n'){$main_wrapper_class .= " gd-image-cover-n ";}
+			// Image_cover
+			if ( ! empty( $options['cover'] ) ) {
+				if ( $options['cover'] == 'x' ) {
+					$main_wrapper_class .= " gd-image-cover-x ";
+				} else if ( $options['cover'] == 'y' ) {
+					$main_wrapper_class .= " gd-image-cover-y ";
+				} else if ( $options['cover'] == 'n' ) {
+					$main_wrapper_class .= " gd-image-cover-n ";
+				}
 			}
 
 			$main_wrapper_class_x = 'card-img-top embed-responsive-item';
 
 			$args = array(
 				'main_wrapper_class' => " " . $main_wrapper_class . " " . geodir_sanitize_html_class( $options['css_class'] ),
-				'type'  => $options['type'],
-				'slider_id'    =>  $slider_id,
-				'second_wrapper_class' =>  $second_wrapper_class,
-				'controlnav'    =>   $options['controlnav'],
-				'animation'    =>   $options['animation'],
-				'slideshow'    =>   $options['slideshow'],
-				'limit'    =>   $options['limit'],
-				'limit_show'    =>   $options['limit_show'],
-				'ajax_load'    =>   $options['ajax_load'],
-				'show_title'    =>   $options['show_title'],
-				'show_caption'    =>   $options['show_caption'],
-				'ul_class'    =>   $ul_class,
-				'post_images'    =>   $post_images,
-				'link_to'    =>     $options['link_to'],
-				'link_screenshot_to'    =>     $options['link_screenshot_to'],
+				'type' => $options['type'],
+				'slider_id' => $slider_id,
+				'second_wrapper_class' => $second_wrapper_class,
+				'controlnav' => $options['controlnav'],
+				'animation' => $options['animation'],
+				'slideshow' => $options['slideshow'],
+				'limit' => $options['limit'],
+				'limit_show' => $options['limit_show'],
+				'ajax_load' => $options['ajax_load'],
+				'show_title' => $options['show_title'],
+				'show_caption' => $options['show_caption'],
+				'ul_class' => $ul_class,
+				'post_images' => $post_images,
+				'link_to' => $options['link_to'],
+				'link_screenshot_to' => $options['link_screenshot_to'],
 				'link' => $link,
 				'link_tag_open' => $link_tag_open,
 				'link_tag_close' => $link_tag_close,
-				'image_size'   =>  $image_size,
-				'cover' =>  $options['cover'],
-				'aspect' =>  $options['aspect'],
-				'responsive_image_class'   => $responsive_image_class
+				'image_size' => $image_size,
+				'cover' => $options['cover'],
+				'aspect' => $options['aspect'],
+				'responsive_image_class' => $responsive_image_class
 			);
-
 
 			$template = $design_style ? $design_style."/images/images.php" : "legacy/images/images.php";
 
-
-
 			$output = geodir_get_template_html( $template, $args );
 
-			echo $output;
-
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
-
-		// make it work with builder preview
-		if($this->is_elementor_preview()){
-			?>
-			<script type="text/javascript">
-				(function(){
-					if (typeof init_read_more == 'function') {
-						init_read_more();
-						geodir_init_lazy_load();
-						geodir_refresh_business_hours();
-						// init any sliders
-						geodir_init_flexslider();
-					}
-				}());
-			</script>
-			<?php
+		// Make it work with builder preview
+		if ( $this->is_elementor_preview() ) {
+			?><script type="text/javascript">(function(){if(typeof init_read_more == 'function'){init_read_more();geodir_init_lazy_load();geodir_refresh_business_hours();geodir_init_flexslider();}}());</script><?php
 		}
-
 
 		return ob_get_clean();
 	}
-
 
 	/**
 	 * Get the available image sizes.
@@ -622,7 +608,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 *
 	 * @return array
 	 */
-	public static function get_dummy_images(){
+	public static function get_dummy_images() {
 		$images = array();
 		$dummy_image_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/plugin/';
 		$dummy_images = array(
@@ -635,15 +621,15 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		);
 
 		$count = 1;
-		foreach($dummy_images as $dummy_image){
-			// image
+
+		foreach ( $dummy_images as $dummy_image ) {
 			$image = new stdClass();
 			$image->ID = 0;
 			$image->post_id = 0;
 			$image->user_id = 0;
-			$image->title = sprintf( __( 'Demo image title %d', 'geodirectory' ),$count);
-			$image->caption = sprintf( __( 'Demo image caption %d', 'geodirectory' ),$count);
-			$image->file = $dummy_image_url.$dummy_image;
+			$image->title = wp_sprintf( __( 'Demo image title %d', 'geodirectory' ), $count );
+			$image->caption = wp_sprintf( __( 'Demo image caption %d', 'geodirectory' ), $count );
+			$image->file = $dummy_image_url . $dummy_image;
 			$image->mime_type = '';
 			$image->menu_order = 0;
 			$image->featured= 0;
@@ -655,7 +641,5 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		}
 
 		return $images;
-
 	}
-
 }
