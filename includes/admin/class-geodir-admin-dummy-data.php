@@ -403,6 +403,16 @@ class GeoDir_Admin_Dummy_Data {
                 } else {
 					do_action( 'geodir_dummy_data_include_file', $post_type, $data_type, $val, $item_index );
 				}
+
+				/**
+				 * Variable representing dummy posts data.
+				 *
+				 * This variable holds an array of dummy posts data, often used for testing and development purposes.
+				 *
+				 * @var array $dummy_posts
+				 * @since 2.3.45
+				 */
+				$dummy_posts = apply_filters( 'geodir_dummy_data_posts', $dummy_posts, $key );
 			}
 
 			$dummy_image_url = apply_filters( 'dummy_image_url', $dummy_image_url,$post_type, $data_type, $item_index );
