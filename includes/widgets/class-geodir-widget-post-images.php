@@ -22,7 +22,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			),
 			'class_name' => __CLASS__,
 			'base_id' => 'gd_post_images',
-			'name' => esc_html__( 'GD > Post Images', 'geodirectory' ),
+			'name' => __( 'GD > Post Images', 'geodirectory' ),
 			'widget_ops' => array(
 				'classname' => 'geodir-post-slider ' . geodir_bsui_class(),
 				'description' => esc_html__( 'This shows a GD post image.', 'geodirectory' ),

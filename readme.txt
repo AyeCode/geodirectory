@@ -307,6 +307,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.45 - TBD =
 * GD > Post images masonry gallery is not working with BS5 - FIXED
+* Added filter for dummy data posts - ADDED
+* Matterport embed URLs not working - FIXED
 
 = GeoDirectory v2.3.44 - 2024-03-14 =
 * Old MariaDB causes index column size error - FIXED
