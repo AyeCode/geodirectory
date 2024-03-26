@@ -628,8 +628,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 					}
 
 					if ( $is_dropdown ) {
-						$selected = ( $cat_count == 1 ) ? 'selected="selected"' : '';
-						$nav_html .= '<option ' . $selected . ' value="' . $cat->term_id . '">' . geodir_ucwords($cat->name) . '</option>';
+						$nav_html .= '<option ' . selected( $cat_count == 1, true, false ) . ' value="' . esc_attr( $cat->term_id ) . '">' . esc_html( $cat->name ) . '</option>';
 					} else {
 						if ($cat_count == 1) {
 							$nav_html .= $design_style ? '<li class="nav-item">' : '<li class="geodir-tab-active">';
@@ -637,29 +636,26 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 							$nav_html .= $design_style ? '<li class="nav-item">' : '<li class="">';
 						}
 
-
-						$term_link = get_term_link($cat, $cat->taxonomy);
-						$term_icon_url = !empty($term_icons) && isset($term_icons[$cat->term_id]) ? $term_icons[$cat->term_id] : '';
-						$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr($cat->name) . ' icon" src="' . $term_icon_url . '" /> ' : '';
+						$term_link = get_term_link( $cat, $cat->taxonomy );
+						$term_icon_url = ! empty( $term_icons ) && isset( $term_icons[ $cat->term_id ] ) ? $term_icons[ $cat->term_id ] : '';
+						$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr( $cat->name ) . ' icon" src="' . esc_attr( $term_icon_url ) . '" /> ' : '';
 						$cat_font_icon = get_term_meta( $cat->term_id, 'ct_cat_font_icon', true );
 						$cat_color = get_term_meta( $cat->term_id, 'ct_cat_color', true );
 						$cat_color = $cat_color ? $cat_color : '#ababab';
 
-						$term_icon = $cat_font_icon ? '<i class="'.$cat_font_icon.' fa-fw" aria-hidden="true" aria-hidden="true"></i>' : $term_icon_url;
+						$term_icon = $cat_font_icon ? '<i class="' . esc_attr( $cat_font_icon ) . ' fa-fw" aria-hidden="true" aria-hidden="true"></i>' : $term_icon_url;
 
 						if ( $design_style ) {
-							$active = $cat_count == 1 ? 'active' : '';
-							$nav_html .= '<a class="nav-link '.$active.'" data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" data-toggle="pill">';
-							$nav_html .= "<span class='gd-cptcat-icon' style='color: $cat_color' >$term_icon</span> ";
-							$nav_html .=  esc_attr($cat->name);
+							$nav_html .= '<a class="nav-link' . ( $cat_count == 1 ? ' active' : '' ) . '" data-termid="' . esc_attr( $cat->term_id ) . '" href="' . esc_url( $term_link ) . '" data-toggle="pill">';
+							$nav_html .= '<span class="gd-cptcat-icon" style="' . esc_attr( 'color:' . $cat_color ) . '">' . $term_icon . '</span>';
+							$nav_html .= esc_html( $cat->name );
 							$nav_html .= '</a>';
-
 						} else {
-							$nav_html .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" title="' . esc_attr($cat->name) . '">';
-							$nav_html .= "<span class='gd-cptcat-icon' >$term_icon</span>";
+							$nav_html .= '<span class="gd-cptcat-cat-left" style="' . esc_attr( 'background:' . $cat_color ) . '"><a data-termid="' . esc_attr( $cat->term_id ) . '" href="' . esc_url( $term_link ) . '" title="' . esc_attr( $cat->name ) . '">';
+							$nav_html .= "<span class='gd-cptcat-icon' >" . $term_icon . "</span>";
 							$nav_html .= '</a></span>';
-							$nav_html .= '<span class="gd-cptcat-cat-right"><a data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" title="' . esc_attr($cat->name) . '">';
-							$nav_html .= $cat->name;
+							$nav_html .= '<span class="gd-cptcat-cat-right"><a data-termid="' . esc_attr( $cat->term_id ) . '" href="' . esc_url( $term_link ) . '" title="' . esc_attr( $cat->name ) . '">';
+							$nav_html .= esc_html( $cat->name );
 							$nav_html .= '<small>';
 							$nav_html .= '</small>';
 							$nav_html .= '</a></span>';
@@ -670,7 +666,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				}
 			}
 
-			if ($is_dropdown) {
+			if ( $is_dropdown ) {
 				$nav_html .= '</select>';
 			} else {
 				$nav_html .= '</ul>';
