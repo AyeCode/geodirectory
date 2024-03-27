@@ -555,7 +555,7 @@ class Geodir_Element_Image_Gallery extends Element {
 	}
 
 	public static function get_dummy_images(){
-		$dummy_image_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/plugin/';
+		$dummy_image_url = 'https://ayecode.b-cdn.net/dummy/plugin/';
 		$dummy_images = array(
 			'burger.jpg',
 			'food-salad.jpg',

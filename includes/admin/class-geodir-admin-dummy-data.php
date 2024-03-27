@@ -391,16 +391,26 @@ class GeoDir_Admin_Dummy_Data {
 					 */
 					include_once( 'dummy-data/classifieds.php' );
 				} elseif ( $key == 'freelancer' ) {
-                    add_filter( 'geodir_extra_custom_fields', 'geodir_extra_custom_fields_' . $key, 10, 3 );
+					add_filter( 'geodir_extra_custom_fields', 'geodir_extra_custom_fields_' . $key, 10, 3 );
 
-                    /**
-                     * Contains dummy data for freelancers.
-                     *
-                     * @since 2.0.0.59
-                     * @package GeoDirectory
-                     */
-                    include_once( 'dummy-data/freelancer.php' );
-                } else {
+					/**
+					 * Contains dummy data for freelancers.
+					 *
+					 * @since 2.0.0.59
+					 * @package GeoDirectory
+					 */
+					include_once( 'dummy-data/freelancer.php' );
+				} elseif ( $key == 'job_board' ) {
+					add_filter( 'geodir_extra_custom_fields', 'geodir_extra_custom_fields_' . $key, 10, 3 );
+
+					/**
+					 * Contains dummy data for freelancers.
+					 *
+					 * @since 2.0.0.59
+					 * @package GeoDirectory
+					 */
+					include_once( 'dummy-data/job_board.php' );
+				} else {
 					do_action( 'geodir_dummy_data_include_file', $post_type, $data_type, $val, $item_index );
 				}
 
@@ -890,6 +900,11 @@ class GeoDir_Admin_Dummy_Data {
 			),
 			'classifieds'   => array(
 				'name'  => __( 'Classifieds', 'geodirectory' ),
+				'count' => 20,
+				'has_templates' => true
+			),
+			'job_board'   => array(
+				'name'  => __( 'Job Board', 'geodirectory' ),
 				'count' => 20,
 				'has_templates' => true
 			),

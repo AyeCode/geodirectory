@@ -7,7 +7,7 @@
  */
 
 // Set the dummy image url
-$dummy_image_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/'; // CDN URL will be faster
+$dummy_image_url = 'https://ayecode.b-cdn.net/dummy/'; // CDN URL will be faster
 
 // Set the dummy categories
 $dummy_categories  = array();
@@ -546,7 +546,7 @@ function geodir_extra_custom_fields_property_rent( $fields, $post_type, $package
 		'show_on_pkg' 			=> $package,
 		'clabels' 				=> 'Price'
     );
-	
+
 	// property status
 	$fields[] = array(
 		'post_type' => $post_type,
@@ -728,6 +728,6 @@ function geodir_extra_custom_fields_property_rent( $fields, $post_type, $package
 		'show_on_pkg' 		  => $package,
 		'clabels' 			  => 'Property Features'
 	);
-						  
+
 	return $fields;
 }

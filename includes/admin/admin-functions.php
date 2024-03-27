@@ -1459,3 +1459,24 @@ function geodir_create_wp_template( $option, $args = array(), $update_option = t
 
 	return $post_id;
 }
+
+/**
+ * @param $limit
+ * @param $type
+ *
+ * @return false|string
+ */
+function geodir_generate_lorem_ipsum($limit = 100, $type = 'characters') {
+	// Predefined Lorem Ipsum text
+	$loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+	// Return based on type
+	if ($type === 'words') {
+		$words = explode(' ', $loremIpsum);
+		$words = array_slice($words, 0, $limit);
+		return implode(' ', $words);
+	} else {
+		// Default to characters
+		return substr($loremIpsum, 0, $limit);
+	}
+}

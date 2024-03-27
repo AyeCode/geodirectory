@@ -6,8 +6,8 @@
  * @package GeoDirectory
  */
 
-$dummy_image_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/freelancers/images';
-$dummy_caticon_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/freelancers/icons';
+$dummy_image_url = 'https://ayecode.b-cdn.net/dummy/freelancers/images';
+$dummy_caticon_url = 'https://ayecode.b-cdn.net/dummy/freelancers/icons';
 
 // Set the dummy categories
 $dummy_categories  = array();
@@ -753,7 +753,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 		'is_required' => true,
 		'required_msg' => __('Enter email to get leads!', 'geodirectory'),
 	);
-	
+
 	// website
     $fields[] = array(
 		'post_type' 			=> $post_type,
@@ -808,20 +808,20 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
     // For Hire
     $fields[] = array(
 		'post_type' => $post_type,
-		'data_type' => 'TINYINT', 
-		'field_type' => 'radio', 
+		'data_type' => 'TINYINT',
+		'field_type' => 'radio',
 		'admin_title' => __('For Hire?', 'geodirectory'),
 		'frontend_desc' => __('Tick "Yes" if you are available for Hire.', 'geodirectory'),
-		'frontend_title' => __('For Hire?', 'geodirectory'), 
-		'htmlvar_name' => 'for_hire', 
+		'frontend_title' => __('For Hire?', 'geodirectory'),
+		'htmlvar_name' => 'for_hire',
 		'sort_order' => '0',
 		'option_values' => 'Yes/1,No/0',
-		'clabels' => __('For Hire?', 'geodirectory'), 
+		'clabels' => __('For Hire?', 'geodirectory'),
 		'is_active' => '1',
 		'field_icon' => 'fas fa-sitemap'
 	);
 
-	
+
 	// Areas of Expertise
 	$fields[] = array(
 		'post_type' => $post_type,
@@ -880,7 +880,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 			'show_on_pkg' => $package,
 			'clabels' => __('Portfolio link 2', 'geodirectory')
 		);
-	
+
 		$fields[] = array(
 					'post_type' => $post_type,
 					'data_type' => 'TEXT',
@@ -977,6 +977,6 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'show_on_pkg' => $package,
 					'clabels' => __('Portfolio link 8', 'geodirectory')
 				);
-						  
+
 	return $fields;
 }
