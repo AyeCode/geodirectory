@@ -7,7 +7,7 @@
  */
 
 // Set the dummy image url
-$dummy_image_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/classifieds/'; // CDN URL will be faster
+$dummy_image_url = 'https://ayecode.b-cdn.net/dummy/classifieds/'; // CDN URL will be faster
 
 // Set the dummy categories
 $dummy_categories = array();
@@ -642,7 +642,7 @@ foreach ( $dummy_posts as $key => $args ) {
 
 function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_id ) {
 	$package = $package_id != '' ? array( $package_id ) : '';
-	
+
 	// price
 	$fields[] = array(
 		'post_type'          => $post_type,

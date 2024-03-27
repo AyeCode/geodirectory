@@ -7,7 +7,7 @@
  */
 
 // Set the dummy image url
-$dummy_image_url = 'https://u8e8u2d3.stackpathcdn.com/dummy/'; // CDN URL will be faster
+$dummy_image_url = 'https://ayecode.b-cdn.net/dummy/'; // CDN URL will be faster
 
 // Set the dummy categories
 $dummy_categories  = array();

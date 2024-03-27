@@ -307,6 +307,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.46 - TBD =
 * GD > Best Of dropdown shows &(ampersand) incorrectly - FIXED
+* Added jobs dummy data type - ADDED
+* Dummy data images CDN url updated - CHANGED
 
 = GeoDirectory v2.3.45 - 2024-03-21 =
 * GD > Post images masonry gallery is not working with BS5 - FIXED
