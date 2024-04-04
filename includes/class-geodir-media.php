@@ -304,12 +304,19 @@ class GeoDir_Media {
 			$file_type = $file_type_arr['type'];
 		} else {
 			$post_type = get_post_type( $post_id );
+
 			// Check for revisions
 			if ( $post_type == 'revision' ) {
 				$post_type = get_post_type( wp_get_post_parent_id( $post_id ) );
 			}
-			$allowed_file_types = self::get_file_fields( $post_type );
-			$allowed_file_types = isset( $allowed_file_types[ $type ] ) ? $allowed_file_types[ $type ] : array( 'jpg', 'jpe', 'jpeg', 'gif', 'png', 'bmp', 'ico', 'webp' );
+
+			$cf_file_types = self::get_file_fields( $post_type );
+
+			if ( ! empty( $cf_file_types ) && ! empty( $cf_file_types[ $type ] ) ) {
+				$allowed_file_types = $cf_file_types[ $type ];
+			} else {
+				$allowed_file_types = geodir_image_extensions();
+			}
 
 			if ( $order === 0 && $type == 'post_images' ) {
 				$attachment_id = media_sideload_image( $url, $post_id, $title, 'id' ); // Uses the post date for the upload time /2009/12/image.jpg

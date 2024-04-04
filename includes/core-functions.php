@@ -227,15 +227,7 @@ function geodir_get_search_default_button_text() {
  * @package GeoDirectory
  */
 function geodir_params() {
-	/**
-	 * Filter the allowed image type extensions for post images.
-	 *
-	 * @since 1.4.7.1
-	 *
-	 * @param string $allowed_img_types The image type extensions array.
-	 */
-	$allowed_img_types = apply_filters( 'geodir_allowed_post_image_exts', array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp' ) );
-
+	$allowed_img_types     = geodir_image_extensions();
 	$default_marker_icon   = GeoDir_Maps::default_marker_icon( true );
 	$default_marker_size   = GeoDir_Maps::get_marker_size( $default_marker_icon, array( 'w' => 20, 'h' => 34 ) );
 	$default_marker_width  = $default_marker_size['w'];

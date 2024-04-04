@@ -595,7 +595,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'cat_sort'           => false,
 					'cat_filter'         => false,
 					'extra_fields'       => array(
-						'gd_file_types'     => array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp'),
+						'gd_file_types'     => geodir_image_extensions(),
 						'file_limit'        => 1,
 					),
 					'single_use'         => true,
