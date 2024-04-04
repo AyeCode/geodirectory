@@ -384,7 +384,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 		$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : geodir_design_style();
 
-		if ( $this->is_preview() ) {
+		if ( $this->is_preview() || $options['type'] == 'masonry' ) {
 			$options['ajax_load'] = false;
 		}
 

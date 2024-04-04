@@ -307,6 +307,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.47 - TBD =
 * GD images don't allows .svg images even WP media allows - FIXED
+* GD > Post Images masonry is not working when AJAX load option active - FIXED
 
 = GeoDirectory v2.3.46 - 2024-03-27 =
 * GD > Best Of dropdown shows &(ampersand) incorrectly - FIXED
