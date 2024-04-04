@@ -1,7 +1,7 @@
 === GeoDirectory - WordPress Business Directory Plugin, or Classified Directory ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
-Tags: business directory, listings, directory plugin, classifieds, directory, member directory, company directory, team directory, chamber of commerce business directory, church directory, address book, contact directory, local business directory, listings directory, link directory
+Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 4.5
 Tested up to: 6.5
 Stable tag: 2.3.47
@@ -9,143 +9,140 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Top WordPress Directory plugin Create a Business Directory, Classified Ads Directory, Job Listings Directory, or Member Directory.
+N1 WordPress Business Directory Plugin to create a Local Business Directory, Classified Ads Directory, or Job Listings Board.
 
 == Description ==
 
-GeoDirectory is the leading WordPress Business Directory Plugin. Help businesses everywhere get found through their listings by your Geo directory website visitors. 
+GeoDirectory is the leading WordPress Business Directory Plugin. Help businesses everywhere get found through their listings by your Geo Directory website visitors. 
 
-No matter what you need to build, be it a City Directory, a Job Board, a Real Estate Listings Directory, or a Classifieds Website, GeoDirectory turns any WordPress theme into a robust search network for users. 
+No matter what you need to build, be it a City Directory, a Job Board, a Real Estate listing directory, or a classified website, GeoDirectory turns any WordPress theme into a robust search network for users. 
 
-Add all your business listings at once and tap into an impressive set of blocks, shortcodes and widgets to set up intuitive, location-based website directories. 
+Add all your business listings at once and tap into an impressive set of blocks, shortcodes, and widgets to set up intuitive, location-based website directories. 
  
-Do it all stress-free and in style with 100% compatible WordPress page builders like Gutenberg, Elementor, Beaver Builder, Divi, and Oxygen!
+Do it all stress-free and in style with 100% compatible WordPress page builders like Gutenberg (Kadence WP, Astra, Neve, OceanWP), Elementor, Bricks, Divi, Beaver Builder, and Breakdance!
 
-✅ [Addons](https://wpgeodirectory.com/downloads/category/addons/) ✅ [Themes](https://wpgeodirectory.com/downloads/category/themes/) ✅ [Demos](https://demos.ayecode.io/) ✅ [Docs](https://docs.wpgeodirectory.com/) ✅ [Showcase](https://wpgeodirectory.com/category/showcase/)
+✅ [Demos](https://demos.ayecode.io/) ✅ [Addons](https://wpgeodirectory.com/downloads/category/addons/) ✅ [Themes](https://wpgeodirectory.com/downloads/category/themes/) ✅ [Docs](https://docs.wpgeodirectory.com/) ✅ [Showcase](https://wpgeodirectory.com/category/showcase/)
 
 == ⚡ THE ONLY PROFESSIONAL WORDPRESS BUSINESS DIRECTORY PLUGIN ==
 
-GeoDirectory stands out as the most robust and scalable directory plugin for WordPress, offering advanced features tailored for listing websites. Its intuitive design and extensive customizability make it the top choice for professionals seeking a reliable WordPress directory solution.
+GeoDirectory is WordPress's most robust and scalable directory plugin. It offers advanced features tailored for listing websites. Its intuitive design and extensive customizability make it the top choice for professionals seeking a reliable WordPress directory solution.
 
-== ⚡ TOP RATED WORDPRESS BUSINESS DIRECTORY PLUGIN WITH +500 5 STARS REVIEWS ==
+== ⚡ TOP RATED WORDPRESS BUSINESS DIRECTORY PLUGIN WITH +550 5 STARS REVIEWS ==
 
 = READ WHAT USERS SAY ABOUT OUR WORDPRESS BUSINESS DIRECTORY PLUGIN =
 
->👉 __Fantastic Plugin w/ An Awesome Team Behind It__
+>👉 __Superb plugin!__
 >⭐⭐⭐⭐⭐
->GeoDirectory was exactly the tool that I needed to get my directory needs met. The tool is incredibly powerful with a wide arrange of tools and fantastic integration with BeaverBuilder. The support team was incredibly helpful in navigating any new territory we ran into.
->💁 chimostudios (@chimostudios)
+>Look no further than this plugin for a directory website, it’s fantastic. I looked at Directorist first and spent a good amount of time setting that up to find out their search function only checked the post title and none of the tags or categories. Useless! GeoDirectory of course checks pretty much every field so your users can find every listing with ease.
 
->👉 __Flexible and powerful plugin with amazing support__
->⭐⭐⭐⭐⭐
->I switched from another directory listing plugin to GeoDirectory a couple of weeks ago and I think I'm sticking with GD. Iâ€™m still moving up the learning curve, but I can see that GD could be a powerful plugin for what I'm trying to do. The support has been fantastic so far. The support team is very responsive and they really try to resolve any issues. They were already helpful answering support tickets that I raised even before I bought my GD membership.
->💁 njsamsatli (@njsamsatli)
+But that’s a relatively small plus point. The main selling point is the customisation you can achieve. You’re able to build your own layout using a page builder and insert the various fields wherever you see fit. It’s so flexible and if you run into a support issue, the team are always on hand to help with responses in just a few hours (and at weekends).
 
->👉 __Great plugin, wonderful add-ons and fantastic support!!__
->⭐⭐⭐⭐⭐
->Like many others I tried other plugins and even a listing theme, none gave me the options, flexibility and seamless integration with Elementor that GeoDirectory did. I worked with the free core GeoDirectory plugin for awhile (which did everything I needed it to) before I finally pulled the trigger and bought the membership giving me full access to all their add-ons and I'm so very happy I did! The add-ons will take your site to a whole new level. Support is simply the best. Fast, friendly and totally clear. You will never have to open another support ticket to explain the answer to the first ðŸ™‚ GeoDirectory is absolutely brilliant!!
->💁 isla2 (@isla2)
+You will need to invest some money to buy all the necessary addons that make this plugin so powerful and you will need to spend a good amount of time working out how to build it how you want it but it’s well worth it and the results speak for themselves.
 
->👉 __Amazing Directory Plugin__
->⭐⭐⭐⭐⭐
->This is a truly amazing directory plugin. Very solid and extremely configurable. And the most important of all, it works with all themes with minimal css changes (or no changes at all). The free support offered here is fast and accurate. From the 4 plugins i tried, this is the only one that fulfilled my needs.
->💁 dimal (@dimalifragis)
+There is documentation to help you set everything up and I think the team will admit it does lack in places but when you get quick support responses, it’s not an issue.
+
+Overall this is the perfect choice if you’re thinking of building a directory site. No need to look elsewhere.
+>💁 mparsons501979 (@mparsons501979)
 
 == 🔥 OUTSTANDING ELEMENTOR DIRECTORY PLUGIN INTEGRATION 🔥 ==
 
-GeoDirectory is the best Directory Plugin for Elementor. We integrate with the free Elementor Plugin, where you can use our widgets as Elementor Elements. On top of that, we created a super-tight integration with Elementor PRO. 
+GeoDirectory excels as the top Directory Plugin for Elementor, seamlessly integrating with the free Elementor Plugin and Elementor PRO. 
 
-Each GeoDirectory Template is available to customize through the Elementor PRO theme builder. Also, you can feed GeoDirectory Data to Elementor Elements through their Dynamic Data feature. Check the following video to appreciate how easy it is to customize your next business directory templates with GeoDirectory, the best Elementor Directory Plugin.
+Utilize our widgets as Elementor Elements and enjoy a super-tight integration with Elementor PRO. 
+
+Customize GeoDirectory Templates using Elementor PRO's theme builder and leverage GeoDirectory Data with Elementor's Dynamic Data feature. 
+
+Watch this video to see how effortlessly you can customize business directory templates with GeoDirectory, the premier Elementor Directory Plugin.
 
 [youtube https://www.youtube.com/watch?v=fEdOOucOtUg]
 
 == ⚡ BE THE GO-TO GUIDING HAND FOR PROFESSIONALS: SAY HELLO TO THE WORLD'S BEST WORDPRESS BUSINESS DIRECTORY PLUGIN ==
 
-Our dedicated team continuously refines every point of the search process (since 2011!), so your visitors walk away with a productive session on GeoDirectory every time.
+Our dedicated team continuously refines every point of the search process (since 2011!), so your visitors always walk away with a productive session on GeoDirectory.
 
 == ⚡ SCALE YOUR DIRECTORY WITH A RELIABLE, PROFICIENT DATABASE ==
 
-Got millions of listings? Massive traffic? Skip the bugs, lags, and crashes with GeoDirectory â€“ the only WordPress directory plugin capable of taking you to the global scale without friction. Our unparalleled, highly-optimized database structure and queries can handle any scale you throw at it. ALL OTHER PLUGINS WILL FAIL AT THIS, GUARANTEED.
+For millions of listings and massive traffic, choose GeoDirectory—the only WordPress directory plugin built for a global scale without issues. Our superior, optimized database effortlessly handles any scale, where others fail, guaranteed.
 
-== ⚡ ASK AND YOU SHALL RECEIVE â€“ DELIVER SPEEDY RESULTS ==
+== ⚡ ASK AND YOU SHALL RECEIVE - DELIVER SPEEDY RESULTS ==
 
-Get free and paid listings (with the Price Manager add-on) in front of visitors within seconds with our rocket-fast search engine that finds local business listings on demand. With the attractive, easy-to-use user interface and slick back-end configurations, you can make your directory website the staple for high-end results and performance.
+Our rapid search engine instantly delivers local business listings, offering free and paid options with the Price Manager add-on. Featuring a user-friendly interface and efficient back-end settings, our platform ensures top performance for your directory website.
 
 == ⚡ DEVELOPER-FRIENDLY + COUNTLESS OF DIRECTORY THEMES ==
 
 The design of your online directory website is limitless, with a wide array of themes and handy page-builder integrations. Need to add that personal touch? Developers can build on GeoDirectory freely using hooks (actions and filters).
 
-== ⚡ HOW IT WORKS - SET UP OUR FREE WORDPRESS BUSINESS DIRECTORY PLUGIN IN NO TIME ==
+== ⚡ QUICK SETUP GUIDE - FREE WORDPRESS BUSINESS DIRECTORY PLUGIN ==
 
-As one of the top wordpress directory plugins, GeoDirectory is armed with a well-thought-out arsenal of features to make the setup process for your website as easy as possible.
+GeoDirectory, a leading WordPress directory plugin, offers a streamlined setup with its feature-rich toolkit.
 
-1. **Create your local directory**. Build your website quickly using the best WordPress page builders like Gutenberg. Focus on local businesses around a street or in a city with our free version, and gain the ability to *add multiple locations or go global with our premium multi-location add-on*.
+1. **Create your local directory**.  Quickly build with top page builders like Gutenberg, focusing on local or expanding globally with our premium add-on.
 
-2. **Publish your listing submission form**. Use GeoDirectory's intuitive *drag-and-drop form builder* (with over 40 field types + fully customizable form fields as an add-on) to let people add listings to your directory. Business owners can now also add extended operating hours for listings. Design the tabs of your listings as you wish with the tab builder.
+2. **Publish your listing form**.  Allow front-end submissions with GeoDirectory's drag-and-drop form builder, featuring over 40 field types and customizable fields. Include extended operating hours for businesses.
 
-3. **Upload all of your listings at once**. Fill up your online directory effortlessly with a quick *CSV import or export for listings, categories, and reviews*. Conveniently edit your data offline and let everything auto-update with a re-import.
+3. **Bulk upload listings**. Easily populate your directory via CSV for listings, categories, and reviews. Edit offline and auto-update with re-imports.
 
-4. **Tap into 40+ widgets, shortcodes, and blocks to improve the user experience**. Use tools like the *Google Maps and [Analytics](https://wpgeodirectory.com/downloads/google-analytics/) widgets* to help businesses get found quicker and allow them to keep tabs on traffic and user behavior. Multilingual site? GeoDirectory is *[100% WPML compatible](https://wpgeodirectory.com/downloads/wpml-multilingual/)*. You can even *enable user reviews and business inquiries* with form integrations.
+4. **Enhance UX with 40+ widgets, shortcodes, and blocks**. Improve visibility with Google Maps, monitor with Analytics, and support multilingual sites. Enable reviews and inquiries.
 
-5. **Enhance search with advanced filters**. Make it easy for users to find accurate results faster (AJAX Loaded) with *listing filters like proximity (premium add-on), rating, reviews, or date*. Use the new badge system to *highlight certain listings for their status or value* (e.g., featured listings, new listings).
+5. ** Improve search with filters **. Use filters for proximity, rating, and more to accelerate finding the right listings. Use badges to highlight listings.
 
-6. **Moderate your listings with ease**. Keep your listings tidy by approving or rejecting submissions and managing listing categories with our easy-to-use back-end tools.
+6. **Moderate listings smoothly**. Manage submissions and categories efficiently with our back-end tools.
 
-== ⚡ FOR WHAT CAN I USE WORDPRESS BUSINESS DIRECTORY PLUGINS? ==
+== ⚡ USAGE OF WORDPRESS BUSINESS DIRECTORY PLUGINS ==
 
-No matter what kind of business you're in, use our free WordPress directory plugin to turn your WordPress site into a powerful search engine for any domain:
+Transform your WordPress site into a versatile search engine for any sector with our free WordPress directory plugin, suitable for any business:
 
-* **Events Directory** GeoDirectory makes an excellent WordPress event calendar plugin by allowing people to submit listings of upcoming and ongoing events around the city in your directory theme.
+* **Events Directory** Turn your site into an event calendar with GeoDirectory, which is perfect for listing city events.
 
-* **Real Estate Directory** Have a real estate agency or website? Use one of the best real estate directory plugins to showcase your listings of houses, apartments, condos, and more. Manage agent profiles and property stats and display listings with beautiful image galleries.
+* **Real Estate Directory** Display real estate listings, including houses and apartments, and manage agent profiles linking them to their listings.
 
-* **Classifieds Ads Directory** Create a marketplace for classified ads with GeoDirectory. Let people submit ads to sell cars, find a job, or promote a service.
+* **Classifieds Ads Directory** With GeoDirectory, create a marketplace for classified ads for selling cars, job finding, or service promotion.
 
-* **Jobs Directory** Use GeoDirectory to build a job board where businesses can post open positions, and people can search for employment.
+* **Jobs Directory** Build a job board where companies list vacancies and job seekers find opportunities with GeoDirectory.
 
-* **Restaurants Directory** Create an online food directory highlighting the best restaurants around town and detailed menus and visitor reviews.
+* **Restaurants Directory**  Develop an online food directory to feature top restaurants, detailed menus, and reviews.
 
-* **Hotels Directory** Use GeoDirectory to list and manage information about hotels, resorts, bed & breakfasts, and other types of accommodation.
+* **Hotels Directory** List and manage hotels, resorts, and accommodation info with GeoDirectory.
 
-* **Doctors Directory** Listing professionals with GeoDirectory is very easy. Create a directory of doctors and allow users to search them by speciality and proximity.  
+* **Doctors Directory** Easily set up a directory of doctors searchable by specialty and location using GeoDirectory. 
 
-* **Therapists Directory** Just like doctors, you can easily create a directory of Therapists. No matter if they are massage therapists or psychologists.  
+* **Therapists Directory** Create a directory for therapists, from massage professionals to psychologists.
 
-* **Pets Directory** The pet industry is growing at unprecedented speed. Users need a directory to locate veterinarians, pet shops, pet groomers, pet parks and more.  
+* **Pets Directory** Address the booming pet industry's needs with a directory for veterinarians, pet stores, and more.  
 
-* **Church Directory** You can list churches, temples, religious retreats and events. Or create a directory of your church members.
+* **Church Directory** Catalog churches, religious retreats, events, or member directories.
 
-* **Service Directory** A directory of freelancers for digital services similar to Fiverr or one for home service professionals like Angi.co or Homeadvisor.com
+* **Service Directory**A directory for digital freelancers (like Fiverr) or home service pros (like Angi).
 
-* **Travel Directory** If you live in a touristic area, list every attraction that a traveller could visit around your area and provide curated experiences.   
+* **Travel Directory** In touristic areas, list attractions and offer curated experiences.
 
-* **Hiking Trails Directory** This is a subset of a travel directory, but it can also attract local traffic. If hicking is your thing, consider becoming the online expert for this niche. 
+* **Hiking Trails Directory** Target local traffic and niche enthusiasts by listing hiking trails.. 
 
-* **Bars & Nightlife Directory** Another directory niche that can be very profitable and with very high traffic. Listing bars, clubs and discos in your local area can lead to sell tickets for happy hours, concerts, Dj Sets and much more. 
+* **Bars & Nightlife Directory** Drive high traffic and profits by cataloging bars, clubs, and nightlife events, facilitating ticket sales.
 
-* **Software review sites** When the market leader becomes too big, they will be unbundled. Airbnb took over a Craiglist category with short term rentals. Capterra and Trustpilot are becoming huge and soon we will see more specialized software reviews directories. Why not starting yours? 
+* **Software review sites** As niche software review directories emerge in response to expanding market leaders, start your specialized site.
 
-Because GeoDirectory allows you to create any listing's type, each with unique custom fields, you can use GeoDirectory for virtually any kind of directory.
+Because GeoDirectory allows you to create any listing type, each with unique custom fields, you can use GeoDirectory for virtually any kind of directory.
 
 == ⚡ TAKE YOUR BUSINESS DIRECTORY TO NEW HEIGHTS WITH PREMIUM ADD-ONS. ==
 
-Get instant access to Premium Addons that have the power to make your local directory into a money-making global directory toolkit.
+Get instant access to Premium Add-Ons that can turn your local directory into a money-making global directory toolkit.
 
 * [Go wide with the Location Manager](https://wpgeodirectory.com/downloads/location-manager/ "Allows to create a global directory") - Create a global directory with accessible local business information of organizations in different countries, regions, cities, and neighborhoods. 
 
 * [Set listing prices with the Pricing Manager](https://wpgeodirectory.com/downloads/pricing-manager/ "Allows to monetize your directory") - Manage bids, taxes, and invoices for your top business listings with our free [Invoicing Plugin](https://wordpress.org/plugins/invoicing/ "Invoicing plugin for WordPress"). Enable/disable features per price. 
 
-* [Purpose your directory with Custom Post Types](https://wpgeodirectory.com/downloads/custom-post-types/ "Allows to extend your directory categorization") - Create additional content types like events, coupons, and offers to supplement multiple directories and help businesses get noticed. Offer the "locationless" option to filter for online businesses and websites.
+* [Purpose your directory with Custom Post Types](https://wpgeodirectory.com/downloads/custom-post-types/ "Allows to extend your directory categorization") - Create additional content types like events, coupons, and offers to supplement multiple directories and help businesses get noticed. Offer the "location-less" option to filter for online companies and websites.
 
-* [Add events as a business listing option (NOW FREE)](https://wordpress.org/plugins/events-for-geodirectory/ "Adds an events manager to your directory") - Have people submit events and turn your GeoDirectory into a WordPress event calendar plugin. With CPT add-on installed, create as many events post types as needed.
+* [Add events as a business listing option (NOW FREE)](https://wordpress.org/plugins/events-for-geodirectory/ "Adds an events manager to your directory")—Have people submit events and turn your GeoDirectory into a WordPress event calendar plugin. With the CPT add-on installed, create as many event post types as needed.
 
-* [Give viewers a run-down on a company's performance with MultiRatings and Reviews](https://wpgeodirectory.com/downloads/multiratings-and-reviews/ "Allows you to extend your rating and reviews categorization") - Extend the review system allowing multiple rating categories (e.g., service, quality, price), add images to reviews and other cool features.
+* [Give viewers a rundown on a company's performance with MultiRatings and Reviews](https://wpgeodirectory.com/downloads/multiratings-and-reviews/ "Allows you to extend your rating and review categorization") -Extend the review system to allow multiple rating categories (e.g., service, quality, price), add images to reviews, and have other cool features.
 
-* [Enhance search with advanced search filters](https://wpgeodirectory.com/downloads/advanced-search-filters/ "Allows you to extend the search with custom filters") -Turn any custom field into an advanced filter of the search widget for more accurate listings search. Adds AJAX search, smart autocompletes, geo location, and much more.
+* [Enhance search with advanced search filters](https://wpgeodirectory.com/downloads/advanced-search-filters/ "Allows you to extend the search with custom filters") -Turn any custom field into an advanced filter of the search widget for more accurate listings search. Adds AJAX search, smart autocompletes, geo-location, and much more.
 
 * [Build up a priceless community with the Buddypress Integration](https://wpgeodirectory.com/downloads/buddypress-integration/ "integrates Buddypress with GeoDirectory") - Engage users and form a community around your niche and listings with seamless integration with Buddypress (open-source social networking software package).
 
-* [Hand over some editorial power to business owners with the Claim Listing Manager](https://wpgeodirectory.com/downloads/claim-manager/ "Allows users to claim their business") -  Allow professionals to fine-tune their listings, add images, link to events, and show an 'owner-verified' badge on the listing. Now with the force upgrade/paid option.
+* [Hand over some editorial power to business owners with the Claim Listing Manager](https://wpgeodirectory.com/downloads/claim-manager/ "Allows users to claim their business") -  Allow professionals to fine-tune their listings, add images, link to events, and show an 'owner-verified' badge on the listing. Now, with the force upgrade/paid option.
 
 * [Spot & pinpoint businesses easier with Marker Cluster](https://wpgeodirectory.com/downloads/marker-cluster/ "To avoid overcrowded maps") - Avoid cluttered maps by using numbered markers at high zoom levels. Now with super fast server-side clustering!
 
@@ -157,7 +154,7 @@ Get instant access to Premium Addons that have the power to make your local dire
 
 * [Say Goodbye to spam listings with GD reCAPTCH](https://wpgeodirectory.com/downloads/gd-recaptcha/ "Stop spammers!") - Banish spam by adding the No CAPTCHA reCAPTCHA widget to any GeoDirectory form.
 
-* [Manage multiple business locations with Franchise Manager]( https://wpgeodirectory.com/downloads/franchise-manager/ "Franchise Manager") - The faster, smarter way to submit listings on directory pages for business chains or franchises.
+* [Manage multiple business locations with Franchise Manager]( https://wpgeodirectory.com/downloads/franchise-manager/ "Franchise Manager") - The faster, more innovative way to submit listings on directory pages for business chains or franchises.
 
 * [Create saveable lists with List Manager]( https://wpgeodirectory.com/downloads/list-manager/ "List Manager") - Give users the ability to create and save personal lists of businesses or events and make them public to other users for more productive searching.
 
@@ -169,15 +166,15 @@ Get instant access to Premium Addons that have the power to make your local dire
 
 == ⚡ GO PRO - BECOME A MEMBER! ==
 
-Get your hands on all the premium add-ons and themes and create an advanced Geo Directory. Sign up at [wpgeodirectory.com](https://wpgeodirectory.com/downloads/membership/ "Get GeoDirectory membership.").
+Get on all the premium add-ons and themes and create an advanced Geo Directory. Sign up at [wpgeodirectory.com](https://wpgeodirectory.com/downloads/membership/ "Get GeoDirectory membership.").
 
 == ⚡ SUPPORT ==
 
-Get timely and friendly support for the Core Business Directory Plugin and add-ons at our [official website](https://wpgeodirectory.com/support).
+You can get timely and friendly support for the Core Business Directory Plugin and add-ons at our [official website](https://wpgeodirectory.com/support).
 
 == ⚡ WHAT'S NEW IN GEODIRECTORY V2.0? ==
 
-Your friends at AyeCode work to continuously refine the best directory plugin in the market to keep customers happy. Here's what's new in the newest version: 
+Your friends at AyeCode work to continuously refine the best directory plugins in the market to keep customers happy. Here's what's new in the newest version: 
 * Extended Business Hours for listings
 * Tab builder, to design the tabs of your listings as you wish by drag and drop
 * Badge System, for "featured" listings, "new" listings, or to add whatever badge you want to your listings from any custom field.
@@ -188,10 +185,14 @@ Your friends at AyeCode work to continuously refine the best directory plugin in
 
 == ⚡ CHECK OUT OUR DIRECTORY THEMES ==
 
-* [Whoop! A Free Yelp Clone](https://wpgeodirectory.com/downloads/whoop/ "Free Yelp Clone")
-* [Directory Starter - Free Directory Starter Theme](https://wpgeodirectory.com/downloads/directory-starter/ "A Free Starter Theme for custom designed directories")
-* [Supreme Directory - A beautiful city directory](https://wpgeodirectory.com/downloads/supreme-directory/ "A Free Theme for city and local directories")
-* [Listimia - 3rd party premium Business Directory Theme](https://wpgeodirectory.com/downloads/listimia/ "3rd party premium Theme")
+* [Directory Theme](https://wpgeodirectory.com/downloads/directory-theme/ "Directory Theme"). A free Theme to build Business, Events, and City Directories.
+* [Real Estate Theme](https://wpgeodirectory.com/downloads/real-estate-directory-theme/ "Real Estate Theme"). A free Theme to build Real Estate lending directories. 
+* [Job Board Theme](https://wpgeodirectory.com/downloads/job-board-theme/ "Job Board Theme"). A free Theme to build Job Boards and Job Listings Directories. 
+
+Our new Themes are built using our theme framework, Blocklstrap. The Blockstrap Theme combines the new WordPress editor (FSE) with Bootstrap 5
+
+* See all our [WordPress Directory Themes](https://wpgeodirectory.com/downloads/category/themes/ "WordPress Directory Theme") and other templates.
+. 
 
 == ⚡ TOP THEMES & PAGE BUILDERS TUTORIALS ==
 
@@ -226,9 +227,9 @@ The same templates are available for the Kadence Theme with Gutenberg and the Ka
 
 = AUTOMATIC INSTALLATION =
 
-Automatic installation is the easiest option. To automatically install GeoDirectory, log in to your WordPress dashboard, navigate the Plugins menu, and click Add New.
+The easiest option is automatic installation. To automatically install GeoDirectory, log in to your WordPress dashboard, navigate to the Plugins menu, and click Add New.
 
-In the search field, type GeoDirectory, and click Search Plugins. Once you've found our business directory plugin, you install it by clicking Install Now. [GeoDirectory basic installation](https://docs.wpgeodirectory.com/category/7-installation)
+In the search field, type GeoDirectory and click Search Plugins. Once you've found our business directory plugin, install it by clicking Install Now. [GeoDirectory basic installation](https://docs.wpgeodirectory.com/category/7-installation)
 
 = MANUAL INSTALLATION =
 
@@ -236,7 +237,7 @@ The manual installation method involves downloading our Directory plugin and upl
 
 = UPDATING =
 
-Automatic updates should work seamlessly. We always suggest you backup your website before any automated update to avoid unforeseen problems.
+Automatic updates should work seamlessly. We always suggest you back up your website before any automated update to avoid unforeseen problems.
 
 == Frequently Asked Questions ==
 
@@ -265,7 +266,7 @@ Hiking Trails Directory
 City Directory
 And so much more.
 
-But because GeoDirectory allows you to create any listing's type, each with unique custom fields, you can use GeoDirectory as an Event Calendar plugin, Real Estate Plugin, Job Board Plugin, Classified Ads plugin and much more.
+But because GeoDirectory allows you to create any listing type, each with unique custom fields, you can use GeoDirectory as an Event Calendar plugin, Real Estate Plugin, Job Board Plugin, Classified Ads plugin, and much more.
 
 = Can I use GeoDirectory for more than one city =
 
@@ -277,7 +278,7 @@ Absolutely yes, Users can submit their listings from the front end of your websi
 
 = Which theme is compatible with GeoDirectory? =
 
-Any theme is compatible with GeoDirectory, and if you find any bug with a theme, ask for support, and we will fix it.
+Any theme is compatible with GeoDirectory. If you find a bug in a theme, ask for support, and we will fix it.
 
 = Does GeoDirectory work with Elementor and other popular page builders? =
 
@@ -290,16 +291,6 @@ Yes, you can use GeoDirectory for businesses with a physical location and online
 = May I have a free trial of the Premium Add-ons? =
 
 We don't offer free trials, but we have a 30-day money-back guarantee if you are unhappy with our products or service.
-
-== Screenshots ==
-
-1. GeoDirectory Home Page.
-2. GeoDirectory Listings Page.
-3. GeoDirectory Listing Detail Page.
-4. GeoDirectory Search Page.
-5. GeoDirectory Front End Signup Page.
-6. GeoDirectory Front End Listing Submission Page.
-7. GeoDirectory WordPress Admin Page.
 
 == Changelog ==
 
