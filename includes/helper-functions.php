@@ -1402,15 +1402,15 @@ function geodir_file_relative_url( $url, $full_path = false ) {
  * @return bool
  */
 function geodir_is_image_file( $url ) {
-    if ( !empty( $url ) ) {
-        $filetype = wp_check_filetype( $url );
-        
-        if ( !empty( $filetype['ext'] ) && in_array( $filetype['ext'], array( 'jpg', 'jpeg', 'jpe',  'gif',  'png',  'bmp',   'tif',  'tiff', 'ico', 'webp' ) ) ) {
-            return true;
-        }
-    }
-    
-    return false;
+	if ( ! empty( $url ) ) {
+		$filetype = wp_check_filetype( $url );
+
+		if ( !empty( $filetype['ext'] ) && in_array( $filetype['ext'], array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'bmp', 'tif', 'tiff', 'ico', 'webp', 'svg' ) ) ) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /**

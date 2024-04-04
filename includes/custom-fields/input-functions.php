@@ -1915,7 +1915,7 @@ function geodir_cfi_files( $html, $cf ) {
         $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? absint( $extra_fields['file_limit'] ) : 0;
         $file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
 
-        $allowed_file_types = isset( $extra_fields['gd_file_types'] ) ? maybe_unserialize( $extra_fields['gd_file_types'] ) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
+        $allowed_file_types = isset( $extra_fields['gd_file_types'] ) ? maybe_unserialize( $extra_fields['gd_file_types'] ) : geodir_image_extensions();
         $display_file_types = $allowed_file_types != '' ? '.' . implode( ", .", $allowed_file_types ) : '';
         if ( ! empty( $allowed_file_types ) ) {
 			$allowed_file_types = implode( ",", $allowed_file_types );

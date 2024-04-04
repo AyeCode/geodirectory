@@ -1770,6 +1770,59 @@ function geodir_allowed_mime_types() {
 }
 
 /**
+ * Retrieves the list of allowed image extensions.
+ *
+ * @since 2.3.47.
+ *
+ * @return array Array of image extensions.
+ */
+function geodir_image_extensions() {
+	$gd_mime_types = geodir_allowed_mime_types();
+
+	$image_exts = ! empty( $gd_mime_types['Image'] ) ? array_keys( $gd_mime_types['Image'] ) : array();
+
+	/**
+	 * Filters the list of allowed image extensions.
+	 *
+	 * @since 2.3.47.
+	 *
+	 * @param array $image_exts Array of image extensions.
+	 */
+	return apply_filters( 'geodir_allowed_post_image_exts', $image_exts );
+}
+
+/**
+ * Retrieves the list of allowed image mime types.
+ *
+ * @since 2.3.47.
+ *
+ * @return array Array of image mime types.
+ */
+function geodir_image_mime_types() {
+	$gd_mime_types = geodir_allowed_mime_types();
+
+	$mime_types = ! empty( $gd_mime_types['Image'] ) ? array_values( $gd_mime_types['Image'] ) : array();
+
+	if ( in_array( 'image/jpeg', $mime_types ) ) {
+		$mime_types[] = 'image/jpe';
+		$mime_types[] = 'image/jpg';
+	}
+
+	if ( ! empty( $mime_types ) ) {
+		$mime_types = array_unique( $mime_types );
+	}
+
+	/**
+	 * Filters the list of allowed image mime types.
+	 *
+	 * @since 2.3.47.
+	 *
+	 * @param array $mime_types Array of image mime types.
+	 */
+	return apply_filters( 'geodir_allowed_image_mime_types', $mime_types );
+}
+
+/**
  * Retrieve list of user display name for user id.
  *
  * @since 1.5.0
