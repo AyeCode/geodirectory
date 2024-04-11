@@ -3265,7 +3265,7 @@ class GeoDir_Compatibility {
 	 * @return string The template path.
 	 */
 	public static function elementor_template_include( $template ) {
-		if ( $page_id = (int) self::gd_page_id() ) {
+		if ( defined( 'ELEMENTOR_VERSION' ) && class_exists( '\Elementor\Plugin' ) && ( $page_id = (int) self::gd_page_id() ) ) {
 			$elementor_plugin = \Elementor\Plugin::$instance;
 			$document = $elementor_plugin->documents->get_doc_for_frontend( $page_id );
 
