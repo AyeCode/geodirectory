@@ -835,3 +835,6 @@ $dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' po
 [gd_output_location location='listing']
 [gd_post_content key='post_content' limit='60' max_height='120']
 [gd_archive_item_section type='close' position='right']";
+
+
+

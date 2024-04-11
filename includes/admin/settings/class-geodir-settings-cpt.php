@@ -85,7 +85,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			global $current_section;
 
 			//echo '###';
-			
+
 			$cpt = self::sanatize_post_type( $_POST );
 			//print_r( $_POST );
 			//echo $current_section;
@@ -104,7 +104,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			if(apply_filters('geodir_post_type_save_bypass', false,$cpt,$current_section)){
 				return;
 			}
-			
+
 			$post_types = geodir_get_option('post_types', array());
 			if ( empty( $post_types ) ) {
 				$post_types = $cpt;
@@ -223,7 +223,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'desc_tip' => true,
 					'advanced' => true,
 					'value'	   => $post_type_values['page_add'],
-					'view_page_args' => array( 
+					'view_page_args' => array(
 						'listing_type' => $post_type
 					),
 					'args'     => array(
@@ -658,7 +658,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					)
 				),
 				$cpt_page_settings
-				) 
+				)
 			);
 
 			//set_current_values()
@@ -811,7 +811,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				'comments',
 				'revisions'
 			);
-			$output[$post_type]['taxonomies'] = array( 
+			$output[$post_type]['taxonomies'] = array(
 				$post_type . "category",
 				$post_type . "_tags"
 			);

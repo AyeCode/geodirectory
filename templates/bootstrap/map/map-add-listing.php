@@ -374,6 +374,11 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                     if(getState && getState == "Stoke-on-Trent" ){
                         getState = 'Staffordshire';
                     }
+
+					// remove Council from region names
+					if(getState){
+						getState = getState.replace(" Council", "");
+					}
                 }
 
             } else {

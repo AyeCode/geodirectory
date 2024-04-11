@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.10';
+		public $version = '0.2.11';
 
 		/**
 		 * Class textdomain.
@@ -1427,6 +1427,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			}
 
+			$output .= $prefix . ' .link-'.esc_attr($type).' {color: var(--bs-'.esc_attr($type).'-rgb) !important;}';
 			$output .= $prefix . ' .link-'.esc_attr($type).':hover {color: rgba(var(--bs-'.esc_attr($type).'-rgb), .8) !important;}';
 
 			//  buttons
