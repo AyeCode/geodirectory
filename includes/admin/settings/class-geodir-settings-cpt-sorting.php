@@ -122,13 +122,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 						<?php
 						$sort_options = self::custom_sort_options( self::$post_type );
 
+
 						if(!empty($sort_options)){
 							foreach ( $sort_options as $key => $val ) {
 								$val = stripslashes_deep( $val ); // strip slashes
 
-								$check_html_variable = self::field_exists( $val['htmlvar_name'], self::$post_type );
-								$display             = '';//$check_html_variable ? ' style="display:none;"' : '';
-								//print_r($val);
+								$display             = '';
 								?>
 
 								<li class="col px-1" <?php echo $display; ?>>
@@ -387,13 +386,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 *
 		 * @return WP_Error
 		 */
-		public static function field_exists( $htmlvar_name, $post_type ) {
+		public static function field_exists( $htmlvar_name, $post_type, $sort = 'asc' ) {
 			global $wpdb;
 
 			$check_html_variable = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT htmlvar_name FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND post_type = %s",
-					array( $htmlvar_name, $post_type )
+					"SELECT htmlvar_name FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND post_type = %s AND sort = %s",
+					array( $htmlvar_name, $post_type, $sort )
 				)
 			);
 
@@ -623,7 +622,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			$field = self::sanatize_custom_field( $field );
 
 			// Check field exists.
-			$exists = self::field_exists($field->htmlvar_name,$field->post_type);
+			$exists = self::field_exists($field->htmlvar_name,$field->post_type, $field->sort );
 
 			if ( is_wp_error( $exists ) ) {
 				return new WP_Error( 'failed', $exists->get_error_message() );

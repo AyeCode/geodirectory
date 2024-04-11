@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.1.36' );
+	define( 'SUPER_DUPER_VER', '1.1.37' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2072,11 +2072,11 @@ window.onload = function() {
 	setTimeout(function() {
 		sd_auto_recover_blocks_fallback();
 	}, 20000);
-	
+
 	setTimeout(function() {
 		sd_auto_recover_blocks_fallback();
 	}, 30000);
-	
+
 	setTimeout(function() {
 		sd_auto_recover_blocks_fallback();
 	}, 60000);
@@ -2407,7 +2407,7 @@ new MutationObserver(() => {
 							if ( $args[$k + '_lg'] !== undefined && $args[$k + '_lg'] !== '' ) { if($v == null && $v_md == null){ $classes.push( $args[$k + '_lg'].replace('-lg','') ); }else{$classes.push( $args[$k + '_lg'] ); } }
 
 						}else{
-							if ( $key == 'font_size' && $args[ $key ] == 'custom' ) {
+							if ( $key == 'font_size' && ( $args[ $key ] == 'custom' || $args[ $key ] === '0' ) ) {
 							 return;
 							}
 							if ( $args[$key] !== undefined && $args[$key] !== '' ) { $classes.push($args[$key]); }
@@ -2481,20 +2481,20 @@ jQuery(function() {
 						icon: <?php echo $this->get_block_icon( $this->options['block-icon'] );?>,//'<?php echo isset( $this->options['block-icon'] ) ? esc_attr( $this->options['block-icon'] ) : 'shield-alt';?>', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 						supports: {
 							<?php
+							if(!isset($this->options['block-supports']['renaming'])){
+								$this->options['block-supports']['renaming'] = false;
+							}
 							if ( isset( $this->options['block-supports'] ) ) {
 								echo $this->array_to_attributes( $this->options['block-supports'] );
 							}
 							?>
 						},
-						<?php
-						if ( isset( $this->options['block-label'] ) ) {
-						?>
 						__experimentalLabel( attributes, { context } ) {
-                            return <?php echo $this->options['block-label']; ?>;
+							var visibility_html = attributes && attributes.visibility_conditions ? ' &#128065;' : '';
+							var metadata_name = attributes && attributes.metadata && attributes.metadata.name ? attributes.metadata.name : '<?php echo esc_attr( addslashes( $this->options['name'] ) ); ?>';
+							var label_name = <?php echo !empty($this->options['block-label']) ? $this->options['block-label'] : "'" . esc_attr( addslashes( $this->options['name'] ) ) . "'"; ?>;
+                            return metadata_name ? metadata_name + visibility_html  : label_name + visibility_html;
                         },
-                        <?php
-                        }
-                        ?>
 						category: '<?php echo isset( $this->options['block-category'] ) ? esc_attr( $this->options['block-category'] ) : 'common';?>', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 						<?php if ( isset( $this->options['block-keywords'] ) ) {
 						echo "keywords : " . $this->options['block-keywords'] . ",";
@@ -2928,7 +2928,6 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
                             ?>
 
 
-
 							return [
 
 								el(wp.blockEditor.BlockControls, {key: 'controls'},
@@ -3087,6 +3086,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 								el('<?php echo esc_attr($block_edit_wrap_tag); ?>', wp.blockEditor.useBlockProps({
 									dangerouslySetInnerHTML: {__html: onChangeContent()},
 									className: props.className,
+									<?php //if(isset($this->arguments['visibility_conditions'])){ echo 'dataVisibilityConditionSD: props.visibility_conditions ? true : false,';} //@todo we need to implement this in the other outputs also ?>
 									style: {'minHeight': '30px'}
 								}))
 								<?php
@@ -3114,6 +3114,11 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 
 							foreach($this->arguments as $key => $args){
                                // if($args['type']=='tabs'){continue;}
+
+                               // don't add metadata arguments
+                               if (substr($key, 0, 9 ) === 'metadata_') {
+								   continue;
+                               }
 							?>
 							if (attr.hasOwnProperty("<?php echo esc_attr( $key );?>")) {
 								if ('<?php echo esc_attr( $key );?>' == 'html') {
@@ -3451,6 +3456,12 @@ el('div',{className: 'bsui'},
 				if ( $args['type'] == 'number' ) {
 					$onchange = "props.setAttributes({ $key: $key ? Number($key) : '' } )";
 				}
+
+				if (substr($key, 0, 9 ) === 'metadata_') {
+					$real_key = str_replace('metadata_','', $key );
+					$onchange = "props.setAttributes({ metadata: { $real_key: $key } } )";
+					$value     = "props.attributes.metadata && props.attributes.metadata.$real_key ? props.attributes.metadata.$real_key : ''";
+				}
 			}
 //			else if ( $args['type'] == 'popup' ) {
 //				$type = 'TextControl';
@@ -3655,7 +3666,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 	let uploads = JSON.parse('['+props.attributes.$key+']');
 	let images = [];
 	uploads.map((upload, index) => (
-		images.push( el('div',{ className: 'col p-2', draggable: 'true', 'data-index': index }, 
+		images.push( el('div',{ className: 'col p-2', draggable: 'true', 'data-index': index },
 			el('img', {
 				src: (upload.sizes && upload.sizes.thumbnail ? upload.sizes.thumbnail.url : upload.url),
 				style: { maxWidth:'100%', background: '#ccc', pointerEvents:'none' }
@@ -4451,7 +4462,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					?>
 					<div class='bsui sd-argument' data-argument='<?php echo esc_attr( $args['row']['key'] ); ?>' data-element_require='<?php echo ( ! empty( $args['row']['element_require'] ) ? $this->convert_element_require( $args['row']['element_require'] ) : '' ); ?>'>
 					<?php if ( ! empty( $args['row']['title'] ) ) { ?>
-					<?php 
+					<?php
 						if ( isset( $args['row']['icon'] ) ) {
 							$args['row']['icon'] = '';
 						}
@@ -4915,7 +4926,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 									'name'        => 'bsvc_rule_BSVCINDEX',
 									'label'       => __( 'Rule', 'ayecode-connect' ),
 									'placeholder' => __( 'Select Rule...', 'ayecode-connect' ),
-									'class'       => 'bsvc_rule form-select-sm no-select2',
+									'class'       => 'bsvc_rule form-select-sm no-select2 mw-100',
 									'options'     => sd_visibility_rules_options(),
 									'default'     => '',
 									'value'       => '',
@@ -4939,7 +4950,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 										'name'        => 'bsvc_gd_field_BSVCINDEX',
 										'label'       => __( 'FIELD', 'ayecode-connect' ),
 										'placeholder' => __( 'FIELD', 'ayecode-connect' ),
-										'class'       => 'bsvc_gd_field form-select-sm no-select2',
+										'class'       => 'bsvc_gd_field form-select-sm no-select2 mw-100',
 										'options'     => sd_visibility_gd_field_options(),
 										'default'     => '',
 										'value'       => '',
@@ -4961,7 +4972,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 										'name'        => 'bsvc_gd_field_condition_BSVCINDEX',
 										'label'       => __( 'CONDITION', 'ayecode-connect' ),
 										'placeholder' => __( 'CONDITION', 'ayecode-connect' ),
-										'class'       => 'bsvc_gd_field_condition form-select-sm no-select2',
+										'class'       => 'bsvc_gd_field_condition form-select-sm no-select2 mw-100',
 										'options'     => sd_visibility_field_condition_options(),
 										'default'     => '',
 										'value'       => '',
@@ -5032,7 +5043,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'        => 'bsvc_output',
 					'label'       => __( 'What should happen if rules met.', 'ayecode-connect' ),
 					'placeholder' => __( 'Default Output', 'ayecode-connect' ),
-					'class'       => 'bsvc_output form-select-sm no-select2',
+					'class'       => 'bsvc_output form-select-sm no-select2 mw-100',
 					'options'     => sd_visibility_output_options(),
 					'default'     => '',
 					'value'       => '',
@@ -5052,7 +5063,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'            => 'bsvc_page',
 					'label'           => __( 'Page Content', 'ayecode-connect' ),
 					'placeholder'     => __( 'Select Page ID...', 'ayecode-connect' ),
-					'class'           => 'bsvc_page form-select-sm no-select2',
+					'class'           => 'bsvc_page form-select-sm no-select2 mw-100',
 					'options'         => sd_template_page_options(),
 					'default'         => '',
 					'value'           => '',
@@ -5068,7 +5079,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'        => 'bsvc_tmpl_part',
 					'label'       => __( 'Template Part', 'ayecode-connect' ),
 					'placeholder' => __( 'Select Template Part...', 'ayecode-connect' ),
-					'class'       => 'bsvc_tmpl_part form-select-sm no-select2',
+					'class'       => 'bsvc_tmpl_part form-select-sm no-select2 mw-100',
 					'options'     => sd_template_part_options(),
 					'default'     => '',
 					'value'       => '',
@@ -5087,7 +5098,7 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
 					'name'             => 'bsvc_message_type',
 					'label'            => __( 'Custom Message Type', 'ayecode-connect' ),
 					'placeholder'      => __( 'Default (none)', 'ayecode-connect' ),
-					'class'            => 'bsvc_message_type form-select-sm no-select2',
+					'class'            => 'bsvc_message_type form-select-sm no-select2 mw-100',
 					'options'          => sd_aui_colors(),
 					'default'          => '',
 					'value'            => '',

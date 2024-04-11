@@ -292,12 +292,26 @@ Yes, you can use GeoDirectory for businesses with a physical location and online
 
 We don't offer free trials, but we have a 30-day money-back guarantee if you are unhappy with our products or service.
 
+== Screenshots ==
+
+1. Geo Directory Home Page.
+2. Geo Directory Listings Page.
+3. Geo Directory Listing Detail Page.
+4. Geo Directory Search Page.
+5. Geo Directory Front End Signup Page.
+6. Geo Directory Front End Listing Submission Page.
+7. Geo Directory WordPress Admin Page.
+
 == Changelog ==
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.3.48 - 2024-04-11 =
+* UK regions can sometime contain "Council", we now remove this by default - CHANGED
+* SD and AUI packages updated to latest - UPDATED
+
 = GeoDirectory v2.3.47 - 2024-04-04 =
-* GD images don't allows .svg images even WP media allows - FIXED
+* GD images don't allow .svg images even WP media allows - FIXED
 * GD > Post Images masonry is not working when AJAX load option active - FIXED
 
 = GeoDirectory v2.3.46 - 2024-03-27 =

@@ -326,7 +326,7 @@ class GeoDir_Admin_Dummy_Data {
 	 */
 	public static function create_dummy_posts( $request ) {
 
-		global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$dummy_post_index,$dummy_image_url,$plugin_prefix, $dummy_categories, $dummy_custom_fields, $dummy_posts,$dummy_sort_fields,$dummy_page_templates;
+		global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$dummy_post_index,$dummy_image_url,$plugin_prefix, $dummy_categories, $dummy_custom_fields, $dummy_posts,$dummy_sort_fields,$dummy_page_templates,$dummy_advanced_search_fields,$cpt_changes;
 
 		$city_bound_lat1 = $request['city_bound_lat1'];
 		$city_bound_lng1 = $request['city_bound_lng1'];
@@ -348,7 +348,9 @@ class GeoDir_Admin_Dummy_Data {
 		$dummy_sort_fields = array();
 		$dummy_posts = array();
 		$dummy_page_templates = array();
+		$dummy_advanced_search_fields = array();
 		$dummy_image_url = '';
+		$cpt_changes = array();
 		foreach ( $data_types as $key => $val ) {
 			if ( $key == $data_type ) {
 				$total_count = $val['count'];
@@ -466,6 +468,23 @@ class GeoDir_Admin_Dummy_Data {
 				self::set_page_templates($post_type,$dummy_page_templates);
 			}
 
+			// Maybe insert advanced search filters
+			if ( class_exists( 'GeoDir_Adv_Search_Settings_Cpt_Search' ) && ! empty( $dummy_advanced_search_fields ) ) {
+				$as = new GeoDir_Adv_Search_Settings_Cpt_Search();
+				foreach ( $dummy_advanced_search_fields as $advanced_search_field ) {
+					$exists = $as::field_exists( $advanced_search_field['htmlvar_name'], $post_type );
+					if ( ! $exists ) {
+						$as::save_field( $advanced_search_field );
+					}
+				}
+			}
+
+
+			// maybe update CPT names
+			if ( $update_templates && !empty($cpt_changes)) {
+				self::update_cpt( $post_type, $cpt_changes );
+			}
+
 			return true;
 
 		} else { // if index is not 0 then we are starting on posts.
@@ -491,6 +510,31 @@ class GeoDir_Admin_Dummy_Data {
 			delete_transient( 'cached_dummy_images' );
 			flush_rewrite_rules();
 		}
+	}
+
+	/**
+	 * @param $post_type
+	 * @param $cpt_changes
+	 *
+	 * @return void
+	 */
+	public static function update_cpt( $post_type, $cpt_changes ) {
+		$post_types = geodir_get_option('post_types', array());
+
+		// bail if not a GD CPT
+		if(empty($post_types[$post_type])){
+			return;
+		}
+
+		$cpt_changes_escaped[$post_type]  = map_deep( $cpt_changes, 'sanitize_text_field' );
+
+		if ( ! empty( $cpt_changes_escaped ) ) {
+			$post_types = array_replace_recursive($post_types,$cpt_changes_escaped);
+//			print_r($post_types);exit;
+			//Update custom post types
+			geodir_update_option( 'post_types', $post_types );
+		}
+
 	}
 
 	/**
