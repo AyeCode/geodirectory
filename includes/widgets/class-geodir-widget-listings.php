@@ -852,6 +852,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			)
 		);
 
+
+		// sanitize title_tag
+		$instance['title_tag'] = in_array( $instance['title_tag'], array( 'h2', 'h3' ), true ) ? esc_attr( $instance['title_tag'] ) : 'h3';
+
 		ob_start();
 
 		$this->output_html( $widget_args, $instance );

@@ -609,8 +609,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		 */
 		$options = wp_parse_args( $args, $defaults );
 
-		//      print_r($args);
-		//      print_r($options);
+		// sanitize tag
+		$options['title_tag'] = in_array( $options['title_tag'], array( 'h2', 'h3', 'h4', 'h5', 'h6', 'span' ), true ) ? esc_attr( $options['title_tag'] ) : 'h4';
 
 		if ( empty( $options['card_color'] ) ) {
 			$options['card_color'] = $defaults['card_color'];}
@@ -787,6 +787,10 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'shadow'              => '',
 			)
 		);
+
+		// sanitize tag
+		$args['title_tag'] = in_array( $args['title_tag'], array( 'h2', 'h3', 'h4', 'h5', 'h6', 'span' ), true ) ? esc_attr( $args['title_tag'] ) : 'h4';
+
 
 		$sort_by    = isset( $args['sort_by'] ) && in_array( $args['sort_by'], array( 'az', 'count' ) ) ? sanitize_text_field( $args['sort_by'] ) : 'count';
 		$cpt_filter = empty( $args['no_cpt_filter'] ) ? true : false;
