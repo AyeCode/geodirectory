@@ -217,19 +217,12 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 			$instance['font_size_class'] = 'h1';
 		}
 
+		// sanitize tag
+		$instance['tag'] = in_array( $instance['tag'], array( 'h1', 'h2', 'h3', 'div' ), true ) ? esc_attr( $instance['tag'] ) : 'h1';
+
 		$design_style = geodir_design_style();
 		$block_preview = $this->is_block_content_call();
 		$output = '';
-//		if ( $this->is_preview() ) {
-//			return $output;
-//		}
-
-		// No GD page
-//		if ( ! geodir_is_geodir_page() && !$block_preview ) {
-//			return;
-//		}
-
-
 
 		// Title container class
 		$container_class = 'geodir-page-title-wrap geodir-page-title-' . sanitize_html_class( $instance['tag'] );

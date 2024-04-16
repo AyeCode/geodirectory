@@ -39,14 +39,14 @@ class GeoDir_REST_Post_Tags_Controller extends GeoDir_REST_Terms_Controller {
 		if ( ! empty( $schema['properties']['id'] ) ) {
 			$data['id'] = (int) $item->term_id;
 		}
-		
+
 		if ( ! empty( $schema['properties']['name'] ) ) {
 			$data['name'] = $item->name;
 		}
 
 		if ( ! empty( $schema['properties']['slug'] ) ) {
 			$data['slug'] = $item->slug;
-		}		
+		}
 
 		if ( ! empty( $schema['properties']['taxonomy'] ) ) {
 			$data['taxonomy'] = $this->taxonomy;

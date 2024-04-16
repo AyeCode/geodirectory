@@ -323,6 +323,10 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 		 */
 		$args = wp_parse_args( $args, $defaults );
 
+		// sanitize heading_tag
+		$allowed_tags = array( 'h2', 'h3', 'h4' );
+		$args['heading_tag'] = in_array( $args['heading_tag'], $allowed_tags, true ) ? esc_attr( $args['heading_tag'] ) : 'h2';
+
 		// Check if we have been here before
 		$tabs_array = ! empty( $gd_single_tabs_array ) ? $gd_single_tabs_array : array();
 

@@ -222,25 +222,25 @@ class GeoDir_AJAX {
 
 			echo geodir_get_template_html( $template, $tmpl_args );
 		} else {
-			echo "<style>.lity-show #" . $prefix . "set_address_button,.lity-show .TopLeft,.lity-show .TopRight,.lity-show .BottomRight,.lity-show .BottomLeft{display:none}.lity-show .geodir_map_container{margin-top:0 !important}</style>";
+			echo "<style>.lity-show #" . esc_attr( $prefix ) . "set_address_button,.lity-show .TopLeft,.lity-show .TopRight,.lity-show .BottomRight,.lity-show .BottomLeft{display:none}.lity-show .geodir_map_container{margin-top:0 !important}</style>";
 
 			include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
 		}
 		?>
-		<input type="hidden" id="<?php echo $prefix . 'latitude'; ?>">
-		<input type="hidden" id="<?php echo $prefix . 'longitude'; ?>">
+		<input type="hidden" id="<?php echo esc_attr( $prefix ) . 'latitude'; ?>">
+		<input type="hidden" id="<?php echo esc_attr( $prefix ) . 'longitude'; ?>">
 		<?php
 		if( $design_style ) {
 			?>
 			<div class="text-right text-end">
 			<button type="button" class="btn btn-link" data-dismiss="modal"><?php _e("Cancel","geodirectory");?></button>
 			<button class="btn btn-primary"
-			        onclick="if(jQuery('#<?php echo $prefix . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo $prefix; ?>', [jQuery('#<?php echo $prefix . 'latitude'; ?>').val(), jQuery('#<?php echo $prefix . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
+			        onclick="if(jQuery('#<?php echo esc_attr( $prefix ) . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo esc_attr( $prefix ); ?>', [jQuery('#<?php echo esc_attr( $prefix ) . 'latitude'; ?>').val(), jQuery('#<?php echo esc_attr( $prefix ) . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
 			</div><?php
 		}else{
 			?>
 			<button style="float: right;margin: 10px 0 0 0;"
-			        onclick="if(jQuery('#<?php echo $prefix . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo $prefix; ?>', [jQuery('#<?php echo $prefix . 'latitude'; ?>').val(), jQuery('#<?php echo $prefix . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
+			        onclick="if(jQuery('#<?php echo esc_attr( $prefix ) . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo esc_attr( $prefix ); ?>', [jQuery('#<?php echo esc_attr( $prefix ) . 'latitude'; ?>').val(), jQuery('#<?php echo esc_attr( $prefix ) . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
 			<?php
 		}
 		wp_die();
