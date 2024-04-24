@@ -211,7 +211,7 @@ final class GeoDirectory {
 	 * @return void
 	 */
 	public static function php_version_notice() {
-		echo '<div class="error"><p>' . __( 'Your version of PHP is below the minimum version of PHP required by GeoDirectory. Please contact your host and request that your version be upgraded to 5.3 or later.', 'geodirectory' ) . '</p></div>';
+		echo '<div class="error"><p>' . esc_html__( 'Your version of PHP is below the minimum version of PHP required by GeoDirectory. Please contact your host and request that your version be upgraded to 5.3 or later.', 'geodirectory' ) . '</p></div>';
 	}
 
 	/**

@@ -52,17 +52,16 @@ class GeoDir_Admin_Assets {
 	 * Enqueue styles.
 	 */
 	public function admin_styles() {
-
 		$screen         = get_current_screen();
 		$screen_id      = $screen ? $screen->id : '';
 		$geodir_map_name = GeoDir_Maps::active_map();
 		$page = ! empty( $_GET['page'] ) ? $_GET['page'] : '';
+		$post_type = ! empty( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
 
 		// Register admin styles
 		if ( wp_style_is( 'select2', 'registered' ) ) {
 			wp_deregister_style( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
 		}
-
 
 		wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-admin-css', geodir_plugin_url() . '/assets/css/admin.css', array(), GEODIRECTORY_VERSION);
@@ -88,7 +87,7 @@ class GeoDir_Admin_Assets {
 			}
 
 			wp_enqueue_style( 'geodir-admin-css' );
-			if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page']  != 'gd-settings' ) {
+			if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] != 'gd-settings' && $_REQUEST['page'] != $post_type . '-settings' ) {
 				wp_enqueue_style( 'select2' );
 			}
 
