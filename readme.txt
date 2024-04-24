@@ -309,6 +309,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.3.50 - TBD =
 * Correct leaflet routing icon font family - FIXED
 * CPT settings template field don't have clear setting option - FIXED
+* GD > Listings additional css class(es) attribute is not working - FIXED
 
 = GeoDirectory v2.3.49 - 2024-04-15 =
 * Extra sanitization for shortcode tag selectors, contributor+ user with details template access could potentially output JS code - FIXED/SECURITY
