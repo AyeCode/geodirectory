@@ -1569,7 +1569,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		}
 
 		// wrap class
-		$class .= ' ' . geodir_build_aui_class( $instance );
+		$class .= ' ' . sd_build_aui_class( $instance );
 
 		// preview message
 		$is_preview = $this->is_preview();
