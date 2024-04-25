@@ -1,3 +1,6 @@
+= 0.2.12 - 2024-04-25 =
+* Enhance BS4 to BS5 class replacements - CHANGED
+
 = 0.2.11 - 2024-04-11 =
 * .link-* classes not respecting editor color change - FIXED
 

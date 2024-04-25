@@ -171,7 +171,7 @@ class GeoDir_AJAX {
 	 * @since 2.0.0
 	 */
 	public static function manual_map() {
-		global $geodirectory, $mapzoom, $geodir_manual_map;
+		global $geodirectory, $mapzoom, $geodir_manual_map,$aui_bs5;
 
 		$prefix = isset( $_POST['trigger'] ) ? sanitize_title( geodir_clean( $_POST['trigger'] ) ) : 'geodir_manual_location_';
 		$prefix = esc_attr( $prefix );
@@ -233,7 +233,7 @@ class GeoDir_AJAX {
 		if( $design_style ) {
 			?>
 			<div class="text-right text-end">
-			<button type="button" class="btn btn-link" data-dismiss="modal"><?php _e("Cancel","geodirectory");?></button>
+			<button type="button" class="btn btn-link" data<?php echo $aui_bs5 ? '-bs' : ''; ?>-dismiss="modal"><?php _e("Cancel","geodirectory");?></button>
 			<button class="btn btn-primary"
 			        onclick="if(jQuery('#<?php echo esc_attr( $prefix ) . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo esc_attr( $prefix ); ?>', [jQuery('#<?php echo esc_attr( $prefix ) . 'latitude'; ?>').val(), jQuery('#<?php echo esc_attr( $prefix ) . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
 			</div><?php
