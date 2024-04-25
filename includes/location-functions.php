@@ -941,7 +941,7 @@ function geodir_google_get_gps_from_address( $address, $wp_error = false ) {
 			$gps['longitude'] = $data['results'][0]['geometry']['location']['lng'];
 		} else {
 			if ( $wp_error ) {
-				$gps = new WP_Error( 'geodir-gps-from-address', __( 'Listing has no GPS info, failed to geocode GPS info.', 'geodirectory' ) );
+				$gps = new WP_Error( 'geodir-gps-from-address', wp_sprintf( __( 'Could not retrieve GPS info from Google geocode server for the address %s', 'geodirectory' ), $search_address ) );
 			} else {
 				$gps = false;
 			}
@@ -1079,14 +1079,20 @@ function geodir_osm_get_gps_from_address( $address, $wp_error = false ) {
 			$gps['longitude'] = $details['lon'];
 		} else {
 			if ( $wp_error ) {
-				$gps = new WP_Error( 'geodir-gps-from-address', __( 'Listing has no GPS info, failed to retrieve GPS info from OpenStreetMap Nominatim server.', 'geodirectory' ) );
+				$gps = new WP_Error( 'geodir-gps-from-address', wp_sprintf( __( 'Could not retrieve GPS info from OpenStreetMap server for the address %s', 'geodirectory' ), $search_address ) );
 			} else {
 				$gps = false;
 			}
 		}
 	} else {
+		if ( is_array( $address ) && ! empty( $address['city'] ) && ! empty( $address['zip'] ) ) {
+			unset( $address['city'] );
+
+			return geodir_osm_get_gps_from_address( $address, $wp_error );
+		}
+
 		if ( $wp_error ) {
-			$gps = new WP_Error( 'geodir-gps-from-address', __( 'Failed to retrieve GPS info from OpenStreetMap Nominatim server.', 'geodirectory' ) );
+			$gps = new WP_Error( 'geodir-gps-from-address', wp_sprintf( __( 'Could not retrieve GPS info from OpenStreetMap server for the address %s', 'geodirectory' ), $search_address ) );
 		} else {
 			$gps = false;
 		}

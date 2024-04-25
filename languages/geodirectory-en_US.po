@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.48\n"
+"Project-Id-Version: GeoDirectory 2.3.50\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-11 19:00+0530\n"
-"PO-Revision-Date: 2024-04-11 19:00+0530\n"
+"POT-Creation-Date: 2024-04-25 17:03+0530\n"
+"PO-Revision-Date: 2024-04-25 17:03+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -424,7 +424,7 @@ msgid "Every %d minutes"
 msgstr ""
 
 #: includes/admin/admin-functions.php:30 includes/admin/admin-functions.php:491
-#: includes/admin/class-geodir-admin-assets.php:120
+#: includes/admin/class-geodir-admin-assets.php:119
 #: includes/admin/class-geodir-admin-blocks.php:231
 #: includes/admin/class-geodir-admin-menus.php:108
 #: includes/class-geodir-elementor.php:155 includes/class-geodir-privacy.php:24
@@ -1215,21 +1215,21 @@ msgstr ""
 msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:255
+#: includes/admin/class-geodir-admin-assets.php:254
 #: includes/class-geodir-frontend-scripts.php:917
 msgid "Allowed Files"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:310
+#: includes/admin/class-geodir-admin-assets.php:309
 msgid "Are you sure you want to delete this log?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:325
+#: includes/admin/class-geodir-admin-assets.php:324
 #: includes/admin/views/html-admin-page-status-report.php:32
 msgid "Copying to clipboard failed. Please press Ctrl/Cmd+C to copy."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:326
+#: includes/admin/class-geodir-admin-assets.php:325
 msgid "Copied to clipboard!"
 msgstr ""
 
@@ -1276,7 +1276,7 @@ msgid "if"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:139
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5038
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5031
 msgid "Add Rule"
 msgstr ""
 
@@ -1293,14 +1293,14 @@ msgid "hide"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:170
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4951
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4952
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4944
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4945
 msgid "FIELD"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:194
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4973
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4974
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4966
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4967
 msgid "CONDITION"
 msgstr ""
 
@@ -1403,7 +1403,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dashboard.php:168
 #: includes/widgets/class-geodir-widget-best-of.php:773
-#: includes/widgets/class-geodir-widget-listings.php:1646
+#: includes/widgets/class-geodir-widget-listings.php:1650
 #: includes/widgets/class-geodir-widget-recently-viewed.php:327
 #: templates/bootstrap/map/map.php:55
 msgid "Loading..."
@@ -2114,7 +2114,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-import-export.php:47
 #: includes/admin/views/html-admin-page-status-report.php:327
 #: includes/integrations/bricks/element-image-gallery.php:71
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3057
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3050
 msgid "Settings"
 msgstr ""
 
@@ -5596,7 +5596,7 @@ msgid "Adds a input to set service area in distance."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1292
-#: includes/location-functions.php:1143
+#: includes/location-functions.php:1149
 msgid "Private Address"
 msgstr ""
 
@@ -8701,7 +8701,7 @@ msgstr ""
 #: includes/custom-fields/input-functions.php:1813
 #: includes/custom-fields/input-functions.php:1843
 #: includes/widgets/class-geodir-widget-archive-item-section.php:43
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3828
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3821
 msgid "Close"
 msgstr ""
 
@@ -10699,7 +10699,7 @@ msgstr ""
 #: includes/class-geodir-ajax.php:236 includes/core-functions.php:347
 #: language.php:78
 #: vendor/ayecode/wp-deactivation-survey/wp-deactivation-survey.php:64
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3677
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3670
 msgid "Cancel"
 msgstr ""
 
@@ -11663,7 +11663,7 @@ msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:119
 #: includes/core-functions.php:293
-#: includes/widgets/class-geodir-widget-listings.php:1186
+#: includes/widgets/class-geodir-widget-listings.php:1190
 msgid "Near:"
 msgstr ""
 
@@ -12245,8 +12245,8 @@ msgstr ""
 
 #: includes/class-geodir-post-types.php:226
 #: includes/class-geodir-post-types.php:280
-#: includes/widgets/class-geodir-widget-categories.php:959
-#: includes/widgets/class-geodir-widget-categories.php:1040
+#: includes/widgets/class-geodir-widget-categories.php:963
+#: includes/widgets/class-geodir-widget-categories.php:1044
 #, php-format
 msgid "%s Categories"
 msgstr ""
@@ -13239,7 +13239,7 @@ msgid "You may lose changes if you navigate away now!"
 msgstr ""
 
 #: includes/core-functions.php:340
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3677
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3670
 msgid "Are you sure?"
 msgstr ""
 
@@ -13269,7 +13269,7 @@ msgstr ""
 
 #: includes/core-functions.php:346
 #: includes/widgets/class-geodir-widget-author-actions.php:264 language.php:129
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3677
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3670
 msgid "Delete"
 msgstr ""
 
@@ -14984,21 +14984,19 @@ msgid "Not enough location info for address."
 msgstr ""
 
 #: includes/location-functions.php:944
-msgid "Listing has no GPS info, failed to geocode GPS info."
+#, php-format
+msgid ""
+"Could not retrieve GPS info from Google geocode server for the address %s"
 msgstr ""
 
 #: includes/location-functions.php:1064
 msgid "Failed to reach OpenStreetMap Nominatim server."
 msgstr ""
 
-#: includes/location-functions.php:1082
+#: includes/location-functions.php:1082 includes/location-functions.php:1095
+#, php-format
 msgid ""
-"Listing has no GPS info, failed to retrieve GPS info from OpenStreetMap "
-"Nominatim server."
-msgstr ""
-
-#: includes/location-functions.php:1089
-msgid "Failed to retrieve GPS info from OpenStreetMap Nominatim server."
+"Could not retrieve GPS info from OpenStreetMap server for the address %s"
 msgstr ""
 
 #: includes/post-functions.php:691 includes/post-functions.php:720
@@ -15179,7 +15177,7 @@ msgid "Page ID"
 msgstr ""
 
 #: includes/template-functions.php:1189
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5080
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5073
 msgid "Template Part"
 msgstr ""
 
@@ -15199,7 +15197,7 @@ msgstr ""
 
 #: includes/template-functions.php:1261
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3090
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5081
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5074
 msgid "Select Template Part..."
 msgstr ""
 
@@ -15883,7 +15881,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:736
 #: includes/widgets/class-geodir-widget-best-of.php:765
-#: includes/widgets/class-geodir-widget-listings.php:1674
+#: includes/widgets/class-geodir-widget-listings.php:1678
 msgid "View all"
 msgstr ""
 
@@ -16281,11 +16279,11 @@ msgstr ""
 msgid "No categories found"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:1215
+#: includes/widgets/class-geodir-widget-categories.php:1219
 msgid "CPT Categories"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:1364
+#: includes/widgets/class-geodir-widget-categories.php:1368
 msgid "Expand sub-categories"
 msgstr ""
 
@@ -16853,16 +16851,16 @@ msgstr ""
 msgid "Show center slide and left/right slide with half preview."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1186
+#: includes/widgets/class-geodir-widget-listings.php:1190
 msgid "Me"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1371
+#: includes/widgets/class-geodir-widget-listings.php:1375
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1576
+#: includes/widgets/class-geodir-widget-listings.php:1580
 #: includes/widgets/class-geodir-widget-loop.php:339
 msgid ""
 "This preview shows all content items to give an idea of layout. Dummy data "
@@ -19487,12 +19485,12 @@ msgstr ""
 msgid "List items bottom gap"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-tabs.php:593
+#: includes/widgets/class-geodir-widget-single-tabs.php:597
 #, php-format
 msgid "Demo tab %d"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-tabs.php:596
+#: includes/widgets/class-geodir-widget-single-tabs.php:600
 #, php-format
 msgid "Demo tab content %d."
 msgstr ""
@@ -22548,67 +22546,67 @@ msgstr ""
 msgid "Placeholder for: %s"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:2887
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:2880
 msgid "Placeholder for:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3828
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3821
 msgid "Reset"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3828
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3821
 msgid "Save Rules"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4922
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4915
 msgid "Remove Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4927
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4920
 msgid "Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4928
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4921
 msgid "Select Rule..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4935
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4928
 msgid "Rule:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4996
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4998
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4989
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:4991
 msgid "VALUE TO MATCH"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5010
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5003
 msgid "Select User Roles:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5044
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5037
 msgid "What should happen if rules met."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5045
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5038
 msgid "Default Output"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5064
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5057
 msgid "Page Content"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5065
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5058
 msgid "Select Page ID..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5099
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5092
 msgid "Custom Message Type"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5100
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5093
 msgid "Default (none)"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5123
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5116
 msgid "CUSTOM MESSAGE TO SHOW"
 msgstr ""
