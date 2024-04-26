@@ -7,6 +7,14 @@
 jQuery(function($) {
     // Start polling the form for auto saves
     setTimeout(function() {
+        if (typeof geodir_is_localstorage === 'function' && jQuery("#geodirectory-add-post input#user_login").length && jQuery("#geodirectory-add-post input#user_email").length && geodir_is_localstorage()) {
+            if (localStorage.getItem('geodirUserLogin')) {
+                jQuery("#geodirectory-add-post input#user_login").val(localStorage.getItem('geodirUserLogin'));
+            }
+            if (localStorage.getItem('geodirUserEmail')) {
+                jQuery("#geodirectory-add-post input#user_email").val(localStorage.getItem('geodirUserEmail'));
+            }
+        }
         geodir_auto_save_poll(geodir_get_form_data());
     }, 1);
     /// check validation on blur
@@ -198,6 +206,12 @@ function geodir_auto_save_post() {
     if (window.geodirUploading) {
         return;
     }
+
+    if (typeof geodir_is_localstorage === 'function' && jQuery("#geodirectory-add-post input#user_login").length && jQuery("#geodirectory-add-post input#user_email").length && geodir_is_localstorage()) {
+        localStorage.setItem('geodirUserLogin', jQuery("#geodirectory-add-post input#user_login").val());
+        localStorage.setItem('geodirUserEmail', jQuery("#geodirectory-add-post input#user_email").val());
+    }
+
     var form_data = geodir_get_form_data();
     form_data += "&action=geodir_auto_save_post&target=auto";
     jQuery.ajax({
@@ -234,6 +248,10 @@ function geodir_save_post() {
         url: geodir_params.ajax_url,
         data: form_data, // serializes the form's elements.
         beforeSend: function() {
+            if (typeof geodir_is_localstorage === 'function' && jQuery("#geodirectory-add-post input#user_login").length && jQuery("#geodirectory-add-post input#user_email").length && geodir_is_localstorage()) {
+                localStorage.removeItem('geodirUserLogin');
+                localStorage.removeItem('geodirUserEmail');
+            }
             jQuery('#geodir-add-listing-submit button').html('<i class="fas fa-circle-notch fa-spin"></i> ' + $button_text).addClass('gd-disabled').prop('disabled', true);
         },
         success: function(data) {
