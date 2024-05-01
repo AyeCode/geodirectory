@@ -458,11 +458,13 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$second_wrapper_class = "geodir-image-wrapper";
 			$ul_class = "geodir-post-image";
 			$image_size = isset( $options['image_size'] ) && $options['image_size'] ? $options['image_size'] : 'medium_large';
+			$lightbox_image_size = ! empty( $options['lightbox_image_size'] ) ? $options['lightbox_image_size'] : 'large';
+			$lightbox_image_size = apply_filters( 'geodir_post_images_lightbox_image_size', $lightbox_image_size );
 			$main_wrapper_class .= " geodir-image-sizes-" . $image_size;
 
 			if ( !empty( $options ) ) {
 				// Wrap class
-				$main_wrapper_class .= " " . geodir_build_aui_class( $options );
+				$main_wrapper_class .= " overflow-hidden " . sd_build_aui_class( $options );
 			}
 
 			if ( $options['type'] == 'slider' ) {
@@ -562,6 +564,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				'link_tag_open' => $link_tag_open,
 				'link_tag_close' => $link_tag_close,
 				'image_size' => $image_size,
+				'lightbox_image_size' => $lightbox_image_size,
 				'cover' => $options['cover'],
 				'aspect' => $options['aspect'],
 				'responsive_image_class' => $responsive_image_class
