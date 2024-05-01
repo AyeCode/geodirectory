@@ -310,6 +310,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Switching the package looses login user name & email - CHANGED
 * BS4 lightbox displays blured image in GD Post Images - FIXED
 * Allow to customize lightbox image size via filter - ADDED
+* Post Images rounded setting is not working - FIXED
 
 = GeoDirectory v2.3.50 - 2024-04-25 =
 * Correct leaflet routing icon font family - FIXED

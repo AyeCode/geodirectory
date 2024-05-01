@@ -464,7 +464,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 			if ( !empty( $options ) ) {
 				// Wrap class
-				$main_wrapper_class .= " " . geodir_build_aui_class( $options );
+				$main_wrapper_class .= " overflow-hidden " . sd_build_aui_class( $options );
 			}
 
 			if ( $options['type'] == 'slider' ) {
