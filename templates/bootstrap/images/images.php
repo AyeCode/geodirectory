@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory/Templates
- * @version    2.3.45
+ * @version    2.3.51
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -123,7 +123,7 @@ global $gd_post, $aui_bs5;
 
 			// Image link
 			if ( $link_to == 'lightbox' ) {
-				$link = geodir_get_image_src( $image, 'large' );
+				$link = geodir_get_image_src( $image, $lightbox_image_size );
 			}
 
 			// Check if screenshot link is different
@@ -135,7 +135,7 @@ global $gd_post, $aui_bs5;
 					$link_tag_open_ss = '<a href="%s" class="' . esc_attr( $responsive_image_class ) . '">';
 					$link_tag_close_ss = '</a>';
 				} else if ( $link_screenshot_to == 'lightbox' ) {
-					$link = geodir_get_image_src( $image, 'large' );
+					$link = geodir_get_image_src( $image, $lightbox_image_size );
 					$link_tag_open_ss = '<a href="%s" class="aui-lightbox-image ' . esc_attr( $responsive_image_class ) . '" ' . $lightbox_attrs . '>';
 					$link_tag_close_ss = "<i class=\"fas fa-search-plus  w-auto h-auto\" aria-hidden=\"true\"></i></a>";
 				} else if ( $link_screenshot_to == 'lightbox_url' ) {
