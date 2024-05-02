@@ -1,3 +1,8 @@
+= 0.2.13 - 2024-05-02 =
+* BS4 lightbox displays blurred image - FIXED
+* Fix PHP notice in HEX to RGB conversion - FIXED
+* Outline buttons not using correct text color when user adjusted colors in block themes - FIXED
+
 = 0.2.12 - 2024-04-25 =
 * Enhance BS4 to BS5 class replacements - CHANGED
 
@@ -44,7 +49,7 @@
 
 = 0.1.97 =
 * BS5 removed mb-3 on slider as it was causing padding issues on GD when mixed Single and Slider archives - CHANGED
-* image cover classes are nto vertically centering image - FIXED
+* image cover classes are not vertically centering image - FIXED
 
 = 0.1.96 =
 * BS4 to BS5 font italic class is not working - FIXED
@@ -124,7 +129,7 @@
 
 = 0.1.73 =
 * Conditional field multiselect field don't match for specific option - FIXED
-* Allow to run conditionl fields on custom event trigger - ADDED
+* Allow to run conditional fields on custom event trigger - ADDED
 
 = 0.1.72 =
 * Input now has "size" option: sm, small, lg, large - ADDED
