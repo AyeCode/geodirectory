@@ -1995,9 +1995,13 @@ class GeoDir_Compatibility {
 		}
 
 		// Borlabs Cookie Integration
-		if ( defined( 'BORLABS_COOKIE_VERSION' ) && version_compare( BORLABS_COOKIE_VERSION, '3.0', '<' ) &&  ! is_admin() && geodir_get_option( 'borlabs_cookie' ) ) {
-			add_filter( 'geodir_lazy_load_map', array( __CLASS__, 'borlabs_cookie_setup' ), 999, 1 );
-			add_filter( 'wp_super_duper_widget_output', array( __CLASS__, 'borlabs_cookie_wrap' ), 999, 4 );
+		if ( defined( 'BORLABS_COOKIE_VERSION' ) ) {
+			if ( version_compare( BORLABS_COOKIE_VERSION, '3.0', '<' ) &&  ! is_admin() && geodir_get_option( 'borlabs_cookie' ) ) {
+				add_filter( 'geodir_lazy_load_map', array( __CLASS__, 'borlabs_cookie_setup' ), 999, 1 );
+				add_filter( 'wp_super_duper_widget_output', array( __CLASS__, 'borlabs_cookie_wrap' ), 999, 4 );
+			} else if ( version_compare( BORLABS_COOKIE_VERSION, '3.0', '>=' ) ) {
+				add_filter( 'geodir_lazy_load_map', array( __CLASS__, 'borlabs_cookie_lazy_load_map' ), 99, 1 );
+			}
 		}
 
 		// Kallyas theme Zion page builder
@@ -3953,7 +3957,7 @@ class GeoDir_Compatibility {
 				);
 
 				if ( defined( 'BORLABS_COOKIE_VERSION' ) && version_compare( BORLABS_COOKIE_VERSION, '3.0', '>=' ) ) {
-					$_setting['desc'] = __( 'NOTE: Go to Borlabs Cookie > Settings to enable Borlabs Cookie integration for GeoDirectory maps.', 'geodirectory' );
+					$_setting['desc'] = __( 'NOTE: Go to Borlabs Cookie > Library > Search "GeoDirectory" & install package.', 'geodirectory' );
 					$_setting['custom_attributes'] = array(
 						'disabled' => 'disabled'
 					);
@@ -4000,6 +4004,22 @@ class GeoDir_Compatibility {
 			if ( ! empty( $contentBlockerData ) && ! BorlabsCookie\Cookie\Frontend\Cookies::getInstance()->checkConsent( $cookie_id ) ) {
 				$lazy_load = 'click';
 			}
+		}
+
+		return $lazy_load;
+	}
+
+	/**
+	 * Borlabs Cookie filter lazy load map.
+	 *
+	 * @since 2.3.52
+	 *
+	 * @param string $lazy_load Lazy load type.
+	 * @return string Filtered lazy load map.
+	 */
+	public static function borlabs_cookie_lazy_load_map( $lazy_load = '' ) {
+		if ( $lazy_load && is_admin() && ! wp_doing_ajax() ) {
+			$lazy_load = ''; // Disable lazy load map in backend.
 		}
 
 		return $lazy_load;
