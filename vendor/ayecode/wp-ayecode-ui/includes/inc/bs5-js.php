@@ -639,35 +639,33 @@
 
             // items
             $i = 0;
-            $carousel  += '<div class="carousel-inner">';
+            $carousel += '<div class="carousel-inner">';
             $container.find('.aui-lightbox-image').each(function() {
                 var a = this;
                 var href = jQuery(a).attr('href');
 
                 $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-                $carousel  += '<div class="carousel-item '+ $active+'"><div>';
-
+                $carousel += '<div class="carousel-item '+ $active+'"><div>';
 
                 // image
                 var css_height = window.innerWidth > window.innerHeight ? '90vh' : 'auto';
-                var img = href ? jQuery(a).find('img').clone().attr('src', href ).attr('sizes', '' ).removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML :  jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML;;
-                $carousel  += img;
+                var img = href ? jQuery(a).find('img').clone().attr('src', href ).attr('sizes', '').removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML :  jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('max-height',css_height).get(0).outerHTML;
+                $carousel += img;
                 // captions
                 if(jQuery(a).parent().find('.carousel-caption').length ){
-                    $carousel  += jQuery(a).parent().find('.carousel-caption').clone().removeClass('sr-only').get(0).outerHTML;
+                    $carousel += jQuery(a).parent().find('.carousel-caption').clone().removeClass('sr-only').get(0).outerHTML;
                 }else if(jQuery(a).parent().find('.figure-caption').length ){
-                    $carousel  += jQuery(a).parent().find('.figure-caption').clone().removeClass('sr-only').addClass('carousel-caption').get(0).outerHTML;
+                    $carousel += jQuery(a).parent().find('.figure-caption').clone().removeClass('sr-only').addClass('carousel-caption').get(0).outerHTML;
                 }
-                $carousel  += '</div></div>';
+                $carousel += '</div></div>';
                 $i++;
-
             });
+
             $container.find('.aui-lightbox-iframe').each(function() {
                 var a = this;
 
                 $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-                $carousel  += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
-
+                $carousel += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
 
                 // iframe
                 var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
@@ -692,7 +690,6 @@
                 $carousel += '</a>';
             }
 
-
             $carousel  += '</div>';
 
             var $close = '<button type="button" class="btn-close btn-close-white text-end position-fixed" style="right: 20px;top: 10px; z-index: 1055;" data-bs-dismiss="modal" aria-label="Close"></button>';
@@ -705,7 +702,6 @@
             // enable ajax load
             //gd_init_carousel_ajax();
         }
-
     }
 
     /**
