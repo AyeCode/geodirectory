@@ -902,16 +902,18 @@ function geodir_hhmm_to_bh_minutes( $hm, $day_no = 0 ) {
 	$hours = $hm;
 	$minutes = 0;
 
-    if ( strpos( $hm, ':' ) !== false ) {
-        list( $hours, $minutes ) = explode( ':', $hm );
-    }
+	if ( strpos( $hm, ':' ) !== false ) {
+		list( $hours, $minutes ) = explode( ':', $hm );
+	}
+
+	$hours = geodir_sanitize_float( $hours );
 
 	$diff = 0;
 	if ( $day_no > 0 ) {
 		$diff = ( $day_no - 1 ) * 60 * 24;
 	}
 
-    return ( ( $hours * 60 ) + $minutes ) + $diff;
+	return ( ( $hours * 60 ) + $minutes ) + $diff;
 }
 
 /**
