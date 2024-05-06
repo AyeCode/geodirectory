@@ -316,6 +316,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 			'output'         => '',
 			'tab_style'      => '',
 			'disable_greedy' => '',
+			'heading_tag'    => ''
 		);
 
 		/**
