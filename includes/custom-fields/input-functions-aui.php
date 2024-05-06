@@ -325,7 +325,9 @@ function geodir_cfi_radio( $html, $cf ) {
 
 		if ( ! empty( $option_values_deep ) ) {
 			foreach( $option_values_deep as $option ) {
-				$option_values[$option['value']] = $option['label'];
+				if ( empty( $option['optgroup'] ) ) {
+					$option_values[ $option['value'] ] = $option['label'];
+				}
 			}
 		}
 
