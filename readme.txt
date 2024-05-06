@@ -308,6 +308,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.52 - TBD =
 * AUI radio set should skip showing optgroup from option values - FIXED
+* PHP Warning: Undefined array key "heading_tag" - FIXED
 
 = GeoDirectory v2.3.51 - 2024-05-02 =
 * Switching the package looses login user name & email - CHANGED
