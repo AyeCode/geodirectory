@@ -878,6 +878,11 @@ class GeoDir_AJAX {
 			wp_die( -1 );
 		}
 
+		// defind doing import
+		if( ! defined( 'GEODIR_DOING_IMPORT' ) ){
+			define( 'GEODIR_DOING_IMPORT', true );
+		}
+
 		//Suspend cache additions
 		wp_suspend_cache_addition(true);
 

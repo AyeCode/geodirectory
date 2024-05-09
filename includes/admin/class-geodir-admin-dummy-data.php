@@ -501,6 +501,13 @@ class GeoDir_Admin_Dummy_Data {
 					$post_info['post_status'] = 'publish';
 				}
 
+				// Set all images except first one to be external for speed
+				if( !empty($post_info['post_images'] ) ){
+					for ($i = 1; $i < count($post_info['post_images']); $i++) {
+						$post_info['post_images'][$i] = '#' . $post_info['post_images'][$i];
+					}
+				}
+
 				wp_insert_post( $post_info, true ); // we hook into the save_post hook
 			}
 		}
