@@ -2500,6 +2500,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 */
 		public static function reserved_fields( $post_type ) {
 			$fields = array(
+				'id',
 				'post_id',
 				'_search_title',
 				'post_status',
