@@ -119,6 +119,12 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			'advanced' => false,
 			'group'    => __( 'Title', 'geodirectory' ),
 		);
+
+		if ( $design_style ) {
+			// title styles
+			$arguments = $arguments + geodir_get_sd_title_inputs();
+		}
+
 		$arguments['hide_if_empty']         = array(
 			'title'    => __( 'Hide widget if no posts?', 'geodirectory' ),
 			'type'     => 'checkbox',

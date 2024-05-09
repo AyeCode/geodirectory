@@ -308,7 +308,9 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.52 - TBD =
 * AUI radio set should skip showing optgroup from option values - FIXED
+* GD > Listings block missing title attribute settings - ADDED/FIXED
 * PHP Warning: Undefined array key "heading_tag" - FIXED
+* Dummy data import does not support external images - FIXED
 * Add "id" as reserved field to prevent custom field with id key - CHANGED
 
 = GeoDirectory v2.3.51 - 2024-05-02 =
