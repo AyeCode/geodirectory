@@ -323,14 +323,14 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	}
 
 	/**
-	 * Output the imae slider.
+	 * Output the image slider.
 	 *
 	* @global bool $geodir_carousel_open  Check whether carousel already open.
 	 *
 	 * @param $options
 	 */
 	public function output_images( $options ) {
-		global $post, $gd_post, $geodir_carousel_open;
+		global $post, $gd_post, $geodir_carousel_open, $aui_bs5;
 
 		// options
 		$defaults = array(
@@ -462,9 +462,24 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$lightbox_image_size = apply_filters( 'geodir_post_images_lightbox_image_size', $lightbox_image_size );
 			$main_wrapper_class .= " geodir-image-sizes-" . $image_size;
 
-			if ( !empty( $options ) ) {
+			if ( ! empty( $options ) ) {
+				// rounded & rounded_size don't work together.
+				if ( ! empty( $options['rounded_size'] ) && in_array( $options['rounded_size'], array( 'sm', 'lg' ) ) ) {
+					if ( $aui_bs5 ) {
+						if ( $options['rounded_size'] == 'sm' ) {
+							$options['rounded_size'] = '1';
+						} elseif ( $options['rounded_size'] == 'lg' ) {
+							$options['rounded_size'] = '3';
+						}
+					}
+
+					if ( ! empty( $options['rounded'] ) && in_array( $options['rounded'], array( 'rounded', 'rounded-top', 'rounded-right', 'rounded-bottom', 'rounded-left', 'rounded-circle', 'rounded-pill', 'rounded-0' ) ) ) {
+						$options['rounded_size'] = '';
+					}
+				}
+
 				// Wrap class
-				$main_wrapper_class .= " overflow-hidden " . sd_build_aui_class( $options );
+				$main_wrapper_class .= " " . sd_build_aui_class( $options );
 			}
 
 			if ( $options['type'] == 'slider' ) {
