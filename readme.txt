@@ -306,6 +306,10 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.3.53 - TBD =
+* Elementor container not following GD CSS Hide conditions - FIXED
+* Add to favorite action is not working - FIXED
+
 = GeoDirectory v2.3.52 - 2024-05-09 =
 * AUI radio set should skip showing optgroup from option values - FIXED
 * GD > Listings block missing title attribute settings - ADDED/FIXED
