@@ -730,23 +730,38 @@ add_filter('geodir_custom_field_output_datepicker','geodir_cf_datepicker',10,5);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_text($html,$location,$cf,$p='',$output=''){
+function geodir_cf_text( $html, $location, $cf, $p = '', $output = '' ) {
+	// Check we have the post value
+	if ( is_numeric( $p ) ) {
+		$gd_post = geodir_get_post_info( $p );
+	} else {
+		global $gd_post;
+	}
 
-    // check we have the post value
-    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
-    else{ global $gd_post;}
+	if ( ! is_array( $cf ) && $cf != '' ) {
+		$cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
 
-    if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
-        if(!$cf){return NULL;}
-    }
+		if ( ! $cf ) {
+			return NULL;
+		}
+	}
 
-    // Block demo content
-    if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = __('Some demo text.','geodirectory');
-    }
+	$html_var = $cf['htmlvar_name'];
 
-    $html_var = $cf['htmlvar_name'];
+	// Block demo content
+	if ( geodir_is_block_demo() ) {
+		$value = '';
+
+		if ( ! empty( $cf ) && isset( $cf['data_type'] ) ) {
+			if ( $cf['data_type'] == 'INT' ) {
+				$value = 100;
+			} elseif ( $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) {
+				$value = 100.50;
+			}
+		}
+
+		$gd_post->{$html_var} = $value ? $value : __( 'Some demo text.', 'geodirectory' );
+	}
 
     // Check if there is a location specific filter.
     if(has_filter("geodir_custom_field_output_text_loc_{$location}")){

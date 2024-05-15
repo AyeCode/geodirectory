@@ -480,10 +480,10 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		}
 
 		// bg color
-		if( !empty($args['color']) ){
-			$link_class .= ( $aui_bs5 ? 'bg-' : 'badge-' ) . sanitize_html_class( $args['color'] );
-		}elseif( !empty($args['bg_color']) && $args['type']!='link'){
-			$link_style .= "background:".esc_attr($args['bg_color']).";";
+		if ( ! empty( $args['color'] ) ) {
+			$link_class .= ( $aui_bs5 ? ' bg-' : ' badge-' ) . sanitize_html_class( $args['color'] );
+		} elseif ( ! empty( $args['bg_color'] ) && $args['type'] != 'link' ) {
+			$link_style .= "background:" . esc_attr( $args['bg_color'] ) . ";";
 		}
 
 		// text color
