@@ -177,10 +177,16 @@ class GeoDir_Fast_AJAX {
 			}
 
 			// Page builder plugins
-			if ( in_array( $action, array( 'geodir_ajax_search' ) ) && ( strpos( $plugin, 'elementor' ) !== false || strpos( $plugin, 'kadence' ) !== false || strpos( $plugin, 'bb-custom-attributes' ) !== false || strpos( $plugin, 'bb-plugin' ) !== false || strpos( $plugin, 'bb-theme-builder' ) !== false || strpos( $plugin, 'buddyboss-platform' ) !== false || strpos( $plugin, 'userswp' ) !== false ) || strpos( $plugin, 'fusion-builder' ) !== false || ( ! empty( $_REQUEST['gdbdate'] ) && ( strpos( $plugin, 'invoicing' ) !== false || strpos( $plugin, 'getpaid-wallet' ) !== false ) ) ) {
+			if ( in_array( $action, array( 'geodir_ajax_search' ) ) 
+				&& ( strpos( $plugin, 'elementor' ) !== false || strpos( $plugin, 'kadence' ) !== false || strpos( $plugin, 'bb-custom-attributes' ) !== false || strpos( $plugin, 'bb-plugin' ) !== false || strpos( $plugin, 'bb-theme-builder' ) !== false || strpos( $plugin, 'buddyboss-platform' ) !== false || strpos( $plugin, 'userswp' ) !== false || strpos( $plugin, 'fusion-builder' ) !== false ) 
+				|| ( ! empty( $_REQUEST['gdbdate'] ) && ( strpos( $plugin, 'invoicing' ) !== false || strpos( $plugin, 'getpaid-wallet' ) !== false ) ) 
+				|| ( in_array( $action, array( 'geodir_cpt_search_field_form', 'geodir_cpt_search_save_field' ) ) && ! empty( $_REQUEST['htmlvar_name'] ) && $_REQUEST['htmlvar_name'] == 'gdbdate' && strpos( $plugin, 'invoicing' ) !== false ) 
+			) {
 				$allowed_plugins[] = $plugin;
 				continue;
 			}
+
+			$not_allowed[] = $plugin;
 		}
 
 		$geodir_ajax_allowed_plugins = $allowed_plugins;
@@ -188,6 +194,7 @@ class GeoDir_Fast_AJAX {
 		// Logs
 		//self::_log( $plugins, 'plugins', __FILE__, __LINE__ );
 		//self::_log( $allowed_plugins, 'allowed_plugins', __FILE__, __LINE__ );
+		//self::_log( $not_allowed, 'not_allowed', __FILE__, __LINE__ );
 
 		return $allowed_plugins;
 	}
