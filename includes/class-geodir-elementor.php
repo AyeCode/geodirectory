@@ -64,6 +64,7 @@ class GeoDir_Elementor {
 
 		add_filter('elementor/frontend/section/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
 		add_filter('elementor/frontend/widget/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
+		add_filter('elementor/frontend/container/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
 
 		// archive pages can be broken if full-width or canvas page template used
 		add_action('get_header', array( __CLASS__, 'maybe_filter_archive_content' ), 11 );
