@@ -1406,10 +1406,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		if ( ! empty( $post_ids ) ) {
 			$post__not_in = array();
 			$post__in     = array();
-			$post_ids     = explode( ',', $post_ids );
+			$post_ids     = array_filter( array_map( 'trim', explode( ',', $post_ids ) ) );
 
 			foreach ( $post_ids as $pid ) {
-				$tmp_id = trim( $pid );
+				$tmp_id = $pid;
 				if ( abs( $tmp_id ) != $tmp_id ) {
 					$post__not_in[] = absint( $tmp_id );
 				} else {
