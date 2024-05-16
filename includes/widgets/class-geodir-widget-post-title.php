@@ -172,7 +172,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		 * @param array $args Widget arguments.
 		 * @param object $this The GeoDir_Widget_Post_Title object.
 		 */
-		$title_tag = empty( $instance['tag'] ) ? 'h2' : apply_filters( 'geodir_widget_gd_post_title_tag', $tag, $instance, $args, $this );
+		$title_tag = apply_filters( 'geodir_widget_gd_post_title_tag', $tag, $instance, $args, $this );
 
 		$design_style = geodir_design_style();
 		$classes = '';
@@ -186,7 +186,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 			}
 
 			// wrapper class
-			$wrap_class = geodir_build_aui_class($instance);
+			$wrap_class = sd_build_aui_class($instance);
 			$classes .= " ".$wrap_class;
 
 			if ( !empty( $instance['text_color'] ) ) { $link_class .= "text-".sanitize_html_class($instance['text_color']); }

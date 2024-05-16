@@ -1614,7 +1614,7 @@ function geodir_animate_markers() {
 
 /**
  * Test if browser local storage is available.
- * 
+ *
  * @returns {boolean}
  */
 function geodir_is_localstorage() {

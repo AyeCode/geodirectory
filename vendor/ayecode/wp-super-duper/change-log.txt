@@ -1,3 +1,7 @@
+= 1.1.40 - 2024-05-16 =
+* Block Visibility condition not working for CPT non-supported fields - FIXED
+* Block label dynamic name not working for containers - FIXED
+
 = 1.1.39 - 2024-04-18 =
 * Better block recovery - UPDATED
 

@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-    define( 'SUPER_DUPER_VER', '1.1.39' );
+    define( 'SUPER_DUPER_VER', '1.1.40' );
 
     /**
      * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2484,7 +2484,7 @@ jQuery(function() {
                         },
                         __experimentalLabel( attributes, { context } ) {
                             var visibility_html = attributes && attributes.visibility_conditions ? ' &#128065;' : '';
-                            var metadata_name = attributes && attributes.metadata && attributes.metadata.name ? attributes.metadata.name : '<?php echo esc_attr( addslashes( $this->options['name'] ) ); ?>';
+                            var metadata_name = attributes && attributes.metadata && attributes.metadata.name ? attributes.metadata.name : '';
                             var label_name = <?php echo !empty($this->options['block-label']) ? $this->options['block-label'] : "'" . esc_attr( addslashes( $this->options['name'] ) ) . "'"; ?>;
                             return metadata_name ? metadata_name + visibility_html  : label_name + visibility_html;
                         },
