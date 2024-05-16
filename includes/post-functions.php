@@ -1970,6 +1970,17 @@ function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
 		'extra_fields' => ''
 	);
 
+	$fields['post_type'] = array(
+		'type' => 'custom',
+		'name' => 'post_type',
+		'htmlvar_name' => 'post_type',
+		'frontend_title' => __( 'Post Type', 'geodirectory' ),
+		'field_icon' => 'fas fa-list',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
 	$fields['post_date'] = array(
 		'name' => 'post_date',
 		'htmlvar_name' => 'post_date',
