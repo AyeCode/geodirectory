@@ -310,6 +310,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Elementor container not following GD CSS Hide conditions - FIXED
 * Add to favorite action is not working - FIXED
 * Booking Availability field is not working properly with Fast AJAX - FIXED
+* GD > Post Meta post_type field support added - CHANGED
 
 = GeoDirectory v2.3.52 - 2024-05-09 =
 * AUI radio set should skip showing optgroup from option values - FIXED
