@@ -1,4 +1,7 @@
-= 0.2.14 - 2024-05-09 =
+= 0.2.15 - 2024-05-22  =
+* Checkbox not showing hand cursor on hover - FIXED
+
+= 0.2.14 - 2024-05-09  =
 * Label type top don't have margin to label - FIXED
 * Improvements for aui_lightbox_embed() function - CHANGED
 

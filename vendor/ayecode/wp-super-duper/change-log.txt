@@ -1,3 +1,6 @@
+= 1.1.41 - 2024-05-22 =
+* placeholder.png replaced with inline SVG for better block template compatibility - CHANGED
+
 = 1.1.40 - 2024-05-16 =
 * Block Visibility condition not working for CPT non-supported fields - FIXED
 * Block label dynamic name not working for containers - FIXED
