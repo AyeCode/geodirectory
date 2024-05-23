@@ -83,8 +83,14 @@ class GeoDir_Admin_Dummy_Data {
 
 					// attach the icon
 					if ( ! empty( $category['icon'] ) && isset( $category_return['term_id'] ) ) {
-						$uploaded = (array) GeoDir_Media::get_external_media( $category['icon'] );
 
+						// temp allow svg
+						add_filter( 'upload_mimes', function( $mimes ) {
+							$mimes['svg'] = 'image/svg';
+							return $mimes;
+						} );
+
+						$uploaded = (array) GeoDir_Media::get_external_media( $category['icon'], '', array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp','image/svg') );
 
 						if ( ! empty( $uploaded['error'] ) ) {
 							continue;
@@ -103,12 +109,20 @@ class GeoDir_Admin_Dummy_Data {
 							'post_content'   => '',
 							'post_status'    => 'inherit'
 						);
+
+
 						$attach_id  = wp_insert_attachment( $attachment, $uploaded['file'] );
+
 
 						// you must first include the image.php file
 						// for the function wp_generate_attachment_metadata() to work
 						require_once( ABSPATH . 'wp-admin/includes/image.php' );
 						$attach_data = wp_generate_attachment_metadata( $attach_id, $uploaded['file'] );
+
+						if(empty($attach_data['file']) && isset($uploaded['type']['ext']) && 'svg' == $uploaded['type']['ext'] ){
+							$attach_data['file'] = str_replace($uploads['basedir'],'', $uploaded['file']);
+						}
+
 						wp_update_attachment_metadata( $attach_id, $attach_data );
 
 						if ( isset( $attach_data['file'] ) ) {
