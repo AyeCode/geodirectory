@@ -45,6 +45,13 @@ class GeoDir_Widget_Single_Reviews extends WP_Super_Duper {
 
 		$arguments = array();
 
+		$arguments['tabs_notice'] = array(
+			'type'     => 'notice',
+			'desc'     => __( 'Only ONE instance of reviews will show, if set to show in GD Tabs block, this block may not show.', 'geodirectory' ),
+			'status'   => 'warning',
+			'group'    => __( 'Title', 'geodirectory' ),
+		);
+
 		$arguments['title'] = array(
 			'title'    => __( 'Title:', 'geodirectory' ),
 			'desc'     => __( 'The widget title.', 'geodirectory' ),

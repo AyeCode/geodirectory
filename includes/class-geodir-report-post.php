@@ -110,7 +110,7 @@ class GeoDir_Report_Post {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die(
 				'<h1>' . __( 'You need a higher level of permission.', 'geodirectory' ) . '</h1>' .
-				'<p>' . __( 'Sorry, you are not allowed to mage post reports.', 'geodirectory' ) . '</p>',
+				'<p>' . __( 'Sorry, you are not allowed to manage post reports.', 'geodirectory' ) . '</p>',
 				403
 			);
 		}
@@ -486,19 +486,19 @@ if ( isset( $_REQUEST['resolved'] ) || isset( $_REQUEST['rejected'] ) || isset( 
 	public static function validate_data( $data, $request, $gd_post ) {
 		if ( ! is_wp_error( $data ) ) {
 			if ( empty( $data['user_name'] ) ) {
-				return new WP_Error( 'report_post_validatation_error', __( 'A valid full name is required.', 'geodirectory' ) );
+				return new WP_Error( 'report_post_validation_error', __( 'A valid full name is required.', 'geodirectory' ) );
 			}
 
 			if ( ! ( ! empty( $data['user_email'] ) && is_email( $data['user_email'] ) ) ) {
-				return new WP_Error( 'report_post_validatation_error', __( 'A valid email address is required.', 'geodirectory' ) );
+				return new WP_Error( 'report_post_validation_error', __( 'A valid email address is required.', 'geodirectory' ) );
 			}
 
 			if ( empty( $data['reason'] ) ) {
-				return new WP_Error( 'report_post_validatation_error', __( 'Select reason for reporting the item.', 'geodirectory' ) );
+				return new WP_Error( 'report_post_validation_error', __( 'Select reason for reporting the item.', 'geodirectory' ) );
 			}
 
 			if ( ! empty( $data['user_email'] ) && self::get_item_by( array( 'post_id' => $gd_post->ID, 'user_email' => $data['user_email'], 'status' => '' ) ) ) {
-				return new WP_Error( 'report_post_validatation_error', __( 'You have already reported this item before.', 'geodirectory' ) );
+				return new WP_Error( 'report_post_validation_error', __( 'You have already reported this item before.', 'geodirectory' ) );
 			}
 		}
 

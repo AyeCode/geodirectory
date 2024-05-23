@@ -717,6 +717,11 @@ class GeoDir_Post_Data {
 				do_action( 'geodir_post_saved', $postarr, $gd_post, $post, $update );
 			}
 
+			/**
+			 * @since 2.3.54
+			 */
+			do_action( 'geodir_after_post_save', $result, $postarr, $format, $gd_post, $post, $update );
+
 			// re-hook this function
 			add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 3 );
 		}
