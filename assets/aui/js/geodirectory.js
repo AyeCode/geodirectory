@@ -1095,8 +1095,8 @@ function gd_fav_save(post_id) {
                             $color_value = $el.data("color-off");
                             $text_classes = $el.find('.geodir-fav-text').attr('class');
                             $style = $color_value ? "style='color:" + $color_value + "'" : "";
-                            $el.tooltip('dispose')
-                                .removeClass('geodir-removetofav-icon')
+                            try{$el.tooltip('dispose');} catch(err){}
+                            $el.removeClass('geodir-removetofav-icon')
                                 .addClass('geodir-addtofav-icon')
                                 .attr("title", geodir_params.text_add_fav)
                                 .html('<i ' + $style + ' class="' + $icon + '"></i> <span class="' + $text_classes + '"' + textStyle + '>' + ' ' + (action_text ? action_text : geodir_params.text_fav) + '</span>').tooltip('enable');
@@ -1104,8 +1104,8 @@ function gd_fav_save(post_id) {
                             $color_value = $el.data("color-on");
                             $text_classes = $el.find('.geodir-fav-text').attr('class');
                             $style = $color_value ? "style='color:" + $color_value + "'" : "";
-                            $el.tooltip('dispose')
-                                .removeClass('geodir-addtofav-icon')
+                            try{$el.tooltip('dispose');} catch(err){}
+                            $el.removeClass('geodir-addtofav-icon')
                                 .addClass('geodir-removetofav-icon')
                                 .attr("title", geodir_params.text_remove_fav)
                                 .html('<i ' + $style + ' class="' + $icon + '"></i> <span class="' + $text_classes + '"' + textStyle + '>' + ' ' + (action_text ? action_text : geodir_params.text_unfav) + '</span>').tooltip('enable');

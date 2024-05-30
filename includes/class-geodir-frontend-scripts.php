@@ -285,8 +285,8 @@ class GeoDir_Frontend_Scripts {
 				// Call the geocode function
 				Sgeocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : null;
 
-				if (jQuery('.snear', $form).val() == '' || ( jQuery('.sgeo_lat').val() != '' && jQuery('.sgeo_lon').val() != ''  ) || jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
-					if (jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
+				if (jQuery('.snear', $form).val() == '' || ( jQuery('.sgeo_lat').val() != '' && jQuery('.sgeo_lon').val() != ''  ) || (jQuery('.snear', $form).val() && jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>"))) {
+					if (jQuery('.snear', $form).val() && jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
 						jQuery(".snear", $form).val('');
 					}
 					jQuery($form).trigger("submit");

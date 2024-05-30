@@ -1529,8 +1529,12 @@ class GeoDir_Elementor {
 		// Prevent: Uncaught TypeError: Cannot access offset of type string on string in controls-stack.php
 		if ( ! empty( $dynamic_settings ) ) {
 			foreach ( $dynamic_settings as $dynamic_key => $dynamic_value ) {
-				if ( ! empty( $controls ) && ! empty( $controls[ $dynamic_key ] ) && ! empty( $controls[ $dynamic_key ][ 'dynamic' ] ) && ! empty( $controls[ $dynamic_key ][ 'type' ] ) && $controls[ $dynamic_key ][ 'type' ] == 'url' ) {
-					unset( $dynamic_settings[ $dynamic_key ] );
+				if ( ! empty( $controls ) && ! empty( $controls[ $dynamic_key ] ) && ! empty( $controls[ $dynamic_key ][ 'dynamic' ] ) && ! empty( $controls[ $dynamic_key ][ 'type' ] ) ) {
+					if ( in_array( $controls[ $dynamic_key ][ 'type' ], array( 'url', 'slider' ) ) ) {
+						unset( $dynamic_settings[ $dynamic_key ] );
+					} else if ( ! in_array( $controls[ $dynamic_key ][ 'type' ], array( 'text', 'textarea' ) ) ) {
+						//geodir_error_log( $dynamic_key, $controls[ $dynamic_key ][ 'type' ], __FILE__, __LINE__ ); // Find which type causes error in controls-stack file.
+					}
 				}
 			}
 		}
@@ -1538,6 +1542,7 @@ class GeoDir_Elementor {
 		self::custom_skin_recursive_unset( $dynamic_settings, 'link' ); // We don't need the link options
 
 		$settings = $element->parse_dynamic_settings( $dynamic_settings, $controls ); // @ <- dirty fix for that fugly controls-stack.php  Illegal string offset 'url' error
+
 		if ( empty( $settings ) ) {
 			return;
 		}
