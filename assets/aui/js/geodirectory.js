@@ -65,6 +65,7 @@ jQuery(document).ready(function($) {
         $cInner = $(params.element);
         if (params.slides && parseInt(params.slides) > 1 && !$cInner.closest('.bs-carousel').length) {
             $carousel = $cInner.closest('.carousel');
+            $carousel.parent().addClass('bsui');
             $carousel.addClass('bs-carousel');
         }
         cId = "bs-carousel-" + params.index;
