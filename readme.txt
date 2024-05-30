@@ -308,6 +308,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.55 - TBD =
 * Elementor custom dynamic property causes error on GD template - FIXED
+* GD > Listings carousel not working with elementor template when center slide active - FIXED
 
 = GeoDirectory v2.3.54 - 2024-05-23 =
 * Dummy category icons can now use SVG images - ADDED
