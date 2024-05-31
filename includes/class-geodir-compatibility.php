@@ -534,6 +534,9 @@ class GeoDir_Compatibility {
 		if ( geodir_is_geodir_page() && has_action( 'avada_render_footer' ) ) {
 			add_action( 'avada_render_footer', array( __CLASS__, 'avada_pause_the_content' ), 1 );
 			add_action( 'avada_render_footer', array( __CLASS__, 'avada_resume_the_content' ), 101 );
+
+			add_action( 'awb_remove_third_party_the_content_changes', array( __CLASS__, 'avada_pause_the_content' ), 1 );
+			add_action( 'awb_readd_third_party_the_content_changes', array( __CLASS__, 'avada_resume_the_content' ), 101 );
 		}
 	}
 
