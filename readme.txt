@@ -1,4 +1,4 @@
-=== GeoDirectory - WordPress Business Directory Plugin, or Classified Directory ===
+=== GeoDirectory - WP Business Directory Plugin and Classified Listings Directory ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
@@ -9,11 +9,11 @@ Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-N1 WordPress Business Directory Plugin to create a Local Business Directory, Classified Ads Directory, or Job Listings Board.
+A superb WordPress Business Directory plugin to create a local business directory, classified ads directory, or job listings board.
 
 == Description ==
 
-GeoDirectory is the leading WordPress Business Directory Plugin. Help businesses everywhere get found through their listings by your Geo Directory website visitors. 
+GeoDirectory is an outstanding WordPress Business Directory Plugin. It helps businesses everywhere get found by your Geo Directory website visitors through their listings. 
 
 No matter what you need to build, be it a City Directory, a Job Board, a Real Estate listing directory, or a classified website, GeoDirectory turns any WordPress theme into a robust search network for users. 
 
@@ -27,21 +27,21 @@ Do it all stress-free and in style with 100% compatible WordPress page builders 
 
 GeoDirectory is WordPress's most robust and scalable directory plugin. It offers advanced features tailored for listing websites. Its intuitive design and extensive customizability make it the top choice for professionals seeking a reliable WordPress directory solution.
 
-== ⚡ TOP RATED WORDPRESS BUSINESS DIRECTORY PLUGIN WITH +550 5 STARS REVIEWS ==
+== ⚡ TOP RATED WORDPRESS BUSINESS DIRECTORY PLUGIN WITH +575 5 STARS REVIEWS ==
 
 = READ WHAT USERS SAY ABOUT OUR WORDPRESS BUSINESS DIRECTORY PLUGIN =
 
 >👉 __Superb plugin!__
 >⭐⭐⭐⭐⭐
->Look no further than this plugin for a directory website, it’s fantastic. I looked at Directorist first and spent a good amount of time setting that up to find out their search function only checked the post title and none of the tags or categories. Useless! GeoDirectory of course checks pretty much every field so your users can find every listing with ease.
+>Look no further than this plugin for a directory website, it’s fantastic. I looked at Directorist first and spent a good amount of time setting that up to find out their search function only checked the post title and >none of the tags or categories. Useless! GeoDirectory of course checks pretty much every field so your users can find every listing with ease.
+>
+>But that’s a relatively small plus point. The main selling point is the customization you can achieve. You can build your own layout using a page builder and insert the various fields wherever you see fit. It’s >so flexible and if you run into a support issue, the team are always on hand to help with responses in just a few hours (and at weekends).
 
-But that’s a relatively small plus point. The main selling point is the customisation you can achieve. You’re able to build your own layout using a page builder and insert the various fields wherever you see fit. It’s so flexible and if you run into a support issue, the team are always on hand to help with responses in just a few hours (and at weekends).
-
-You will need to invest some money to buy all the necessary addons that make this plugin so powerful and you will need to spend a good amount of time working out how to build it how you want it but it’s well worth it and the results speak for themselves.
-
-There is documentation to help you set everything up and I think the team will admit it does lack in places but when you get quick support responses, it’s not an issue.
-
-Overall this is the perfect choice if you’re thinking of building a directory site. No need to look elsewhere.
+>You will need to invest some money to buy all the necessary add-ons that make this plugin so powerful, and you will need to spend a good amount of time working out how to build it how you want it, but it’s well worth it, and the results speak for themselves.
+>
+>There is documentation to help you set everything up and I think the team will admit it does lack in places but when you get quick support responses, it’s not an issue.
+>
+>Overall this is the perfect choice if you’re thinking of building a directory site. No need to look elsewhere.
 >💁 mparsons501979 (@mparsons501979)
 
 == 🔥 OUTSTANDING ELEMENTOR DIRECTORY PLUGIN INTEGRATION 🔥 ==
