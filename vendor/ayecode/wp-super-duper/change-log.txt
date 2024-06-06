@@ -1,3 +1,10 @@
+= 1.1.43 - 2024-06-05 =
+* example block attribute now works for block previews - ADDED
+* Block previews now enabled by default (set example as false to disable) - CHANGED
+* viewportWidth can be set in example attribute to set the preview viewport width - ADDED
+* example argument can be set on individual arguments to pass as the example - ADDED
+* `parent` and `allowedBlocks` block arguments now supported - ADDED
+
 = 1.1.41 - 2024-05-22 =
 * placeholder.png replaced with inline SVG for better block template compatibility - CHANGED
 

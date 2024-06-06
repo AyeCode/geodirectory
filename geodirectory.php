@@ -12,7 +12,7 @@
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory - Business Directory Plugin for WordPress.
  * Version: 2.3.55
- * Author: AyeCode - WordPress Business Directory Plugins
+ * Author: AyeCode - WP Business Directory Plugins
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
  * Domain Path: /languages

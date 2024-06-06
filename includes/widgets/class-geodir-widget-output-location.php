@@ -106,7 +106,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 
 
 	    }
-        
+
         parent::__construct( $options );
     }
 
@@ -220,7 +220,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 
 	/**
 	 * Get some dummy data if empty.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function get_dummy_data(){
