@@ -308,6 +308,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.56 - TBD =
 * Avada AWB fly-out menu conflicts on GD archive pages - FIXED
+* Map and Location widget not always setting BS5 classes correctly - FIXED
 
 = GeoDirectory v2.3.55 - 2024-05-30 =
 * Elementor custom dynamic property causes error on GD template - FIXED

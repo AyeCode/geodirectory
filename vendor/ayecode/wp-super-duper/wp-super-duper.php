@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-    define( 'SUPER_DUPER_VER', '1.1.41' );
+    define( 'SUPER_DUPER_VER', '1.1.43' );
 
     /**
      * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2491,28 +2491,55 @@ jQuery(function() {
                         category: '<?php echo isset( $this->options['block-category'] ) ? esc_attr( $this->options['block-category'] ) : 'common';?>', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
                         <?php if ( isset( $this->options['block-keywords'] ) ) {
                         echo "keywords : " . $this->options['block-keywords'] . ",";
+                        }
 
-//						// block hover preview.
-//						$example_args = array();
-//						if(!empty($this->arguments)){
-//							foreach($this->arguments as $key => $a_args){
-//								if(isset($a_args['example'])){
-//									$example_args[$key] = $a_args['example'];
-//								}
-//							}
-//						}
-//						$viewport_width = isset($this->options['example']['viewportWidth']) ? 'viewportWidth: '.absint($this->options['example']['viewportWidth']) : '';
-//						if( isset( $this->options['example'] ) && $this->options['example'] === false ){
-//							// no preview if set to false
-//						}elseif( !empty( $example_args ) ){
-//							echo "example : {attributes:{".$this->array_to_attributes( $example_args )."},$viewport_width},";
-//						}elseif( !empty( $this->options['example'] ) ){
-//							unset($this->options['example']['viewportWidth']);
-//							echo "example : {".$this->array_to_attributes( $this->options['example'] ).$viewport_width."},";
-//						}else{
-//							echo 'example : {'.$viewport_width.'},';
-//						}
 
+                        // block hover preview.
+                        $example_args = array();
+                        if(!empty($this->arguments)){
+                            foreach($this->arguments as $key => $a_args){
+                                if(isset($a_args['example'])){
+                                    $example_args[$key] = $a_args['example'];
+                                }
+                            }
+                        }
+                        $viewport_width = isset($this->options['example']['viewportWidth']) ? 'viewportWidth: '.absint($this->options['example']['viewportWidth']) : '';
+                        $example_inner_blocks = !empty($this->options['example']['innerBlocks']) && is_array($this->options['example']['innerBlocks']) ? 'innerBlocks: ' . wp_json_encode($this->options['example']['innerBlocks']) : '';
+                        if( isset( $this->options['example'] ) && $this->options['example'] === false ){
+                            // no preview if set to false
+                        }elseif( !empty( $example_args ) ){
+                            echo "example : {attributes:{".$this->array_to_attributes( $example_args )."},$viewport_width},";
+                        }elseif( !empty( $this->options['example'] ) ){
+                            unset($this->options['example']['viewportWidth']);
+                            unset($this->options['example']['innerBlocks']);
+                            $example_atts = $this->array_to_attributes( $this->options['example'] );
+                            $example_parts = array();
+                            if($example_atts){
+                                $example_parts[] = rtrim($example_atts,",");
+                            }
+                            if($viewport_width){
+                                $example_parts[] = $viewport_width;
+                            }
+                            if($example_inner_blocks){
+                                $example_parts[] = $example_inner_blocks;
+                            }
+                            if(!empty($example_parts)){
+                                echo "example : {".implode(',', $example_parts)."},";
+                            }
+                        }else{
+                            echo 'example : {viewportWidth: 500},';
+                        }
+
+
+
+                        // limit to parent
+                        if( !empty( $this->options['parent'] ) ){
+                            echo "parent : " . wp_json_encode( $this->options['parent'] ) . ",";
+                        }
+
+                        // limit allowed blocks
+                        if( !empty( $this->options['allowed-blocks'] ) ){
+                            echo "allowedBlocks : " . wp_json_encode( $this->options['allowed-blocks'] ) . ",";
                         }
 
                         // maybe set no_wrap
