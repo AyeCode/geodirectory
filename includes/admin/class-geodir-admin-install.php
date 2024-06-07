@@ -1133,7 +1133,7 @@ CREATE TABLE " . GEODIR_POST_REPORTS_TABLE . " (
 		$columns['_search_title'] = "_search_title text NOT NULL";
 		$columns['post_status'] = "post_status varchar(20) NULL DEFAULT NULL";
 		$columns['post_tags'] = "post_tags text NULL DEFAULT NULL";
-		$columns['post_category'] = "post_category varchar(254) NULL DEFAULT NULL";
+		$columns['post_category'] = "post_category text NULL DEFAULT NULL";
 		$columns['default_category'] = "default_category INT NULL DEFAULT NULL";
 		$columns['featured'] = "featured tinyint(1) NOT NULL DEFAULT '0'";
 		$columns['featured_image'] = "featured_image varchar( 254 ) NULL DEFAULT NULL";

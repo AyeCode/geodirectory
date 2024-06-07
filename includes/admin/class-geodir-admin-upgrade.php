@@ -830,7 +830,7 @@ class GeoDir_Admin_Upgrade {
 				}
 				$columns = array_keys( $fields );
 
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$post_type}category post_category varchar(254) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$post_type}category post_category text NULL DEFAULT NULL;" );
 				if ( in_array( 'is_featured', $columns ) ) {
 					$wpdb->query( "ALTER TABLE {$table} DROP INDEX is_featured" );
 					// Converting the ENUM to TINYINT directly might give unexpected results. So we should start by converting column to a CHAR(1) and then to TINYINT(1).

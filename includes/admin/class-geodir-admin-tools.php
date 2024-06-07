@@ -62,6 +62,11 @@ class GeoDir_Admin_Tools {
 					__( 'This tool will install all the missing GeoDirectory pages. Pages already defined and set up will not be replaced.', 'geodirectory' )
 				),
 			),
+			'merge_missing_terms' => array(
+				'name'    => __( 'Merge Missing Categories', 'geodirectory' ),
+				'button'  => __( 'Run', 'geodirectory' ),
+				'desc'    => __( 'Merge missing listing categories from WP terms relationships.', 'geodirectory' ),
+			),
 			'recount_terms' => array(
 				'name'    => __( 'Term counts', 'geodirectory' ),
 				'button'  => __( 'Run', 'geodirectory' ),
@@ -116,6 +121,16 @@ class GeoDir_Admin_Tools {
 				} else {
 					$message = __( 'No reviews checked.', 'geodirectory' );
 				}
+				break;
+			case 'merge_missing_terms' :
+				$count = geodir_merge_missing_terms();
+
+				if ( $count > 0 ) {
+					$message = wp_sprintf( _n( 'Missing categories merged for %d listing.', 'Missing categories merged for %d listings.', $count, 'geodirectory' ), $count );
+				} else {
+					$message = __( 'No listing found with missing terms.', 'geodirectory' );
+				}
+
 				break;
 			case 'recount_terms' : // TODO
 				$post_types = geodir_get_posttypes();
