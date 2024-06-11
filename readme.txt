@@ -308,6 +308,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.57 - TBD =
 * Tool added to merge missing listing categories from WP relationship terms - ADDED
+* Location type missing causes issue in location replace vars - FIXED
 
 = GeoDirectory v2.3.56 - 2024-06-06 =
 * Avada AWB fly-out menu conflicts on GD archive pages - FIXED
