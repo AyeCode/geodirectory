@@ -2098,6 +2098,88 @@ function sd_get_nofollow_input( $type = 'nofollow', $overwrite = array() ) {
 }
 
 /**
+ * A helper function for width inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function sd_get_width_input( $type = 'width', $overwrite = array() ) {
+
+    $device_size = '';
+    if ( ! empty( $overwrite['device_type'] ) ) {
+        if ( $overwrite['device_type'] == 'Tablet' ) {
+            $device_size = '-md';
+        } elseif ( $overwrite['device_type'] == 'Desktop' ) {
+            $device_size = '-lg';
+        }
+    }
+    $options = array(
+        '' => __('Default', 'ayecode-connect'),
+        'w' . $device_size . '-25' => '25%',
+        'w' . $device_size . '-50' => '50%',
+        'w' . $device_size . '-75' => '75%',
+        'w' . $device_size . '-100' => '100%',
+        'w' . $device_size . '-auto' => 'auto',
+    );
+
+    $defaults = array(
+        'type'     => 'select',
+        'title'    => __( 'Width', 'ayecode-connect' ),
+        'options'  => $options,
+        'default'  => '',
+        'desc_tip' => true,
+        'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
+    );
+
+    $input = wp_parse_args( $overwrite, $defaults );
+
+    return $input;
+}
+
+/**
+ * A helper function for height inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function sd_get_height_input( $type = 'height', $overwrite = array() ) {
+
+    $device_size = '';
+    if ( ! empty( $overwrite['device_type'] ) ) {
+        if ( $overwrite['device_type'] == 'Tablet' ) {
+            $device_size = '-md';
+        } elseif ( $overwrite['device_type'] == 'Desktop' ) {
+            $device_size = '-lg';
+        }
+    }
+    $options = array(
+        '' => __('Default', 'ayecode-connect'),
+        'h' . $device_size . '-25' => '25%',
+        'h' . $device_size . '-50' => '50%',
+        'h' . $device_size . '-75' => '75%',
+        'h' . $device_size . '-100' => '100%',
+        'h' . $device_size . '-auto' => 'auto',
+    );
+
+    $defaults = array(
+        'type'     => 'select',
+        'title'    => __( 'Height', 'ayecode-connect' ),
+        'options'  => $options,
+        'default'  => '',
+        'desc_tip' => true,
+        'group'    => __( 'Wrapper Styles', 'ayecode-connect' ),
+    );
+
+    $input = wp_parse_args( $overwrite, $defaults );
+
+    return $input;
+}
+
+/**
  * @param $type
  * @param $overwrite
  *
@@ -2832,7 +2914,9 @@ function sd_get_class_build_keys() {
 		'h100',
 		'overflow',
 		'scrollbars',
-		'float-MTD'
+        'float-MTD',
+        'height-MTD',
+		'width-MTD'
 	);
 
 	return apply_filters( 'sd_class_build_keys', $keys );

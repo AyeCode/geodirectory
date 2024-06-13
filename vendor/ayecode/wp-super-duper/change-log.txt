@@ -1,3 +1,7 @@
+= 1.1.44 - 2024-06-13 =
+* Width and Height helper functions added - ADDED
+* Undefined array key warning - FIXED
+
 = 1.1.43 - 2024-06-05 =
 * example block attribute now works for block previews - ADDED
 * Block previews now enabled by default (set example as false to disable) - CHANGED

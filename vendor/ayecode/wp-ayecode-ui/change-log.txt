@@ -1,3 +1,6 @@
+= 0.2.16 - 2024-06-13  =
+* Buttons after click when still have :focus can have wrong box-shadow if colour has been changed - FIXED
+
 = 0.2.15 - 2024-05-22  =
 * Checkbox not showing hand cursor on hover - FIXED
 
