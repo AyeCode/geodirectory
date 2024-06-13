@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-    define( 'SUPER_DUPER_VER', '1.1.43' );
+    define( 'SUPER_DUPER_VER', '1.1.44' );
 
     /**
      * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -4382,9 +4382,17 @@ wp.data.select('core/edit-post').__experimentalGetPreviewDeviceType();
                 /** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
                 $title  = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 
-                if(empty($instance['widget_title_tag'])){
+                if ( empty( $instance['widget_title_tag'] ) ) {
+                    if ( ! isset( $args['before_title'] ) ) {
+                        $args['before_title'] = '';
+                    }
+
+                    if ( ! isset( $args['after_title'] ) ) {
+                        $args['after_title'] = '';
+                    }
+
                     $output = $args['before_title'] . $title . $args['after_title'];
-                }else{
+                } else {
                     $title_tag = esc_attr( $instance['widget_title_tag'] );
 
                     // classes
