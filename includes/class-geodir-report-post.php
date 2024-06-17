@@ -315,6 +315,17 @@ if ( isset( $_REQUEST['resolved'] ) || isset( $_REQUEST['rejected'] ) || isset( 
 			'report_post_section_link' => admin_url( 'admin.php?page=gd-settings' )
 		);
 
+		/**
+		 * Skip email send.
+		 *
+		 * @since 2.3.58
+		 */
+		$skip = apply_filters( 'geodir_skip_email_send', false, $email_name, $email_vars );
+
+		if ( $skip === true ) {
+			return;
+		}
+
 		do_action( 'geodir_pre_' . $email_name . '_email', $email_name, $email_vars );
 
 		$subject      = GeoDir_Email::get_subject( $email_name, $email_vars );
