@@ -638,6 +638,17 @@ class GeoDir_Email {
 		$email_vars['to_name']  = geodir_get_client_name( $post->post_author );
 		$email_vars['to_email'] = $recipient;
 
+		/**
+		 * Skip email send.
+		 *
+		 * @since 2.3.58
+		 */
+		$skip = apply_filters( 'geodir_skip_email_send', false, $email_name, $email_vars );
+
+		if ( $skip === true ) {
+			return;
+		}
+
 		do_action( 'geodir_pre_user_publish_post_email', $email_name, $email_vars );
 
 		$subject      = self::get_subject( $email_name, $email_vars );
@@ -756,6 +767,17 @@ class GeoDir_Email {
 		$email_vars['post']     = $post;
 		$email_vars['to_email'] = self::get_admin_email();
 
+		/**
+		 * Skip email send.
+		 *
+		 * @since 2.3.58
+		 */
+		$skip = apply_filters( 'geodir_skip_email_send', false, $email_name, $email_vars );
+
+		if ( $skip === true ) {
+			return;
+		}
+
 		do_action( 'geodir_pre_admin_post_edit_email', $email_name, $email_vars );
 
 		$subject      = self::get_subject( $email_name, $email_vars );
@@ -809,6 +831,17 @@ class GeoDir_Email {
 		$email_vars             = $data;
 		$email_vars['post']     = $post;
 		$email_vars['to_email'] = self::get_admin_email();
+
+		/**
+		 * Skip email send.
+		 *
+		 * @since 2.3.58
+		 */
+		$skip = apply_filters( 'geodir_skip_email_send', false, $email_name, $email_vars );
+
+		if ( $skip === true ) {
+			return;
+		}
 
 		do_action( 'geodir_pre_admin_pending_post_email', $email_name, $email_vars );
 
@@ -868,6 +901,17 @@ class GeoDir_Email {
 		$email_vars['post']     = $post;
 		$email_vars['to_name']  = geodir_get_client_name( $post->post_author );
 		$email_vars['to_email'] = $recipient;
+
+		/**
+		 * Skip email send.
+		 *
+		 * @since 2.3.58
+		 */
+		$skip = apply_filters( 'geodir_skip_email_send', false, $email_name, $email_vars );
+
+		if ( $skip === true ) {
+			return;
+		}
 
 		do_action( 'geodir_pre_user_pending_post_email', $email_name, $email_vars );
 
@@ -973,6 +1017,17 @@ class GeoDir_Email {
 			$email_vars['comment_moderation_link'] = '';
 		}
 
+		/**
+		 * Skip email send.
+		 *
+		 * @since 2.3.58
+		 */
+		$skip = apply_filters( 'geodir_skip_email_send', false, $email_name, $email_vars );
+
+		if ( $skip === true ) {
+			return;
+		}
+
 		do_action( 'geodir_pre_owner_comment_submit_email', $email_name, $email_vars );
 
 		$subject      = self::get_subject( $email_name, $email_vars );
@@ -1044,6 +1099,17 @@ class GeoDir_Email {
 		$email_vars['to_name']  = geodir_get_client_name( $gd_post->post_author );
 		$email_vars['to_email'] = $recipient;
 
+		/**
+		 * Skip email send.
+		 *
+		 * @since 2.3.58
+		 */
+		$skip = apply_filters( 'geodir_skip_email_send', false, $email_name, $email_vars );
+
+		if ( $skip === true ) {
+			return;
+		}
+
 		do_action( 'geodir_pre_owner_comment_approved_email', $email_name, $email_vars );
 
 		$subject      = self::get_subject( $email_name, $email_vars );
@@ -1110,6 +1176,17 @@ class GeoDir_Email {
 		$email_vars['comment']  = $comment;
 		$email_vars['to_name']  = $to_name;
 		$email_vars['to_email'] = $recipient;
+
+		/**
+		 * Skip email send.
+		 *
+		 * @since 2.3.58
+		 */
+		$skip = apply_filters( 'geodir_skip_email_send', false, $email_name, $email_vars );
+
+		if ( $skip === true ) {
+			return;
+		}
 
 		do_action( 'geodir_pre_author_comment_approved_email', $email_name, $email_vars );
 
