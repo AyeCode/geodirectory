@@ -168,7 +168,7 @@ class GeoDir_Media {
 		}
 
 		$metadata = array();
-		$imagesize = getimagesize( $file );
+		$imagesize = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( $file ) : @getimagesize( $file );
 		$metadata['width'] = $imagesize[0];
 		$metadata['height'] = $imagesize[1];
 

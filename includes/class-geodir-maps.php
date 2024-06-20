@@ -96,7 +96,7 @@ class GeoDir_Maps {
 
 		$sizes = array();
 		if ( is_file( $icon ) && file_exists( $icon ) ) {
-			$size = getimagesize( trim( $icon ) );
+			$size = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( trim( $icon ) ) : @getimagesize( trim( $icon ) );
 
 			// Check for .svg image
 			if ( empty( $size ) && preg_match( '/\.svg$/i', $icon ) ) {
