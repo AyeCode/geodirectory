@@ -810,13 +810,13 @@ class GeoDir_Admin_Taxonomies {
 					add_filter( 'wp_check_filetype_and_ext', array( 'GeoDir_Admin_Import_Export', 'set_filetype_and_ext' ), 10, 4 );
 				}
 
-				$image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon, array( 'image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp', 'image/svg' ), array( 'ext' => 'svg', 'type' => 'image/svg' ) );
+				$image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon, array( 'image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp', 'image/avif', 'image/svg' ), array( 'ext' => 'svg', 'type' => 'image/svg' ) );
 
 				if ( ! $has_filter ) {
 					remove_filter( 'wp_check_filetype_and_ext', array( 'GeoDir_Admin_Import_Export', 'set_filetype_and_ext' ), 10, 4 );
 				}
 			} else {
-				$image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon, array( 'image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp' ), array( 'ext' => 'png', 'type' => 'image/png' ) );
+				$image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon, array( 'image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp', 'image/avif' ), array( 'ext' => 'png', 'type' => 'image/png' ) );
 			}
 
 			if ( ! empty($image['url'] ) ) {

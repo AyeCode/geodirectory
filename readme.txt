@@ -308,6 +308,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.58 - TBD =
 * Image slider conflicts with GD Listings carousel on elementor template - FIXED
+* Add AVIF image support - ADDED
 
 = GeoDirectory v2.3.57 - 2024-06-13 =
 * Tool added to merge missing listing categories from WP relationship terms - ADDED

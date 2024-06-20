@@ -48,15 +48,10 @@ class GeoDir_Media {
 
 		switch ( $mime_type ) {
 			case 'image/jpeg':
-				$image = true;
-				break;
 			case 'image/png':
-				$image = true;
-				break;
 			case 'image/gif':
-				$image = true;
-				break;
 			case 'image/webp':
+			case 'image/avif':
 				$image = true;
 				break;
 			default:
@@ -633,7 +628,7 @@ class GeoDir_Media {
 	 *
 	 * @return array|bool|mixed
 	 */
-	public static function get_external_media( $url, $file_name = '', $allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp'),$dangerously_set_filetype = array() ) {
+	public static function get_external_media( $url, $file_name = '', $allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp', 'image/avif'),$dangerously_set_filetype = array() ) {
 		// Gives us access to the download_url() and wp_handle_sideload() functions
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 

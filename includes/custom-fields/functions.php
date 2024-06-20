@@ -625,6 +625,7 @@ function geodir_custom_upload_mimes( $existing_mimes = array() ) {
 	$existing_mimes['docx'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 	$existing_mimes['xlsx'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 	$existing_mimes['webp'] = 'image/webp';
+	$existing_mimes['avif'] = 'image/avif';
 	return $existing_mimes;
 }
 add_filter('geodir_add_custom_sort_options', 'geodir_add_custom_sort_options', 0, 2);

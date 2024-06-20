@@ -550,7 +550,7 @@ function geodir_extra_custom_fields_job_board( $fields, $post_type, $package_id 
 		'clabels'        => __( 'Company Logo', 'geodirectory' ),
 		'field_icon'     => 'far fa-image',
 		'extra'       => array(
-			'gd_file_types'     => array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp'),
+			'gd_file_types'     => array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp','avif'),
 			'file_limit'        => 1,
 		),
 		'single_use'         => true,
