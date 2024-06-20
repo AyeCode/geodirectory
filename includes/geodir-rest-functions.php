@@ -65,6 +65,7 @@ function geodir_rest_allowed_image_mime_types() {
 		'tiff|tif'     => 'image/tiff',
 		'ico'          => 'image/x-icon',
 		'webp'         => 'image/webp',
+		'avif'         => 'image/avif'
 	) );
 }
 

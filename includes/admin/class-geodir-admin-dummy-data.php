@@ -90,7 +90,7 @@ class GeoDir_Admin_Dummy_Data {
 							return $mimes;
 						} );
 
-						$uploaded = (array) GeoDir_Media::get_external_media( $category['icon'], '', array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp','image/svg') );
+						$uploaded = (array) GeoDir_Media::get_external_media( $category['icon'], '', array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp', 'image/avif','image/svg') );
 
 						if ( ! empty( $uploaded['error'] ) ) {
 							continue;
