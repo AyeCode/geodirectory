@@ -14,7 +14,7 @@
     }
   ],
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.6",
     "ayecode/wp-font-awesome-settings": "^1",
     "ayecode/wp-super-duper": "^1.0",
     "ayecode/wp-deactivation-survey": "^1.0",

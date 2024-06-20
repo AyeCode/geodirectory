@@ -644,7 +644,7 @@ function geodir_get_image_dimension( $image_url, $default = array() ) {
 
 	$dimension = array();
 	if ( is_file( $image_url ) && file_exists( $image_url ) ) {
-		$size = @getimagesize( trim( $image_url ) );
+		$size = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( trim( $image_url ) ) : @getimagesize( trim( $image_url ) );
 
 		// Check for .svg image
 		if ( empty( $size ) && preg_match( '/\.svg$/i', $image_url ) ) {
