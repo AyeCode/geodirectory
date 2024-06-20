@@ -306,6 +306,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.3.58 - TBD =
+* Image slider conflicts with GD Listings carousel on elementor template - FIXED
+
 = GeoDirectory v2.3.57 - 2024-06-13 =
 * Tool added to merge missing listing categories from WP relationship terms - ADDED
 * Location type missing causes issue in location replace vars - FIXED

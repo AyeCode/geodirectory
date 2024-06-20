@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory/Templates
- * @version    2.3.51
+ * @version    2.3.58
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -45,7 +45,7 @@ defined( 'ABSPATH' ) || exit;
  * @var string $responsive_image_class
  */
 
-global $gd_post, $aui_bs5;
+global $gd_post, $aui_bs5, $geodir_carousel_open;
 
 ?>
 <div class="<?php echo esc_attr( $main_wrapper_class ); ?>">
@@ -67,7 +67,7 @@ global $gd_post, $aui_bs5;
 	$inner_wrapper_class = '';
 	if ( $type == 'slider' || $type == 'image' ) {
 		$limit_show_row = '';
-		$inner_wrapper_class = 'carousel-inner ' . $limit_show_row;
+		$inner_wrapper_class = ( ! $geodir_carousel_open ? 'carousel-inner ' : '' ) . $limit_show_row;
 	} else if ( $type == 'gallery' || $type == 'masonry' ) {
 		$inner_wrapper_class = 'row row-cols-1 row-cols-md-3 g-2';
 	}
@@ -106,7 +106,11 @@ global $gd_post, $aui_bs5;
 			$link_tag_close_ss = '';
 
 			if ( $type == 'slider' || $type == 'image' ) {
-				echo '<div class="carousel-item' . ( $image_count == 0 ? ' active' : '' ) . '"' . ( $image_count == 0 && $limit_show ? ' style="width:' . (float) $max_width_percent . '%"' : '' ) . '>';
+				if ( $geodir_carousel_open ) {
+					echo '<div ' . ( $image_count == 0 && $limit_show ? 'style="width:' . (float) $max_width_percent . '%"' : '' ) . '>';
+				} else {
+					echo '<div class="carousel-item' . ( $image_count == 0 ? ' active' : '' ) . '"' . ( $image_count == 0 && $limit_show ? ' style="width:' . (float) $max_width_percent . '%"' : '' ) . '>';
+				}
 			} else if( $type == 'gallery' ) {
 				echo '<div class="col' . ( $aui_bs5 ? '' : ' mb-4' ) . '"' . ( $limit_show && $image_count >= $limit_show ? ' style="display:none"' : '' ) . '><div class="card m-0 p-0 overflow-hidden">';
 			} else if ( $type == 'masonry' ) {
