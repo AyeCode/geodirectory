@@ -306,11 +306,12 @@ class GeoDir_Query {
 				 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
 				 */
 				if ( strpos( $clauses['where'], ' HAVING ') === false && strpos( $clauses['groupby'], ' HAVING ') === false ) {
+					$dist = get_query_var( 'dist' ) ? geodir_sanitize_float( get_query_var( 'dist' ) ) : geodir_get_option( 'search_radius', 5 );
+
 					if ( GeoDir_Post_types::supports( $geodir_post_type, 'service_distance' ) ) {
 						$_table = geodir_db_cpt_table( $geodir_post_type );
-						$having = " HAVING distance <= `{$_table}`.`service_distance` ";
+						$having = $wpdb->prepare( " HAVING ( ( `{$_table}`.`service_distance` > 0 AND distance <= `{$_table}`.`service_distance` ) OR ( ( `{$_table}`.`service_distance` <= 0 OR `{$_table}`.`service_distance` IS NULL ) AND distance <= %f ) )", $dist );
 					} else {
-						$dist = get_query_var( 'dist' ) ? geodir_sanitize_float( get_query_var( 'dist' ) ) : geodir_get_option( 'search_radius', 5 );
 						$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
 					}
 
@@ -678,7 +679,7 @@ class GeoDir_Query {
 
 				$latlon = $geodirectory->location->get_latlon();
 				// fake near if we have GPS
-				if ( $snear == '' && $latlon) {
+				if ( $snear == '' && $latlon ) {
 					$snear = ' ';
 				}
 
@@ -714,7 +715,7 @@ class GeoDir_Query {
 					$post_title_where = $s != "" ? $wpdb->prepare( "{$wpdb->posts}.post_title LIKE %s", array( $s ) ) : "1=1";
 					$where .= " AND ( ( $post_title_where $better_search_terms ) $content_where $terms_sql ) AND $wpdb->posts.post_type = '{$post_types}' {$status_where}";
 
-					if ( ! empty( $between ) ) {
+					if ( ! empty( $between ) && ! ( GeoDir_Post_types::supports( $post_types, 'service_distance' ) && $geodirectory->location->get_latlon() ) ) {
 						$where .= $wpdb->prepare( " AND ( latitude BETWEEN %f AND %f ) AND ( longitude BETWEEN %f AND %f ) ", $between['lat1'], $between['lat2'], $between['lon1'], $between['lon2'] );
 					}
 

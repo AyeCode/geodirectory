@@ -1142,14 +1142,15 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 			 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
 			 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
 			 */
-			if ( strpos( $where, ' HAVING ') === false && strpos( $groupby, ' HAVING ') === false &&  strpos( $fields, 'AS distance')) {
+			if ( strpos( $where, ' HAVING ') === false && strpos( $groupby, ' HAVING ') === false &&  strpos( $fields, 'AS distance' ) ) {
+				$dist = get_query_var( 'dist' ) ? geodir_sanitize_float( get_query_var( 'dist' ) ) : geodir_get_option( 'search_radius', 5 );
+				if ( wp_doing_ajax() && ! empty( $wp->query_vars['dist'] ) ) {
+					$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
+				}
+
 				if ( GeoDir_Post_types::supports( $post_type, 'service_distance' ) ) {
-					$having = " HAVING distance <= `{$table}`.`service_distance` ";
+					$having = $wpdb->prepare( " HAVING ( ( `{$table}`.`service_distance` > 0 AND distance <= `{$table}`.`service_distance` ) OR ( ( `{$table}`.`service_distance` <= 0 OR `{$table}`.`service_distance` IS NULL ) AND distance <= %f ) )", $dist );
 				} else {
-					$dist = get_query_var( 'dist' ) ? geodir_sanitize_float( get_query_var( 'dist' ) ) : geodir_get_option( 'search_radius', 5 );
-					if ( wp_doing_ajax() && ! empty( $wp->query_vars['dist'] ) ) {
-						$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
-					}
 					$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
 				}
 
@@ -1394,22 +1395,20 @@ function geodir_function_widget_listings_where( $where ) {
 				}
 
 				if ( $query_part = geodir_gps_query_part( $latitude, $longitude, $table ) ) {
-					$where .= " AND " . $query_part . " <= ";
+					if ( $_dist = get_query_var( 'dist' ) ) {
+						$dist = geodir_sanitize_float( $_dist );
+					} else {
+						$dist = geodir_get_option( 'search_radius', 5 );
+					}
+
+					if ( wp_doing_ajax() && ! empty( $wp->query_vars['dist'] ) ) {
+						$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
+					}
 
 					if ( GeoDir_Post_types::supports( $post_type, 'service_distance' ) ) {
-						$where .= "`service_distance`";
+						$where .= $wpdb->prepare( " AND ( ( `service_distance` > 0 AND " . $query_part . " <= `service_distance` ) OR ( ( `service_distance` <= 0 OR `service_distance` IS NULL ) AND " . $query_part . " <= %f ) )", $dist );
 					} else {
-						if ( $_dist = get_query_var( 'dist' ) ) {
-							$dist = geodir_sanitize_float( $_dist );
-						} else {
-							$dist = geodir_get_option( 'search_radius', 5 );
-						}
-
-						if ( wp_doing_ajax() && ! empty( $wp->query_vars['dist'] ) ) {
-							$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
-						}
-
-						$where .= $wpdb->prepare( "%f", $dist );
+						$where .= $wpdb->prepare( " AND " . $query_part . " <= %f", $dist );
 					}
 				}
 			}
