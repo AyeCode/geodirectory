@@ -276,10 +276,11 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 			 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
 			 */
 			if ( strpos( $where, ' HAVING ' ) === false && strpos( $group_by, ' HAVING ' ) === false && strpos( $fields, 'AS distance' ) ) {
+				$distance = ! empty( $request['dist'] ) ? geodir_sanitize_float( $request['dist'] ) : geodir_get_option( 'search_radius', 5 );
+
 				if ( GeoDir_Post_types::supports( $request['post_type'], 'service_distance' ) ) {
-					$having = " HAVING distance <= `pd`.`service_distance` ";
+					$having = $wpdb->prepare( " HAVING ( ( `pd`.`service_distance` > 0 AND distance <= `pd`.`service_distance` ) OR ( ( `pd`.`service_distance` <= 0 OR `pd`.`service_distance` IS NULL ) AND distance <= %f ) )", $distance );
 				} else {
-					$distance = ! empty( $request['dist'] ) ? geodir_sanitize_float( $request['dist'] ) : geodir_get_option( 'search_radius', 5 );
 					$having = $wpdb->prepare( " HAVING distance <= %f ", $distance );
 				}
 
