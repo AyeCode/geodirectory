@@ -927,13 +927,40 @@ class GeoDir_Compatibility {
 		$object_post_type = get_post_type( (int) $object_id );
 
 		// Bail when non related post type.
-		if ( in_array( $object_post_type, array( 'attachment', 'nav_menu_item', 'card_templates', 'advanced_ads','product' ) ) ) {
+		if ( in_array( $object_post_type, array( 'post', 'attachment', 'nav_menu_item', 'card_templates', 'advanced_ads','product', 'tve_notifications', 'thrive_typography' ) ) ) {
 			return $metadata;
 		}
 
 		// Bail when non related meta_key.
 		if ( ! empty( $meta_key ) && is_scalar( $meta_key ) && in_array( $meta_key, array( 'amazonS3_cache' ) ) ) {
 			return $metadata;
+		}
+
+		// Thrive Theme
+		if ( function_exists( 'thrive_theme' ) && $single && ! is_admin() && $meta_key == 'layout_data' && in_array( $object_post_type, array( 'thrive_template', 'thrive_layout' ) ) && ( geodir_is_page( 'search' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = GeoDir_Compatibility::gd_page_id() ) ) {
+			$thrive_meta = thrive_post( $page_id )->get_visibility_meta();
+
+			if ( ! empty( $thrive_meta ) && is_array( $thrive_meta ) && ( empty( $metadata ) || is_array( $metadata ) ) ) {
+				$_metadata = array();
+
+				if ( ! empty( $metadata[0] ) && is_array( $metadata[0] ) ) {
+					$_metadata = $metadata[0];
+				}
+
+				if ( ! empty( $thrive_meta['sidebar'] ) && $thrive_meta['sidebar'] == 'hide' ) {
+					$_metadata['hide_sidebar'] = true;
+				}
+
+				if ( ! empty( $_metadata ) ) {
+					if ( ! is_array( $metadata ) ) {
+						$metadata = array();
+					}
+
+					$metadata[0] = $_metadata;
+
+					return $metadata;
+				}
+			}
 		}
 
 		// Standard WP fields
@@ -1043,9 +1070,10 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'znhg_kallyas_theme_config' ) && ( strpos( $meta_key, 'zn-' ) === 0 || strpos( $meta_key, 'zn_' ) === 0 || strpos( $meta_key, '_zn_' ) === 0 ) || in_array( $meta_key, array( 'show_header', 'show_footer' ) ) ) // Kallyas theme Zion Builder
 			 || ( defined( 'ASTRA_THEME_VERSION' ) && ( strpos( $meta_key, 'ast-' ) === 0 ) ) // Astra theme
 			 || ( defined( 'UAGB_FILE' ) && ( strpos( $meta_key, 'spectra' ) === 0 || strpos( $meta_key, '_uag_' ) === 0 || strpos( $meta_key, '_uagb_' ) === 0 ) ) // Spectra
-			  || ( defined( 'BRICKS_VERSION' ) && strpos( $meta_key, '_bricks_' ) === 0 ) // Bricks Theme
+			 || ( defined( 'BRICKS_VERSION' ) && strpos( $meta_key, '_bricks_' ) === 0 ) // Bricks Theme
+			 || ( function_exists( 'thrive_theme' ) && ( strpos( $meta_key, 'tve_' ) === 0 || strpos( $meta_key, '_tve_' ) === 0 || strpos( $meta_key, 'thrive_' ) === 0 ) || in_array( $meta_key, array( 'default', 'layout', 'layout_data', 'structure', 'sidebar-type', 'sticky-sidebar', 'off-screen-sidebar', 'comments', 'sections', 'icons', 'style', 'format', 'tag', 'no_search_results', 'primary_template', 'secondary_template', 'variable_template', 'sidebar_on_left', 'hide_sidebar', 'content_width' ) ) ) // Thrive Theme
 			 ) && geodir_is_gd_post_type( $object_post_type ) ) {
-			if ( geodir_is_page( 'detail' ) ) {
+			if ( geodir_is_page( 'single' ) ) {
 				$template_page_id = geodir_details_page_id( $object_post_type );
 			} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
 				$template_page_id = geodir_archive_page_id( $object_post_type );
@@ -1912,6 +1940,12 @@ class GeoDir_Compatibility {
 			// SEOPress
 			if ( GeoDir_SEO::seopress_enabled() ) {
 				add_filter( 'seopress_titles_the_title_priority', array( __CLASS__, 'seopress_titles_the_title_priority' ), 10, 1 );
+			}
+
+			// Thrive Theme
+			if ( function_exists( 'thrive_theme' ) ) {
+				add_action( 'geodir_widget_loop_before', array( __CLASS__, 'thrive_loop_setup_wp_query' ), 1, 2 );
+				add_filter( 'thrive_theme_section_default_content', array( __CLASS__, 'thrive_theme_section_default_content' ), 21, 3 );
 			}
 		} else {
 			// SEOPress
@@ -4229,5 +4263,53 @@ class GeoDir_Compatibility {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Adjust WP_Query to work loop with Thrive template.
+	 *
+	 * @since 2.3.59
+	 *
+	 * @param array  $widget_args Widget args.
+	 * @param string $id_base Widget ID.
+	 */
+	public static function thrive_loop_setup_wp_query( $widget_args, $id_base ) {
+		global $wp_query, $gd_temp_wp_query;
+
+		if ( geodir_is_page( 'search' ) && ! empty( $gd_temp_wp_query ) && empty( $wp_query->posts ) && ! empty( $wp_query->query['posts_per_page'] ) ) {
+			$wp_query->posts = $gd_temp_wp_query;
+			$wp_query->post_count = count( $gd_temp_wp_query );
+			$wp_query->found_posts = $wp_query->post_count;
+		}
+	}
+
+	/**
+	 * Set GD page template content to Thrive template.
+	 *
+	 * @since 2.3.59
+	 *
+	 * @param string $content Template content.
+	 * @param object $object Template object.
+	 * @param string $type Section type.
+	 * @return string Page template content.
+	 */
+	public static function thrive_theme_section_default_content( $content, $object, $type ) {
+		if ( $type == 'content' && ( geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) || geodir_is_page( 'single' ) ) ) {
+			$content = get_post_field( 'post_content', (int) GeoDir_Compatibility::gd_page_id() );
+
+			// Run the shortcodes on the content
+			$content = do_shortcode( $content );
+
+			// Run block content if its available
+			if ( function_exists( 'do_blocks' ) ) {
+				$content = do_blocks( $content );
+			}
+
+			if ( $content ) {
+				$content = '<style>.thrv_wrapper .bsui div,.thrv_wrapper div.bsui{box-sizing:border-box}</style>' . $content;
+			}
+		}
+
+		return $content;
 	}
 }

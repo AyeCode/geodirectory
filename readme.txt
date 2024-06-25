@@ -309,6 +309,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.3.59 - TBD =
 * Use default distance radius when service_distance value is not set - CHANGED
 * GD > Dynamic Content block can now do date comparisons with custom date fields - ADDED
+* Thrive Theme compatibility changes - ADDED
 
 = GeoDirectory v2.3.58 - 2024-06-20 =
 * Image slider conflicts with GD Listings carousel on elementor template - FIXED
