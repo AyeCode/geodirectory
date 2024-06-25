@@ -34,7 +34,7 @@ Do it all stress-free and in style with 100% compatible WordPress page builders 
 
 GeoDirectory is a robust and scalable WordPress directory plugin. It offers advanced features tailored for listing websites. Its intuitive design and extensive customizability make it a top choice for professionals seeking a reliable WordPress directory solution.
 
-== ⚡ TOP RATED WORDPRESS BUSINESS DIRECTORY PLUGIN WITH +575 5 STARS REVIEWS ==
+== ⚡ HIGHLY RATED WORDPRESS BUSINESS DIRECTORY PLUGIN WITH OVER 585 FIVE-STAR REVIEWS ==
 
 = READ WHAT USERS SAY ABOUT OUR WORDPRESS BUSINESS DIRECTORY PLUGIN =
 
