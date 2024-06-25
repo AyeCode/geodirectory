@@ -13,7 +13,7 @@ A superb WordPress Business Directory plugin to create a local business director
 
 == Description ==
 
->👉 __Best directory plugin__
+>👉 __[Best directory plugin](https://wordpress.org/support/topic/best-directory-plugin-14/)__
 >⭐⭐⭐⭐⭐
 >*I’ve tried many directory plugin before going for this one and i have to say this is by far the best one on the market.*
 >*it takes some time to learn how to use it and set it properly but once you do everything runs smooth and easy.*
@@ -38,22 +38,22 @@ GeoDirectory is a robust and scalable WordPress directory plugin. It offers adva
 
 = READ WHAT USERS SAY ABOUT OUR WORDPRESS BUSINESS DIRECTORY PLUGIN =
 
->👉 __Superb plugin!__
+>👉 __[Superb plugin!](https://wordpress.org/support/topic/superb-plugin-410/)__
 >⭐⭐⭐⭐⭐
->Look no further than this plugin for a directory website, it’s fantastic. I looked at Directorist first and spent a good amount of time setting that up to find out their search function only checked the post title and >none of the tags or categories. Useless! GeoDirectory of course checks pretty much every field so your users can find every listing with ease.
+>*Look no further than this plugin for a directory website, it’s fantastic. I looked at Directorist first and spent a good amount of time setting that up to find out their search function only checked the post title and >none of the tags or categories. Useless! GeoDirectory of course checks pretty much every field so your users can find every listing with ease.*
 >
->But that’s a relatively small plus point. The main selling point is the customization you can achieve. You can build your own layout using a page builder and insert the various fields wherever you see fit. It’s >so flexible and if you run into a support issue, the team are always on hand to help with responses in just a few hours (and at weekends).
+>*But that’s a relatively small plus point. The main selling point is the customization you can achieve. You can build your own layout using a page builder and insert the various fields wherever you see fit. It’s >so flexible and if you run into a support issue, the team are always on hand to help with responses in just a few hours (and at weekends).*
 
->You will need to invest some money to buy all the necessary add-ons that make this plugin so powerful, and you will need to spend a good amount of time working out how to build it how you want it, but it’s well worth it, and the results speak for themselves.
+>*You will need to invest some money to buy all the necessary add-ons that make this plugin so powerful, and you will need to spend a good amount of time working out how to build it how you want it, but it’s well worth it, and the results speak for themselves.*
 >
->There is documentation to help you set everything up and I think the team will admit it does lack in places but when you get quick support responses, it’s not an issue.
+>*There is documentation to help you set everything up and I think the team will admit it does lack in places but when you get quick support responses, it’s not an issue.*
 >
->Overall this is the perfect choice if you’re thinking of building a directory site. No need to look elsewhere.
+>*Overall this is the perfect choice if you’re thinking of building a directory site. No need to look elsewhere.*
 >💁 mparsons501979 (@mparsons501979)
 
->👉 __Unbelievable plugin__
+>👉 __[Unbelievable plugin](https://wordpress.org/support/topic/unbelievable-plugin-11/)__
 >⭐⭐⭐⭐⭐
->This is the first business directory plugin I’ve ever used and I’m amazed about what it can do. I had reviewed several other directory plugins, but this one serves all of my purposes. There are so many options available >for everything imaginable. They also have tons of add-ons to do even more that are part of the membership package I signed up for. Something like this normally would cost tens of thousands to have this much functionality. I highly recommend. Their customer service is very responsive as well and knowledgeable.
+>*This is the first business directory plugin I’ve ever used and I’m amazed about what it can do. I had reviewed several other directory plugins, but this one serves all of my purposes. There are so many options available for everything imaginable. They also have tons of add-ons to do even more that are part of the membership package I signed up for. Something like this normally would cost tens of thousands to have this much functionality. I highly recommend. Their customer service is very responsive as well and knowledgeable.*
 >💁 beantown123 (@beantown123)
 
 == 🔥 OUTSTANDING ELEMENTOR DIRECTORY PLUGIN INTEGRATION 🔥 ==
