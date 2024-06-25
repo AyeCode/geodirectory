@@ -15,9 +15,9 @@ A superb WordPress Business Directory plugin to create a local business director
 
 >👉 __Best directory plugin__
 >⭐⭐⭐⭐⭐
->I’ve tried many directory plugin before going for this one and i have to say this is by far the best one on the market.
->it takes some time to learn how to use it and set it properly but once you do everything runs smooth and easy.
->A special note goes to the support which is amazing and always reliable.
+>*I’ve tried many directory plugin before going for this one and i have to say this is by far the best one on the market.*
+>*it takes some time to learn how to use it and set it properly but once you do everything runs smooth and easy.*
+>*A special note goes to the support which is amazing and always reliable.*
 >💁 mm81 (@mm81)
 
 GeoDirectory is an outstanding WordPress Business Directory Plugin. It helps visitors to your Geo Directory website discover businesses through their listings.
