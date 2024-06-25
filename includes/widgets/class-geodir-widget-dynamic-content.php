@@ -220,13 +220,23 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			$match_found = $match_field === '' ? true : false;
 
 			if ( ! $match_found ) {
-				if ( ( $match_field == 'post_date' || $match_field == 'post_modified' ) && ( empty( $args['condition'] ) || $args['condition'] == 'is_greater_than' || $args['condition'] == 'is_less_than' ) ) {
+				$is_date_search = !empty($search[0]) && ( $search[0] === '+' || $search[0] === '-' );
+				if ( ( $match_field == 'post_date' || $match_field == 'post_modified' || ( $is_date && $is_date_search ) ) && ( empty( $args['condition'] ) || $args['condition'] == 'is_greater_than' || $args['condition'] == 'is_less_than' ) ) {
 					if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
 						$search = '+' . $search;
 					}
-					$the_time = $match_field == 'post_modified' ? get_the_modified_date( 'Y-m-d', $find_post ) : get_the_time( 'Y-m-d', $find_post );
+
+					if ($match_field == 'post_modified') {
+						$the_time = get_the_modified_date( 'Y-m-d', $find_post );
+					}elseif($match_field == 'post_date'){
+						$the_time = get_the_time( 'Y-m-d', $find_post );
+					}else{
+						$the_time =  $match_value ;
+					}
+
 					$until_time = strtotime( $the_time . ' ' . $search . ' days' );
 					$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
+
 					if ( ( empty( $args['condition'] ) || $args['condition'] == 'is_less_than' ) && $until_time > $now_time ) {
 						$match_found = true;
 					} elseif ( $args['condition'] == 'is_greater_than' && $until_time < $now_time ) {
@@ -356,7 +366,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 
 				// replace other post variables
 				if ( ! empty( $html ) ) {
-					$html = geodir_replace_variables( $html );
+					$html = geodir_replace_variables( $html, $post_id );
 
 					if ( ! empty( $html ) ) {
 						$output .= do_shortcode( $html );
