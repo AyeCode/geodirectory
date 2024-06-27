@@ -1265,13 +1265,15 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
                                 echo esc_attr( $bep  . $hn ) . '{'.esc_attr( $h_css ).'}';
                              }
                         }
-
                     }
-				?>
+
+                    // Pagination on Hello Elementor theme.
+                    if ( function_exists( 'hello_elementor_setup' ) ) {
+                        echo '.aui-nav-links .pagination{justify-content:inherit}';
+                    }
+                ?>
             </style>
 			<?php
-
-
 			/*
 			 * We only add the <script> tags for code highlighting, so we strip them from the output.
 			 */
@@ -1280,8 +1282,6 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				'</style>'
 			), '', self::minify_css( ob_get_clean() ) );
 		}
-
-
 
 		/**
 		 * Check if we should add booststrap 3 compatibility changes.
