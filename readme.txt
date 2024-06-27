@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 4.5
 Tested up to: 6.5
-Stable tag: 2.3.58
+Stable tag: 2.3.59
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -317,10 +317,11 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory v2.3.59 - TBD =
+= GeoDirectory v2.3.59 - 2024-06-27 =
 * Use default distance radius when service_distance value is not set - CHANGED
 * GD > Dynamic Content block can now do date comparisons with custom date fields - ADDED
 * Thrive Theme compatibility changes - ADDED
+* Elementor icon list css not loading in archive posts - FIXED
 
 = GeoDirectory v2.3.58 - 2024-06-20 =
 * Image slider conflicts with GD Listings carousel on elementor template - FIXED

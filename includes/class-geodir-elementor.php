@@ -175,22 +175,36 @@ class GeoDir_Elementor {
 	 *
 	 * @return bool
 	 */
-	public static function maybe_hide_elements($should_render, $section){
+	public static function maybe_hide_elements( $should_render, $section ) {
+		global $geodir_ele_iset, $geodir_ele_icss;
+
+		if ( empty( $geodir_ele_render ) ) {
+			$geodir_ele_render = array();
+		}
 
 		$dynamic_settings = $section->get_parsed_dynamic_settings();
 
 		$class = '';
-		if(isset($dynamic_settings['_css_classes'])){
+		if ( isset( $dynamic_settings['_css_classes'] ) ) {
 			$class = $dynamic_settings['_css_classes'];
-		}elseif(isset($dynamic_settings['css_classes'])){
+		} else if ( isset( $dynamic_settings['css_classes'] ) ) {
 			$class = $dynamic_settings['css_classes'];
 		}
 
-		// remove if set to do so via class
-		if( $class == 'elementor-hidden gd-dont-render' ){
+		// Remove if set to do so via class
+		if ( $class == 'elementor-hidden gd-dont-render' ) {
 			$should_render = false;
 		}
 
+		if ( $section->get_name() == 'icon-list' ) {
+			if ( $geodir_ele_iset && $geodir_ele_iset === 2 && $should_render && empty( $geodir_ele_icss ) ) {
+				$geodir_ele_icss = 1;
+			}
+
+			if ( empty ( $geodir_ele_iset ) ) {
+				$geodir_ele_iset = $should_render ? 1 : 2;
+			}
+		}
 
 		return $should_render;
 	}
@@ -284,9 +298,12 @@ class GeoDir_Elementor {
 	 * @return mixed Filters the html content.
 	 */
 	public static function maybe_add_image_caption( $html, $widget ) {
+		global $gd_post, $geodir_ele_iset, $geodir_ele_icss;
+
 		if ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) ) {
 			$type = $widget->get_name();
-			if ($type  === 'image'  ) {
+
+			if ( $type  === 'image' ) {
 				$settings = $widget->get_settings();
 
 				if ( ! empty( $settings['__dynamic__']['image'] ) && strpos( $settings['__dynamic__']['image'], 'name="gd-image"' ) !== false && ! empty( $settings['caption_source'] ) && $settings['caption_source'] == 'attachment' ) {
@@ -295,7 +312,7 @@ class GeoDir_Elementor {
 						$html = str_replace( '></figcaption>', '>' . esc_attr( $match[1] ) . '</figcaption>', $html );
 					}
 				}
-			} elseif ( 'image-gallery' === $type ) {
+			} else if ( 'image-gallery' === $type ) {
 				$settings = $widget->get_settings();
 
 				if ( ! empty( $settings['__dynamic__']['wp_gallery'] ) && strpos( $settings['__dynamic__']['wp_gallery'], 'name="gd-gallery"' ) !== false ) {
@@ -303,7 +320,6 @@ class GeoDir_Elementor {
 					if ( ! empty( $match[1] ) ) {
 						$gallery_settings = json_decode( urldecode( $match[1] ) );
 						if ( ! empty( $gallery_settings->key ) ) {
-							global $gd_post;
 							$key = esc_attr( $gallery_settings->key );
 
 							$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
@@ -363,11 +379,22 @@ class GeoDir_Elementor {
 					$html = self::render_pro_carousel( $widget,$settings );
 				}
 
-			}elseif($type  === 'icon-list'){
-				// remove icon list items that have fallback link of #hide
+			} else if ( $type  === 'icon-list' ) {
+				// Remove icon list items that have fallback link of #hide
 				$html = preg_replace('/<li class="elementor-icon-list-item" >([\n\r\s]+)<a href="#hide">(.*?)<\/li>/ms', '', $html);
 				$html = preg_replace('/<li class="elementor-icon-list-item" >([\n\r\s]+)<span class="elementor-icon-list-icon">([\n\r\s]+)<i aria-hidden="true" class="[a-z0-9 .\-]+"><\/i>([\n\r\s]+)<\/span>([\n\r\s]+)<span class="elementor-icon-list-text">#hide<\/span>([\n\r\s]+)<\/li>/', '', $html); // < 3.0
 				$html = preg_replace('/<li class="elementor-icon-list-item">([\n\r\s]+)<span class="elementor-icon-list-icon">([\n\r\s]+)<i aria-hidden="true" class="[a-z0-9 .\-]+"><\/i>([\n\r\s]+)<\/span>([\n\r\s]+)<span class="elementor-icon-list-text">#hide<\/span>([\n\r\s]+)<\/li>/', '', $html); // > 3.0+
+			}
+		}
+
+		// Add widget-icon-list CSS.
+		if ( ! empty( $html ) && ! empty( $geodir_ele_icss ) && $geodir_ele_icss === 1 && in_array( $widget->get_name(), array( 'icon-list', 'wp-widget-gd_post_content', 'wp-widget-gd_post_meta' ) ) ) {
+			$geodir_ele_icss = 2;
+			$widget_config = $widget->get_name() == 'icon-list' ? $widget->get_css_config() : $widget->get_widget_css_config( 'icon-list' );
+
+			if ( ! empty( $widget_config ) && ! empty( $widget_config['data']['file_url'] ) ) {
+				$widget_css = '<link id="elementor-widget-icon-list" rel="stylesheet" href="' . esc_url( $widget_config['data']['file_url'] ) . '">';
+				$html = $widget_css . $html;
 			}
 		}
 
