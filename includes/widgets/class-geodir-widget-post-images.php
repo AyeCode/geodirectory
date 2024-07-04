@@ -420,6 +420,12 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$post_id = absint( $options['id'] );
 		}
 
+		$current_post = ! empty( $gd_post ) && $gd_post->ID == $post_id ? $gd_post : array();
+
+		if ( empty( $current_post->post_id ) && ! empty( $post_id ) ) {
+			$current_post = geodir_get_post_info( $post_id );
+		}
+
 		if ( $block_preview ) {
 			$options['ajax_load'] = false; // disable ajax loading
 			$post_id = -1;
@@ -559,6 +565,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$main_wrapper_class_x = 'card-img-top embed-responsive-item';
 
 			$args = array(
+				'current_post' => $current_post,
 				'main_wrapper_class' => " " . $main_wrapper_class . " " . geodir_sanitize_html_class( $options['css_class'] ),
 				'type' => $options['type'],
 				'slider_id' => $slider_id,

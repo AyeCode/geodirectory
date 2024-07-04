@@ -203,6 +203,7 @@ function geodir_get_screenshot( $url, $params = array() ) {
 		$args['vpw'] = $params['vpw'];
 		$args['vph'] = $params['vph'];
 	}
+
 	if ( ! empty( $params['requeue'] ) ) {
 		$args['requeue'] = 'true';
 	}
@@ -215,15 +216,25 @@ function geodir_get_screenshot( $url, $params = array() ) {
 	return apply_filters( 'geodir_get_screenshot', $screenshot, $url, $params, $args );
 }
 
-function geodir_get_field_screenshot( $field, $sizes = array( 'w' => 825, 'h' => 430, 'image' => 1 ) ) {
+function geodir_get_field_screenshot( $field, $sizes = array(), $the_post = array() ) {
 	global $gd_post;
+
+	if ( empty( $sizes ) || ! is_array( $sizes ) ) {
+		$sizes = array( 'w' => 825, 'h' => 430, 'image' => 1 );
+	}
+
+	if ( empty( $the_post ) ) {
+		$the_post = $gd_post;
+	}
+
 	$url = '';
-	if ( isset( $gd_post->{$field} ) && esc_url( $gd_post->{$field}) ) {
+
+	if ( isset( $the_post->{$field} ) && esc_url( $the_post->{$field} ) ) {
 		// check if maybe a video URL
-		if ($video = geodir_get_video_screenshot( $gd_post->{$field})) {
+		if ($video = geodir_get_video_screenshot( $the_post->{$field} ) ) {
 			$url = $video;
 		}else{
-			$url = geodir_get_screenshot( $gd_post->{$field}, $sizes );
+			$url = geodir_get_screenshot( $the_post->{$field}, $sizes );
 		}
 	}
 
@@ -273,6 +284,12 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 
 	$post_images = array();
 
+	$the_post = ! empty( $gd_post ) && $gd_post->ID == $post_id ? $gd_post : array();
+
+	if ( empty( $the_post->post_id ) && ! empty( $post_id ) ) {
+		$the_post = geodir_get_post_info( $post_id );
+	}
+
 	if ( ! empty( $types ) ) {
 		$original_types = $types;
 
@@ -283,7 +300,7 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 				if ( stripos( strrev( $val ), "tohsneercs_" ) === 0 ) {
 					$field = str_replace( "_screenshot", "", $val );
 
-					if ( isset( $gd_post->{$field} ) && esc_url( $gd_post->{$field} ) ) {
+					if ( isset( $the_post->{$field} ) && esc_url( $the_post->{$field} ) ) {
 						$has_screenshots = true;
 					} else {
 						unset( $types[$key] ); // Unset if an invalid screenshot type
@@ -305,24 +322,58 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 					if ( stripos( strrev( $type ), "tohsneercs_") === 0 ) {
 						$field = str_replace( "_screenshot", "", $type );
 
-						if ( isset( $gd_post->{$field} ) && esc_url( $gd_post->{$field} ) ) {
-							$image_src = geodir_get_field_screenshot( $field );
+						if ( isset( $the_post->{$field} ) && esc_url( $the_post->{$field} ) ) {
+							$file_fields = GeoDir_Media::get_file_fields( $the_post->post_type );
 
-							if ( $image_src ) {
-								$image = new stdClass();
-								$image->ID = 0;
-								$image->post_id = $post_id;
-								$image->user_id = 0;
-								$image->title = wp_sprintf( __( '%s screenshot', 'geodirectory' ), esc_attr( $field ) );
-								$image->caption = '';
-								$image->file = ltrim( $image_src, '/\\' );
-								$image->mime_type = '';
-								$image->menu_order = 0;
-								$image->featured= 0;
-								$image->is_approved = 1;
-								$image->metadata = '';
-								$image->type = esc_attr( $field ) . '_screenshot';
-								$new_images[] = $image;
+							if ( ! empty( $file_fields ) && isset( $file_fields[ $field ] ) ) {
+								$attachments = GeoDir_Media::get_attachments_by_type( $post_id, $field, $limit, $revision_id, '', $status );
+							} else {
+								$attachments = array();
+							}
+
+							if ( ! empty( $attachments ) ) {
+								foreach ( $attachments as $ia => $attachment ) {
+									$media_url = geodir_get_image_src( $attachment );
+									$media_image = geodir_get_screenshot( $media_url, array( 'w' => 825, 'h' => 430, 'image' => 1 ) );
+
+									if ( $media_image ) {
+										$image = new stdClass();
+										$image->ID = 0;
+										$image->post_id = $post_id;
+										$image->user_id = 0;
+										$image->title = ! empty( $attachment->title ) ? $attachment->title : wp_sprintf( __( '%s screenshot', 'geodirectory' ), esc_attr( $field ) );
+										$image->caption = ! empty( $attachment->caption ) ? $attachment->caption : '';
+										$image->file = ltrim( $media_image, '/\\' );
+										$image->mime_type = $attachment->mime_type;
+										$image->menu_order = 0;
+										$image->featured = 0;
+										$image->is_approved = 1;
+										$image->metadata = array( 'media_url' => $media_url, 'mime_type' => $attachment->mime_type );
+										$image->type = esc_attr( $field ) . '_screenshot';
+
+										$new_images[] = $image;
+									}
+								}
+							} else {
+								$image_src = geodir_get_field_screenshot( $field, array(), $the_post );
+
+								if ( $image_src ) {
+									$image = new stdClass();
+									$image->ID = 0;
+									$image->post_id = $post_id;
+									$image->user_id = 0;
+									$image->title = wp_sprintf( __( '%s screenshot', 'geodirectory' ), esc_attr( $field ) );
+									$image->caption = '';
+									$image->file = ltrim( $image_src, '/\\' );
+									$image->mime_type = '';
+									$image->menu_order = 0;
+									$image->featured= 0;
+									$image->is_approved = 1;
+									$image->metadata = '';
+									$image->type = esc_attr( $field ) . '_screenshot';
+
+									$new_images[] = $image;
+								}
 							}
 						}
 					} else {
@@ -361,7 +412,7 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 		// Fallback images
 		foreach( $fallback_types as $fallback_type ) {
 			// Logo
-			if ( $fallback_type == 'logo' && isset( $gd_post->logo ) && $gd_post->logo && geodir_post_has_image_types( 'logo', $post_id ) ) {
+			if ( $fallback_type == 'logo' && isset( $the_post->logo ) && $the_post->logo && geodir_post_has_image_types( 'logo', $post_id ) ) {
 				$logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1, '', '', $status );
 				if ( $logo_image ) {
 					$post_images = $logo_image;
@@ -439,9 +490,9 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 				}
 			}
 
-			if ( $fallback_type == 'cpt_default' && ! empty( $gd_post ) ) {
+			if ( $fallback_type == 'cpt_default' && ! empty( $the_post ) ) {
 				// Check for CPT default image
-				$cpt = $gd_post->post_type;
+				$cpt = $the_post->post_type;
 				if ( $cpt ) {
 					$cpts = geodir_get_posttypes('array');
 					if ( ! empty( $cpts[$cpt]['default_image'] ) ) {
@@ -467,8 +518,8 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 			if ( stripos( strrev( $fallback_type ), "tohsneercs_" ) === 0 ) { // screenshots
 				$field = str_replace( "_screenshot", "", $fallback_type );
 
-				if ( isset( $gd_post->{$field} ) && esc_url( $gd_post->{$field} ) ) {
-					$image_src = geodir_get_field_screenshot( $field );
+				if ( isset( $the_post->{$field} ) && esc_url( $the_post->{$field} ) ) {
+					$image_src = geodir_get_field_screenshot( $field, array(), $the_post );
 
 					if ( $image_src ) {
 						$image = new stdClass();

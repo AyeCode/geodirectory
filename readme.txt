@@ -319,6 +319,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.60 - TBD =
 * Category default image is not set during dummy data import - FIXED
+* Allow to play video file in post images lightbox - ADDED
 
 = GeoDirectory v2.3.59 - 2024-06-27 =
 * Use default distance radius when service_distance value is not set - CHANGED
