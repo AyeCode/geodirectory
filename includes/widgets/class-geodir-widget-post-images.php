@@ -436,7 +436,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		}
 
 		if ( $block_preview ) {
-			$post_images = $this->get_dummy_images();
+			$post_images = $this->get_dummy_images( $options['limit'] );
 		} else {
 			// Show images with all statuses to admin & post author.
 			if ( is_preview() && geodir_listing_belong_to_current_user( $post_id ) ) {
@@ -633,7 +633,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 *
 	 * @return array
 	 */
-	public static function get_dummy_images() {
+	public static function get_dummy_images( $limit = 0 ) {
 		$images = array();
 		$dummy_image_url = 'https://ayecode.b-cdn.net/dummy/plugin/';
 		$dummy_images = array(
@@ -662,6 +662,11 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$image->metadata = '';
 			$image->type = '_dummy';
 			$images[] = $image;
+
+			if ( $limit > 0 && $limit == $count ) {
+				return $images;
+			}
+
 			$count++;
 		}
 
