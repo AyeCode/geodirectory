@@ -420,6 +420,12 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$post_id = absint( $options['id'] );
 		}
 
+		$current_post = ! empty( $gd_post ) && $gd_post->ID == $post_id ? $gd_post : array();
+
+		if ( empty( $current_post->post_id ) && ! empty( $post_id ) ) {
+			$current_post = geodir_get_post_info( $post_id );
+		}
+
 		if ( $block_preview ) {
 			$options['ajax_load'] = false; // disable ajax loading
 			$post_id = -1;
@@ -430,7 +436,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		}
 
 		if ( $block_preview ) {
-			$post_images = $this->get_dummy_images();
+			$post_images = $this->get_dummy_images( $options['limit'] );
 		} else {
 			// Show images with all statuses to admin & post author.
 			if ( is_preview() && geodir_listing_belong_to_current_user( $post_id ) ) {
@@ -559,6 +565,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$main_wrapper_class_x = 'card-img-top embed-responsive-item';
 
 			$args = array(
+				'current_post' => $current_post,
 				'main_wrapper_class' => " " . $main_wrapper_class . " " . geodir_sanitize_html_class( $options['css_class'] ),
 				'type' => $options['type'],
 				'slider_id' => $slider_id,
@@ -626,7 +633,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 *
 	 * @return array
 	 */
-	public static function get_dummy_images() {
+	public static function get_dummy_images( $limit = 0 ) {
 		$images = array();
 		$dummy_image_url = 'https://ayecode.b-cdn.net/dummy/plugin/';
 		$dummy_images = array(
@@ -655,6 +662,11 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$image->metadata = '';
 			$image->type = '_dummy';
 			$images[] = $image;
+
+			if ( $limit > 0 && $limit == $count ) {
+				return $images;
+			}
+
 			$count++;
 		}
 

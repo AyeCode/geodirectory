@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory/Templates
- * @version    2.3.58
+ * @version    2.3.60
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -47,6 +47,11 @@ defined( 'ABSPATH' ) || exit;
 
 global $gd_post, $aui_bs5, $geodir_carousel_open;
 
+$the_post = $gd_post;
+
+if ( empty( $the_post ) && ! empty( $current_post ) ) {
+	$the_post = $current_post;
+}
 ?>
 <div class="<?php echo esc_attr( $main_wrapper_class ); ?>">
 	<?php
@@ -144,8 +149,18 @@ global $gd_post, $aui_bs5, $geodir_carousel_open;
 					$link_tag_close_ss = "<i class=\"fas fa-search-plus  w-auto h-auto\" aria-hidden=\"true\"></i></a>";
 				} else if ( $link_screenshot_to == 'lightbox_url' ) {
 					$field_key = str_replace( "_screenshot", "", $image->type );
-					$link = isset( $gd_post->{$field_key} ) ? $gd_post->{$field_key} : '';
+					$link = isset( $the_post->{$field_key} ) ? $the_post->{$field_key} : '';
 					$fa_icon = 'fas fa-link';
+
+					if ( ! empty( $meta ) && is_array( $meta ) ) {
+						if ( ! empty( $meta['media_url'] ) ) {
+							$link = $meta['media_url'];
+						}
+
+						if ( ! empty( $meta['mime_type'] ) && strpos( $meta['mime_type'], 'video' ) === 0 ) {
+							$fa_icon = 'fas fa-video';
+						}
+					}
 
 					// Check if youtube
 					$screenshot_base_url = 'https://www.youtube.com/embed/%s';
@@ -163,7 +178,10 @@ global $gd_post, $aui_bs5, $geodir_carousel_open;
 				} else if ( $link_screenshot_to == 'url' || $link_screenshot_to == 'url_same' ) {
 					$field_key = str_replace( "_screenshot", "", $image->type );
 					$link_icon = $link_screenshot_to == 'url' ? "fas fa-external-link-alt" : 'fas fa-link';
-					$link = isset( $gd_post->{$field_key} ) ? $gd_post->{$field_key} : '';
+					$link = isset( $the_post->{$field_key} ) ? $the_post->{$field_key} : '';
+					if ( ! empty( $meta ) && is_array( $meta ) && ! empty( $meta['media_url'] ) ) {
+						$link = $meta['media_url'];
+					}
 					$link_tag_open_ss = '<a href="%s" class="' . esc_attr( $responsive_image_class ) . '" rel="nofollow noopener noreferrer"' . ( $link_screenshot_to == 'url' ? " target='_blank'" : '' ) . '>';
 					$link_tag_close_ss = '<i class="' . esc_attr( $link_icon ) . ' w-auto h-auto" aria-hidden="true"></i></a>';
 				}
