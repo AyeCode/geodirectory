@@ -172,7 +172,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 				$wrap_class .= " mx-n2 ";
 
 				if ( $args['list_style'] == 'wrap' ) {
-					$inner_class .= ( $aui_bs5 ? 'border-start-0 border-end-0' : 'border-left-0 border-right-0' ) . ' rounded-0 px-2';
+					$inner_class .= ( $aui_bs5 ? ' border-start-0 border-end-0' : ' border-left-0 border-right-0' ) . ' rounded-0 px-2';
 				} else if ( $args['list_style'] == 'none' ) {
 					$wrap_class = '';
 				}
