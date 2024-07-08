@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.61\n"
+"Project-Id-Version: GeoDirectory 2.3.62\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-05 14:55+0530\n"
-"PO-Revision-Date: 2024-07-05 14:55+0530\n"
+"POT-Creation-Date: 2024-07-08 20:44+0530\n"
+"PO-Revision-Date: 2024-07-08 20:44+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1101,7 +1101,6 @@ msgstr ""
 #: includes/admin/class-geodir-admin-api-keys-table-list.php:40
 #: includes/admin/class-geodir-admin-dummy-data.php:1157
 #: includes/admin/class-geodir-admin-dummy-data.php:1169
-#: includes/admin/diagnostic-functions.php:41
 #: includes/admin/settings/class-geodir-settings-cpt.php:596
 #: includes/admin/settings/class-geodir-settings-cpt.php:604
 #: includes/admin/views/html-admin-settings-cpt-cf-setting-item.php:170
@@ -1434,7 +1433,6 @@ msgstr ""
 #: includes/admin/class-geodir-admin-setup-wizard.php:1770
 #: includes/admin/class-geodir-admin-setup-wizard.php:1847
 #: includes/admin/class-geodir-admin-setup-wizard.php:1941
-#: includes/admin/diagnostic-functions.php:42
 msgid "Action"
 msgstr ""
 
@@ -1577,7 +1575,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1053
 #: includes/admin/class-geodir-admin-dummy-data.php:1061
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:669
-#: includes/helper-functions.php:1908 language.php:57
+#: includes/helper-functions.php:1907 language.php:57
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1103
 msgid "Twitter"
 msgstr ""
@@ -1590,7 +1588,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1068
 #: includes/admin/class-geodir-admin-dummy-data.php:1076
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:640
-#: includes/helper-functions.php:1907 language.php:58
+#: includes/helper-functions.php:1906 language.php:58
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1102
 msgid "Facebook"
 msgstr ""
@@ -1733,7 +1731,6 @@ msgid "GD Dashboard"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1374
-#: includes/admin/diagnostic-functions.php:780
 #: includes/class-geodir-email.php:256 includes/class-geodir-user.php:546
 #: includes/widgets/class-geodir-widget-add-listing.php:78
 #: includes/widgets/class-geodir-widget-add-listing.php:87 language.php:30
@@ -2018,7 +2015,6 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-install.php:338
 #: includes/admin/dashboard-functions.php:278
-#: includes/admin/diagnostic-functions.php:561
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:506
 #: includes/admin/settings/class-geodir-settings-design.php:49
 #: includes/admin/settings/class-geodir-settings-design.php:88
@@ -2399,7 +2395,6 @@ msgid "Image"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:85
-#: includes/admin/diagnostic-functions.php:805
 msgid "Location"
 msgstr ""
 
@@ -2423,7 +2418,6 @@ msgid "N/A"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:238
-#: includes/admin/diagnostic-functions.php:560
 msgid "Attachments"
 msgstr ""
 
@@ -3337,7 +3331,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:1034
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:185
-#: includes/helper-functions.php:1681 includes/helper-functions.php:1781
+#: includes/helper-functions.php:1680 includes/helper-functions.php:1780
 #: includes/widgets/class-geodir-widget-categories.php:163
 #: includes/widgets/class-geodir-widget-categories.php:173
 #: includes/widgets/class-geodir-widget-categories.php:183
@@ -3364,15 +3358,6 @@ msgstr ""
 #: includes/admin/class-geodir-admin-tools.php:82
 #: includes/admin/class-geodir-admin-tools.php:87
 #: includes/admin/class-geodir-admin-tools.php:686
-#: includes/admin/diagnostic-functions.php:52
-#: includes/admin/diagnostic-functions.php:63
-#: includes/admin/diagnostic-functions.php:73
-#: includes/admin/diagnostic-functions.php:106
-#: includes/admin/diagnostic-functions.php:120
-#: includes/admin/diagnostic-functions.php:131
-#: includes/admin/diagnostic-functions.php:142
-#: includes/admin/diagnostic-functions.php:152
-#: includes/admin/diagnostic-functions.php:161
 msgid "Run"
 msgstr ""
 
@@ -3830,354 +3815,6 @@ msgstr ""
 msgid "Pending Reviews"
 msgstr ""
 
-#: includes/admin/diagnostic-functions.php:21
-msgid "GD Diagnostic Tools"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:40
-msgid "Tool"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:47
-msgid "GD pages check"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:49
-msgid "Checks if the GD pages are installed correctly or not."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:59
-msgid "Multisite DB conversion check"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:61
-msgid ""
-"Checks if the GD database tables have been converted to use multisite "
-"correctly."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:69
-msgid "Ratings check"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:71
-msgid "Checks ratings for correct location and content settings"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:88
-msgid "Sync GD tags"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:90
-msgid ""
-"This tool can be used when tags are showing in the backend but missing from "
-"the front end."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:127
-msgid "Sync GD Categories"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:129
-msgid ""
-"This tool can be used when categories are missing from the details table but "
-"showing in other places in the backend (only checks posts with missing "
-"category info in details table)"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:138
-msgid "Clear all GD version numbers"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:140
-msgid ""
-"This tool will clear all GD version numbers so any upgrade functions will "
-"run again."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:147
-msgid "Load custom fields translation"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:149
-msgid ""
-"This tool will load strings from the database into a file to translate via "
-"po editor.Ex: custom fields"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:156
-msgid "Reload Countries table"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:158
-msgid ""
-"This tool will drop and re-add the countries table, it is meant to refresh "
-"the list when countries are added/removed, if you have duplicate country "
-"problems you should merge those first or you could have orphaned posts."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:301
-#: includes/admin/diagnostic-functions.php:401
-msgid ": Done"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:312
-#: includes/admin/diagnostic-functions.php:409
-#: includes/admin/diagnostic-functions.php:524
-#: includes/admin/diagnostic-functions.php:590
-#: includes/admin/diagnostic-functions.php:908
-msgid "Fix"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:462
-msgid "Version: Deleted"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:464
-msgid "Version: Not Found"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:470
-msgid "Upgrade/install scripts will run on next page reload."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:507
-msgid "Review locations missing or broken"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:512
-msgid "-->FIXED: Review locations fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:514
-msgid "-->FAILED: Review locations fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:519
-msgid "Review locations ok"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:556
-msgid "API Keys"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:557
-#: includes/admin/dummy-data/standard_places.php:71
-#: includes/admin/dummy-data/standard_places.php:73
-#: includes/admin/dummy-data/standard_places.php:82
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:511
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:958
-#: includes/widgets/class-geodir-widget-simple-archive.php:433
-msgid "Business Hours"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:558
-msgid "Custom fields"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:559
-msgid "Post icon"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:562
-msgid "Custom sort fields"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:563
-msgid "Place detail"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:674
-msgid "Add Listing page exists with proper setting."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:677
-msgid "Add Listing page is missing."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:679
-#: includes/class-geodir-user.php:493 includes/class-geodir-user.php:505
-#: includes/class-geodir-user.php:506 includes/class-geodir-user.php:508
-#: language.php:24
-msgid "Add Listing"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:680
-msgid "-->FIXED: Add Listing page fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:682
-msgid "-->FAILED: Add Listing page fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:700
-msgid "Listing Preview page exists with proper setting."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:703
-msgid "Listing Preview page is missing."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:705
-msgid "Listing Preview"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:706
-msgid "-->FIXED: Listing Preview page fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:708
-msgid "-->FAILED: Listing Preview page fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:725
-msgid "Listing Success page exists with proper setting."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:728
-msgid "Listing Success page is missing."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:730
-msgid "Listing Success"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:731
-msgid "-->FIXED: Listing Success page fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:733
-msgid "-->FAILED: Listing Success page fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:750
-msgid "Info page exists with proper setting."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:753
-msgid "Info page is missing."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:755
-#: includes/helper-functions.php:1867
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1034
-msgid "Info"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:756
-msgid "-->FIXED: Info page fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:758
-msgid "-->FAILED: Info page fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:775
-msgid "Login page exists with proper setting."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:778
-msgid "Login page is missing."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:781
-msgid "-->FIXED: Login page fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:783
-msgid "-->FAILED: Login page fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:800
-msgid "Location page exists with proper setting."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:803
-msgid "Location page is missing."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:806
-msgid "-->FIXED: Location page fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:808
-msgid "-->FAILED: Location page fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:825
-msgid "Archive page exists with proper setting."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:828
-msgid "Archive page is missing."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:830
-#: includes/class-geodir-block-theme.php:253
-#: includes/class-geodir-block-theme.php:870
-#: includes/elementor/class-geodir-elementor-template-archive.php:30
-msgid "GD Archive"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:831
-msgid "-->FIXED: Archive page fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:833
-msgid "-->FAILED: Archive page fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:850
-msgid "Search page exists with proper setting."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:853
-msgid "Search page is missing."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:855
-#: includes/class-geodir-block-theme.php:866
-msgid "GD Search"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:856
-msgid "-->FIXED: Search page fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:858
-msgid "-->FAILED: Search page fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:875
-msgid "Details page exists with proper setting."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:878
-msgid "Details page is missing."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:880
-msgid "GD Details"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:881
-msgid "-->FIXED: Details page fixed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:883
-msgid "-->FAILED: Details page fix failed"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:937
-msgid ""
-"Fail to load custom fields in to file for translation, please check file "
-"permission:"
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:940
-msgid "Load custom fields in to file for translation: ok"
-msgstr ""
-
 #: includes/admin/dummy-data/car_sales.php:16
 msgid "SUVs"
 msgstr ""
@@ -4594,7 +4231,7 @@ msgid "Portfolio link 8"
 msgstr ""
 
 #: includes/admin/dummy-data/job_board.php:78
-#: includes/helper-functions.php:1725
+#: includes/helper-functions.php:1724
 msgid "Latest"
 msgstr ""
 
@@ -4853,6 +4490,15 @@ msgstr ""
 #: includes/admin/dummy-data/property_sale.php:713
 #: includes/class-geodir-classifieds.php:714
 msgid "Select the property features."
+msgstr ""
+
+#: includes/admin/dummy-data/standard_places.php:71
+#: includes/admin/dummy-data/standard_places.php:73
+#: includes/admin/dummy-data/standard_places.php:82
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:511
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:958
+#: includes/widgets/class-geodir-widget-simple-archive.php:433
+msgid "Business Hours"
 msgstr ""
 
 #: includes/admin/dummy-data/standard_places.php:72
@@ -5426,7 +5072,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:698
-#: includes/helper-functions.php:1909
+#: includes/helper-functions.php:1908
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1104
 msgid "Instagram"
 msgstr ""
@@ -10968,6 +10614,12 @@ msgstr ""
 msgid "GD Single"
 msgstr ""
 
+#: includes/class-geodir-block-theme.php:253
+#: includes/class-geodir-block-theme.php:870
+#: includes/elementor/class-geodir-elementor-template-archive.php:30
+msgid "GD Archive"
+msgstr ""
+
 #: includes/class-geodir-block-theme.php:267
 msgid "Select the template to use as the GD add listing page template"
 msgstr ""
@@ -10991,6 +10643,10 @@ msgstr ""
 
 #: includes/class-geodir-block-theme.php:864
 msgid "GD Location"
+msgstr ""
+
+#: includes/class-geodir-block-theme.php:866
+msgid "GD Search"
 msgstr ""
 
 #: includes/class-geodir-block-theme.php:924
@@ -12892,6 +12548,12 @@ msgstr ""
 msgid "My Listings"
 msgstr ""
 
+#: includes/class-geodir-user.php:493 includes/class-geodir-user.php:505
+#: includes/class-geodir-user.php:506 includes/class-geodir-user.php:508
+#: language.php:24
+msgid "Add Listing"
+msgstr ""
+
 #: includes/class-geodir-user.php:529
 msgid "You do not have permission to delete this post."
 msgstr ""
@@ -14590,219 +14252,224 @@ msgstr ""
 msgid "pm"
 msgstr ""
 
-#: includes/helper-functions.php:1724
+#: includes/helper-functions.php:1723
 #: includes/widgets/class-geodir-widget-categories.php:213
 msgid "A-Z"
 msgstr ""
 
-#: includes/helper-functions.php:1726
+#: includes/helper-functions.php:1725
 msgid "Most reviews"
 msgstr ""
 
-#: includes/helper-functions.php:1727
+#: includes/helper-functions.php:1726
 msgid "Highest rating"
 msgstr ""
 
-#: includes/helper-functions.php:1728
+#: includes/helper-functions.php:1727
 msgid "Random"
 msgstr ""
 
-#: includes/helper-functions.php:1732
+#: includes/helper-functions.php:1731
 msgid "Distance to current post (details page only)"
 msgstr ""
 
-#: includes/helper-functions.php:1862
+#: includes/helper-functions.php:1861
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1029
 msgid "Primary"
 msgstr ""
 
-#: includes/helper-functions.php:1863
+#: includes/helper-functions.php:1862
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1030
 msgid "Secondary"
 msgstr ""
 
-#: includes/helper-functions.php:1864
+#: includes/helper-functions.php:1863
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1031
 msgid "Success"
 msgstr ""
 
-#: includes/helper-functions.php:1865
+#: includes/helper-functions.php:1864
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1032
 msgid "Danger"
 msgstr ""
 
-#: includes/helper-functions.php:1866
+#: includes/helper-functions.php:1865
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1033
 msgid "Warning"
 msgstr ""
 
-#: includes/helper-functions.php:1868
+#: includes/helper-functions.php:1866
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1034
+msgid "Info"
+msgstr ""
+
+#: includes/helper-functions.php:1867
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1035
 msgid "Light"
 msgstr ""
 
-#: includes/helper-functions.php:1869
+#: includes/helper-functions.php:1868
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1036
 msgid "Dark"
 msgstr ""
 
-#: includes/helper-functions.php:1870
+#: includes/helper-functions.php:1869
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1038
 msgid "White"
 msgstr ""
 
-#: includes/helper-functions.php:1871
+#: includes/helper-functions.php:1870
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1039
 msgid "Purple"
 msgstr ""
 
-#: includes/helper-functions.php:1872
+#: includes/helper-functions.php:1871
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1040
 msgid "Salmon"
 msgstr ""
 
-#: includes/helper-functions.php:1873
+#: includes/helper-functions.php:1872
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1041
 msgid "Cyan"
 msgstr ""
 
-#: includes/helper-functions.php:1874
+#: includes/helper-functions.php:1873
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1042
 msgid "Gray"
 msgstr ""
 
-#: includes/helper-functions.php:1875
+#: includes/helper-functions.php:1874
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1045
 msgid "Indigo"
 msgstr ""
 
-#: includes/helper-functions.php:1876
+#: includes/helper-functions.php:1875
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1046
 msgid "Orange"
 msgstr ""
 
-#: includes/helper-functions.php:1879
+#: includes/helper-functions.php:1878
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1049
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1073
 msgid "(button only)"
 msgstr ""
 
-#: includes/helper-functions.php:1880
+#: includes/helper-functions.php:1879
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1050
 msgid "Primary outline"
 msgstr ""
 
-#: includes/helper-functions.php:1881
+#: includes/helper-functions.php:1880
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1051
 msgid "Secondary outline"
 msgstr ""
 
-#: includes/helper-functions.php:1882
+#: includes/helper-functions.php:1881
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1052
 msgid "Success outline"
 msgstr ""
 
-#: includes/helper-functions.php:1883
+#: includes/helper-functions.php:1882
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1053
 msgid "Danger outline"
 msgstr ""
 
-#: includes/helper-functions.php:1884
+#: includes/helper-functions.php:1883
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1054
 msgid "Warning outline"
 msgstr ""
 
-#: includes/helper-functions.php:1885
+#: includes/helper-functions.php:1884
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1055
 msgid "Info outline"
 msgstr ""
 
-#: includes/helper-functions.php:1886
+#: includes/helper-functions.php:1885
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1056
 msgid "Light outline"
 msgstr ""
 
-#: includes/helper-functions.php:1887
+#: includes/helper-functions.php:1886
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1057
 msgid "Dark outline"
 msgstr ""
 
-#: includes/helper-functions.php:1888
+#: includes/helper-functions.php:1887
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1058
 msgid "White outline"
 msgstr ""
 
-#: includes/helper-functions.php:1889
+#: includes/helper-functions.php:1888
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1059
 msgid "Purple outline"
 msgstr ""
 
-#: includes/helper-functions.php:1890
+#: includes/helper-functions.php:1889
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1060
 msgid "Salmon outline"
 msgstr ""
 
-#: includes/helper-functions.php:1891
+#: includes/helper-functions.php:1890
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1061
 msgid "Cyan outline"
 msgstr ""
 
-#: includes/helper-functions.php:1892
+#: includes/helper-functions.php:1891
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1062
 msgid "Gray outline"
 msgstr ""
 
-#: includes/helper-functions.php:1893
+#: includes/helper-functions.php:1892
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1064
 msgid "Indigo outline"
 msgstr ""
 
-#: includes/helper-functions.php:1894
+#: includes/helper-functions.php:1893
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1065
 msgid "Orange outline"
 msgstr ""
 
-#: includes/helper-functions.php:1910
+#: includes/helper-functions.php:1909
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1105
 msgid "Linkedin"
 msgstr ""
 
-#: includes/helper-functions.php:1911
+#: includes/helper-functions.php:1910
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1106
 msgid "Flickr"
 msgstr ""
 
-#: includes/helper-functions.php:1912
+#: includes/helper-functions.php:1911
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1107
 msgid "GitHub"
 msgstr ""
 
-#: includes/helper-functions.php:1913
+#: includes/helper-functions.php:1912
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1108
 msgid "YouTube"
 msgstr ""
 
-#: includes/helper-functions.php:1914
+#: includes/helper-functions.php:1913
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1109
 msgid "WordPress"
 msgstr ""
 
-#: includes/helper-functions.php:1915
+#: includes/helper-functions.php:1914
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1110
 msgid "Google"
 msgstr ""
 
-#: includes/helper-functions.php:1916
+#: includes/helper-functions.php:1915
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1111
 msgid "Yahoo"
 msgstr ""
 
-#: includes/helper-functions.php:1917
+#: includes/helper-functions.php:1916
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1112
 msgid "Vkontakte"
 msgstr ""
 
-#: includes/helper-functions.php:1958
+#: includes/helper-functions.php:1957
 #, php-format
 msgid ""
 "%s requires a newer version of GeoDirectory and will not run until the "

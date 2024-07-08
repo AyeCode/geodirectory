@@ -1287,22 +1287,21 @@ function geodir_utf8_ucfirst( $str, $lower_str_end = false, $encoding = 'UTF-8' 
  *
  * @return int $count.
  */
-function geodir_total_listings_count($post_type = false)
-{
+function geodir_total_listings_count( $post_type = false ) {
 	global $wpdb;
 
 	$count = 0;
-	
-	if ($post_type) {
-		$count = $count + $wpdb->get_var("select count(post_id) from " . $wpdb->prefix . "geodir_" . $post_type . "_detail");
-	} else {
-		$all_postypes = geodir_get_posttypes();
 
-		if (!empty($all_postypes)) {
-			foreach ($all_postypes as $key) {
-				$count = $count + $wpdb->get_var("select count(post_id) from " . $wpdb->prefix . "geodir_" . $key . "_detail");
+	if ( $post_type ) {
+		$count = $count + $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(post_id) FROM %i", geodir_db_cpt_table( $post_type ) ) );
+	} else {
+		$post_types = geodir_get_posttypes();
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $key ) {
+				$count = $count + $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(post_id) FROM %i", geodir_db_cpt_table( $key ) ) );
 			}
-		}	
+		}
 	}
 
 	return $count;

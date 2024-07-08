@@ -480,6 +480,84 @@ function get_post_type_singular_label( $post_type, $echo = false, $translate = f
 	return geodir_get_post_type_singular_label( $post_type, $echo, $translate );
 }
 
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_diagnostic_tools_setting_page() {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_admin_ajax_handler() {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_diagnose_tags_sync() {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_diagnose_cats_sync() {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_diagnose_version_clear() {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_diagnose_ratings() {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_diagnose_multisite_conversion() {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_fix_virtual_page( $slug, $page_title, $old_id, $option ) {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_diagnose_default_pages() {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_diagnose_load_db_language() {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+}
+
+/**
+ * @deprecated 2.3.62
+ */
+function geodir_posts_clauses_request( $clauses ) {
+	_deprecated_function( __FUNCTION__, '2.3.62' );
+	return $clauses;
+}
+
 //
 ///**
 // * @deprecated
