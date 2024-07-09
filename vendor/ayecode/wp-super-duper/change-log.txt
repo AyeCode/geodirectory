@@ -1,3 +1,8 @@
+= 1.2.0 - 2024-07-09 =
+* Added color options for upcoming dark mode feature - ADDED
+* Improvements to blocks to help prevent broken blocks - CHANGED
+* Blocks now store shortcodes in block param and not in the content - CHANGED
+
 = 1.1.45 - 2024-06-20 =
 * Yoast SEO conflict causes JS error on post edit pages - FIXED
 
