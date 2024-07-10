@@ -1,3 +1,6 @@
+= 1.2.1 - TBD =
+* Hide advanced border options when border color selected to none - FIXED
+
 = 1.2.0 - 2024-07-09 =
 * Added color options for upcoming dark mode feature - ADDED
 * Improvements to blocks to help prevent broken blocks - CHANGED
