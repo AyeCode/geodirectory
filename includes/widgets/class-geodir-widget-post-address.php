@@ -321,6 +321,10 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 			)
 		);
 
+		if ( ! empty( $args['border_type'] ) && empty( $args['border'] ) ) {
+			$args['border_type'] = '';
+		}
+
 		if ( empty( $args['id'] ) ) {
 			$args['id'] = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
 
