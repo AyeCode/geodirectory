@@ -1,5 +1,4 @@
 <?php
-
 /**
  * GeoDir_Widget_Dynamic_Content class.
  *
@@ -13,20 +12,19 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 	 * Sets up the widgets name etc
 	 */
 	public function __construct() {
-
 		$options = array(
 			'textdomain'     => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'     => 'location-alt',
 			'block-category' => 'geodirectory',
 			'block-keywords' => "['dynamic','geodir','geodirectory']",
 			'class_name'     => __CLASS__,
-			'base_id'        => 'gd_dynamic_content',												// this us used as the widget id and the shortcode id.
-			'name'           => __( 'GD > Dynamic Content', 'geodirectory' ),						// the name of the widget.
+			'base_id'        => 'gd_dynamic_content',
+			'name'           => __( 'GD > Dynamic Content', 'geodirectory' ),
 			'no_wrap'       => true,
 			'widget_ops'     => array(
-				'classname'     => 'geodir-dynamic-content '.geodir_bsui_class(),                                     	// widget class
-				'description'   => esc_html__( 'Display dynamic content using post fields.', 'geodirectory' ),	// widget description
-				'geodirectory'  => true,
+				'classname'    => 'geodir-dynamic-content ' . geodir_bsui_class(),
+				'description'  => esc_html__( 'Display dynamic content using post fields.', 'geodirectory' ),
+				'geodirectory' => true
 			)
 		);
 
@@ -39,53 +37,54 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 	 */
 	public function set_arguments() {
 		$arguments = array(
-			'id'  	=> array(
+			'id' => array(
 				'type' => 'number',
-				'title' => __('Post ID:', 'geodirectory'),
-				'desc' => __('Leave blank to use current post id.', 'geodirectory'),
+				'title' => __( 'Post ID:', 'geodirectory' ),
+				'desc' => __( 'Leave blank to use current post id.', 'geodirectory' ),
 				'placeholder' => 'Leave blank to use current post id.',
 				'default' => '',
 				'desc_tip' => true,
 				'advanced' => false
 			),
-			'key'  => array(
+			'key' => array(
 				'type' => 'select',
-				'title' => __('Field Key:', 'geodirectory'),
-				'desc' => __('This is the custom field key.', 'geodirectory'),
+				'title' => __( 'Field Key:', 'geodirectory' ),
+				'desc' => __( 'This is the custom field key.', 'geodirectory' ),
 				'placeholder' => '',
 				'options' => $this->get_custom_field_keys(),
 				'default'  => '',
 				'desc_tip' => true,
 				'advanced' => false
 			),
-			'condition'  => array(
+			'condition' => array(
 				'type' => 'select',
-				'title' => __('Field condition:', 'geodirectory'),
-				'desc' => __('Select the custom field condition.', 'geodirectory'),
+				'title' => __( 'Field condition:', 'geodirectory' ),
+				'desc' => __( 'Select the custom field condition.', 'geodirectory' ),
 				'placeholder' => '',
 				'options' => $this->get_badge_conditions(),
 				'default' => 'is_equal',
 				'desc_tip' => true,
-				'advanced' => false
+				'advanced' => false,
+				'element_require' => '([%key%]!="logged_in" && [%key%]!="logged_out")'
 			),
-			'search'  => array(
+			'search' => array(
 				'type' => 'text',
-				'title' => __('Value to match:', 'geodirectory'),
-				'desc' => __('Match this text with field value to display post badge. For post date enter value like +7 or -7.', 'geodirectory'),
+				'title' => __( 'Value to match:', 'geodirectory' ),
+				'desc' => __( 'Match this text with field value to display post badge. For post date enter value like +7 or -7. Use current_user to match with current logged in user. For user_roles use comma separated user roles & with consition is_contains or is_not_contains.', 'geodirectory' ),
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,
 				'advanced' => false,
-				'element_require' => '[%condition%]!="is_empty" && [%condition%]!="is_not_empty"'
+				'element_require' => '([%condition%]!="is_empty" && [%condition%]!="is_not_empty" && [%key%]!="logged_in" && [%key%]!="logged_out")'
 			),
 			'html' => array(
-				'title'       => __( 'Text:', 'geodirectory' ),
-				'desc' => __('Use %%input%% to use the input value of the field or %%post_url%% for the post url, or the field key for any other info %%email%%.', 'geodirectory'),
-				'type'        => 'textarea',
-				'placeholder' => '', // __( '', 'geodirectory' ), @todo any reason to use empty?
-				'default'     => '',
-				'desc_tip'    => true,
-				'advanced'    => false
+				'title' => __( 'Text:', 'geodirectory' ),
+				'desc' => __( 'Use %%input%% to use the input value of the field or %%post_url%% for the post url, or the field key for any other info %%email%%.', 'geodirectory' ),
+				'type' => 'textarea',
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => false
 			),
 		);
 
@@ -107,17 +106,17 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		$is_preview = $this->is_preview();
 		$block_preview = $this->is_block_content_call();
 
-		$post_id 	= ! empty( $args['id'] ) ? $args['id'] : ( ! empty( $post->ID ) ? $post->ID : 0 );
-		$post_type 	= $post_id ? get_post_type( $post_id ) : '';
+		$post_id = ! empty( $args['id'] ) ? $args['id'] : ( ! empty( $post->ID ) ? $post->ID : 0 );
+		$post_type = $post_id ? get_post_type( $post_id ) : '';
 
-		if(empty($args['id']) && $is_preview ){
+		if ( empty( $args['id']) && $is_preview ) {
 			$post_id  = geodir_get_post_id_with_content( $args['key'] );
 			$post_type = 'gd_place';
 		}
 
 		$args['id'] = $post_id;
 
-		// options
+		// Options
 		$defaults = array(
 			'id' => '',
 			'key' => '',
@@ -125,8 +124,6 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			'search' => '',
 			'html' => '',
 		);
-
-
 
 		/**
 		 * Parse incoming $args into an array and merge it with $defaults
@@ -136,13 +133,13 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		// Errors.
 		$errors = array();
 		if ( empty( $args['id'] ) ) {
-			$errors[] = __('post id is missing','geodirectory');
+			$errors[] = __( 'post id is missing','geodirectory' );
 		}
 		if ( empty( $post_type ) ) {
-			$errors[] = __('invalid post type','geodirectory');
+			$errors[] = __( 'invalid post type','geodirectory' );
 		}
 		if ( empty( $args['key'] ) ) {
-			$errors[] = __('field key is missing', 'geodirectory');
+			$errors[] = __( 'field key is missing', 'geodirectory' );
 		}
 
 		$output = '';
@@ -154,13 +151,12 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 
 		// Decode &lt; & &gt;
 		if ( ! empty( $html ) ) {
-			$trans   = array(
+			$trans = array(
 				'&lt;' => '<',
 				'&gt;' => '>'
 			);
 
 			$html = strtr( $html, $trans );
-
 			$html = geodir_unwptexturize( $html );
 		}
 
@@ -169,22 +165,37 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		}
 
 		$match_field = $_match_field = $args['key'];
+
 		if ( $match_field == 'address' ) {
 			$match_field = 'street';
-		} elseif ( $match_field == 'post_images' ) {
+		} else if ( $match_field == 'post_images' ) {
 			$match_field = 'featured_image';
 		}
 
 		$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
+		$find_post_keys = ! empty( $find_post ) ? array_keys( (array) $find_post ) : array();
 
-//		print_r($find_post );echo '###'.$post_id;print_r($args);
+		if ( ! empty( $find_post->ID ) && ! in_array( 'post_category', $find_post_keys ) ) {
+			$find_post = geodir_get_post_info( (int) $find_post->ID );
+			$find_post_keys = ! empty( $find_post ) ? array_keys( (array) $find_post ) : array();
+		}
 
-		if ($match_field === '' || ( ! empty( $find_post ) && ( isset( $find_post->{$match_field} ) || isset( $find_post->{$_match_field} ) ) ) ) {
+		$non_cf_keys = array_keys( $this->get_non_cf_keys() );
+
+		if ( $match_field === '' || ( ! empty( $find_post_keys ) && ( in_array( $match_field, $find_post_keys ) || in_array( $_match_field, $find_post_keys ) || in_array( $match_field, $non_cf_keys ) ) ) ) {
 			$address_fields = array( 'street2', 'neighbourhood', 'city', 'region', 'country', 'zip', 'latitude', 'longitude' ); // Address fields
 			$field = array();
 			$search = $args['search'];
 
-			if ( $match_field && ! in_array( $match_field, array( 'post_date', 'post_modified', 'default_category', 'post_id', 'post_status' ) ) && ! in_array( $match_field, $address_fields ) ) {
+			if ( $search == 'current_user' ) {
+				if ( is_user_logged_in() && ( $current_user_id = get_current_user_id() ) ) {
+					$search = $current_user_id;
+				} else {
+					$search = - 1; // If not logged in treate as 0.
+				}
+			}
+
+			if ( $match_field && ! in_array( $match_field, $non_cf_keys ) && ! in_array( $match_field, $address_fields ) ) {
 				$package_id = $is_preview ? 0 : geodir_get_post_package_id( $post_id, $post_type );
 				$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
@@ -192,7 +203,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 					if ( $match_field == $field_info['htmlvar_name'] ) {
 						$field = $field_info;
 						break;
-					} elseif( $_match_field == $field_info['htmlvar_name'] ) {
+					} else if ( $_match_field == $field_info['htmlvar_name'] ) {
 						$field = $field_info;
 						break;
 					}
@@ -210,64 +221,114 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				}
 			}
 
-			$is_date = ( ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) || in_array( $match_field, array( 'post_date', 'post_modified' ) ) ? true : false;
+			$is_date = ( ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) || in_array( $match_field, array( 'post_date', 'post_date_gmt', 'post_modified', 'post_modified_gmt' ) ) ? true : false;
 			/**
 			 * @since 2.0.0.95
 			 */
 			$is_date = apply_filters( 'geodir_dynamic_content_is_date', $is_date, $match_field, $field, $args, $find_post );
 
-			$match_value = isset( $find_post->{$match_field} ) ? esc_attr( trim( $find_post->{$match_field} ) ) : ''; // escape user input
+			$match_value = in_array( $match_field, $find_post_keys ) ? esc_attr( trim( $find_post->{$match_field} ) ) : '';
 			$match_found = $match_field === '' ? true : false;
 
-			if ( ! $match_found ) {
-				$is_date_search = !empty($search[0]) && ( $search[0] === '+' || $search[0] === '-' );
-				if ( ( $match_field == 'post_date' || $match_field == 'post_modified' || ( $is_date && $is_date_search ) ) && ( empty( $args['condition'] ) || $args['condition'] == 'is_greater_than' || $args['condition'] == 'is_less_than' ) ) {
-					if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
-						$search = '+' . $search;
-					}
+			if ( in_array( $match_field, array( 'logged_in', 'logged_out', 'user_roles' ) ) ) {
+				$match_found = false;
 
-					if ($match_field == 'post_modified') {
-						$the_time = get_the_modified_date( 'Y-m-d', $find_post );
-					}elseif($match_field == 'post_date'){
-						$the_time = get_the_time( 'Y-m-d', $find_post );
-					}else{
-						$the_time =  $match_value ;
-					}
+				switch ( $match_field ) {
+					case 'logged_in':
+						$match_found = (bool) is_user_logged_in();
 
-					$until_time = strtotime( $the_time . ' ' . $search . ' days' );
-					$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
+						break;
+					case 'logged_out':
+						$match_found = ! is_user_logged_in();
 
-					if ( ( empty( $args['condition'] ) || $args['condition'] == 'is_less_than' ) && $until_time > $now_time ) {
-						$match_found = true;
-					} elseif ( $args['condition'] == 'is_greater_than' && $until_time < $now_time ) {
-						$match_found = true;
-					}
-				} else {
-					switch ( $args['condition'] ) {
-						case 'is_equal':
-							$match_found = (bool) ( $search != '' && $match_value == $search );
-							break;
-						case 'is_not_equal':
-							$match_found = (bool) ( $search != '' && $match_value != $search );
-							break;
-						case 'is_greater_than':
-							$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value > $search );
-							break;
-						case 'is_less_than':
-							$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value < $search );
-							break;
-						case 'is_empty':
-							$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
-							break;
-						case 'is_not_empty':
-							$match_found = (bool) ( $match_value !== '' && $match_value !== false && $match_value !== '0' && ! is_null( $match_value ) );
-							break;
-						case 'is_contains':
-							$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) !== false );
-							break;
-						case 'is_not_contains':
-							$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) === false );
-							break;
+						break;
+					case 'user_roles':
+						if ( ! empty( $search ) ) {
+							$match_roles = is_scalar( $search ) ? explode( ",", $search ) : $search;
+
+							if ( is_array( $match_roles ) ) {
+								$match_roles = array_filter( array_map( 'trim', $match_roles ) );
+							}
+
+							if ( ! empty( $match_roles ) && is_array( $match_roles ) && is_user_logged_in() && ( $current_user = wp_get_current_user() ) ) {
+								$user_roles = $current_user->roles;
+
+								if ( $args['condition'] == 'is_not_contains' ) {
+									$match_found = true;
+
+									foreach ( $match_roles as $role ) {
+										if ( in_array( $role, $user_roles ) ) {
+											$match_found = false;
+										}
+									}
+								} else {
+									$match_roles = array_intersect( $match_roles, $user_roles );
+
+									if ( ! empty( $match_roles ) ) {
+										$match_found = true;
+									}
+								}
+							}
+						}
+
+						break;
+				}
+			} else {
+				if ( ! $match_found ) {
+					$is_date_search = ! empty( $search[0]) && ( $search[0] === '+' || $search[0] === '-' );
+
+					if ( ( in_array( $match_field, array( 'post_date', 'post_date_gmt', 'post_modified', 'post_modified_gmt' ) ) || ( $is_date && $is_date_search ) ) && ( empty( $args['condition'] ) || $args['condition'] == 'is_greater_than' || $args['condition'] == 'is_less_than' ) ) {
+						if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
+							$search = '+' . $search;
+						}
+
+						if ( $match_field == 'post_modified' ) {
+							$the_time = get_the_modified_date( 'Y-m-d', $find_post );
+						} else if ( $match_field == 'post_modified_gmt' ) {
+							$the_time = get_post_modified_time( 'Y-m-d', true, $find_post, true );
+						} else if ( $match_field == 'post_date' ) {
+							$the_time = get_the_time( 'Y-m-d', $find_post );
+						} else if ( $match_field == 'post_date_gmt' ) {
+							$the_time = get_post_time( 'Y-m-d', true, $find_post, true );
+						} else {
+							$the_time =  $match_value ;
+						}
+
+						$until_time = strtotime( $the_time . ' ' . $search . ' days' );
+						$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
+
+						if ( ( empty( $args['condition'] ) || $args['condition'] == 'is_less_than' ) && $until_time > $now_time ) {
+							$match_found = true;
+						} else if ( $args['condition'] == 'is_greater_than' && $until_time < $now_time ) {
+							$match_found = true;
+						}
+					} else {
+						switch ( $args['condition'] ) {
+							case 'is_equal':
+								$match_found = (bool) ( $search != '' && $match_value == $search );
+								break;
+							case 'is_not_equal':
+								$match_found = (bool) ( $search != '' && $match_value != $search );
+								break;
+							case 'is_greater_than':
+								$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value > $search );
+								break;
+							case 'is_less_than':
+								$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value < $search );
+								break;
+							case 'is_empty':
+								$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
+								break;
+							case 'is_not_empty':
+								$match_found = (bool) ( $match_value !== '' && $match_value !== false && $match_value !== '0' && ! is_null( $match_value ) );
+								break;
+							case 'is_contains':
+								$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) !== false );
+								break;
+							case 'is_not_contains':
+								$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) === false );
+								break;
+						}
 					}
 				}
 			}
@@ -278,7 +339,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			$match_found = apply_filters( 'geodir_dynamic_content_check_match_found', $match_found, $args, $find_post );
 
 			if ( $match_found ) {
-				// check for price format
+				// Check for price format
 				if ( isset( $field['data_type'] ) && ( $field['data_type'] == 'INT' || $field['data_type'] == 'FLOAT' || $field['data_type'] == 'DECIMAL' ) && isset( $field['extra_fields'] ) && $field['extra_fields'] ) {
 					$extra_fields = stripslashes_deep( maybe_unserialize( $field['extra_fields'] ) );
 
@@ -336,46 +397,50 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				 */
 				$match_value = apply_filters( 'geodir_dynamic_content_match_value', $match_value, $match_field, $args, $find_post, $field );
 
-				if ( empty( $html ) && empty( $args['icon_class'] ) ) {
+				if ( ! ( ! empty( $html ) || $html === '0' ) && empty( $args['icon_class'] ) ) {
 					if ( isset( $field['frontend_title'] ) ) {
 						$html = $field['frontend_title'];
 					} else if ( $match_field == 'default_category' ) {
-						$html = __( 'Default Category', 'geodirectory' ); // default_category don't have frontend_title.
+						$html = __( 'Default Category', 'geodirectory' ); // Default_category don't have frontend_title.
 					}
 				}
 
-				if ( ! empty( $html ) && $html = str_replace( "%%input%%", $match_value, $html ) ) {
-					// will be replace in condition check
+				if ( ( ! empty( $html ) || $html === '0' ) && ( $html = str_replace( "%%input%%", $match_value, $html ) ) ) {
+					// Will be replace in condition check
 				}
 
-				if( ! empty( $html ) && $post_id && $html = str_replace( "%%post_url%%", get_permalink( $post_id ),$html ) ) {
-					// will be replace in condition check
+				if ( ( ! empty( $html ) || $html === '0' ) && $post_id && ( $html = str_replace( "%%post_url%%", get_permalink( $post_id ),$html ) ) ) {
+					// Will be replace in condition check
 				}
 
-				if ( empty( $html ) ) {
+				if ( ! ( ! empty( $html ) || $html === '0' ) ) {
 					if ( empty( $html ) && $match_field == 'post_date' ) {
-						$badge = __( 'NEW', 'geodirectory' );
-					} elseif ( empty( $html ) && $match_field == 'post_modified' ) {
+						$html = __( 'NEW', 'geodirectory' );
+					} else if ( empty( $html ) && $match_field == 'post_modified' ) {
 						$html = __( 'UPDATED', 'geodirectory' );
 					}
 				}
 
-				if ( empty( $output ) && $is_preview && $args['html'] ) {
+				if ( ! ( ! empty( $output ) || $output === '0' ) && $is_preview && ( $args['html'] || $args['html'] === '0' ) ) {
 					$output = $args['html'];
 				}
 
-				// replace other post variables
-				if ( ! empty( $html ) ) {
+				// Replace other post variables
+				if ( ! empty( $html ) || $html === '0' ) {
 					$html = geodir_replace_variables( $html, $post_id );
 
-					if ( ! empty( $html ) ) {
+					if ( ! empty( $html ) || $html === '0' ) {
+						if ( $is_preview || $block_preview ) {
+							$output = '';
+						}
+
 						$output .= do_shortcode( $html );
 					}
 				}
 			}
 		}
 
-		if ( empty( $output ) && $is_preview && $args['html'] ) {
+		if ( ! ( ! empty( $output ) || $output === '0' ) && $is_preview && ( $args['html'] || $args['html'] === '0' ) ) {
 			$output = $args['html'];
 		}
 
@@ -387,7 +452,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 	 *
 	 * @return array
 	 */
-	public function get_custom_field_keys(){
+	public function get_custom_field_keys() {
 		$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
 
 		$keys = array();
@@ -410,12 +475,36 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			}
 		}
 
-		$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
-		$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
-		$keys['post_id'] = 'post_id ( ' . __( 'post id', 'geodirectory' ) . ' )';
-		$keys['post_status'] = 'post_status ( ' . __( 'Post Status', 'geodirectory' ) . ' )';
+		$keys = array_merge( $keys, $this->get_non_cf_keys() );
 
 		return apply_filters( 'geodir_badge_field_keys', $keys );
+	}
+
+	/**
+	 * Non custom fields keys.
+	 *
+	 * @since 2.3.63
+	 *
+	 * @return array Non custom fields keys.
+	 */
+	public function get_non_cf_keys() {
+		$keys = array();
+		$keys['default_category'] = 'default_category ( ' . __( 'Default Category', 'geodirectory' ) . ' )';
+		$keys['overall_rating'] = 'overall_rating ( ' . __( 'Overall Rating', 'geodirectory' ) . ' )';
+		$keys['rating_count'] = 'rating_count ( ' . __( 'Rating Count', 'geodirectory' ) . ' )';
+		$keys['post_id'] = 'post_id ( ' . __( 'post id', 'geodirectory' ) . ' )';
+		$keys['post_type'] = 'post_type ( ' . __( 'Post Type', 'geodirectory' ) . ' )';
+		$keys['post_author'] = 'post_author ( ' . __( 'Post Author', 'geodirectory' ) . ' )';
+		$keys['post_status'] = 'post_status ( ' . __( 'Post Status', 'geodirectory' ) . ' )';
+		$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
+		$keys['post_date_gmt'] = 'post_date_gmt ( ' . __( 'post date gmt', 'geodirectory' ) . ' )';
+		$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
+		$keys['post_modified_gmt'] = 'post_modified_gmt ( ' . __( 'post modified gmt', 'geodirectory' ) . ' )';
+		$keys['logged_in'] = 'logged_in ( ' . __( 'Logged In', 'geodirectory' ) . ' )';
+		$keys['logged_out'] = 'logged_out ( ' . __( 'Logged Out', 'geodirectory' ) . ' )';
+		$keys['user_roles'] = 'user_roles ( ' . __( 'Specific User Roles', 'geodirectory' ) . ' )';
+
+		return apply_filters( 'geodir_badge_non_cf_keys', $keys );
 	}
 
 	/**
@@ -423,7 +512,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 	 *
 	 * @return array
 	 */
-	public function get_badge_conditions(){
+	public function get_badge_conditions() {
 		$conditions = array(
 			'is_equal' => __( 'is equal', 'geodirectory' ),
 			'is_not_equal' => __( 'is not equal', 'geodirectory' ),
