@@ -232,7 +232,7 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 			'rounded-bottom' => 'rounded-bottom',
 			'rounded-left'   => 'rounded-left',
 		);
-		$defaults['element_require'] = '[%border%]';
+		$defaults['element_require'] = '([%border%]&&[%border%]!="0")';
 	} elseif ( 'rounded_size' === $type ) {
 		$defaults['title'] = __( 'Border radius size', 'ayecode-connect' );
 
@@ -254,7 +254,7 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 				'lg' => __( 'Large', 'ayecode-connect' ),
 			);
 		}
-		$defaults['element_require'] = '[%border%]';
+		$defaults['element_require'] = '([%border%]&&[%border%]!="0")';
 	} elseif ( 'width' === $type ) { // BS%
 		$defaults['title']           = __( 'Border width', 'ayecode-connect' );
 		$defaults['options']         = array(
@@ -264,7 +264,7 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 			'border-4' => '4',
 			'border-5' => '5',
 		);
-		$defaults['element_require'] = $aui_bs5 ? '[%border%]' : '1==2';
+		$defaults['element_require'] = $aui_bs5 ? '([%border%]&&[%border%]!="0")' : '1==2';
 	} elseif ( 'opacity' === $type ) { // BS%
 		$defaults['title']           = __( 'Border opacity', 'ayecode-connect' );
 		$defaults['options']         = array(
@@ -274,7 +274,7 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 			'border-opacity-25' => '25%',
 			'border-opacity-10' => '10%',
 		);
-		$defaults['element_require'] = $aui_bs5 ? '[%border%]' : '1==2';
+		$defaults['element_require'] = $aui_bs5 ? '([%border%]&&[%border%]!="0")' : '1==2';
 	} elseif ( 'type' === $type ) {
 		$defaults['title']           = __( 'Border show', 'ayecode-connect' );
 		$defaults['options']         = array(
@@ -288,14 +288,13 @@ function sd_get_border_input( $type = 'border', $overwrite = array() ) {
 			'border-left-0'   => __( '-Left', 'ayecode-connect' ),
 			'border-right-0'  => __( '-Right', 'ayecode-connect' ),
 		);
-		$defaults['element_require'] = '[%border%]';
-
+		$defaults['element_require'] = '([%border%]&&[%border%]!="0")';
 	} else {
 		$defaults['title']   = __( 'Border color', 'ayecode-connect' );
 		$defaults['options'] = array(
-			                       ''  => __( 'Default', 'ayecode-connect' ),
-			                       '0' => __( 'None', 'ayecode-connect' ),
-		                       ) + sd_aui_colors(false,false,false,false,true);
+			''  => __( 'Default', 'ayecode-connect' ),
+			'0' => __( 'None', 'ayecode-connect' )
+		) + sd_aui_colors( false, false, false, false, true );
 	}
 
 	$input = wp_parse_args( $overwrite, $defaults );
