@@ -3717,7 +3717,8 @@ function blockstrap_blocks_render_blocks($block_content, $parsed_block, $thiss )
 
 	// Check if ita a nested block that needs to be wrapped
 	if(! empty($parsed_block['attrs']['sd_shortcode_close'])){
-		$block_content = $parsed_block['attrs']['sd_shortcode'].$block_content.$parsed_block['attrs']['sd_shortcode_close'];
+		$content = isset($parsed_block['attrs']['html']) ? $parsed_block['attrs']['html'] : $block_content;
+		$block_content = $parsed_block['attrs']['sd_shortcode'].$content.$parsed_block['attrs']['sd_shortcode_close'];
 	}elseif(! empty($parsed_block['attrs']['sd_shortcode'])){
 		// Add the shortcode if its not a wrapped block
 		$block_content .= $parsed_block['attrs']['sd_shortcode'];
