@@ -70,7 +70,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			'search' => array(
 				'type' => 'text',
 				'title' => __( 'Value to match:', 'geodirectory' ),
-				'desc' => __( 'Match this text with field value to display post badge. For post date enter value like +7 or -7. Use current_user to match with current logged in user. For user_roles use comma separated user roles & with consition is_contains or is_not_contains.', 'geodirectory' ),
+				'desc' => __( 'Match this text with field value to display post badge. For post date enter value like +7 or -7. Use current_user to match with current logged in user. For user_roles use comma separated user roles & with condition is_contains or is_not_contains.', 'geodirectory' ),
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,
@@ -191,7 +191,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				if ( is_user_logged_in() && ( $current_user_id = get_current_user_id() ) ) {
 					$search = $current_user_id;
 				} else {
-					$search = - 1; // If not logged in treate as 0.
+					$search = - 1; // If not logged in treat as 0.
 				}
 			}
 
