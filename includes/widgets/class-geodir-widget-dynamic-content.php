@@ -434,7 +434,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 							$output = '';
 						}
 
-						$output .= do_shortcode( $html );
+						$output = do_shortcode( $html );
 					}
 				}
 			}
