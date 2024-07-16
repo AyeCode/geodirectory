@@ -26,6 +26,8 @@ class GeoDir_Widget_Notifications extends WP_Super_Duper {
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_notifications', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Notifications','geodirectory'), // the name of the widget.
+//			'no_wrap'       => true,
+			'block-wrap'       => '',
             'widget_ops'    => array(
                 'classname'   => 'geodir-notifications '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows hints tips and notifications to users, these can be added by GeoDirectory or any of its addons.','geodirectory'), // widget description

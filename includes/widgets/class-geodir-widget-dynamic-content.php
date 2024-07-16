@@ -483,7 +483,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 	/**
 	 * Non custom fields keys.
 	 *
-	 * @since 2.3.63
+	 * @since 2.3.64
 	 *
 	 * @return array Non custom fields keys.
 	 */
