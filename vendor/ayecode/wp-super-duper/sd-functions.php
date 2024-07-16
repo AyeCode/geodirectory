@@ -3703,27 +3703,40 @@ function sd_gd_field_rule_search( $search, $post_type, $rule, $field = array(), 
 }
 
 
-/**
- * Add the shortcodes to the block content if sett as an attribute.
- *
- * We have moved the shortcodes from the block content to a block argument to help prevent broken blocks.
- *
- * @param $block_content
- * @param $parsed_block
- * @param $thiss
- * @return mixed|string
- */
-function blockstrap_blocks_render_blocks($block_content, $parsed_block, $thiss ){
+if(!function_exists('sd_blocks_render_blocks')){
+	/**
+	 * Add the shortcodes to the block content if set as an attribute.
+	 *
+	 * We have moved the shortcodes from the block content to a block argument to help prevent broken blocks.
+	 *
+	 * @param $block_content
+	 * @param $parsed_block
+	 * @param $thiss
+	 * @return mixed|string
+	 */
+	function sd_blocks_render_blocks($block_content, $parsed_block, $thiss ){
 
-	// Check if ita a nested block that needs to be wrapped
-	if(! empty($parsed_block['attrs']['sd_shortcode_close'])){
-		$content = isset($parsed_block['attrs']['html']) ? $parsed_block['attrs']['html'] : $block_content;
-		$block_content = $parsed_block['attrs']['sd_shortcode'].$content.$parsed_block['attrs']['sd_shortcode_close'];
-	}elseif(! empty($parsed_block['attrs']['sd_shortcode'])){
-		// Add the shortcode if its not a wrapped block
-		$block_content .= $parsed_block['attrs']['sd_shortcode'];
+		// Check if ita a nested block that needs to be wrapped
+		if(! empty($parsed_block['attrs']['sd_shortcode_close'])){
+			$content = isset($parsed_block['attrs']['html']) ? $parsed_block['attrs']['html'] : $block_content;
+			$block_content = $parsed_block['attrs']['sd_shortcode'].$content.$parsed_block['attrs']['sd_shortcode_close'];
+		}elseif(! empty($parsed_block['attrs']['sd_shortcode'])){
+			$has_warp = false;
+			if($block_content && strpos(trim($block_content), '<div class="wp-block-') === 0 ){
+				$parts = explode('></', $block_content);
+				if(count($parts) === 2){
+					$block_content = $parts[0].'>'.$parsed_block['attrs']['sd_shortcode'].'</'.$parts[1];
+					$has_warp = true;
+				}
+			}
+			if (!$has_warp) {
+				// Add the shortcode if its not a wrapped block
+				$block_content .= $parsed_block['attrs']['sd_shortcode'];
+			}
+		}
+		return $block_content;
 	}
-	return $block_content;
 }
-add_filter('render_block', 'blockstrap_blocks_render_blocks',10,3);
+
+add_filter('render_block', 'sd_blocks_render_blocks',10,3);
 
