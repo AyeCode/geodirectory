@@ -1,3 +1,6 @@
+= 1.2.2 - 2024-07-12 =
+* Blocks with `block-save-return` set should not have a sd_shortcode argument - FIXED
+
 = 1.2.1 - 2024-07-10 =
 * `html` argument not wrapped correctly in shortcode with new system for blocks - FIXED
 * Hide advanced border options when border color selected to none - FIXED

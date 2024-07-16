@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.1' );
+	define( 'SUPER_DUPER_VER', '1.2.2' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2963,7 +2963,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 
 
 
-							//if(empty($this->options['nested-block'])){
+							if(empty($this->options['block-save-return'])){
 							?>
 								///////////////////////////////////////////////////////////////////////
 
@@ -2998,6 +2998,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 								shortcode += "]";
 
 								if(shortcode){
+
 									props.setAttributes({sd_shortcode: shortcode});
 
 									<?php
@@ -3010,7 +3011,7 @@ const { deviceType } = wp.data.useSelect != 'undefined' ?  wp.data.useSelect(sel
 
 							///////////////////////////////////////////////////////////////////////
 							<?php
-							//} // end nested block check
+							} // end nested block check
 							?>
 
 							return [

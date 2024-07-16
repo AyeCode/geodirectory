@@ -52,7 +52,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				'desc' => __( 'This is the custom field key.', 'geodirectory' ),
 				'placeholder' => '',
 				'options' => $this->get_custom_field_keys(),
-				'default'  => '',
+				'default'  => 'post_title',
 				'desc_tip' => true,
 				'advanced' => false
 			),
@@ -62,7 +62,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				'desc' => __( 'Select the custom field condition.', 'geodirectory' ),
 				'placeholder' => '',
 				'options' => $this->get_badge_conditions(),
-				'default' => 'is_equal',
+				'default' => 'is_not_equal',
 				'desc_tip' => true,
 				'advanced' => false,
 				'element_require' => '([%key%]!="logged_in" && [%key%]!="logged_out")'
@@ -305,10 +305,10 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 					} else {
 						switch ( $args['condition'] ) {
 							case 'is_equal':
-								$match_found = (bool) ( $search != '' && $match_value == $search );
+								$match_found = (bool) ( ( $search != '' || $search === '' ) && $match_value == $search );
 								break;
 							case 'is_not_equal':
-								$match_found = (bool) ( $search != '' && $match_value != $search );
+								$match_found = (bool) ( ( $search != '' || $search === '' ) && $match_value != $search );
 								break;
 							case 'is_greater_than':
 								$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value > $search );
