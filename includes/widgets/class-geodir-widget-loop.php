@@ -358,10 +358,17 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 			} elseif ( geodir_is_page( 'search' ) && ! isset( $_REQUEST['geodir_search'] ) ) {
 				geodir_no_listings_found();
 			} else {
+
 				// Check we are not inside a template builder container
 				if ( isset( $wp_query->posts[0] ) && $wp_query->posts[0]->post_type == 'page' ) {
 					// Reset the query count so the correct number of listings are output.
 					rewind_posts();
+
+					// Reset the proper loop content
+					if ( isset( $wp_query->posts[0] ) && $wp_query->posts[0]->post_type == 'page' && geodir_is_page('search') ) {
+						return ob_get_clean();
+					}
+
 					// Reset the proper loop content
 					global $wp_query, $gd_temp_wp_query;
 
