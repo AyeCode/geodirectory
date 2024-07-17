@@ -317,6 +317,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.3.65 - TBD =
+* Image attribute in schema shows location when private address is enabled - FIXED
+
 = GeoDirectory v2.3.64 - 2024-07-16 =
 * GD > Dynamic Content keys added for logged in, logged out, post author, user roles etc - ADDED
 * BIG changes to the way blocks are rendered to help prevent broken blocks in the future - CHANGED
