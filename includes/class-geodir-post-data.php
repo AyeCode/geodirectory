@@ -2041,24 +2041,22 @@ class GeoDir_Post_Data {
 	 * @param object $post Optional. The post object or blank.
 	 */
 	public static function schema( $post = '' ) {
-
 		global $gd_post, $post;
+
 		if ( ! geodir_is_page( 'detail' ) ) {
 			return;
 		}
 
-		// url
-		$c_url      = geodir_curPageURL();
-		$upload_dir = wp_upload_dir();
+		$can_see_address = isset( $gd_post->post_type ) && GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) && geodir_user_can( 'see_private_address', array( 'post' => $gd_post ) ) ? true : false;
 
 		// post reviews
 		if ( empty( $gd_post->rating_count ) ) {
 			$reviews = '';
 		} else {
-			$reviews      = array();
+			$reviews = array();
 			$post_reviews = get_comments( array( 'post_id' => $post->ID, 'status' => 'approve' ) );
-			foreach ( $post_reviews as $review ) {
 
+			foreach ( $post_reviews as $review ) {
 				if ( $rating_value = GeoDir_Comments::get_comment_rating( $review->comment_ID ) ) {
 					$reviews[] = array(
 						"@type"         => "Review",
@@ -2077,9 +2075,7 @@ class GeoDir_Post_Data {
 						)
 					);
 				}
-
 			}
-
 		}
 
 		// post images
@@ -2088,30 +2084,40 @@ class GeoDir_Post_Data {
 		if ( empty( $post_images ) ) {
 			$images = array();
 		} else {
-			$i_arr = array();
-			foreach ( $post_images as $img ) {
-				$image_meta = maybe_unserialize( $img->metadata );
+			$_images = array();
 
-				$i_arr[] = array(
+			foreach ( $post_images as $attachment ) {
+				$image_meta = maybe_unserialize( $attachment->metadata );
+
+				if ( strpos( $attachment->file, '#' ) === 0 ) {
+					$attachment->file = ltrim( $attachment->file, '#' );
+				}
+
+				$_image = array(
 					"@type"                => "ImageObject",
-					"author"               => ! empty( $img->user_id ) ? get_the_author_meta( 'display_name', $img->user_id ) : '',
+					"author"               => ! empty( $attachment->user_id ) ? get_the_author_meta( 'display_name', $attachment->user_id ) : '',
 					"contentLocation"      => isset( $gd_post->street ) ? $gd_post->street . ", " . $gd_post->city . ", " . $gd_post->country : '',
-					"url"                  => $upload_dir['baseurl'] . $img->file,
-					"datePublished"        => $post->post_date,
-					//@todo we need to add a date field to the attachment table
-					"caption"              => stripslashes_deep( $img->caption ),
-					"name"                 => stripslashes_deep( $img->title ),
+					"url"                  => geodir_get_image_src( $attachment, 'full' ),
+					"datePublished"        => ! empty( $attachment->date_gmt ) && strpos( $attachment->date_gmt, '0000-00-00' ) === false ? $attachment->date_gmt : $post->post_date,
+					"caption"              => stripslashes_deep( $attachment->caption ),
+					"name"                 => stripslashes_deep( $attachment->title ),
 					"representativeOfPage" => true,
-					"thumbnail"            => geodir_get_image_src( $img, 'medium' ),
+					"thumbnail"            => geodir_get_image_src( $attachment, 'medium' )
 				);
+
+				// Don't show private address.
+				if ( ! $can_see_address ) {
+					unset( $_image['contentLocation'] );
+				}
+
+				$_images[] = $_image;
 			}
 
-			if ( count( $i_arr ) == 1 ) {
-				$images = $i_arr[0];
+			if ( count( $_images ) == 1 ) {
+				$images = $_images[0];
 			} else {
-				$images = $i_arr;
+				$images = $_images;
 			}
-
 		}
 
 		// external links
@@ -2151,10 +2157,10 @@ class GeoDir_Post_Data {
 		if ( ! empty( $gd_post->phone ) ) {
 			$schema['telephone'] = $gd_post->phone;
 		}
-		$schema['url']    = $c_url;
+		$schema['url']    = geodir_curPageURL();
 		$schema['sameAs'] = $external_links;
 		$schema['image']  = $images;
-		$can_see_address = isset( $gd_post->post_type ) && GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) && geodir_user_can( 'see_private_address', array( 'post' => $gd_post ) ) ? true : false;
+
 		if ( $can_see_address ) {
 			$schema['address'] = array(
 				"@type"           => "PostalAddress",
@@ -2203,7 +2209,6 @@ class GeoDir_Post_Data {
 			$schema['identifier'] = absint( $gd_post->ID );
 
 			$accommodation = array();
-
 			$accommodation['@type'] = "Accommodation";
 
 			if ( ! empty( $gd_post->accommodates ) ) {
@@ -2215,8 +2220,6 @@ class GeoDir_Post_Data {
 			}
 
 			$schema['containsPlace'] = $accommodation;
-
-
 		}
 
 		/**
