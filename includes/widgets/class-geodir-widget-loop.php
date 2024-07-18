@@ -365,7 +365,8 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 					rewind_posts();
 
 					// Reset the proper loop content
-					if ( isset( $wp_query->posts[0] ) && $wp_query->posts[0]->post_type == 'page' && geodir_is_page('search') ) {
+					if ( isset( $wp_query->posts[0] ) && $wp_query->posts[0]->post_type == 'page' && geodir_is_page('search') && !geodir_is_block_theme()) {
+						$wp_query->current_post = $wp_query->post_count;
 						return ob_get_clean();
 					}
 
