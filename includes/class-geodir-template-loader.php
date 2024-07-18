@@ -59,6 +59,7 @@ class GeoDir_Template_Loader {
      * @param $post_ID
      * @param $post_after
      * @param $post_before
+	 * @todo we will need ot updated this for block themes
      */
     public static function set_clear_list_view_storage($post_ID, $post_after, $post_before){
         if($post_after->post_type=='page' && has_shortcode( $post_after->post_content, 'gd_loop' ) ){
