@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 4.5
 Tested up to: 6.6
-Stable tag: 2.3.66
+Stable tag: 2.3.67
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -320,6 +320,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.3.67 - 2024-07-18 =
 * GD search broken on some block theme - FIXED
 * Astra theme GD search broken - FIXED
+* Super Duper lib caused fatal error on WP < 5.9 - FIXED
 
 = GeoDirectory v2.3.66 - 2024-07-17 =
 * non FSE themes can fail to render new blocks - FIXED
