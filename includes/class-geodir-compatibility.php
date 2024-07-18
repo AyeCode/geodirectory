@@ -116,6 +116,7 @@ class GeoDir_Compatibility {
 
 		// Astra Theme v4.1 compatibility
 		add_filter( 'astra_single_layout_one_banner_visibility', array( __CLASS__, 'astra_single_layout_one_banner_visibility' ), 9999, 1 );
+		add_filter( 'astra_primary_class', array( __CLASS__, 'astra_primary_class' ), 100, 2 );
 		add_filter( 'astra_entry_header_class', array( __CLASS__, 'astra_entry_header_class' ), 10, 1 );
 		add_filter( 'astra_get_option_ast-dynamic-archive-page-structure', array( __CLASS__, 'astra_filter_option' ), 10, 3 );
 
@@ -1463,7 +1464,7 @@ class GeoDir_Compatibility {
 			$gd_skip_the_content = true;
 
 			if ( geodir_is_page( 'search' ) ) {
-				$value = false;
+				//$value = false;
 			}
 		}
 
@@ -1486,6 +1487,22 @@ class GeoDir_Compatibility {
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Fix the page classes for GD archives.
+	 *
+	 * @param $classes
+	 * @param $class
+	 * @return mixed|string[]
+	 */
+	public static function astra_primary_class($classes, $class)
+	{
+		if(geodir_is_page('search') || geodir_is_page('archive')){
+			return ['content-area','primary'];
+		}
+		return $classes;
+
 	}
 
 	/**
