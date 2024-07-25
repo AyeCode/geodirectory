@@ -50,6 +50,7 @@ class GeoDir_Query {
 		}
 
 		add_filter( 'split_the_query', array( $this, 'split_the_query' ), 100, 2 );
+		add_action( 'wp', array( $this, 'set_wp_the_query' ), 1, 1 );
 
 		$this->init_query_vars();
 	}
@@ -1689,5 +1690,23 @@ class GeoDir_Query {
 		}
 
 		return $split_the_query;
+	}
+
+	/**
+	 * Set global for main WP_Query.
+	 *
+	 * @since 2.3.68
+	 *
+	 * @global object $wp_the_query WP_Query object.
+	 * @global object $gd_wp_the_query WP_Query object.
+	 */
+	public function set_wp_the_query( $the_wp ) {
+		global $wp_the_query, $gd_wp_the_query;
+
+		if ( ! empty( $wp_the_query ) && isset( $wp_the_query->posts ) && $wp_the_query->is_main_query() && self::is_gd_main_query( $wp_the_query ) ) {
+			if ( empty( $wp_the_query->posts ) || ( ! empty( $wp_the_query->posts[0]->post_type ) && geodir_is_gd_post_type( $wp_the_query->posts[0]->post_type ) ) )
+			$gd_wp_the_query = $wp_the_query;
+			$gd_wp_the_query->the_posts = $wp_the_query->posts;
+		}
 	}
 }

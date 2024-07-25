@@ -1222,6 +1222,8 @@ class GeoDir_Elementor {
 	 * @return bool|string Bypass archive content.
 	 */
 	public static function bypass_setup_archive_page_content( $bypass, $content ) {
+		global $gd_in_gd_loop, $gd_archive_content_start;
+
 		if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) ) {
 			if ( geodir_is_page( 'search' ) ) {
 				$page_id = geodir_search_page_id();
@@ -1233,6 +1235,8 @@ class GeoDir_Elementor {
 
 			if ( $page_id && self::is_elementor( $page_id ) ) {
 				$bypass = false;
+			} else if ( $page_id && ! $gd_archive_content_start && $gd_in_gd_loop === false ) {
+				$bypass = null;
 			}
 		}
 

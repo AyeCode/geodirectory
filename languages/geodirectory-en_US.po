@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.63\n"
+"Project-Id-Version: GeoDirectory 2.3.68\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 10:44+0530\n"
-"PO-Revision-Date: 2024-07-16 10:45+0530\n"
+"POT-Creation-Date: 2024-07-25 21:43+0530\n"
+"PO-Revision-Date: 2024-07-25 21:43+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1280,7 +1280,7 @@ msgid "if"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:139
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5134
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5136
 msgid "Add Rule"
 msgstr ""
 
@@ -1297,14 +1297,14 @@ msgid "hide"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:170
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5047
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5048
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5049
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5050
 msgid "FIELD"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:194
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5069
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5070
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5071
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5072
 msgid "CONDITION"
 msgstr ""
 
@@ -2025,7 +2025,7 @@ msgid "Reviews"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-install.php:444
-#: includes/class-geodir-compatibility.php:281
+#: includes/class-geodir-compatibility.php:282
 msgid "Once Monthly"
 msgstr ""
 
@@ -2116,7 +2116,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-import-export.php:47
 #: includes/admin/views/html-admin-page-status-report.php:327
 #: includes/integrations/bricks/element-image-gallery.php:71
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3143
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3145
 msgid "Settings"
 msgstr ""
 
@@ -8375,7 +8375,7 @@ msgstr ""
 #: includes/custom-fields/input-functions.php:1813
 #: includes/custom-fields/input-functions.php:1843
 #: includes/widgets/class-geodir-widget-archive-item-section.php:43
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3915
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3917
 msgid "Close"
 msgstr ""
 
@@ -10373,7 +10373,7 @@ msgstr ""
 #: includes/class-geodir-ajax.php:236 includes/core-functions.php:347
 #: language.php:78
 #: vendor/ayecode/wp-deactivation-survey/wp-deactivation-survey.php:64
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3764
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3766
 msgid "Cancel"
 msgstr ""
 
@@ -10901,85 +10901,85 @@ msgid_plural "%d reviews"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-geodir-compatibility.php:301
+#: includes/class-geodir-compatibility.php:302
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:303
+#: includes/class-geodir-compatibility.php:304
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:308
+#: includes/class-geodir-compatibility.php:309
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:309
+#: includes/class-geodir-compatibility.php:310
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:324
+#: includes/class-geodir-compatibility.php:325
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:326
+#: includes/class-geodir-compatibility.php:327
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:331
+#: includes/class-geodir-compatibility.php:332
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:332
+#: includes/class-geodir-compatibility.php:333
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:349
+#: includes/class-geodir-compatibility.php:350
 msgid "SEOPress SEO Detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:350
+#: includes/class-geodir-compatibility.php:351
 msgid ""
 "The SEOPress SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:355
+#: includes/class-geodir-compatibility.php:356
 msgid "Disable SEOPress"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:356
+#: includes/class-geodir-compatibility.php:357
 msgid "Disable overwrite by SEOPress titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:386
+#: includes/class-geodir-compatibility.php:387
 #, php-format
 msgid ""
 "Kleo theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:400
+#: includes/class-geodir-compatibility.php:401
 #, php-format
 msgid ""
 "Listimia theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:719
+#: includes/class-geodir-compatibility.php:720
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:874
+#: includes/class-geodir-compatibility.php:875
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -10987,54 +10987,54 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3036
+#: includes/class-geodir-compatibility.php:3053
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3047
+#: includes/class-geodir-compatibility.php:3064
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3054
+#: includes/class-geodir-compatibility.php:3071
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3055
+#: includes/class-geodir-compatibility.php:3072
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3760
+#: includes/class-geodir-compatibility.php:3777
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3987
+#: includes/class-geodir-compatibility.php:4004
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3988
+#: includes/class-geodir-compatibility.php:4005
 msgid "Enable Borlabs Cookie integration for GeoDirectory maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3997
+#: includes/class-geodir-compatibility.php:4014
 msgid ""
 "NOTE: Go to Borlabs Cookie > Library > Search \"GeoDirectory\" & install "
 "package."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4138
+#: includes/class-geodir-compatibility.php:4155
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
 "with Divi Builder."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:245
+#: includes/class-geodir-defaults.php:233
 msgid "[[#site_name#]] Your listing has been submitted for approval"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:255
+#: includes/class-geodir-defaults.php:243
 msgid ""
 "Dear [#client_name#],\n"
 "\n"
@@ -11046,11 +11046,11 @@ msgid ""
 "Thank you for your contribution."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:272
+#: includes/class-geodir-defaults.php:260
 msgid "[[#site_name#]] Listing Published Successfully"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:282
+#: includes/class-geodir-defaults.php:270
 msgid ""
 "Dear [#client_name#],\n"
 "\n"
@@ -11062,14 +11062,14 @@ msgid ""
 "Thank you for your contribution."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:299
+#: includes/class-geodir-defaults.php:287
 msgid ""
 "[[#site_name#]] A new comment has been submitted on your listing "
 "[#listing_title#]"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:309
-#: includes/class-geodir-defaults.php:344
+#: includes/class-geodir-defaults.php:297
+#: includes/class-geodir-defaults.php:332
 msgid ""
 "Dear [#client_name#],\n"
 "\n"
@@ -11088,17 +11088,17 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:334
+#: includes/class-geodir-defaults.php:322
 msgid ""
 "[[#site_name#]] A comment on your listing [#listing_title#] has been approved"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:369
+#: includes/class-geodir-defaults.php:357
 msgid ""
 "[[#site_name#]] Your comment on listing [#listing_title#] has been approved"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:379
+#: includes/class-geodir-defaults.php:367
 msgid ""
 "Dear [#comment_author#],\n"
 "\n"
@@ -11109,11 +11109,11 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:396
+#: includes/class-geodir-defaults.php:384
 msgid "[[#site_name#]] A new listing has been submitted for review"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:406
+#: includes/class-geodir-defaults.php:394
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -11124,11 +11124,11 @@ msgid ""
 "[#site_name_url#]"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:421
+#: includes/class-geodir-defaults.php:409
 msgid "[[#site_name#]] Listing edited by Author"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:431
+#: includes/class-geodir-defaults.php:419
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -11143,11 +11143,11 @@ msgid ""
 "This email is just for your information."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:451
+#: includes/class-geodir-defaults.php:439
 msgid "[[#site_name#]] A new comment is waiting for your approval"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:461
+#: includes/class-geodir-defaults.php:449
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -11170,11 +11170,11 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:488
+#: includes/class-geodir-defaults.php:476
 msgid "[[#site_name#]] Someone has reported a post!"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:498
+#: includes/class-geodir-defaults.php:486
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -11197,114 +11197,114 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:543
+#: includes/class-geodir-defaults.php:531
 #, php-format
 msgid "All %%pt_plural%% %%in_location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:552
+#: includes/class-geodir-defaults.php:540
 #, php-format
 msgid "%%pt_plural%% %%in_location%% %%page%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:561
+#: includes/class-geodir-defaults.php:549
 #, php-format
 msgid "%%pt_plural%% %%in_location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:570
+#: includes/class-geodir-defaults.php:558
 #, php-format
 msgid "All %%category%% %%in_location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:579
+#: includes/class-geodir-defaults.php:567
 #, php-format
 msgid "%%category%% %%in_location%% %%page%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:588
+#: includes/class-geodir-defaults.php:576
 #, php-format
 msgid "Posts related to Category: %%category%% %%in_location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:597
+#: includes/class-geodir-defaults.php:585
 #, php-format
 msgid "Tag: %%tag%% %%in_location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:606
+#: includes/class-geodir-defaults.php:594
 #, php-format
 msgid "%%tag%% %%in_location%% %%page%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:615
+#: includes/class-geodir-defaults.php:603
 #, php-format
 msgid "Posts related to Tag: %%tag%% %%in_location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:624
+#: includes/class-geodir-defaults.php:612
 #, php-format
 msgid "%%title%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:633
+#: includes/class-geodir-defaults.php:621
 #, php-format
 msgid "%%title%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:642
+#: includes/class-geodir-defaults.php:630
 #, php-format
 msgid "%%excerpt%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:651
+#: includes/class-geodir-defaults.php:639
 #, php-format
 msgid "%%location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:660
+#: includes/class-geodir-defaults.php:648
 #, php-format
 msgid "%%title%% %%location%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:669
+#: includes/class-geodir-defaults.php:657
 #, php-format
 msgid "%%location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:678
+#: includes/class-geodir-defaults.php:666
 #, php-format
 msgid "Search results for: %%search_term%% %%search_near%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:687
+#: includes/class-geodir-defaults.php:675
 #, php-format
 msgid ""
 "%%pt_plural%% search results for %%search_term%% %%search_near%% %%sep%% "
 "%%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:696
+#: includes/class-geodir-defaults.php:684
 #, php-format
 msgid "%%pt_plural%% search results for %%search_term%% %%search_near%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:705
+#: includes/class-geodir-defaults.php:693
 #, php-format
 msgid "Add %%pt_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:714
+#: includes/class-geodir-defaults.php:702
 #, php-format
 msgid "Edit %%pt_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:723
+#: includes/class-geodir-defaults.php:711
 #, php-format
 msgid "Add %%pt_single%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:732
+#: includes/class-geodir-defaults.php:720
 #, php-format
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
@@ -12930,7 +12930,7 @@ msgid "You may lose changes if you navigate away now!"
 msgstr ""
 
 #: includes/core-functions.php:340
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3764
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3766
 msgid "Are you sure?"
 msgstr ""
 
@@ -12960,7 +12960,7 @@ msgstr ""
 
 #: includes/core-functions.php:346
 #: includes/widgets/class-geodir-widget-author-actions.php:264 language.php:129
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3764
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3766
 msgid "Delete"
 msgstr ""
 
@@ -14876,7 +14876,7 @@ msgid "Page ID"
 msgstr ""
 
 #: includes/template-functions.php:1189
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5176
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5178
 msgid "Template Part"
 msgstr ""
 
@@ -14896,7 +14896,7 @@ msgstr ""
 
 #: includes/template-functions.php:1261
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3224
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5177
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5179
 msgid "Select Template Part..."
 msgstr ""
 
@@ -16582,7 +16582,7 @@ msgid ","
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-listings.php:1586
-#: includes/widgets/class-geodir-widget-loop.php:339
+#: includes/widgets/class-geodir-widget-loop.php:340
 msgid ""
 "This preview shows all content items to give an idea of layout. Dummy data "
 "is used in places."
@@ -17573,16 +17573,16 @@ msgstr ""
 msgid "GD > Notifications"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-notifications.php:31
+#: includes/widgets/class-geodir-widget-notifications.php:33
 msgid ""
 "Shows hints tips and notifications to users, these can be added by "
 "GeoDirectory or any of its addons."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-notifications.php:85
-#: includes/widgets/class-geodir-widget-notifications.php:91
-#: includes/widgets/class-geodir-widget-notifications.php:97
-#: includes/widgets/class-geodir-widget-notifications.php:104
+#: includes/widgets/class-geodir-widget-notifications.php:87
+#: includes/widgets/class-geodir-widget-notifications.php:93
+#: includes/widgets/class-geodir-widget-notifications.php:99
+#: includes/widgets/class-geodir-widget-notifications.php:106
 #, php-format
 msgid "This is how %s notifications will look on your site."
 msgstr ""
@@ -22390,67 +22390,67 @@ msgstr ""
 msgid "Placeholder for: %s"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:2923
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:2925
 msgid "Placeholder for:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3915
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3917
 msgid "Reset"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3915
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:3917
 msgid "Save Rules"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5018
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5020
 msgid "Remove Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5023
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5025
 msgid "Rule"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5024
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5026
 msgid "Select Rule..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5031
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5033
 msgid "Rule:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5092
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:5094
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5096
 msgid "VALUE TO MATCH"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5106
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5108
 msgid "Select User Roles:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5140
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5142
 msgid "What should happen if rules met."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5141
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5143
 msgid "Default Output"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5160
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5162
 msgid "Page Content"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5161
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5163
 msgid "Select Page ID..."
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5195
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5197
 msgid "Custom Message Type"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5196
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5198
 msgid "Default (none)"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5219
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:5221
 msgid "CUSTOM MESSAGE TO SHOW"
 msgstr ""

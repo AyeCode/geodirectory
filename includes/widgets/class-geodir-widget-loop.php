@@ -225,8 +225,9 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-		global $wp_query, $gd_layout_class, $geodir_item_tmpl;
+		global $wp_query, $gd_wp_the_query, $gd_temp_wp_query, $gd_temp_wp_query_set, $gd_layout_class, $geodir_item_tmpl, $gd_in_gd_loop, $gd_archive_content_start;
 
+		$gd_in_gd_loop = true;
 		$design_style = geodir_design_style();
 
 		ob_start();
@@ -358,27 +359,41 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 			} elseif ( geodir_is_page( 'search' ) && ! isset( $_REQUEST['geodir_search'] ) ) {
 				geodir_no_listings_found();
 			} else {
-
-				// Check we are not inside a template builder container
+				// Check we are not inside a template builder container.
 				if ( isset( $wp_query->posts[0] ) && $wp_query->posts[0]->post_type == 'page' ) {
+					$the_posts = array();
+
+					if ( geodir_is_page( 'search' ) ) {
+						if ( $gd_temp_wp_query_set && ( empty( $gd_temp_wp_query ) || ( ! empty( $gd_temp_wp_query->post_type ) && geodir_is_gd_post_type( $gd_temp_wp_query->post_type ) ) ) ) {
+							// Set posts from GD archive loop setup.
+							$the_posts = $gd_temp_wp_query;
+						} else if ( ! empty( $gd_wp_the_query ) && isset( $gd_wp_the_query->the_posts ) ) {
+							// Set posts from main archive loop setup.
+							$the_posts = $gd_wp_the_query->the_posts;
+
+							if ( has_filter( 'the_content', array( 'GeoDir_Template_Loader', 'setup_archive_page_content' ) ) ) {
+								// DS + Search + Blocks
+								remove_filter( 'the_content', array( 'GeoDir_Template_Loader', 'setup_archive_page_content' ) );
+							}
+						}
+					} else {
+						// Set posts from GD archive loop setup.
+						$the_posts = $gd_temp_wp_query;
+					}
+
 					// Reset the query count so the correct number of listings are output.
 					rewind_posts();
 
-					// Reset the proper loop content
-					if ( isset( $wp_query->posts[0] ) && $wp_query->posts[0]->post_type == 'page' && geodir_is_page('search') && !geodir_is_block_theme() && empty( $wp_query->before_loop ) ) {
-						$wp_query->current_post = $wp_query->post_count;
-						return ob_get_clean();
-					}
-
-					// Reset the proper loop content
-					global $wp_query, $gd_temp_wp_query;
-
-					$wp_query->posts = $gd_temp_wp_query;
+					$wp_query->posts = $the_posts;
 				}
 
 				// Check if still have listings.
 				if ( $wp_query->post_count == 1 && empty( $wp_query->posts ) ) {
 					geodir_no_listings_found();
+
+					if ( defined( 'ASTRA_THEME_VERSION' ) && geodir_is_page( 'search' ) ) {
+						$wp_query->current_post = $wp_query->post_count; // gd_archive_content_start = false
+					}
 				} else {
 					$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : geodir_design_style();
 
@@ -481,7 +496,11 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 		// Add filter to make main page comments closed after the GD loop
 		add_filter( 'comments_open', array( __CLASS__, 'comments_open' ), 10, 2 );
 
-		return ob_get_clean();
+		$_conetnt = ob_get_clean();
+
+		$gd_in_gd_loop = false;
+
+		return $_conetnt;
 	}
 
 	/**

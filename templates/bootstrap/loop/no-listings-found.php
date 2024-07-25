@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 global $geodir_widget_cpt;
 ?>
-<p class="geodir-info">
+<div class="geodir-info d-block mx-1">
     <?php
     $show_add_listing = GeoDir_User::show_add_listings('array');
     $current_pt = ! empty( $geodir_widget_cpt ) ? $geodir_widget_cpt : geodir_get_current_posttype();
@@ -33,4 +33,4 @@ global $geodir_widget_cpt;
 	    )
     );
     ?>
-</p>
+</div>
