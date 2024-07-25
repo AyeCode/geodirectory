@@ -1464,7 +1464,7 @@ class GeoDir_Compatibility {
 			$gd_skip_the_content = true;
 
 			if ( geodir_is_page( 'search' ) ) {
-				//$value = false;
+				$value = false;
 			}
 		}
 

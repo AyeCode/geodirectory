@@ -323,10 +323,10 @@ class GeoDir_Template_Loader {
 	 * @return string The filtered content.
 	 */
 	public static function setup_archive_page_content( $content ) {
-		global $wp_query, $post, $gd_done_archive_loop, $gd_skip_the_content;
+		global $wp_query, $post, $gd_done_archive_loop, $gd_skip_the_content, $gd_in_gd_loop;
 
 		// If we are not filtering the archive page content then bail.
-		if ( $gd_skip_the_content || ! self::is_archive_page_content() ) {
+		if ( $gd_skip_the_content || ! self::is_archive_page_content() || $gd_in_gd_loop ) {
 			return $content;
 		}
 
@@ -353,8 +353,11 @@ class GeoDir_Template_Loader {
 			}
 		}
 
+		global $gd_archive_content_start;
+
 		// Backup post.
 		$gd_backup_post = $post;
+		$gd_archive_content_start = true;
 
 		// Remove our filter so we don't get stuck in a loop
 		remove_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
@@ -446,11 +449,11 @@ class GeoDir_Template_Loader {
         global $wp_query;
 
         // declare our global var so we can store the main query temporarily.
-        global $gd_temp_wp_query;
+        global $gd_temp_wp_query, $gd_temp_wp_query_set;
 
         // Set our temp var with the main query posts.
         $gd_temp_wp_query = $wp_query->posts;
-
+		$gd_temp_wp_query_set = true;
 
         //print_r($gd_temp_wp_query ); echo '@@@';
         // Set the main query to our archive page template
