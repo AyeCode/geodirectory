@@ -1704,9 +1704,10 @@ class GeoDir_Query {
 		global $wp_the_query, $gd_wp_the_query;
 
 		if ( ! empty( $wp_the_query ) && isset( $wp_the_query->posts ) && $wp_the_query->is_main_query() && self::is_gd_main_query( $wp_the_query ) ) {
-			if ( empty( $wp_the_query->posts ) || ( ! empty( $wp_the_query->posts[0]->post_type ) && geodir_is_gd_post_type( $wp_the_query->posts[0]->post_type ) ) )
-			$gd_wp_the_query = $wp_the_query;
-			$gd_wp_the_query->the_posts = $wp_the_query->posts;
+			if ( empty( $wp_the_query->posts ) || ( ! empty( $wp_the_query->posts[0]->post_type ) && geodir_is_gd_post_type( $wp_the_query->posts[0]->post_type ) ) ) {
+				$gd_wp_the_query = $wp_the_query;
+				$gd_wp_the_query->the_posts = $wp_the_query->posts;
+			}
 		}
 	}
 }
