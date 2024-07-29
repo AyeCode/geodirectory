@@ -972,7 +972,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					}
 				}
 
-				$parent_category = ( $is_category && $cat_filter && $cpt == $current_posttype ) ? $current_term_id : 0;
+				$parent_category = ( $is_category && !$cat_filter && $cpt == $current_posttype ) ? $current_term_id : 0;
 				$cat_taxonomy    = $cpt . 'category';
 				$skip_childs     = false;
 
