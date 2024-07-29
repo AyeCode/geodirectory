@@ -957,3 +957,23 @@ function geodir_cpt_requires_address( $post_type ) {
 
 	return $result;
 }
+
+/**
+ * Get post type with rewrite slug options.
+ *
+ * @since 2.3.70
+ *
+ * @return array Post type options with slugs.
+ */
+function geodir_cpt_rewrite_slug_options() {
+	$post_types = geodir_get_posttypes( 'array' );
+	$options = array();
+
+	if ( ! empty( $post_types ) ) {
+		foreach ( $post_types as $key => $info ) {
+			$options[ $key ] = $info['rewrite']['slug'];
+		}
+	}
+
+	return apply_filters( 'geodir_cpt_rewrite_slug_options', $options );
+}

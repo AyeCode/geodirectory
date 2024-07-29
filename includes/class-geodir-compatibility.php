@@ -159,6 +159,7 @@ class GeoDir_Compatibility {
 		add_filter( 'fusion_should_get_page_option', array( __CLASS__, 'fusion_should_get_page_option' ), 999, 1 );
 		add_filter( 'is_hundred_percent_template', array( __CLASS__, 'fusion_is_hundred_percent_template' ), 20, 2 );
 		add_filter( 'fusion_is_hundred_percent_template', array( __CLASS__, 'fusion_is_hundred_percent_template' ), 20, 2 );
+		add_action( 'fusion_builder_admin_scripts_hook', array( __CLASS__, 'avada_fusion_builder_admin_script' ), 11 );
 
 		if ( ! is_admin() ) {
 			// Filter post meta
@@ -3312,6 +3313,101 @@ class GeoDir_Compatibility {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Add inline custom script to Fusion Builder.
+	 *
+	 * @since 2.3.70
+	 *
+	 * @return mixed
+	 */
+	public static function avada_fusion_builder_admin_script() {
+		if ( wp_script_is( 'fusion_builder', 'enqueued' ) ) {
+			$basic_nonce = wp_create_nonce( 'geodir_basic_nonce' );
+			$cpt_options = geodir_cpt_rewrite_slug_options();
+
+			ob_start();
+			if ( 2 === 3 ) { ?><script type="text/javascript"><?php } ?>
+jQuery(function($){
+	$(document).on('change', '[data-element_type="gd_listings"] .fusion-builder-option select[name="post_type"]', function(){
+		var $_wrap = $(this).closest('[data-element_type="gd_listings"]'), _cpt = $(this).val();
+
+		if ($('select[name="category"]', $_wrap).length) {
+			if (!window.gdCPTCats) {
+				window.gdCPTCats = [];
+			}
+			var gdCptSlugs = <?php echo "[" . json_encode( $cpt_options ) . "]"; ?>;
+			if (gdCptSlugs.length && gdCptSlugs[0][_cpt]) {
+				var _optc, $_cat = $('select[name="category"]', $_wrap), gdCatPath = '<?php echo esc_url( rest_url( 'geodir/v2/GDCPTSLUG/categories/?per_page=100' ) ); ?>';gdCatPath = gdCatPath.replace('GDCPTSLUG', gdCptSlugs[0][_cpt]);
+				_optc = '';
+				if ($('option:first', $_cat).length && $('option:first', $_cat).val() === "0") {
+					_optc += '<option value="0">' + $('option:first', $_cat).text() +'</option>';
+				}
+				if (window.gdCPTCats[gdCatPath]) {
+					$.each(window.gdCPTCats[gdCatPath],function(key, term) {
+						_optc += '<option value="' + term.id +'">' + term.name +'</option>';
+					});
+					$_cat.html(_optc).select2({'placeholder': fusionBuilderText.select_categories_or_leave_blank_for_all});
+				} else {
+					$.ajax({
+						url: gdCatPath,
+						type: 'GET',
+						dataType: 'json',
+						data: {}
+					}).done(function(res) {
+						if (res && typeof res == 'object') {
+							window.gdCPTCats[gdCatPath] = res;
+							$.each(res, function(key, term) {
+								_optc += '<option value="' + term.id +'">' + term.name +'</option>'
+							});
+						}
+						$_cat.html(_optc).select2({'placeholder': fusionBuilderText.select_categories_or_leave_blank_for_all});
+					});
+				}
+			}
+		}
+
+		if ($('select[name="sort_by"]', $_wrap).length) {
+			if (!window.gdCPTSort) {
+				window.gdCPTSort = [];
+			}
+
+			if (window.gdCPTSort[_cpt]) {
+				var _opts = '', res = window.gdCPTSort[_cpt];
+				$.each(res, function(val, lbl) {
+					_opts += '<option value="' + val +'">' + lbl +'</option>';
+				});
+				$('select[name="sort_by"]', $_wrap).html(_opts).select2();
+			} else {
+				$.ajax({
+					url: '<?php echo esc_js( geodir_ajax_url( true ) ) ?>',
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						'action': 'geodir_get_sort_options',
+						'post_type': _cpt,
+						'security': '<?php echo esc_js( $basic_nonce ) ?>'
+					}
+				}).done(function(res) {
+					var _opts = '';
+					if (res && typeof res == 'object') {
+						window.gdCPTSort[_cpt] = res;
+						$.each(res, function(val, lbl) {
+							_opts += '<option value="' + val +'">' + lbl +'</option>';
+						});
+					}
+					$('select[name="sort_by"]', $_wrap).html(_opts).select2();
+				});
+			}
+		}
+	});
+});
+		<?php if ( 2 === 3 ) { ?></script><?php }
+			$script = ob_get_clean();
+
+			wp_add_inline_script( 'fusion_builder', trim( $script ), 'after' );
+		}
 	}
 
 	/**
