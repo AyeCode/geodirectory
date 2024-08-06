@@ -7,7 +7,7 @@ jQuery(window).on("load",function() {
 
     // rating click
     jQuery( 'a.gd-rating-link' ).on("click", function() {
-        jQuery.post( ajaxurl, { action: 'geodirectory_rated' } );
+        jQuery.post( ajaxurl, { action: 'geodirectory_rated', '_gdnonce': jQuery(this).data('nonce') } );
         jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
     });
 

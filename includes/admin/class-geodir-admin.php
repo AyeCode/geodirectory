@@ -126,9 +126,14 @@ class GeoDir_Admin {
 	 *
 	 * @since 2.0.0
 	 */
-	public function geodirectory_rated(){
-		update_option( 'geodirectory_admin_footer_text_rated', true );
-		wp_die();
+	public function geodirectory_rated() {
+		if ( current_user_can( 'manage_options' ) && ! empty( $_REQUEST['_gdnonce'] ) && wp_verify_nonce( $_REQUEST['_gdnonce'], 'geodirectory_rated' ) ) {
+			update_option( 'geodirectory_admin_footer_text_rated', true );
+
+			wp_die();
+		}
+
+		wp_die( -1 );
 	}
 
 	/**
@@ -417,8 +422,7 @@ class GeoDir_Admin {
 			// Change the footer text
 			if ( ! get_option( 'geodirectory_admin_footer_text_rated' ) ) {
 				/* translators: %s: five stars */
-				$footer_text = sprintf( __( 'If you like <strong>GeoDirectory</strong> please leave us a %s rating. A huge thanks in advance!', 'geodirectory' ), '<a href="https://wordpress.org/support/plugin/geodirectory/reviews?rate=5#new-post" target="_blank" class="gd-rating-link" data-rated="' . esc_attr__( 'Thanks :)', 'geodirectory' ) . '">&#9733;&#9733;&#9733;&#9733;&#9733;</a>' );
-
+				$footer_text = sprintf( __( 'If you like <strong>GeoDirectory</strong> please leave us a %s rating. A huge thanks in advance!', 'geodirectory' ), '<a href="https://wordpress.org/support/plugin/geodirectory/reviews?rate=5#new-post" target="_blank" class="gd-rating-link" data-rated="' . esc_attr__( 'Thanks :)', 'geodirectory' ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'geodirectory_rated' ) ) . '">&#9733;&#9733;&#9733;&#9733;&#9733;</a>' );
 			} else {
 				$footer_text = __( 'Thank you for using GeoDirectory!', 'geodirectory' );
 			}
