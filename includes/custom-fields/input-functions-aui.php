@@ -1521,7 +1521,7 @@ function geodir_cfi_address( $html, $cf ) {
         } ?>
 
         <?php  if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
-            <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details"<?php echo geodir_conditional_field_attrs( $cf, 'map', 'fieldset' ); ?>>
+            <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details" <?php echo geodir_conditional_field_attrs( $cf, 'map', 'fieldset' ); ?>>
                 <?php
                 if ( geodir_core_multi_city() ) {
                     add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
@@ -1660,7 +1660,7 @@ function geodir_cfi_address( $html, $cf ) {
         }?>
 
         <?php if ( isset( $post_mapzoom ) ) { ?>
-            <div data-argument="<?php echo $prefix . 'mapzoom'; ?>" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row d-none"<?php echo geodir_conditional_field_attrs( $cf, 'mapzoom', 'hidden' ); ?>><input type="hidden" value="<?php echo esc_attr( $post_mapzoom ); ?>" name="<?php echo 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/></div>
+            <div data-argument="<?php echo $prefix . 'mapzoom'; ?>" class="<?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row d-none" <?php echo geodir_conditional_field_attrs( $cf, 'mapzoom', 'hidden' ); ?>><input type="hidden" value="<?php echo esc_attr( $post_mapzoom ); ?>" name="<?php echo 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/></div>
         <?php }
 
         $html = ob_get_clean();
