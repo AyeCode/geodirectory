@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.70\n"
+"Project-Id-Version: GeoDirectory 2.3.71\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-01 20:26+0530\n"
-"PO-Revision-Date: 2024-08-01 20:26+0530\n"
+"POT-Creation-Date: 2024-08-08 19:19+0530\n"
+"PO-Revision-Date: 2024-08-08 19:19+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -2844,18 +2844,18 @@ msgid "Let's go!"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:518
-#: includes/admin/class-geodir-admin.php:251
+#: includes/admin/class-geodir-admin.php:256
 msgid "GeoDirectory - an AyeCode product!"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:519
-#: includes/admin/class-geodir-admin.php:252
+#: includes/admin/class-geodir-admin.php:257
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:37
 msgid "Please confirm you wish to connect your site?"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:520
-#: includes/admin/class-geodir-admin.php:253
+#: includes/admin/class-geodir-admin.php:258
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:38
 #, php-format
 msgid ""
@@ -2864,25 +2864,25 @@ msgid ""
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:521
-#: includes/admin/class-geodir-admin.php:254
+#: includes/admin/class-geodir-admin.php:259
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:39
 msgid "Connect Site"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:522
-#: includes/admin/class-geodir-admin.php:255
+#: includes/admin/class-geodir-admin.php:260
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:40
 msgid "Connecting..."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:523
-#: includes/admin/class-geodir-admin.php:256
+#: includes/admin/class-geodir-admin.php:261
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:41
 msgid "This service will only work with a live domain, not a localhost."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:524
-#: includes/admin/class-geodir-admin.php:257
+#: includes/admin/class-geodir-admin.php:262
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:42
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
@@ -3131,7 +3131,7 @@ msgid "Awesome, your directory is ready!"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:1595
-#: includes/admin/class-geodir-admin.php:423
+#: includes/admin/class-geodir-admin.php:427
 msgid "Thank you for using GeoDirectory!"
 msgstr ""
 
@@ -3668,117 +3668,117 @@ msgstr ""
 msgid "Taxonomies Page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:145
+#: includes/admin/class-geodir-admin.php:150
 msgid "GD Add listing page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:146
+#: includes/admin/class-geodir-admin.php:151
 msgid "This is where users will add listings via the frontend if enabled."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:148
+#: includes/admin/class-geodir-admin.php:153
 msgid "GD Location page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:149
+#: includes/admin/class-geodir-admin.php:154
 msgid ""
 "This page can be used as the main directory page and is also used by some "
 "addons."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:151
+#: includes/admin/class-geodir-admin.php:156
 msgid "GD Search page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:152
+#: includes/admin/class-geodir-admin.php:157
 msgid "This is the GD search results page."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:154
+#: includes/admin/class-geodir-admin.php:159
 msgid "GD Archive template"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:155
+#: includes/admin/class-geodir-admin.php:160
 msgid ""
 "Used to design the archive pages but should never be linked to directly."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:157
+#: includes/admin/class-geodir-admin.php:162
 msgid "GD Archive Item template"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:158
+#: includes/admin/class-geodir-admin.php:163
 msgid ""
 "Used to design the archive items but should never be linked to directly."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:160
+#: includes/admin/class-geodir-admin.php:165
 msgid "GD Details template"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:161
+#: includes/admin/class-geodir-admin.php:166
 msgid "Used to design the details page but should never be linked to directly."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:163
+#: includes/admin/class-geodir-admin.php:168
 msgid "GD T&Cs"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:164
+#: includes/admin/class-geodir-admin.php:169
 msgid "This is the page that will be used for your terms and conditions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:172
+#: includes/admin/class-geodir-admin.php:177
 #, php-format
 msgid "GD Archive template (%s)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:173
+#: includes/admin/class-geodir-admin.php:178
 #, php-format
 msgid ""
 "Used to design the %s archive pages but should never be linked to directly."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:175
+#: includes/admin/class-geodir-admin.php:180
 #, php-format
 msgid "GD Archive Item template (%s)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:176
+#: includes/admin/class-geodir-admin.php:181
 #, php-format
 msgid ""
 "Used to design the %s archive items but should never be linked to directly."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:178
+#: includes/admin/class-geodir-admin.php:183
 #, php-format
 msgid "GD Details template (%s)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:179
+#: includes/admin/class-geodir-admin.php:184
 #, php-format
 msgid ""
 "Used to design the %s details page but should never be linked to directly."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:181
+#: includes/admin/class-geodir-admin.php:186
 #, php-format
 msgid "GD Add listing page (%s)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:182
+#: includes/admin/class-geodir-admin.php:187
 #, php-format
 msgid "Used to design the add %s page for the frontend."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:420
+#: includes/admin/class-geodir-admin.php:425
 #, php-format
 msgid ""
 "If you like <strong>GeoDirectory</strong> please leave us a %s rating. A "
 "huge thanks in advance!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:420
+#: includes/admin/class-geodir-admin.php:425
 msgid "Thanks :)"
 msgstr ""
 
