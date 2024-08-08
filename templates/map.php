@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.3.24
+ * @version    2.3.71
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -960,9 +960,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
     /* ]]> */
 </script>
 <?php }
-$set_button_class = 'geodir_button';
-if (is_admin())
-    $set_button_class = 'btn btn-primary collapse';
+$set_button_class = is_admin() ? 'gd-advanced-setting btn btn-sm btn-primary collapse' : 'geodir_button';
 ?>
 <input type="button" id="<?php echo $prefix; ?>set_address_button" class="<?php echo $set_button_class; ?>" value="<?php esc_attr_e($map_title, 'geodirectory'); ?>" style="float:none;"/>
 <div id="<?php echo $prefix; ?>d_mouseClick"></div>
