@@ -53,6 +53,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 
 			add_filter( 'geodir_get_settings_'.$this->id , array( $this, 'set_current_values' ) );
+
+			add_action( 'geodir_post_type_saved', array( $this, 'clear_post_type_cache' ), 1, 2 );
 		}
 
 		/**
@@ -850,6 +852,20 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 			return apply_filters('geodir_save_post_type', $output, $post_type, $raw);
 
+		}
+
+		/**
+		 * Clear post type cache on save post type.
+		 *
+		 * @since 2.3.72
+		 *
+		 * @param string $post_type Saved post type.
+		 * @param array  $args Post types args.
+		 * @return mixed
+		 */
+		public function clear_post_type_cache( $post_type, $args ) {
+			// Clear CPT templates cache.
+			geodir_cache_flush_group( 'geodir_cpt_templates' );
 		}
 	}
 
