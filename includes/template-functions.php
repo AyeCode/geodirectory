@@ -835,8 +835,14 @@ function geodir_listing_archive_image() {
  */
 function geodir_get_page_id( $page, $post_type = '', $translated = true ) {
 	$page_id = 0;
+
 	if ( ! empty( $post_type ) ) {
 		$page_id = geodir_get_cpt_page_id( $page, $post_type );
+
+		// Check post type page template exists.
+		if ( ! ( ! empty( $page_id ) && get_post_type( $page_id ) ) ) {
+			$page_id = 0;
+		}
 	}
 
 	if ( ! $page_id ) {
@@ -949,10 +955,14 @@ function geodir_get_cpt_page_id( $page, $post_type = '' ) {
 
 	}
 
-	$page_id = wp_cache_get( "geodir_cpt_template_page_id:{$post_type}:{$page}", 'geodir_cpt_template_page' );
+	$page_id = geodir_cache_get( "geodir_cpt_template_page_id:{$post_type}:{$page}", 'geodir_cpt_templates' );
 
 	if ( $page_id !== false ) {
-		return $page_id;
+		if ( ! empty( $page_id ) && get_post_type( $page_id ) ) {
+			return $page_id;
+		} else {
+			$page_id = 0;
+		}
 	}
 
 	$post_types = geodir_get_posttypes( 'array' );
@@ -960,7 +970,7 @@ function geodir_get_cpt_page_id( $page, $post_type = '' ) {
 		$page_id = (int) $post_types[ $post_type ][ 'page_' . $page ];
 	}
 
-	wp_cache_set( "geodir_cpt_template_page_id:{$post_type}:{$page}", $page_id, 'geodir_cpt_template_page' );
+	geodir_cache_set( "geodir_cpt_template_page_id:{$post_type}:{$page}", $page_id, 'geodir_cpt_templates' );
 
 	return $page_id;
 }
@@ -1045,6 +1055,11 @@ function geodir_get_template_id( $page, $post_type = '', $translated = true ) {
 	$page_id = 0;
 	if ( ! empty( $post_type ) ) {
 		$page_id = geodir_get_cpt_template_id( $page, $post_type );
+
+		// Check post type page template exists.
+		if ( ! ( ! empty( $page_id ) && get_post_type( $page_id ) ) ) {
+			$page_id = 0;
+		}
 	}
 
 	if ( ! $page_id ) {
@@ -1075,18 +1090,23 @@ function geodir_get_cpt_template_id( $page, $post_type = '' ) {
 
 	}
 
-	$page_id = wp_cache_get( "geodir_cpt_template_template_id:{$post_type}:{$page}", 'geodir_cpt_template_template' );
+	$page_id = geodir_cache_get( "geodir_cpt_template_template_id:{$post_type}:{$page}", 'geodir_cpt_templates' );
 
 	if ( $page_id !== false ) {
-		return $page_id;
+		if ( ! empty( $page_id ) && get_post_type( $page_id ) ) {
+			return $page_id;
+		} else {
+			$page_id = 0;
+		}
 	}
 
 	$post_types = geodir_get_posttypes( 'array' );
+
 	if ( ! empty( $post_types ) && ! empty( $post_types[ $post_type ][ 'template_' . $page ] ) ) {
 		$page_id = (int) $post_types[ $post_type ][ 'template_' . $page ];
 	}
 
-	wp_cache_set( "geodir_cpt_template_template_id:{$post_type}:{$page}", $page_id, 'geodir_cpt_template_template' );
+	geodir_cache_set( "geodir_cpt_template_template_id:{$post_type}:{$page}", $page_id, 'geodir_cpt_templates' );
 
 	return $page_id;
 }
