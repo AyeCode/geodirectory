@@ -52,6 +52,9 @@ class GeoDir_Query {
 		add_filter( 'split_the_query', array( $this, 'split_the_query' ), 100, 2 );
 		add_action( 'wp', array( $this, 'set_wp_the_query' ), 1, 1 );
 
+		add_filter( 'geodir_main_query_posts_where', array( $this, 'main_query_posts_where' ), 10, 3 );
+		add_filter( 'geodir_posts_order_by_sort', array( $this, 'posts_order_by_sort' ), 10, 4 );
+
 		$this->init_query_vars();
 	}
 
@@ -1709,5 +1712,61 @@ class GeoDir_Query {
 				$gd_wp_the_query->the_posts = $wp_the_query->posts;
 			}
 		}
+	}
+
+	/**
+	 * Set GD posts main query post where clause.
+	 *
+	 * @since 2.3.73
+	 *
+	 * @global object $wpdb WordPress database object.
+	 *
+	 * @param string $where Query posts where clause.
+	 * @param object $query WP_Query object.
+	 * @param string $geodir_post_type Current post type.
+	 * @return string Query posts where clause.
+	 */
+	public function main_query_posts_where( $where, $query, $geodir_post_type ) {
+		global $wpdb;
+
+		// A-Z Search value.
+		$value = geodir_az_search_value();
+
+		if ( $value != '' ) {
+			$where .= $wpdb->prepare(" AND `{$wpdb->posts}`.`post_title` LIKE %s ", $wpdb->esc_like( $value ) . '%' );
+		}
+
+		return $where;
+	}
+
+	/**
+	 * Set GD posts main query post orderby clause.
+	 *
+	 * @since 2.3.73
+	 *
+	 * @global object $wpdb WordPress database object.
+	 *
+	 * @param string $orderby Query posts orderby clause.
+	 * @param string $sort_by Current sort by parameter.
+	 * @param string $table Details database table.
+	 * @param object $query WP_Query object.
+	 * @return string Query posts orderby clause.
+	 */
+	public function posts_order_by_sort( $orderby, $sort_by, $table, $query ) {
+		global $wpdb;
+
+		$value = geodir_az_search_value();
+
+		if ( $value != '' ) {
+			$_orderby = "`{$wpdb->posts}`.`post_title` ASC";
+
+			if ( trim( $orderby ) != "" ) {
+				$_orderby .= "," . $orderby;
+			}
+
+			$orderby = $_orderby;
+		}
+
+		return $orderby;
 	}
 }

@@ -604,6 +604,7 @@ add_action( 'widgets_init', 'goedir_register_widgets' );
 function geodir_get_widgets(){
 
 	$widgets = array(
+		'GeoDir_Widget_AZ_Search',
 		'GeoDir_Widget_Search',
 		'GeoDir_Widget_Best_Of',
 		'GeoDir_Widget_Categories',

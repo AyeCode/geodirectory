@@ -291,16 +291,16 @@ function geodir_loop_paging( $args = array() ) {
 		$end_no   = min( $paged * $posts_per_page, $numposts );
 		if ( $listing_type_name ) {
 			$listing_type_name = __( $listing_type_name, 'geodirectory' );
-			$pegination_desc   = wp_sprintf( __( 'Showing %1$s %2$d-%3$d of %4$d', 'geodirectory' ), $listing_type_name, $start_no, $end_no, $numposts );
+			$pagination_desc   = wp_sprintf( __( 'Showing %1$s %2$d-%3$d of %4$d', 'geodirectory' ), $listing_type_name, $start_no, $end_no, $numposts );
 		} else {
-			$pegination_desc = wp_sprintf( __( 'Showing listings %1$d-%2$d of %3$d', 'geodirectory' ), $start_no, $end_no, $numposts );
+			$pagination_desc = wp_sprintf( __( 'Showing listings %1$d-%2$d of %3$d', 'geodirectory' ), $start_no, $end_no, $numposts );
 		}
 		$bs_class        = $design_style ? 'text-muted pb-2' : '';
 
 		if( ! empty( $args['advanced_pagination_class'] ) ) {
 			$bs_class = esc_attr( $args['advanced_pagination_class'] );
 		}
-		$pagination_info = '<div class="gd-pagination-details ' . $bs_class . '">' . $pegination_desc . '</div>';
+		$pagination_info = '<div class="gd-pagination-details ' . $bs_class . '">' . $pagination_desc . '</div>';
 
 		/**
 		 * Adds an extra pagination info above/under pagination.
@@ -1348,4 +1348,71 @@ function geodir_filter_textarea_output( $text, $context = '', $args = array() ) 
 	}
 
 	return apply_filters( 'geodir_filtered_textarea_output', $text, $orig_text, $context, $args );
+}
+
+/**
+ * Get A-Z search options.
+ *
+ * @since 2.3.73
+ *
+ * @param string $post_type Current post type. Default empty.
+ * @return array A-Z options array.
+ */
+function geodir_az_search_options( $post_type = '' ) {
+	$range = range( 'A', 'Z' );
+
+	$options = array();
+
+	foreach ( $range as $char ) {
+		$options[] = $char;
+	}
+
+	/**
+	 * Filter A-Z search options.
+	 *
+	 * @since 2.3.73
+	 *
+	 * @param array  $options A-Z options array.
+	 * @param string $post_type Current post type. Default empty.
+	 */
+	return apply_filters( 'geodir_az_search_options', $options, $post_type );
+}
+
+/**
+ * Get A-Z search hidden input.
+ *
+ * @since 2.3.73
+ *
+ * @param array $args Input args.
+ */
+function geodir_az_search_input( $args ) {
+	if ( geodir_is_page( 'search' ) ) {
+		$options = geodir_az_search_options();
+
+		$value = ! empty( $_REQUEST['saz'] ) && in_array( $_REQUEST['saz'], $options ) ? sanitize_text_field( $_REQUEST['saz'] ) : '';
+
+		echo '<input type="hidden" name="saz" value="' . esc_attr( $value ) . '">';
+	}
+}
+add_action( 'geodir_before_search_form', 'geodir_az_search_input', 10, 1 );
+
+/**
+ * Get A-Z searched value.
+ *
+ * @since 2.3.73
+ *
+ * @return string Searched character.
+ */
+function geodir_az_search_value() {
+	$value = '';
+
+	if ( isset( $_REQUEST['saz'] ) && isset( $_REQUEST['geodir_search'] ) && geodir_is_page( 'search' ) ) {
+		$_value = sanitize_text_field( $_REQUEST['saz'] );
+
+		if ( in_array( $_value, geodir_az_search_options() ) ) {
+			$value = $_value;
+		}
+	}
+
+	return $value;
 }
