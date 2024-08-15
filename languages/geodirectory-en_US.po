@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.72\n"
+"Project-Id-Version: GeoDirectory 2.3.73\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-15 18:21+0530\n"
-"PO-Revision-Date: 2024-08-15 18:22+0530\n"
+"POT-Creation-Date: 2024-08-15 20:37+0530\n"
+"PO-Revision-Date: 2024-08-15 20:37+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -428,7 +428,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-blocks.php:231
 #: includes/admin/class-geodir-admin-menus.php:108
 #: includes/class-geodir-elementor.php:156 includes/class-geodir-privacy.php:24
-#: includes/core-functions.php:934
+#: includes/core-functions.php:935
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
 #: includes/integrations/bricks/class-geodir-bricks.php:276
 msgid "GeoDirectory"
@@ -537,6 +537,7 @@ msgstr ""
 #: includes/admin/admin-functions.php:905
 #: includes/admin/admin-functions.php:975
 #: includes/admin/admin-functions.php:1004
+#: includes/widgets/class-geodir-widget-az-search.php:70
 #: includes/widgets/class-geodir-widget-categories.php:76
 #: includes/widgets/class-geodir-widget-cpt-meta.php:89
 #: includes/widgets/class-geodir-widget-listings.php:78
@@ -650,6 +651,9 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-archive-item-section.php:75
 #: includes/widgets/class-geodir-widget-archive-item-section.php:89
 #: includes/widgets/class-geodir-widget-archive-item-section.php:104
+#: includes/widgets/class-geodir-widget-az-search.php:130
+#: includes/widgets/class-geodir-widget-az-search.php:144
+#: includes/widgets/class-geodir-widget-az-search.php:159
 #: includes/widgets/class-geodir-widget-best-of.php:263
 #: includes/widgets/class-geodir-widget-best-of.php:281
 #: includes/widgets/class-geodir-widget-best-of.php:299
@@ -719,6 +723,8 @@ msgstr ""
 #: includes/admin/admin-functions.php:926
 #: includes/admin/admin-functions.php:964
 #: includes/widgets/class-geodir-widget-archive-item-section.php:105
+#: includes/widgets/class-geodir-widget-az-search.php:145
+#: includes/widgets/class-geodir-widget-az-search.php:160
 #: includes/widgets/class-geodir-widget-best-of.php:314
 #: includes/widgets/class-geodir-widget-listings.php:529
 #: includes/widgets/class-geodir-widget-loop-paging.php:171
@@ -738,6 +744,8 @@ msgstr ""
 #: includes/admin/admin-functions.php:927
 #: includes/admin/admin-functions.php:966
 #: includes/widgets/class-geodir-widget-author-actions.php:97
+#: includes/widgets/class-geodir-widget-az-search.php:146
+#: includes/widgets/class-geodir-widget-az-search.php:161
 #: includes/widgets/class-geodir-widget-best-of.php:316
 #: includes/widgets/class-geodir-widget-categories.php:326
 #: includes/widgets/class-geodir-widget-listings.php:531
@@ -913,6 +921,8 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:584
 #: includes/class-geodir-post-data.php:1651 includes/core-functions.php:372
 #: includes/widgets/class-geodir-widget-add-listing.php:317
+#: includes/widgets/class-geodir-widget-az-search.php:45
+#: includes/widgets/class-geodir-widget-az-search.php:94
 #: includes/widgets/class-geodir-widget-categories.php:46
 #: includes/widgets/class-geodir-widget-categories.php:109
 #: includes/widgets/class-geodir-widget-listings.php:49
@@ -2202,7 +2212,7 @@ msgid "CPT Add Listing"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:241
-#: includes/core-functions.php:675
+#: includes/core-functions.php:676
 msgid "GD Pages"
 msgstr ""
 
@@ -2775,6 +2785,7 @@ msgid "Extra Features"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:108
+#: includes/widgets/class-geodir-widget-az-search.php:38
 #: includes/widgets/class-geodir-widget-categories.php:51
 #: includes/widgets/class-geodir-widget-listings.php:55
 #: includes/widgets/class-geodir-widget-loop-actions.php:39
@@ -3555,7 +3566,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-categories.php:211
 #: includes/admin/views/html-admin-settings-import-export-listings.php:197
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:193
-#: includes/core-functions.php:1110 includes/post-functions.php:1977
+#: includes/core-functions.php:1111 includes/post-functions.php:1977
 #: includes/widgets/class-geodir-widget-dynamic-content.php:496
 #: language.php:174 templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
@@ -3633,38 +3644,38 @@ msgid "The pages that should be included/excluded."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:115
-#: includes/core-functions.php:677
+#: includes/core-functions.php:678
 msgid "Add Listing Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:116
-#: includes/core-functions.php:678
+#: includes/core-functions.php:679
 msgid "Author Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:117
-#: includes/core-functions.php:679
+#: includes/core-functions.php:680
 msgid "Listing Detail Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:118
-#: includes/core-functions.php:682
+#: includes/core-functions.php:683
 msgid "Location Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:119
-#: includes/core-functions.php:684
+#: includes/core-functions.php:685
 msgid "Post Type Archive"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:120
 #: includes/admin/settings/class-geodir-settings-general.php:295
-#: includes/core-functions.php:685
+#: includes/core-functions.php:686
 msgid "Search Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:121
-#: includes/core-functions.php:686
+#: includes/core-functions.php:687
 msgid "Taxonomies Page"
 msgstr ""
 
@@ -13111,51 +13122,51 @@ msgctxt "time ago"
 msgid "%d years"
 msgstr ""
 
-#: includes/core-functions.php:680
+#: includes/core-functions.php:681
 msgid "Listing Preview Page"
 msgstr ""
 
-#: includes/core-functions.php:681
+#: includes/core-functions.php:682
 msgid "Listing Success Page"
 msgstr ""
 
-#: includes/core-functions.php:683
+#: includes/core-functions.php:684
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1107
+#: includes/core-functions.php:1108
 msgid "Select search type"
 msgstr ""
 
-#: includes/core-functions.php:1303 includes/core-functions.php:1317
+#: includes/core-functions.php:1304 includes/core-functions.php:1318
 #: templates/bootstrap/search-bar/input-near.php:39
 #: templates/bootstrap/search-bar/input-search.php:38
 msgid "Clear field"
 msgstr ""
 
-#: includes/core-functions.php:1651
+#: includes/core-functions.php:1652
 msgid "Filesystem ERROR during mu-plugin file copy: "
 msgstr ""
 
-#: includes/core-functions.php:1653
+#: includes/core-functions.php:1654
 msgid ""
 "There was a problem accessing the filesystem during copy Fast AJAX mu-plugin "
 "file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1661
+#: includes/core-functions.php:1662
 #, php-format
 msgid ""
 "Unable to create directory %s. Make sure its parent directory writable by "
 "the server."
 msgstr ""
 
-#: includes/core-functions.php:1665
+#: includes/core-functions.php:1666
 #, php-format
 msgid "Must-plugin directory %s is not writable by the server."
 msgstr ""
 
-#: includes/core-functions.php:1673
+#: includes/core-functions.php:1674
 msgid ""
 "There was a problem in copy Fast AJAX mu-plugin file to mu-plugins folder."
 msgstr ""
@@ -15263,43 +15274,17 @@ msgstr ""
 msgid "Not published"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-best-of.php:35
-msgid "GD > Best of listings"
+#: includes/widgets/class-geodir-widget-az-search.php:29
+msgid "GD > A-Z Search"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-best-of.php:38
-msgid "Shows the best of listings from categories."
+#: includes/widgets/class-geodir-widget-az-search.php:32
+msgid "Shows the listings in A-Z alphabetical list."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-best-of.php:56
-#: includes/widgets/class-geodir-widget-categories.php:104
-#: includes/widgets/class-geodir-widget-category-description.php:42
-#: includes/widgets/class-geodir-widget-cpt-meta.php:36
-#: includes/widgets/class-geodir-widget-dashboard.php:42
-#: includes/widgets/class-geodir-widget-listings.php:114
-#: includes/widgets/class-geodir-widget-map.php:106
-#: includes/widgets/class-geodir-widget-post-address.php:93
-#: includes/widgets/class-geodir-widget-post-content.php:35
-#: includes/widgets/class-geodir-widget-post-features.php:101
-#: includes/widgets/class-geodir-widget-post-meta.php:97
-#: includes/widgets/class-geodir-widget-recent-reviews.php:101
-#: includes/widgets/class-geodir-widget-recently-viewed.php:52
-#: includes/widgets/class-geodir-widget-single-reviews.php:56
-msgid "Title:"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-best-of.php:57
-#: includes/widgets/class-geodir-widget-categories.php:105
-#: includes/widgets/class-geodir-widget-category-description.php:43
-#: includes/widgets/class-geodir-widget-dashboard.php:43
-#: includes/widgets/class-geodir-widget-listings.php:115
-#: includes/widgets/class-geodir-widget-map.php:107
-#: includes/widgets/class-geodir-widget-post-images.php:35
-#: includes/widgets/class-geodir-widget-recent-reviews.php:102
-#: includes/widgets/class-geodir-widget-single-reviews.php:57
-msgid "The widget title."
-msgstr ""
-
+#: includes/widgets/class-geodir-widget-az-search.php:46
+#: includes/widgets/class-geodir-widget-az-search.php:109
+#: includes/widgets/class-geodir-widget-az-search.php:120
 #: includes/widgets/class-geodir-widget-best-of.php:71
 #: includes/widgets/class-geodir-widget-best-of.php:144
 #: includes/widgets/class-geodir-widget-best-of.php:154
@@ -15340,6 +15325,162 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-recent-reviews.php:157
 #: includes/widgets/class-geodir-widget-recent-reviews.php:166
 msgid "Filters"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:51
+#: includes/widgets/class-geodir-widget-categories.php:67
+#: includes/widgets/class-geodir-widget-listings.php:69
+#: includes/widgets/class-geodir-widget-loop-actions.php:49
+#: includes/widgets/class-geodir-widget-loop-paging.php:49
+#: includes/widgets/class-geodir-widget-map.php:68
+#: includes/widgets/class-geodir-widget-post-address.php:55
+#: includes/widgets/class-geodir-widget-post-fav.php:70
+#: includes/widgets/class-geodir-widget-post-features.php:64
+#: includes/widgets/class-geodir-widget-post-meta.php:60
+#: includes/widgets/class-geodir-widget-post-rating.php:64
+#: includes/widgets/class-geodir-widget-recent-reviews.php:64
+#: includes/widgets/class-geodir-widget-search.php:54
+#: includes/widgets/class-geodir-widget-single-tabs.php:71
+msgid "Styles"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:58
+#: includes/widgets/class-geodir-widget-az-search.php:136
+#: includes/widgets/class-geodir-widget-az-search.php:151
+#: includes/widgets/class-geodir-widget-az-search.php:166
+#: includes/widgets/class-geodir-widget-az-search.php:189
+#: includes/widgets/class-geodir-widget-az-search.php:192
+#: includes/widgets/class-geodir-widget-az-search.php:193
+#: includes/widgets/class-geodir-widget-az-search.php:194
+#: includes/widgets/class-geodir-widget-az-search.php:196
+#: includes/widgets/class-geodir-widget-loop-paging.php:47
+#: includes/widgets/class-geodir-widget-loop-paging.php:162
+#: includes/widgets/class-geodir-widget-loop-paging.php:177
+#: includes/widgets/class-geodir-widget-loop-paging.php:193
+msgid "Paging"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:63
+#: includes/widgets/class-geodir-widget-az-search.php:71
+#: includes/widgets/class-geodir-widget-categories.php:77
+#: includes/widgets/class-geodir-widget-categories.php:80
+#: includes/widgets/class-geodir-widget-listings.php:79
+#: includes/widgets/class-geodir-widget-listings.php:82
+#: includes/widgets/class-geodir-widget-loop-actions.php:57
+#: includes/widgets/class-geodir-widget-loop-actions.php:59
+#: includes/widgets/class-geodir-widget-loop-paging.php:57
+#: includes/widgets/class-geodir-widget-loop-paging.php:59
+#: includes/widgets/class-geodir-widget-map.php:78
+#: includes/widgets/class-geodir-widget-map.php:81
+#: includes/widgets/class-geodir-widget-post-address.php:65
+#: includes/widgets/class-geodir-widget-post-address.php:68
+#: includes/widgets/class-geodir-widget-post-fav.php:80
+#: includes/widgets/class-geodir-widget-post-fav.php:83
+#: includes/widgets/class-geodir-widget-post-features.php:74
+#: includes/widgets/class-geodir-widget-post-features.php:77
+#: includes/widgets/class-geodir-widget-post-meta.php:70
+#: includes/widgets/class-geodir-widget-post-meta.php:73
+#: includes/widgets/class-geodir-widget-post-rating.php:74
+#: includes/widgets/class-geodir-widget-post-rating.php:77
+#: includes/widgets/class-geodir-widget-recent-reviews.php:74
+#: includes/widgets/class-geodir-widget-recent-reviews.php:77
+#: includes/widgets/class-geodir-widget-search.php:64
+#: includes/widgets/class-geodir-widget-search.php:67
+#: includes/widgets/class-geodir-widget-single-tabs.php:81
+#: includes/widgets/class-geodir-widget-single-tabs.php:84
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1586
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1610
+#: vendor/ayecode/wp-super-duper/sd-functions.php:1634
+msgid "Advanced"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:89
+#: includes/widgets/class-geodir-widget-best-of.php:56
+#: includes/widgets/class-geodir-widget-categories.php:104
+#: includes/widgets/class-geodir-widget-category-description.php:42
+#: includes/widgets/class-geodir-widget-cpt-meta.php:36
+#: includes/widgets/class-geodir-widget-dashboard.php:42
+#: includes/widgets/class-geodir-widget-listings.php:114
+#: includes/widgets/class-geodir-widget-map.php:106
+#: includes/widgets/class-geodir-widget-post-address.php:93
+#: includes/widgets/class-geodir-widget-post-content.php:35
+#: includes/widgets/class-geodir-widget-post-features.php:101
+#: includes/widgets/class-geodir-widget-post-meta.php:97
+#: includes/widgets/class-geodir-widget-recent-reviews.php:101
+#: includes/widgets/class-geodir-widget-recently-viewed.php:52
+#: includes/widgets/class-geodir-widget-single-reviews.php:56
+msgid "Title:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:90
+#: includes/widgets/class-geodir-widget-best-of.php:57
+#: includes/widgets/class-geodir-widget-categories.php:105
+#: includes/widgets/class-geodir-widget-category-description.php:43
+#: includes/widgets/class-geodir-widget-dashboard.php:43
+#: includes/widgets/class-geodir-widget-listings.php:115
+#: includes/widgets/class-geodir-widget-map.php:107
+#: includes/widgets/class-geodir-widget-post-images.php:35
+#: includes/widgets/class-geodir-widget-recent-reviews.php:102
+#: includes/widgets/class-geodir-widget-single-reviews.php:57
+msgid "The widget title."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:102
+#: includes/widgets/class-geodir-widget-categories.php:119
+#: includes/widgets/class-geodir-widget-cpt-meta.php:44
+#: includes/widgets/class-geodir-widget-recently-viewed.php:83
+msgid "Post Type:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:103
+msgid "Post type to filter posts."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:113
+msgid "Do not filter current CPT:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:114
+msgid "Do not filter for current viewing post type."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:127
+#: includes/widgets/class-geodir-widget-loop-paging.php:153
+#: includes/widgets/class-geodir-widget-post-rating.php:103
+#: includes/widgets/class-geodir-widget-single-reviews.php:80
+msgid "Style"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:131
+#: includes/widgets/class-geodir-widget-loop-paging.php:157
+msgid "Rounded"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:141
+#: includes/widgets/class-geodir-widget-loop-paging.php:167
+msgid "Size"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:155
+#: includes/widgets/class-geodir-widget-loop-paging.php:182
+msgid "Size (mobile)"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:156
+#: includes/widgets/class-geodir-widget-loop-paging.php:183
+msgid "Pagination size to show on mobile."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-az-search.php:449
+msgid "A-Z Search"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-best-of.php:35
+msgid "GD > Best of listings"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-best-of.php:38
+msgid "Shows the best of listings from categories."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:74
@@ -15628,60 +15769,6 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-categories.php:524
 #: includes/widgets/class-geodir-widget-cpt-meta.php:62
 msgid "CPT Title"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-categories.php:67
-#: includes/widgets/class-geodir-widget-listings.php:69
-#: includes/widgets/class-geodir-widget-loop-actions.php:49
-#: includes/widgets/class-geodir-widget-loop-paging.php:49
-#: includes/widgets/class-geodir-widget-map.php:68
-#: includes/widgets/class-geodir-widget-post-address.php:55
-#: includes/widgets/class-geodir-widget-post-fav.php:70
-#: includes/widgets/class-geodir-widget-post-features.php:64
-#: includes/widgets/class-geodir-widget-post-meta.php:60
-#: includes/widgets/class-geodir-widget-post-rating.php:64
-#: includes/widgets/class-geodir-widget-recent-reviews.php:64
-#: includes/widgets/class-geodir-widget-search.php:54
-#: includes/widgets/class-geodir-widget-single-tabs.php:71
-msgid "Styles"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-categories.php:77
-#: includes/widgets/class-geodir-widget-categories.php:80
-#: includes/widgets/class-geodir-widget-listings.php:79
-#: includes/widgets/class-geodir-widget-listings.php:82
-#: includes/widgets/class-geodir-widget-loop-actions.php:57
-#: includes/widgets/class-geodir-widget-loop-actions.php:59
-#: includes/widgets/class-geodir-widget-loop-paging.php:57
-#: includes/widgets/class-geodir-widget-loop-paging.php:59
-#: includes/widgets/class-geodir-widget-map.php:78
-#: includes/widgets/class-geodir-widget-map.php:81
-#: includes/widgets/class-geodir-widget-post-address.php:65
-#: includes/widgets/class-geodir-widget-post-address.php:68
-#: includes/widgets/class-geodir-widget-post-fav.php:80
-#: includes/widgets/class-geodir-widget-post-fav.php:83
-#: includes/widgets/class-geodir-widget-post-features.php:74
-#: includes/widgets/class-geodir-widget-post-features.php:77
-#: includes/widgets/class-geodir-widget-post-meta.php:70
-#: includes/widgets/class-geodir-widget-post-meta.php:73
-#: includes/widgets/class-geodir-widget-post-rating.php:74
-#: includes/widgets/class-geodir-widget-post-rating.php:77
-#: includes/widgets/class-geodir-widget-recent-reviews.php:74
-#: includes/widgets/class-geodir-widget-recent-reviews.php:77
-#: includes/widgets/class-geodir-widget-search.php:64
-#: includes/widgets/class-geodir-widget-search.php:67
-#: includes/widgets/class-geodir-widget-single-tabs.php:81
-#: includes/widgets/class-geodir-widget-single-tabs.php:84
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1586
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1610
-#: vendor/ayecode/wp-super-duper/sd-functions.php:1634
-msgid "Advanced"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-categories.php:119
-#: includes/widgets/class-geodir-widget-cpt-meta.php:44
-#: includes/widgets/class-geodir-widget-recently-viewed.php:83
-msgid "Post Type:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:130
@@ -16690,13 +16777,6 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-loop-paging.php:47
-#: includes/widgets/class-geodir-widget-loop-paging.php:162
-#: includes/widgets/class-geodir-widget-loop-paging.php:177
-#: includes/widgets/class-geodir-widget-loop-paging.php:193
-msgid "Paging"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:47
 #: includes/widgets/class-geodir-widget-loop-paging.php:201
 #: includes/widgets/class-geodir-widget-loop-paging.php:209
 #: includes/widgets/class-geodir-widget-loop-paging.php:214
@@ -16764,28 +16844,6 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-loop-paging.php:132
 msgid "Default (0)"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:153
-#: includes/widgets/class-geodir-widget-post-rating.php:103
-#: includes/widgets/class-geodir-widget-single-reviews.php:80
-msgid "Style"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:157
-msgid "Rounded"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:167
-msgid "Size"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:182
-msgid "Size (mobile)"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:183
-msgid "Pagination size to show on mobile."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-loop.php:26
