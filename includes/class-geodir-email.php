@@ -296,9 +296,11 @@ class GeoDir_Email {
 			$replace_array['[#comment_author_email#]']    = $comment->comment_author_email;
 			$replace_array['[#comment_date#]']            = $comment->comment_date;
 			$replace_array['[#comment_content#]']         = wp_specialchars_decode( $comment->comment_content );
+			$replace_array['[#comment_url#]']             = get_comment_link( $comment );
 			$replace_array['[#comment_post_ID#]']         = (int) $comment->comment_post_ID;
 			$replace_array['[#comment_post_title#]']      = html_entity_decode( get_the_title( (int) $comment->comment_post_ID ), ENT_COMPAT, 'UTF-8' );
 			$replace_array['[#comment_post_url#]']        = get_permalink( (int) $comment->comment_post_ID );
+			$replace_array['[#comment_post_link#]']       = '<a href="' . esc_url( $replace_array['[#comment_url#]'] ) . '">' . $replace_array['[#comment_post_title#]'] . '</a>';
 			$replace_array['[#comment_approve_link#]']    = admin_url( "comment.php?action=approve&c={$comment_ID}#wpbody-content" );
 			$replace_array['[#comment_trash_link#]']      = admin_url( "comment.php?action=trash&c={$comment_ID}#wpbody-content" );
 			$replace_array['[#comment_spam_link#]']       = admin_url( "comment.php?action=spam&c={$comment_ID}#wpbody-content" );

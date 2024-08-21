@@ -430,7 +430,7 @@ function geodir_new_comment_notify_postauthor( $comment_ID ) {
 	}
 
 	// Only send notifications for approved or pending comments.
-	if ( $maybe_notify && ! ( in_array( 'comment_approved', array_keys( (array) $comment ) ) && ( $comment->comment_approved == '0' || $comment->comment_approved == 'hold' || $comment->comment_approved == '1' || $comment->comment_approved == 'approve' ) ) ) {
+	if ( $maybe_notify && ! ( in_array( 'comment_approved', array_keys( (array) $comment ) ) && ( $comment->comment_approved == '0' || $comment->comment_approved === 'hold' || $comment->comment_approved == '1' || $comment->comment_approved === 'approve' ) ) ) {
 		$maybe_notify = false;
 	}
 
