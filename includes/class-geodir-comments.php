@@ -1244,7 +1244,7 @@ class GeoDir_Comments {
 				<div class="card border-0 rounded bg-transparent-primary bg-primary bg-opacity-10" >
 					<div class="card-body text-center text-dark">
 						<div class="mb-1">
-							<?php echo $rating_titles[ $post_rating_rounded ]; ?>
+							<?php echo ( isset( $rating_titles[ $post_rating_rounded ] ) ? $rating_titles[ $post_rating_rounded ] : '' ); ?>
 						</div>
 						<div class="mb-1 display-5">
 							<?php echo round( $post_rating, 1 ); ?>

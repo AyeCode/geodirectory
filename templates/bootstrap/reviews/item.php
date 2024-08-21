@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.3.7
+ * @version    2.3.74
  *
  * Variables.
  *
@@ -71,7 +71,7 @@ global $post, $aui_bs5;
 		<!-- .comment-meta -->
 
 		<?php if ( '0' == $comment->comment_approved ) : ?>
-			<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.', 'geodirectory' ); ?></p>
+			<p class="comment-awaiting-moderation alert alert-warning m-3 mb-1 py-2"><?php _e( 'Your comment is awaiting moderation.', 'geodirectory' ); ?></p>
 		<?php endif; ?>
 
 		<div class="comment-content comment card-body m-0">
@@ -96,7 +96,7 @@ global $post, $aui_bs5;
 						edit_comment_link( __( 'Edit', 'geodirectory' ), '<span class="edit-link btn btn-link">', '</span>' );
 						do_action( "geodir_comment_links_after_edit" , $comment );
 
-						if ( geodir_user_can_reply_review( $comment ) ) {
+						if ( geodir_user_can_reply_review( $comment ) && '0' != $comment->comment_approved ) {
 						?>
 						<span class="reply-link">
 							<?php $reply_link = get_comment_reply_link( array_merge( $args, array(
