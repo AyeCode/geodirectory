@@ -131,7 +131,7 @@ function geodir_cfi_input_output($cf){
             'validation_text'   => $validation_msg,
             'validation_pattern'=> ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
             'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
-            'class'             => '',
+            'class'             => !empty($cf['css_class']) ? $cf['css_class'] : '',
             'value'             => $value,
             'help_text'         => __( $cf['desc'], 'geodirectory' ),
             'extra_attributes'  => $extra_attributes,

@@ -45,4 +45,5 @@ registerBlockType( 'geodirectory/geodir-widget-single-next-prev', { title: 'GD >
 registerBlockType( 'geodirectory/geodir-widget-single-reviews', { title: 'GD > Single Reviews' } );
 registerBlockType( 'geodirectory/geodir-widget-single-tabs', { title: 'GD > Single Tabs' } );
 registerBlockType( 'geodirectory/geodir-widget-single-taxonomies', { title: 'GD > Single Taxonomies' } );
+registerBlockType( 'geodirectory/geodir-widget-az-search', { title: 'GD > A-Z Search' } );
 */
