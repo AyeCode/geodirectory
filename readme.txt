@@ -20,6 +20,8 @@ A superb WordPress Business Directory plugin to create a local business director
 >*A special note goes to the support which is amazing and always reliable.*
 >💁 mm81 (@mm81)
 
+[youtube https://www.youtube.com/watch?v=qoyDh3IfPOU]
+
 GeoDirectory is an outstanding WordPress Business Directory Plugin. It helps visitors to your Geo Directory website discover businesses through their listings.
 
 No matter what you need to build, be it a City Directory, a Job Board, a Real Estate listing directory, or a classified website, GeoDirectory turns any WordPress theme into a robust search network for users. 
@@ -64,9 +66,9 @@ Utilize our widgets as Elementor Elements and enjoy a super-tight integration wi
 
 Customize GeoDirectory Templates using Elementor PRO's theme builder and leverage GeoDirectory Data with Elementor's Dynamic Data feature. 
 
-Watch this video to see how effortlessly you can customize business directory templates with GeoDirectory, the premier Elementor Directory Plugin.
+Watch this video to see how effortlessly you can customize business directory templates with GeoDirectory, the premier Elementor Directory Plugin:
 
-[youtube https://www.youtube.com/watch?v=fEdOOucOtUg]
+👉[Customize the design of GeoDirectory Templates with Elementor Pro](https://www.youtube.com/watch?v=fEdOOucOtUg)
 
 == ⚡ BE THE GO-TO GUIDING HAND FOR PROFESSIONALS: SAY HELLO TO OUR POWERFUL WORDPRESS BUSINESS DIRECTORY PLUGIN ==
 
