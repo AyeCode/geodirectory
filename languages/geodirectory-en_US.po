@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.73\n"
+"Project-Id-Version: GeoDirectory 2.3.74\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-15 20:37+0530\n"
-"PO-Revision-Date: 2024-08-15 20:37+0530\n"
+"POT-Creation-Date: 2024-08-22 18:40+0530\n"
+"PO-Revision-Date: 2024-08-22 18:40+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -11338,7 +11338,7 @@ msgstr ""
 msgid "Could not retrieve template."
 msgstr ""
 
-#: includes/class-geodir-email.php:534
+#: includes/class-geodir-email.php:536
 #, php-format
 msgid ""
 "\n"
@@ -11347,11 +11347,11 @@ msgid ""
 "Subject: %s\n"
 msgstr ""
 
-#: includes/class-geodir-email.php:535
+#: includes/class-geodir-email.php:537
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1163 includes/post-functions.php:2031
+#: includes/class-geodir-email.php:1165 includes/post-functions.php:2031
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:246
 msgid "Author"
 msgstr ""

@@ -18,7 +18,7 @@ class GeoDir_Widget_AZ_Search extends WP_Super_Duper {
 	public function __construct() {
 		$options = array(
 			'textdomain'     => GEODIRECTORY_TEXTDOMAIN,
-			'block-icon'     => 'fas fa-arrow-down-a-z',
+			'block-icon'     => 'editor-spellcheck',
 			'block-category' => 'geodirectory',
 			'block-keywords' => "['az','geodir','search']",
 			'block-supports' => array(
