@@ -813,7 +813,7 @@ function geodir_cfi_multiselect( $html, $cf ) {
 				}
 			}
 
-			$conditional_attrs = geodir_conditional_field_attrs( $cf );
+			$conditional_attrs = geodir_conditional_field_attrs( $cf, '', 'radio' );
 
 			$html .= aui()->radio(
 				array(
@@ -831,7 +831,7 @@ function geodir_cfi_multiselect( $html, $cf ) {
 				)
 			);
 		} else {
-			$conditional_attrs = geodir_conditional_field_attrs( $cf );
+			$conditional_attrs = geodir_conditional_field_attrs( $cf, '', $multi_display );
 			$horizontal = true;
 			ob_start();
 			?>
