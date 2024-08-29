@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.75 - TBD =
 * In some cases SVG icon as map marker is not working on FireFox - FIXED
+* List Save button not working on Fast AJAX search - FIXED
 
 = GeoDirectory v2.3.74 - 2024-08-22 =
 * Email tags added for comment link & comment post link - ADDED
