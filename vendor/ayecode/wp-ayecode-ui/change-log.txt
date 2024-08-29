@@ -1,3 +1,6 @@
+= 0.2.24 - 2024-08-29 =
+* Changes for search form conditional fields - CHANGED
+
 = 0.2.23 - 2024-08-08 =
 * Conditional field set default value changes - CHANGED
 
