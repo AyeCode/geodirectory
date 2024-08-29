@@ -655,7 +655,7 @@ function create_marker(item, map_canvas) {
         maxWidth: 200
     }) : null;
     if (item.lt && item.ln) {
-        var marker_id, title, icon, cs;
+        var marker_id, title, icon, cs, isSvg, resize = false;
         marker_id = item['m'];
         title = geodir_htmlEscape(item['t']);
         cs = item['cs'];
@@ -664,15 +664,15 @@ function create_marker(item, map_canvas) {
         iconH = item['h'] ? parseFloat(item['h']) : 0;
         iconMW = geodir_params.marker_max_width ? parseFloat(geodir_params.marker_max_width) : 0;
         iconMH = geodir_params.marker_max_height ? parseFloat(geodir_params.marker_max_height) : 0;
+        isSvg = icon && icon.substr((icon.lastIndexOf('.')+1)).toLowerCase() == 'svg' ? true : false;
         /* Some svg files has dimensions with different unit */
-        if (geodir_params.resize_marker && ( iconW < iconMW || iconH < iconMH ) && icon.substr((icon.lastIndexOf('.')+1)).toLowerCase() == 'svg') {
+        if (geodir_params.resize_marker && ( iconW < iconMW || iconH < iconMH ) && isSvg) {
             iconW = iconW * 10;
             iconH = iconH * 10;
         }
         if (geodir_params.resize_marker && iconW > 5 && iconH > 5 && ((iconMW > 5 && iconW > iconMW) || (iconMH > 5 && iconH > iconMH))) {
             resizeW = iconW;
             resizeH = iconH;
-            resize = false;
 
             if (iconMH > 5 && resizeH > iconMH) {
                 _resizeH = iconMH;
@@ -699,6 +699,14 @@ function create_marker(item, map_canvas) {
                     anchor: new google.maps.Point((Math.round(resizeW / 2)), resizeH)
                 };
             }
+        }
+        if (isSvg && !resize && iconW > 5 && iconH > 5) {
+            icon = {
+                url: icon,
+                scaledSize: new google.maps.Size(iconW, iconH),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point((Math.round(iconW / 2)), iconH)
+            };
         }
         var latlng = new google.maps.LatLng(item.lt, item.ln);
         var marker = jQuery.goMap.createMarker({
