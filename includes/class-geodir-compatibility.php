@@ -938,6 +938,13 @@ class GeoDir_Compatibility {
 			return $metadata;
 		}
 
+		$query_post_type = ! empty( $wp_query ) ? get_query_var( 'post_type' ) : '';
+
+		// Prevent conflicts custom non GD post type archive page.
+		if ( ! empty( $query_post_type ) && is_scalar( $query_post_type ) && in_array( $query_post_type, array( 'product' ) ) ) {
+			return $metadata;
+		}
+
 		// Thrive Theme
 		if ( function_exists( 'thrive_theme' ) && $single && ! is_admin() && $meta_key == 'layout_data' && in_array( $object_post_type, array( 'thrive_template', 'thrive_layout' ) ) && ( geodir_is_page( 'search' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = GeoDir_Compatibility::gd_page_id() ) ) {
 			$thrive_meta = thrive_post( $page_id )->get_visibility_meta();
