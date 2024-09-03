@@ -898,7 +898,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 				// If we can cut the size before links then better.
 				if ( empty( $tag_include  ) && ! empty( $args['tag_count'] ) && count( $tag_include ) > $args['tag_count'] ) {
 					$tag_include = array_slice( $tag_include, 0, absint( $args['tag_count'] ) );
-				}$tags[] = 'ffff';
+				}
 
 				if ( ! empty( $tags ) ) {
 					$tag_icon = ! empty( $args['tag_icon'] ) ? esc_attr( $args['tag_icon'] ) : 'far fa-check-circle';
