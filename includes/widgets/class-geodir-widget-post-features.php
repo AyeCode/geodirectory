@@ -150,7 +150,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 		$arguments['tag_include'] = array(
 			'title'       => __( 'Specific tags', 'geodirectory' ),
 			'desc'        => __( 'Enter a comma separated list of tag slugs to only show them specifically (otherwise any tag will show)', 'geodirectory' ),
-			'type'        => 'number',
+			'type'        => 'text',
 			'placeholder' => 'parking,cafe,swimming-pool',
 			'desc_tip'    => true,
 			'default'     => '',
@@ -895,26 +895,31 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 
 				$tag_include = !empty($args['tag_include']) ? array_map('trim', explode(',', $args['tag_include'])) : '';
 
-				// if we can cut the size before links then better.
-				if ( empty( $tag_include  ) && !empty($args['tag_count']) && count($tag_include ) > $args['tag_count'] ) {
-					array_slice($tag_include , 0, absint($args['tag_count']));
-				}
+				// If we can cut the size before links then better.
+				if ( empty( $tag_include  ) && ! empty( $args['tag_count'] ) && count( $tag_include ) > $args['tag_count'] ) {
+					$tag_include = array_slice( $tag_include, 0, absint( $args['tag_count'] ) );
+				}$tags[] = 'ffff';
 
 				if ( ! empty( $tags ) ) {
-					$tag_icon = !empty($args['tag_icon']) ? esc_attr($args['tag_icon']) : 'far fa-check-circle';
+					$tag_icon = ! empty( $args['tag_icon'] ) ? esc_attr( $args['tag_icon'] ) : 'far fa-check-circle';
+
 					foreach ( $tags as $tag ) {
 						$slug = sanitize_title_with_dashes( $tag );
 
-						if ( ! empty( $tag_include ) && !in_array($slug,$tag_include) ) {
+						if ( ! empty( $tag_include ) && ! in_array( $slug, $tag_include ) ) {
 							continue;
 						}
 
-
 						if ( $args['tag_link'] ) {
-							$tag_link = $this->is_preview() ? '#' : get_term_link( $slug,$post_type.'_tags' );
-							$tag_value = '<a href="'.esc_url($tag_link).'" >' . esc_attr($tag) . '</a>';
-						}else{
-							$tag_value = esc_attr($tag);
+							$tag_link = $this->is_preview() ? '#' : get_term_link( $slug, $post_type . '_tags' );
+
+							if ( is_wp_error( $tag_link ) ) {
+								continue;
+							}
+
+							$tag_value = '<a href="' . esc_url( $tag_link ) . '">' . esc_attr( $tag ) . '</a>';
+						} else {
+							$tag_value = esc_attr( $tag );
 						}
 
 						$features[] = array(
@@ -924,13 +929,11 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 					}
 				}
 
-				if ( ! empty( $features ) && !empty($args['tag_count']) && count($features) > $args['tag_count'] ) {
-					array_slice($features, 0, absint($args['tag_count']));
+				if ( ! empty( $features ) && ! empty( $args['tag_count'] ) && count( $features ) > $args['tag_count'] ) {
+					$features = array_slice( $features, 0, absint( $args['tag_count'] ) );
 				}
 			} else {
-
 				$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, $args['location'] );
-
 			}
 
 			if ( ! empty( $fields ) ) {
