@@ -1425,46 +1425,54 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 *
 		 * @return string
 		 */
-		public static function loop_fields_output($tabs,$tab_id = ''){
+		public static function loop_fields_output( $tabs, $tab_id = '' ) {
 			ob_start();
 
-			if(!empty($tabs)){
-				foreach($tabs as $key => $tab){
-
-					if($tab_id && $tab->id!=$tab_id){
+			if ( ! empty( $tabs ) ) {
+				foreach ( $tabs as $key => $tab ) {
+					if ( $tab_id && $tab->id != $tab_id ) {
 						continue;
-					}elseif($tab_id && $tab->id==$tab_id && $tab->tab_level > 0){
-						echo self::output_custom_field_setting_item($tab->id,$tab); break;
+					} elseif ( $tab_id && $tab->id == $tab_id && $tab->tab_level > 0 ) {
+						echo self::output_custom_field_setting_item( $tab->id, $tab );
+						break;
 					}
 
-					if($tab->tab_level=='1' ){continue;}
+					if ( $tab->tab_level == '1' ) {
+						continue;
+					}
 
-
-					$tab_rendered = self::output_custom_field_setting_item($tab->id,$tab);
-					$tab_rendered = str_replace("</li>","",$tab_rendered);
+					$tab_content = self::output_custom_field_setting_item( $tab->id, $tab );
+					$tab_content = $tab_content ? str_replace( "</li>", "", $tab_content ) : '';
 					$child_tabs = '';
-					foreach($tabs as $child_tab){
-						if($child_tab->tab_parent==$tab->id){
-							$child_tabs .= self::output_custom_field_setting_item($child_tab->id,$child_tab);
+
+					foreach ( $tabs as $child_tab ) {
+						if ( $child_tab->tab_parent == $tab->id ) {
+							$child_tab_content = self::output_custom_field_setting_item( $child_tab->id, $child_tab );
+
+							if ( $child_tab_content ) {
+								$child_tabs .= $child_tab_content;
+							}
 						}
 					}
 
-					if($child_tabs){
-						$tab_rendered .= "<ul>";
-						$tab_rendered .= $child_tabs;
-						$tab_rendered .= "</ul>";
+					if ( $child_tabs ) {
+						$tab_content .= "<ul>";
+						$tab_content .= $child_tabs;
+						$tab_content .= "</ul>";
 					}
 
-					echo $tab_rendered;
+					echo $tab_content;
 					echo "</li>";
 
-					unset($tabs[$key]);
-
+					unset( $tabs[ $key ] );
 				}
 			}
-			return ob_get_clean();
-		}
 
+			$content = ob_get_clean();
+			$content = trim( $content );
+
+			return $content;
+		}
 
         /**
          * GeoDir get all fields by posttype.
@@ -1482,7 +1490,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			return $cf_arr1 + $cf_arr2 + $cf_arr3; // this way defaults can't be overwritten
 		}
 
-
 		/**
 		 * Adds admin html for custom fields.
 		 *
@@ -1494,81 +1501,74 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @param string $field_ins_upd When set to "submit" displays form.
 		 * @param string $field_type_key The key of the custom field.
 		 */
-		public static function output_custom_field_setting_item($field_id = '',$field = '',$cf = array())
-		{
-
+		public static function output_custom_field_setting_item( $field_id = '', $field = '', $cf = array() ) {
 			ob_start();
-			// if field not provided get it
-			if (!is_object($field) && $field_id) {
-				global $wpdb;
-				$field = $wpdb->get_row($wpdb->prepare("select * from " . GEODIR_CUSTOM_FIELDS_TABLE . " where id= %d", array($field_id)));
+
+			// If field not provided get it.
+			if ( ! is_object( $field ) && $field_id ) {
+				$field = self::get_item( $field_id );
 			}
 
-			// if field template not provided get it
-			if(empty($cf)){
-				$cf_arr  = self::get_all_fields($field->post_type);
-				$cf = (isset($cf_arr[$field->field_type_key])) ? $cf_arr[$field->field_type_key] : ''; // the field type
+			// If field template not provided get it.
+			if ( empty( $cf ) ) {
+				$cf_arr = self::get_all_fields( $field->post_type );
+
+				$cf = isset( $cf_arr[ $field->field_type_key ] ) ? $cf_arr[ $field->field_type_key ] : '';
 			}
 
-			//print_r($cf);
-
-			// set defaults
-			if(isset($cf['defaults'])){
-				foreach($cf['defaults'] as $key => $val ){
-					if(!isset($field->{$key})){
+			// Set defaults
+			if ( isset( $cf['defaults'] ) ) {
+				foreach ( $cf['defaults'] as $key => $val ) {
+					if ( ! isset( $field->{$key} ) ) {
 						$field->{$key} = $val;
 					}
 				}
 			}
 
-			if(!isset( $field->is_default ))$field->is_default = 0;
+			if ( ! isset( $field->is_default ) ) {
+				$field->is_default = 0;
+			}
 
-			// Setup some variables
-
-
-			// Strip slashes but not from json extra_fields
+			// Strip slashes but not from json extra_fields.
 			if ( isset( $field->extra_fields ) ) {
 				$extra_fields = $field->extra_fields;
 			}
-			$validation_pattern = isset($field->validation_pattern) ? $field->validation_pattern : '';
-			$field = wp_unslash( $field ); // strip slashes from labels
-			$field->validation_pattern = str_replace('\\\\', '\\', $validation_pattern);// we need the validation pattern without slashes stripped.
+
+			$validation_pattern = isset( $field->validation_pattern ) ? $field->validation_pattern : '';
+			$field = wp_unslash( $field ); // Strip slashes from labels.
+			$field->validation_pattern = str_replace( '\\\\', '\\', $validation_pattern ); // We need the validation pattern without slashes stripped.
+
 			if ( isset( $field->extra_fields ) ) {
 				$field->extra_fields = $extra_fields;
 			}
 
-			//print_r($field);
-			// Set nonce
+			// Set nonce.
 			$nonce = wp_create_nonce( 'custom_fields_' . $field->id );
 
-			// Set if this is a default field
+			// Set if this is a default field.
 			$default = isset( $field->is_admin ) ? $field->is_admin : '';
 
-			// Remove Send Enquiry from listings page
+			// Remove Send Enquiry from listings page.
 			$display_on_listing = true;
 			$htmlvar_name = isset( $field->htmlvar_name ) && $field->htmlvar_name != '' ? $field->htmlvar_name : '';
+
 			if ( $htmlvar_name == 'geodir_email' ) {
 				$display_on_listing  = false;
 			}
 
-			// Hide the field from custom fields (i.e. address field from location less CPT)
+			// Hide the field from custom fields (i.e. address field from location less CPT).
 			if ( has_filter( "geodir_cfa_skip_item_output_{$field->field_type}" ) ) {
 				if ( apply_filters( "geodir_cfa_skip_item_output_{$field->field_type}", false, $field_id, $field, $cf ) === true ) {
-					return;
+					$content = ob_get_clean();
+					$content = trim( $content );
+
+					return $content;
 				}
 			}
 
-
-			// @todo do we need this?
-			$field_display = $field->field_type == 'address' && $field->htmlvar_name == 'post' ? 'style="display:none"' : '';
-
-			// set a unique id for radio fields
-			$radio_id = ( isset( $field->htmlvar_name ) && $field->htmlvar_name ) ? $field->htmlvar_name : rand( 5, 500 );
-
-			// field icon
 			$icon = isset( $cf['icon'] ) ? $cf['icon'] : ( isset( $field->field_icon ) ? $field->field_icon : '' );
 
-			// Set the field icon
+			// Set the field icon.
 			if ( geodir_is_fa_icon( $icon ) ) {
 				$field_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
 			} elseif ( geodir_is_icon_url( $icon ) ) {
@@ -1577,7 +1577,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				$field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
 			}
 
-			// if field type name is missing set it from main settings
+			// If field type name is missing set it from main settings.
 			if ( isset( $cf['name'] ) && $cf['name'] ) {
 				$field->field_type_name = $cf['name'];
 			} else {
@@ -1595,8 +1595,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			 * @since 2.0.0
 			 */
 			include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-cf-setting-item.php' );
-			return ob_get_clean();
 
+			$content = ob_get_clean();
+			$content = trim( $content );
+
+			return $content;
 		}
 
 		/**
