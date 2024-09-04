@@ -1065,37 +1065,72 @@ class GeoDir_Comments {
 	}
 
 	/**
+	 * Get post reviews ratings wise counts.
+	 *
 	 * @param $post_id
 	 * @param $force_query
 	 *
 	 * @return array|false|mixed|object|stdClass|null
 	 */
 	public static function get_post_review_rating_counts( $post_id = 0, $force_query = 0 ) {
-		global $wpdb,$gd_post;
+		global $wpdb;
 
-		// check for cache
+		// Check for cache.
 		$cache = wp_cache_get( 'gd_post_review_rating_counts_' . $post_id, 'gd_post_review_rating_counts' );
+
 		if ( $cache !== false && ! $force_query ) {
+			/**
+			 * Filter post review rating counts cached results.
+			 *
+			 * @since 2.3.76
+			 *
+			 * @param array $cache Cached review rating counts array.
+			 * @param int   $post_id Current post ID.
+			 * @param bool  $force_query Force query to skip cached results.
+			 */
+			$cache = apply_filters( 'geodir_post_review_rating_counts', $cache, $post_id, $force_query );
+
 			return $cache;
 		}
 
-		$results = $wpdb->get_results(
-			$wpdb->prepare(
-				'SELECT r.rating FROM ' . GEODIR_REVIEW_TABLE . " AS r JOIN {$wpdb->comments} AS cmt ON cmt.comment_ID = r.comment_id WHERE r.post_id = %d AND cmt.comment_approved = '1' AND r.rating > 0",
-				array( $post_id )
-			)
-		);
+		$sql = $wpdb->prepare( "SELECT `r`.`rating` FROM `" . GEODIR_REVIEW_TABLE . "` AS `r` JOIN `{$wpdb->comments}` AS `cmt` ON `cmt`.`comment_ID` = `r`.`comment_id` WHERE `r`.`post_id` = %d AND `cmt`.`comment_approved` = '1' AND `r`.`rating` > 0", array( $post_id ) );
+
+		/**
+		 * Filter post review rating counts SQL query.
+		 *
+		 * @since 2.3.76
+		 *
+		 * @param string $sql SQL Query.
+		 * @param int    $post_id Current post ID.
+		 * @param bool   $force_query Force query to skip cached results.
+		 */
+		$sql = apply_filters( 'geodir_post_review_rating_counts_sql', $sql, $post_id, $force_query );
+
+		$results = $wpdb->get_results( $sql );
 
 		$counts = array();
+
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $result ) {
 				isset( $counts[ $result->rating ] ) ? $counts[ $result->rating ]++ : $counts[ $result->rating ] = 1;
 			}
 		}
 
+		/**
+		 * Filter post review rating counts results.
+		 *
+		 * @since 2.3.76
+		 *
+		 * @param array $counts Review rating counts.
+		 * @param int   $post_id Current post ID.
+		 * @param bool  $force_query Force query to skip cached results.
+		 */
+		$counts = apply_filters( 'geodir_post_review_rating_counts', $counts, $post_id, $force_query );
+
 		if ( ! empty( $counts ) ) {
-			// set cache
+			// Set cache.
 			wp_cache_set( 'gd_post_review_rating_counts_' . $post_id, $counts, 'gd_post_review_rating_counts' );
+
 			return $counts;
 		} else {
 			return false;
