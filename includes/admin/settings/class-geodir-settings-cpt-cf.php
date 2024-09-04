@@ -1441,7 +1441,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 
 					$tab_rendered = self::output_custom_field_setting_item($tab->id,$tab);
-					$tab_rendered = str_replace("</li>","",$tab_rendered);
+					$tab_rendered = ! empty( $tab_rendered ) ? str_replace("</li>","",$tab_rendered) : '';
 					$child_tabs = '';
 					foreach($tabs as $child_tab){
 						if($child_tab->tab_parent==$tab->id){
