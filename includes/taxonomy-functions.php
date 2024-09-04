@@ -626,6 +626,19 @@ function geodir_get_cat_icon( $term_id, $full_path = false, $default = false ) {
 }
 
 /**
+ * Get the category icon alt text.
+ *
+ * @since 2.3.76
+ *
+ * @param int $term_id Category ID.
+ * @param string|bool $default Default alt text. Default false.
+ * @return string Alt text.
+ */
+function geodir_get_cat_icon_alt( $term_id, $default = false ) {
+	return GeoDir_Admin_Taxonomies::get_cat_icon_alt( $term_id, $default );
+}
+
+/**
  * Get the category default image.
  *
  * @param $term_id

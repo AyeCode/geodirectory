@@ -568,6 +568,9 @@ function list_markers(json, map_canvas_var) {
                     marker['icon'] = icon_url;
                     marker['w'] = icon['w'];
                     marker['h'] = icon['h'];
+                    if ( icon['a'] ) {
+                        marker['alt'] = icon['a'];
+                    }
                 }
             }
             if (map_options.map_type == 'post' && i == 0) {
@@ -1328,6 +1331,7 @@ function create_marker_osm(item, map_canvas) {
         var marker = jQuery.goMap.createMarker({
             id: marker_id,
             title: title,
+            alt: item.alt ? geodir_htmlEscape(item.alt) : '',
             position: coord,
             visible: true,
             clickable: true,
