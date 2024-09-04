@@ -559,6 +559,9 @@ function geodirGoMapInit() {
                 if (marker.title)
                     options.title = marker.title;
 
+                if (marker.alt)
+                    options.alt = marker.alt;
+
                 if (marker.label)
                     options.label = marker.label;
 

@@ -399,11 +399,20 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 				}
 			}
 
-			$geodir_rest_cache_icons[ $icon_id ] = array(
+			$_item = array(
 				'i' => $icon_url,
 				'w' => $icon_width,
 				'h' => $icon_height
 			);
+
+			// Icon alt text.
+			$alt = geodir_get_cat_icon_alt( $icon_id );
+
+			if ( $alt != '' ) {
+				$_item['a'] = $alt;
+			}
+
+			$geodir_rest_cache_icons[ $icon_id ] = $_item;
 		}
 		$response['i'] 	= $icon_id;
 

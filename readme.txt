@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.76 - TBD =
 * GD > Post Features shows error when tag does not exists - FIXED
+* Add alt text to OSM marker icon if alt text saved in media - CHANGED
 
 = GeoDirectory v2.3.75 - 2024-08-29 =
 * In some cases SVG icon as map marker is not working on FireFox - FIXED

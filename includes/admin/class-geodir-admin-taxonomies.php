@@ -1172,6 +1172,51 @@ class GeoDir_Admin_Taxonomies {
         return apply_filters( 'geodir_get_cat_icon', $cat_icon, $term_id, $full_path, $default );
     }
 
+	/**
+	 * Get the category icon alt text.
+	 *
+	 * @since 2.3.76
+	 *
+	 * @param int $term_id Category ID.
+	 * @param string|bool $default Default alt text. Default false.
+	 * @return string Icon alt text.
+	 */
+	public static function get_cat_icon_alt( $term_id, $default = false ) {
+		global $geodir_cat_icon_alt;
+
+		if ( ! is_array( $geodir_cat_icon_alt ) ) {
+			$geodir_cat_icon_alt = array();
+		}
+
+		if ( isset( $geodir_cat_icon_alt[ $term_id ] ) ) {
+			return $geodir_cat_icon_alt[ $term_id ];
+		}
+
+		$alt = '';
+		$attachment_id = 0;
+
+		if ( ! empty( $term_id ) && $term_id != 'd' && $term_id > 0 ) {
+			$term_meta = get_term_meta( $term_id, 'ct_cat_icon', true );
+
+			$attachment_id = is_array( $term_meta ) && ! empty( $term_meta['id'] ) ? absint( $term_meta['id'] ) : 0;
+			$alt = $attachment_id > 0 ? get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) : '';
+
+			if ( $alt ) {
+				$alt = trim( strip_tags( $alt ) );
+			}
+		}
+
+		// Default alt text.
+		if ( $alt == '' && $default != false && is_scalar( $default ) ) {
+			$alt = $default;
+		}
+
+		$alt = apply_filters( 'geodir_get_cat_icon_alt', $alt, $term_id, $default, $attachment_id );
+
+		$geodir_cat_icon_alt[ $term_id ] = $alt;
+
+		return $alt;
+	}
 
     /**
      * Fires after a new term is created or term updated.
