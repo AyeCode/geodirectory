@@ -34,6 +34,15 @@ jQuery(document).ready(function($) {
 		var hash = window.location.hash;
 		hash && jQuery('ul.nav a[href="' + hash + '"]').tab('show');
 
+		/* Scroll to tab content */
+		if (hash && jQuery('#gd-single-tabs-content > ' + hash).length && !(hash.substring(0, 9) == '#comment-' || hash.substring(0, 8) == '#reviews')) {
+			setTimeout(function() {
+				jQuery('html,body').animate({
+					scrollTop: jQuery('#gd-single-tabs-content > ' + hash).offset().top - 120
+				}, 'slow');
+			}, 150);
+		}
+
 		jQuery('.nav-tabs a').on("click",function (e) {
 			var $greedyLink = '', greedyHash = '';
 			if(jQuery(this).closest('.greedy').length && jQuery(this).hasClass('greedy-nav-link')){
