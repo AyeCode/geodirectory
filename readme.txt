@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.78 - TBD =
 * GD > Post Content read more link don't scrolls to tab content when tab is not placed at first - FIXED
+* geodir_template_page_options() function updated to use custom query for better memory usage - CHANGED
 
 = GeoDirectory v2.3.77 - 2024-09-06 =
 * Theme customize AyeCode UI colors settings not working after update - FIXED

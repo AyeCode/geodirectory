@@ -826,7 +826,6 @@ class GeoDir_Admin_Settings {
 
 					$parsed_args = wp_parse_args( $args, $defaults );
 
-					$pages  = get_pages( $parsed_args );
 					$page_options = array();
 
 					if ( ! empty( $pages ) ) {
@@ -836,6 +835,7 @@ class GeoDir_Admin_Settings {
 							$page_options[ $id ] = $title;
 						}
 					}
+					$page_options  = geodir_template_page_options();
 
 					if ( isset( $parsed_args['show_option_none'] ) ) {
 						$parsed_args['show_option_none'] = trim( $parsed_args['show_option_none'] );
