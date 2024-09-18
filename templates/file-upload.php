@@ -58,6 +58,6 @@ if ( $multiple ) {
 		<span id="upload-msg"><?php _e( 'Please drag & drop the files to rearrange the order', 'geodirectory' ); ?></span>
 		<?php } ?>
 		<span id="<?php echo esc_attr( $id ); ?>upload-error" style="display:none"></span>
-		<span style="display: none" id="gd-image-meta-input" class="lity-hide lity-show"></span>
+		<span style="display: none" id="gd_image_meta_<?php echo esc_attr( $id ); ?>" class="lity-hide lity-show"></span>
 	</div>
 </div>

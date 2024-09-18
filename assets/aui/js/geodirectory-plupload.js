@@ -450,16 +450,16 @@ function gd_edit_image_meta(inputId, orderId) {
     html = html + "<div class='form-group mb-3'><label for='gd-image-meta-title' class='text-left text-start form-label'>" + geodir_params.label_title + "</label><input id='gd-image-meta-title' value='" + image_title + "' class='form-control'></div>"; // title value
     html = html + "<div class='form-group mb-3'><label for='gd-image-meta-caption' class='text-left text-start form-label'>" + geodir_params.label_caption + "</label><input id='gd-image-meta-caption' value='" + image_caption + "' class='form-control'></div>"; // caption value
     hBtn = "<span class='btn btn-primary c-pointer' onclick='gd_set_image_meta(\"" + inputId + "\"," + orderId + ")'>" + geodir_params.button_set + "</span>"; // set button
-    jQuery('#gd-image-meta-input .modal-body').html(html);
-    jQuery('#gd-image-meta-input .modal-footer').html(hBtn);
-    jQuery('#gd-image-meta-input').modal('show');
+    jQuery('#gd_image_meta_' + inputId + ' .modal-body').html(html);
+    jQuery('#gd_image_meta_' + inputId + ' .modal-footer').html(hBtn);
+    jQuery('#gd_image_meta_' + inputId).modal('show');
 }
 
 function gd_set_image_meta(inputId, orderId) {
-    var imagesS = jQuery("#" + inputId, jQuery('#' + inputId + 'plupload-upload-ui').parent()).val(), images = imagesS.split("::"), img_arr = images[orderId].split("|"), image_url = img_arr[0], image_id = img_arr[1], image_title = geodir_esc_entities(jQuery('#gd-image-meta-title').val()), image_caption = geodir_esc_entities(jQuery('#gd-image-meta-caption').val());
+    var imagesS = jQuery("#" + inputId, jQuery('#' + inputId + 'plupload-upload-ui').parent()).val(), images = imagesS.split("::"), img_arr = images[orderId].split("|"), image_url = img_arr[0], image_id = img_arr[1], image_title = geodir_esc_entities(jQuery('#gd_image_meta_' + inputId + ' #gd-image-meta-title').val()), image_caption = geodir_esc_entities(jQuery('#gd_image_meta_' + inputId + ' #gd-image-meta-caption').val());
     images[orderId] = image_url + "|" + image_id + "|" + image_title + "|" + image_caption;
     imagesS = images.join("::");
     jQuery("#" + inputId, jQuery('#' + inputId + 'plupload-upload-ui').parent()).val(imagesS).trigger('change');
     plu_show_thumbs(inputId);
-    jQuery('#gd-image-meta-input').modal('hide');
+    jQuery('#gd_image_meta_' + inputId).modal('hide');
 }
