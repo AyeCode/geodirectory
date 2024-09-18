@@ -382,7 +382,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				<span id="upload-msg"><?php _e( 'Please drag & drop the images to rearrange the order', 'geodirectory' ); ?></span>
 				<span class="geodir-regenerate-thumbnails bsui" style="margin:25px 0 10px 0;display:block;"><button type="button" class="button-secondary" aria-label="<?php esc_attr_e( 'Regenerate Thumbnails', 'geodirectory' );?>" aria-expanded="false" data-action="geodir-regenerate-thumbnails" data-post-id="<?php echo $post_id; ?>"><?php _e( 'Regenerate Thumbnails', 'geodirectory' );?></button><span style="margin-top:5px;display:block;"><?php _e( 'Regenerate thumbnails & metadata.', 'geodirectory' ); ?></span></span>
 				<?php if ( geodir_design_style() ) { ?>
-				<div class="modal fade bsui" id="gd-image-meta-input" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal fade bsui" id="gd_image_meta_<?php echo esc_attr( $id ); ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -403,7 +403,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				</div>
 				<?php } else { ?>
 				<span id="<?php echo $id; ?>upload-error" style="display:none"></span>
-				<span style="display: none" id="gd-image-meta-input" class="lity-hide lity-show"></span>
+				<span style="display: none" id="gd_image_meta_<?php echo esc_attr( $id ); ?>" class="lity-hide lity-show"></span>
 				<?php } ?>
 			</div>
 

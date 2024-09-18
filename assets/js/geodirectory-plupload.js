@@ -451,8 +451,8 @@ function gd_edit_image_meta(input, order_id) {
     html = html + "<div class='gd-modal-text'><label for='gd-image-meta-title'>" + geodir_params.label_title + "</label><input id='gd-image-meta-title' value='" + image_title + "'></div>"; // title value
     html = html + "<div class='gd-modal-text'><label for='gd-image-meta-caption'>" + geodir_params.label_caption + "</label><input id='gd-image-meta-caption' value='" + image_caption + "'></div>"; // caption value
     html = html + "<div class='gd-modal-button'><button class='button button-primary button-large' onclick='gd_set_image_meta(\"" + input.id + "\"," + order_id + ")'>" + geodir_params.button_set + "</button></div>"; // caption value
-    jQuery('#gd-image-meta-input').html(html);
-    lity('#gd-image-meta-input');
+    jQuery('#gd_image_meta_' + input.id).html(html);
+    lity('#gd_image_meta_' + input.id);
 
 }
 
@@ -463,8 +463,8 @@ function gd_set_image_meta(input_id, order_id) {
     var img_arr = images[order_id].split("|");
     var image_url = img_arr[0];
     var image_id = img_arr[1];
-    var image_title = geodir_esc_entities(jQuery('#gd-image-meta-title').val());
-    var image_caption = geodir_esc_entities(jQuery('#gd-image-meta-caption').val());
+    var image_title = geodir_esc_entities(jQuery('#gd_image_meta_' + input_id + ' #gd-image-meta-title').val());
+    var image_caption = geodir_esc_entities(jQuery('#gd_image_meta_' + input_id + ' #gd-image-meta-caption').val());
     images[order_id] = image_url + "|" + image_id + "|" + image_title + "|" + image_caption;
     imagesS = images.join("::");
     jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val(imagesS).trigger("change");

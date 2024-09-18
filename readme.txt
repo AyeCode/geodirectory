@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.3.79 - TBD =
+* Image meta not saved properly when multiple file fields on add/edit listing page - FIXED
+
 = GeoDirectory v2.3.78 - 2024-09-12 =
 * GD > Post Content read more link don't scrolls to tab content when tab is not placed at first - FIXED
 * geodir_template_page_options() function updated to use custom query for better memory usage - CHANGED
