@@ -1459,9 +1459,9 @@ function gd_ninja_lightbox($action,$nonce,$post_id,$extra){
 
 		if($action=='geodir_ninja_forms'){
 			// clear all form data so we can reload the same form via ajax
-			delete form;
-			delete formDisplay;
-			delete nfForms;
+			form = null;
+			formDisplay = null;
+			nfForms = null;
 		}
 
 		url = geodir_params.ajax_url+"?action="+$action+"&security="+$nonce+"&p="+$post_id+"&extra="+$extra;
@@ -2178,7 +2178,7 @@ function geodir_init_listings_carousel(el, index) {
                 mN = 'n4';
                 $carousel.parent().addClass('px-4');
             }
-            var controls = '<a class="carousel-control-prev text-dark mr-2 ml-n2 me-2 ms-' + mN + ' w-auto '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="prev"><i class="fas fa-chevron-left fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_previous + '</span></a><a class="carousel-control-next text-dark ml-2 w-auto mr-n2 me-' + mN + ' ms-2 '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="next"><i class="fas fa-chevron-right fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_next + '</span></a>';
+            var controls = '<a class="carousel-control-prev text-dark mr-2 ml-n2 me-2 ms-' + mN + ' w-auto '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="' + ( geodir_params.is_rtl ? 'next' : 'prev' ) + '"><i class="fas fa-chevron-' + ( geodir_params.is_rtl ? 'right' : 'left' ) + ' fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_previous + '</span></a><a class="carousel-control-next text-dark ml-2 w-auto mr-n2 me-' + mN + ' ms-2 '+i_mb+'" href="#' + cid + '" role="button" data-' + bsDash + 'slide="' + ( geodir_params.is_rtl ? 'prev' : 'next' ) + '"><i class="fas fa-chevron-' + ( geodir_params.is_rtl ? 'left' : 'right' ) + ' fa-lg" aria-hidden="true"></i><span class="sr-only visually-hidden">' + geodir_params.txt_next + '</span></a>';
             jQuery(el).after(controls);
         }
 
@@ -2352,7 +2352,7 @@ function bs_carousel_data(el) {
         $ci.find('.bs-carousel-item').each(function(i) {
             var item = {
                 'width': cW,
-                'transform': transform * -1,
+                'transform': transform * (geodir_params.is_rtl ? 1 : -1),
             }
             if (i == to) {
                 tItem = item;
