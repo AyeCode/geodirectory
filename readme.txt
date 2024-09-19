@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.79 - TBD =
 * Image meta not saved properly when multiple file fields on add/edit listing page - FIXED
+* Carousel in BootStrap modal not working on RTL - FIXED
 
 = GeoDirectory v2.3.78 - 2024-09-12 =
 * GD > Post Content read more link don't scrolls to tab content when tab is not placed at first - FIXED
