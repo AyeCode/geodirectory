@@ -874,8 +874,8 @@ class GeoDir_Frontend_Scripts {
 						'gd_ajax_url' => geodir_ajax_url( true ),
 						'has_gd_ajax' => ( defined( 'GEODIR_FAST_AJAX' ) && geodir_get_option( 'fast_ajax' ) ? 1 : 0 ),
 						'gd_modal' => (int)geodir_get_option('geodir_disable_gb_modal'),
-						'is_rtl' => is_rtl() ? 1 : 0, // fix rtl issue
-						'basic_nonce' => wp_create_nonce( 'geodir_basic_nonce'),// fix rtl issue
+						'is_rtl' => (bool) is_rtl(),
+						'basic_nonce' => wp_create_nonce( 'geodir_basic_nonce'),
 						'text_add_fav'      => apply_filters('geodir_add_favourite_text', __( 'Add to Favorites', 'geodirectory' )),
 						'text_fav'          => apply_filters('geodir_favourite_text', __('Favorite', 'geodirectory' ) ),
 						'text_remove_fav'   => apply_filters('geodir_remove_favourite_text', __( 'Remove from Favorites', 'geodirectory' )),
