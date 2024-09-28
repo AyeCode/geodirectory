@@ -4349,7 +4349,7 @@ jQuery(function($){
 	 * @since 2.3.31
 	 */
 	public static function spectra_uagb_post_assets_enqueue_scripts() {
-		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = self::gd_page_id() ) ) {
+		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'detail' ) ) && ( $page_id = self::gd_page_id() ) ) {
 			$current_post_assets = new UAGB_Post_Assets( $page_id );
 			$current_post_assets->enqueue_scripts();
 		}
