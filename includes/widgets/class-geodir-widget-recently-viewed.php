@@ -29,10 +29,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 
 		parent::__construct( $options );
 
-
 		add_action('wp_enqueue_scripts',array( $this,  'enqueue_script') );
-//		add_action('wp_footer', array( $this, 'geodir_recently_viewed_posts' ),1000);
-
 	}
 
 	/**
@@ -42,8 +39,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 	 *
 	 * @return array
 	 */
-	public function set_arguments(){
-
+	public function set_arguments() {
 		$design_style = geodir_design_style();
 
 		$widget_args = array();
@@ -196,9 +192,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			$arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
 
 			$widget_args = $widget_args + $arguments;
-
 		}
-
 
 		/*
 		 * Elementor Pro features below here
@@ -249,109 +243,115 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 	 *
 	 * @return mixed|string
 	 */
-	public function output($args = array(), $widget_args = array(),$content = ''){
+	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $geodir_recently_viewed_count;
-		// if block demo return empty to show placeholder text
-//		if($this->is_block_content_call()){
-//			//return '';
-//		}
 
 		$args = wp_parse_args(
-			(array)$args,
-			array('title' => '',
-			      'post_type' => '',
-			      'layout' => '2',
-			      'post_limit'  => '6',
-				// elementor settings
-				  'skin_id' => '',
-				  'skin_column_gap' => '',
-				  'skin_row_gap' => '',
+			(array) $args,
+			array(
+				'title' => '',
+				'post_type' => '',
+				'layout' => '2',
+				'post_limit' => '6',
+				// Elementor settings
+				'skin_id' => '',
+				'skin_column_gap' => '',
+				'skin_row_gap' => '',
 				// AUI settings
-				  'column_gap'  => '',
-				  'row_gap'  => '',
-				  'card_border'  => '',
-				  'card_shadow'  => '',
-				  'bg'    => '',
-				  'mt'    => '',
-				  'mb'    => '3',
-				  'mr'    => '',
-				  'ml'    => '',
-				  'pt'    => '',
-				  'pb'    => '',
-				  'pr'    => '',
-				  'pl'    => '',
-				  'border'    => '',
-				  'rounded'    => '',
-				  'rounded_size'    => '',
-				  'shadow'    => '',
+				'column_gap' => '',
+				'row_gap' => '',
+				'card_border' => '',
+				'card_shadow' => '',
+				'bg' => '',
+				'mt' => '',
+				'mb' => '3',
+				'mr' => '',
+				'ml' => '',
+				'pt' => '',
+				'pb' => '',
+				'pr' => '',
+				'pl' => '',
+				'border' => '',
+				'rounded' => '',
+				'rounded_size' => '',
+				'shadow' => '',
 			)
 		);
 
-		if(empty($geodir_recently_viewed_count)){
+		if ( empty( $geodir_recently_viewed_count ) ) {
 			$geodir_recently_viewed_count = 1;
-		}else{
+		} else {
 			$geodir_recently_viewed_count++;
 		}
 
 		$design_style = geodir_design_style();
 
-		$post_page_limit = !empty( $args['post_limit'] ) ? $args['post_limit'] : '6';
-		$layout = !empty( $args['layout'] ) ? $args['layout'] : '2';
-		$post_type = !empty( $args['post_type'] ) ? $args['post_type'] : 'gd_place';
-		$enqueue_slider = !empty( $args['enqueue_slider'] ) ? true : false;
-		
-		// elementor pro
-		if(defined( 'ELEMENTOR_PRO_VERSION' )) {
+		$post_page_limit = ! empty( $args['post_limit'] ) ? absint( $args['post_limit'] ) : '6';
+		$layout = ! empty( $args['layout'] ) ? absint( $args['layout'] ) : '2';
+		$post_type = ! empty( $args['post_type'] ) ? sanitize_text_field( $args['post_type'] ) : 'gd_place';
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
+			$post_type = 'gd_place';
+		}
+		$enqueue_slider = ! empty( $args['enqueue_slider'] ) ? true : false;
+
+		// Elementor pro
+		if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
 			$skin_id         = ! empty( $args['skin_id'] ) ? absint( $args['skin_id'] ) : '';
 			$skin_column_gap = ! empty( $args['skin_column_gap'] ) ? absint( $args['skin_column_gap'] ) : '';
 			$skin_row_gap    = ! empty( $args['skin_row_gap'] ) ? absint( $args['skin_row_gap'] ) : '';
 		}
 
-		// elementor
+		// Elementor
 		$skin_active = false;
 		$elementor_wrapper_class = '';
-		if(defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id){
-			if(get_post_status ( $skin_id )=='publish'){
+
+		if ( defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id ) {
+			if ( get_post_status ( $skin_id ) == 'publish' ) {
 				$skin_active = true;
 			}
-			if($skin_active){
-				$columns = isset($layout) ? absint($layout) : 1;
-				if($columns == '0'){$columns = 6;}// we have no 6 row option to lets use list view
-				$elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-'.$columns.' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
+
+			if ( $skin_active ) {
+				$columns = $layout;
+
+				if ( $columns < 1 ) {
+					$columns = 6;// We have no 6 row option to lets use list view.
+				}
+
+				$elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-' . $columns . ' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
 			}
 		}
 
-		// spinner
-		if($design_style){
-			$spinner = '<div class="spinner-border" role="status">
-  <span class="sr-only">'.__("Loading...","geodirectory").'</span>
-</div>';
-		}else{
+		// Spinner
+		if ( $design_style ) {
+			$spinner = '<div class="spinner-border" role="status"><span class="sr-only">' . esc_html__( "Loading...", "geodirectory" ) . '</span></div>';
+		} else {
 			$spinner = '<i class="fas fa-sync fa-spin fa-2x"></i>';
 		}
 
-		// preview
+		// Preview
 		$preview_listings = '';
-		if($this->is_preview() && $design_style){
 
-			// card border class
+		if ( $this->is_preview() && $design_style ) {
+			// Card border class
 			$card_border_class = '';
-			if(!empty($args['card_border'])){
-				if($args['card_border']=='none'){
+
+			if ( ! empty( $args['card_border'] ) ) {
+				if ( $args['card_border'] == 'none' ) {
 					$card_border_class = 'border-0';
-				}else{
-					$card_border_class = 'border-'.sanitize_html_class($args['card_border']);
+				} else {
+					$card_border_class = 'border-' . sanitize_html_class( $args['card_border'] );
 				}
 			}
 
-			// card shadow
+			// Card shadow
 			$card_shadow_class = '';
-			if(!empty($args['card_shadow'])){
-				if($args['card_shadow']=='small'){
+
+			if ( ! empty( $args['card_shadow'] ) ) {
+				if ( $args['card_shadow'] == 'small' ) {
 					$card_shadow_class = 'shadow-sm';
-				}elseif($args['card_shadow']=='medium'){
+				} else if ( $args['card_shadow'] == 'medium' ) {
 					$card_shadow_class = 'shadow';
-				}elseif($args['card_shadow']=='large'){
+				} else if ( $args['card_shadow'] == 'large' ) {
 					$card_shadow_class = 'shadow-lg';
 				}
 			}
@@ -359,82 +359,70 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			$query_args = array(
 				'posts_per_page' => absint( $args['post_limit'] ),
 				'is_geodir_loop' => true,
-				'post_type'      => $post_type,
+				'post_type' => $post_type,
 			);
 
 			$widget_listings = geodir_get_widget_listings( $query_args );
 
-			$template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
+			$template = $design_style ? $design_style . "/content-widget-listing.php" : "content-widget-listing.php";
+
 			$preview_listings = geodir_get_template_html( $template, array(
 				'widget_listings' => $widget_listings,
-				'column_gap_class'   => $args['column_gap'] ? 'mb-'.absint($args['column_gap']) : 'mb-4',
-				'row_gap_class'   => $args['row_gap'] ? 'px-'.absint($args['row_gap']) : '',
-				'card_border_class'   => $card_border_class,
-				'card_shadow_class'  =>  $card_shadow_class,
+				'column_gap_class' => $args['column_gap'] ? 'mb-' . absint( $args['column_gap'] ) : 'mb-4',
+				'row_gap_class' => $args['row_gap'] ? 'px-' . absint( $args['row_gap'] ) : '',
+				'card_border_class' => $card_border_class,
+				'card_shadow_class' => $card_shadow_class,
 			) );
 		}
-		
 
-
-		// wrap class
-		$wrap_class = geodir_build_aui_class($args);
+		// Wrap class
+		$wrap_class = geodir_build_aui_class( $args );
 
 		ob_start();
-
-		if($enqueue_slider && !$design_style){
-			// enqueue flexslider JS
+		if ( $enqueue_slider && ! $design_style ) {
+			// Enqueue flexslider JS
 			GeoDir_Frontend_Scripts::enqueue_script( 'jquery-flexslider' );
 		}
 		?>
-		<div class="geodir-recently-reviewed <?php echo $wrap_class;?>">
-			<div class="recently-reviewed-content recently-reviewed-content-<?php echo absint($geodir_recently_viewed_count); echo $elementor_wrapper_class;?>"><?php echo $preview_listings;?></div>
-			<div class="recently-reviewed-loader" style="display: none;text-align: center;">
-<?php echo $spinner;?>
-			</div>
+		<div class="geodir-recently-reviewed <?php echo esc_attr( $wrap_class ); ?>">
+			<div class="recently-reviewed-content recently-reviewed-content-<?php echo absint( $geodir_recently_viewed_count ) . esc_attr( $elementor_wrapper_class ); ?>"><?php echo $preview_listings; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+			<div class="recently-reviewed-loader" style="display:none;text-align:center;"><?php echo $spinner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 		</div>
 
-		<script type="text/javascript">
-			document.addEventListener("DOMContentLoaded", function() {
-				if(!geodir_is_localstorage()){return;}
-				jQuery('.recently-reviewed-loader').show();
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
+	if(!geodir_is_localstorage()){return;}
+	jQuery('.recently-reviewed-loader').show();
 
-				var recently_viewed = localStorage.getItem("gd_recently_viewed");
-				var data = {
-					'action': 'geodir_recently_viewed_listings',
-					'viewed_post_id' : recently_viewed,
-					'list_per_page' :'<?php echo $post_page_limit; ?>' ,
-					'layout' : '<?php echo $layout; ?>',
-					'post_type':'<?php echo $post_type; ?>',
-					'column_gap':'<?php echo esc_attr($args['column_gap']); ?>',
-					'row_gap':'<?php echo esc_attr($args['row_gap']); ?>',
-					'card_border':'<?php echo esc_attr($args['card_border']); ?>',
-					'card_shadow':'<?php echo esc_attr($args['card_shadow']); ?>',
-					<?php
-					// elementor pro
-					if(defined( 'ELEMENTOR_PRO_VERSION' )) {
-						?>
-					'skin_id':'<?php echo $skin_id; ?>',
-					'skin_column_gap':'<?php echo $skin_column_gap; ?>',
-					'skin_row_gap':'<?php echo $skin_row_gap; ?>',
-						<?php
-					}
-					?>
-					
-				};
+	var recently_viewed = localStorage.getItem("gd_recently_viewed");
+	var data = {
+		'action': 'geodir_recently_viewed_listings',
+		'viewed_post_id' : recently_viewed,
+		'list_per_page' :'<?php echo (int) $post_page_limit; ?>' ,
+		'layout' : '<?php echo (int) $layout; ?>',
+		'post_type':'<?php echo esc_js( $post_type ); ?>',
+		'column_gap':'<?php echo esc_attr( $args['column_gap'] ); ?>',
+		'row_gap':'<?php echo esc_attr( $args['row_gap'] ); ?>',
+		'card_border':'<?php echo esc_attr( $args['card_border'] ); ?>',
+		'card_shadow':'<?php echo esc_attr( $args['card_shadow'] ); ?>',
+		<?php if( defined( 'ELEMENTOR_PRO_VERSION' ) ) { ?>
+		'skin_id':'<?php echo ( $skin_id ? (int) $skin_id : '' ); ?>',
+		'skin_column_gap':'<?php echo ( $skin_column_gap ? (int) $skin_column_gap : '' ); ?>',
+		'skin_row_gap':'<?php echo ( $skin_row_gap ? (int) $skin_row_gap : '' ); ?>',
+		<?php } ?>
+	};
 
-				jQuery.post(geodir_params.ajax_url, data, function(response) {
-					jQuery('.geodir-recently-reviewed .recently-reviewed-content-<?php echo absint($geodir_recently_viewed_count); ?>').html(response);
-					jQuery('.recently-reviewed-loader').hide();
-					init_read_more();
-					geodir_init_lazy_load();
-					geodir_refresh_business_hours();
-					// init any sliders
-					geodir_init_flexslider();
-
-				});
-			});
-		</script>
-
+	jQuery.post(geodir_params.ajax_url, data, function(response) {
+		jQuery('.geodir-recently-reviewed .recently-reviewed-content-<?php echo absint( $geodir_recently_viewed_count ); ?>').html(response);
+		jQuery('.recently-reviewed-loader').hide();
+		init_read_more();
+		geodir_init_lazy_load();
+		geodir_refresh_business_hours();
+		// init any sliders
+		geodir_init_flexslider();
+	});
+});
+</script>
 		<?php
 		return ob_get_clean();
 	}
@@ -453,7 +441,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 
 			if ( geodir_is_gd_post_type( $get_post_type ) ) {
 				ob_start();
-				if ( 0 ) { ?><script><?php }?>
+				if ( 0 ) { ?><script><?php } ?>
 document.addEventListener("DOMContentLoaded", function(event) {
 	if (!geodir_is_localstorage()) {
 		return;
@@ -466,8 +454,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		return false;
 	}
 	/*localStorage.removeItem("gd_recently_viewed");*/
-	var post_id = '<?php echo $get_post_id; ?>',
-		post_type = '<?php echo $get_post_type; ?>',
+	var post_id = '<?php echo absint( $get_post_id ); ?>',
+		post_type = '<?php echo esc_js( $get_post_type ); ?>',
 		reviewed_arr = {},
 		recently_reviewed = JSON.parse(localStorage.getItem('gd_recently_viewed'));
 	if (null != recently_reviewed) {
