@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.80\n"
+"Project-Id-Version: GeoDirectory 2.3.81\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-23 12:37+0530\n"
-"PO-Revision-Date: 2024-09-23 12:37+0530\n"
+"POT-Creation-Date: 2024-09-30 15:43+0530\n"
+"PO-Revision-Date: 2024-09-30 15:43+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -498,8 +498,8 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-rating.php:154
 #: includes/widgets/class-geodir-widget-post-rating.php:173
 #: includes/widgets/class-geodir-widget-recent-reviews.php:207
-#: includes/widgets/class-geodir-widget-recently-viewed.php:151
-#: includes/widgets/class-geodir-widget-recently-viewed.php:164
+#: includes/widgets/class-geodir-widget-recently-viewed.php:147
+#: includes/widgets/class-geodir-widget-recently-viewed.php:160
 #: includes/widgets/class-geodir-widget-report-post.php:76
 #: includes/widgets/class-geodir-widget-report-post.php:108
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:113
@@ -671,9 +671,9 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-features.php:246
 #: includes/widgets/class-geodir-widget-post-images.php:145
 #: includes/widgets/class-geodir-widget-recent-reviews.php:175
-#: includes/widgets/class-geodir-widget-recently-viewed.php:114
-#: includes/widgets/class-geodir-widget-recently-viewed.php:132
-#: includes/widgets/class-geodir-widget-recently-viewed.php:150
+#: includes/widgets/class-geodir-widget-recently-viewed.php:110
+#: includes/widgets/class-geodir-widget-recently-viewed.php:128
+#: includes/widgets/class-geodir-widget-recently-viewed.php:146
 #: includes/widgets/class-geodir-widget-report-post.php:157
 #: includes/widgets/class-geodir-widget-search.php:144
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:112
@@ -731,7 +731,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-loop-paging.php:187
 #: includes/widgets/class-geodir-widget-loop.php:103
 #: includes/widgets/class-geodir-widget-post-features.php:372
-#: includes/widgets/class-geodir-widget-recently-viewed.php:165
+#: includes/widgets/class-geodir-widget-recently-viewed.php:161
 #: includes/widgets/class-geodir-widget-search.php:145
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:128
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:638
@@ -754,7 +754,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-loop-paging.php:188
 #: includes/widgets/class-geodir-widget-loop.php:105
 #: includes/widgets/class-geodir-widget-post-features.php:374
-#: includes/widgets/class-geodir-widget-recently-viewed.php:167
+#: includes/widgets/class-geodir-widget-recently-viewed.php:163
 #: includes/widgets/class-geodir-widget-search.php:146
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:130
 #: includes/widgets/class-geodir-widget-simple-archive.php:196
@@ -1419,7 +1419,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dashboard.php:168
 #: includes/widgets/class-geodir-widget-best-of.php:773
 #: includes/widgets/class-geodir-widget-listings.php:1656
-#: includes/widgets/class-geodir-widget-recently-viewed.php:327
+#: includes/widgets/class-geodir-widget-recently-viewed.php:326
 #: templates/bootstrap/map/map.php:55
 msgid "Loading..."
 msgstr ""
@@ -6009,9 +6009,9 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-recent-reviews.php:199
 #: includes/widgets/class-geodir-widget-recent-reviews.php:214
 #: includes/widgets/class-geodir-widget-recent-reviews.php:232
-#: includes/widgets/class-geodir-widget-recently-viewed.php:215
-#: includes/widgets/class-geodir-widget-recently-viewed.php:225
-#: includes/widgets/class-geodir-widget-recently-viewed.php:234
+#: includes/widgets/class-geodir-widget-recently-viewed.php:209
+#: includes/widgets/class-geodir-widget-recently-viewed.php:219
+#: includes/widgets/class-geodir-widget-recently-viewed.php:228
 #: includes/widgets/class-geodir-widget-report-post.php:100
 #: includes/widgets/class-geodir-widget-report-post.php:116
 #: includes/widgets/class-geodir-widget-report-post.php:129
@@ -14892,7 +14892,7 @@ msgid "Template Part"
 msgstr ""
 
 #: includes/template-functions.php:1214
-#: includes/widgets/class-geodir-widget-recently-viewed.php:208
+#: includes/widgets/class-geodir-widget-recently-viewed.php:202
 #: includes/widgets/class-geodir-widget-simple-archive.php:210
 #: includes/widgets/class-geodir-widget-simple-archive.php:216
 #: includes/widgets/class-geodir-widget-simple-archive.php:226
@@ -15195,7 +15195,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-listings.php:530
 #: includes/widgets/class-geodir-widget-loop.php:104
 #: includes/widgets/class-geodir-widget-post-features.php:373
-#: includes/widgets/class-geodir-widget-recently-viewed.php:166
+#: includes/widgets/class-geodir-widget-recently-viewed.php:162
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:129
 #: includes/widgets/class-geodir-widget-simple-archive.php:195
 msgid "Medium"
@@ -15407,7 +15407,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-features.php:101
 #: includes/widgets/class-geodir-widget-post-meta.php:97
 #: includes/widgets/class-geodir-widget-recent-reviews.php:101
-#: includes/widgets/class-geodir-widget-recently-viewed.php:52
+#: includes/widgets/class-geodir-widget-recently-viewed.php:48
 #: includes/widgets/class-geodir-widget-single-reviews.php:56
 msgid "Title:"
 msgstr ""
@@ -15428,7 +15428,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-az-search.php:102
 #: includes/widgets/class-geodir-widget-categories.php:119
 #: includes/widgets/class-geodir-widget-cpt-meta.php:44
-#: includes/widgets/class-geodir-widget-recently-viewed.php:83
+#: includes/widgets/class-geodir-widget-recently-viewed.php:79
 msgid "Post Type:"
 msgstr ""
 
@@ -15514,14 +15514,14 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:108
 #: includes/widgets/class-geodir-widget-listings.php:333
 #: includes/widgets/class-geodir-widget-loop.php:36
-#: includes/widgets/class-geodir-widget-recently-viewed.php:72
+#: includes/widgets/class-geodir-widget-recently-viewed.php:68
 #: includes/widgets/class-geodir-widget-simple-archive.php:129
 msgid "How the listings should laid out by default."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:117
 #: includes/widgets/class-geodir-widget-listings.php:198
-#: includes/widgets/class-geodir-widget-recently-viewed.php:62
+#: includes/widgets/class-geodir-widget-recently-viewed.php:58
 msgid "Posts to show:"
 msgstr ""
 
@@ -15575,7 +15575,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:211
 #: includes/widgets/class-geodir-widget-listings.php:449
 #: includes/widgets/class-geodir-widget-loop.php:191
-#: includes/widgets/class-geodir-widget-recently-viewed.php:219
+#: includes/widgets/class-geodir-widget-recently-viewed.php:213
 #: includes/widgets/class-geodir-widget-simple-archive.php:221
 msgid "Skin column gap"
 msgstr ""
@@ -15583,7 +15583,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:212
 #: includes/widgets/class-geodir-widget-listings.php:450
 #: includes/widgets/class-geodir-widget-loop.php:192
-#: includes/widgets/class-geodir-widget-recently-viewed.php:220
+#: includes/widgets/class-geodir-widget-recently-viewed.php:214
 #: includes/widgets/class-geodir-widget-simple-archive.php:222
 msgid "The px value for the column gap."
 msgstr ""
@@ -15591,7 +15591,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:222
 #: includes/widgets/class-geodir-widget-listings.php:460
 #: includes/widgets/class-geodir-widget-loop.php:202
-#: includes/widgets/class-geodir-widget-recently-viewed.php:228
+#: includes/widgets/class-geodir-widget-recently-viewed.php:222
 #: includes/widgets/class-geodir-widget-simple-archive.php:231
 msgid "Skin row gap"
 msgstr ""
@@ -15599,7 +15599,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:223
 #: includes/widgets/class-geodir-widget-listings.php:461
 #: includes/widgets/class-geodir-widget-loop.php:203
-#: includes/widgets/class-geodir-widget-recently-viewed.php:229
+#: includes/widgets/class-geodir-widget-recently-viewed.php:223
 #: includes/widgets/class-geodir-widget-simple-archive.php:232
 msgid "The px value for the row gap."
 msgstr ""
@@ -15607,7 +15607,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:259
 #: includes/widgets/class-geodir-widget-listings.php:473
 #: includes/widgets/class-geodir-widget-loop.php:48
-#: includes/widgets/class-geodir-widget-recently-viewed.php:110
+#: includes/widgets/class-geodir-widget-recently-viewed.php:106
 #: includes/widgets/class-geodir-widget-simple-archive.php:139
 msgid "Card row gap"
 msgstr ""
@@ -15615,7 +15615,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:260
 #: includes/widgets/class-geodir-widget-listings.php:474
 #: includes/widgets/class-geodir-widget-loop.php:49
-#: includes/widgets/class-geodir-widget-recently-viewed.php:111
+#: includes/widgets/class-geodir-widget-recently-viewed.php:107
 #: includes/widgets/class-geodir-widget-simple-archive.php:140
 msgid "This adjusts the spacing between the cards horizontally."
 msgstr ""
@@ -15647,10 +15647,10 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-loop.php:80
 #: includes/widgets/class-geodir-widget-loop.php:94
 #: includes/widgets/class-geodir-widget-loop.php:110
-#: includes/widgets/class-geodir-widget-recently-viewed.php:124
-#: includes/widgets/class-geodir-widget-recently-viewed.php:142
-#: includes/widgets/class-geodir-widget-recently-viewed.php:156
-#: includes/widgets/class-geodir-widget-recently-viewed.php:172
+#: includes/widgets/class-geodir-widget-recently-viewed.php:120
+#: includes/widgets/class-geodir-widget-recently-viewed.php:138
+#: includes/widgets/class-geodir-widget-recently-viewed.php:152
+#: includes/widgets/class-geodir-widget-recently-viewed.php:168
 #: includes/widgets/class-geodir-widget-simple-archive.php:153
 #: includes/widgets/class-geodir-widget-simple-archive.php:171
 #: includes/widgets/class-geodir-widget-simple-archive.php:185
@@ -15661,7 +15661,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:277
 #: includes/widgets/class-geodir-widget-listings.php:491
 #: includes/widgets/class-geodir-widget-loop.php:66
-#: includes/widgets/class-geodir-widget-recently-viewed.php:128
+#: includes/widgets/class-geodir-widget-recently-viewed.php:124
 #: includes/widgets/class-geodir-widget-simple-archive.php:157
 msgid "Card column gap"
 msgstr ""
@@ -15669,7 +15669,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:278
 #: includes/widgets/class-geodir-widget-listings.php:492
 #: includes/widgets/class-geodir-widget-loop.php:67
-#: includes/widgets/class-geodir-widget-recently-viewed.php:129
+#: includes/widgets/class-geodir-widget-recently-viewed.php:125
 #: includes/widgets/class-geodir-widget-simple-archive.php:158
 msgid "This adjusts the spacing between the cards vertically."
 msgstr ""
@@ -15677,7 +15677,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:295
 #: includes/widgets/class-geodir-widget-listings.php:509
 #: includes/widgets/class-geodir-widget-loop.php:84
-#: includes/widgets/class-geodir-widget-recently-viewed.php:146
+#: includes/widgets/class-geodir-widget-recently-viewed.php:142
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:108
 #: includes/widgets/class-geodir-widget-simple-archive.php:175
 msgid "Card border"
@@ -15686,7 +15686,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:296
 #: includes/widgets/class-geodir-widget-listings.php:510
 #: includes/widgets/class-geodir-widget-loop.php:85
-#: includes/widgets/class-geodir-widget-recently-viewed.php:147
+#: includes/widgets/class-geodir-widget-recently-viewed.php:143
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:109
 #: includes/widgets/class-geodir-widget-simple-archive.php:176
 msgid "Set the border style for the card."
@@ -15696,7 +15696,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-categories.php:320
 #: includes/widgets/class-geodir-widget-listings.php:524
 #: includes/widgets/class-geodir-widget-loop.php:98
-#: includes/widgets/class-geodir-widget-recently-viewed.php:160
+#: includes/widgets/class-geodir-widget-recently-viewed.php:156
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:123
 #: includes/widgets/class-geodir-widget-simple-archive.php:189
 msgid "Card shadow"
@@ -15706,7 +15706,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-categories.php:321
 #: includes/widgets/class-geodir-widget-listings.php:525
 #: includes/widgets/class-geodir-widget-loop.php:99
-#: includes/widgets/class-geodir-widget-recently-viewed.php:161
+#: includes/widgets/class-geodir-widget-recently-viewed.php:157
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:124
 #: includes/widgets/class-geodir-widget-simple-archive.php:190
 msgid "Set the card shadow style."
@@ -16559,7 +16559,7 @@ msgid "h2 (if main content of page)"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-listings.php:332
-#: includes/widgets/class-geodir-widget-recently-viewed.php:71
+#: includes/widgets/class-geodir-widget-recently-viewed.php:67
 msgid "Layout:"
 msgstr ""
 
@@ -18712,27 +18712,27 @@ msgstr ""
 msgid "Shows the GeoDirectory Most Recently Viewed Listings."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recently-viewed.php:53
+#: includes/widgets/class-geodir-widget-recently-viewed.php:49
 msgid "The Recently Viewed widget title."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recently-viewed.php:55
+#: includes/widgets/class-geodir-widget-recently-viewed.php:51
 msgid "Recently Viewed"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recently-viewed.php:63
+#: includes/widgets/class-geodir-widget-recently-viewed.php:59
 msgid "The number of posts to show by default. (max 50)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recently-viewed.php:84
+#: includes/widgets/class-geodir-widget-recently-viewed.php:80
 msgid "The custom post types to show. Only used when there are multiple CPTs."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recently-viewed.php:96
+#: includes/widgets/class-geodir-widget-recently-viewed.php:92
 msgid "Enqueue Slider Script:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recently-viewed.php:97
+#: includes/widgets/class-geodir-widget-recently-viewed.php:93
 msgid "This is only needed if your archive items are using a image slider."
 msgstr ""
 
