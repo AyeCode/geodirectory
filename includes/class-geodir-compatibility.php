@@ -4349,15 +4349,15 @@ jQuery(function($){
 	 * @since 2.3.31
 	 */
 	public static function spectra_uagb_post_assets_enqueue_scripts() {
-		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'detail' ) ) && ( $page_id = self::gd_page_id() ) ) {
+		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'detail' ) || geodir_is_page( 'search' ) ) && ( $page_id = self::gd_page_id() ) ) {
 			$current_post_assets = new UAGB_Post_Assets( $page_id );
 			$current_post_assets->enqueue_scripts();
-			if ( geodir_is_page( 'archive' ) ) {
+			if ( geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
+				$post_type = geodir_get_current_posttype();
 				// also load archive item style.
-				$post_type = get_post_type( get_the_ID() );
-				$page_id = geodir_archive_item_page_id( $post_type );
+				$archive_item_page_id = geodir_archive_item_page_id( $post_type );
 
-				$current_post_assets = new UAGB_Post_Assets( $page_id );
+				$current_post_assets = new UAGB_Post_Assets( $archive_item_page_id );
 				$current_post_assets->enqueue_scripts();
 			}
 		}
