@@ -62,6 +62,7 @@ class GeoDir_Elementor {
 		add_action( 'save_post',  array( __CLASS__,'clear_cache'));
 
 
+		add_action( 'elementor/editor/after_enqueue_scripts', array( __CLASS__, 'after_enqueue_editor_scripts' ), 99 );
 		add_filter('elementor/frontend/section/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
 		add_filter('elementor/frontend/widget/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
 		add_filter('elementor/frontend/container/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
@@ -1743,5 +1744,138 @@ class GeoDir_Elementor {
 		$widget->add_render_attribute( $element, $attributes, null, $overwrite );
 
 		return $widget;
+	}
+
+	/**
+	 * Add scripts on Elementor Editor pages.
+	 *
+	 * @since 2.3.82
+	 *
+	 * @return mixed
+	 */
+	public static function after_enqueue_editor_scripts() {
+		$scripts = self::get_editor_scripts();
+
+		if ( $scripts ) {
+			wp_add_inline_script( 'elementor-editor', $scripts );
+		}
+	}
+
+	/**
+	 * Get the script to add on Elementor Editor pages.
+	 *
+	 * @since 2.3.82
+	 *
+	 * @return string GD widget scripts.
+	 */
+	public static function get_editor_scripts() {
+		$post_types = geodir_get_posttypes();
+
+		if ( count( $post_types ) < 2 ) {
+			return '';
+		}
+
+		$basic_nonce = wp_create_nonce( 'geodir_basic_nonce' );
+		$cpt_options = geodir_cpt_rewrite_slug_options();
+		$all_text = __( 'All', 'geodirectory' );
+
+		ob_start();
+		?>
+		<?php if (1 === 0) { ?><script><?php } ?> 
+jQuery(function($){
+	var gdEleCat = 'select[name="widget-gd_listings[REPLACE_TO_ID][category][]"]', gdEleSort = 'select[name="widget-gd_listings[REPLACE_TO_ID][sort_by]"]';
+	$(document).on('change', '#elementor-controls select[name="widget-gd_listings[REPLACE_TO_ID][post_type]"]', function(e){
+		var $_wrap = $(this).closest('#elementor-controls').find('form'), _cpt = $(this).val();
+
+		if ($(gdEleCat, $_wrap).length) {
+			if (!window.gdCPTCats) {
+				window.gdCPTCats = [];
+			}
+			var gdCptSlugs = <?php echo "[" . json_encode( $cpt_options ) . "]"; ?>;
+			if (gdCptSlugs.length && gdCptSlugs[0][_cpt]) {
+				var _optc, $_cat = $(gdEleCat, $_wrap), gdCatPath = '<?php echo esc_url( rest_url( 'geodir/v2/GDCPTSLUG/categories/?per_page=100' ) ); ?>';gdCatPath = gdCatPath.replace('GDCPTSLUG', gdCptSlugs[0][_cpt]);
+				_optc = '';
+				if ($('option:first', $_cat).length && $('option:first', $_cat).val() === "0") {
+					_optc += '<option value="0">' + $('option:first', $_cat).text() +'</option>';
+				}
+				if (window.gdCPTCats[gdCatPath]) {
+					$.each(window.gdCPTCats[gdCatPath],function(key, term) {
+						_optc += '<option value="' + term.id +'">' + term.name +'</option>';
+					});
+					$_cat.html(_optc);
+				} else {
+					$.ajax({
+						url: gdCatPath,
+						type: 'GET',
+						dataType: 'json',
+						data: {}
+					}).done(function(res) {
+						if (res && typeof res == 'object') {
+							window.gdCPTCats[gdCatPath] = res;
+							$.each(res, function(key, term) {
+								_optc += '<option value="' + term.id +'">' + term.name +'</option>'
+							});
+						}
+						$_cat.html(_optc);
+					});
+				}
+			}
+		}
+
+		if ($(gdEleSort, $_wrap).length) {
+			if (!window.gdCPTSort) {
+				window.gdCPTSort = [];
+			}
+			var sortV = '';
+			if(!$(gdEleSort, $_wrap).data('sort-'+_cpt)) {
+				$(gdEleSort, $_wrap).attr('data-sort-'+_cpt, $(gdEleSort, $_wrap).val());
+			} else {
+				sortV = $(gdEleSort, $_wrap).data('sort-'+_cpt);
+			}
+			if(!$(gdEleSort, $_wrap).data('sort-cpt')) {
+				$(gdEleSort, $_wrap).attr('data-sort-cpt', $(gdEleSort, $_wrap).val());
+			} else {
+				if (!sortV) {
+					sortV = $(gdEleSort, $_wrap).data('sort-'+_cpt);
+				}
+			}
+			if (!sortV) {
+				$(gdEleSort, $_wrap).val();
+			}
+
+			if (window.gdCPTSort[_cpt]) {
+				var _opts = '', res = window.gdCPTSort[_cpt];
+				$.each(res, function(val, lbl) {
+					_opts += '<option value="' + val +'">' + lbl +'</option>';
+				});
+				$(gdEleSort, $_wrap).html(_opts).val(sortV);
+			} else {
+				$.ajax({
+					url: '<?php echo esc_js( geodir_ajax_url( true ) ) ?>',
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						'action': 'geodir_get_sort_options',
+						'post_type': _cpt,
+						'security': '<?php echo esc_js( $basic_nonce ) ?>'
+					}
+				}).done(function(res) {
+					var _opts = '';
+					if (res && typeof res == 'object') {
+						window.gdCPTSort[_cpt] = res;
+						$.each(res, function(val, lbl) {
+							_opts += '<option value="' + val +'">' + lbl +'</option>';
+						});
+					}
+					$(gdEleSort, $_wrap).html(_opts).val(sortV);
+				});
+			}
+		}
+	});
+});<?php if (1 === 0) { ?></script><?php } ?> 
+		<?php
+		$script = ob_get_clean();
+
+		return $script;
 	}
 }
