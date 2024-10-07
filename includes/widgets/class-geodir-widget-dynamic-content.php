@@ -17,6 +17,9 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			'block-icon'     => 'location-alt',
 			'block-category' => 'geodirectory',
 			'block-keywords' => "['dynamic','geodir','geodirectory']",
+			'block-supports' => array(
+				'customClassName' => false,
+			),
 			'class_name'     => __CLASS__,
 			'base_id'        => 'gd_dynamic_content',
 			'name'           => __( 'GD > Dynamic Content', 'geodirectory' ),
