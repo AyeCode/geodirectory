@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.3.82 - TBD =
 * Elementor editor GD > Listings - Category & CPT options are not changing on CPT change - FIXED
+* GD > Dynamic Content remove CSS class setting added by WP default - CHANGED
 
 = GeoDirectory v2.3.81 - 2024-09-30 =
 * Spectra block style issue on GD Single page - FIXED
