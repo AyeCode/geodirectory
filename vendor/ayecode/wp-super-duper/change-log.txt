@@ -1,5 +1,6 @@
-= 1.2.11 - 2024-10-09 =
+= 1.2.12 - 2024-10-10 =
 * Multiple blocks with taxonomy linking feature can cause ajax query to loop and freeze browser - FIXED
+* __experimentalGetPreviewDeviceType is deprecated - FIXED
 
 = 1.2.10 - 2024-10-08 =
 * Selecting multiple similar blocks with different settings can cause editor to freeze - FIXED
