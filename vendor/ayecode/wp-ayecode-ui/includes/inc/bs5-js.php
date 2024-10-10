@@ -637,8 +637,7 @@
 
             // items
             $i = 0;
-            $rtl_class = '<?php echo is_rtl() ? 'justify-content-end' : 'justify-content-start'; ?>'; 
-            $carousel += '<div class="carousel-inner d-flex align-items-center ' + $rtl_class + '">';
+            $carousel += '<div class="carousel-inner d-flex align-items-center">';
             $container.find('.aui-lightbox-image').each(function() {
                 var a = this;
                 var href = jQuery(a).attr('href');
