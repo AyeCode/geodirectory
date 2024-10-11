@@ -166,7 +166,7 @@ Get instant access to Premium Add-Ons that can turn your local directory into a 
 
 * [Migrate listings from other sites with Social Importer](https://wpgeodirectory.com/downloads/social-importer/ "Import 1 listing at a time from Facebook, Yelp, Google My Business, and Trip Advisor!") - Import pages and events from Facebook and listings from Google My Business, Yelp, and Trip Advisor. One listing at a time, no bulk scraping.
 
-* [Say Goodbye to spam listings with GD reCAPTCH](https://wpgeodirectory.com/downloads/gd-recaptcha/ "Stop spammers!") - Banish spam by adding the No CAPTCHA reCAPTCHA widget to any GeoDirectory form.
+* [Say Goodbye to spam listings with GD reCAPTCHA](https://wpgeodirectory.com/downloads/gd-recaptcha/ "Stop spammers!") - Banish spam by adding the No CAPTCHA reCAPTCHA widget to any GeoDirectory form.
 
 * [Manage multiple business locations with Franchise Manager]( https://wpgeodirectory.com/downloads/franchise-manager/ "Franchise Manager") - The faster, more innovative way to submit listings on directory pages for business chains or franchises.
 
