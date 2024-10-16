@@ -213,7 +213,7 @@ class GeoDir_Bricks {
 	 * @return string Filtered content.
 	 */
 	public static function overwrite_archive_item_template_content( $content, $original_content, $page_id ) {
-		global $gd_post;
+		global $gd_post, $geodir_brocks_css;
 
 		$post_type = ! empty( $gd_post->post_type ) ? '_' . $gd_post->post_type : '';
 
@@ -222,11 +222,26 @@ class GeoDir_Bricks {
 		if ( ! empty( $bricks_data ) ) {
 			remove_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'overwrite_archive_item_template_content' ), 10, 3 );
 
+			if ( empty( $geodir_brocks_css ) ) {
+				$geodir_brocks_css = array();
+			}
+
 			ob_start();
 			Bricks\Frontend::render_content( $bricks_data );
 			$_content = ob_get_clean();
 
-			$content = trim( $_content );
+			$content = $_content ? trim( $_content ) : '';
+
+			// Render inline CSS.
+			if ( $content && empty( $geodir_brocks_css[ $page_id ] ) ) {
+				$additional_data = Bricks\Element_Template::get_builder_call_additional_data( $page_id );
+
+				if ( ! empty( $additional_data['css'] ) ) {
+					$content .= "<style type=\"text/css\" data-template-id=\"" . (int) $page_id . "\">" . trim( Bricks\Assets::minify_css( $additional_data['css'] ) ) . "</style>";
+				}
+
+				$geodir_brocks_css[ $page_id ] = true;
+			}
 
 			add_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'overwrite_archive_item_template_content' ), 10, 3 );
 		}
