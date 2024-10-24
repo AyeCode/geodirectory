@@ -1060,6 +1060,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					}
 
 					foreach ( $categories as $category ) {
+						$args['parent_term'] = $category;
+
 						$term_icon = '';
 						$cat_color = '';
 
@@ -1373,6 +1375,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 		$depth++;
 		foreach ( $child_cats as $category ) {
+			$args['child_term'] = $category;
+
 			$term_icon_url = ! empty( $term_icons ) && isset( $term_icons[ $category->term_id ] ) ? $term_icons[ $category->term_id ] : '';
 			$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr( $category->name ) . ' icon" src="' . $term_icon_url . '" class=""/> ' : '';
 			$cat_font_icon = get_term_meta( $category->term_id, 'ct_cat_font_icon', true );

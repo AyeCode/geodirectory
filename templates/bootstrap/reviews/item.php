@@ -61,7 +61,7 @@ global $post, $aui_bs5;
 				$ratings_html = '';
 				if ( function_exists( 'geodir_reviewrating_get_comment_rating_by_id' ) ) {
 					$comment_ratings = geodir_reviewrating_get_comment_rating_by_id($comment->comment_ID);
-					$ratings = @unserialize($comment_ratings->ratings);
+					$ratings = ! empty( $comment_ratings->ratings ) ? @unserialize($comment_ratings->ratings) : array();
 					$ratings_html = GeoDir_Review_Rating_Template::geodir_reviewrating_draw_ratings($ratings, true);
 				}
 				echo '<div class="geodir-review-ratings c-pointer"  data-bs-toggle="popover-html" data-bs-sanitize="false" data-bs-placement="top" data-bs-html="true"  data-bs-content="'.esc_attr($ratings_html).'" data-bs-trigger="hover focus" >'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
