@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 4.5
 Tested up to: 6.6
-Stable tag: 2.3.82
+Stable tag: 2.3.83
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -319,7 +319,7 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory v2.3.83 - TBD =
+= GeoDirectory v2.3.83 - 2024-10-24 =
 * Bricks Builder style is not rendering for GD Archive Item template - FIXED
 
 = GeoDirectory v2.3.82 - 2024-10-10 =

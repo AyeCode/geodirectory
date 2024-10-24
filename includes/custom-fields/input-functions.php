@@ -1152,8 +1152,13 @@ function geodir_cfi_address( $html, $cf ) {
             $lat_lng_blank = true;
         }
 
-        if (empty($lat)) $lat = isset($location->city_latitude) ? $location->city_latitude : '';
-        if (empty($lng)) $lng = isset($location->city_longitude) ? $location->city_longitude : '';
+        if ( empty( $lat ) ) {
+            $lat = ! empty( $location->latitude ) ? $location->latitude : ( isset( $location->city_latitude ) ? $location->city_latitude : '' );
+        }
+
+        if ( empty( $lng ) ) {
+            $lng = ! empty( $location->longitude ) ? $location->longitude : ( isset( $location->city_longitude ) ? $location->city_longitude : '' );
+        }
 
         /**
          * Filter the default latitude.
