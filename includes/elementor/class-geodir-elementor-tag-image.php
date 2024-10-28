@@ -83,7 +83,7 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 
 	public function get_value( array $options = [] ) {
 		global $gd_post;
-		
+
 		$key = $this->get_settings( 'key' );
 
 		$image_data = [
@@ -110,7 +110,11 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 					];
 				}
 			} else {
-				$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key, 1 );
+				$post_id = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
+				if ( $post_id && wp_is_post_revision( $post_id ) ) {
+					$post_id = wp_get_post_parent_id( $post_id );
+				}
+				$post_images = GeoDir_Media::get_attachments_by_type( $post_id, $key, 1 );
 
 				if(!empty($post_images)){
 					$image = $post_images[0];
