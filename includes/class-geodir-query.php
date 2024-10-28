@@ -357,7 +357,7 @@ class GeoDir_Query {
 					$lat = $latlon['lat'];
 					$lon = $latlon['lon'];
 
-					$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))) AS distance ";
+					$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((($lat) - (" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(($lat) * pi()/180) * COS( (" . $table . ".latitude) * pi()/180) *POWER(SIN(($lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))) AS distance ";
 				}
 
 				global $s;// = get_search_query();
@@ -725,7 +725,7 @@ class GeoDir_Query {
 
 					if ( isset( $_REQUEST['sdistance'] ) && $_REQUEST['sdistance'] != 'all' ) {
 						$DistanceRadius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
-						$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
+						$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((($lat) - (" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(($lat) * pi()/180) * COS( (" . $table . ".latitude) * pi()/180) *POWER(SIN(($lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
 					}
 
 					// Private address
