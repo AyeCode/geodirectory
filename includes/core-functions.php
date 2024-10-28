@@ -1099,7 +1099,7 @@ function geodir_search_form_post_type_input() {
 					$wrap_class = '';
 					$attrs = '';
 				}
-				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class'" . $attrs . ">";
+				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class' " . $attrs . ">";
 			}
 
 			$select_class = $design_style ? " form-control " . ( $aui_bs5 ? 'form-select' : 'custom-select' ) : '';

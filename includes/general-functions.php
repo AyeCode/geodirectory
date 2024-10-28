@@ -1302,7 +1302,7 @@ function geodir_gps_query_part( $latitude, $longitude, $table = '', $radius = ''
 
 	$prefix = $table ? $table . '.' : '';
 
-	$query = "( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ABS( {$latitude} ) - ABS( {$prefix}`latitude` ) ) * PI() / 180 / 2 ), 2 ) + COS( ABS( {$latitude} ) * PI() / 180 ) * COS( ABS( {$prefix}`latitude` ) * PI() / 180 ) * POWER( SIN( ( {$longitude} - {$prefix}`longitude` ) * PI() / 180 / 2 ), 2 ) ) ) )";
+	$query = "( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ( {$latitude} ) - ( {$prefix}`latitude` ) ) * PI() / 180 / 2 ), 2 ) + COS( ( {$latitude} ) * PI() / 180 ) * COS( ( {$prefix}`latitude` ) * PI() / 180 ) * POWER( SIN( ( {$longitude} - {$prefix}`longitude` ) * PI() / 180 / 2 ), 2 ) ) ) )";
 
 	return $query;
 }

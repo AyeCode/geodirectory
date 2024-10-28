@@ -221,7 +221,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		}
 		if ( $latitude && $longitude ) {
 			$radius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
-			$fields .= ", ( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ABS( {$latitude} ) - ABS( pd.latitude ) ) * PI() / 180 / 2 ), 2 ) + COS( ABS( {$latitude} ) * PI() / 180 ) * COS( ABS( pd.latitude ) * PI() / 180 ) * POWER( SIN( ( {$longitude} - pd.longitude ) * PI() / 180 / 2 ), 2 ) ) ) ) AS distance ";
+			$fields .= ", ( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ( {$latitude} ) - ( pd.latitude ) ) * PI() / 180 / 2 ), 2 ) + COS( ( {$latitude} ) * PI() / 180 ) * COS( ( pd.latitude ) * PI() / 180 ) * POWER( SIN( ( {$longitude} - pd.longitude ) * PI() / 180 / 2 ), 2 ) ) ) ) AS distance ";
 		}
 
 		$fields = apply_filters( 'geodir_rest_markers_query_fields', $fields, $request );
