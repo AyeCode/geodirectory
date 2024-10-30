@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.83\n"
+"Project-Id-Version: GeoDirectory 2.3.84\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-24 23:37+0530\n"
-"PO-Revision-Date: 2024-10-24 23:37+0530\n"
+"POT-Creation-Date: 2024-10-31 00:27+0530\n"
+"PO-Revision-Date: 2024-10-31 00:28+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -4913,7 +4913,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:59
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:166
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:327
-#: includes/elementor/class-geodir-elementor-tag-image.php:316
+#: includes/elementor/class-geodir-elementor-tag-image.php:320
 #: includes/elementor/class-geodir-elementor-tag-text.php:266
 msgid "Custom Fields"
 msgstr ""
@@ -8219,7 +8219,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-color.php:99
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:267
 #: includes/elementor/class-geodir-elementor-tag-gallery.php:106
-#: includes/elementor/class-geodir-elementor-tag-image.php:275
+#: includes/elementor/class-geodir-elementor-tag-image.php:279
 #: includes/elementor/class-geodir-elementor-tag-number.php:93
 #: includes/elementor/class-geodir-elementor-tag-text.php:221
 #: includes/elementor/class-geodir-elementor-tag-url.php:152
@@ -13684,7 +13684,7 @@ msgid "Raw Values"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:368
-#: includes/elementor/class-geodir-elementor-tag-image.php:325
+#: includes/elementor/class-geodir-elementor-tag-image.php:329
 #: includes/elementor/class-geodir-elementor-tag-text.php:307
 msgid "Category meta"
 msgstr ""
@@ -13698,11 +13698,11 @@ msgstr ""
 msgid "Image Field"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-tag-image.php:284
+#: includes/elementor/class-geodir-elementor-tag-image.php:288
 msgid "Fallback"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-tag-image.php:332
+#: includes/elementor/class-geodir-elementor-tag-image.php:336
 msgid "Location Meta"
 msgstr ""
 
