@@ -186,7 +186,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 				'desc'     => __( 'The number of items in a row on desktop view.', 'geodirectory' ),
 				'type'     => 'select',
 				'options'  => array(
-					''  => __( 'Default (1)', 'geodirectory' ),
+					'1'  => __( 'Default (1)', 'geodirectory' ),
 					'2' => '2',
 					'3' => '3',
 					'4' => '4',
@@ -219,7 +219,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 				'desc'            => __( 'The number of columns in the row.', 'geodirectory' ),
 				'type'            => 'select',
 				'options'         => array(
-					''  => __( 'Default (1)', 'geodirectory' ),
+					'1'  => __( 'Default (1)', 'geodirectory' ),
 					'2' => '2',
 					'3' => '3',
 					'4' => '4',
