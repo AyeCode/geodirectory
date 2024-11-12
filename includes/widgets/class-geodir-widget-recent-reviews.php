@@ -301,7 +301,20 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			'shadow'                => '',
 			'design_style'          => $design_style
 		);
+
 		$instance = wp_parse_args( $args, $defaults );
+
+		if ( (int) $instance['row_items'] < 1 ) {
+			$instance['row_items'] = 1;
+		} else if ( (int) $instance['row_items'] > 6 ) {
+			$instance['row_items'] = 6;
+		}
+
+		if ( (int) $instance['row_cols'] < 1 ) {
+			$instance['row_cols'] = 1;
+		} else if ( (int) $instance['row_cols'] > 6 ) {
+			$instance['row_cols'] = 6;
+		}
 
 		// prints the widget
 		extract( $widget_args, EXTR_SKIP );
