@@ -187,6 +187,14 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'default'  => '1',
 				),
 
+				array(
+					'name'     => __( 'Enable BIG Data Optimizations', 'geodirectory' ),
+					'desc'     => __( 'This will help with directories over 50k listings (can slow down smaller directories)', 'geodirectory' ),
+					'id'       => 'enable_big_data',
+					'type'     => 'checkbox',
+//					'default'  => '0',
+				),
+
 				// @todo to be move to own design section
 				array(
 					'id' => 'design_style',

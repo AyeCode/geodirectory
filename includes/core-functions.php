@@ -150,7 +150,7 @@ function geodir_help_tip( $tip, $allow_html = false ) {
 	}
 	$ml = $aui_bs5 ? 'ms-2' : 'ml-2';
 
-	return '<i class="fas fa-question-circle gd-help-tip ' . $ml . ' text-muted" title="' . $tip . '" data-toggle="tooltip" data-html="true"></i>';
+	return '<i class="fas fa-question-circle gd-help-tip ' . $ml . ' text-muted" title="' . $tip . '" data-bs-toggle="tooltip" data-bd-html="true"></i>';
 }
 
 /**

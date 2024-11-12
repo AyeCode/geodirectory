@@ -123,7 +123,7 @@ global $post, $aui_bs5;
 							)
 						)
 					);
-					echo str_replace( 'comment-reply-link', 'comment-reply-link btn btn-sm btn-link px-1', $reply_link );
+					echo $reply_link ? str_replace( 'comment-reply-link', 'comment-reply-link btn btn-sm btn-link px-1', $reply_link ) : '';
 					?>
 				</span>
 				<?php } do_action( 'geodir_comment_links_end', $comment ); ?>
