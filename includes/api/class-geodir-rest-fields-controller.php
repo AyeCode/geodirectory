@@ -99,7 +99,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 
         // Retrieve the list of registered collection query parameters.
         $registered = $this->get_collection_params();
-        
+
         $args = array();
 
 		/*
@@ -138,7 +138,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 			}
 		}
 
-	    
+
 
 		if ( isset( $args['per_page'] ) ) {
 			$args['per_page'] = absint( $args['per_page'] );
@@ -172,9 +172,9 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		 */
 		$args = apply_filters( "geodir_rest_fields_query", $args, $request );
 		$query_args = $this->prepare_items_query( $args, $request );
-		
+
 		$query_args['count_total'] = true;
-		
+
         $results = $this->get_fields( $query_args );
 
         $fields = array();
@@ -787,7 +787,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		}
 		$query_from = "FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
 		$query_where = "WHERE 1=1";
-		
+
 		// nicename
 		if ( ! empty( $args['htmlvar_name'] ) ) {
 			$query_where .= $wpdb->prepare( ' AND htmlvar_name = %s', $args['htmlvar_name'] );
@@ -823,7 +823,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		}
 		$orderby_array[] = 'frontend_title ASC';
 		$query_orderby = 'ORDER BY ' . implode( ', ', $orderby_array );
-		
+
 		// limit
 		if ( isset( $args['per_page'] ) && $args['per_page'] > 0 ) {
 			if ( $args['offset'] ) {
@@ -867,7 +867,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		$sql = "SELECT $query_fields $query_from $query_where $query_orderby $query_limit";
 
 		$results = $wpdb->get_results( $sql );
-		
+
 		$total_rows = 0;
 		if ( isset( $args['count_total'] ) && $args['count_total'] ) {
 			$total_rows = (int) $wpdb->get_var( 'SELECT FOUND_ROWS()' );

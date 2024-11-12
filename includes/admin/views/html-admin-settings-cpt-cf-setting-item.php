@@ -691,6 +691,7 @@ $tab_class .= ( isset( $field->field_type ) && $field->field_type == 'fieldset' 
 				 * @param string $field ->field_type Current field type.
 				 */
 				$cat_sort_heading_label = apply_filters( 'geodir_advance_custom_fields_heading', __( 'Posts sort options', 'geodirectory' ), $field->field_type );
+				$cat_sort_heading_label = apply_filters( 'geodir_advance_custom_fields_heading', __( 'Posts sort options', 'geodirectory' ), $field->field_type );
 				?>
 				<h3 class="border-bottom text-dark h4 pt-3 pb-2 mb-3 <?php echo geodir_advanced_toggle_class(); ?>" data-setting="cat_sort_heading"><?php echo $cat_sort_heading_label; ?></h3>
 				<?php

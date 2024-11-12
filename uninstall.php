@@ -86,10 +86,10 @@ if ( geodir_get_option( 'admin_uninstall' ) ) {
 	// Options
 	// Delete settings
 	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'geodir_settings' OR option_name LIKE 'geodirectory\_%' OR ( option_name LIKE 'gd\_%' AND option_name LIKE '%category\_installed' );" );
-	
+
 	// Delete widgets
 	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'widget\_gd\_%';" );
-	
+
 	// Delete transients
 	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient__gd_activation_redirect' OR option_name LIKE '\_transient\_geodir\_%' OR option_name LIKE '\_transient\_gd_addons_section\_%' OR option_name LIKE '\_transient\_gd_avg\_%'" );
 	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout__gd_activation_redirect' OR option_name LIKE '\_timeout\_transient\_geodir\_%' OR option_name LIKE '\_timeout\_transient\_gd_addons_section\_%' OR option_name LIKE '\_timeout\_transient\_gd_avg\_%'" );
@@ -103,4 +103,10 @@ if ( geodir_get_option( 'admin_uninstall' ) ) {
 // Delete Fast AJAX mu-plugin file.
 if ( defined( 'WPMU_PLUGIN_DIR' ) && is_file( WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php' ) && file_exists( WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php' ) ) {
 	unlink( WPMU_PLUGIN_DIR . '/geodir-fast-ajax.php' );
+}
+
+// remove crons
+$timestamp = wp_next_scheduled('geodir_weekly_cache_clear_hook');
+if ($timestamp) {
+	wp_unschedule_event($timestamp, 'geodir_weekly_cache_clear_hook');
 }

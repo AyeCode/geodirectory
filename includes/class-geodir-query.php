@@ -461,7 +461,12 @@ class GeoDir_Query {
 			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 			$table            = geodir_db_cpt_table( $geodir_post_type );
 
-			$where .= $wpdb->prepare( " AND $wpdb->posts.post_type = %s ", $geodir_post_type );
+			// check if we already have the CPT query
+			$cpt_query = $wpdb->prepare( "$wpdb->posts.post_type = %s", $geodir_post_type );
+			// only add CPT if required (duplicate bad for big DBs)
+			if (strpos($where, $cpt_query) === false) {
+				$where .= $wpdb->prepare( " AND $wpdb->posts.post_type = %s ", $geodir_post_type );
+			}
 
 			if ( geodir_is_page( 'search' ) ) {
 				global $wpdb, $geodir_post_type, $plugin_prefix, $dist, $snear, $s, $s_A, $s_SA, $search_term;

@@ -23,12 +23,12 @@ $security         = $system_status->get_security_info();
 $settings         = $system_status->get_settings();
 $pages            = $system_status->get_pages();
 ?>
-<div class="notice">
+<div class="notice alert alert-primary">
 	<p><?php _e( 'Please copy and paste this information in your ticket when contacting support:', 'geodirectory' ); ?> </p>
-	<p class="submit"><a href="#" class="button-primary debug-report"><?php _e( 'Get system report', 'geodirectory' ); ?></a></p>
+	<p class="submit"><a href="#" class="button-primary debug-report btn btn-primary btn-sm text-white text-decoration-none"><?php _e( 'Get system report', 'geodirectory' ); ?></a></p>
 	<div id="debug-report">
 		<textarea readonly="readonly"></textarea>
-		<p class="submit"><button id="copy-for-support" class="button-primary" href="#" data-tip="<?php esc_attr_e( 'Copied!', 'geodirectory' ); ?>"><?php _e( 'Select all & copy for support', 'geodirectory' ); ?></button></p>
+		<p class="submit"><button id="copy-for-support" class="btn btn-primary btn-sm" href="#" data-tip="<?php esc_attr_e( 'Copied!', 'geodirectory' ); ?>"><?php _e( 'Select all & copy for support', 'geodirectory' ); ?></button></p>
 		<p class="copy-error gd-hidden"><?php _e( 'Copying to clipboard failed. Please press Ctrl/Cmd+C to copy.', 'geodirectory' ); ?></p>
 	</div>
 </div>
@@ -647,7 +647,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 	</thead>
 	<tbody>
-		<?php 		
+		<?php
 			if ( ! empty( $theme['overrides'] ) ) { ?>
 					<tr>
 						<td data-export-label="Overrides"><?php _e( 'Overrides', 'geodirectory' ); ?></td>

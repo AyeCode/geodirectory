@@ -36,11 +36,14 @@ class GeoDir_Admin_Tools {
 	 * @return array
 	 */
 	public function get_tools() {
-		global $geodir_count_attachments;
+		global $geodir_count_attachments, $geodirectory;
 
 		if ( empty( $geodir_count_attachments ) ) {
 			$geodir_count_attachments = GeoDir_Media::count_image_attachments();
 		}
+
+		$is_big_data_active = !empty($geodirectory->settings['enable_big_data']);
+		$big_data_status = $is_big_data_active ? __('(active)', 'geodirectory') : __('(not active)', 'geodirectory');
 
 		$tools = array(
 			'clear_version_numbers' => array(
@@ -86,6 +89,11 @@ class GeoDir_Admin_Tools {
 				'name'    => __( 'DB text translation', 'geodirectory' ),
 				'button'  => __( 'Run', 'geodirectory' ),
 				'desc'    => __( 'This tool will collect any texts stored in the DB and put them in the file db-language.php so they can then be used to translate them by translations tools.', 'geodirectory' ),
+			),
+			'clear_paging_cache' => array(
+				'name'    => __( 'Clear paging cache', 'geodirectory' ),
+				'button'  => __( 'Clear', 'geodirectory' ),
+				'desc'    => __( 'This tool will delete pagign cache when the BIG Data option is enabled', 'geodirectory' ) . ' ' . esc_attr( $big_data_status ),
 			),
 			'search_replace_cf' => array(
 				'name'    => __( 'Search & Replace Custom Field Value', 'geodirectory' ),
@@ -144,7 +152,7 @@ class GeoDir_Admin_Tools {
 				break;
 			case 'generate_keywords' :
 				$generated = (int) geodir_generate_title_keywords();
-				
+
 				if ( $generated > 0 ) {
 					$message = wp_sprintf( _n( '%d keyword generated.', '%d keywords generated.', $generated, 'geodirectory' ), $generated );
 				} else {
@@ -160,6 +168,14 @@ class GeoDir_Admin_Tools {
 					$message = __( 'File successfully created: ', 'geodirectory' ). geodir_plugin_path() . 'db-language.php';
 				} else {
 					$message = __( 'There was a problem creating the file, please check file permissions: ', 'geodirectory' ). geodir_plugin_path() . 'db-language.php';
+					$ran     = false;
+				}
+				break;
+			case 'clear_paging_cache' :
+				if ($this->clear_paging_cache()) {
+					$message = __( 'Cache successfully cleared', 'geodirectory' );
+				} else {
+					$message = __( 'There was a problem clearing the cache', 'geodirectory' );
 					$ran     = false;
 				}
 				break;
@@ -204,7 +220,7 @@ class GeoDir_Admin_Tools {
 
 	/**
 	 * Clear version numbers so install/upgrade functions will run.
-	 * 
+	 *
 	 * @return string|void
 	 */
 	public function clear_version_numbers(){
@@ -261,6 +277,12 @@ class GeoDir_Admin_Tools {
 		}
 
 		return false;
+	}
+
+	public function clear_paging_cache()
+	{
+		delete_option('gd_found_posts_cache');
+		return true;
 	}
 
 	/**
@@ -676,7 +698,7 @@ class GeoDir_Admin_Tools {
 
 	/**
 	 * Tool to remove unused GDv1 options.
-	 * 
+	 *
 	 * @since 2.1.0.12
 	 */
 	public function extra_debug_tools( $tools ) {
@@ -693,7 +715,7 @@ class GeoDir_Admin_Tools {
 
 	/**
 	 * Remove unused GDv1 options.
-	 * 
+	 *
 	 * @since 2.1.0.12
 	 */
 	public function remove_unused_data() {

@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 4.5
-Tested up to: 6.6
-Stable tag: 2.3.84
+Tested up to: 6.7
+Stable tag: 2.3.85
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -319,8 +319,10 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory v2.3.85 - TBD =
+= GeoDirectory v2.3.85 - 2024-11-12 =
 * GD > Recent Reviews carousel does not work when row items selected to default - FIXED
+* Added developer setting for "Big Dats" to improve queries for directories with over 50k listings - ADDED
+* Widget title tag can now only be set from a sanitized list - FIXED
 
 = GeoDirectory v2.3.84 - 2024-10-31 =
 * Use of ABS() on latitude in distance query gives incorrect distance - FIXED

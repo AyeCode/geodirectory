@@ -199,6 +199,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			</div>
 
+			<?php
+			$listing_type = self::$post_type;
+
+			$cfs = self::fields_custom( $listing_type );
+
+			if ( ! empty( $cfs ) ) {
+			?>
+
 			<h3 class="h6  text-muted"><?php _e( 'Custom Fields', 'geodirectory' ); ?></h3>
 			<div class="inside">
 
@@ -219,6 +227,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			</div>
 			<?php
+			}
 
 		}
 
@@ -238,6 +247,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$listing_type = self::$post_type;
 
 			$cfs = self::fields_standard( self::$post_type );
+
 			?>
 			<ul class="row row-cols-1 px-2 mb-0">
 				<li class="gd-cf-tooltip-wrap col px-1">
@@ -321,7 +331,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				}
 				echo '</ul>';
 			} else {
-				_e( 'There are no custom fields here yet.', 'geodirectory' );
+				//_e( 'There are no custom fields here yet.', 'geodirectory' );
 			}
 
 		}
