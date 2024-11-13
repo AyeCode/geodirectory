@@ -241,10 +241,6 @@ if ( ! class_exists( 'GeoDirectory' ) ) :
 
 			include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-post-types.php' ); // Registers post types
 
-			if ( !defined( 'GEODIR_LATITUDE_ERROR_MSG' ) ) {
-				require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
-			}
-
 			GeoDir_Email::init();// set up the email class
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/validation-functions.php' );
@@ -422,6 +418,10 @@ if ( ! class_exists( 'GeoDirectory' ) ) :
 		 * Init GeoDirectory when WordPress Initialises.
 		 */
 		public function init() {
+			if ( ! defined( 'GEODIR_LATITUDE_ERROR_MSG' ) ) {
+				require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
+			}
+
 			// Before init action.
 			do_action( 'geodirectory_before_init' );
 

@@ -1074,10 +1074,8 @@ function geodir_search_form_post_type_input() {
 
 	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
 		foreach ( $post_types as $post_type => $info ){
-			global $wpdb;
-			$has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
-			if ( ! $has_posts ) {
-				unset($post_types->{$post_type});
+			if ( ! geodir_cpt_has_post( $post_type ) ) {
+				unset( $post_types->{$post_type} );
 			}
 		}
 

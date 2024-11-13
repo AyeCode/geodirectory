@@ -531,24 +531,86 @@ function geodir_get_posttype_info( $post_type = '' ) {
  * @global string $geodir_post_type The post type.
  * @return string The post type.
  */
-function geodir_get_default_posttype()
-{
-    $post_types = apply_filters( 'geodir_get_default_posttype', geodir_get_posttypes( 'object' ) );
+function geodir_get_default_posttype() {
+	global $wpdb;
 
-    $stype = false;
-    foreach ( $post_types as $post_type => $info ) {
-        global $wpdb;
-        $has_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = %s AND post_status='publish' LIMIT 1", $post_type ) );
-        if ( $has_posts ) {
-            $stype = $post_type; break;
-        }
-    }
+	$post_types = apply_filters( 'geodir_get_default_posttype', geodir_get_posttypes( 'object' ) );
 
-    if(!$stype){
-        $stype = 'gd_place';
-    }
+	$stype = false;
 
-    return $stype;
+	foreach ( $post_types as $post_type => $info ) {
+		if ( geodir_cpt_has_post( $post_type ) ) {
+			$stype = $post_type;
+
+			break;
+		}
+	}
+
+	if ( ! $stype ) {
+		$stype = 'gd_place';
+	}
+
+	return $stype;
+}
+
+/*
+ * Check post type has published post.
+ *
+ * @since 2.3.85
+ *
+ * @param string $post_type The post type.
+ * @return string True if has posts or False.
+ */
+function geodir_cpt_has_post( $post_type ) {
+	global $wpdb, $geodir_cpt_has_post;
+
+	$has_post = false;
+
+	// Check global cached.
+	if ( ! ( is_array( $geodir_cpt_has_post ) && isset( $geodir_cpt_has_post[ $post_type ] ) ) ) {
+		geodir_cpt_set_has_post();
+	}
+
+	if ( is_array( $geodir_cpt_has_post ) && isset( $geodir_cpt_has_post[ $post_type ] ) ) {
+		$has_post = $geodir_cpt_has_post[ $post_type ];
+	}
+
+	return $has_post;
+}
+
+/*
+ * Set post type has post found.
+ *
+ * @since 2.3.85
+ */
+function geodir_cpt_set_has_post() {
+	global $wpdb, $geodir_cpt_has_post;
+
+	if ( empty( $geodir_cpt_has_post ) ) {
+		$geodir_cpt_has_post = array();
+	}
+
+	$post_types = geodir_get_posttypes();
+
+	if ( empty( $post_types ) ) {
+		return;
+	}
+
+	$fields = array();
+	$values = array();
+
+	foreach ( $post_types as $post_type ) {
+		$fields[] = 'post_type = %s';
+		$values[] = $post_type;
+	}
+
+	$where = count( $fields ) > 1 ? "( " . implode( " OR ", $fields ) . " )" : $fields[0];
+
+	$col = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT post_type FROM `{$wpdb->posts}` WHERE post_status = 'publish' AND {$where}", $values ) );
+
+	foreach ( $post_types as $post_type ) {
+		$geodir_cpt_has_post[ $post_type ] = ! empty( $col ) && in_array( $post_type, $col ) ? true : false;
+	}
 }
 
 
