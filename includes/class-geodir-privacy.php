@@ -21,17 +21,33 @@ class GeoDir_Privacy extends GeoDir_Abstract_Privacy {
 	 * Init - hook into events.
 	 */
 	public function __construct() {
-		parent::__construct( __( 'GeoDirectory', 'geodirectory' ) );
+		parent::__construct();
+
+		// Initialize data exporters and erasers.
+		add_action( 'init', array( $this, 'register_erasers_exporters' ) );
+
+		// Handles custom anonomization types not included in core.
+		add_filter( 'wp_privacy_anonymize_data', array( $this, 'anonymize_custom_data_types' ), 10, 3 );
+	}
+
+	/**
+	 * Initial registration of privacy erasers and exporters.
+	 *
+	 * Due to the use of translation functions, this should run only after plugins loaded.
+	 */
+	public function register_erasers_exporters() {
+		$this->name = __( 'GeoDirectory', 'geodirectory' );
+
 
 		// Include supporting classes.
 		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-privacy-erasers.php' );
 		include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-privacy-exporters.php' );
 
-		$gd_post_types = geodir_get_posttypes( 'object' );
+		$post_types = geodir_get_posttypes( 'object' );
 
-		if ( ! empty( $gd_post_types ) ) {
-			foreach ( $gd_post_types as $post_type => $info ) {
-				$name = $info->labels->name;
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type => $info ) {
+				$name = __( $info->labels->name, 'geodirectory' );
 
 				if ( self::allow_export_post_type_data( $post_type ) ) {
 					// This hook registers GeoDirectory data exporters.
@@ -39,9 +55,6 @@ class GeoDir_Privacy extends GeoDir_Abstract_Privacy {
 				}
 			}
 		}
-
-		// Handles custom anonomization types not included in core.
-		add_filter( 'wp_privacy_anonymize_data', array( $this, 'anonymize_custom_data_types' ), 10, 3 );
 
 		if ( self::allow_export_reviews_data() ) {
 			// Review data export
@@ -57,6 +70,7 @@ class GeoDir_Privacy extends GeoDir_Abstract_Privacy {
 		if ( self::allow_export_favorites_data() ) {
 			$this->add_exporter( 'geodirectory-post-favorites', __( 'GeoDirectory Favorite Listings', 'geodirectory' ), array( 'GeoDir_Privacy_Exporters', 'favorites_data_exporter' ) );
 		}
+
 		if ( self::allow_erase_favorites_data() ) {
 			$this->add_eraser( 'geodirectory-post-favorites', __( 'GeoDirectory Favorite Listings', 'geodirectory' ), array( 'GeoDir_Privacy_Erasers', 'favorites_data_eraser' ) );
 		}
