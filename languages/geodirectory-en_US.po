@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.3.85\n"
+"Project-Id-Version: GeoDirectory 2.3.86\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-12 13:29+0000\n"
-"PO-Revision-Date: 2024-11-12 13:29+0000\n"
+"POT-Creation-Date: 2024-11-14 20:56+0530\n"
+"PO-Revision-Date: 2024-11-14 20:56+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -26,7 +26,7 @@ msgstr ""
 "assets\n"
 "X-Poedit-SearchPathExcluded-4: assets\n"
 
-#: geodirectory.php:214
+#: geodirectory.php:207
 msgid ""
 "Your version of PHP is below the minimum version of PHP required by "
 "GeoDirectory. Please contact your host and request that your version be "
@@ -427,7 +427,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-assets.php:119
 #: includes/admin/class-geodir-admin-blocks.php:231
 #: includes/admin/class-geodir-admin-menus.php:108
-#: includes/class-geodir-elementor.php:157 includes/class-geodir-privacy.php:24
+#: includes/class-geodir-elementor.php:157 includes/class-geodir-privacy.php:39
 #: includes/core-functions.php:935
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
 #: includes/integrations/bricks/class-geodir-bricks.php:291
@@ -1816,10 +1816,10 @@ msgstr ""
 #, php-format
 msgid ""
 "If you find a bug within GeoDirectory core you can create a ticket via <a "
-"href=\"%1$s\">Github issues</a>. Ensure you read the <a href=\"%2$s"
-"\">contribution guide</a> prior to submitting your report. To help us solve "
-"your issue, please be as descriptive as possible and include your <a href="
-"\"%3$s\">system status report</a>."
+"href=\"%1$s\">Github issues</a>. Ensure you read the <a "
+"href=\"%2$s\">contribution guide</a> prior to submitting your report. To "
+"help us solve your issue, please be as descriptive as possible and include "
+"your <a href=\"%3$s\">system status report</a>."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-help.php:65
@@ -2030,7 +2030,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-design.php:49
 #: includes/admin/settings/class-geodir-settings-design.php:88
 #: includes/admin/settings/class-geodir-settings-import-export.php:46
-#: includes/class-geodir-privacy.php:88 language.php:111
+#: includes/class-geodir-privacy.php:102 language.php:111
 msgid "Reviews"
 msgstr ""
 
@@ -2257,8 +2257,8 @@ msgstr ""
 #: includes/admin/class-geodir-admin-notices.php:79
 #, php-format
 msgid ""
-"GeoDirectory Fast AJAX must-use plugin(mu-plugin) is missing. %1$sFast AJAX"
-"%2$s f will not work properly."
+"GeoDirectory Fast AJAX must-use plugin(mu-plugin) is missing. %1$sFast "
+"AJAX%2$s f will not work properly."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-notices.php:151
@@ -3595,7 +3595,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-categories.php:211
 #: includes/admin/views/html-admin-settings-import-export-listings.php:197
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:193
-#: includes/core-functions.php:1111 includes/post-functions.php:1977
+#: includes/core-functions.php:1109 includes/post-functions.php:1977
 #: includes/widgets/class-geodir-widget-dynamic-content.php:499
 #: language.php:174 templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
@@ -3832,7 +3832,7 @@ msgstr ""
 
 #: includes/admin/dashboard-functions.php:141
 #: includes/admin/settings/class-geodir-settings-import-export.php:44
-#: includes/class-geodir-privacy.php:77
+#: includes/class-geodir-privacy.php:91
 #: includes/widgets/class-geodir-widget-categories.php:475
 msgid "Listings"
 msgstr ""
@@ -7490,8 +7490,8 @@ msgstr ""
 #: includes/admin/views/html-admin-page-addons.php:49
 #, php-format
 msgid ""
-"If you already have a membership key please install <a href=\"%s\" target="
-"\"_blank\">WP Easy Updates</a>"
+"If you already have a membership key please install <a href=\"%s\" "
+"target=\"_blank\">WP Easy Updates</a>"
 msgstr ""
 
 #: includes/admin/views/html-admin-page-addons.php:54
@@ -8151,8 +8151,8 @@ msgstr ""
 #, php-format
 msgid ""
 "If you are modifying GeoDirectory on a parent theme that you did not build "
-"personally we recommend using a child theme. See: <a href=\"%s\" target="
-"\"_blank\">How to create a child theme</a>"
+"personally we recommend using a child theme. See: <a href=\"%s\" "
+"target=\"_blank\">How to create a child theme</a>"
 msgstr ""
 
 #: includes/admin/views/html-admin-page-status-report.php:609
@@ -10761,9 +10761,9 @@ msgstr ""
 
 #: includes/class-geodir-classifieds.php:69
 msgid ""
-"Select statuses to enable functionality for this post type. <span style="
-"\"color:red;\">(WARNING: disabling any status for the post type will move "
-"all existing posts to draft.)</span>"
+"Select statuses to enable functionality for this post type. <span "
+"style=\"color:red;\">(WARNING: disabling any status for the post type will "
+"move all existing posts to draft.)</span>"
 msgstr ""
 
 #: includes/class-geodir-classifieds.php:70
@@ -12165,20 +12165,20 @@ msgstr ""
 msgid "Post Title"
 msgstr ""
 
-#: includes/class-geodir-privacy.php:38
+#: includes/class-geodir-privacy.php:54
 #, php-format
 msgid "User %s"
 msgstr ""
 
-#: includes/class-geodir-privacy.php:53
+#: includes/class-geodir-privacy.php:66
 msgid "User Listing Reviews"
 msgstr ""
 
-#: includes/class-geodir-privacy.php:58 includes/class-geodir-privacy.php:61
+#: includes/class-geodir-privacy.php:71 includes/class-geodir-privacy.php:75
 msgid "GeoDirectory Favorite Listings"
 msgstr ""
 
-#: includes/class-geodir-privacy.php:78
+#: includes/class-geodir-privacy.php:92
 msgid ""
 "We collect information about you during the add listing process on our site. "
 "This information may include, but is not limited to, your name, IP address, "
@@ -12187,87 +12187,87 @@ msgid ""
 "purpose of adding your business/personal listings."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:79 includes/class-geodir-privacy.php:90
-#: includes/class-geodir-privacy.php:99
+#: includes/class-geodir-privacy.php:93 includes/class-geodir-privacy.php:104
+#: includes/class-geodir-privacy.php:113
 msgid "Handling this data also allows us to:"
 msgstr ""
 
-#: includes/class-geodir-privacy.php:81
+#: includes/class-geodir-privacy.php:95
 msgid ""
 "- Display this information in a public facing manner (such as a web page or "
 "API request) and allow website users to search and view submitted listing "
 "information."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:82
+#: includes/class-geodir-privacy.php:96
 msgid "- Send you important account/order/service information."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:83
+#: includes/class-geodir-privacy.php:97
 msgid ""
 "- Provide a way for users to contact your listing via the provided contact "
 "information."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:84
+#: includes/class-geodir-privacy.php:98
 msgid ""
 "- Notify you of user interactions such as but not limited to review and "
 "contact notifications."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:85
+#: includes/class-geodir-privacy.php:99
 msgid "- Respond to your queries or complaints."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:86
+#: includes/class-geodir-privacy.php:100
 msgid ""
 "- Set up and administer your account, provide technical and/or customer "
 "support, spam prevention and to verify your identity. We do this on the "
 "basis of our legitimate business interests."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:89
+#: includes/class-geodir-privacy.php:103
 msgid ""
 "We collect information about you during the leave a review process on our "
 "site. This information may include, but is not limited to, your name, email "
 "address, IP address, website url, image(s), review ratings and review texts."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:92
+#: includes/class-geodir-privacy.php:106
 msgid ""
 "- Display this information in a public facing manner (such as a web page or "
 "API request)."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:93
+#: includes/class-geodir-privacy.php:107
 msgid ""
 "- Notify you of interactions such as approval or rejection of your review."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:94
+#: includes/class-geodir-privacy.php:108
 msgid "- Notify you of user interactions such as reply notifications."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:95
+#: includes/class-geodir-privacy.php:109
 msgid "- Spam prevention."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:97
+#: includes/class-geodir-privacy.php:111
 msgid "Listing contact forms"
 msgstr ""
 
-#: includes/class-geodir-privacy.php:98
+#: includes/class-geodir-privacy.php:112
 msgid ""
 "We may collect information about you when you submit a contact form to a "
 "listing. This information may include, but is not limited to, your name, "
 "email address, IP address and contact texts."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:101
+#: includes/class-geodir-privacy.php:115
 msgid "- Send your contact message and details to the listings contact email."
 msgstr ""
 
-#: includes/class-geodir-privacy.php:102
+#: includes/class-geodir-privacy.php:116
 msgid "- Monitor the contact system for spam and abuse."
 msgstr ""
 
@@ -13173,39 +13173,39 @@ msgstr ""
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1108
+#: includes/core-functions.php:1106
 msgid "Select search type"
 msgstr ""
 
-#: includes/core-functions.php:1304 includes/core-functions.php:1318
+#: includes/core-functions.php:1302 includes/core-functions.php:1316
 #: templates/bootstrap/search-bar/input-near.php:39
 #: templates/bootstrap/search-bar/input-search.php:38
 msgid "Clear field"
 msgstr ""
 
-#: includes/core-functions.php:1652
+#: includes/core-functions.php:1650
 msgid "Filesystem ERROR during mu-plugin file copy: "
 msgstr ""
 
-#: includes/core-functions.php:1654
+#: includes/core-functions.php:1652
 msgid ""
 "There was a problem accessing the filesystem during copy Fast AJAX mu-plugin "
 "file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1662
+#: includes/core-functions.php:1660
 #, php-format
 msgid ""
 "Unable to create directory %s. Make sure its parent directory writable by "
 "the server."
 msgstr ""
 
-#: includes/core-functions.php:1666
+#: includes/core-functions.php:1664
 #, php-format
 msgid "Must-plugin directory %s is not writable by the server."
 msgstr ""
 
-#: includes/core-functions.php:1674
+#: includes/core-functions.php:1672
 msgid ""
 "There was a problem in copy Fast AJAX mu-plugin file to mu-plugins folder."
 msgstr ""
@@ -14851,8 +14851,8 @@ msgstr ""
 #: includes/post-types-functions.php:498
 #, php-format
 msgid ""
-"%s scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s"
-"\">Preview %s</a>"
+"%s scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" "
+"href=\"%2$s\">Preview %s</a>"
 msgstr ""
 
 #: includes/post-types-functions.php:498
@@ -14864,15 +14864,15 @@ msgstr ""
 msgid "%s draft updated. <a target=\"_blank\" href=\"%s\">Preview %s</a>"
 msgstr ""
 
-#: includes/post-types-functions.php:913
+#: includes/post-types-functions.php:975
 msgid "Details page sidebar"
 msgstr ""
 
-#: includes/post-types-functions.php:915
+#: includes/post-types-functions.php:977
 msgid "Listings page"
 msgstr ""
 
-#: includes/post-types-functions.php:917
+#: includes/post-types-functions.php:979
 msgid "Map bubble"
 msgstr ""
 

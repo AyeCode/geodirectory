@@ -11,13 +11,13 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory - Business Directory Plugin for WordPress.
- * Version: 2.3.85
+ * Version: 2.3.86
  * Author: AyeCode - WP Business Directory Plugins
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
  * Domain Path: /languages
- * Requires at least: 4.5
- * Tested up to: 6.6
+ * Requires at least: 5.0
+ * Tested up to: 6.7
  */
 
 if ( ! class_exists( 'GeoDirectory' ) ) :
@@ -34,7 +34,7 @@ if ( ! class_exists( 'GeoDirectory' ) ) :
 		 *
 		 * @var string
 		 */
-		public $version = '2.3.85';
+		public $version = '2.3.86';
 
 		/**
 		 * GeoDirectory instance.
@@ -180,14 +180,7 @@ if ( ! class_exists( 'GeoDirectory' ) ) :
 		 * @return void
 		 */
 		public function load_textdomain() {
-			// Determines the current locale.
-			if ( function_exists( 'determine_locale' ) ) {
-				$locale = determine_locale();
-			} else if ( function_exists( 'get_user_locale' ) ) {
-				$locale = get_user_locale();
-			} else {
-				$locale = get_locale();
-			}
+			$locale = determine_locale();
 
 			/**
 			 * Filter the plugin locale.
@@ -197,7 +190,7 @@ if ( ! class_exists( 'GeoDirectory' ) ) :
 			 */
 			$locale = apply_filters( 'plugin_locale', $locale, 'geodirectory' );
 
-			unload_textdomain( 'geodirectory' );
+			unload_textdomain( 'geodirectory', true );
 			load_textdomain( 'geodirectory', WP_LANG_DIR . '/geodirectory/geodirectory-' . $locale . '.mo' );
 			load_plugin_textdomain( 'geodirectory', false, basename( dirname( GEODIRECTORY_PLUGIN_FILE ) ) . '/languages/' );
 		}
