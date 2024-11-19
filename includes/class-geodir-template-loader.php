@@ -466,7 +466,7 @@ class GeoDir_Template_Loader {
 		} else {
 			$wp_query->posts = array();
 
-			geodir_error_log( 'Archuve page template not found', $post_type . ':' . $archive_page_id, __FILE__, __LINE__ );
+			geodir_error_log( 'Archive page template not found', $post_type . ':' . $archive_page_id, __FILE__, __LINE__ );
 		}
 
 		$wp_query->post = $archive_page;
