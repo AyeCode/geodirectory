@@ -2859,23 +2859,41 @@ function geodir_design_style(){
  * Check if Gutenberg is in use.
  *
  * @since 2.1.0
- * @return bool
+ * @return bool True if site uses Gutenberg else False.
  */
-function geodir_is_gutenberg(){
+function geodir_is_gutenberg() {
 	global $wp_version;
-	$gutenberg = true;
 
-	// if less than v5
+	$is_gutenberg = true;
+
+	// If less than v5.
 	if ( version_compare( $wp_version, '5.0.0', '<' ) ) {
-		$gutenberg = false;
+		$is_gutenberg = false;
 	}
 
-	// if plugin active to disable
-	if(class_exists('Classic_Editor')){
-		$gutenberg = false;
+	if ( class_exists( 'Classic_Editor' ) ) {
+		$is_gutenberg = false; // Classic Editor plugin is active.
+	} else if ( geodir_is_classicpress() ) {
+		$is_gutenberg = false; // Site is using ClassicPress.
 	}
 
-	return $gutenberg;
+	return $is_gutenberg;
+}
+
+/**
+ * Check if ClassicPress is in use.
+ *
+ * @since 2.3.87
+ * @return bool True if site uses ClassicPress else False.
+ */
+function geodir_is_classicpress() {
+	if ( function_exists( 'classicpress_version' ) ) {
+		$is_classicpress = true;
+	} else {
+		$is_classicpress = false;
+	}
+
+	return $is_classicpress;
 }
 
 /**
