@@ -426,7 +426,7 @@ class GeoDir_Elementor {
 		$caption_type = !empty($settings['caption_type']) ? esc_attr($settings['caption_type']) : '';
 		if(!empty($settings['slides'])){
 			?>
-			<div class="elementor-image-carousel-wrapper swiper-container" dir="ltr">
+			<div class="elementor-image-carousel-wrapper swiper swiper-container" dir="ltr">
 				<div class="elementor-image-carousel swiper-wrapper">
 						<?php
 						$widget->slide_prints_count = 0;
@@ -1781,7 +1781,7 @@ class GeoDir_Elementor {
 
 		ob_start();
 		?>
-		<?php if (1 === 0) { ?><script><?php } ?> 
+		<?php if (1 === 0) { ?><script><?php } ?>
 jQuery(function($){
 	var gdEleCat = 'select[name="widget-gd_listings[REPLACE_TO_ID][category][]"]', gdEleSort = 'select[name="widget-gd_listings[REPLACE_TO_ID][sort_by]"]';
 	$(document).on('change', '#elementor-controls select[name="widget-gd_listings[REPLACE_TO_ID][post_type]"]', function(e){
@@ -1872,7 +1872,7 @@ jQuery(function($){
 			}
 		}
 	});
-});<?php if (1 === 0) { ?></script><?php } ?> 
+});<?php if (1 === 0) { ?></script><?php } ?>
 		<?php
 		$script = ob_get_clean();
 

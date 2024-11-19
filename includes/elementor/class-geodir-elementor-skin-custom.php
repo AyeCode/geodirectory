@@ -108,12 +108,12 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 		if ( $cache !== false ) {
 			return $cache;
 		}
-		
+
 		$templates = $wpdb->get_results(
 			"SELECT $wpdb->term_relationships.object_id as ID, $wpdb->posts.post_title as post_title FROM $wpdb->term_relationships
 				INNER JOIN $wpdb->term_taxonomy ON
 					$wpdb->term_relationships.term_taxonomy_id=$wpdb->term_taxonomy.term_taxonomy_id
-				INNER JOIN $wpdb->terms ON 
+				INNER JOIN $wpdb->terms ON
 					$wpdb->term_taxonomy.term_id=$wpdb->terms.term_id AND $wpdb->terms.slug='geodirectory-archive-item'
 				INNER JOIN $wpdb->posts ON
 					$wpdb->term_relationships.object_id=$wpdb->posts.ID
@@ -265,7 +265,7 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 		] );
 
 		if ( $parent_settings[ $this->get_id() . '_post_slider' ] == "yes" ) {
-			echo '<div class="swiper-container">';
+			echo '<div class="swiper-container swiper">';
 		}
 		?>
 		<div <?php echo $this->parent->get_render_attribute_string( 'container' ); ?>>
