@@ -44,7 +44,7 @@ $dummy_categories['instruments'] = array(
 $dummy_categories['guitars']     = array(
 	'name'      => __( 'Guitars', 'geodirectory' ),
 	'icon'      => $dummy_image_url . 'icons/guitars.png',
-	'font_icon' => 'fas fa-music',
+	'font_icon' => 'fas fa-guitar',
 	'color'     => '#15a5a5',
 );
 
@@ -907,3 +907,29 @@ if( $gutenberg ) {
 [gd_archive_item_section type='close'  position='footer' ]
 <!-- /wp:geodirectory/geodir-widget-archive-item-section -->";
 }
+
+
+// CPT Texts
+$name = esc_attr__( 'Listings', 'geodirectory' );
+$singular_name = esc_attr__( 'Listing', 'geodirectory' );
+$cpt_slug = 'listings';
+
+$cpt_changes = array(
+	'labels'      => array(
+		'name'               => esc_attr( $name ),
+		'singular_name'      => esc_attr( $singular_name ),
+		'add_new'            => _x( 'Add New', $post_type, 'geodirectory' ),
+		'add_new_item'       => esc_attr__( 'Add New ' . $singular_name, 'geodirectory' ),
+		'edit_item'          => esc_attr__( 'Edit ' . $singular_name, 'geodirectory' ),
+		'new_item'           => esc_attr__( 'New ' . $singular_name, 'geodirectory' ),
+		'view_item'          => esc_attr__( 'View ' . $singular_name, 'geodirectory' ),
+		'search_items'       => esc_attr__( 'Search ' . $name, 'geodirectory' ),
+		'not_found'          => esc_attr__( 'No ' . $name . ' found.', 'geodirectory' ),
+		'not_found_in_trash' => esc_attr__( 'No ' . $name . ' found in trash.', 'geodirectory' ),
+	),
+	'rewrite'     => array(
+		'slug' => esc_attr( $cpt_slug )
+	),
+	'has_archive' => esc_attr( $cpt_slug ),
+	'menu_icon'   => 'dashicons-businessman'
+);
