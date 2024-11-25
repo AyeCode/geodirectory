@@ -126,7 +126,9 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 						$the_time = $key == 'post_modified' ? get_the_modified_date( 'Y-m-d', $gd_post ) : get_the_time( 'Y-m-d', $gd_post );
 						$until_time = strtotime( $the_time . ' ' . $search . ' days' );
 						$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
-						if ( $until_time >= $now_time ) {
+						if ( ( empty( $condition ) || $condition == 'is_less_than' ) && $until_time > $now_time ) {
+							$match_found = true;
+						} elseif ( $condition == 'is_greater_than' && $until_time < $now_time ) {
 							$match_found = true;
 						}
 					} else {
