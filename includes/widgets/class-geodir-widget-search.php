@@ -303,6 +303,9 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 
 		$design_style = ! empty( $instance['design_style'] ) ? esc_attr( $instance['design_style'] ) : geodir_design_style();
 
+		// Enqueue widget scripts on call.
+		geodir_widget_enqueue_scripts( $instance, $this );
+
 		// Set the CPT to be used.
 		if ( isset( $post_type ) && $post_type && geodir_is_gd_post_type( $post_type ) ) {
 			geodir_get_search_post_type( $post_type ); // set the post type

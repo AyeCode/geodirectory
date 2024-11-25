@@ -4288,7 +4288,21 @@ jQuery(function($){
 	public static function block_theme_load_scripts( $options, $super_duper ) {
 		global $geodir_frontend_scripts_loaded;
 
-		if ( ! $geodir_frontend_scripts_loaded && ( ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) || defined( '__BREAKDANCE_VERSION' ) ) && ! wp_script_is( 'geodir', 'registered' ) ) {
+		// Scripts already loaded.
+		if ( $geodir_frontend_scripts_loaded ) {
+			return;
+		}
+
+		// Check block theme / BREAKDANCE theme.
+		if ( ! ( ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) || defined( '__BREAKDANCE_VERSION' ) ) ) {
+			return;
+		}
+
+		if ( geodir_load_scripts_on_call() && ( wp_doing_ajax() || wp_doing_cron() || strpos( $options['base_id'], 'gd_' ) ) ) {
+			return;
+		}
+
+		if ( ! wp_script_is( 'geodir', 'registered' ) ) {
 			$geodir_frontend_scripts_loaded = true;
 
 			GeoDir_Frontend_Scripts::load_scripts();

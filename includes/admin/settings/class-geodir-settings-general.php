@@ -195,6 +195,13 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 //					'default'  => '0',
 				),
 
+				array(
+					'name' => __( 'Disable Scripts On Call', 'geodirectory' ),
+					'desc' => __( 'Scripts on call feature loads JavaScript files(ex: map) only when required on the pages on frontend. Tick to disable if any JavaScript error on the page.', 'geodirectory' ),
+					'id' => 'disable_scripts_on_call',
+					'type' => 'checkbox',
+				),
+
 				// @todo to be move to own design section
 				array(
 					'id' => 'design_style',

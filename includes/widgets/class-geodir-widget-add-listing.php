@@ -155,78 +155,81 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         return $args;
     }
 
-    /**
-     * The Super block output function.
-     *
-     * @param array $args
-     * @param array $widget_args
-     * @param string $content
-     *
-     * @return mixed|string|void
-     */
-    public function output($args = array(), $widget_args = array(),$content = ''){
-        global $geodir_label_type;
-        // Some theme renders add listing shortcode in search page results.
-        /**
-         * @since 2.0.0.68
-         */
-        $output = apply_filters( 'geodir_pre_add_listing_shortcode_output', NULL, $args, $widget_args, $content );
-        if ( $output !== NULL ) {
-            return $output;
-        }
+	/**
+	 * The Super block output function.
+	 *
+	 * @param array $args
+	 * @param array $widget_args
+	 * @param string $content
+	 *
+	 * @return mixed|string|void
+	 */
+	public function output($args = array(), $widget_args = array(),$content = ''){
+		global $geodir_label_type;
 
-        $design_style = geodir_design_style();
+		// Some theme renders add listing shortcode in search page results.
+		/**
+		 * @since 2.0.0.68
+		 */
+		$output = apply_filters( 'geodir_pre_add_listing_shortcode_output', NULL, $args, $widget_args, $content );
+		if ( $output !== NULL ) {
+			return $output;
+		}
 
-        $default_post_type = geodir_add_listing_default_post_type();
+		$design_style = geodir_design_style();
 
-        $defaults = array(
-            'pid'           => '',
-            'listing_type'  => $default_post_type,
-            'login_msg'     => __( 'You must login to post.', 'geodirectory' ),
-            'show_login'    => true,
-            'container'     => '',
-            'mapzoom'       => '0',
-            'label_type'    => 'horizontal',
-            'bg'    => '',
-            'mt'    => '',
-            'mb'    => '3',
-            'mr'    => '',
-            'ml'    => '',
-            'pt'    => '',
-            'pb'    => '',
-            'pr'    => '',
-            'pl'    => '',
-            'border'    => '',
-            'rounded'    => '',
-            'rounded_size'    => '',
-            'shadow'    => '',
-        );
+		$default_post_type = geodir_add_listing_default_post_type();
 
-        $params = wp_parse_args( $args,$defaults);
+		$defaults = array(
+			'pid'           => '',
+			'listing_type'  => $default_post_type,
+			'login_msg'     => __( 'You must login to post.', 'geodirectory' ),
+			'show_login'    => true,
+			'container'     => '',
+			'mapzoom'       => '0',
+			'label_type'    => 'horizontal',
+			'bg'    => '',
+			'mt'    => '',
+			'mb'    => '3',
+			'mr'    => '',
+			'ml'    => '',
+			'pt'    => '',
+			'pb'    => '',
+			'pr'    => '',
+			'pl'    => '',
+			'border'    => '',
+			'rounded'    => '',
+			'rounded_size'    => '',
+			'shadow'    => '',
+		);
 
-        if(empty($params['label_type'])){$params['label_type'] = $defaults['label_type'];}
+		$params = wp_parse_args( $args,$defaults);
 
-        // set the label type
-        $geodir_label_type = esc_attr($params['label_type']);
+		if ( empty( $params['label_type'] ) ) {
+			$params['label_type'] = $defaults['label_type'];
+		}
 
-        if(isset($args['post_type']) && !empty($args['post_type'])){
-            $params['listing_type'] = $args['post_type'];
-        }
+		// Set the label type.
+		$geodir_label_type = esc_attr( $params['label_type'] );
 
-        if(!isset($args['login_msg']) || $args['login_msg']==''){
-            $params['login_msg'] = $defaults['login_msg'];
-        }
+		if ( isset( $args['post_type'] ) && ! empty( $args['post_type'] ) ) {
+			$params['listing_type'] = $args['post_type'];
+		}
 
-        if ( !empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
-            $params['pid'] = absint( $_REQUEST['pid'] );
-            $params['listing_type'] = $post_type;
-        } else if ( isset( $_REQUEST['listing_type'] ) ) {
-            $params['listing_type'] = sanitize_text_field( $_REQUEST['listing_type'] );
-        }
+		if ( ! isset( $args['login_msg'] ) || $args['login_msg'] == '' ) {
+			$params['login_msg'] = $defaults['login_msg'];
+		}
 
-        // check if CPT is disabled add listing
-        if ( ! geodir_add_listing_check_post_type( $params['listing_type'] ) ) {
-            $message = __( 'Adding listings is disabled for this post type.', 'geodirectory' );
+		if ( ! empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
+			$params['pid'] = absint( $_REQUEST['pid'] );
+			$params['listing_type'] = $post_type;
+		} else if ( isset( $_REQUEST['listing_type'] ) ) {
+			$params['listing_type'] = sanitize_text_field( $_REQUEST['listing_type'] );
+		}
+
+		// Check if CPT is disabled add listing.
+		if ( ! geodir_add_listing_check_post_type( $params['listing_type'] ) ) {
+			$message = __( 'Adding listings is disabled for this post type.', 'geodirectory' );
 			/**
 			 * Filter the message for post type add listing disabled.
 			 *
@@ -235,47 +238,42 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
 			 * @param string $message Message for add listing disabled.
 			 * @param string $listing_type The post type.
 			 */
-            $message = apply_filters( 'geodir_add_listing_disabled_message', $message, $params['listing_type'] );
+			$message = apply_filters( 'geodir_add_listing_disabled_message', $message, $params['listing_type'] );
 
-            return $design_style ? aui()->alert(array(
-                    'type'=> 'warning',
-                    'content'=> $message
-                )
-            ) : $message;
-        }
+			return $design_style ? aui()->alert( array( 'type'=> 'warning', 'content'=> $message ) ) : $message;
+		}
 
-        if ( $this->is_preview() ) {
-            return $design_style ? $this->get_dummy_preview( $params ) : '';
-        }
+		if ( $this->is_preview() ) {
+			return $design_style ? $this->get_dummy_preview( $params ) : '';
+		}
 
-        foreach ( $params as $key => $value ) {
-            $_REQUEST[ $key ] = $value;
-        }
+		foreach ( $params as $key => $value ) {
+			$_REQUEST[ $key ] = $value;
+		}
 
-        $user_id = get_current_user_id();
+		$user_id = get_current_user_id();
 
+		ob_start();
+		if ( ! $user_id && !geodir_get_option( 'post_logged_out' ) ) {
+			echo geodir_notification( array( 'info' => $params['login_msg'] ) );
+			if ( $params['show_login'] ) {
+				echo "<br />";
+				echo GeoDir_User::login_link();
+			}
+		} else if ( ! $user_id && ! get_option( 'users_can_register' ) ) {
+			echo geodir_notification( array( 'error' => __( 'User registration is disabled, please login to continue.', 'geodirectory' ) ) );
+		} else {
+			// Enqueue widget scripts on call.
+			geodir_widget_enqueue_scripts( $params, $this );
 
-        ob_start();
+			GeoDir_Post_Data::add_listing_form($params);
+		}
 
-        //
-        if ( !$user_id && !geodir_get_option('post_logged_out')) {
-            echo geodir_notification( array('info'=>$params['login_msg']) );
-            if ( $params['show_login'] ) {
-                echo "<br />";
-                echo GeoDir_User::login_link();
-            }
-        } elseif(!$user_id && !get_option( 'users_can_register' )){
-            echo geodir_notification( array('error'=>__('User registration is disabled, please login to continue.','geodirectory')) );
-        }else {
-            GeoDir_Post_Data::add_listing_form($params);
-        }
+		// Reset the label type.
+		$geodir_label_type = '';
 
-        // reset the label type
-        $geodir_label_type = '';
-
-        return ob_get_clean();
-    }
-
+		return ob_get_clean();
+	}
 
     /**
      * Get the post type options for search.
