@@ -395,151 +395,149 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
 
 }
 
-
-class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags
-{
-    /*
+class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags {
+	/*
 	 * The $id property should match the array key where the class is registered.
 	 */
-    protected $id = 'geodirectory';
+	protected $id = 'geodirectory';
 
-    /**
-     * GeoDir_Ninja_Forms_MergeTags constructor.
-     *
-     * @since 2.0.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
+	/**
+	 * GeoDir_Ninja_Forms_MergeTags constructor.
+	 *
+	 * @since 2.0.0
+	 */
+	public function __construct() {
+		parent::__construct();
 
-        /* Translatable display name for the group. */
-        $this->title = __( '<span class="dashicons-before dashicons-admin-site"> GeoDirectory</span>', 'geodirectory' );
-
-        /* Individual tag registration. */
-        $this->merge_tags = array(
-
-            'email' => array(
-                'id' => 'email',
-                'tag' => '{GD:listing_email}', // The tag to be  used.
-                'label' => __( 'Email', 'geodirectory' ), // Translatable label for tag selection.
-                'callback' => 'email' // Class method for processing the tag. See below.
-            ),
-        );
-
-        /*
+		/*
 		 * Use the `init` and `admin_init` hooks for any necessary data setup that relies on WordPress.
 		 * See: https://codex.wordpress.org/Plugin_API/Action_Reference
 		 */
-        add_action( 'init', array( $this, 'init' ) );
-        add_action( 'admin_init', array( $this, 'admin_init' ) );
-    }
+		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
+	}
 
-    public function init(){ /* This section intentionally left blank. */ }
-    public function admin_init(){ /* This section intentionally left blank. */ }
+	public function init() {
+		/* Translatable display name for the group. */
+		$this->title = __( '<span class="dashicons-before dashicons-admin-site"> GeoDirectory</span>', 'geodirectory' );
 
-    /**
-     * Get Post id.
-     *
-     * @since 2.0.0
-     *
-     * @global object $post WordPress post object.
-     *
-     * @return int $post_id.
-     */
-    protected function post_id()
-    {
-        global $post;
+		/* Individual tag registration. */
+		$this->merge_tags = array(
+			'email' => array(
+				'id' => 'email',
+				'tag' => '{GD:listing_email}',
+				'label' => esc_html__( 'Email', 'geodirectory' ),
+				'callback' => 'email'
+			)
+		);
+	}
 
-        if ( is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-            // If we are doing AJAX, use the referer to get the Post ID.
-            $post_id = absint( url_to_postid( wp_get_referer() ) );
+	public function admin_init(){ /* This section intentionally left blank. */ }
 
-            // Check referer contains correct post
-            if ( $post_id && ! geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
-                $post_id = 0;
-            }
+	/**
+	 * Get Post id.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @global object $post WordPress post object.
+	 *
+	 * @return int $post_id.
+	 */
+	protected function post_id() {
+		global $post;
 
-            // Retrieve value from form data.
-            if ( empty( $post_id ) && ( $_post_id = (int) $this->get_submitted_value( 'listing_id' ) ) ) {
-                $post_id = $_post_id;
-            }
-        } elseif ( $post ) {
-            $post_id = $post->ID;
-        } else {
-            return false; // No Post ID found.
-        }
+		if ( is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			// If we are doing AJAX, use the referer to get the Post ID.
+			$post_id = absint( url_to_postid( wp_get_referer() ) );
 
-        return $post_id;
-    }
+			// Check referer contains correct post
+			if ( $post_id && ! geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
+				$post_id = 0;
+			}
 
-    /**
-     * The callback method for the {my:foo} merge tag.
-     * @return string
-     */
-    public function email()
-    {
-        $post_id = $this->post_id();
+			// Retrieve value from form data.
+			if ( empty( $post_id ) && ( $_post_id = (int) $this->get_submitted_value( 'listing_id' ) ) ) {
+				$post_id = $_post_id;
+			}
+		} elseif ( $post ) {
+			$post_id = $post->ID;
+		} else {
+			return false; // No Post ID found.
+		}
 
-        if( ! $post_id ) return '';
-        $listing_email = geodir_get_post_meta($post_id,'email',true);
-        return $listing_email ? $listing_email : '';
-    }
+		return $post_id;
+	}
 
-    /**
-     * Retrieve field value from form data.
-     * @return string|array
-     */
-    public function get_submitted_value( $field_key ) {
-        $field_value = '';
+	/**
+	 * The callback method for the {my:foo} merge tag.
+	 * @return string
+	 */
+	public function email() {
+		$post_id = $this->post_id();
 
-        if ( empty( $_POST['formData'] ) ) {
-        	return $field_value;
-        }
+		if( ! $post_id ) {
+			return '';
+		}
 
-        $_form_data = json_decode( $_POST['formData'], TRUE  );
+		$listing_email = geodir_get_post_meta( $post_id, 'email', true );
 
-        // php5.2 fallback
-        if ( empty( $_form_data ) ) {
-            $_form_data = json_decode( stripslashes( $_POST['formData'] ), TRUE  );
-        }
+		return $listing_email ? $listing_email : '';
+	}
 
-        if ( empty( $_form_data['id'] ) ) {
-            return $field_value;
-        }
-        $fields = Ninja_Forms()->form( $_form_data['id'] )->get_fields();
+	/**
+	 * Retrieve field value from form data.
+	 * @return string|array
+	 */
+	public function get_submitted_value( $field_key ) {
+		$field_value = '';
 
-        if ( ! empty( $fields ) ) {
-            foreach( $fields as $id => $field ) {
-                if ( $field->get_setting( 'key' ) == $field_key && isset( $_form_data['fields'][ $id ]['value'] ) ) {
-                    $field_value = $_form_data['fields'][ $id ]['value'];
-                }
-            }
-        }
+		if ( empty( $_POST['formData'] ) ) {
+			return $field_value;
+		}
 
-        return $field_value;
-    }
+		$_form_data = json_decode( $_POST['formData'], TRUE  );
+
+		// php5.2 fallback
+		if ( empty( $_form_data ) ) {
+			$_form_data = json_decode( stripslashes( $_POST['formData'] ), TRUE  );
+		}
+
+		if ( empty( $_form_data['id'] ) ) {
+			return $field_value;
+		}
+
+		$fields = Ninja_Forms()->form( $_form_data['id'] )->get_fields();
+
+		if ( ! empty( $fields ) ) {
+			foreach( $fields as $id => $field ) {
+				if ( $field->get_setting( 'key' ) == $field_key && isset( $_form_data['fields'][ $id ]['value'] ) ) {
+					$field_value = $_form_data['fields'][ $id ]['value'];
+				}
+			}
+		}
+
+		return $field_value;
+	}
 }
-
-add_filter('ninja_forms_new_form_templates','geodir_add_ninja_forms_template');
+add_filter( 'ninja_forms_new_form_templates','geodir_add_ninja_forms_template' );
 
 /**
- * Add ninja forms template.
- *
- * @since 2.0.0
- *
- * @param array $templates Templates.
- * @return array
- */
-function geodir_add_ninja_forms_template($templates){
+* Add ninja forms template.
+*
+* @since 2.0.0
+*
+* @param array $templates Templates.
+* @return array
+*/
+function geodir_add_ninja_forms_template( $templates ) {
+	$new_templates['formtemplate-geodirectory-contactform'] = array(
+		'id'             => 'formtemplate-geodirectory-contactform',
+		'title'         => __( 'GeoDirectory Contact Form', 'geodirectory' ),
+		'template-desc' => __( 'Allow your users to contact the listing owners. You can add and remove fields as needed.', 'geodirectory' ),
+		'form' => geodir_ninja_forms_contact_template()
+	);
 
-    $new_templates['formtemplate-geodirectory-contactform'] = array(
-        'id'             => 'formtemplate-geodirectory-contactform',
-        'title'         => __( 'GeoDirectory Contact Form', 'geodirectory' ),
-        'template-desc' => __( 'Allow your users to contact the listing owners. You can add and remove fields as needed.', 'geodirectory' ),
-        'form' => geodir_ninja_forms_contact_template()
-    );
-
-    return $new_templates + $templates;
+	return $new_templates + $templates;
 }
 
 /**
@@ -554,7 +552,7 @@ function geodir_ninja_forms_contact_template(){
     "settings": {
         "title": "GeoDirectory Contact Form",
         "key": "geodirectory_contact",
-        "created_at": "2018-03-29 19:16:00",
+        "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "default_label_pos": "above",
         "conditions": [],
         "objectType": "Form Setting",
@@ -734,7 +732,7 @@ function geodir_ninja_forms_contact_template(){
         "key": "name",
         "parent_id": "1",
         "type": "textbox",
-        "created_at": "2016-08-24 16:39:20",
+        "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "label_pos": "above",
         "required": "1",
         "order": "4",
@@ -805,7 +803,7 @@ function geodir_ninja_forms_contact_template(){
         "key": "email",
         "parent_id": "1",
         "type": "email",
-        "created_at": "2016-08-24 16:39:20",
+        "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "label_pos": "above",
         "required": "1",
         "order": "5",
@@ -892,7 +890,7 @@ function geodir_ninja_forms_contact_template(){
         "key": "message",
         "parent_id": "1",
         "type": "textarea",
-        "created_at": "2016-08-24 16:39:20",
+        "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "label_pos": "above",
         "required": "1",
         "order": "7",
@@ -964,7 +962,7 @@ function geodir_ninja_forms_contact_template(){
         "key": "submit",
         "parent_id": "1",
         "type": "submit",
-        "created_at": "2016-08-24 16:39:20",
+        "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "processing_label": "Processing",
         "order": "8",
         "objectType": "Field",
@@ -1035,7 +1033,7 @@ function geodir_ninja_forms_contact_template(){
         "key": "",
         "type": "save",
         "active": "1",
-        "created_at": "2016-08-24 16:39:20",
+        "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "label": "Store Submission",
         "objectType": "Action",
         "objectDomain": "actions",
@@ -1081,7 +1079,7 @@ function geodir_ninja_forms_contact_template(){
         "key": "",
         "type": "email",
         "active": "1",
-        "created_at": "2016-08-24 16:39:20",
+        "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "label": "Email Confirmation",
         "to": "{field:email}",
         "subject": "This is an email action.",
@@ -1121,7 +1119,7 @@ function geodir_ninja_forms_contact_template(){
         "key": "",
         "type": "email",
         "active": "1",
-        "created_at": "2016-08-24 16:47:39",
+        "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "objectType": "Action",
         "objectDomain": "actions",
         "editActive": "",
@@ -1166,7 +1164,7 @@ function geodir_ninja_forms_contact_template(){
         "key": "",
         "type": "successmessage",
         "active": "1",
-        "created_at": "2016-08-24 16:39:20",
+        "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "label": "Success Message",
         "message": "Thank you {field:name} your contact form has been sent to the user!",
         "objectType": "Action",

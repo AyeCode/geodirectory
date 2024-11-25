@@ -686,7 +686,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$map_args['post_id']        = 0;
 		}
 
-		return self::render_map( $map_args );
+		return self::render_map( $map_args, $this );
 	}
 
 
@@ -1001,7 +1001,7 @@ jQuery(function ($) {
 	 *
 	 * @return string $content.
 	 */
-	public static function render_map( $map_args ) {
+	public static function render_map( $map_args, $widget = array() ) {
 		global $geodirectory, $gd_post;
 
 		$defaults = array(
@@ -1156,7 +1156,7 @@ jQuery(function ($) {
 
 		ob_start();
 
-		self::display_map( $params );
+		self::display_map( $params, $widget );
 
 		$content = ob_get_clean();
 
@@ -1170,7 +1170,7 @@ jQuery(function ($) {
 	 *
 	 * @param array $params map arguments array.
 	 */
-	public static function display_map( $params ) {
+	public static function display_map( $params, $widget = array() ) {
 		global $gd_maps_canvas, $gd_post;
 
 		if ( empty( $gd_maps_canvas ) ) {
@@ -1229,16 +1229,8 @@ jQuery(function ($) {
 			$map_canvas_attribs .= ' data-lat="' . esc_attr( $gd_post->latitude ) . '" data-lng="' . esc_attr( $gd_post->longitude ) . '" ';
 		}
 
-		// Maps
-		if ( geodir_lazy_load_map() ) {
-			// Lazy Load
-			wp_enqueue_script( 'geodir-map' );
-			wp_localize_script( 'geodir-map', $map_options['map_canvas'], $map_options );
-			wp_add_inline_script( 'geodir-map', GeoDir_Maps::google_map_callback(), 'before' );
-		} else {
-			wp_enqueue_script( 'geodir-map-widget' );
-			wp_localize_script( 'geodir-map-widget', $map_options['map_canvas'], $map_options );
-		}
+		// Enqueue widget scripts on call.
+		geodir_widget_enqueue_scripts( $map_options, $widget );
 
 		// template output
 		$design_style = geodir_design_style();

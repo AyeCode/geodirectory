@@ -1876,14 +1876,16 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
                              // Embed media.
                             global $wp_embed;
 
-							$matterport = strpos(parse_url( $value , PHP_URL_HOST), "my.matterport.com") === 0;
+                            $matterport = $value ? parse_url( $value, PHP_URL_HOST ) : '';
+                            $matterport = $matterport ? strpos( $matterport, "my.matterport.com" ) === 0 : 0;
                             $value = $wp_embed->autoembed( $value );
 
-	                        if ( $matterport ) {
-		                        $value = str_replace('sandbox="allow-scripts"','sandbox="allow-scripts allow-same-origin"', $value);
-	                        }
+                            if ( $matterport ) {
+                                $value = str_replace('sandbox="allow-scripts"','sandbox="allow-scripts allow-same-origin"', $value);
+                            }
                         }
-	                    $content = do_shortcode( wpautop( $value ) );
+
+                        $content = do_shortcode( wpautop( $value ) );
                     }
                 } else {
                     // Post content
