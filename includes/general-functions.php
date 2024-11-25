@@ -3243,7 +3243,11 @@ function geodir_widget_enqueue_scripts( $args, $widget = array(), $extra = array
 				}
 			}
 		} else if ( $widget->id_base == 'gd_add_listing' ) {
-			// GD > Add Listing
+			if ( ! wp_script_is( 'geodir-plupload', 'enqueued' ) && ! isset( $_REQUEST['ct_builder'] ) ) {
+				GeoDir_Frontend_Scripts::enqueue_script( 'geodir-plupload' );
+			}
+
+			// GD > Add Listing// GD > Add Listing
 			if ( $lazy_load_map ) {
 				if ( $map_api != 'none' && ! wp_script_is( 'geodir-map', 'enqueued' ) ) {
 					GeoDir_Frontend_Scripts::enqueue_script( 'geodir-map' );
