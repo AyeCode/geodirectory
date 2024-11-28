@@ -93,7 +93,7 @@ class GeoDir_Admin_Tools {
 			'clear_paging_cache' => array(
 				'name'    => __( 'Clear paging cache', 'geodirectory' ),
 				'button'  => __( 'Clear', 'geodirectory' ),
-				'desc'    => __( 'This tool will delete pagign cache when the BIG Data option is enabled', 'geodirectory' ) . ' ' . esc_attr( $big_data_status ),
+				'desc'    => __( 'This tool will delete paging cache when the BIG Data option is enabled', 'geodirectory' ) . ' ' . esc_attr( $big_data_status ),
 			),
 			'search_replace_cf' => array(
 				'name'    => __( 'Search & Replace Custom Field Value', 'geodirectory' ),
