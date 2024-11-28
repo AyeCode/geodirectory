@@ -1,4 +1,4 @@
-= 0.2.29 - TBD =
+= 0.2.29 - 2024-11-28 =
 * Load Select2 JavaScript only when required - CHANGED
 
 = 0.2.28 - 2024-11-12 =
