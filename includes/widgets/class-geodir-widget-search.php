@@ -344,7 +344,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 				)
 			);
 
-			$geodir_search_widget_params['buttons_class'] .= ! empty( $instance['btn_bg'] ) ? ' btn-' . esc_attr( $instance['btn_bg'] ) : 'btn-primary';
+			$geodir_search_widget_params['buttons_class'] .= ! empty( $instance['btn_bg'] ) ? ' btn-' . esc_attr( $instance['btn_bg'] ) : ' btn-primary';
 			$geodir_search_widget_params['buttons_class'] .= ! empty( $instance['input_size'] ) ? ' btn-' . esc_attr( $instance['input_size'] ) : '';
 
 			if ( ( isset( $instance['btn_rounded_size'] ) && 'circle' === $instance['btn_rounded_size'] ) || ( isset( $instance['btn_rounded_size_md'] ) && 'circle' === $instance['btn_rounded_size_md'] ) || ( isset( $instance['btn_rounded_size_lg'] ) && 'circle' === $instance['btn_rounded_size_lg'] ) ) {

@@ -268,9 +268,16 @@ class GeoDir_Bricks {
 	}
 
 	public static function register_elements() {
+
 		$element_files = array(
-			GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-image-gallery.php'
+			GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-image-gallery.php',
 		);
+
+		if (class_exists('Super_Duper_Bricks_Element')) {
+			$element_files[] = GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-add-listing.php';
+			$element_files[] = GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-search.php';
+			$element_files[] = GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-map.php';
+		}
 
 		foreach ( $element_files as $file ) {
 			\Bricks\Elements::register_element( $file );

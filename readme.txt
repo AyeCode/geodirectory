@@ -322,6 +322,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.3.88 - TBD =
 * Elementor conditional field condition less than not working for post date - FIXED
 * Option added to enable/disable load scripts on call - ADDED
+* Some GD elements added to Bricks builder - ADDED
 
 = GeoDirectory v2.3.87 - 2024-11-21 =
 * Compatibility changes for ClassicPress - CHANGED
