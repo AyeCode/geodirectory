@@ -18,7 +18,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
 
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
-            'block-icon'    => 'admin-site',
+            'block-icon'    => 'fas fa-plus',
             'block-category'=> 'geodirectory',
             'block-keywords'=> "['add','listing','geodir']",
             'block-outputx'   => array( // the block visual output elements as an array
