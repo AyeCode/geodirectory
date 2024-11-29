@@ -85,7 +85,14 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			'advanced' => true
 		);
 
-
+		$widget_args['use_viewing_post_type'] = array(
+			'title' => __("Use current viewing post type?", 'geodirectory'),
+			'type' => 'checkbox',
+			'desc_tip' => true,
+			'value'  => '1',
+			'default'  => '0',
+			'advanced' => true,
+		);
 		// not needed in AUI
 		if(!$design_style){
 			$widget_args['enqueue_slider']  = array(
@@ -292,6 +299,15 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		if ( ! geodir_is_gd_post_type( $post_type ) ) {
 			$post_type = 'gd_place';
 		}
+		$use_viewing_post_type = ! empty( $args['use_viewing_post_type'] ) ? true : false;
+		// set post type to current viewing post type
+		if ( $use_viewing_post_type ) {
+			$current_post_type = geodir_get_current_posttype();
+			if ( $current_post_type != '' && $current_post_type != $post_type ) {
+				$post_type = $current_post_type;
+			}
+		}
+		
 		$enqueue_slider = ! empty( $args['enqueue_slider'] ) ? true : false;
 
 		// Elementor pro
