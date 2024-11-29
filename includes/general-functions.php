@@ -3135,7 +3135,7 @@ function geodir_load_scripts_on_call() {
 			$ayecode_ui_settings = AyeCode_UI_Settings::instance();
 		}
 
-		if ( $ayecode_ui_settings->is_preview() ) {
+		if ( ! empty( $ayecode_ui_settings ) && is_callable( array( $ayecode_ui_settings, 'is_preview' ) ) && $ayecode_ui_settings->is_preview() ) {
 			$active = false;
 		}
 	}
