@@ -4305,7 +4305,8 @@ jQuery(function($){
 		if ( ! wp_script_is( 'geodir', 'registered' ) ) {
 			$geodir_frontend_scripts_loaded = true;
 
-			GeoDir_Frontend_Scripts::load_scripts();
+			// call scripts after the WP object is loaded so we can use page conditions
+			add_action('wp', array('GeoDir_Frontend_Scripts','load_scripts'), 10);
 		}
 	}
 
