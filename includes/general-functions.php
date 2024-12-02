@@ -3209,8 +3209,9 @@ function geodir_widget_enqueue_scripts( $args, $widget = array(), $extra = array
 
 				if ( ! wp_script_is( 'geodir-map-widget', 'enqueued' ) ) {
 					GeoDir_Frontend_Scripts::enqueue_script( 'geodir-map-widget' );
-					wp_localize_script( 'geodir-map-widget', $args['map_canvas'], $args );
 				}
+
+				wp_localize_script( 'geodir-map-widget', $args['map_canvas'], $args );
 			}
 		} else if ( $widget->id_base == 'gd_search' || $widget->id_base == 'gd_location_switcher' ) {
 			// GD > Search, GD > Location Switcher
