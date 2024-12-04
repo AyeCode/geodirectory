@@ -322,6 +322,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.91 - TBD =
 * Multiple maps on the page shows JavaScript error - FIXED
 * A-Z Search links don't removes page params on paginated links - FIXED
+* GD > Post Images option "Show limit" uses incorrect width for first slide on mobile - FIXED
 
 = GeoDirectory v2.3.90 - 2024-11-30 =
 * Load scripts on call feature can break block theme add listing page map - FIXED
