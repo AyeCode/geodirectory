@@ -3155,10 +3155,15 @@ function geodir_load_scripts_on_call() {
  * @return mixed
  */
 function geodir_widget_enqueue_scripts( $args, $widget = array(), $extra = array() ) {
+	do_action( 'geodir_enqueue_scripts_on_call_before', $args, $widget, $extra );
+
 	if ( ! empty( $widget ) && is_object( $widget ) && ! empty( $widget->id_base ) ) {
+		$design_style = geodir_design_style();
 		$lazy_load_map = geodir_lazy_load_map();
 		$lazy_load_scripts = geodir_load_scripts_on_call();
 		$map_api = GeoDir_Maps::active_map();
+
+		do_action( 'geodir_widget_enqueue_scripts_on_call_before', $lazy_load_scripts, $args, $widget, $extra );
 
 		if ( $widget->id_base == 'gd_map' ) {
 			// GD > Map
@@ -3244,8 +3249,19 @@ function geodir_widget_enqueue_scripts( $args, $widget = array(), $extra = array
 				}
 			}
 		} else if ( $widget->id_base == 'gd_add_listing' ) {
-			if ( ! wp_script_is( 'geodir-plupload', 'enqueued' ) && ! isset( $_REQUEST['ct_builder'] ) ) {
-				GeoDir_Frontend_Scripts::enqueue_script( 'geodir-plupload' );
+			if ( ! isset( $_REQUEST['ct_builder'] ) ) {
+				if ( ! wp_script_is( 'geodir-plupload', 'enqueued' ) ) {
+					GeoDir_Frontend_Scripts::enqueue_script( 'geodir-plupload' );
+				}
+
+				if ( ! wp_script_is( 'geodir-add-listing', 'enqueued' ) ) {
+					GeoDir_Frontend_Scripts::enqueue_script( 'geodir-add-listing' );
+				}
+
+				if ( ! $design_style ) {
+					GeoDir_Frontend_Scripts::enqueue_script( 'geodir-jquery-ui-timepicker' );
+					wp_enqueue_script( 'jquery-ui-autocomplete' );
+				}
 			}
 
 			// GD > Add Listing// GD > Add Listing
@@ -3284,5 +3300,9 @@ function geodir_widget_enqueue_scripts( $args, $widget = array(), $extra = array
 				}
 			}
 		}
+
+		do_action( 'geodir_widget_enqueue_scripts_on_call_after', $lazy_load_scripts, $args, $widget, $extra );
 	}
+
+	do_action( 'geodir_enqueue_scripts_on_call_after', $args, $widget, $extra );
 }
