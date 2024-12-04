@@ -432,7 +432,8 @@ class GeoDir_Widget_AZ_Search extends WP_Super_Duper {
 			}
 		} else {
 			if ( ! empty( $current_post_type ) && $current_post_type == $args['post_type'] && geodir_is_page( 'search' ) ) {
-				$az_search_url = geodir_curPageURL();remove_query_arg( array( 'saz' ), geodir_curPageURL() );
+				$az_search_url = remove_query_arg( array( 'saz', 'paged' ), geodir_curPageURL() );
+				$az_search_url = preg_replace( '#/page/\d+#', '', $az_search_url );
 			} else {
 				$az_search_url = add_query_arg(
 					array(
