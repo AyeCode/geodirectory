@@ -2351,11 +2351,19 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
+        $show_street_in_address = true;
         $show_street2_in_address = true;
         $show_city_in_address = true;
         $show_region_in_address = true;
         $show_country_in_address = true;
         $show_zip_in_address = true;
+
+        /**
+         * Filter "show street in address" value.
+         *
+         * @since 2.8.92
+         */
+        $show_street_in_address = apply_filters( 'geodir_show_street_in_address', $show_street_in_address, $gd_post );
 
         if (!empty($cf['extra_fields'])) {
             $extra_fields = stripslashes_deep(maybe_unserialize($cf['extra_fields']));
@@ -2414,7 +2422,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             }
         }
 
-        if ($gd_post->street) {
+        if ( $gd_post->street || $gd_post->city || $gd_post->region || $gd_post->country ) {
             $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess( $cf );
             $output = geodir_field_output_process($output);
@@ -2454,7 +2462,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ( isset($gd_post->post_title) ) {
                 $address_fields['post_title'] = '<span itemprop="placeName">' . $gd_post->post_title . '</span>';
             }
-            if ( isset($gd_post->street) ) {
+            if ( $show_street_in_address && isset( $gd_post->street ) && $gd_post->street ) {
                 $address_fields['street'] = '<span itemprop="streetAddress">' . $gd_post->street . '</span>';
             }
             if ( $show_street2_in_address && isset( $gd_post->street2 ) && $gd_post->street2 ) {
