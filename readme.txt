@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.92 - TBD =
 * GD > Post Address not rendered for optional & empty street value - CHANGED
+* Google address response have missing city parts for some addresses within Barbados - FIXED
 
 = GeoDirectory v2.8.91 - 2024-12-05 =
 * Multiple maps on the page shows JavaScript error - FIXED
