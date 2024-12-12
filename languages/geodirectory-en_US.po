@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.91\n"
+"Project-Id-Version: GeoDirectory 2.8.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-05 16:25+0530\n"
-"PO-Revision-Date: 2024-12-05 16:25+0530\n"
+"POT-Creation-Date: 2024-12-12 20:18+0530\n"
+"PO-Revision-Date: 2024-12-12 20:19+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -430,7 +430,7 @@ msgstr ""
 #: includes/class-geodir-elementor.php:157 includes/class-geodir-privacy.php:39
 #: includes/core-functions.php:935
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
-#: includes/integrations/bricks/class-geodir-bricks.php:298
+#: includes/integrations/bricks/class-geodir-bricks.php:301
 msgid "GeoDirectory"
 msgstr ""
 
@@ -1484,8 +1484,8 @@ msgid "Dummy data has not fully installed yet!"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:775
-#: templates/bootstrap/map/map-add-listing.php:776
-#: templates/bootstrap/map/map-add-listing.php:940 templates/map.php:724
+#: templates/bootstrap/map/map-add-listing.php:791
+#: templates/bootstrap/map/map-add-listing.php:955 templates/map.php:724
 #: templates/map.php:905
 msgid "Geocode was not successful for the following reason:"
 msgstr ""
@@ -10401,7 +10401,7 @@ msgid "Closed"
 msgstr ""
 
 #: includes/business-hours-functions.php:678 includes/core-functions.php:330
-#: includes/custom-fields/output-functions.php:2687
+#: includes/custom-fields/output-functions.php:2695
 msgid "Open now"
 msgstr ""
 
@@ -12969,12 +12969,12 @@ msgid "Leave a reply"
 msgstr ""
 
 #: includes/core-functions.php:328
-#: includes/widgets/class-geodir-widget-recent-reviews.php:586
+#: includes/widgets/class-geodir-widget-recent-reviews.php:587
 msgid "Read more"
 msgstr ""
 
 #: includes/core-functions.php:329
-#: includes/widgets/class-geodir-widget-recent-reviews.php:586
+#: includes/widgets/class-geodir-widget-recent-reviews.php:587
 msgid "about this listing"
 msgstr ""
 
@@ -13537,11 +13537,11 @@ msgstr ""
 msgid "Read more..."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2587
+#: includes/custom-fields/output-functions.php:2595
 msgid "View on map"
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2746
+#: includes/custom-fields/output-functions.php:2754
 msgid "Expand opening hours"
 msgstr ""
 
@@ -21252,20 +21252,20 @@ msgstr ""
 msgid "Loading categories..."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:526
-#: templates/bootstrap/map/map-add-listing.php:831 templates/map.php:474
+#: templates/bootstrap/map/map-add-listing.php:540
+#: templates/bootstrap/map/map-add-listing.php:846 templates/map.php:474
 #: templates/map.php:799
 #, php-format
 msgid "Please choose any address of the (%s) city only."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:545
-#: templates/bootstrap/map/map-add-listing.php:849 templates/map.php:493
+#: templates/bootstrap/map/map-add-listing.php:559
+#: templates/bootstrap/map/map-add-listing.php:864 templates/map.php:493
 #: templates/map.php:817
 msgid "Cannot determine address at this location."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:990
+#: templates/bootstrap/map/map-add-listing.php:1005
 msgid ""
 "Click on \"Set Address on Map\" and then you can also drag map marker to "
 "locate the correct address"
