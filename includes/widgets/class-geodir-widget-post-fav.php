@@ -24,7 +24,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 
 		$options = array(
 			'textdomain'       => GEODIRECTORY_TEXTDOMAIN,
-			'block-icon'       => 'admin-site',
+			'block-icon'       => 'fas fa-heart',
 			'block-category'   => 'geodirectory',
 			'block-keywords'   => "['fav','geo','geodir']",
 			'block-supports'   => array(
@@ -378,6 +378,8 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 			'mb'             => '',
 			'mr'             => '',
 			'ml'             => '',
+			'list_hide'		 => '',
+			'list_hide_secondary'		 => '',
 		);
 
 		/**

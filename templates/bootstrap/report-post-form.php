@@ -116,7 +116,7 @@ $post_id = absint( $post->ID );
 		$button = aui()->button(
 			array(
 				'type' => 'submit',
-				'class' => 'btn btn-primary btn-sm geodir-report-post-button',
+				'class' => 'btn btn-primary btn-sm w-100 geodir-report-post-button',
 				'content' => __( 'Report', 'geodirectory' ),
 				'no_wrap' => true
 			)

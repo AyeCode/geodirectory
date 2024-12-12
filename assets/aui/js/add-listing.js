@@ -270,6 +270,7 @@ function geodir_save_post() {
                 if (typeof data == 'object' && data.success === false && data.data) {
                     alert(data.data);
                 }
+				document.dispatchEvent(new Event('ayecode_reset_captcha'));
                 return false;
             }
         },
@@ -277,6 +278,7 @@ function geodir_save_post() {
             jQuery('#geodir-add-listing-submit button').html($button_text).removeClass('gd-disabled').prop('disabled', false);
             alert(geodir_params.rating_error_msg);
             console.log(textStatus);
+			document.dispatchEvent(new Event('ayecode_reset_captcha'));
         }
     });
 }
@@ -337,7 +339,7 @@ function geodir_validate_submit(form) {
     var is_validate = true;
     var $field = false;
     jQuery(form).find(".required_field:visible").each(function() {
-        jQuery(this).find("[field_type]:visible, .geodir_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field, .g-recaptcha-response").each(function() {
+        jQuery(this).find("[field_type]:visible, .geodir_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field, .g-recaptcha-response, [name='cf-turnstile-response']").each(function() {
             if (!geodir_validate_field(this)) {
                 is_validate = false;
                 if (!$field) {
