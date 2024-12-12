@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.3.30
+ * @version    2.8.92
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -117,6 +117,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
     var doingGeocode = false;
     var postal_town;
     var locality;
+    var sublocality;
     function geocodePosition(latLon, address) {
         console.log(address);
         if (address && (locality || postal_town) && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
@@ -134,11 +135,9 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 
 	function geodirGetAnyZip(responses) {
 		var zip = '';
-
 		// Use a standard for loop instead of forEach
 		for (var j = 0; j < responses.length; j++) {
 			var response = responses[j];
-			console.log(response);
 			for (var i = 0; i < response.address_components.length; i++) {
 				var addr = response.address_components[i];
 				if (addr.types[0] == 'postal_code' && addr.short_name) {
@@ -146,7 +145,6 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 				}
 			}
 		}
-
 		return zip; // This will only be reached if no postal_code is found
 	}
 
@@ -161,9 +159,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
             var getState = '';
             var getCountry = '';
             var baseCountry = '';
-
             getCountryISO = '';
-
             formatted_address = '';
             street_number = '';
             premise = ''; // In Russian ;
@@ -175,6 +171,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
             sublocality_level_1 = '';
             postal_town = '';
             locality = '';
+            sublocality = '';
             country = '';
             postal_code = '';
             postal_code_prefix = '';
@@ -203,6 +200,12 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                         }
                         if (addr.types[0] == 'locality') {
                             locality = addr;
+                        }
+                        if (addr.types[0] == 'sublocality') {
+                            sublocality = addr;
+                        }
+                        if (!sublocality && addr.types[1] && addr.types[1] == 'sublocality') {
+                            sublocality = addr;
                         }
                         if (addr.types[0] == 'premise') {
                             premise = addr;
@@ -244,6 +247,12 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                 }
                 if (locality == '' && addr.types[0] == 'locality') {
                     locality = addr;
+                }
+                if (sublocality == '' && addr.types[0] == 'sublocality') {
+                    sublocality = addr;
+                }
+                if (sublocality == '' && addr.types[1] && addr.types[1] == 'sublocality') {
+                    sublocality = addr;
                 }
                 if (addr.types[0] == 'country') {
                     country = addr;
@@ -328,7 +337,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                     getAddress += route.long_name;//route
             }
 
-			getZip = postal_code.long_name;//postal_code
+			getZip = postal_code.long_name ? postal_code.long_name : '';//postal_code
 
 			// maybe try and get zip alternative if region is missing so we can use our zip arrays to find the region later
 			if (!getState && !getZip) {
@@ -350,6 +359,11 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
             //getState
             if (country.short_name) {
                 rr = country.short_name;
+            }
+
+            /* Some address in Barbados returns different response for reverse geocode */
+            if (getCountryISO == "BB" && ! locality && sublocality) {
+                locality = sublocality;
             }
 
             //$country_arr = ["US", "CA", "IN","DE","NL"];
@@ -380,7 +394,6 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 						getState = getState.replace(" Council", "");
 					}
                 }
-
             } else {
                 if (administrative_area_level_1.long_name) {
                     getState = administrative_area_level_1.long_name;
@@ -389,8 +402,6 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                     getState = administrative_area_level_2.long_name;
                 }
             }
-
-
 
             /* Fix some countries without regions, Isle of Man, Singapore, Greece. */
             if (getCountryISO=='IM'){
@@ -402,8 +413,6 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
             } else if(getCountryISO == 'GR' && !getState && administrative_area_level_3.long_name) {
                 getState = administrative_area_level_3.long_name;
             }
-
-
 
             /* Fix region name for ‎Belgium */
             if (getState == 'Brussels Hoofdstedelijk Gewest') {
@@ -477,6 +486,11 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                 }
             }
 
+            /* Some addresses within Barbados don't returns city parts */
+            if (getCountryISO == "BB" && getState && !getCity) {
+                getCity = getState;
+            }
+
             //getCountry
             if (country.long_name) {
                 getCountry = country.long_name;
@@ -545,6 +559,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 			updateMarkerAddress('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
         }
     }
+
     function centerMap(latlng) {
         jQuery("#<?php echo $prefix.'map';?>").goMap();
         if (window.gdMaps == 'google') {
