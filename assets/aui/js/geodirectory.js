@@ -2265,6 +2265,12 @@ function geodir_report_post(el) {
 		return;
 	}
 
+	// CF Turnstile
+	if ($form.find("[name='cf-turnstile-response']").length && $form.find("[name='cf-turnstile-response']").val()=='') {
+		return;
+	}
+
+
 	jQuery.ajax({
 		url: geodir_params.ajax_url,
 		type: 'POST',
@@ -2288,6 +2294,7 @@ function geodir_report_post(el) {
 		.always(function(data, textStatus, jqXHR) {
 			$button.parent().find('.fa-spin').remove();
 			$button.prop('disabled', false);
+			document.dispatchEvent(new Event('ayecode_reset_captcha'));
 		});
 }
 

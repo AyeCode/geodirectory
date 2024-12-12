@@ -277,6 +277,9 @@ class GeoDir_Bricks {
 			$element_files[] = GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-add-listing.php';
 			$element_files[] = GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-search.php';
 			$element_files[] = GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-map.php';
+			$element_files[] = GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-post-fav.php';
+			$element_files[] = GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-post-rating.php';
+			$element_files[] = GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-recent-reviews.php';
 		}
 
 		foreach ( $element_files as $file ) {

@@ -287,7 +287,7 @@ function geodir_validate_submit(form) {
     var is_validate = true;
     var $field = false;
     jQuery(form).find(".required_field:visible").each(function() {
-        jQuery(this).find("[field_type]:visible, .geodir_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field, .g-recaptcha-response").each(function() {
+        jQuery(this).find("[field_type]:visible, .geodir_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field, .g-recaptcha-response, [name='cf-turnstile-response']").each(function() {
             if (!geodir_validate_field(this)) {
                 is_validate = false;
                 if (!$field) {
@@ -500,7 +500,7 @@ var GeoDir_Business_Hours = {
         var sample = this.sample;
         var $item = $el.closest('.gd-bh-item');
         var uniqueid = Math.floor( Math.random() * 100000000000 ).toString();
-      
+
         jQuery('.gd-bh-closed', $item).remove();
         $item.removeClass('gd-bh-item-closed');
         sample = sample.replace(/GD_UNIQUE_ID/g, uniqueid);

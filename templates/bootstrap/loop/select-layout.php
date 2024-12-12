@@ -106,15 +106,9 @@ global $aui_bs5;
 			if ( ! empty( $layouts ) ) {
 				foreach ( $layouts as $key => $layout ) {
 					$layout_name = $key ? wp_sprintf( __( 'View: Grid %d', 'geodirectory' ), $key ) : __( 'View: List', 'geodirectory' );
-					if ( $aui_bs5 ) {
-						?>
-						<a href="javascript:void(0);" class="dropdown-item" data-gridview="<?php echo absint( $key ); ?>" onclick="geodir_list_view_select(<?php echo absint( $key ); ?>);return false;"><?php echo esc_attr( $layout_name ); ?></a>
-						<?php
-					} else {
-						?>
-						<button class="dropdown-item" data-gridview="<?php echo absint( $key ); ?>" onclick="geodir_list_view_select(<?php echo absint( $key ); ?>);return false;"><?php echo esc_attr( $layout_name ); ?></button>
-						<?php
-					}
+					?>
+					<button class="dropdown-item" data-gridview="<?php echo absint( $key ); ?>" onclick="geodir_list_view_select(<?php echo absint( $key ); ?>);return false;"><?php echo esc_attr( $layout_name ); ?></button>
+					<?php
 				}
 			}
 			?>

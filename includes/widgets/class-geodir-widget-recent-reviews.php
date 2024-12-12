@@ -462,7 +462,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			}
 		}
 
-		$comments_li = self::get_recent_reviews( $g_size, $count, $excerpt_length, false, $post_type, $add_location_filter, $instance['min_rating'], $instance['carousel'], $review_by_author, $post_id, $instance['design_style'] );
+		$comments_li = self::get_recent_reviews( $g_size, $count, $excerpt_length, false, $post_type, $add_location_filter, $instance['min_rating'], $instance['carousel'], $review_by_author, $post_id, $instance['design_style'], $this->is_preview() );
 
 		$content = '';
 		if ( ! empty( $comments_li ) ) {
@@ -517,7 +517,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 	 * @global object $wpdb WordPress Database object.
 	 *
 	 */
-	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0, $carousel = '', $review_by_author = '', $post_id = '', $design_type = '' ) {
+	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0, $carousel = '', $review_by_author = '', $post_id = '', $design_type = '', $is_preview = false ) {
 		global $wpdb, $tablecomments, $tableposts, $rating_table_name, $table_prefix;
 
 		$design_style = geodir_design_style();
@@ -567,7 +567,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		$count   = $wpdb->prepare( '%d', $no_comments );
 		$request = 'SELECT c.comment_ID, c.comment_author, c.comment_author_email, c.comment_content, c.comment_date, r.rating, r.user_id, r.post_id, r.post_type FROM ' . GEODIR_REVIEW_TABLE . " AS r {$join} {$where} ORDER BY c.comment_date DESC, c.comment_ID DESC LIMIT $count";
 
-		$comments = $wpdb->get_results( $request );
+		$comments = $is_preview ? self::dummy_reviews( $no_comments ) :  $wpdb->get_results( $request );
+
 
 		$i            = 0;
 		foreach ( $comments as $comment ) {
@@ -624,5 +625,125 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		}
 
 		return $comments_echo;
+	}
+
+	public static function dummy_reviews($limit = '')
+	{
+		$reviews = array(
+				(object)array(
+					'comment_ID' => 1,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 1. This is a review.',
+					'comment_date' => '2023-11-15 10:15:00', // past date
+					'rating' => 5,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				),
+				(object)array(
+					'comment_ID' => 2,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 2. This is a review.',
+					'comment_date' => '2023-10-20 09:30:00',
+					'rating' => 5,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				),
+				(object)array(
+					'comment_ID' => 3,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 3. This is a review.',
+					'comment_date' => '2023-09-05 14:45:00',
+					'rating' => 5,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				),
+				(object)array(
+					'comment_ID' => 4,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 4. This is a review.',
+					'comment_date' => '2023-08-22 08:20:00',
+					'rating' => 4,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				),
+				(object)array(
+					'comment_ID' => 5,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 5. This is a review.',
+					'comment_date' => '2023-07-14 11:10:00',
+					'rating' => 5,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				),
+				(object)array(
+					'comment_ID' => 6,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 6. This is a review.',
+					'comment_date' => '2023-06-30 16:55:00',
+					'rating' => 5,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				),
+				(object)array(
+					'comment_ID' => 7,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 7. This is a review.',
+					'comment_date' => '2023-05-18 07:35:00',
+					'rating' => 3,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				),
+				(object)array(
+					'comment_ID' => 8,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 8. This is a review.',
+					'comment_date' => '2023-04-10 15:25:00',
+					'rating' => 5,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				),
+				(object)array(
+					'comment_ID' => 9,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 9. This is a review.',
+					'comment_date' => '2023-03-27 12:00:00',
+					'rating' => 5,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				),
+				(object)array(
+					'comment_ID' => 10,
+					'comment_author' => 'admin',
+					'comment_author_email' => 'info@ayecode.io',
+					'comment_content' => 'This is a dummy review number 10. This is a review.',
+					'comment_date' => '2023-02-05 19:40:00',
+					'rating' => 4,
+					'user_id' => 1,
+					'post_id' => 1,
+					'post_type' => 'gd_place'
+				)
+			);
+
+		return $limit ? array_slice($reviews,0,$limit) : $reviews;
+
+
 	}
 }
