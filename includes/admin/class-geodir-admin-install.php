@@ -754,15 +754,15 @@ CREATE TABLE " . GEODIR_REVIEW_TABLE . " (
 	post_id bigint(20) DEFAULT '0',
 	user_id bigint(20) DEFAULT '0',
 	rating float DEFAULT '0',
-	ratings text DEFAULT '',
-	attachments text DEFAULT '',
+	ratings text NOT NULL,
+	attachments text NOT NULL,
 	post_type varchar(20) DEFAULT '',
 	city varchar(50) DEFAULT '',
 	region varchar(50) DEFAULT '',
 	country varchar(50) DEFAULT '',
 	latitude varchar(22) DEFAULT '',
 	longitude varchar(22) DEFAULT '',
-	PRIMARY KEY  (comment_id)
+	PRIMARY KEY (comment_id)
 ) $collate;";
 
 		// Table to store api keys
