@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.8.93 - TBD =
+* MySQL error BLOB, TEXT, GEOMETRY or JSON column can't have a default value - FIXED
+
 = GeoDirectory v2.8.92 - 2024-12-12 =
 * GD > Post Address not rendered for optional & empty street value - CHANGED
 * Changes to better support AyeCode Connect Turnstile Captcha - ADDED
