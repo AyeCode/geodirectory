@@ -852,7 +852,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			}
 		}
 		?>
-<style>.geodir_map_container .poi-info-window .full-width{width:180px;position:relative;margin-left:inherit;left:inherit;}</style>
+<style>.geodir_map_container .poi-info-window .full-width{width:180px;position:relative;margin-left:inherit;left:inherit;}.geodir-map-canvas .gm-style img{max-width:none}</style>
 <script type="text/javascript">
 window.gdBaseLat = <?php echo geodir_sanitize_float( $base_latitude ); ?>;
 window.gdBaseLng = <?php echo geodir_sanitize_float( $base_longitude ); ?>;
