@@ -205,6 +205,8 @@ class GeoDir_Frontend_Scripts {
 								});
 							}
 						}
+					} else {
+						s = ''; /* Keep placeholder for AJAX search. */
 					}
 					<?php } ?>
 
