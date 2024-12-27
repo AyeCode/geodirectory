@@ -700,22 +700,31 @@ function geodir_get_business_hours( $value = '', $country = '' ) {
 					if ( empty( $slot['opens'] ) ) {
 						continue;
 					}
+					$open_24h = false;
 					$opens = $slot['opens'];
 					$closes = ! empty( $slot['closes'] ) ? $slot['closes'] : '00:00';
+					if ( $closes == '00:00' ) {
+						if ( $opens == '00:00' ) {
+							$open_24h = true;
+						}
+						$closes = '24:00';
+					}
 					$opens_time = strtotime( $opens );
 					$closes_time = strtotime( date_i18n( 'H:i:59', strtotime( $closes ) ) );
-					
-					if ( $is_today && (($opens_time <= $time_int && $time_int <= $closes_time) || ($opens == '00:00' && $opens == $closes) || ($opens != '00:00' && $opens == $closes && $opens_time <= $time_int)) ) {
+
+					if ( $is_today && ( ( $opens_time <= $time_int && $time_int <= $closes_time ) || $open_24h || ( $opens != '00:00' && $opens == $closes && $opens_time <= $time_int ) ) ) {
 						$is_open = 1;
 						$has_open = 1;
 					} else {
 						$is_open = 0;
 					}
-					if ( $opens == '00:00' && $opens == $closes ) {
+
+					if ( $open_24h ) {
 						$range = $open_24hours_label;
 					} else {
 						$range = date_i18n( $time_format, $opens_time ) . ' - ' . date_i18n( $time_format, $closes_time );
 					}
+
 					$day_range[] = $range;
 
 					$minutes = array( geodir_hhmm_to_bh_minutes( $opens, $day_no ), geodir_hhmm_to_bh_minutes( $closes, $day_no ) );
