@@ -1027,9 +1027,9 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		}
 
 		if ( $type == 'featured' ) {
-			$output = "[gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='' $alignment $position_args]";
+			$output = "[gd_post_badge key='featured' condition='is_not_empty' badge='" . esc_attr( _x( 'FEATURED', 'featured badge', 'geodirectory' ) ) . "' bg_color='#fd4700' txt_color='#ffffff' css_class='' $alignment $position_args]";
 		} elseif ( $type == 'new' ) {
-			$output = "[gd_post_badge id=''  key='post_date'  condition='is_less_than'  search='+30'  icon_class=''  badge='New'  link=''  new_window='false'  popover_title=''  popover_text=''  cta=''  tooltip_text=''  hover_content=''  hover_icon=''  type=''  shadow=''  color=''  bg_color='#ff0000'  txt_color='#ffffff'  size=''  $alignment  mb=''  ml='' $position_args  list_hide=''  list_hide_secondary=''  css_class='' ]";
+			$output = "[gd_post_badge id=''  key='post_date'  condition='is_less_than'  search='+30'  icon_class=''  badge='" . esc_attr( _x( 'New', 'new badge', 'geodirectory' ) ) . "'  link=''  new_window='false'  popover_title=''  popover_text=''  cta=''  tooltip_text=''  hover_content=''  hover_icon=''  type=''  shadow=''  color=''  bg_color='#ff0000'  txt_color='#ffffff'  size=''  $alignment  mb=''  ml='' $position_args  list_hide=''  list_hide_secondary=''  css_class='' ]";
 		} elseif ( $type == 'favorite' ) {
 			$output = "[gd_post_fav show='icon'  icon=''  icon_color_off='rgba(223,223,223,0.8)'  icon_color_on='#ff0000'  type='link'  shadow=''  color=''  bg_color=''  txt_color=''  size='h5'  $alignment $position_args  list_hide=''  list_hide_secondary='' ]";
 		} elseif ( $type == 'price' ) {

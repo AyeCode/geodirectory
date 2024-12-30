@@ -322,6 +322,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.95 - TBD =
 * Open now search don't filters listings with UTC timezone & open for 24 hours - FIXED
 * Show Map/Listings toggle is not working for block theme on mobile - FIXED
+* GD Simple Archive Item > FEATURED badge is not translatable - FIXED
 
 = GeoDirectory v2.8.94 - 2024-12-26 =
 * AJAX search with empty text don't show placeholder text for main search input - CHANGED
