@@ -391,11 +391,28 @@ class GeoDir_Elementor {
 		// Add widget-icon-list CSS.
 		if ( ! empty( $html ) && ! empty( $geodir_ele_icss ) && $geodir_ele_icss === 1 && in_array( $widget->get_name(), array( 'icon-list', 'wp-widget-gd_post_content', 'wp-widget-gd_post_meta' ) ) ) {
 			$geodir_ele_icss = 2;
-			$widget_config = $widget->get_name() == 'icon-list' ? $widget->get_css_config() : $widget->get_widget_css_config( 'icon-list' );
 
-			if ( ! empty( $widget_config ) && ! empty( $widget_config['data']['file_url'] ) ) {
-				$widget_css = '<link id="elementor-widget-icon-list" rel="stylesheet" href="' . esc_url( $widget_config['data']['file_url'] ) . '">';
-				$html = $widget_css . $html;
+			$widget_config = array();
+			$css_config = false;
+
+			// Elementor Pro v3.25.0 removed get_css_config() && get_widget_css_config() methods.
+			if ( $widget->get_name() == 'icon-list' ) {
+				if ( method_exists( $widget, 'get_css_config' ) ) {
+					$widget_config = $widget->get_css_config();
+					$css_config = true;
+				}
+			} else if ( method_exists( $widget, 'get_widget_css_config' ) ) {
+				$widget_config = $widget->get_widget_css_config( 'icon-list' );
+				$css_config = true;
+			}
+
+			if ( $css_config ) {
+				if ( ! empty( $widget_config ) && ! empty( $widget_config['data']['file_url'] ) ) {
+					$widget_css = '<link id="elementor-widget-icon-list" rel="stylesheet" href="' . esc_url( $widget_config['data']['file_url'] ) . '">';
+					$html = $widget_css . $html;
+				}
+			} else {
+				wp_enqueue_style( 'widget-icon-list' );
 			}
 		}
 
