@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.94\n"
+"Project-Id-Version: GeoDirectory 2.8.95\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-19 20:39+0530\n"
-"PO-Revision-Date: 2024-12-26 18:15+0530\n"
+"POT-Creation-Date: 2025-01-02 17:57+0530\n"
+"PO-Revision-Date: 2025-01-02 17:58+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1230,7 +1230,7 @@ msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-assets.php:254
-#: includes/class-geodir-frontend-scripts.php:938
+#: includes/class-geodir-frontend-scripts.php:940
 msgid "Allowed Files"
 msgstr ""
 
@@ -3344,7 +3344,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:1034
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:185
-#: includes/class-geodir-elementor.php:1780 includes/helper-functions.php:1680
+#: includes/class-geodir-elementor.php:1797 includes/helper-functions.php:1680
 #: includes/helper-functions.php:1780
 #: includes/widgets/class-geodir-widget-categories.php:163
 #: includes/widgets/class-geodir-widget-categories.php:173
@@ -5335,7 +5335,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1332
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1337
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1338
-#: includes/business-hours-functions.php:860
+#: includes/business-hours-functions.php:869
 msgid "Temporarily Closed"
 msgstr ""
 
@@ -10353,43 +10353,43 @@ msgid "Sunday"
 msgstr ""
 
 #: includes/business-hours-functions.php:62
-#: includes/business-hours-functions.php:2048 includes/helper-functions.php:674
+#: includes/business-hours-functions.php:2057 includes/helper-functions.php:674
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2323
 msgid "Mon"
 msgstr ""
 
 #: includes/business-hours-functions.php:63
-#: includes/business-hours-functions.php:2049 includes/helper-functions.php:675
+#: includes/business-hours-functions.php:2058 includes/helper-functions.php:675
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2324
 msgid "Tue"
 msgstr ""
 
 #: includes/business-hours-functions.php:64
-#: includes/business-hours-functions.php:2050 includes/helper-functions.php:676
+#: includes/business-hours-functions.php:2059 includes/helper-functions.php:676
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2325
 msgid "Wed"
 msgstr ""
 
 #: includes/business-hours-functions.php:65
-#: includes/business-hours-functions.php:2051 includes/helper-functions.php:677
+#: includes/business-hours-functions.php:2060 includes/helper-functions.php:677
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2326
 msgid "Thu"
 msgstr ""
 
 #: includes/business-hours-functions.php:66
-#: includes/business-hours-functions.php:2052 includes/helper-functions.php:678
+#: includes/business-hours-functions.php:2061 includes/helper-functions.php:678
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2327
 msgid "Fri"
 msgstr ""
 
 #: includes/business-hours-functions.php:67
-#: includes/business-hours-functions.php:2053 includes/helper-functions.php:679
+#: includes/business-hours-functions.php:2062 includes/helper-functions.php:679
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2328
 msgid "Sat"
 msgstr ""
 
 #: includes/business-hours-functions.php:68
-#: includes/business-hours-functions.php:2054 includes/helper-functions.php:673
+#: includes/business-hours-functions.php:2063 includes/helper-functions.php:673
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2322
 msgid "Sun"
 msgstr ""
@@ -10415,18 +10415,18 @@ msgstr ""
 msgid "Open 24 hours"
 msgstr ""
 
-#: includes/business-hours-functions.php:1112
-#: includes/business-hours-functions.php:1114
-#: includes/business-hours-functions.php:1120
-#: includes/business-hours-functions.php:1125
+#: includes/business-hours-functions.php:1121
+#: includes/business-hours-functions.php:1123
+#: includes/business-hours-functions.php:1129
+#: includes/business-hours-functions.php:1134
 msgid "UTC"
 msgstr ""
 
-#: includes/business-hours-functions.php:1183
+#: includes/business-hours-functions.php:1192
 msgid "Manual Offsets"
 msgstr ""
 
-#: includes/business-hours-functions.php:2047
+#: includes/business-hours-functions.php:2056
 msgid "Today"
 msgstr ""
 
@@ -10481,13 +10481,13 @@ msgid "You have successfully deleted the Listing."
 msgstr ""
 
 #: includes/class-geodir-ajax.php:792
-#: includes/class-geodir-frontend-scripts.php:903
+#: includes/class-geodir-frontend-scripts.php:905
 #: includes/post-functions.php:397 language.php:82
 msgid "Unfavorite"
 msgstr ""
 
 #: includes/class-geodir-ajax.php:797
-#: includes/class-geodir-frontend-scripts.php:901
+#: includes/class-geodir-frontend-scripts.php:903
 #: includes/post-functions.php:377
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:951
 #: includes/widgets/class-geodir-widget-simple-archive.php:426 language.php:81
@@ -11379,21 +11379,21 @@ msgstr ""
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:492 includes/core-functions.php:337
+#: includes/class-geodir-elementor.php:509 includes/core-functions.php:337
 #: includes/widgets/class-geodir-widget-single-next-prev.php:94
 #: templates/bootstrap/images/images.php:266
 #: templates/legacy/single/next-prev.php:12
 msgid "Previous"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:496 includes/core-functions.php:338
+#: includes/class-geodir-elementor.php:513 includes/core-functions.php:338
 #: includes/widgets/class-geodir-widget-single-next-prev.php:95
 #: templates/bootstrap/images/images.php:270
 #: templates/legacy/single/next-prev.php:13
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:1187
+#: includes/class-geodir-elementor.php:1204
 msgid "Could not retrieve template."
 msgstr ""
 
@@ -11427,114 +11427,114 @@ msgstr ""
 msgid "My Location"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:288
-#: includes/class-geodir-frontend-scripts.php:289
+#: includes/class-geodir-frontend-scripts.php:290
+#: includes/class-geodir-frontend-scripts.php:291
 msgid "In:"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:358
+#: includes/class-geodir-frontend-scripts.php:360
 msgid "Search was not successful for the following reason :"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:388
+#: includes/class-geodir-frontend-scripts.php:390
 msgid "Search was not successful for the requested address."
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:443
+#: includes/class-geodir-frontend-scripts.php:445
 #: includes/core-functions.php:303
 msgid "Unable to find your location"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:446
+#: includes/class-geodir-frontend-scripts.php:448
 #: includes/core-functions.php:304
 msgid "Permission denied in finding your location"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:449
+#: includes/class-geodir-frontend-scripts.php:451
 #: includes/core-functions.php:305
 msgid "Your location is currently unknown"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:452
+#: includes/class-geodir-frontend-scripts.php:454
 #: includes/core-functions.php:306
 msgid "Attempt to find location took too long"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:455
+#: includes/class-geodir-frontend-scripts.php:457
 #: includes/core-functions.php:307
 msgid "Location detection not supported in browser"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:900
+#: includes/class-geodir-frontend-scripts.php:902
 #: includes/post-functions.php:367 language.php:84
 msgid "Add to Favorites"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:902
+#: includes/class-geodir-frontend-scripts.php:904
 #: includes/post-functions.php:387 language.php:85
 msgid "Remove from Favorites"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:912
+#: includes/class-geodir-frontend-scripts.php:914
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2446
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:913
+#: includes/class-geodir-frontend-scripts.php:915
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2447
 msgctxt "enhanced select"
 msgid "No matches found"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:914
+#: includes/class-geodir-frontend-scripts.php:916
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2448
 msgctxt "enhanced select"
 msgid "Loading failed"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:915
+#: includes/class-geodir-frontend-scripts.php:917
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2449
 msgctxt "enhanced select"
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:916
+#: includes/class-geodir-frontend-scripts.php:918
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2450
 msgctxt "enhanced select"
 msgid "Please enter %item% or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:917
+#: includes/class-geodir-frontend-scripts.php:919
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2451
 msgctxt "enhanced select"
 msgid "Please delete 1 character"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:918
+#: includes/class-geodir-frontend-scripts.php:920
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2452
 msgctxt "enhanced select"
 msgid "Please delete %item% characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:919
+#: includes/class-geodir-frontend-scripts.php:921
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2453
 msgctxt "enhanced select"
 msgid "You can only select 1 item"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:920
+#: includes/class-geodir-frontend-scripts.php:922
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2454
 msgctxt "enhanced select"
 msgid "You can only select %item% items"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:921
+#: includes/class-geodir-frontend-scripts.php:923
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2455
 msgctxt "enhanced select"
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:922
+#: includes/class-geodir-frontend-scripts.php:924
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2456
 msgctxt "enhanced select"
 msgid "Searching&hellip;"
@@ -19067,6 +19067,16 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:949
 #: includes/widgets/class-geodir-widget-simple-archive.php:424
+msgid "New"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1030
+msgctxt "featured badge"
+msgid "FEATURED"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1032
+msgctxt "new badge"
 msgid "New"
 msgstr ""
 

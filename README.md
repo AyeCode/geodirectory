@@ -11,8 +11,8 @@ More information can be found at [wpgeodirectory.com](http://wpgeodirectory.com/
 
 ### Minimum Requirements ###
 
-* WordPress 3.5 or greater
-* PHP version 5.3 or greater
+* WordPress 5.0 or greater
+* PHP version 5.6 or greater
 * MySQL version 5.0 or greater
 
 ### Automatic installation ###

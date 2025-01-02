@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 2.8.94
+Stable tag: 2.8.95
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -234,7 +234,7 @@ The same templates are available for the Kadence Theme with Gutenberg and the Ka
 
 = Minimum Requirements =
 
-* WordPress 4.5 or greater
+* WordPress 5.0 or greater
 * PHP version 5.6 or greater
 * MySQL version 5.0 or greater
 
@@ -319,7 +319,7 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory v2.8.95 - TBD =
+= GeoDirectory v2.8.95 - 2025-01-02 =
 * Open now search don't filters listings with UTC timezone & open for 24 hours - FIXED
 * Show Map/Listings toggle is not working for block theme on mobile - FIXED
 * GD Simple Archive Item > FEATURED badge is not translatable - FIXED
