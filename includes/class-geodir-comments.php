@@ -886,7 +886,7 @@ class GeoDir_Comments {
 			$wrap_class = $type == 'input' ? 'c-pointer' : '';
 			?>
 			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
-			<span class="gd-rating-wrap d-inline-flex position-relative <?php echo $wrap_class; ?>" <?php echo $rating_wrap_title; ?>>
+			<span class="gd-rating-wrap d-inline-flex text-nowrap position-relative <?php echo $wrap_class; ?>" <?php echo $rating_wrap_title; ?>>
 				<span class="gd-rating-foreground position-absolute text-nowrap overflow-hidden" <?php echo $foreground_style; ?>><?php echo $rating_html; ?></span>
 				<span class="gd-rating-background" <?php echo $rating_color_off; ?>><?php echo $rating_html; ?></span>
 			</span>
@@ -896,7 +896,7 @@ class GeoDir_Comments {
 				<?php } ?>
 			</div>
 			<?php if ( $rating_label ) { ?>
-				<span class="gd-rating-label font-weight-bold fw-bold p-0 m-0"><?php echo esc_attr( $rating_label ); ?></span>
+				<span class="gd-rating-label font-weight-bold fw-bold p-0 m-0 text-nowrap"><?php echo esc_attr( $rating_label ); ?></span>
 				<?php
 			}
 			echo '</div>';
