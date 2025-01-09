@@ -2018,7 +2018,7 @@ class GeoDir_Compatibility {
 		if ( defined( 'ELEMENTOR_VERSION' ) ) {
 			if ( version_compare( ELEMENTOR_VERSION, '2.9.0', '>=' ) && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) ) {
 				// Page template
-				add_filter( 'template_include', array( __CLASS__, 'elementor_template_include' ), 12, 1 );
+				add_filter( 'template_include', array( __CLASS__, 'elementor_template_include' ), 10, 1 );
 			}
 		}
 

@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.96 - TBD =
 * Rating label in not responsive on mobile - CHANGED
+* In some cases page as archive/search template is not working with Elementor Pro - FIXED
 
 = GeoDirectory v2.8.95 - 2025-01-02 =
 * Open now search don't filters listings with UTC timezone & open for 24 hours - FIXED

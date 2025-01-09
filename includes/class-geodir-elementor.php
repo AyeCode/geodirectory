@@ -1272,7 +1272,7 @@ class GeoDir_Elementor {
 	 * @return string Filtered content.
 	 */
 	public static function overwrite_archive_template_content( $content, $original_content, $page_id ) {
-		if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) && $page_id && self::is_elementor( $page_id ) ) {
+		if ( ( ! defined( 'ELEMENTOR_PRO_VERSION' ) || ( defined( 'ELEMENTOR_PRO_VERSION' ) && ! self::is_template_override() ) ) && $page_id && self::is_elementor( $page_id ) ) {
 			$_content = $content;
 			$content = \Elementor\Plugin::$instance->frontend->get_builder_content( $page_id, true );
 
@@ -1459,19 +1459,22 @@ class GeoDir_Elementor {
 				foreach ( $conditions['archive'] as $archive_conditions ) {
 					foreach ( $archive_conditions as $archive_condition ) {
 						if (
-							$archive_condition == 'include/geodirectory_archive' // all archives
+							( $archive_condition == 'include/geodirectory_archive' // all archives
 							|| stripos( strrev( $archive_condition ), strrev( $type ) ) === 0 // all search
 							|| stripos( strrev( $archive_condition ), strrev( $type."_".$post_type ) ) === 0 // cpt search
-						) {
-							$result = true;
-							break 2;
+						) ) {
+							// Skip exclude condition
+							if ( stripos( $archive_condition, "exclude/" ) !== 0 ) {
+								$result = true;
+								break 2;
+							}
 						}
 					}
 				}
 			} elseif ( $page_type == 'single' && ! empty( $conditions['single'] ) ) {
 				foreach ( $conditions['single'] as $archive_conditions ) {
 					foreach ( $archive_conditions as $archive_condition ) {
-						if ( stripos( strrev( $archive_condition ), strrev( $type ) ) === 0 ) {
+						if ( stripos( strrev( $archive_condition ), strrev( $type ) ) === 0 && stripos( $archive_condition, "exclude/" ) !== 0 ) {
 							$result = true;
 							break 2;
 						}
