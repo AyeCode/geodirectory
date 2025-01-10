@@ -33,9 +33,7 @@ class GeoDir_Bricks {
 		add_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'overwrite_archive_item_template_content' ), 10, 3 );
 
 		// Bricks
-		add_filter( 'bricks/builder/i18n', array( __CLASS__, 'builder_i18n' ), 10, 1 );
 		add_filter( 'bricks/dynamic_data/register_providers', array( __CLASS__, 'register_provider' ), 10, 1 );
-		add_filter( 'bricks/setup/control_options', array( __CLASS__, 'add_template_types' ), 10, 1 );
 		add_filter( 'bricks/database/content_type', array( __CLASS__, 'set_content_type' ), 10, 2 );
 		add_filter( 'bricks/builder/data_post_id', array( __CLASS__, 'maybe_set_post_id' ), 11, 1 );
 		add_filter( 'bricks/active_templates', array( __CLASS__, 'set_active_templates' ), 11, 3 );
@@ -49,6 +47,10 @@ class GeoDir_Bricks {
 		if ( ! class_exists( 'Bricks\Integrations\Dynamic_Data\Providers\Provider_Geodir' ) ) {
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/provider-geodir.php' );
 		}
+
+		// Bricks
+		add_filter( 'bricks/builder/i18n', array( __CLASS__, 'builder_i18n' ), 10, 1 );
+		add_filter( 'bricks/setup/control_options', array( __CLASS__, 'add_template_types' ), 10, 1 );
 	}
 
 	public static function set_post_id() {
