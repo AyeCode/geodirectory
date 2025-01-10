@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.8.92
+ * @version    2.8.97
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -906,6 +906,8 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
         $("#<?php echo $prefix;?>set_address_button").on("click",function(){var set_on_map=true;geodir_codeAddress(set_on_map)});
 
         if (window.gdMaps == 'google') {
+            <?php do_action( 'geodir_add_listing_map_inline_js', 'google', $geodir_map_name, $geodir_manual_map, $gd_move_inline_script ); ?>
+
             // Add dragging event listeners.
             google.maps.event.addListener(baseMarker, 'dragstart', function () {
             //updateMarkerAddress('Dragging...');
@@ -959,6 +961,7 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
             // Limit the zoom level
             google.maps.event.addListener($.goMap.map,'zoom_changed',function(){$("#<?php echo $prefix.'map';?>").goMap();if($.goMap.map.getZoom() < minZoomLevel){$.goMap.map.setZoom(minZoomLevel)}});
         } else if (window.gdMaps == 'osm') {
+            <?php do_action( 'geodir_add_listing_map_inline_js', 'osm', $geodir_map_name, $geodir_manual_map, $gd_move_inline_script ); ?>
             // Add dragging event listeners.
             baseMarker.on('drag',function(e){updateMarkerPositionOSM(baseMarker.getLatLng())});
             baseMarker.on('dragend', function(e) {
@@ -989,7 +992,7 @@ if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").heig
 });
 <?php }
 	if ( ! empty( $gd_move_inline_script ) ) {
-		$inline_script = ob_get_clean(); wp_add_inline_script( 'geodir-add-listing', trim( $inline_script ) );
+		$inline_script = ob_get_clean(); $inline_script = apply_filters( 'geodir_add_listing_map_inline_script', trim( $inline_script ), $geodir_map_name, $geodir_manual_map ); wp_add_inline_script( 'geodir-add-listing', $inline_script );
 	} else { ?>
     /* ]]> */
 </script>
