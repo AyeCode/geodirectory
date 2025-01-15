@@ -1505,4 +1505,42 @@ class GeoDir_Media {
 			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':1:::1:1', 'gd_attachments_by_type' );
 		}
 	}
+
+
+	/**
+	 * Retrieves an attachment by its ID.
+	 *
+	 * This function fetches an attachment from the database using its ID and optional status.
+	 * It uses caching to optimize performance for repeated requests.
+	 *
+	 * @param int $attachment_id The ID of the attachment to retrieve.
+	 * @param string $status Optional. The status of the attachment. Default is an empty string.
+	 *
+	 * @return object|null The attachment row from the database or null if not found.
+	 */
+	public static function get_attachment_by_id( $attachment_id, $status = '' ) {
+		global $wpdb;
+
+
+		// Check for cache
+		$cache_key = 'gd_attachment_by_id:' . $attachment_id . ':' . $status . ':' . (int) is_preview();
+		$cache = wp_cache_get( $cache_key, 'gd_attachment_by_id' );
+		if ( $cache !== false ) {
+			return $cache;
+		}
+
+
+		// get the results
+		$sql = $wpdb->prepare( "SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE ID = %d LIMIT 1", $attachment_id );
+
+		$results = $wpdb->get_row($sql);
+
+		// maybe set external meta
+		$results = self::set_external_src_meta( $results );
+
+		// set cache
+		wp_cache_set( $cache_key, $results, 'gd_attachment_by_id' );
+		return $results;
+
+	}
 }

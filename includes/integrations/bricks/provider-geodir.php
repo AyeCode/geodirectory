@@ -75,9 +75,38 @@ class Provider_Geodir extends Base {
 
 			if ( ! empty( $args[1] ) && strlen( $args[1] ) == strlen( (int) $args[1] ) && (int) $args[1] > 0 && geodir_is_gd_post_type( get_post_type( (int) $args[1] ) ) ) {
 				$post_id = (int) $args[1];
+			} elseif ( ! empty( $gd_post->ID ) ) {
+				$post_id = absint( $gd_post->ID );
+			}elseif(bricks_is_builder_call()){
+				$post_id = !empty($_REQUEST['postId']) ? absint($_REQUEST['postId']) : '';
+			}
+
+			if ( $key === 'post_images' ) {
+				$show = 'value';
 			}
 
 			$value = do_shortcode( '[gd_post_meta key="' .esc_attr( $key )  . '" show="' .esc_attr( $show )  . '" no_wrap="1"' . ( $post_id ? ' id="' . $post_id . '"' : '') . ']' );
+
+			$geodir_ascii = 7110111168105114;
+
+			if ( 'image' === $context ) {
+				$value = [];
+				if('featured_image' === $key){
+					$featured_image_id = get_post_thumbnail_id( $post_id );
+					if ( $featured_image_id ) {
+						$value[] = $featured_image_id;
+					}
+				}else{
+//					$images = \GeoDir_Media::get_post_images( $post_id );
+					$images = \GeoDir_Media::get_attachments_by_type( $post_id, $key );
+
+					if ( ! empty( $images ) ) {
+						foreach ( $images as $image ) {
+							$value[] = $geodir_ascii.absint($image->ID);
+						}
+					}
+				}
+			}
 
 			return apply_filters( 'geodir_bricks_get_post_meta_tag_value', $value, $key, $tag, $args, $context, $post, $this, $post_id );
 		} else if ( strpos( $tag, 'gd_cat_meta_' ) === 0 ) {
