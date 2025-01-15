@@ -81,7 +81,7 @@ class Provider_Geodir extends Base {
 				$post_id = !empty($_REQUEST['postId']) ? absint($_REQUEST['postId']) : '';
 			}
 
-			if ( $key === 'post_images' ) {
+			if ( $key === 'post_images' || $key === 'business_hours'  ) {
 				$show = 'value';
 			}
 
