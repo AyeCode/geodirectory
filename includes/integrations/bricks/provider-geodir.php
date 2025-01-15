@@ -121,6 +121,11 @@ class Provider_Geodir extends Base {
 				$term_id = isset( $current_category->term_id ) ?  absint( $current_category->term_id ) : 0;
 			} else if ( ! $term_id && ! empty( $gd_post ) ) {
 				$term_id = ! empty( $gd_post->default_category ) ? absint( $gd_post->default_category ) : 0;
+			}elseif(bricks_is_builder_call()){
+				$post_id = !empty($_REQUEST['postId']) ? absint($_REQUEST['postId']) : '';
+				$_gd_post = geodir_get_post_info( $post_id );
+				$term_id = ! empty( $_gd_post->default_category ) ? absint( $_gd_post->default_category ) : 0;
+//				print_r( $_gd_post );
 			}
 
 			if ( $term_id ) {
@@ -141,6 +146,8 @@ class Provider_Geodir extends Base {
 
 					if ( $show == 'value' ) {
 						$value = "<img src='" . esc_attr( $value ) . "' />";
+					}elseif ('image' === $context && $value) {
+						$value = [$value];
 					}
 				} else if ( $key == 'color' ) {
 					$value = get_term_meta( $term_id, 'ct_cat_color', true );
@@ -151,13 +158,20 @@ class Provider_Geodir extends Base {
 
 					if ( $show == 'value' ) {
 						$value = "<img src='" . esc_attr( $value ) . "' />";
+					}elseif ('image' === $context && $value) {
+						$value = [$value];
 					}
 				}
 			}
 
-			if ( $value && ( $show =='value-raw' || $show == 'value-strip' ) ) {
+			if ( $value && ( $show =='value-raw' || $show == 'value-strip' ) && !is_array($value) ) {
 				$value = wp_strip_all_tags( $value );
 			}
+
+
+
+
+//			echo  $show.'###'. $term_id.'###'.$key.'###'.$context;
 
 			return apply_filters( 'geodir_bricks_get_cat_meta_tag_value', $value, $key, $tag, $args, $context, $post, $this, $term_id );
 		}
