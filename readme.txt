@@ -324,6 +324,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Bricks Theme, Images post meta now work in dynamic data - FIXED  
 * Bricks Theme, Images category meta work in dynamic data - FIXED
 * Added new hooks in add listing map template - ADDED
+* GD > Categories shows uncaught type error on PHP 8 - FIXED
 
 = GeoDirectory v2.8.96 - 2025-01-09 =
 * Rating label in not responsive on mobile - CHANGED
