@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.96\n"
+"Project-Id-Version: GeoDirectory 2.8.97\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-09 20:58+0530\n"
-"PO-Revision-Date: 2025-01-09 20:59+0530\n"
+"POT-Creation-Date: 2025-01-16 20:25+0530\n"
+"PO-Revision-Date: 2025-01-16 20:25+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -430,7 +430,7 @@ msgstr ""
 #: includes/class-geodir-elementor.php:157 includes/class-geodir-privacy.php:39
 #: includes/core-functions.php:935
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
-#: includes/integrations/bricks/class-geodir-bricks.php:301
+#: includes/integrations/bricks/class-geodir-bricks.php:477
 msgid "GeoDirectory"
 msgstr ""
 
@@ -1485,8 +1485,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:775
 #: templates/bootstrap/map/map-add-listing.php:791
-#: templates/bootstrap/map/map-add-listing.php:955 templates/map.php:724
-#: templates/map.php:905
+#: templates/bootstrap/map/map-add-listing.php:957 templates/map.php:724
+#: templates/map.php:906
 msgid "Geocode was not successful for the following reason:"
 msgstr ""
 
@@ -3242,13 +3242,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:303
 #: includes/admin/class-geodir-admin-taxonomies.php:368
-#: includes/integrations/bricks/provider-geodir.php:147
+#: includes/integrations/bricks/provider-geodir.php:190
 msgid "Category Top Description"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:308
 #: includes/admin/class-geodir-admin-taxonomies.php:373
-#: includes/integrations/bricks/provider-geodir.php:148
+#: includes/integrations/bricks/provider-geodir.php:191
 msgid "Category Bottom Description"
 msgstr ""
 
@@ -3264,13 +3264,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:324
 #: includes/admin/class-geodir-admin-taxonomies.php:389
-#: includes/integrations/bricks/provider-geodir.php:149
+#: includes/integrations/bricks/provider-geodir.php:192
 msgid "Category Icon"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:330
 #: includes/admin/class-geodir-admin-taxonomies.php:395
-#: includes/integrations/bricks/provider-geodir.php:151
+#: includes/integrations/bricks/provider-geodir.php:194
 msgid "Category Color"
 msgstr ""
 
@@ -11999,8 +11999,8 @@ msgstr ""
 
 #: includes/class-geodir-post-types.php:226
 #: includes/class-geodir-post-types.php:280
-#: includes/widgets/class-geodir-widget-categories.php:963
-#: includes/widgets/class-geodir-widget-categories.php:1044
+#: includes/widgets/class-geodir-widget-categories.php:964
+#: includes/widgets/class-geodir-widget-categories.php:1045
 #, php-format
 msgid "%s Categories"
 msgstr ""
@@ -13863,12 +13863,12 @@ msgid "%s Tags Archive"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-template-archive.php:59
-#: includes/integrations/bricks/class-geodir-bricks.php:110
+#: includes/integrations/bricks/class-geodir-bricks.php:286
 msgid "Search Results"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-template-archive.php:63
-#: includes/integrations/bricks/class-geodir-bricks.php:108
+#: includes/integrations/bricks/class-geodir-bricks.php:284
 msgid "Archive"
 msgstr ""
 
@@ -14560,7 +14560,7 @@ msgstr ""
 msgid "Placeholder image"
 msgstr ""
 
-#: includes/integrations/bricks/class-geodir-bricks.php:107
+#: includes/integrations/bricks/class-geodir-bricks.php:283
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:144
 msgid "Single"
 msgstr ""
@@ -14704,15 +14704,15 @@ msgstr ""
 msgid "GD Category Meta"
 msgstr ""
 
-#: includes/integrations/bricks/provider-geodir.php:150
+#: includes/integrations/bricks/provider-geodir.php:193
 msgid "Category Map Icon"
 msgstr ""
 
-#: includes/integrations/bricks/provider-geodir.php:152
+#: includes/integrations/bricks/provider-geodir.php:195
 msgid "Category Image"
 msgstr ""
 
-#: includes/integrations/bricks/provider-geodir.php:153
+#: includes/integrations/bricks/provider-geodir.php:196
 msgid "Category Schema"
 msgstr ""
 
@@ -16127,11 +16127,11 @@ msgstr ""
 msgid "No categories found"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:1221
+#: includes/widgets/class-geodir-widget-categories.php:1222
 msgid "CPT Categories"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:1370
+#: includes/widgets/class-geodir-widget-categories.php:1371
 msgid "Expand sub-categories"
 msgstr ""
 
@@ -19549,7 +19549,7 @@ msgstr ""
 msgid "Add custom feature"
 msgstr ""
 
-#: language.php:65 templates/legacy/map/map.php:46 templates/map.php:976
+#: language.php:65 templates/legacy/map/map.php:46 templates/map.php:978
 msgid ""
 "<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your "
 "search criteria and try again.</p>"
@@ -21277,7 +21277,7 @@ msgstr ""
 msgid "Cannot determine address at this location."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:1005
+#: templates/bootstrap/map/map-add-listing.php:1008
 msgid ""
 "Click on \"Set Address on Map\" and then you can also drag map marker to "
 "locate the correct address"
@@ -21385,7 +21385,7 @@ msgstr ""
 msgid "reviewed"
 msgstr ""
 
-#: templates/map.php:977
+#: templates/map.php:979
 msgid "<h3>Map Not Loaded</h3><p>Sorry, unable to load Maps API."
 msgstr ""
 

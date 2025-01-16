@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 2.8.96
+Stable tag: 2.8.97
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -319,7 +319,7 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
-= GeoDirectory v2.8.97 - TBD =
+= GeoDirectory v2.8.97 - 2025-01-16 =
 * Enabling Bricks Builder shows _load_textdomain_just_in_time was called incorrectly - FIXED
 * Bricks Theme, Images post meta now work in dynamic data - FIXED  
 * Bricks Theme, Images category meta work in dynamic data - FIXED
