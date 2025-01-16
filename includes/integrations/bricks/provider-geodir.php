@@ -75,9 +75,38 @@ class Provider_Geodir extends Base {
 
 			if ( ! empty( $args[1] ) && strlen( $args[1] ) == strlen( (int) $args[1] ) && (int) $args[1] > 0 && geodir_is_gd_post_type( get_post_type( (int) $args[1] ) ) ) {
 				$post_id = (int) $args[1];
+			} elseif ( ! empty( $gd_post->ID ) ) {
+				$post_id = absint( $gd_post->ID );
+			}elseif(bricks_is_builder_call()){
+				$post_id = !empty($_REQUEST['postId']) ? absint($_REQUEST['postId']) : '';
+			}
+
+			if ( $key === 'post_images' || $key === 'business_hours'  ) {
+				$show = 'value';
 			}
 
 			$value = do_shortcode( '[gd_post_meta key="' .esc_attr( $key )  . '" show="' .esc_attr( $show )  . '" no_wrap="1"' . ( $post_id ? ' id="' . $post_id . '"' : '') . ']' );
+
+			$geodir_ascii = 7110111168105114;
+
+			if ( 'image' === $context ) {
+				$value = [];
+				if('featured_image' === $key){
+					$featured_image_id = get_post_thumbnail_id( $post_id );
+					if ( $featured_image_id ) {
+						$value[] = $featured_image_id;
+					}
+				}else{
+//					$images = \GeoDir_Media::get_post_images( $post_id );
+					$images = \GeoDir_Media::get_attachments_by_type( $post_id, $key );
+
+					if ( ! empty( $images ) ) {
+						foreach ( $images as $image ) {
+							$value[] = $geodir_ascii.absint($image->ID);
+						}
+					}
+				}
+			}
 
 			return apply_filters( 'geodir_bricks_get_post_meta_tag_value', $value, $key, $tag, $args, $context, $post, $this, $post_id );
 		} else if ( strpos( $tag, 'gd_cat_meta_' ) === 0 ) {
@@ -92,6 +121,11 @@ class Provider_Geodir extends Base {
 				$term_id = isset( $current_category->term_id ) ?  absint( $current_category->term_id ) : 0;
 			} else if ( ! $term_id && ! empty( $gd_post ) ) {
 				$term_id = ! empty( $gd_post->default_category ) ? absint( $gd_post->default_category ) : 0;
+			}elseif(bricks_is_builder_call()){
+				$post_id = !empty($_REQUEST['postId']) ? absint($_REQUEST['postId']) : '';
+				$_gd_post = geodir_get_post_info( $post_id );
+				$term_id = ! empty( $_gd_post->default_category ) ? absint( $_gd_post->default_category ) : 0;
+//				print_r( $_gd_post );
 			}
 
 			if ( $term_id ) {
@@ -112,6 +146,8 @@ class Provider_Geodir extends Base {
 
 					if ( $show == 'value' ) {
 						$value = "<img src='" . esc_attr( $value ) . "' />";
+					}elseif ('image' === $context && $value) {
+						$value = [$value];
 					}
 				} else if ( $key == 'color' ) {
 					$value = get_term_meta( $term_id, 'ct_cat_color', true );
@@ -122,13 +158,20 @@ class Provider_Geodir extends Base {
 
 					if ( $show == 'value' ) {
 						$value = "<img src='" . esc_attr( $value ) . "' />";
+					}elseif ('image' === $context && $value) {
+						$value = [$value];
 					}
 				}
 			}
 
-			if ( $value && ( $show =='value-raw' || $show == 'value-strip' ) ) {
+			if ( $value && ( $show =='value-raw' || $show == 'value-strip' ) && !is_array($value) ) {
 				$value = wp_strip_all_tags( $value );
 			}
+
+
+
+
+//			echo  $show.'###'. $term_id.'###'.$key.'###'.$context;
 
 			return apply_filters( 'geodir_bricks_get_cat_meta_tag_value', $value, $key, $tag, $args, $context, $post, $this, $term_id );
 		}

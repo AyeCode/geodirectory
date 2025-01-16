@@ -41,6 +41,180 @@ class GeoDir_Bricks {
 		// Bricks Elements
 		add_filter( 'bricks/builder/elements', array( __CLASS__, 'setup_elements' ), 10, 1 );
 		add_action( 'init', array( __CLASS__, 'register_elements' ), 11 );
+
+
+		// Filters to make images work
+		add_filter( 'get_post_metadata', array( __CLASS__, '_wp_attachment_metadata'), 10, 5 );
+		add_filter( 'wp_get_attachment_image', array( __CLASS__, '_wp_get_attachment_image' ), 10, 5 );
+		add_filter( 'wp_get_attachment_image_attributes',  array( __CLASS__, '_bricks_set_image_attributes'), 10, 3 );
+		add_action( 'after_setup_theme',array( __CLASS__, 'remove_bricks_image_attributes_filter'), 10 );
+		add_filter( 'wp_get_attachment_image_src', array( __CLASS__, 'maybe_gd_image_id'), 10, 4 );
+
+	}
+
+	/**
+	 * Check if the attachment id is prefixed with our marker and if so check our tables for the image src.
+	 *
+	 * @param $image
+	 * @param $attachment_id
+	 * @param $size
+	 * @param $icon
+	 *
+	 * @return array|mixed
+	 */
+	public static function maybe_gd_image_id($image, $attachment_id, $size, $icon){
+		global $gd_last_attachment_id;
+
+		// a unique GD prefix (GeoDir in ASCII)
+		$geodir_ascii = 7110111168105114;
+		if (strpos($attachment_id, $geodir_ascii) === 0 ) {
+
+			$gd_attachment_id_parts = explode( $geodir_ascii, $attachment_id );
+			$gd_attachment_id = end( $gd_attachment_id_parts );
+
+			$gd_attachment = GeoDir_Media::get_attachment_by_id( $gd_attachment_id );
+
+			if ( ! empty( $gd_attachment ) ) {
+				$gd_last_attachment_id = absint( $gd_attachment_id );
+				$meta = isset( $gd_attachment->metadata ) ? maybe_unserialize( $gd_attachment->metadata ) : array();
+				$image_src =  geodir_get_image_src( $gd_attachment,$size );
+				$img_width = isset($meta['sizes'][$size]['width']) ? absint($meta['sizes'][$size]['width']) : (isset($meta['width']) ? absint($meta['width']) : 0);
+				$img_height = isset($meta['sizes'][$size]['height']) ? absint($meta['sizes'][$size]['height']) : (isset($meta['height']) ? absint($meta['height']) : 0);
+
+				if ( $image_src ) {
+					$image = [
+						$image_src, // image src
+						$img_width,
+						$img_height,
+						$icon
+
+					];
+				}
+			}
+		}
+
+		return $image;
+	}
+
+	/**
+	 * Remove the standard Bricks filter as it has no check for attachment ID being NULL.
+	 * We set this back in the next function with our check in place.
+	 *
+	 */
+	public static function remove_bricks_image_attributes_filter() {
+		// Get the Theme singleton instance
+		$theme = \Bricks\Theme::instance();
+
+		// Ensure the Theme instance and frontend property exist
+		if ( $theme && isset( $theme->frontend ) ) {
+			// Remove the filter
+			remove_filter( 'wp_get_attachment_image_attributes', [ $theme->frontend, 'set_image_attributes' ], 10, 3 );
+		}
+	}
+
+	/**
+	 * Add a filter to the image attributes to add back the bricks filter action OR add our own.
+	 *
+	 * @param $attr
+	 * @param $attachment
+	 * @param $size
+	 *
+	 * @return mixed
+	 */
+	public static function _bricks_set_image_attributes($attr, $attachment, $size){
+
+		if ( !is_admin() ) {
+			if ( is_null( $attachment ) ) {
+				$theme = \Bricks\Theme::instance();
+				if ( empty( $theme ) ) {
+					$attr = $theme->frontend->set_image_attributes( $attr, $attachment, array( 512, 512 ) );
+				}
+				$attr['data-type'] = 'string';
+			}else{
+				$theme = \Bricks\Theme::instance();
+				if ( empty( $theme ) ) {
+					$attr = $theme->frontend->set_image_attributes($attr, $attachment, $size);
+				}
+			}
+		}
+
+		return $attr;
+	}
+
+	/**
+	 * We check if an attachment id is prefixed with our long marker number and if so we get the data from our table.
+	 *
+	 * @param $html
+	 * @param $attachment_id
+	 * @param $size
+	 * @param $icon
+	 * @param $attr
+	 *
+	 * @return mixed|string
+	 */
+	public static function _wp_get_attachment_image( $html, $attachment_id, $size, $icon, $attr ) {
+
+		// a unique GD prefix (GeoDir in ASCII)
+		$geodir_ascii = 7110111168105114;
+		if ( strpos( $attachment_id, $geodir_ascii ) === 0 ) {
+
+			$gd_attachment_id_parts = explode( $geodir_ascii, $attachment_id );
+			$gd_attachment_id       = end( $gd_attachment_id_parts );
+			$gd_attachment          = GeoDir_Media::get_attachment_by_id( $gd_attachment_id );
+			$class                  = ! empty( $attr['class'] ) ? esc_attr( $attr['class'] ) : '';
+			$html                   = geodir_get_image_tag( $gd_attachment, $size, '', $class );
+
+
+			$meta = isset( $gd_attachment->metadata ) ? maybe_unserialize( $gd_attachment->metadata ) : '';
+
+			// Only set different sizes if not thumbnail
+			if ( $size != 'thumbnail' && ! empty( $meta ) ) {
+				$html = wp_image_add_srcset_and_sizes( $html, $meta, 0 );
+			}
+
+		}
+
+		return $html;
+	}
+
+	/**
+	 * We check if an attachment id is prefixed with our long marker number and if so we get the meta data from our table.
+	 *
+	 * @param $output
+	 * @param $object_id
+	 * @param $meta_key
+	 * @param $single
+	 * @param $meta_type
+	 *
+	 * @return array|array[]|mixed|string|string[]
+	 */
+	public static function _wp_attachment_metadata( $output, $object_id, $meta_key, $single, $meta_type ) {
+
+		// a unique GD prefix (GeoDir in ASCII)
+		$geodir_ascii = 7110111168105114;
+		if ( '_wp_attachment_metadata' === $meta_key && strpos( $object_id, $geodir_ascii ) === 0 ) {
+
+
+			$gd_attachment_id_parts = explode( $geodir_ascii, $object_id );
+			$gd_attachment_id       = end( $gd_attachment_id_parts );
+			$gd_attachment          = GeoDir_Media::get_attachment_by_id( $gd_attachment_id );
+
+			$meta = isset( $gd_attachment->metadata ) ? maybe_unserialize( $gd_attachment->metadata ) : '';
+			if ( ! empty( $meta ) ) {
+				$output = $single ? [ $meta ] : $meta;
+			} elseif ( ! empty( $gd_attachment->file ) ) {
+
+				// if its an external image we still need to return some meta or it will fail the bricks checks
+				$meta   = [
+					'file' => $gd_attachment->file,
+				];
+				$output = $single ? [ $meta ] : $meta;
+
+			}
+
+		}
+
+		return $output;
 	}
 
 	public static function init_hooks() {

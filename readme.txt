@@ -321,6 +321,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.97 - TBD =
 * Enabling Bricks Builder shows _load_textdomain_just_in_time was called incorrectly - FIXED
+* Bricks Theme, Images post meta now work in dynamic data - FIXED  
+* Bricks Theme, Images category meta work in dynamic data - FIXED
 * Added new hooks in add listing map template - ADDED
 
 = GeoDirectory v2.8.96 - 2025-01-09 =
