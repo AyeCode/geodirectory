@@ -888,13 +888,14 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			$_filter_ids = explode( ',', $filter_ids );
 
 			foreach ( $_filter_ids as $filter_id ) {
-				$filter_id = trim( $filter_id );
+				$filter_id = (int) trim( $filter_id );
+				$absint_filter_id = absint( $filter_id );
 
-				if ( absint( $filter_id ) > 0 ) {
-					if ( abs( $filter_id ) != $filter_id ) {
-						$filter_terms['exclude'][] = absint( $filter_id );
+				if ( $absint_filter_id > 0 ) {
+					if ( $absint_filter_id != $filter_id ) {
+						$filter_terms['exclude'][] = $absint_filter_id;
 					} else {
-						$filter_terms['include'][] = absint( $filter_id );
+						$filter_terms['include'][] = $absint_filter_id;
 					}
 				}
 			}
