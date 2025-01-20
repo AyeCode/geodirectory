@@ -434,11 +434,11 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
 		}
 	}
 
-    $location_terms = array();
-    $location_terms['gd_neighbourhood'] = !empty($wp->query_vars['neighbourhood']) ? $wp->query_vars['neighbourhood'] : '';
-    $location_terms['gd_city'] = !empty($wp->query_vars['city']) ? $wp->query_vars['city'] : '';
-    $location_terms['gd_region'] = !empty($wp->query_vars['region']) ? $wp->query_vars['region'] : '';
-    $location_terms['gd_country'] = !empty($wp->query_vars['country']) ? $wp->query_vars['country'] : '';
+	$location_terms = array();
+	$location_terms['gd_neighbourhood'] = ! empty( $wp->query_vars['neighbourhood'] ) && is_scalar( $wp->query_vars['neighbourhood'] ) ? $wp->query_vars['neighbourhood'] : '';
+	$location_terms['gd_city'] = ! empty( $wp->query_vars['city'] ) && is_scalar( $wp->query_vars['city'] ) ? $wp->query_vars['city'] : '';
+	$location_terms['gd_region'] = ! empty( $wp->query_vars['region'] ) && is_scalar( $wp->query_vars['region'] ) ? $wp->query_vars['region'] : '';
+	$location_terms['gd_country'] = ! empty( $wp->query_vars['country'] ) && is_scalar( $wp->query_vars['country'] ) ? $wp->query_vars['country'] : '';
 
     // On single page set neighbourhood from post.
     if ( ! empty( $location_terms['gd_city'] ) && empty( $location_terms['gd_neighbourhood'] ) && ( $gd_page == 'single' || geodir_is_page( 'single' ) ) && ! empty( $gd_post->neighbourhood ) ) {
