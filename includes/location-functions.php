@@ -61,7 +61,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '', $return_array =
 				'data-country_code' => $ccode,
 				'data-country_lat'  => $gps['lat'],
 				'data-country_lon'  => $gps['lon']
-				
+
 			)
 		);
 	}
@@ -257,7 +257,7 @@ function geodir_get_current_location_terms( $location_array_from = null, $gd_pos
 		$location_array[ $location_term ] = isset( $geodirectory->location->{$location_term . "_slug"} ) ? $geodirectory->location->{$location_term . "_slug"} : '';
 	}
 
-	// Set empty locations terms when outside default location active. 
+	// Set empty locations terms when outside default location active.
 	if ( geodir_core_multi_city() && ! geodir_is_page( 'single' ) && ! geodir_is_page( 'search' ) ) {
 		$location_array = array();
 	}
@@ -509,13 +509,13 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
         }
     }
     $full_location = !empty($full_location) ? implode(', ', $full_location): '';
-    
+
     if ( empty( $full_location ) ) {
         /**
          * Filter the text in meta description in full location is empty.
          *
          * @since 1.6.22
-         * 
+         *
          * @param string $full_location Default: Empty.
          * @param array  $location_array The array of location variables.
          * @param string $gd_page       The page being filtered.
@@ -523,13 +523,13 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
          */
          $full_location = apply_filters( 'geodir_meta_description_location_empty_text', '', $location_array, $gd_page, $sep );
     }
-    
+
     if ( empty( $location_single ) ) {
         /**
          * Filter the text in meta description in single location is empty.
          *
          * @since 1.6.22
-         * 
+         *
          * @param string $location_single Default: Empty.
          * @param array $location_array The array of location variables.
          * @param string $gd_page       The page being filtered.

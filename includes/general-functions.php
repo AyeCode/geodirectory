@@ -727,7 +727,7 @@ function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
 
 	if ( ! $dist ) {
 		if ( get_query_var( 'dist' ) ) {
-			$dist = get_query_var('dist');
+			$dist = geodir_sanitize_float( get_query_var('dist') );
 		}elseif(wp_doing_ajax() && !empty($wp->query_vars['dist'])){
 			$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
 		}else{

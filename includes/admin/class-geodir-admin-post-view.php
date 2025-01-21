@@ -308,13 +308,13 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			/* translators: 1: user display name 2: user ID 3: user email */
 			$curent_user_name	= sprintf(
 				esc_html__( '%1$s (#%2$s &ndash; %3$s)', 'geodirectory' ),
-				$user->display_name,
+				preg_replace('/[^a-zA-Z0-9\s]/', '', $user->display_name ), // select2 can convert broken html tags into working ones which could result in XSS
 				absint( $user->ID ),
-				$user->user_email
+				sanitize_email( $user->user_email )
 			);
 			?>
 			<label class="screen-reader-text" for="post_author_override"><?php _e('User', 'geodirectory'); ?></label>
-			<select class="geodir-user-search" name="post_author_override" id="post_author_override" data-placeholder="<?php esc_attr_e( 'Search for a user&hellip;', 'geodirectory' ); ?>" data-allow_clear="false"><option value="<?php echo esc_attr( $curent_user_id ); ?>" selected="selected"><?php echo $curent_user_name; ?><option></select>
+			<select class="geodir-user-search" name="post_author_override" id="post_author_override" data-placeholder="<?php esc_attr_e( 'Search for a user&hellip;', 'geodirectory' ); ?>" data-allow_clear="false"><option value="<?php echo esc_attr( $curent_user_id ); ?>" selected="selected"><?php echo esc_attr( $curent_user_name ); ?><option></select>
 			<?php
 		}
 
