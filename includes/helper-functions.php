@@ -304,40 +304,42 @@ function geodir_strtoupper($string, $charset='UTF-8') {
  * @param bool $formatted True if returns formatted url. False if not. Default true.
  * @return array Parsed url and title.
  */
-function geodir_parse_custom_field_url($url, $formatted = true) {
-	if ($url == '' || !is_string($url)) {
+function geodir_parse_custom_field_url( $url, $formatted = true ) {
+	if ( $url == '' || ! is_string( $url ) ) {
 		return NULL;
 	}
+
 	$original_url = $url;
-	
-	$url = stripcslashes($url);
-	$parts = explode('|', $url, 2);
-	
-	$url = trim($parts[0]);
-	if ($formatted && $url != '') {
+
+	$url = stripcslashes( $url );
+	$parts = explode( '|', $url, 2 );
+
+	$url = trim( $parts[0] );
+	if ( $formatted && $url != '' ) {
 		$url = str_replace( ' ', '%20', $url );
-		$url = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\[\]\\x80-\\xff]|i', '', $url);
-		
-		if (0 !== stripos($url, 'mailto:')) {
-			$strip = array('%0d', '%0a', '%0D', '%0A');
-			$url = _deep_replace($strip, $url);
+		$url = preg_replace( '|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\[\]\\x80-\\xff]|i', '', $url );
+
+		if ( 0 !== stripos( $url, 'mailto:' ) ) {
+			$strip = array( '%0d', '%0a', '%0D', '%0A' );
+			$url = _deep_replace( $strip, $url );
 		}
-		
-		$url = str_replace(';//', '://', $url);
-		
-		if (strpos($url, ':') === false && ! in_array($url[0], array('/', '#', '?')) && !preg_match('/^[a-z0-9-]+?\.php/i', $url)) {
+
+		$url = str_replace( ';//', '://', $url );
+
+		if ( strpos( $url, ':' ) === false && ! in_array( $url[0], array('/', '#', '?' ) ) && ! preg_match( '/^[a-z0-9-]+?\.php/i', $url ) ) {
 			$url = 'http://' . $url;
 		}
-		
-		$url = wp_kses_normalize_entities($url);
-		$url = str_replace('&amp;', '&#038;', $url);
-		$url = str_replace("'", '&#039;', $url);
+
+		$url = wp_kses_normalize_entities( $url );
+		$url = str_replace( '&amp;', '&#038;', $url );
+		$url = str_replace( "'", '&#039;', $url );
 	}
-	
+
 	$return = array();
 	$return['url'] = $url;
-	if (!empty($parts[1]) && trim($parts[1]) != '') {
-		$return['label'] = trim($parts[1]);
+
+	if ( ! empty( $parts[1] ) && trim( $parts[1] ) != '') {
+		$return['label'] = trim( urldecode( $parts[1] ) );
 	}
 
 	return $return;

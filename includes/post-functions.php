@@ -1808,7 +1808,32 @@ add_filter( 'geodir_custom_field_value_phone', 'geodir_validate_custom_field_val
 add_filter( 'geodir_custom_field_value_radio', 'geodir_validate_custom_field_value_text', 10, 6 );
 add_filter( 'geodir_custom_field_value_select', 'geodir_validate_custom_field_value_text', 10, 6 );
 add_filter( 'geodir_custom_field_value_text', 'geodir_validate_custom_field_value_text', 10, 6 );
-add_filter( 'geodir_custom_field_value_url', 'geodir_validate_custom_field_value_text', 10, 6 );
+
+/**
+ * Sanitize url value.
+ *
+ * @since 2.3.99
+ *
+ * @param string $value Field value.
+ * @param object $gd_post GeoDirectory post object.
+ * @param object $custom_field Custom field.
+ * @param int $post_id Post id.
+ * @param object $post Post.
+ * @param string $update Update.
+ * @return string $value Sanitized url.
+ */
+function geodir_validate_custom_field_value_url( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
+	if ( $value != '' ) {
+		if ( is_array( $value ) ) {
+			$value = array_map( 'sanitize_url', $value );
+		} else {
+			$value = is_scalar( $value ) ? sanitize_url( wp_unslash( $value ) ) : $value;
+		}
+	}
+
+	return $value;
+}
+add_filter( 'geodir_custom_field_value_url', 'geodir_validate_custom_field_value_url', 10, 6 );
 
 /**
  * Sanitize textarea/html value.
