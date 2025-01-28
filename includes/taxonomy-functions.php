@@ -171,87 +171,87 @@ function geodir_get_taxonomy_posttype($taxonomy = '')
         return false;
 }
 
-if (!function_exists('geodir_custom_taxonomy_walker')) {
-    /**
-     * Custom taxonomy walker function.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @param string $cat_taxonomy The taxonomy name.
-     * @param int $cat_parent The parent term ID.
-     * @param bool $hide_empty Hide empty taxonomies? Default: false.
-     * @param int $pading CSS padding in pixels.
-     * @return string|void taxonomy HTML.
-     */
-    function geodir_custom_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = false, $pading = 0)
-    {
-        global $cat_display, $post_cat, $exclude_cats;
+if ( ! function_exists( 'geodir_custom_taxonomy_walker' ) ) {
+	/**
+	 * Custom taxonomy walker function.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $cat_taxonomy The taxonomy name.
+	 * @param int $cat_parent The parent term ID.
+	 * @param bool $hide_empty Hide empty taxonomies? Default: false.
+	 * @param int $pading CSS padding in pixels.
+	 * @return string|void taxonomy HTML.
+	 */
+	function geodir_custom_taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty = false, $pading = 0 ) {
+		global $cat_display, $post_cat, $exclude_cats;
 
-        $search_terms = trim($post_cat, ",");
+		$search_terms = ! is_null( $post_cat ) && $post_cat !== "" ? trim( $post_cat, "," ) : '';
+		$search_terms = explode( ",", $search_terms );
 
-        $search_terms = explode(",", $search_terms);
+		$cat_terms = get_terms( $cat_taxonomy, array( 'parent' => $cat_parent, 'hide_empty' => $hide_empty, 'exclude' => $exclude_cats ) );
 
-        $cat_terms = get_terms($cat_taxonomy, array('parent' => $cat_parent, 'hide_empty' => $hide_empty, 'exclude' => $exclude_cats));
+		$display = '';
+		$onchange = '';
+		$term_check = '';
+		$main_list_class = '';
+		$out = '';
 
-        $display = '';
-        $onchange = '';
-        $term_check = '';
-        $main_list_class = '';
-        $out = '';
-        //If there are terms, start displaying
-        if (count($cat_terms) > 0) {
-            //Displaying as a list
-            $p = $pading * 20;
-            $pading++;
+		// If there are terms, start displaying.
+		if ( count( $cat_terms ) > 0 ) {
+			// Displaying as a list.
+			$p = $pading * 20;
+			$pading++;
 
+			if ( ( ! geodir_is_page( 'listing' ) ) || ( is_search() && $_REQUEST['search_taxonomy'] == '' ) ) {
+				if ( $cat_parent == 0 ) {
+					$list_class = 'main_list gd-parent-cats-list gd-cats-display-' . $cat_display;
+					$main_list_class = 'class="main_list_selecter"';
+				} else {
+					//$display = 'display:none';
+					$list_class = 'sub_list gd-sub-cats-list';
+				}
+			}
 
-            if ((!geodir_is_page('listing')) || (is_search() && $_REQUEST['search_taxonomy'] == '')) {
-                if ($cat_parent == 0) {
-                    $list_class = 'main_list gd-parent-cats-list gd-cats-display-' . $cat_display;
-                    $main_list_class = 'class="main_list_selecter"';
-                } else {
-                    //$display = 'display:none';
-                    $list_class = 'sub_list gd-sub-cats-list';
-                }
-            }
+			if ( $cat_display == 'checkbox' || $cat_display == 'radio' ) {
+				$p = 0;
+				$out = '<div class="' . $list_class . ' gd-cat-row-' . $cat_parent . '" style="margin-left:' . $p . 'px;' . $display . ';">';
+			}
 
-            if ($cat_display == 'checkbox' || $cat_display == 'radio') {
-                $p = 0;
-                $out = '<div class="' . $list_class . ' gd-cat-row-' . $cat_parent . '" style="margin-left:' . $p . 'px;' . $display . ';">';
-            }
+			foreach ( $cat_terms as $cat_term ) {
+				$term_name = geodir_utf8_ucfirst( $cat_term->name );
 
-            foreach ($cat_terms as $cat_term) {
+				$checked = '';
 
-                $checked = '';
+				if ( in_array( $cat_term->term_id, $search_terms ) ) {
+					if ( $cat_display == 'select' || $cat_display == 'multiselect' ) {
+						$checked = 'selected="selected"';
+					} else {
+						$checked = 'checked="checked"';
+					}
+				}
 
-                if (in_array($cat_term->term_id, $search_terms)) {
-                    if ($cat_display == 'select' || $cat_display == 'multiselect')
-                        $checked = 'selected="selected"';
-                    else
-                        $checked = 'checked="checked"';
-                }
+				if ( $cat_display == 'radio' ) {
+					$out .= '<span style="display:block" ><input type="radio" field_type="radio" name="tax_input[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . esc_attr( $cat_term->taxonomy ) . '" title="' . esc_attr( $term_name ) . '" value="' . (int) $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . (int) $cat_term->term_id . '" >' . $term_check . $term_name . '</span>';
+				} else if ( $cat_display == 'select' || $cat_display == 'multiselect' ) {
+					$out .= '<option ' . $main_list_class . ' style="margin-left:' . esc_attr( $p ) . 'px;" alt="' . esc_attr( $cat_term->taxonomy ) . '" title="' . esc_attr( $term_name ) . '" value="' . (int) $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . $term_name . '</option>';
+				} else {
+					$out .= '<span style="display:block"><input style="display:inline-block" type="checkbox" field_type="checkbox" name="tax_input[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . esc_attr( $cat_term->taxonomy ) . '" title="' . esc_attr( $term_name ) . '" value="' . (int) $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . esc_attr( $cat_term->term_id ) . '" >' . $term_check . $term_name . '</span>';
+				}
 
-                if ($cat_display == 'radio')
-                    $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="tax_input[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
-                elseif ($cat_display == 'select' || $cat_display == 'multiselect')
-                    $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</option>';
+				// Call recurson to print sub cats.
+				$out .= geodir_custom_taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $pading );
+			}
 
-                else {
-                    $out .= '<span style="display:block"><input style="display:inline-block" type="checkbox" field_type="checkbox" name="tax_input[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
-                }
+			if ( $cat_display == 'checkbox' || $cat_display == 'radio' ) {
+				$out .= '</div>';
+			}
 
-                // Call recurson to print sub cats
-                $out .= geodir_custom_taxonomy_walker($cat_taxonomy, $cat_term->term_id, $hide_empty, $pading);
+			return $out;
+		}
 
-            }
-
-            if ($cat_display == 'checkbox' || $cat_display == 'radio')
-                $out .= '</div>';
-
-            return $out;
-        }
-        return;
-    }
+		return;
+	}
 }
 
 /**
