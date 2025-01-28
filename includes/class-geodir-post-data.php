@@ -230,6 +230,16 @@ class GeoDir_Post_Data {
 							self::remove_post_revisions( $post_id, $user_id );
 							GeoDir_Comments::update_post_rating( $post_id, $post_type);
 						}
+
+						/*
+						 * Handle GD post revision restore.
+						 *
+						 * @since 2.8.99
+						 *
+						 * @param int $post_id The post ID.
+						 * @param int $revision_id The revision ID.
+						 */
+						do_action( 'geodir_post_revision_restored', $post_id, $revision_id );
 					}
 				}
 			}
