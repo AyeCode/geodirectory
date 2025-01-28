@@ -695,22 +695,7 @@ function geodir_get_image_dimension( $image_url, $default = array() ) {
 
 	$dimension = array();
 	if ( is_file( $image_url ) && file_exists( $image_url ) ) {
-		$size = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( trim( $image_url ) ) : @getimagesize( trim( $image_url ) );
-
-		// Check for .svg image
-		if ( empty( $size ) && preg_match( '/\.svg$/i', $image_url ) ) {
-			if ( ( $xml = simplexml_load_file( $image_url ) ) !== false ) {
-				$attributes = $xml->attributes();
-
-				if ( ! empty( $attributes ) && isset( $attributes->viewBox ) ) {
-					$viewbox = explode( ' ', $attributes->viewBox );
-
-					$size = array();
-					$size[0] = isset( $attributes->width ) && preg_match( '/\d+/', $attributes->width, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[2] ) : 0 );
-					$size[1] = isset( $attributes->height ) && preg_match( '/\d+/', $attributes->height, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[3] ) : 0 );
-				}
-			}
-		}
+		$size = geodir_getimagesize( trim( $image_url ) );
 
 		if ( ! empty( $size ) && ! empty( $size[0] ) && ! empty( $size[1] ) ) {
 			$dimension = array( 'width' => $size[0], 'height' => $size[1] );
@@ -722,6 +707,37 @@ function geodir_get_image_dimension( $image_url, $default = array() ) {
 	$geodir_image_dimension[ $_image_url ] = $dimension;
 
 	return $dimension;
+}
+
+/**
+ * Get image size.
+ *
+ * @since 2.3.99
+ *
+ * @param string $image_path The image path.
+ * @return array Image size array(width, height).
+ */
+function geodir_getimagesize( $image_path ) {
+	$size = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( $image_path ) : @getimagesize( $image_path );
+
+	if ( empty( $size ) ) {
+		$size = array();
+
+		// Check for .svg icon.
+		if ( preg_match( '/\.svg$/i', $image_path ) && ( $xml = simplexml_load_file( $image_path ) ) !== false ) {
+			$attributes = $xml->attributes();
+
+			if ( ! empty( $attributes ) && ( isset( $attributes->viewBox ) || isset( $attributes->viewbox ) ) ) {
+				// Mapmarker.io icon contains viewbox. 
+				$viewbox = $attributes->viewBox ? explode( ' ', $attributes->viewBox ) : explode( ' ', $attributes->viewbox );
+
+				$size[0] = isset( $attributes->width ) && preg_match( '/\d+/', $attributes->width, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[2] ) : 0 );
+				$size[1] = isset( $attributes->height ) && preg_match( '/\d+/', $attributes->height, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[3] ) : 0 );
+			}
+		}
+	}
+
+	return $size;
 }
 
 /**
