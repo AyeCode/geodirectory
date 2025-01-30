@@ -181,7 +181,9 @@ class Provider_Geodir extends Base {
 			return apply_filters( 'geodir_bricks_get_cat_meta_tag_value', $value, $key, $tag, $args, $context, $post, $this, $term_id );
 		}
 
-		return $tag;
+
+		return apply_filters( 'geodir_bricks_get_tag_value', $tag, $post, $args, $context );
+
 	}
 
 	public function get_post_meta_keys() {
@@ -200,6 +202,6 @@ class Provider_Geodir extends Base {
 		$keys['image'] = __( 'Category Image', 'geodirectory' );
 		$keys['schema'] = __( 'Category Schema', 'geodirectory' );
 
-		return apply_filters( 'geodir_bricks_dynamic_data_tags', $keys, $this );
+		return apply_filters( 'geodir_bricks_category_meta_keys', $keys, $this );
 	}
 }
