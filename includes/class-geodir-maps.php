@@ -96,22 +96,7 @@ class GeoDir_Maps {
 
 		$sizes = array();
 		if ( is_file( $icon ) && file_exists( $icon ) ) {
-			$size = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( trim( $icon ) ) : @getimagesize( trim( $icon ) );
-
-			// Check for .svg image
-			if ( empty( $size ) && preg_match( '/\.svg$/i', $icon ) ) {
-				if ( ( $xml = simplexml_load_file( $icon ) ) !== false ) {
-					$attributes = $xml->attributes();
-
-					if ( ! empty( $attributes ) && isset( $attributes->viewBox ) ) {
-						$viewbox = explode( ' ', $attributes->viewBox );
-
-						$size = array();
-						$size[0] = isset( $attributes->width ) && preg_match( '/\d+/', $attributes->width, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[2] ) : 0 );
-						$size[1] = isset( $attributes->height ) && preg_match( '/\d+/', $attributes->height, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[3] ) : 0 );
-					}
-				}
-			}
+			$size = geodir_getimagesize( trim( $icon ) );
 
 			if ( ! empty( $size[0] ) && ! empty( $size[1] ) ) {
 				$sizes = array( 'w' => $size[0], 'h' => $size[1] );

@@ -147,6 +147,13 @@ jQuery(document).ready(function($) {
             }, 200);
         }
     });
+
+    /* Hide embed wrapper when embed iframe is hidden */
+    $(".geodir-embed-container > iframe.wp-embedded-content").each(function() {
+        if ($(this).css("visibility") == "hidden") {
+            $(this).closest(".ratio,.embed-responsive").removeClass("ratio ratio-16x9 embed-responsive embed-responsive-16by9");
+        }
+    });
 });
 
 /**
