@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.97\n"
+"Project-Id-Version: GeoDirectory 2.8.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-16 20:25+0530\n"
-"PO-Revision-Date: 2025-01-16 20:25+0530\n"
+"POT-Creation-Date: 2025-01-30 20:31+0530\n"
+"PO-Revision-Date: 2025-01-30 20:31+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -192,7 +192,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:845
 #: includes/api/class-geodir-rest-posts-controller.php:2198
 #: includes/class-geodir-location.php:365
-#: includes/class-geodir-location.php:419 includes/post-functions.php:2162
+#: includes/class-geodir-location.php:419 includes/post-functions.php:2187
 msgid "Country"
 msgstr ""
 
@@ -206,7 +206,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:835
 #: includes/api/class-geodir-rest-posts-controller.php:2212
 #: includes/class-geodir-location.php:384
-#: includes/class-geodir-location.php:431 includes/post-functions.php:2151
+#: includes/class-geodir-location.php:431 includes/post-functions.php:2176
 msgid "Region"
 msgstr ""
 
@@ -220,7 +220,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:825
 #: includes/api/class-geodir-rest-posts-controller.php:2226
 #: includes/class-geodir-location.php:404
-#: includes/class-geodir-location.php:440 includes/post-functions.php:2140
+#: includes/class-geodir-location.php:440 includes/post-functions.php:2165
 msgid "City"
 msgstr ""
 
@@ -241,7 +241,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1227
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
-#: includes/custom-fields/functions.php:678 includes/post-functions.php:2173
+#: includes/custom-fields/functions.php:678 includes/post-functions.php:2198
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -919,7 +919,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:514
 #: includes/admin/settings/class-geodir-settings-general.php:557
 #: includes/admin/settings/class-geodir-settings-general.php:599
-#: includes/class-geodir-post-data.php:1651 includes/core-functions.php:372
+#: includes/class-geodir-post-data.php:1661 includes/core-functions.php:372
 #: includes/widgets/class-geodir-widget-add-listing.php:315
 #: includes/widgets/class-geodir-widget-az-search.php:45
 #: includes/widgets/class-geodir-widget-az-search.php:94
@@ -1359,7 +1359,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-conditional-fields.php:258
 #: includes/class-geodir-privacy-exporters.php:344
 #: includes/custom-fields/input-functions-aui.php:1984
-#: includes/post-functions.php:1187 includes/post-functions.php:1944
+#: includes/post-functions.php:1187 includes/post-functions.php:1969
 #: includes/widgets/class-geodir-widget-dynamic-content.php:407
 #: includes/widgets/class-geodir-widget-dynamic-content.php:470
 #: includes/widgets/class-geodir-widget-dynamic-content.php:495
@@ -1554,8 +1554,8 @@ msgstr ""
 #: includes/admin/dummy-data/job_board.php:572
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:418
 #: includes/class-geodir-comments.php:95
-#: includes/class-geodir-post-data.php:977
-#: includes/class-geodir-post-data.php:998
+#: includes/class-geodir-post-data.php:987
+#: includes/class-geodir-post-data.php:1008
 #: includes/widgets/class-geodir-widget-ninja-forms.php:429 language.php:35
 #: language.php:55 language.php:124 language.php:140
 msgid "Email"
@@ -1586,7 +1586,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1053
 #: includes/admin/class-geodir-admin-dummy-data.php:1061
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:679
-#: includes/helper-functions.php:1907 language.php:57
+#: includes/helper-functions.php:1909 language.php:57
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1144
 msgid "Twitter"
 msgstr ""
@@ -1599,7 +1599,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1068
 #: includes/admin/class-geodir-admin-dummy-data.php:1076
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:650
-#: includes/helper-functions.php:1906 language.php:58
+#: includes/helper-functions.php:1908 language.php:58
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1143
 msgid "Facebook"
 msgstr ""
@@ -1633,7 +1633,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1134
 #: includes/admin/dummy-data/classifieds.php:914
-#: includes/class-geodir-post-data.php:896
+#: includes/class-geodir-post-data.php:906
 msgid "Listing"
 msgstr ""
 
@@ -1672,7 +1672,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1190
 #: includes/admin/class-geodir-admin-dummy-data.php:1192
 #: includes/admin/class-geodir-admin-dummy-data.php:1201
-#: includes/class-geodir-post-data.php:1657
+#: includes/class-geodir-post-data.php:1667
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:952
 #: includes/widgets/class-geodir-widget-simple-archive.php:427 language.php:59
 #: language.php:175
@@ -1686,8 +1686,8 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1210
 #: includes/admin/class-geodir-admin-dummy-data.php:1212
 #: includes/admin/class-geodir-admin-dummy-data.php:1222
-#: includes/class-geodir-post-data.php:1654
-#: includes/custom-fields/functions.php:668 includes/post-functions.php:2118
+#: includes/class-geodir-post-data.php:1664
+#: includes/custom-fields/functions.php:668 includes/post-functions.php:2143
 msgid "Address"
 msgstr ""
 
@@ -2188,7 +2188,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:146
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:300
-#: includes/post-functions.php:2043
+#: includes/post-functions.php:2068
 msgid "Status"
 msgstr ""
 
@@ -2623,7 +2623,7 @@ msgid "Unpublished"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-report-post-list-table.php:773
-#: includes/post-functions.php:1987 includes/post-functions.php:1998
+#: includes/post-functions.php:2012 includes/post-functions.php:2023
 #: includes/widgets/class-geodir-widget-author-actions.php:359
 msgid "Published"
 msgstr ""
@@ -3242,13 +3242,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:303
 #: includes/admin/class-geodir-admin-taxonomies.php:368
-#: includes/integrations/bricks/provider-geodir.php:190
+#: includes/integrations/bricks/provider-geodir.php:197
 msgid "Category Top Description"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:308
 #: includes/admin/class-geodir-admin-taxonomies.php:373
-#: includes/integrations/bricks/provider-geodir.php:191
+#: includes/integrations/bricks/provider-geodir.php:198
 msgid "Category Bottom Description"
 msgstr ""
 
@@ -3264,13 +3264,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:324
 #: includes/admin/class-geodir-admin-taxonomies.php:389
-#: includes/integrations/bricks/provider-geodir.php:192
+#: includes/integrations/bricks/provider-geodir.php:199
 msgid "Category Icon"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:330
 #: includes/admin/class-geodir-admin-taxonomies.php:395
-#: includes/integrations/bricks/provider-geodir.php:194
+#: includes/integrations/bricks/provider-geodir.php:201
 msgid "Category Color"
 msgstr ""
 
@@ -3344,8 +3344,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:1034
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:185
-#: includes/class-geodir-elementor.php:1800 includes/helper-functions.php:1680
-#: includes/helper-functions.php:1780
+#: includes/class-geodir-elementor.php:1800 includes/helper-functions.php:1682
+#: includes/helper-functions.php:1782
 #: includes/widgets/class-geodir-widget-categories.php:163
 #: includes/widgets/class-geodir-widget-categories.php:173
 #: includes/widgets/class-geodir-widget-categories.php:183
@@ -3596,7 +3596,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-categories.php:211
 #: includes/admin/views/html-admin-settings-import-export-listings.php:197
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:193
-#: includes/core-functions.php:1109 includes/post-functions.php:1977
+#: includes/core-functions.php:1109 includes/post-functions.php:2002
 #: includes/widgets/class-geodir-widget-dynamic-content.php:499
 #: language.php:174 templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
@@ -4314,7 +4314,7 @@ msgid "Portfolio link 8"
 msgstr ""
 
 #: includes/admin/dummy-data/job_board.php:78
-#: includes/helper-functions.php:1724
+#: includes/helper-functions.php:1726
 msgid "Latest"
 msgstr ""
 
@@ -5122,7 +5122,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:708
-#: includes/helper-functions.php:1908
+#: includes/helper-functions.php:1910
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1145
 msgid "Instagram"
 msgstr ""
@@ -5775,8 +5775,8 @@ msgstr ""
 #: includes/admin/views/html-admin-page-status-report.php:578
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:22
 #: includes/class-geodir-comments.php:79
-#: includes/class-geodir-post-data.php:963
-#: includes/class-geodir-post-data.php:991 language.php:33 language.php:123
+#: includes/class-geodir-post-data.php:973
+#: includes/class-geodir-post-data.php:1001 language.php:33 language.php:123
 msgid "Name"
 msgstr ""
 
@@ -10311,85 +10311,85 @@ msgid "Limit results to taxonomies associated with a specific post type."
 msgstr ""
 
 #: includes/business-hours-functions.php:29 includes/general-functions.php:229
-#: includes/helper-functions.php:637
+#: includes/helper-functions.php:639
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2339
 msgid "Monday"
 msgstr ""
 
 #: includes/business-hours-functions.php:30 includes/general-functions.php:230
-#: includes/helper-functions.php:638
+#: includes/helper-functions.php:640
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2340
 msgid "Tuesday"
 msgstr ""
 
 #: includes/business-hours-functions.php:31 includes/general-functions.php:231
-#: includes/helper-functions.php:639
+#: includes/helper-functions.php:641
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2341
 msgid "Wednesday"
 msgstr ""
 
 #: includes/business-hours-functions.php:32 includes/general-functions.php:232
-#: includes/helper-functions.php:640
+#: includes/helper-functions.php:642
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2342
 msgid "Thursday"
 msgstr ""
 
 #: includes/business-hours-functions.php:33 includes/general-functions.php:233
-#: includes/helper-functions.php:641
+#: includes/helper-functions.php:643
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2343
 msgid "Friday"
 msgstr ""
 
 #: includes/business-hours-functions.php:34 includes/general-functions.php:234
-#: includes/helper-functions.php:642
+#: includes/helper-functions.php:644
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2344
 msgid "Saturday"
 msgstr ""
 
 #: includes/business-hours-functions.php:35 includes/general-functions.php:228
-#: includes/helper-functions.php:636
+#: includes/helper-functions.php:638
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2338
 msgid "Sunday"
 msgstr ""
 
 #: includes/business-hours-functions.php:62
-#: includes/business-hours-functions.php:2057 includes/helper-functions.php:674
+#: includes/business-hours-functions.php:2057 includes/helper-functions.php:676
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2332
 msgid "Mon"
 msgstr ""
 
 #: includes/business-hours-functions.php:63
-#: includes/business-hours-functions.php:2058 includes/helper-functions.php:675
+#: includes/business-hours-functions.php:2058 includes/helper-functions.php:677
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2333
 msgid "Tue"
 msgstr ""
 
 #: includes/business-hours-functions.php:64
-#: includes/business-hours-functions.php:2059 includes/helper-functions.php:676
+#: includes/business-hours-functions.php:2059 includes/helper-functions.php:678
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2334
 msgid "Wed"
 msgstr ""
 
 #: includes/business-hours-functions.php:65
-#: includes/business-hours-functions.php:2060 includes/helper-functions.php:677
+#: includes/business-hours-functions.php:2060 includes/helper-functions.php:679
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2335
 msgid "Thu"
 msgstr ""
 
 #: includes/business-hours-functions.php:66
-#: includes/business-hours-functions.php:2061 includes/helper-functions.php:678
+#: includes/business-hours-functions.php:2061 includes/helper-functions.php:680
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2336
 msgid "Fri"
 msgstr ""
 
 #: includes/business-hours-functions.php:67
-#: includes/business-hours-functions.php:2062 includes/helper-functions.php:679
+#: includes/business-hours-functions.php:2062 includes/helper-functions.php:681
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2337
 msgid "Sat"
 msgstr ""
 
 #: includes/business-hours-functions.php:68
-#: includes/business-hours-functions.php:2063 includes/helper-functions.php:673
+#: includes/business-hours-functions.php:2063 includes/helper-functions.php:675
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2331
 msgid "Sun"
 msgstr ""
@@ -11410,7 +11410,7 @@ msgstr ""
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1165 includes/post-functions.php:2031
+#: includes/class-geodir-email.php:1165 includes/post-functions.php:2056
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:246
 msgid "Author"
 msgstr ""
@@ -11658,11 +11658,11 @@ msgstr ""
 msgid "Listing city is required."
 msgstr ""
 
-#: includes/class-geodir-maps.php:508
+#: includes/class-geodir-maps.php:493
 msgid "No category"
 msgstr ""
 
-#: includes/class-geodir-maps.php:605
+#: includes/class-geodir-maps.php:590
 msgid "Load Map"
 msgstr ""
 
@@ -11754,21 +11754,21 @@ msgstr ""
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:696
+#: includes/class-geodir-post-data.php:706
 #, php-format
 msgid "Could not update post in the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:706
+#: includes/class-geodir-post-data.php:716
 #, php-format
 msgid "Could not insert post into the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:836
+#: includes/class-geodir-post-data.php:846
 msgid "You do not have permission to edit this post."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:854
+#: includes/class-geodir-post-data.php:864
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -11776,7 +11776,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:878
+#: includes/class-geodir-post-data.php:888
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -11784,91 +11784,91 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:955
-#: includes/class-geodir-post-data.php:988
+#: includes/class-geodir-post-data.php:965
+#: includes/class-geodir-post-data.php:998
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:968
-#: includes/class-geodir-post-data.php:994
+#: includes/class-geodir-post-data.php:978
+#: includes/class-geodir-post-data.php:1004
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:982
-#: includes/class-geodir-post-data.php:1001
+#: includes/class-geodir-post-data.php:992
+#: includes/class-geodir-post-data.php:1011
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1027 language.php:36
+#: includes/class-geodir-post-data.php:1037 language.php:36
 msgid "Enter Listing Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1069
-#: includes/class-geodir-post-data.php:1075
+#: includes/class-geodir-post-data.php:1079
+#: includes/class-geodir-post-data.php:1085
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1086
+#: includes/class-geodir-post-data.php:1096
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1105
+#: includes/class-geodir-post-data.php:1115
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1299
+#: includes/class-geodir-post-data.php:1309
 msgid "You do not own this post"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1308
+#: includes/class-geodir-post-data.php:1318
 msgid "Delete revision failed."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1397
-#: includes/class-geodir-post-data.php:1640
+#: includes/class-geodir-post-data.php:1407
+#: includes/class-geodir-post-data.php:1650
 msgid "You do not have the privileges to perform this action."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1547
+#: includes/class-geodir-post-data.php:1557
 msgid "User name must have atleast 3 characters."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1549
+#: includes/class-geodir-post-data.php:1559
 msgid "Invalid user email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1575
+#: includes/class-geodir-post-data.php:1585
 msgid "Something wrong! Fail to register a new user."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1661
+#: includes/class-geodir-post-data.php:1671
 #, php-format
 msgid "%s is empty but is a mandatory field, please check and try again."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1754
+#: includes/class-geodir-post-data.php:1764
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1757
+#: includes/class-geodir-post-data.php:1767
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1764
+#: includes/class-geodir-post-data.php:1774
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1770
+#: includes/class-geodir-post-data.php:1780
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1858
+#: includes/class-geodir-post-data.php:1868
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -13975,12 +13975,12 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
-#: includes/general-functions.php:2658 includes/helper-functions.php:693
+#: includes/general-functions.php:2658 includes/helper-functions.php:695
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2347
 msgid "AM"
 msgstr ""
 
-#: includes/general-functions.php:2659 includes/helper-functions.php:694
+#: includes/general-functions.php:2659 includes/helper-functions.php:696
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2348
 msgid "PM"
 msgstr ""
@@ -14144,406 +14144,406 @@ msgstr ""
 msgid "%1$s must be between %2$d (inclusive) and %3$d (inclusive)"
 msgstr ""
 
-#: includes/helper-functions.php:645
+#: includes/helper-functions.php:647
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2293
 msgid "January"
 msgstr ""
 
-#: includes/helper-functions.php:646
+#: includes/helper-functions.php:648
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2294
 msgid "February"
 msgstr ""
 
-#: includes/helper-functions.php:647
+#: includes/helper-functions.php:649
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2295
 msgid "March"
 msgstr ""
 
-#: includes/helper-functions.php:648
+#: includes/helper-functions.php:650
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2296
 msgid "April"
 msgstr ""
 
-#: includes/helper-functions.php:649
+#: includes/helper-functions.php:651
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2297
 msgid "May"
 msgstr ""
 
-#: includes/helper-functions.php:650
+#: includes/helper-functions.php:652
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2298
 msgid "June"
 msgstr ""
 
-#: includes/helper-functions.php:651
+#: includes/helper-functions.php:653
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2299
 msgid "July"
 msgstr ""
 
-#: includes/helper-functions.php:652
+#: includes/helper-functions.php:654
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2300
 msgid "August"
 msgstr ""
 
-#: includes/helper-functions.php:653
+#: includes/helper-functions.php:655
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2301
 msgid "September"
 msgstr ""
 
-#: includes/helper-functions.php:654
+#: includes/helper-functions.php:656
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2302
 msgid "October"
 msgstr ""
 
-#: includes/helper-functions.php:655
+#: includes/helper-functions.php:657
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2303
 msgid "November"
 msgstr ""
 
-#: includes/helper-functions.php:656
+#: includes/helper-functions.php:658
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2304
 msgid "December"
 msgstr ""
 
-#: includes/helper-functions.php:659
+#: includes/helper-functions.php:661
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2305
 msgctxt "January abbreviation"
 msgid "Jan"
 msgstr ""
 
-#: includes/helper-functions.php:660
+#: includes/helper-functions.php:662
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2306
 msgctxt "February abbreviation"
 msgid "Feb"
 msgstr ""
 
-#: includes/helper-functions.php:661
+#: includes/helper-functions.php:663
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2307
 msgctxt "March abbreviation"
 msgid "Mar"
 msgstr ""
 
-#: includes/helper-functions.php:662
+#: includes/helper-functions.php:664
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2308
 msgctxt "April abbreviation"
 msgid "Apr"
 msgstr ""
 
-#: includes/helper-functions.php:663
+#: includes/helper-functions.php:665
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2309
 msgctxt "May abbreviation"
 msgid "May"
 msgstr ""
 
-#: includes/helper-functions.php:664
+#: includes/helper-functions.php:666
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2310
 msgctxt "June abbreviation"
 msgid "Jun"
 msgstr ""
 
-#: includes/helper-functions.php:665
+#: includes/helper-functions.php:667
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2311
 msgctxt "July abbreviation"
 msgid "Jul"
 msgstr ""
 
-#: includes/helper-functions.php:666
+#: includes/helper-functions.php:668
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2312
 msgctxt "August abbreviation"
 msgid "Aug"
 msgstr ""
 
-#: includes/helper-functions.php:667
+#: includes/helper-functions.php:669
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2313
 msgctxt "September abbreviation"
 msgid "Sep"
 msgstr ""
 
-#: includes/helper-functions.php:668
+#: includes/helper-functions.php:670
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2314
 msgctxt "October abbreviation"
 msgid "Oct"
 msgstr ""
 
-#: includes/helper-functions.php:669
+#: includes/helper-functions.php:671
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2315
 msgctxt "November abbreviation"
 msgid "Nov"
 msgstr ""
 
-#: includes/helper-functions.php:670
+#: includes/helper-functions.php:672
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2316
 msgctxt "December abbreviation"
 msgid "Dec"
 msgstr ""
 
-#: includes/helper-functions.php:682
+#: includes/helper-functions.php:684
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2317
 msgctxt "Sunday initial"
 msgid "S"
 msgstr ""
 
-#: includes/helper-functions.php:683
+#: includes/helper-functions.php:685
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2318
 msgctxt "Monday initial"
 msgid "M"
 msgstr ""
 
-#: includes/helper-functions.php:684
+#: includes/helper-functions.php:686
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2319
 msgctxt "Tuesday initial"
 msgid "T"
 msgstr ""
 
-#: includes/helper-functions.php:685
+#: includes/helper-functions.php:687
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2320
 msgctxt "Wednesday initial"
 msgid "W"
 msgstr ""
 
-#: includes/helper-functions.php:686
+#: includes/helper-functions.php:688
 msgctxt "Thursday initial"
 msgid "T"
 msgstr ""
 
-#: includes/helper-functions.php:687
+#: includes/helper-functions.php:689
 msgctxt "Friday initial"
 msgid "F"
 msgstr ""
 
-#: includes/helper-functions.php:688
+#: includes/helper-functions.php:690
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2323
 msgctxt "Saturday initial"
 msgid "S"
 msgstr ""
 
-#: includes/helper-functions.php:691
+#: includes/helper-functions.php:693
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2345
 msgid "am"
 msgstr ""
 
-#: includes/helper-functions.php:692
+#: includes/helper-functions.php:694
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2346
 msgid "pm"
 msgstr ""
 
-#: includes/helper-functions.php:1723
+#: includes/helper-functions.php:1725
 #: includes/widgets/class-geodir-widget-categories.php:213
 msgid "A-Z"
 msgstr ""
 
-#: includes/helper-functions.php:1725
+#: includes/helper-functions.php:1727
 msgid "Most reviews"
 msgstr ""
 
-#: includes/helper-functions.php:1726
+#: includes/helper-functions.php:1728
 msgid "Highest rating"
 msgstr ""
 
-#: includes/helper-functions.php:1727
+#: includes/helper-functions.php:1729
 msgid "Random"
 msgstr ""
 
-#: includes/helper-functions.php:1731
+#: includes/helper-functions.php:1733
 msgid "Distance to current post (details page only)"
 msgstr ""
 
-#: includes/helper-functions.php:1861
+#: includes/helper-functions.php:1863
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1028
 msgid "Primary"
 msgstr ""
 
-#: includes/helper-functions.php:1862
+#: includes/helper-functions.php:1864
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1029
 msgid "Secondary"
 msgstr ""
 
-#: includes/helper-functions.php:1863
+#: includes/helper-functions.php:1865
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1030
 msgid "Success"
 msgstr ""
 
-#: includes/helper-functions.php:1864
+#: includes/helper-functions.php:1866
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1031
 msgid "Danger"
 msgstr ""
 
-#: includes/helper-functions.php:1865
+#: includes/helper-functions.php:1867
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1032
 msgid "Warning"
 msgstr ""
 
-#: includes/helper-functions.php:1866
+#: includes/helper-functions.php:1868
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1033
 msgid "Info"
 msgstr ""
 
-#: includes/helper-functions.php:1867
+#: includes/helper-functions.php:1869
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1034
 msgid "Light"
 msgstr ""
 
-#: includes/helper-functions.php:1868
+#: includes/helper-functions.php:1870
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1035
 msgid "Dark"
 msgstr ""
 
-#: includes/helper-functions.php:1869
+#: includes/helper-functions.php:1871
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1037
 msgid "White"
 msgstr ""
 
-#: includes/helper-functions.php:1870
+#: includes/helper-functions.php:1872
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1038
 msgid "Purple"
 msgstr ""
 
-#: includes/helper-functions.php:1871
+#: includes/helper-functions.php:1873
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1039
 msgid "Salmon"
 msgstr ""
 
-#: includes/helper-functions.php:1872
+#: includes/helper-functions.php:1874
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1040
 msgid "Cyan"
 msgstr ""
 
-#: includes/helper-functions.php:1873
+#: includes/helper-functions.php:1875
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1041
 msgid "Gray"
 msgstr ""
 
-#: includes/helper-functions.php:1874
+#: includes/helper-functions.php:1876
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1044
 msgid "Indigo"
 msgstr ""
 
-#: includes/helper-functions.php:1875
+#: includes/helper-functions.php:1877
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1045
 msgid "Orange"
 msgstr ""
 
-#: includes/helper-functions.php:1878
+#: includes/helper-functions.php:1880
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1090
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1114
 msgid "(button only)"
 msgstr ""
 
-#: includes/helper-functions.php:1879
+#: includes/helper-functions.php:1881
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1091
 msgid "Primary outline"
 msgstr ""
 
-#: includes/helper-functions.php:1880
+#: includes/helper-functions.php:1882
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1092
 msgid "Secondary outline"
 msgstr ""
 
-#: includes/helper-functions.php:1881
+#: includes/helper-functions.php:1883
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1093
 msgid "Success outline"
 msgstr ""
 
-#: includes/helper-functions.php:1882
+#: includes/helper-functions.php:1884
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1094
 msgid "Danger outline"
 msgstr ""
 
-#: includes/helper-functions.php:1883
+#: includes/helper-functions.php:1885
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1095
 msgid "Warning outline"
 msgstr ""
 
-#: includes/helper-functions.php:1884
+#: includes/helper-functions.php:1886
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1096
 msgid "Info outline"
 msgstr ""
 
-#: includes/helper-functions.php:1885
+#: includes/helper-functions.php:1887
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1097
 msgid "Light outline"
 msgstr ""
 
-#: includes/helper-functions.php:1886
+#: includes/helper-functions.php:1888
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1098
 msgid "Dark outline"
 msgstr ""
 
-#: includes/helper-functions.php:1887
+#: includes/helper-functions.php:1889
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1099
 msgid "White outline"
 msgstr ""
 
-#: includes/helper-functions.php:1888
+#: includes/helper-functions.php:1890
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1100
 msgid "Purple outline"
 msgstr ""
 
-#: includes/helper-functions.php:1889
+#: includes/helper-functions.php:1891
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1101
 msgid "Salmon outline"
 msgstr ""
 
-#: includes/helper-functions.php:1890
+#: includes/helper-functions.php:1892
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1102
 msgid "Cyan outline"
 msgstr ""
 
-#: includes/helper-functions.php:1891
+#: includes/helper-functions.php:1893
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1103
 msgid "Gray outline"
 msgstr ""
 
-#: includes/helper-functions.php:1892
+#: includes/helper-functions.php:1894
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1105
 msgid "Indigo outline"
 msgstr ""
 
-#: includes/helper-functions.php:1893
+#: includes/helper-functions.php:1895
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1106
 msgid "Orange outline"
 msgstr ""
 
-#: includes/helper-functions.php:1909
+#: includes/helper-functions.php:1911
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1146
 msgid "Linkedin"
 msgstr ""
 
-#: includes/helper-functions.php:1910
+#: includes/helper-functions.php:1912
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1147
 msgid "Flickr"
 msgstr ""
 
-#: includes/helper-functions.php:1911
+#: includes/helper-functions.php:1913
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1148
 msgid "GitHub"
 msgstr ""
 
-#: includes/helper-functions.php:1912
+#: includes/helper-functions.php:1914
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1149
 msgid "YouTube"
 msgstr ""
 
-#: includes/helper-functions.php:1913
+#: includes/helper-functions.php:1915
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1150
 msgid "WordPress"
 msgstr ""
 
-#: includes/helper-functions.php:1914
+#: includes/helper-functions.php:1916
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1151
 msgid "Google"
 msgstr ""
 
-#: includes/helper-functions.php:1915
+#: includes/helper-functions.php:1917
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1152
 msgid "Yahoo"
 msgstr ""
 
-#: includes/helper-functions.php:1916
+#: includes/helper-functions.php:1918
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1153
 msgid "Vkontakte"
 msgstr ""
 
-#: includes/helper-functions.php:1957
+#: includes/helper-functions.php:1959
 #, php-format
 msgid ""
 "%s requires a newer version of GeoDirectory and will not run until the "
@@ -14704,15 +14704,15 @@ msgstr ""
 msgid "GD Category Meta"
 msgstr ""
 
-#: includes/integrations/bricks/provider-geodir.php:193
+#: includes/integrations/bricks/provider-geodir.php:200
 msgid "Category Map Icon"
 msgstr ""
 
-#: includes/integrations/bricks/provider-geodir.php:195
+#: includes/integrations/bricks/provider-geodir.php:202
 msgid "Category Image"
 msgstr ""
 
-#: includes/integrations/bricks/provider-geodir.php:196
+#: includes/integrations/bricks/provider-geodir.php:203
 msgid "Category Schema"
 msgstr ""
 
@@ -14792,41 +14792,41 @@ msgstr ""
 msgid "Watch Video"
 msgstr ""
 
-#: includes/post-functions.php:1955
+#: includes/post-functions.php:1980
 #: includes/widgets/class-geodir-widget-dynamic-content.php:496
 msgid "Overall Rating"
 msgstr ""
 
-#: includes/post-functions.php:1966
+#: includes/post-functions.php:1991
 #: includes/widgets/class-geodir-widget-dynamic-content.php:497
 msgid "Rating Count"
 msgstr ""
 
-#: includes/post-functions.php:2009 includes/post-functions.php:2020
+#: includes/post-functions.php:2034 includes/post-functions.php:2045
 msgid "Modified"
 msgstr ""
 
-#: includes/post-functions.php:2054
+#: includes/post-functions.php:2079
 msgid "ID"
 msgstr ""
 
-#: includes/post-functions.php:2065
+#: includes/post-functions.php:2090
 msgid "Post Link"
 msgstr ""
 
-#: includes/post-functions.php:2129
+#: includes/post-functions.php:2154
 msgid "Address line 2"
 msgstr ""
 
-#: includes/post-functions.php:2184
+#: includes/post-functions.php:2209
 msgid "Latitude"
 msgstr ""
 
-#: includes/post-functions.php:2195
+#: includes/post-functions.php:2220
 msgid "Longitude"
 msgstr ""
 
-#: includes/post-functions.php:2206
+#: includes/post-functions.php:2231
 msgid "Map Directions"
 msgstr ""
 
