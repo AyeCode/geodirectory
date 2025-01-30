@@ -125,7 +125,12 @@ class Provider_Geodir extends Base {
 				$post_id = !empty($_REQUEST['postId']) ? absint($_REQUEST['postId']) : '';
 				$_gd_post = geodir_get_post_info( $post_id );
 				$term_id = ! empty( $_gd_post->default_category ) ? absint( $_gd_post->default_category ) : 0;
-//				print_r( $_gd_post );
+			}
+
+			// if we still dont have a terms ID we might be in a loop
+			if ( ! $term_id ) {
+				$term_id = \Bricks\Query::get_loop_object_id();
+
 			}
 
 			if ( $term_id ) {
