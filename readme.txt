@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.99 - TBD =
 * Url field type sanitization breaks encoded url field value - FIXED
+* Bricks theme term dynamic data not working inside custom loop - FIXED
 
 = GeoDirectory v2.8.98 - 2025-01-20 =
 * Potential XSS via user display name ( not possible in default settings, requires profile edit via another plugin or contributor + user ) - FIXED/SECURITY
