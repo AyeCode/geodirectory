@@ -341,6 +341,7 @@ if ( ! class_exists( 'GeoDirectory' ) ) :
 				require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-blockstrap.php' );
 			} else if ( 'Bricks' === $theme->get( 'Name' ) || 'bricks' === $theme->get( 'Template' ) ) {
 				require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/class-geodir-bricks.php' );
+				require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/class-geodir-bricks-query-filters.php' );
 			}
 
 			$this->query = new GeoDir_Query();

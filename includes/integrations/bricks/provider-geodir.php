@@ -175,9 +175,6 @@ class Provider_Geodir extends Base {
 
 
 
-
-//			echo  $show.'###'. $term_id.'###'.$key.'###'.$context;
-
 			return apply_filters( 'geodir_bricks_get_cat_meta_tag_value', $value, $key, $tag, $args, $context, $post, $this, $term_id );
 		}
 
