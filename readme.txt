@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.9.1 - 2025-TBD =
+* Added GD Query loop options for Bricks theme - ADDED
+
 = GeoDirectory v2.8.99 - 2025-01-30 =
 * Url field type sanitization breaks encoded url field value - FIXED
 * Map marker icon generated with mapmarker.io shows incorrect size - FIXED

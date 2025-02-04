@@ -8,7 +8,7 @@
 
 /**
  * Get the Database table string from Custom Post Type.
- * 
+ *
  * @param $post_type
  *
  * @return bool|string
@@ -360,13 +360,13 @@ function geodir_add_parent_terms($term_ids, $taxonomy) {
 	if (is_int($term_ids)) {
 		$term_ids = array($term_ids);
 	}
-	
+
 	$parent_terms = array();
-	
+
 	foreach ($term_ids as $term_id) {
 		$parent_terms[] = $term_id;
 		$term_parents = geodir_get_category_parents($term_id, $taxonomy, $parent_terms);
-		
+
 		if (!empty($term_parents)) {
 			$parent_terms = array_merge($parent_terms, $term_parents);
 		}
@@ -421,7 +421,7 @@ function geodir_get_ip() {
 	} else {
 		$ip = $_SERVER['REMOTE_ADDR'];
 	}
-	
+
 	/**
 	 * Filter the the visitor's IP address.
 	 *
@@ -725,21 +725,21 @@ function geodir_date($date_input, $date_to, $date_from = '') {
     if (empty($date_input) || empty($date_to)) {
         return NULL;
     }
-    
+
     $date = '';
     if (!empty($date_from)) {
         $datetime = date_create_from_format($date_from, $date_input);
-        
+
         if (!empty($datetime)) {
             $date = $datetime->format($date_to);
         }
     }
-    
+
     if (empty($date)) {
         $date = strpos($date_input, '/') !== false ? str_replace('/', '-', $date_input) : $date_input;
         $date = date_i18n($date_to, strtotime($date));
     }
-    
+
     $date = geodir_maybe_untranslate_date($date);
     /**
      * Filter the the date format conversion.
@@ -1059,12 +1059,12 @@ function geodir_tool_restore_cpt_from_taxonomies() {
     if ( !empty( $cpts ) ) {
         return;
     }
-    
+
     $cpts_restore = $cpts;
-    
+
     foreach ( $cpts as $cpt ) {
         $is_custom = $cpt['cpt'] == 'gd_place' ? 0 : 1;
-        
+
         $cpts_restore[ $cpt['cpt'] ] = array(
             'labels' => array (
                 'name' => $cpt['slug'],
@@ -1125,7 +1125,7 @@ function geodir_tool_restore_cpt_from_taxonomies() {
             'linkable_from' => '',
         );
     }
-    
+
     geodir_update_option( 'geodir_post_types',$cpts_restore );
 }
 
@@ -1147,7 +1147,7 @@ function geodir_utf8_strimwidth( $str, $start, $width, $trimmaker = '', $encodin
     if ( function_exists( 'mb_strimwidth' ) ) {
         return mb_strimwidth( $str, $start, $width, $trimmaker, $encoding );
     }
-    
+
     return geodir_utf8_substr( $str, $start, $width, $encoding ) . $trimmaker;
 }
 
@@ -1157,7 +1157,7 @@ function geodir_utf8_strimwidth( $str, $start, $width, $trimmaker = '', $encodin
  * @since 1.6.18
  * @package Geodirectory
  *
- * @param string $str The string being checked for length. 
+ * @param string $str The string being checked for length.
  * @param string $encoding The encoding parameter is the character encoding. Default "UTF-8".
  * @return int Returns the number of characters in string.
  */
@@ -1165,7 +1165,7 @@ function geodir_utf8_strlen( $str, $encoding = 'UTF-8' ) {
     if ( function_exists( 'mb_strlen' ) ) {
         return mb_strlen( $str, $encoding );
     }
-        
+
     return strlen( $str );
 }
 
@@ -1185,7 +1185,7 @@ function geodir_utf8_strpos( $str, $find, $offset = 0, $encoding = 'UTF-8' ) {
     if ( function_exists( 'mb_strpos' ) ) {
         return mb_strpos( $str, $find, $offset, $encoding );
     }
-        
+
     return strpos( $str, $find, $offset );
 }
 
@@ -1205,7 +1205,7 @@ function geodir_utf8_strrpos( $str, $find, $offset = 0, $encoding = 'UTF-8' ) {
     if ( function_exists( 'mb_strrpos' ) ) {
         return mb_strrpos( $str, $find, $offset, $encoding );
     }
-        
+
     return strrpos( $str, $find, $offset );
 }
 
@@ -1217,7 +1217,7 @@ function geodir_utf8_strrpos( $str, $find, $offset = 0, $encoding = 'UTF-8' ) {
  *
  * @param string $str The string to extract the substring from.
  * @param int $start If start is non-negative, the returned string will start at the entered position in string, counting from zero.
- *                      If start is negative, the returned string will start at the entered position from the end of string. 
+ *                      If start is negative, the returned string will start at the entered position from the end of string.
  * @param int|null $length Maximum number of characters to use from string.
  * @param string $encoding The encoding parameter is the character encoding. Default "UTF-8".
  * @return string
@@ -1230,7 +1230,7 @@ function geodir_utf8_substr( $str, $start, $length = null, $encoding = 'UTF-8' )
             return mb_substr( $str, $start, $length, $encoding );
         }
     }
-        
+
     return substr( $str, $start, $length );
 }
 
@@ -1267,13 +1267,13 @@ function geodir_utf8_ucfirst( $str, $lower_str_end = false, $encoding = 'UTF-8' 
     if ( function_exists( 'mb_strlen' ) ) {
         $first_letter = geodir_strtoupper( geodir_utf8_substr( $str, 0, 1, $encoding ), $encoding );
         $str_end = "";
-        
+
         if ( $lower_str_end ) {
             $str_end = geodir_strtolower( geodir_utf8_substr( $str, 1, geodir_utf8_strlen( $str, $encoding ), $encoding ), $encoding );
         } else {
             $str_end = geodir_utf8_substr( $str, 1, geodir_utf8_strlen( $str, $encoding ), $encoding );
         }
-        
+
         return $first_letter . $str_end;
     }
 
@@ -1329,14 +1329,14 @@ function geodir_get_diagnose_step_max_items() {
  */
 function geodir_file_relative_url( $url, $full_path = false ) {
     $url = trim( $url );
-    
+
     if ( !$url ) {
         return $url;
     }
-    
+
     $relative_url = $url;
     $url = trim( $url, '/\\' ); // clean slashes
-    
+
     $upload_dir = wp_upload_dir();
     $upload_basedir = $upload_dir['basedir'];
     $upload_baseurl = $upload_dir['baseurl'];
@@ -1351,8 +1351,8 @@ function geodir_file_relative_url( $url, $full_path = false ) {
         $https = 'http://';
         $match_upload_baseurl = str_replace( 'http://', '', $upload_baseurl );
         $content_url = str_replace( 'https://', 'http://', $content_url );
-    }    
-    
+    }
+
     $match_content_url = strpos( $content_url, 'https://' ) === 0 ? str_replace( 'https://', '', $content_url ) : str_replace( 'http://', '', $content_url );
     $match_url = strpos( $url, 'https://' ) === 0 ? str_replace( 'https://', '', $url ) : str_replace( 'http://', '', $url );
 
@@ -1368,7 +1368,7 @@ function geodir_file_relative_url( $url, $full_path = false ) {
 	if ( strpos( $match_url, 'www.' ) === 0 ) {
 		$match_url = str_replace( 'www.', '', $match_url );
 	}
-        
+
     if ( $full_path ) {
         if ( strpos( $relative_url, 'http://' ) === 0 || strpos( $relative_url, 'https://' ) === 0 ) {
             if ( strpos( $match_url, $match_upload_baseurl ) === 0 || strpos( $match_url, $match_content_url ) === 0 ) {
@@ -1387,10 +1387,10 @@ function geodir_file_relative_url( $url, $full_path = false ) {
         } elseif ( strpos( $match_url, $match_content_url ) === 0 ) { // url contains content url
             $relative_url = str_replace( $match_content_url, '', $match_url );
         }
-        
+
         $relative_url = trim( $relative_url, '/\\' );
     }
-    
+
     return apply_filters( 'geodir_file_relative_url', $relative_url, $url, $full_path );
 }
 
@@ -1640,7 +1640,7 @@ function geodir_get_endpoint_url( $endpoint, $value = '', $permalink = '' ) {
  */
 function geodir_array_splice_assoc( $input, $offset, $length, $replacement ) {
 	$replacement = (array) $replacement;
-	
+
 	$key_indices = array_flip( array_keys( $input ) );
 
 	if ( isset( $input[ $offset ] ) && is_string( $offset ) ) {
@@ -1811,7 +1811,7 @@ function geodir_category_tree_options( $post_type = 'gd_place', $parent = 0, $hi
 
 /**
  * Get raw meta value, so not to pass through post meta filter.
- * 
+ *
  * @param $object_id
  * @param $meta_key
  *
@@ -1859,7 +1859,7 @@ function geodir_getcookie( $name ) {
 
 function geodir_aui_colors($include_branding = false, $include_outlines = false, $outline_button_only_text = false){
 	$theme_colors = array();
-	
+
 	$theme_colors["primary"] = __('Primary', 'geodirectory');
 	$theme_colors["secondary"] = __('Secondary', 'geodirectory');
 	$theme_colors["success"] = __('Success', 'geodirectory');
@@ -1894,7 +1894,7 @@ function geodir_aui_colors($include_branding = false, $include_outlines = false,
 		$theme_colors["outline-indigo"] = __('Indigo outline', 'geodirectory') . $button_only;
 		$theme_colors["outline-orange"] = __('Orange outline', 'geodirectory') . $button_only;
 	}
-	
+
 
 	if($include_branding){
 		$theme_colors = $theme_colors  + geodir_aui_branding_colors();
@@ -1923,7 +1923,7 @@ function geodir_aui_branding_colors(){
  * Get the post id of the first post that has content for a field key.
  *
  * This is used to help with block previews.
- * 
+ *
  * @param string $field_key
  * @param string $post_type
  *
@@ -1969,7 +1969,7 @@ function geodir_min_version_check($name,$version){
 
 /**
  * Return the bsui class for AUI if AUI design is active.
- * 
+ *
  * @return string
  */
 function geodir_bsui_class(){
@@ -1985,8 +1985,9 @@ function geodir_bsui_class(){
  * @return bool True if full url or False.
  */
 function geodir_is_full_url( $url ) {
+
 	// Start with http: or https:.
-	if ( 0 === stripos( $url, 'http:' ) || 0 === stripos( $url, 'https:' ) ) {
+	if ( is_string($url) && ( 0 === stripos( $url, 'http:' ) || 0 === stripos( $url, 'https:' ) ) ) {
 		return true;
 	}
 
