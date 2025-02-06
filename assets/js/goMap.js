@@ -755,6 +755,10 @@ function geodirGoMapInit() {
             zoomControlOptions: {
                 position: 'LEFT_CENTER'
             },
+            cameraControl: false,
+            cameraControlOptions: {
+                position: 'LEFT_CENTER'
+            },
             scaleControl: false, // Show or hide scale
             scrollwheel: true, // Mouse scroll whell
             fullscreenControl: false, // disable fullscreen button as we add our own
@@ -859,6 +863,10 @@ function geodirGoMapInit() {
                 zoomControl: (opts.zoomControl === "0" || !opts.zoomControl ? false : true),
                 zoomControlOptions: {
                     position: google.maps.ControlPosition[opts.zoomControlOptions.position.toUpperCase()]
+                },
+                cameraControl: (opts.cameraControl === "0" || !opts.cameraControl ? false : true),
+                cameraControlOptions: {
+                    position: google.maps.ControlPosition[opts.cameraControlOptions.position.toUpperCase()]
                 },
                 scaleControl: (opts.scaleControl === "0" || !opts.scaleControl ? false : true),
                 scrollwheel: (opts.scrollwheel === "0" || !opts.scrollwheel ? false : true),
