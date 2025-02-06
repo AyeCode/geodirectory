@@ -3316,6 +3316,17 @@ function sd_render_block( $block_content, $block, $instance = '' ) {
 	$attributes = json_decode( $block['attrs']['visibility_conditions'], true );
 	$rules = ! empty( $attributes ) ? sd_block_parse_rules( $attributes ) : array();
 
+	// remove rules with missing validators.
+	$valid_rules = sd_visibility_rules_options();
+
+	if ( ! empty( $rules ) ) {
+		foreach ( $rules as $key => $rule ) {
+			if ( ! isset( $valid_rules[ $rule['type'] ] ) ) {
+				unset( $rules[ $key ] );
+			}
+		}
+	}
+
 	// No rules set.
 	if ( empty( $rules ) ) {
 		return $block_content;
