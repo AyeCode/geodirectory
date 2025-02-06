@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.99\n"
+"Project-Id-Version: GeoDirectory 2.8.100\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-30 20:31+0530\n"
-"PO-Revision-Date: 2025-01-30 20:31+0530\n"
+"POT-Creation-Date: 2025-02-06 18:54+0530\n"
+"PO-Revision-Date: 2025-02-06 18:54+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -3242,13 +3242,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:303
 #: includes/admin/class-geodir-admin-taxonomies.php:368
-#: includes/integrations/bricks/provider-geodir.php:197
+#: includes/integrations/bricks/provider-geodir.php:198
 msgid "Category Top Description"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:308
 #: includes/admin/class-geodir-admin-taxonomies.php:373
-#: includes/integrations/bricks/provider-geodir.php:198
+#: includes/integrations/bricks/provider-geodir.php:199
 msgid "Category Bottom Description"
 msgstr ""
 
@@ -3264,13 +3264,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:324
 #: includes/admin/class-geodir-admin-taxonomies.php:389
-#: includes/integrations/bricks/provider-geodir.php:199
+#: includes/integrations/bricks/provider-geodir.php:200
 msgid "Category Icon"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:330
 #: includes/admin/class-geodir-admin-taxonomies.php:395
-#: includes/integrations/bricks/provider-geodir.php:201
+#: includes/integrations/bricks/provider-geodir.php:202
 msgid "Category Color"
 msgstr ""
 
@@ -14560,6 +14560,14 @@ msgstr ""
 msgid "Placeholder image"
 msgstr ""
 
+#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:405
+msgid "GeoDirectory Query"
+msgstr ""
+
+#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:415
+msgid "Disable GD Location Filtering"
+msgstr ""
+
 #: includes/integrations/bricks/class-geodir-bricks.php:283
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:144
 msgid "Single"
@@ -14704,15 +14712,15 @@ msgstr ""
 msgid "GD Category Meta"
 msgstr ""
 
-#: includes/integrations/bricks/provider-geodir.php:200
+#: includes/integrations/bricks/provider-geodir.php:201
 msgid "Category Map Icon"
 msgstr ""
 
-#: includes/integrations/bricks/provider-geodir.php:202
+#: includes/integrations/bricks/provider-geodir.php:203
 msgid "Category Image"
 msgstr ""
 
-#: includes/integrations/bricks/provider-geodir.php:203
+#: includes/integrations/bricks/provider-geodir.php:204
 msgid "Category Schema"
 msgstr ""
 

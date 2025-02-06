@@ -126,13 +126,13 @@ class Provider_Geodir extends Base {
 			}
 
 			// then do other checks
-			if ( ! $term_id && geodir_is_page( 'archive' ) ) {echo '###a';
+			if ( ! $term_id && geodir_is_page( 'archive' ) ) {
 				$current_category = get_queried_object();
 				$term_id = isset( $current_category->term_id ) ?  absint( $current_category->term_id ) : 0;
-			} else if ( ! $term_id && ! empty( $gd_post ) ) {echo '###b'.$gd_post->ID;
+			} else if ( ! $term_id && ! empty( $gd_post ) ) {
 				$term_id = ! empty( $gd_post->default_category ) ? absint( $gd_post->default_category ) : 0;
-			}elseif(bricks_is_builder_call()){echo '###c';
-				$post_id = !empty($_REQUEST['postId']) ? absint($_REQUEST['postId']) : '';
+			} else if ( bricks_is_builder_call() ) {
+				$post_id = ! empty( $_REQUEST['postId'] ) ? absint( $_REQUEST['postId'] ) : '';
 				$_gd_post = geodir_get_post_info( $post_id );
 				$term_id = ! empty( $_gd_post->default_category ) ? absint( $_gd_post->default_category ) : 0;
 			}
