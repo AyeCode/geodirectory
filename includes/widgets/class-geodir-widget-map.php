@@ -1036,6 +1036,7 @@ jQuery(function ($) {
 			'rounded'             => '',
 			'rounded_size'        => '',
 			'shadow'              => '',
+			'cameraControl'       => false // cameraControl
 		);
 
 		$params = wp_parse_args( $map_args, $defaults );
@@ -1075,6 +1076,7 @@ jQuery(function ($) {
 		if ( ! empty( $params['hide_zoom_control'] ) ) {
 			$params['zoomControl'] = 0;
 		}
+
 		// streetViewControl
 		if ( ! empty( $params['hide_street_control'] ) ) {
 			$params['streetViewControl'] = 0;
