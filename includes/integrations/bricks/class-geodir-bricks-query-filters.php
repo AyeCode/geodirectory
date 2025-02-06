@@ -34,7 +34,11 @@ class GeoDir_Bricks_Query_Filters {
 		}
 
 
-		// Add our query loop options to the elements
+		// Add our query loop options to the elements, section
+		add_filter( 'bricks/elements/slider/controls', array( __CLASS__, 'add_element_controls' ) );
+		add_filter( 'bricks/elements/section/controls', array( __CLASS__, 'add_element_controls' ) );
+		add_filter( 'bricks/elements/carousel/controls', array( __CLASS__, 'add_element_controls' ) );
+		add_filter( 'bricks/elements/accordion/controls', array( __CLASS__, 'add_element_controls' ) );
 		add_filter( 'bricks/elements/container/controls', array( __CLASS__, 'add_element_controls' ) );
 		add_filter( 'bricks/elements/div/controls', array( __CLASS__, 'add_element_controls' ) );
 		add_filter( 'bricks/elements/block/controls', array( __CLASS__, 'add_element_controls' ) );
