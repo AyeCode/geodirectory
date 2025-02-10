@@ -54,3 +54,16 @@ if ( $current_max_ex_time && $new_max_ex_time !== false ) {
 	</div>
 </div>
 <?php } ?>
+<?php if ( ! ( isset( $_REQUEST['section'] ) && $_REQUEST['section'] == 'settings' ) ) { ?>
+<div class="geodir-csv-tips d-none">
+<?php
+aui()->alert( array(
+		'type' => 'info',
+		'content' => wp_sprintf( __( '<b>Important:</b> Do not use <b>Excel</b> file as it adds characters that breaks the import process. %sHow to prepare CSV file to import.%s', 'geodirectory' ), '<a href="https://docs.wpgeodirectory.com/article/463-csv-imports-useful-tips" target="_blank">', '</a>' ),
+		'class' => 'mb-4'
+	),
+	true
+);
+?>
+</div>
+<?php } ?>
