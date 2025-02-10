@@ -20,6 +20,10 @@ jQuery(window).on("load",function() {
         }
     });
 
+    if(jQuery('.gd-import-export .geodir-csv-tips').length && jQuery('.gd-import-export .plupload-upload-uic').length) {
+        jQuery('.gd-import-export .plupload-upload-uic:first').closest('.card-body').prepend(jQuery('.gd-import-export .geodir-csv-tips').html());
+    }
+
     var media_frame = [];
     jQuery(document).on('click', '.gd_upload_image_button', function(e) {
         e.preventDefault();
