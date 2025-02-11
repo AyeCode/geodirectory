@@ -423,7 +423,11 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		$skin_active = false;
 		$elementor_wrapper_class = '';
 
-		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $skin_id && ! $this->is_preview() ) {
+		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $skin_id ) {
+			if ( $this->is_preview() && ! $this->is_elementor_preview() ) {
+				$skin_id = 0;
+			}
+
 			if ( get_post_status( $skin_id ) == 'publish' ) {
 				$skin_active = true;
 
