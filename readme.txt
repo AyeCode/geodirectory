@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.101 - TBD =
 * GD > Import & Export add message not to use Excel file - CHANGED
+* GD > Recently Viewed widget option added to manage archive item template - ADDED
 
 = GeoDirectory v2.8.100 - 2025-02-06 =
 * Added GD Query loop options for Bricks theme - ADDED

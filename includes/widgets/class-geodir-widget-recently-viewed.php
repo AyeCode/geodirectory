@@ -106,12 +106,88 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			);
 		}
 
+		if ( $design_style ) {
+			$arguments['template_type'] = array(
+				'type' => 'select',
+				'title' => __( 'Archive Item Template Type:', 'geodirectory' ),
+				'desc' => __( 'Select archive item template type to assign template to listings loop.', 'geodirectory' ),
+				'options' => geodir_template_type_options(),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group' => __( 'Card Design', 'geodirectory' ),
+			);
 
-		if($design_style) {
+			$arguments['tmpl_page'] = array(
+				'type' => 'select',
+				'title' => __( 'Archive Item Template Page:', 'geodirectory' ),
+				'desc' => __( 'Select archive item template page.', 'geodirectory' ),
+				'options' => geodir_template_page_options(),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'element_require' => '[%template_type%]=="page"',
+				'group' => __( 'Card Design', 'geodirectory' ),
+			);
 
+			if ( geodir_is_block_theme() ) {
+				$arguments['tmpl_part'] = array(
+					'type' => 'select',
+					'title' => __( 'Archive Item Template Part:', 'geodirectory' ),
+					'desc' => __( 'Select archive item template part.', 'geodirectory' ),
+					'options' => geodir_template_part_options(),
+					'default' => '',
+					'desc_tip' => true,
+					'advanced' => false,
+					'element_require' => '[%template_type%]=="template_part"',
+					'group' => __( 'Card Design', 'geodirectory' ),
+				);
+			}
+		}
+
+		/*
+		* Elementor Pro features below here
+		*/
+		if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
+			$arguments['skin_id'] = array(
+				'title'           => __( 'Archive Item Elementor Skin:', 'geodirectory' ),
+				'desc'            => '',
+				'type'            => 'select',
+				'options'         => GeoDir_Elementor::get_elementor_pro_skins(),
+				'default'         => '',
+				'desc_tip'        => false,
+				'advanced'        => false,
+				'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
+				'group'           => __( 'Card Design', 'geodirectory' ),
+			);
+
+			$arguments['skin_column_gap'] = array(
+				'title'           => __( 'Skin column gap', 'geodirectory' ),
+				'desc'            => __( 'The px value for the column gap.', 'geodirectory' ),
+				'type'            => 'number',
+				'default'         => '30',
+				'desc_tip'        => true,
+				'advanced'        => false,
+				'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
+				'group'           => __( 'Card Design', 'geodirectory' ),
+			);
+
+			$arguments['skin_row_gap'] = array(
+				'title'           => __( 'Skin row gap', 'geodirectory' ),
+				'desc'            => __( 'The px value for the row gap.', 'geodirectory' ),
+				'type'            => 'number',
+				'default'         => '35',
+				'desc_tip'        => true,
+				'advanced'        => false,
+				'element_require' => '([%template_type%]=="" || [%template_type%]=="elementor_skin")',
+				'group'           => __( 'Card Design', 'geodirectory' ),
+			);
+		}
+
+		if ( $design_style ) {
 			$arguments['row_gap'] = array(
 				'title' => __( "Card row gap", 'geodirectory' ),
-				'desc' => __('This adjusts the spacing between the cards horizontally.','geodirectory'),
+				'desc' => __( 'This adjusts the spacing between the cards horizontally.', 'geodirectory' ),
 				'type' => 'select',
 				'options' =>  array(
 					''  =>  __("Default","geodirectory"),
@@ -201,41 +277,6 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			$widget_args = $widget_args + $arguments;
 		}
 
-		/*
-		 * Elementor Pro features below here
-		 */
-		if(defined( 'ELEMENTOR_PRO_VERSION' )){
-			$widget_args['skin_id'] = array(
-				'title' => __( "Elementor Skin", 'geodirectory' ),
-				'desc' => '',
-				'type' => 'select',
-				'options' =>  GeoDir_Elementor::get_elementor_pro_skins(),
-				'default'  => '',
-				'desc_tip' => false,
-				'advanced' => false,
-				'group'     => __("Design","geodirectory")
-			);
-
-			$widget_args['skin_column_gap'] = array(
-				'title' => __('Skin column gap', 'geodirectory'),
-				'desc' => __('The px value for the column gap.', 'geodirectory'),
-				'type' => 'number',
-				'default'  => '30',
-				'desc_tip' => true,
-				'advanced' => false,
-				'group'     => __("Design","geodirectory")
-			);
-			$widget_args['skin_row_gap'] = array(
-				'title' => __('Skin row gap', 'geodirectory'),
-				'desc' => __('The px value for the row gap.', 'geodirectory'),
-				'type' => 'number',
-				'default'  => '35',
-				'desc_tip' => true,
-				'advanced' => false,
-				'group'     => __("Design","geodirectory")
-			);
-		}
-
 		return $widget_args;
 	}
 
@@ -251,7 +292,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 	 * @return mixed|string
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-		global $geodir_recently_viewed_count;
+		global $geodir_recently_viewed_count, $geodir_item_tmpl, $gd_layout_class;
 
 		$args = wp_parse_args(
 			(array) $args,
@@ -260,6 +301,10 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 				'post_type' => '',
 				'layout' => '2',
 				'post_limit' => '6',
+				// Template Settings
+				'template_type' => '',
+				'tmpl_page' => '',
+				'tmpl_part' => '',
 				// Elementor settings
 				'skin_id' => '',
 				'skin_column_gap' => '',
@@ -307,30 +352,92 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 				$post_type = $current_post_type;
 			}
 		}
-		
+
 		$enqueue_slider = ! empty( $args['enqueue_slider'] ) ? true : false;
 
-		// Elementor pro
-		if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
-			$skin_id         = ! empty( $args['skin_id'] ) ? absint( $args['skin_id'] ) : '';
-			$skin_column_gap = ! empty( $args['skin_column_gap'] ) ? absint( $args['skin_column_gap'] ) : '';
-			$skin_row_gap    = ! empty( $args['skin_row_gap'] ) ? absint( $args['skin_row_gap'] ) : '';
+		/**
+		 * Filter the widget template_type param.
+		 *
+		 * @param string $template_type Filter template_type.
+		 *
+		 * @since 2.8.101
+		 *
+		 */
+		$template_type = apply_filters( 'geodir_widget_gd_recently_viewed_template_type', ( ! empty( $args['template_type'] ) ? $args['template_type'] : '' ), $args, $this->id_base );
+
+		$template_page = 0;
+		/**
+		 * Filter the widget tmpl_page param.
+		 *
+		 * @param int $template_page Filter tmpl_page.
+		 *
+		 * @since 2.8.101
+		 *
+		 */
+		if ( $template_type == 'page' ) {
+			$template_page = apply_filters( 'geodir_widget_gd_recently_viewed_tmpl_page', ( ! empty( $args['tmpl_page'] ) ? (int) $args['tmpl_page'] : 0 ), $args, $this->id_base );
 		}
 
-		// Elementor
+		$template_part = '';
+		/**
+		 * Filter the widget tmpl_part param.
+		 *
+		 * @param string $template_part Filter tmpl_part.
+		 *
+		 * @since 2.8.101
+		 *
+		 */
+		if ( $template_type == 'template_part' && geodir_is_block_theme() ) {
+			$template_part = apply_filters( 'geodir_widget_gd_recently_viewed_tmpl_part', ( ! empty( $args['tmpl_part'] ) ? $args['tmpl_part'] : '' ), $args, $this->id_base );
+		}
+
+		$skin_id = 0;
+		if ( empty( $template_type ) || $template_type == 'elementor_skin' ) {
+			/**
+			 * Filter the widget skin_id param.
+			 *
+			 * @param int $skin_id Filter skin_id.
+			 *
+			 * @since 2.8.101
+			 *
+			 */
+			$skin_id = apply_filters( 'geodir_widget_gd_recently_viewed_skin_id', ( ! empty( $args['skin_id'] ) ? (int) $args['skin_id'] : 0 ), $args, $this->id_base );
+		}
+
+		$geodir_item_tmpl = array();
+
+		if ( ! empty( $template_page ) && get_post_type( $template_page ) == 'page' && get_post_status( $template_page ) == 'publish' ) {
+			$geodir_item_tmpl = array(
+				'id'   => $template_page,
+				'type' => 'page',
+			);
+		} else if ( ! empty( $template_part ) && ( $_template_part = geodir_get_template_part_by_slug( $template_part ) ) ) {
+			$geodir_item_tmpl = array(
+				'id'      => $_template_part->slug,
+				'content' => $_template_part->content,
+				'type'    => 'template_part',
+			);
+		}
+
+		// Elementor Pro
 		$skin_active = false;
 		$elementor_wrapper_class = '';
 
-		if ( defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id ) {
-			if ( get_post_status ( $skin_id ) == 'publish' ) {
+		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $skin_id && ! $this->is_preview() ) {
+			if ( get_post_status( $skin_id ) == 'publish' ) {
 				$skin_active = true;
+
+				$geodir_item_tmpl = array(
+					'id'   => $skin_id,
+					'type' => 'elementor_skin',
+				);
 			}
 
 			if ( $skin_active ) {
-				$columns = $layout;
+				$columns = isset( $layout ) ? absint( $layout ) : 1;
 
 				if ( $columns < 1 ) {
-					$columns = 6;// We have no 6 row option to lets use list view.
+					$columns = 6; // We have no 6 row option to lets use list view
 				}
 
 				$elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-' . $columns . ' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
@@ -348,6 +455,8 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		$preview_listings = '';
 
 		if ( $this->is_preview() && $design_style ) {
+			$gd_layout_class = geodir_convert_listing_view_class( $layout );
+
 			// Card border class
 			$card_border_class = '';
 
@@ -380,21 +489,45 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 
 			$widget_listings = geodir_get_widget_listings( $query_args );
 
-			$template = $design_style ? $design_style . "/content-widget-listing.php" : "content-widget-listing.php";
+			if ( $skin_active ) {
+				$column_gap = ! empty( $args['skin_column_gap'] ) ? absint( $args['skin_column_gap'] ) : '';
+				$row_gap    = ! empty( $args['skin_row_gap'] ) ? absint( $args['skin_row_gap'] ) : '';
 
-			$preview_listings = geodir_get_template_html( $template, array(
-				'widget_listings' => $widget_listings,
-				'column_gap_class' => $args['column_gap'] ? 'mb-' . absint( $args['column_gap'] ) : 'mb-4',
-				'row_gap_class' => $args['row_gap'] ? 'px-' . absint( $args['row_gap'] ) : '',
-				'card_border_class' => $card_border_class,
-				'card_shadow_class' => $card_shadow_class,
-			) );
+				ob_start();
+
+				geodir_get_template(
+					'elementor/content-widget-listing.php',
+					array(
+						'widget_listings' => $widget_listings,
+						'skin_id'         => $skin_id,
+						'columns'         => $columns,
+						'column_gap'      => $column_gap,
+						'row_gap'         => $row_gap,
+					)
+				);
+
+				$preview_listings = ob_get_clean();
+			} else {
+				$template = $design_style ? $design_style . '/content-widget-listing.php' : 'content-widget-listing.php';
+
+				$preview_listings = geodir_get_template_html(
+					$template,
+					array(
+						'widget_listings'   => $widget_listings,
+						'column_gap_class'  => $args['column_gap'] ? 'mb-' . absint( $args['column_gap'] ) : 'mb-4',
+						'row_gap_class'     => $args['row_gap'] ? 'px-' . absint( $args['row_gap'] ) : '',
+						'card_border_class' => $card_border_class,
+						'card_shadow_class' => $card_shadow_class,
+					)
+				);
+			}
 		}
 
 		// Wrap class
 		$wrap_class = geodir_build_aui_class( $args );
 
 		ob_start();
+
 		if ( $enqueue_slider && ! $design_style ) {
 			// Enqueue flexslider JS
 			GeoDir_Frontend_Scripts::enqueue_script( 'jquery-flexslider' );
@@ -402,7 +535,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		?>
 		<div class="geodir-recently-reviewed <?php echo esc_attr( $wrap_class ); ?>">
 			<div class="recently-reviewed-content recently-reviewed-content-<?php echo absint( $geodir_recently_viewed_count ) . esc_attr( $elementor_wrapper_class ); ?>"><?php echo $preview_listings; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
-			<div class="recently-reviewed-loader" style="display:none;text-align:center;"><?php echo $spinner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
+			<div class="recently-reviewed-loader" style="<?php echo ( $this->is_preview() ? 'display:none;' : '' ); ?>text-align:center;"><?php echo $spinner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 		</div>
 
 <script type="text/javascript">
@@ -414,32 +547,29 @@ document.addEventListener("DOMContentLoaded", function() {
 	var data = {
 		'action': 'geodir_recently_viewed_listings',
 		'viewed_post_id' : recently_viewed,
-		'list_per_page' :'<?php echo (int) $post_page_limit; ?>' ,
 		'layout' : '<?php echo (int) $layout; ?>',
 		'post_type':'<?php echo esc_js( $post_type ); ?>',
 		'column_gap':'<?php echo esc_attr( $args['column_gap'] ); ?>',
 		'row_gap':'<?php echo esc_attr( $args['row_gap'] ); ?>',
 		'card_border':'<?php echo esc_attr( $args['card_border'] ); ?>',
 		'card_shadow':'<?php echo esc_attr( $args['card_shadow'] ); ?>',
+		'template_type':'<?php echo esc_attr( $template_type ); ?>',
+		'tmpl_page':'<?php echo esc_attr( $template_page ); ?>',
+		'tmpl_part':'<?php echo esc_attr( $template_part ); ?>',
 		<?php if( defined( 'ELEMENTOR_PRO_VERSION' ) ) { ?>
 		'skin_id':'<?php echo ( $skin_id ? (int) $skin_id : '' ); ?>',
-		'skin_column_gap':'<?php echo ( $skin_column_gap ? (int) $skin_column_gap : '' ); ?>',
-		'skin_row_gap':'<?php echo ( $skin_row_gap ? (int) $skin_row_gap : '' ); ?>',
+		'skin_column_gap':'<?php echo ( ! empty( $args['skin_column_gap'] ) ? (int) $args['skin_column_gap'] : '' ); ?>',
+		'skin_row_gap':'<?php echo ( ! empty( $args['skin_row_gap'] ) ? (int) $args['skin_row_gap'] : '' ); ?>',
 		<?php } ?>
+		'list_per_page' :'<?php echo (int) $post_page_limit; ?>'
 	};
 
-	jQuery.post(geodir_params.ajax_url, data, function(response) {
-		jQuery('.geodir-recently-reviewed .recently-reviewed-content-<?php echo absint( $geodir_recently_viewed_count ); ?>').html(response);
-		jQuery('.recently-reviewed-loader').hide();
-		init_read_more();
-		geodir_init_lazy_load();
-		geodir_refresh_business_hours();
-		// init any sliders
-		geodir_init_flexslider();
-	});
+	jQuery.post(geodir_params.ajax_url,data,function(response){jQuery('.geodir-recently-reviewed .recently-reviewed-content-<?php echo absint( $geodir_recently_viewed_count ); ?>').html(response);jQuery('.recently-reviewed-loader').hide();init_read_more();geodir_init_lazy_load();geodir_refresh_business_hours();geodir_load_badge_class();geodir_init_flexslider();});
 });
 </script>
 		<?php
+		$geodir_item_tmpl = array();
+
 		return ob_get_clean();
 	}
 
@@ -469,6 +599,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 		return false;
 	}
+	function gdrvUnique(value, index, array) {
+	  return array.indexOf(value) === index;
+	}
 	/*localStorage.removeItem("gd_recently_viewed");*/
 	var post_id = '<?php echo absint( $get_post_id ); ?>',
 		post_type = '<?php echo esc_js( $get_post_type ); ?>',
@@ -481,9 +614,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				if (recently_reviewed[post_type].length > 0) {
 					temp_post_arr = recently_reviewed[post_type];
 				}
-				if (jQuery.inArray(post_id, temp_post_arr) === -1) {
-					temp_post_arr.push(post_id);
+				if (jQuery.inArray(post_id, temp_post_arr) !== -1) {
+					temp_post_arr.splice(jQuery.inArray(post_id, temp_post_arr), 1);
 				}
+				temp_post_arr.push(post_id);
+				temp_post_arr = temp_post_arr.filter(gdrvUnique);
 				/* Limit to 50 per CPT */
 				if (temp_post_arr.length > 50) {
 					temp_post_arr = temp_post_arr.slice(-50);
