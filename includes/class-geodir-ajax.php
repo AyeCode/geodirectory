@@ -277,24 +277,25 @@ class GeoDir_AJAX {
 	}
 
 	public static function recently_viewed_listings(){
-		global $gd_post, $post,$gd_layout_class, $geodir_is_widget_listing;
-		ob_start();
+		global $post, $gd_post, $geodir_item_tmpl, $gd_layout_class;
 
+		$design_style = geodir_design_style();
+		$list_per_page = ! empty( $_REQUEST['list_per_page'] ) ? absint( $_REQUEST['list_per_page'] ) : '';
+		$post_type = ! empty( $_REQUEST['post_type'] ) ? sanitize_key( $_REQUEST['post_type'] ) : '';
 
-		$list_per_page = !empty($_REQUEST['list_per_page']) ? absint($_REQUEST['list_per_page']) : '';
-
-		$post_type = !empty($_REQUEST['post_type']) ? sanitize_key( $_REQUEST['post_type'] ) : '';
-
-		$all_postypes = geodir_get_posttypes();
-		if (!in_array($post_type, $all_postypes)){
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
 			$post_type = 'gd_place';
 		}
 
-		$layout = empty( $_REQUEST['layout'] ) ? 'gridview_onehalf' : apply_filters( 'widget_layout', geodir_convert_listing_view_class($_REQUEST['layout']) );
+		$layout = ! empty( $_REQUEST['layout'] ) ? absint( $_REQUEST['layout'] ) : 2;
+		$post_ids = ! empty( $_REQUEST['viewed_post_id'] ) ? json_decode( stripslashes( $_REQUEST['viewed_post_id'] ), true ) : '';
 
-		$post_ids = !empty($_REQUEST['viewed_post_id']) ? json_decode(stripslashes($_REQUEST['viewed_post_id']), true) : '';
+		// Templates
+		$template_type = ! empty( $_REQUEST['template_type'] ) ? sanitize_text_field( $_REQUEST['template_type'] ) : '';
+		$template_page = ! empty( $_REQUEST['tmpl_page'] ) ? sanitize_text_field( $_REQUEST['tmpl_page'] ) : '';
+		$template_part = ! empty( $_REQUEST['tmpl_part'] ) ? sanitize_text_field( $_REQUEST['tmpl_part'] ) : '';
 
-		// elementor pro
+		// Elementor pro
 		$skin_id = ! empty( $_REQUEST['skin_id'] ) ? absint( $_REQUEST['skin_id'] ) : '';
 		$skin_column_gap = ! empty( $_REQUEST['skin_column_gap'] ) ? absint( $_REQUEST['skin_column_gap'] ) : '';
 		$skin_row_gap = ! empty( $_REQUEST['skin_row_gap'] ) ? absint( $_REQUEST['skin_row_gap'] ) : '';
@@ -305,99 +306,144 @@ class GeoDir_AJAX {
 		$card_border = ! empty( $_REQUEST['card_border'] ) ? sanitize_html_class( $_REQUEST['card_border'] ) : '';
 		$card_shadow = ! empty( $_REQUEST['card_shadow'] ) ? sanitize_html_class( $_REQUEST['card_shadow'] ) : '';
 
-
 		$listings_ids = array();
 
-		if( !empty( $post_type ) ) {
+		if ( ! empty( $post_type ) ) {
+			if ( ! empty( $post_ids ) && is_array( $post_ids ) && ! empty( $post_ids[ $post_type ] ) ) {
+				$listings_ids = $post_ids[ $post_type ];
+			}
 
-			if( !empty( $post_ids ) && $post_ids !='' && !empty($post_ids[$post_type]) ) {
-
-				$listings_ids = $post_ids[$post_type];
+			if ( ! empty( $listings_ids ) ) {
+				$listings_ids = array_reverse( array_unique( $listings_ids ) );
+				$listings_ids = array_slice( $listings_ids, 0, $list_per_page );
 			}
 		}
 
-		$listings_ids = !empty( $listings_ids ) ? array_reverse($listings_ids) : array();
-		$listings_ids = !empty($listings_ids) ? array_slice($listings_ids, 0, $list_per_page) : array();
 		$widget_listings = array();
-		if(!empty($listings_ids)){
 
-			foreach($listings_ids as $post_id){
-				$post_id = absint($post_id);
-				$listing = geodir_get_post_info($post_id);
-				if(!empty($listing) && isset($listing->ID)){
-					$widget_listings[] = $listing;
+		if ( ! empty( $listings_ids ) ) {
+			foreach( $listings_ids as $post_id ) {
+				$post_id = absint( $post_id );
+
+				if ( $post_id > 0 ) {
+					$listing = geodir_get_post_info( $post_id );
+
+					if ( ! empty( $listing ) && ! empty( $listing->post_type ) && $listing->post_type == $post_type ) {
+						$widget_listings[] = $listing;
+					}
 				}
 			}
 		}
 
-		if(!empty($widget_listings)){
+		$output = '';
 
-			// elementor
+		if ( ! empty( $widget_listings ) ) {
+			$geodir_item_tmpl = array();
+
+			if ( ! empty( $template_page ) && get_post_type( $template_page ) == 'page' && get_post_status( $template_page ) == 'publish' ) {
+				$geodir_item_tmpl = array(
+					'id'   => $template_page,
+					'type' => 'page',
+				);
+			} else if ( ! empty( $template_part ) && ( $_template_part = geodir_get_template_part_by_slug( $template_part ) ) ) {
+				$geodir_item_tmpl = array(
+					'id'      => $_template_part->slug,
+					'content' => $_template_part->content,
+					'type'    => 'template_part',
+				);
+			}
+
+			// Elementor Pro
 			$skin_active = false;
-			$columns = 1;
-			if(defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id){
-				if(get_post_status ( $skin_id )=='publish'){
+			$elementor_wrapper_class = '';
+
+			if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $skin_id ) {
+				if ( get_post_status( $skin_id ) == 'publish' ) {
 					$skin_active = true;
+
+					$geodir_item_tmpl = array(
+						'id'   => $skin_id,
+						'type' => 'elementor_skin',
+					);
 				}
-				if($skin_active){
-					$columns = isset($layout) ? absint($layout) : 1;
-					if($columns == '0'){$columns = 6;}// we have no 6 row option to lets use list view
+
+				if ( $skin_active ) {
+					$columns = isset( $layout ) ? absint( $layout ) : 1;
+
+					if ( $columns < 1 ) {
+						$columns = 6; // We have no 6 row option to lets use list view
+					}
+
+					$elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-' . $columns . ' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
 				}
 			}
 
 			$gd_layout_class = geodir_convert_listing_view_class( $layout );
 
-			// card border class
+			// Card border class
 			$card_border_class = '';
-			if(!empty($card_border)){
-				if($card_border=='none'){
+
+			if ( ! empty( $args['card_border'] ) ) {
+				if ( $args['card_border'] == 'none' ) {
 					$card_border_class = 'border-0';
-				}else{
-					$card_border_class = 'border-'.sanitize_html_class($card_border);
+				} else {
+					$card_border_class = 'border-' . sanitize_html_class( $args['card_border'] );
 				}
 			}
 
-			// card shadow
+			// Card shadow
 			$card_shadow_class = '';
-			if(!empty($card_shadow)){
-				if($card_shadow=='small'){
+
+			if ( ! empty( $args['card_shadow'] ) ) {
+				if ( $args['card_shadow'] == 'small' ) {
 					$card_shadow_class = 'shadow-sm';
-				}elseif($card_shadow=='medium'){
+				} else if ( $args['card_shadow'] == 'medium' ) {
 					$card_shadow_class = 'shadow';
-				}elseif($card_shadow=='large'){
+				} else if ( $args['card_shadow'] == 'large' ) {
 					$card_shadow_class = 'shadow-lg';
 				}
 			}
 
-			if($skin_active){
-				$column_gap = $skin_column_gap;
-				$row_gap = $skin_row_gap;
-				geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
+			if ( $skin_active ) {
+				ob_start();
 
-			}else{
-				$design_style = geodir_design_style();
-				$template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
+				geodir_get_template(
+					'elementor/content-widget-listing.php',
+					array(
+						'widget_listings' => $widget_listings,
+						'skin_id'         => $skin_id,
+						'columns'         => $columns,
+						'column_gap'      => $skin_column_gap,
+						'row_gap'         => $skin_row_gap,
+					)
+				);
 
-				echo geodir_get_template_html( $template, array(
-					'widget_listings' => $widget_listings,
-					'column_gap_class'   => $column_gap ? 'mb-'.absint($column_gap) : 'mb-4',
-					'row_gap_class'   => $row_gap ? 'px-'.absint($row_gap) : '',
-					'card_border_class'   => $card_border_class,
-					'card_shadow_class'  =>  $card_shadow_class,
-				) );
+				$output = ob_get_clean();
+			} else {
+				$template = $design_style ? $design_style . '/content-widget-listing.php' : 'content-widget-listing.php';
 
+				$output = geodir_get_template_html(
+					$template,
+					array(
+						'widget_listings'   => $widget_listings,
+						'column_gap_class'  => $column_gap ? 'mb-' . absint( $column_gap ) : 'mb-4',
+						'row_gap_class'     => $row_gap ? 'px-' . absint( $row_gap ) : '',
+						'card_border_class' => $card_border_class,
+						'card_shadow_class' => $card_shadow_class,
+					)
+				);
 			}
-
-		}else{
-			echo aui()->alert(array(
+		} else {
+			$output = aui()->alert( array(
 					'type'=> 'info',
-					'content'=> __("Your recently viewed listings will show here.","geodirectory")
+					'content'=> __( "Your recently viewed listings will show here.", "geodirectory" )
 				)
 			);
-
 		}
 
-		echo ob_get_clean();
+		if ( $output ) {
+			echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 
 		wp_die();
 	}
