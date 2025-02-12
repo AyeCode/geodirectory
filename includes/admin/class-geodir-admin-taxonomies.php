@@ -509,7 +509,7 @@ class GeoDir_Admin_Taxonomies {
 
         $img_id = !empty( $cat_icon['id'] ) ? $cat_icon['id'] : '';
         $img_src = !empty( $cat_icon['src'] ) ? $cat_icon['src'] : '';
-        $show_img = !empty( $cat_icon['full'] ) ? $cat_icon['full'] : admin_url( 'images/media-button-image.gif' );
+        $show_img = !empty( $cat_icon['full'] ) ? $cat_icon['full'] : geodir_plugin_url() . '/assets/images/media-button-image.gif';
 
         ob_start();
         ?>

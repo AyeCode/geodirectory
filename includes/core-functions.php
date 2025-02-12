@@ -318,7 +318,7 @@ function geodir_params() {
 		'i18n_searching'                               => _x( 'Searching&hellip;', 'geodir select', 'geodirectory' ),
 		'txt_choose_image'                             => __( 'Choose an image', 'geodirectory' ),
 		'txt_use_image'                                => __( 'Use image', 'geodirectory' ),
-		'img_spacer'                                   => admin_url( 'images/media-button-image.gif' ),
+		'img_spacer'                                   => geodir_plugin_url() . '/assets/images/media-button-image.gif',
 		'txt_post_review'                              => __( 'Post Review', 'geodirectory' ),
 		'txt_post_reply'                               => __( 'Post reply', 'geodirectory' ),
 		'txt_leave_a_review'                           => __( 'Leave a Review', 'geodirectory' ),

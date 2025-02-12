@@ -460,7 +460,7 @@ class GeoDir_Admin_Settings {
 						}
 					}else{
 						$remove_class = 'gd-hidden';
-						$show_img = '<img src="'.admin_url( 'images/media-button-image.gif' ).'" />';
+						$show_img = '<img src="' . esc_url( geodir_plugin_url() . '/assets/images/media-button-image.gif' ) . '" />';
 					}
 
 
