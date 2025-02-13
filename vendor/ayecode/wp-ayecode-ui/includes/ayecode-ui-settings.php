@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.31';
+		public $version = '0.2.32';
 
 		/**
 		 * Class textdomain.
@@ -1299,6 +1299,12 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			if ( function_exists( 'hello_elementor_setup' ) ) {
 				echo '.aui-nav-links .pagination{justify-content:inherit}';
 			}
+
+            // Astra theme - when woocommerce active they add compatibility CSS which breaks select2 in modals
+            if( defined('ASTRA_THEME_VERSION')){
+                echo '.woocommerce-js.modal-open .select2-container .select2-dropdown, .woocommerce-js.modal-open .select2-container .select2-search__field, .woocommerce-page.modal-open .select2-container .select2-dropdown, .woocommerce-page.modal-open .select2-container .select2-search__field{z-index: 1056;}';
+            }
+
 			?></style><?php
 			$custom_css = ob_get_clean();
 
