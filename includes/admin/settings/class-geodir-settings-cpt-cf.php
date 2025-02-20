@@ -729,6 +729,35 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
+			// TikTok
+			$custom_fields['tiktok'] = array( // The key value should be unique and not contain any spaces.
+				'field_type'  => 'url',
+				'class'       => 'gd-tiktok',
+				'icon'        => 'fab fa-tiktok',
+				'name'        => __( 'TikTok', 'geodirectory' ),
+				'description' => __( 'Adds a TikTok url input. This can be used by other plugins if the htmlvar remains `tiktok`.', 'geodirectory' ),
+				'defaults'    => array(
+					'data_type'          => 'TEXT',
+					'admin_title'        => 'TikTok',
+					'frontend_title'     => 'TikTok',
+					'frontend_desc'      => 'You can enter your TikTok url.',
+					'htmlvar_name'       => 'tiktok',
+					'is_active'          => true,
+					'for_admin_use'      => false,
+					'default_value'      => '',
+					'show_in'            => '[detail]',
+					'is_required'        => false,
+					'option_values'      => '',
+					'validation_pattern' => '',
+					'validation_msg'     => '',
+					'required_msg'       => '',
+					'field_icon'         => 'fab fa-tiktok',
+					'css_class'          => '',
+					'cat_sort'           => false,
+					'cat_filter'         => false
+				)
+			);
+
 			// Terms &amp; Conditions
 			$custom_fields['terms_conditions'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'checkbox',
