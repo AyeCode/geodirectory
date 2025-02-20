@@ -129,6 +129,16 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			'advanced' => false,
 			'group'    => __( 'Filters', 'geodirectory' ),
 		);
+		$arguments['excerpt_length'] = array(
+			'title' => __( 'Comment excerpt length:', 'geodirectory' ),
+			'desc' => __( 'Maximum number of characters used to display a comment excerpt. Default: 100.', 'geodirectory' ),
+			'type' => 'number',
+			'default' => '',
+			'placeholder' => '100',
+			'desc_tip' => true,
+			'advanced' => false,
+			'group' => __( 'Filters', 'geodirectory' ),
+		);
 		$arguments['add_location_filter']   = array(
 			'title'    => __( 'Enable location filter', 'geodirectory' ),
 			'type'     => 'checkbox',
@@ -279,6 +289,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			'title'                 => '',
 			'count'                 => '5',
 			'min_rating'            => 0,
+			'excerpt_length'        => '',
 			'add_location_filter'   => '',
 			'use_viewing_post_type' => '',
 			'row_items'             => '',
@@ -316,6 +327,13 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			$instance['row_cols'] = 6;
 		}
 
+		// Comment excerpt length.
+		if ( ! empty( $instance['excerpt_length'] ) && (int) $instance['excerpt_length'] > 0 ) {
+			$instance['excerpt_length'] = (int) $instance['excerpt_length'];
+		} else {
+			$instance['excerpt_length'] = 100;
+		}
+
 		// prints the widget
 		extract( $widget_args, EXTR_SKIP );
 
@@ -349,7 +367,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		 * @since 1.0.0
 		 *
 		 */
-		$excerpt_length = apply_filters( 'geodir_recent_reviews_excerpt_length', 100 );
+		$excerpt_length = apply_filters( 'geodir_recent_reviews_excerpt_length', (int) $instance['excerpt_length'] );
 
 		/**
 		 * Filters the recent reviews default location filter.
@@ -586,9 +604,12 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			$readmore_seo_class = $design_style ? 'sr-only visually-hidden' : '';
 			$read_more          = '<a class="comment_excerpt" href="' . $comment_permalink . '">' . __( 'Read more', 'geodirectory' ) . '<span class="gd-visuallyhidden ' . $readmore_seo_class . '"> ' . __( 'about this listing', 'geodirectory' ) . '</span></a>';
 
-			$comment_content_length = strlen( $comment_content );
+			$comment_content_length = geodir_utf8_strlen( $comment_content );
 			if ( $comment_content_length > $comment_lenth ) {
-				$comment_excerpt = geodir_utf8_substr( $comment_content, 0, $comment_lenth ) . '... ' . $read_more;
+				$comment_excerpt = trim( geodir_utf8_substr( $comment_content, 0, $comment_lenth ) );
+
+				/* translators: 1: Comment text, 2: Read more link. */
+				$comment_excerpt = wp_sprintf( _x( '%1$s&hellip; %2$s', 'Recent review comment excerpt', 'geodirectory' ), $comment_excerpt, $read_more );
 			} else {
 				$comment_excerpt = $comment_content;
 			}

@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.8.102 - TBD =
+* GD > Recent Reviews option added to customize comment excerpt length - ADDED
+
 = GeoDirectory v2.8.101 - 2025-02-13 =
 * GD > Import & Export add message not to use Excel file - CHANGED
 * GD > Recently Viewed widget option added to manage archive item template - ADDED
