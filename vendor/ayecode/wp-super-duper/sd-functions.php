@@ -3387,7 +3387,7 @@ function sd_render_block( $block_content, $block, $instance = '' ) {
 			}
 
 			if ( $valid_type ) {
-				$block_content = '<div class="' . esc_attr( wp_get_block_default_classname( $instance->name ) ) . ' sd-block-has-rule">' . $content . '</div>';
+				$block_content = '<div class="' . esc_attr( wp_get_block_default_classname( $instance->name ) ) . ' sd-block-has-rule' . ( $output_condition['type'] == 'hide' ? ' sd-block-hide-rule' : '' ) . '">' . $content . '</div>';
 			}
 		}
 	}
@@ -3778,6 +3778,15 @@ if(!function_exists('sd_blocks_render_blocks')){
 	 * @return mixed|string
 	 */
 	function sd_blocks_render_blocks($block_content, $parsed_block, $thiss = array() ){
+		// Check hide block visibility conditions.
+		if ( ! empty( $parsed_block ) && ! empty( $parsed_block['attrs']['visibility_conditions'] ) && $block_content && strpos( strrev( $block_content ), strrev( ' sd-block-has-rule sd-block-hide-rule"></div>' ) ) === 0 && ! empty( $thiss ) && $thiss->name ) {
+			$match_content = '<div class="' . esc_attr( wp_get_block_default_classname( $thiss->name ) ) . ' sd-block-has-rule sd-block-hide-rule"></div>';
+
+			// Return empty content to hide block.
+			if ( $block_content == $match_content ) {
+				return '';
+			}
+		}
 
 		// Check if ita a nested block that needs to be wrapped
 		if(! empty($parsed_block['attrs']['sd_shortcode_close'])){

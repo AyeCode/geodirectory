@@ -1,3 +1,6 @@
+= 0.2.33 - 2025-02-20 =
+* Some hosts can show wp-content folder twice in asset URLs - FIXED
+
 = 0.2.32 - 2025-02-13 =
 * Astra theme woocommerce compatibility CSS breaks select2 in modals - FIXED
 
