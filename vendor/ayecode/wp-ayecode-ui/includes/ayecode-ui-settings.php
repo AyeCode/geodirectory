@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.32';
+		public $version = '0.2.33';
 
 		/**
 		 * Class textdomain.
@@ -759,6 +759,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
             // Build URL using WP_CONTENT_URL and the relative path
             $url = trailingslashit($content_url) . $after_content;
+
+            // some hosts end up with /wp-content/wp-content/
+            $url = str_replace( '/wp-content/wp-content/', '/wp-content/', $url );
 
             return trailingslashit($url);
         }
