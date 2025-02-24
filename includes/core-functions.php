@@ -637,6 +637,7 @@ function geodir_get_widgets(){
 		'GeoDir_Widget_Single_Taxonomies',
 		'GeoDir_Widget_Single_Next_Prev',
 		'GeoDir_Widget_Single_Reviews',
+		'GeoDir_Widget_Tags',
 		'GeoDir_Widget_Post_Distance',
 		'GeoDir_Widget_Map_Pinpoint',
 		'GeoDir_Widget_Page_Title',
