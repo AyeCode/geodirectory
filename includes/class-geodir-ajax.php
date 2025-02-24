@@ -56,6 +56,7 @@ class GeoDir_AJAX {
 			'save_api_key'			=> false,
 			'bestof'			=> true,
 			'cpt_categories' => true,
+			'cpt_tags' => true,
 			'json_search_users' => false,
 			'ninja_forms' => true,
 			'get_tabs_form' => false,
@@ -692,6 +693,19 @@ class GeoDir_AJAX {
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
 		GeoDir_Widget_Categories::get_categories($_POST);
+
+		wp_die();
+	}
+
+	/**
+	 * Get GD > Tags widget ajax content.
+	 *
+	 * @since 2.8.103
+	 */
+	public static function cpt_tags() {
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		GeoDir_Widget_Tags::get_tags_ajax_content( $_POST );
 
 		wp_die();
 	}

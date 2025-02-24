@@ -322,6 +322,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.103 - TBD =
 * GD > Categories looses BS5 style on AJAX CPT change - FIXED
 * GD > Categories append post type name setting is not wokring - FIXED
+* GD > Tags widget added to show GD post type tags - ADDED
 
 = GeoDirectory v2.8.102 - 2025-02-20 =
 * GD > Recent Reviews option added to customize comment excerpt length - ADDED
