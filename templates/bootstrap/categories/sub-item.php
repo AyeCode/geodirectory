@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.3.9
+ * @version    2.8.103
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -69,8 +69,6 @@ $cat_class .= ' ' . sd_build_aui_class(
 $cat_class = normalize_whitespace( $cat_class );
 
 // Count Text
-$count = !$hide_count ? ' <span class="gd-cptcat-count badge ' . ( $aui_bs5 ? 'text-bg-light ms-2' : 'badge-light ml-2' ) . '">' . $cat_count . '</span>' : '';
-// Count Text
 $count_class = ( $aui_bs5 ? 'ms-3' : 'ml-3' );
 
 if ( ! $hide_count ) {
@@ -82,7 +80,7 @@ if ( ! $hide_count ) {
 	} else if ( ! empty( $args['badge_color'] ) ) {
 		$count_class .= ' badge badge-' . esc_attr( $args['badge_color'] );
 	} else {
-		$count_class .= ' badge badge-light';// . ( $aui_bs5 ? 'text-bg-light' : 'badge-light' );
+		$count_class .= ' badge badge-light';
 	}
 
 	$count_class .= ' ' . sd_build_aui_class(
@@ -94,30 +92,7 @@ if ( ! $hide_count ) {
 		)
 	);
 
-	$badge_text_append = ! empty( $args['badge_text_append'] ) ? esc_attr( $args['badge_text_append'] ) : '';
-	$cat_num = absint( wp_strip_all_tags( $cat_count ) );
-	$cat_app = '';
-
-	if ( 'options' === $badge_text_append ) {
-		/* translators: %s: items count */
-		$cat_app = sprintf( _n( '%s option', '%s options', $cat_num, 'geodirectory' ), number_format_i18n( $cat_num ) );
-	} elseif ( 'listings' === $badge_text_append ) {
-		/* translators: %s: items count */
-		$cat_app = sprintf( _n( '%s listing', '%s listings', $cat_num, 'geodirectory' ), number_format_i18n( $cat_num ) );
-	} elseif ( 'items' === $badge_text_append ) {
-		/* translators: %s: items count */
-		$cat_app = sprintf( _n( '%s item', '%s items', $cat_num, 'geodirectory' ), number_format_i18n( $cat_num ) );
-	} elseif ( 'cpt' === $badge_text_append ) {
-		$cpt_name          = geodir_post_type_name( $args['post_type'], true );
-		$cpt_name_singular = geodir_post_type_singular_name( $args['post_type'], true );
-		$cat_app           = '1' == $cat_num ? number_format_i18n( $cat_num ) . ' ' . $cpt_name_singular : number_format_i18n( $cat_num ) . ' ' . $cpt_name;
-	}
-
-	if ( $cat_app ) {
-		$cat_count = str_replace( $cat_num, $cat_app, $cat_count );
-	}
-
-	$count = '<span class="gd-cptcat-count ' . esc_attr( $count_class ) . '">' . $cat_count . '</span>';
+	$count = '<span class="gd-cptcat-count ' . esc_attr( $count_class ) . '">' . $term_count_text . '</span>';
 } else {
 	$count = '';
 }

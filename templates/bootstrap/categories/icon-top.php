@@ -2,42 +2,13 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.3.9
+ * @version    2.8.103
  */
-
-//$cpt_row = $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
-//$cpt_row .= $depth ? '' : '<div class="card-body text-center btn btn-outline-primary p-1 py-4">';
-//$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
-//
-//$icon = '';
-//if(!$hide_icon){
-//	$icon_size_class = isset($args['icon_size']) ? sanitize_html_class($args['icon_size']) : 'h1';
-//	if($icon_size_class=='box-large'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconlarge';}
-//	if($icon_size_class=='box-medium'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconmedium';}
-//	if($icon_size_class=='box-small'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconsmall';}
-//	$icon_size_class .= $args['icon_position'] == 'top' ? ' mb-3 ' : ' d-inline-block mr-1 align-middle';
-//	$img_class = $depth ? ' d-inline-block iconsmall mr-1' : $icon_size_class;
-//	$icon .= '<div class="gd-cptcat-cat-left  text-whitex border-0 m-0 '.$img_class.'" >';
-//	$icon .= "<span class='gd-cptcat-icon' style='color: $cat_color;'>$cat_icon</span>";
-//	$icon .= '</div>';
-//}
-//
-//if(!$depth && $args['icon_position'] != 'left'){$cpt_row .= $icon;}
-//
-//$indents = $depth > 2 ? implode("", array_fill( 0,$depth - 2, "- " ) ) : '';
-//
-//$link_class = $depth ? 'h6' : 'font-weight-bold fw-bold h5';
-//$cpt_row .= '<div class="gd-cptcat-cat-right   text-uppercase text-truncate">';
-//$cpt_row .= '<a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '" class="text-lightx text-reset stretched-link   '.$link_class.'">';
-//$cpt_row .= $indents;
-//$cpt_row .= $args['icon_position'] == 'left' ? $icon : '';
-//$cpt_row .= $cat_name  . '</a>'. $count;
-//$cpt_row .= $depth  ? '</div></div>' : '</div>';
-
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
 /**
  * Variables.
  *
@@ -86,30 +57,7 @@ if ( ! $hide_count ) {
 		)
 	);
 
-	$badge_text_append = ! empty( $args['badge_text_append'] ) ? esc_attr( $args['badge_text_append'] ) : '';
-	//  $cat_count = absint($cat_count);
-	//  print_r($args);
-	$cat_num = absint( wp_strip_all_tags( $cat_count ) );
-	$cat_app = '';
-	if ( 'options' === $badge_text_append ) {
-		/* translators: %s: items count */
-		$cat_app = sprintf( _n( '%s option', '%s options', $cat_num, 'geodirectory' ), number_format_i18n( $cat_num ) );
-	} elseif ( 'listings' === $badge_text_append ) {
-		/* translators: %s: items count */
-		$cat_app = sprintf( _n( '%s listing', '%s listings', $cat_num, 'geodirectory' ), number_format_i18n( $cat_num ) );
-	} elseif ( 'items' === $badge_text_append ) {
-		/* translators: %s: items count */
-		$cat_app = sprintf( _n( '%s item', '%s items', $cat_num, 'geodirectory' ), number_format_i18n( $cat_num ) );
-	} elseif ( 'cpt' === $badge_text_append ) {
-		$cpt_name          = geodir_post_type_name( $args['post_type'], true );
-		$cpt_name_singular = geodir_post_type_singular_name( $args['post_type'], true );
-		$cat_app           = '1' == $cat_num ? number_format_i18n( $cat_num ) . ' ' . $cpt_name_singular : number_format_i18n( $cat_num ) . ' ' . $cpt_name;
-	}
-	if ( $cat_app ) {
-		$cat_count = str_replace( $cat_num, $cat_app, $cat_count );
-	}
-
-	$count = ' <span class="gd-cptcat-count ' . esc_attr( $count_class ) . '">' . $cat_count . '</span>';
+	$count = ' <span class="gd-cptcat-count ' . esc_attr( $count_class ) . '">' . $term_count_text . '</span>';
 } else {
 	$count = '';
 }
