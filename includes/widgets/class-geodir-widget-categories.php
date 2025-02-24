@@ -667,14 +667,17 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	 */
 	public static function get_categories( $params ) {
 		$params['via_ajax'] = true;
-		$output             = self::categories_output( $params );
-		if ( ! empty( $output ) ) {
-			echo $output;
+		$output = self::categories_output( $params );
+
+		if ( empty( $output ) ) {
+			$output = '<div class="gd-cptcats-empty alert alert-info">' . __( 'No categories found', 'geodirectory' ) . '</div>';
 		} else {
-			$design_style = geodir_design_style();
-			$alert_class  = $design_style ? 'alert alert-info' : '';
-			echo '<div class="gd-cptcats-empty ' . $alert_class . '">' . __( 'No categories found', 'geodirectory' ) . '</div>';
+			if ( function_exists( 'aui_bs_convert_sd_output' ) ) {
+				$output = aui_bs_convert_sd_output( $output );
+			}
 		}
+
+		echo $output;
 	}
 
 	/**
@@ -683,35 +686,15 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	 * @since 2.0.0
 	 */
 	public function add_js() {
+		global $geodir_cats_script;
+
+		if ( ! empty( $geodir_cats_script ) ) {
+			return;
+		}
+
+		$geodir_cats_script = true;
 		?>
-		<script type="text/javascript">
-			if (!window.gdCategoriesJs) {
-				document.addEventListener("DOMContentLoaded", function(event) {
-					jQuery('.geodir-cat-list-tax').on("change", function(e) {
-						e.preventDefault();
-						var $widgetBox = jQuery(this).closest('.geodir-categories-container');
-						var $container = jQuery('.gd-cptcat-rows', $widgetBox);
-						$container.addClass('gd-loading');
-						$container.html('<i class="fas fa-cog fa-spin" aria-hidden="true"></i>');
-						var data = {
-							'action': 'geodir_cpt_categories',
-							'security': geodir_params.basic_nonce,
-							'ajax_cpt': jQuery(this).val()
-						};
-						jQuery('.gd-wgt-params', $widgetBox).find('input').each(function() {
-							if (jQuery(this).attr('name')) {
-								data[jQuery(this).attr('name')] = jQuery(this).val();
-							}
-						});
-						jQuery.post(geodir_params.ajax_url, data, function(response) {
-							$container.html(response);
-							$container.removeClass('gd-loading');
-						});
-					})
-				});
-				window.gdCategoriesJs = true;
-			}
-		</script>
+<script type="text/javascript">if(!window.gdCategoriesJs){document.addEventListener("DOMContentLoaded",function(event){jQuery(".geodir-cat-list-tax").on("change",function(e){e.preventDefault();var $widgetBox=jQuery(this).closest(".geodir-categories-container");var $container=$widgetBox.find(".gd-cptcat-rows:first");$container.addClass("gd-loading p-3 text-center").html('<i class="fas fa-circle-notch fa-spin fa-2x" aria-hidden="true"></i>');var data={action:"geodir_cpt_categories",security:geodir_params.basic_nonce,ajax_cpt:jQuery(this).val()};$widgetBox.find(".gd-wgt-params:first").find("input").each(function(){if(jQuery(this).attr("name")){data[jQuery(this).attr("name")]=jQuery(this).val()}});jQuery.post(geodir_params.ajax_url,data,function(response){$container.removeClass("gd-loading p-3 text-center").html(response)})})});window.gdCategoriesJs=true}</script>
 		<?php
 	}
 
@@ -734,6 +717,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		$old_gd_use_query_vars = $gd_use_query_vars;
 
 		$gd_use_query_vars = geodir_is_page( 'detail' ) ? true : false;
+
+		$instance = $params;
 
 		$args = wp_parse_args(
 			(array) $params,
@@ -961,7 +946,14 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				if ( $ajax_cpt && $ajax_cpt !== $cpt ) {
 					continue;
 				}
-				$cpt_options[] = '<option value="' . $cpt . '" ' . selected( $cpt, $current_posttype, false ) . '>' . wp_sprintf( __( '%s Categories', 'geodirectory' ), __( $cpt_info['labels']['singular_name'], 'geodirectory' ) ) . '</option>';
+
+				$args['cpt_name'] = geodir_post_type_name( $cpt, true );
+				$args['cpt_singular_name'] = geodir_post_type_singular_name( $cpt, true );
+
+				$args['cpt_name_lcase'] = geodir_strtolower( $args['cpt_name'] );
+				$args['cpt_singular_name_lcase'] = geodir_strtolower( $args['cpt_singular_name'] );
+
+				$cpt_options[] = '<option value="' . $cpt . '" ' . selected( $cpt, $current_posttype, false ) . '>' . wp_sprintf( __( '%s Categories', 'geodirectory' ), $args['cpt_singular_name'] ) . '</option>';
 
 				// if ajaxed then only show the first one
 				if ( $cpt_ajax && $cpt_list != '' ) {
@@ -1042,7 +1034,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					}
 
 					if ( ! empty( $args['cpt_title'] ) && ! $cpt_ajax ) {
-						$cpt_row .= '<' . esc_attr( $args['title_tag'] ) . ' class="gd-cptcat-title">' . wp_sprintf( __( '%s Categories', 'geodirectory' ), __( $cpt_info['labels']['singular_name'], 'geodirectory' ) ) . '</' . esc_attr( $args['title_tag'] ) . '>';
+						$cpt_row .= '<' . esc_attr( $args['title_tag'] ) . ' class="gd-cptcat-title">' . wp_sprintf( __( '%s Categories', 'geodirectory' ), $args['cpt_singular_name'] ) . '</' . esc_attr( $args['title_tag'] ) . '>';
 					}
 
 					if ( $design_style && $open_wrap ) {
@@ -1169,48 +1161,36 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			if ( ! $via_ajax && $cpt_ajax && ! empty( $cpt_options ) ) {
 				global $geodirectory;
 				$post_type = is_array( $args['post_type'] ) ? implode( ',', $args['post_type'] ) : ( ! empty( $args['post_type'] ) ? $args['post_type'] : '0' );
-				$output   .= '<div class="gd-cptcats-select"><div class="gd-wgt-params">';
-				$output   .= '<input type="hidden" name="post_type" value="' . esc_attr( $post_type ) . '">';
-				$output   .= '<input type="hidden" name="cpt_ajax" value="' . $cpt_ajax . '">';
-				$output   .= '<input type="hidden" name="filter_ids" value="' . $filter_ids . '">';
-				$output   .= '<input type="hidden" name="cpt_title" value="' . absint( $args['cpt_title'] ) . '">';
-				$output   .= '<input type="hidden" name="title_tag" value="' . $args['title_tag'] . '">';
-				$output   .= '<input type="hidden" name="hide_empty" value="' . $hide_empty . '">';
-				$output   .= '<input type="hidden" name="hide_count" value="' . $hide_count . '">';
-				$output   .= '<input type="hidden" name="hide_icon" value="' . $hide_icon . '">';
-				$output   .= '<input type="hidden" name="cpt_left" value="' . $cpt_left . '">';
-				$output   .= '<input type="hidden" name="sort_by" value="' . $sort_by . '">';
-				$output   .= '<input type="hidden" name="max_level" value="' . $max_level . '">';
-				$output   .= '<input type="hidden" name="max_count" value="' . $max_count . '">';
-				$output   .= '<input type="hidden" name="no_cpt_filter" value="' . absint( $args['no_cpt_filter'] ) . '">';
-				$output   .= '<input type="hidden" name="no_cat_filter" value="' . absint( $args['no_cat_filter'] ) . '">';
-				$output   .= '<input type="hidden" name="ajax_is_listing" value="' . $is_listing . '">';
+				$output .= '<div class="gd-cptcats-select"><div class="gd-wgt-params">';
+				$output .= '<input type="hidden" name="post_type" value="' . esc_attr( $post_type ) . '">';
+				$output .= '<input type="hidden" name="cpt_ajax" value="' . esc_attr( $cpt_ajax ) . '">';
+				$output .= '<input type="hidden" name="filter_ids" value="' . esc_attr( $filter_ids ) . '">';
+				$output .= '<input type="hidden" name="cpt_title" value="' . absint( $args['cpt_title'] ) . '">';
+				$output .= '<input type="hidden" name="title_tag" value="' . esc_attr( $args['title_tag'] ) . '">';
+				$output .= '<input type="hidden" name="hide_empty" value="' . esc_attr( $hide_empty ) . '">';
+				$output .= '<input type="hidden" name="hide_count" value="' . esc_attr( $hide_count ) . '">';
+				$output .= '<input type="hidden" name="hide_icon" value="' . esc_attr( $hide_icon ) . '">';
+				$output .= '<input type="hidden" name="cpt_left" value="' . esc_attr( $cpt_left ) . '">';
+				$output .= '<input type="hidden" name="sort_by" value="' . esc_attr( $sort_by ) . '">';
+				$output .= '<input type="hidden" name="max_level" value="' . esc_attr( $max_level ) . '">';
+				$output .= '<input type="hidden" name="max_count" value="' . esc_attr( $max_count ) . '">';
+				$output .= '<input type="hidden" name="no_cpt_filter" value="' . absint( $args['no_cpt_filter'] ) . '">';
+				$output .= '<input type="hidden" name="no_cat_filter" value="' . absint( $args['no_cat_filter'] ) . '">';
+				$output .= '<input type="hidden" name="ajax_is_listing" value="' . (int) $is_listing . '">';
+				$output .= '<input type="hidden" name="ajax_is_detail" value="' . (int) $is_detail . '">';
+				$output .= '<input type="hidden" name="ajax_is_category" value="' . (int) $is_category . '">';
+				$output .= '<input type="hidden" name="ajax_post_ID" value="' . absint( $post_ID ) . '">';
+				$output .= '<input type="hidden" name="ajax_current_term_id" value="' . absint( $current_term_id ) . '">';
 
-				$output .= '<input type="hidden" name="card_color" value="' . esc_attr( $args['card_color'] ) . '">';
-				$output .= '<input type="hidden" name="icon_color" value="' . esc_attr( $args['icon_color'] ) . '">';
-				$output .= '<input type="hidden" name="icon_size" value="' . esc_attr( $args['icon_size'] ) . '">';
-				$output .= '<input type="hidden" name="design_type" value="' . esc_attr( $args['design_type'] ) . '">';
-				$output .= '<input type="hidden" name="row_items" value="' . absint( $args['row_items'] ) . '">';
-				$output .= '<input type="hidden" name="row_positioning" value="' . esc_attr( $args['row_positioning'] ) . '">';
-				$output .= '<input type="hidden" name="card_padding_inside" value="' . absint( $args['card_padding_inside'] ) . '">';
-				$output .= '<input type="hidden" name="bg" value="' . esc_attr( $args['bg'] ) . '">';
-				$output .= '<input type="hidden" name="mt" value="' . absint( $args['mt'] ) . '">';
-				$output .= '<input type="hidden" name="mb" value="' . absint( $args['mb'] ) . '">';
-				$output .= '<input type="hidden" name="mr" value="' . absint( $args['mr'] ) . '">';
-				$output .= '<input type="hidden" name="ml" value="' . absint( $args['ml'] ) . '">';
-				$output .= '<input type="hidden" name="pt" value="' . absint( $args['pt'] ) . '">';
-				$output .= '<input type="hidden" name="pb" value="' . absint( $args['pb'] ) . '">';
-				$output .= '<input type="hidden" name="pr" value="' . absint( $args['pr'] ) . '">';
-				$output .= '<input type="hidden" name="pl" value="' . absint( $args['pl'] ) . '">';
-				$output .= '<input type="hidden" name="border" value="' . esc_attr( $args['border'] ) . '">';
-				$output .= '<input type="hidden" name="rounded" value="' . esc_attr( $args['rounded'] ) . '">';
-				$output .= '<input type="hidden" name="rounded_size" value="' . esc_attr( $args['rounded_size'] ) . '">';
-				$output .= '<input type="hidden" name="shadow" value="' . esc_attr( $args['shadow'] ) . '">';
+				$input_keys = array( 'card_color', 'icon_color', 'icon_size', 'design_type', 'row_items', 'row_positioning', 'card_padding_inside', 'bg', 'mt', 'mr', 'mb', 'ml', 'pt', 'pr', 'pb', 'pl', 'border', 'rounded', 'rounded_size', 'shadow', 'card_shadow', 'fa_icon', 'cat_text_color', 'cat_font_size', 'cat_font_weight', 'cat_font_case', 'badge_text_color', 'badge_font_size', 'badge_font_weight', 'badge_font_case', 'cat_text_color_custom', 'cat_font_size_custom', 'badge_position', 'badge_color', 'badge_text_append', 'badge_text_color_custom', 'badge_font_size_custom', 'css_class' );
+				foreach ( $input_keys as $input_key ) {
+					if ( isset( $instance[ $input_key ] ) ) {
+						$input_value = is_array( $args[ $input_key ] ) ? implode( ",", $args[ $input_key ] ) : $args[ $input_key ];
 
-				$output .= '<input type="hidden" name="ajax_is_detail" value="' . $is_detail . '">';
-				$output .= '<input type="hidden" name="ajax_is_category" value="' . $is_category . '">';
-				$output .= '<input type="hidden" name="ajax_post_ID" value="' . $post_ID . '">';
-				$output .= '<input type="hidden" name="ajax_current_term_id" value="' . $current_term_id . '">';
+						$output .= '<input type="hidden" name="' . esc_attr( $input_key ) . '" value="' . ( $input_value !== "" ? esc_attr( $input_value ) : "" ) . '">';
+					}
+				}
+
 				if ( ! empty( $geodirectory->location ) ) {
 					foreach ( $geodirectory->location as $key => $value ) {
 						if ( is_scalar( $value ) || ( ! is_object( $value ) && ! is_array( $value ) ) ) {
@@ -1263,6 +1243,25 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						$card_class = 'shadow-sm';
 					}
 
+					$term_count = absint( wp_strip_all_tags( $cat_count ) );
+
+					$badge_text_append = ! empty( $args['badge_text_append'] ) ? $args['badge_text_append'] : '';
+
+					if ( 'options' === $badge_text_append ) {
+						/* translators: %s: items count */
+						$term_count_text = wp_sprintf( _n( '%s option', '%s options', $term_count, 'geodirectory' ), number_format_i18n( $term_count ) );
+					} else if ( 'listings' === $badge_text_append ) {
+						/* translators: %s: items count */
+						$term_count_text = wp_sprintf( _n( '%s listing', '%s listings', $term_count, 'geodirectory' ), number_format_i18n( $term_count ) );
+					} else if ( 'items' === $badge_text_append ) {
+						/* translators: %s: items count */
+						$term_count_text = wp_sprintf( _n( '%s item', '%s items', $term_count, 'geodirectory' ), number_format_i18n( $term_count ) );
+					} else if ( 'cpt' === $badge_text_append ) {
+						$term_count_text = $term_count > 1 ? number_format_i18n( $term_count ) . ' ' . $args['cpt_name_lcase'] : number_format_i18n( $term_count ) . ' ' . $args['cpt_singular_name_lcase'];
+					} else {
+						$term_count_text = $term_count;
+					}
+
 					$template = $design_style . "/categories/$style.php";
 
 					$cpt_row .= geodir_get_template_html(
@@ -1280,6 +1279,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 							'depth'      => $depth,
 							'card_class' => $card_class,
 							'args'       => $args,
+							'term_count_text' => $term_count_text
 						)
 					);
 

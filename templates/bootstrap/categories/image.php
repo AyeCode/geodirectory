@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.3.36
+ * @version    2.8.103
  *
  * Variables.
  *
@@ -87,30 +87,7 @@ if ( ! $hide_count ) {
 		)
 	);
 
-	$badge_text_append = ! empty( $args['badge_text_append'] ) ? esc_attr( $args['badge_text_append'] ) : '';
-	$cat_num = absint( wp_strip_all_tags( $cat_count ) );
-	$cat_app = '';
-
-	if ( 'options' === $badge_text_append ) {
-		/* translators: %s: items count */
-		$cat_app = sprintf( _n( '%s option', '%s options', $cat_num, 'geodirectory' ), number_format_i18n( $cat_num ) );
-	} elseif ( 'listings' === $badge_text_append ) {
-		/* translators: %s: items count */
-		$cat_app = sprintf( _n( '%s listing', '%s listings', $cat_num, 'geodirectory' ), number_format_i18n( $cat_num ) );
-	} elseif ( 'items' === $badge_text_append ) {
-		/* translators: %s: items count */
-		$cat_app = sprintf( _n( '%s item', '%s items', $cat_num, 'geodirectory' ), number_format_i18n( $cat_num ) );
-	} elseif ( 'cpt' === $badge_text_append ) {
-		$cpt_name          = geodir_post_type_name( $args['post_type'], true );
-		$cpt_name_singular = geodir_post_type_singular_name( $args['post_type'], true );
-		$cat_app           = '1' == $cat_num ? number_format_i18n( $cat_num ) . ' ' . $cpt_name_singular : number_format_i18n( $cat_num ) . ' ' . $cpt_name;
-	}
-
-	if ( $cat_app ) {
-		$cat_count = str_replace( $cat_num, $cat_app, $cat_count );
-	}
-
-	$count = ' <span class="gd-cptcat-count ' . esc_attr( $count_class ) . '">' . $cat_count . '</span>';
+	$count = ' <span class="gd-cptcat-count ' . esc_attr( $count_class ) . '">' . $term_count_text . '</span>';
 } else {
 	$count = '';
 }
