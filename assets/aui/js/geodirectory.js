@@ -56,6 +56,12 @@ jQuery(document).ready(function($) {
 					$greedyLink = jQuery(this).closest(".greedy").find(".greedy-links .nav-link.active");
 				}
 			} else {
+				if (jQuery(this).closest(".greedy-links.dropdown-menu").length) {
+					jQuery(this).closest(".greedy-links.dropdown-menu").addClass('greedy-close-menu d-none');
+					setTimeout(function(){
+						jQuery('.greedy-close-menu').removeClass('d-none');
+					},50)
+				}
 				jQuery(this).tab('show');
 			}
 			var scrollmem = jQuery('body').scrollTop() || jQuery('html').scrollTop();
