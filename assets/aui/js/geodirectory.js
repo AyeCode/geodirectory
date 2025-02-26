@@ -56,12 +56,6 @@ jQuery(document).ready(function($) {
 					$greedyLink = jQuery(this).closest(".greedy").find(".greedy-links .nav-link.active");
 				}
 			} else {
-				if (jQuery(this).closest(".greedy-links.dropdown-menu").length) {
-					jQuery(this).closest(".greedy-links.dropdown-menu").addClass('greedy-close-menu d-none');
-					setTimeout(function(){
-						jQuery('.greedy-close-menu').removeClass('d-none');
-					},50)
-				}
 				jQuery(this).tab('show');
 			}
 			var scrollmem = jQuery('body').scrollTop() || jQuery('html').scrollTop();
@@ -663,27 +657,17 @@ jQuery(document).ready(function($) {
 		jQuery('.gd-category-dd ul').hide();
 	});
 
-
-
 	// setup search forms
-	geodir_setup_search_form();
-
+	geodir_setup_search_form(true);
 
 	// init the rating inputs, delay needed for font awesome to load
 	setTimeout(function(){gd_init_rating_input();}, 250);
-
-
-
 });
 
 // init any sliders
-function geodir_init_flexslider(){
-
-}
-
+function geodir_init_flexslider(){ }
 
 jQuery(window).on("load",function() {
-
 	// Set times to time ago
 	if(jQuery('.gd-timeago').length){
 		geodir_time_ago('.gd-timeago');
@@ -1011,7 +995,7 @@ function geodir_load_search_form(stype, el) {
 	});
 }
 
-function geodir_setup_search_form(){
+function geodir_setup_search_form(onDomReady){
 	//  new seach form change
 	if (jQuery('.search_by_post').val()) {
 		gd_s_post_type = jQuery('.search_by_post').val();
@@ -1027,7 +1011,7 @@ function geodir_setup_search_form(){
 		});
 	}, 100);
 
-	if (typeof aui_init === "function") {
+	if (!onDomReady && typeof aui_init === "function") {
 		aui_init();
 	}
 }
