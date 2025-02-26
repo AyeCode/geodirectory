@@ -1,3 +1,6 @@
+= 0.2.34 - TBD =
+* Greedy menu should auto close on tab select - CHANGED
+
 = 0.2.33 - 2025-02-20 =
 * Some hosts can show wp-content folder twice in asset URLs - FIXED
 
