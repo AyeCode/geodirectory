@@ -721,20 +721,23 @@ function geodir_getDistanceRadius( $uom = 'km' ) {
 
 function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
 	global $wp;
+
 	if ( $unit != 'km' && $unit != 'miles' ) {
 		$unit = geodir_get_option( 'search_distance_long', 'miles' );
 	}
 
 	if ( ! $dist ) {
 		if ( get_query_var( 'dist' ) ) {
-			$dist = geodir_sanitize_float( get_query_var('dist') );
-		}elseif(wp_doing_ajax() && !empty($wp->query_vars['dist'])){
-			$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
-		}else{
+			$dist = get_query_var('dist');
+		} else if ( wp_doing_ajax() && ! empty( $wp->query_vars['dist'] ) ) {
+			$dist = $wp->query_vars['dist'];
+		} else {
 			$dist = geodir_get_option( 'search_radius', 5 ); // seems to work in miles
 			$unit = geodir_get_option( 'search_distance_long', 'miles' );
 		}
 	}
+
+	$dist = geodir_sanitize_float( $dist ) > 0 ? geodir_sanitize_float( $dist ) : 5;
 
 	// Convert distance to miles
 	if ( $unit != 'miles' ) {
@@ -744,7 +747,6 @@ function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
 	// sanatize just in case
 	$lat = filter_var( $lat, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 	$lon = filter_var( $lon, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
-	$dist = geodir_sanitize_float( $dist ) > 0 ? geodir_sanitize_float( $dist ) : 5;
 
 	$lat1 = $lat - ( $dist / 69 );
 	$lat2 = $lat + ( $dist / 69 );
