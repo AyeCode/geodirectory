@@ -1388,7 +1388,7 @@ function geodir_search_form() {
 			'rounded_size_lg' => isset( $instance['btn_rounded_size_lg'] ) ? $instance['btn_rounded_size_lg'] : '',
 		)
 	);
-	$geodir_search_widget_params['buttons_class'] .= $instance['btn_bg'] ? ' btn-' . esc_attr( $instance['btn_bg'] ) : 'btn-primary';
+	$geodir_search_widget_params['buttons_class'] .= $instance['btn_bg'] ? ' btn-' . esc_attr( $instance['btn_bg'] ) : ' btn-primary';
 	$geodir_search_widget_params['buttons_class'] .= $instance['input_size'] ? ' btn-' . esc_attr( $instance['input_size'] ) : '';
 	if ( 'circle' === $instance['btn_rounded_size'] || 'circle' === $instance['btn_rounded_size_md'] || 'circle' === $instance['btn_rounded_size_lg']) {
 		$geodir_search_widget_params['buttons_class'] .= ' px-3';
