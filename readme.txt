@@ -326,6 +326,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Greedy menu should auto close on tab select - CHANGED
 * Non float distance value in near me search sometimes throws error - FIXED
 * German language double quote breaks AJAX search args on CPT switch - FIXED
+* Filters added to geodir_get_widget_listings() to short-circuit queries - ADDED 
 
 = GeoDirectory v2.8.102 - 2025-02-20 =
 * GD > Recent Reviews option added to customize comment excerpt length - ADDED

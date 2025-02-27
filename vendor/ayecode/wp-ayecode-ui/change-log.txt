@@ -1,4 +1,4 @@
-= 0.2.34 - TBD =
+= 0.2.34 - 2025-02-27 =
 * Greedy menu should auto close on tab select - CHANGED
 
 = 0.2.33 - 2025-02-20 =
