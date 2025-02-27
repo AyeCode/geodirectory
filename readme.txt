@@ -324,7 +324,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * GD > Categories append post type name setting is not wokring - FIXED
 * GD > Tags widget added to show GD post type tags - ADDED
 * Greedy menu should auto close on tab select - CHANGED
-* Non flaot distance value in near me search sometimes throws error - FIXED
+* Non float distance value in near me search sometimes throws error - FIXED
 
 = GeoDirectory v2.8.102 - 2025-02-20 =
 * GD > Recent Reviews option added to customize comment excerpt length - ADDED
