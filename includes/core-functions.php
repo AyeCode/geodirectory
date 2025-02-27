@@ -1352,26 +1352,20 @@ function geodir_search_form() {
 	global $geodir_search_widget_params;
 
 	$args = array();
+
 	if ( wp_doing_ajax() && ! empty( $_POST['keepArgs'] ) ) {
+		// Yes this has 4 html codes, all 4 are needed.
+		$KeepArgs = str_replace( array('“', '”', '″', '„' ), '"', $_POST['keepArgs'] );
 
-		// yes this has 3 html codes, all 3 are needed.
-		$KeepArgs = str_replace( array('“','”','″'), '"', $_POST['keepArgs'] );
-
-//		echo $_POST['keepArgs'].'###'." \n".$KeepArgs;
 		$_args = json_decode( stripslashes( sanitize_text_field( $KeepArgs  ) ), true );
-//		print_r( $_args );
 
 		if ( ! empty( $_args ) && is_array( $_args ) ) {
 			$args = $_args;
 		}
 	}
 
-
-
 	$instance = $args;
 	$keep_args = $args;
-//	print_r( $instance );
-
 
 	// filters position
 	$geodir_search_widget_params['filters_pos'] = ! empty( $instance['filters_pos'] ) ? esc_attr($instance['filters_pos']) : '';
