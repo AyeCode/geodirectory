@@ -1132,6 +1132,8 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 		$rows = geodir_cache_get( $cache_key, $cache_group );
 
+		$rows = apply_filters('geodir_widget_listings_rows_count_pre_query', $rows, $post_type, $count_only, $sql, $gd_query_args_widgets);
+
 		if ( $rows === false ) {
 			$rows = (int) $wpdb->get_var( $sql );
 
@@ -1220,6 +1222,9 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$cache_key = wp_hash( $sql );
 
 		$rows = geodir_cache_get( $cache_key, $cache_group );
+
+		// maybe short-circuit
+		$rows = apply_filters('geodir_widget_listings_rows_pre_query', $rows, $post_type, $count_only, $sql, $gd_query_args_widgets);
 
 		if ( $rows === false ) {
 			$rows = $wpdb->get_results( $sql );
