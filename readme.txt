@@ -322,6 +322,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.104 - TBD =
 * Map don't load when selected post type is deleted - FIXED
 * Show error message instead of blank page during save CPT setting - CHANGED
+* Protect GD temp folder via index file - CHANGED/SECURITY
 
 = GeoDirectory v2.8.103 - 2025-02-27 =
 * GD > Categories looses BS5 style on AJAX CPT change - FIXED
