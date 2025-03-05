@@ -84,47 +84,42 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 		 * Save settings.
 		 */
 		public function save() {
-			global $current_section;
-
-			//echo '###';
+			global $current_section, $geodir_settings_error;
 
 			$cpt = self::sanatize_post_type( $_POST );
-			//print_r( $_POST );
-			//echo $current_section;
-			$settings = $this->get_settings( $current_section );
-//			print_r($cpt );
-//			exit;
-			if(is_wp_error( $cpt) ){
-				$cpt->get_error_message(); exit;
+
+			if ( is_wp_error( $cpt ) ) {
+				$geodir_settings_error = $cpt->get_error_message();
+				return;
 			}
+
+			$settings = $this->get_settings( $current_section );
 
 			/**
 			 * Bypass the normal GD post save action.
 			 *
 			 * This is used when we are using the settings screens for a non GD listing CPT.
 			 */
-			if(apply_filters('geodir_post_type_save_bypass', false,$cpt,$current_section)){
+			if ( apply_filters('geodir_post_type_save_bypass', false, $cpt, $current_section ) ) {
 				return;
 			}
 
-			$post_types = geodir_get_option('post_types', array());
+			$post_types = geodir_get_option( 'post_types', array() );
+
 			if ( empty( $post_types ) ) {
 				$post_types = $cpt;
 			} else {
-				$post_types = array_merge($post_types,$cpt);
+				$post_types = array_merge( $post_types, $cpt );
 			}
 
-			//Update custom post types
+			// Update custom post types
 			geodir_update_option( 'post_types', $post_types );
 
 			foreach ( $cpt as $post_type => $args ) {
 				do_action( 'geodir_post_type_saved', $post_type, $args );
 			}
 
-			//$settings = $this->get_settings( $current_section );
-			//GeoDir_Admin_Settings::save_fields( $settings );
-
-			// run the create tables function to add our new columns.
+			// Run the create tables function to add our new columns.
 			GeoDir_Admin_Install::create_tables();
 		}
 

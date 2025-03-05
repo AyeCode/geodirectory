@@ -74,7 +74,7 @@ class GeoDir_Admin_Settings {
 	 * Save the settings.
 	 */
 	public static function save() {
-		global $current_tab;
+		global $current_tab, $geodir_settings_error;
 
 		if ( empty( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'geodirectory-settings' ) ) {
 			die( __( 'Action failed. Please refresh the page and retry.', 'geodirectory' ) );
@@ -82,6 +82,20 @@ class GeoDir_Admin_Settings {
 
 		// Trigger actions
 		do_action( 'geodir_settings_save_' . $current_tab );
+
+		// Show error message.
+		if ( ! empty( $geodir_settings_error ) ) {
+			if ( is_array( $geodir_settings_error ) ) {
+				foreach ( $geodir_settings_error as $message ) {
+					self::add_error( $message );
+				}
+			} else {
+				self::add_error( $geodir_settings_error );
+			}
+
+			return;
+		}
+
 		do_action( 'geodir_update_options_' . $current_tab );
 		do_action( 'geodir_update_options' );
 
