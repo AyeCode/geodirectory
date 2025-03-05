@@ -388,8 +388,12 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 		$cat_terms = get_terms( $term_args );
 
-		if ($hide_empty && ! $hierarchical) {
-			$cat_terms = geodir_filter_empty_terms($cat_terms);
+		if ( is_wp_error( $cat_terms ) ) {
+			return '';
+		}
+
+		if ( $hide_empty && ! $hierarchical ) {
+			$cat_terms = geodir_filter_empty_terms( $cat_terms );
 		}
 
 		$main_list_class = '';
