@@ -331,10 +331,11 @@ class Geodir_REST_Terms_Controller extends WP_REST_Terms_Controller {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param object $term Term object.
+	 * @param WP_Term $term Term object.
+	 * @param WP_REST_Request $request Request object.
 	 * @return array Links for the given term.
 	 */
-	protected function prepare_links( $term ) {
+	protected function prepare_links( $term, $request = array() ) {
 		$base = $this->namespace . '/' . $this->rest_base;
 		$links = array(
 			'self'       => array(
@@ -384,7 +385,16 @@ class Geodir_REST_Terms_Controller extends WP_REST_Terms_Controller {
 			$links['https://api.w.org/post_type'] = $post_type_links;
 		}
 
-		return $links;
+		/**
+		 * Prepares links for the request.
+		 *
+		 * @since 2.8.105
+		 *
+		 * @param array   $links Links for the given term.
+		 * @param WP_Term $term Term object.
+		 * @param WP_REST_Request $request Request object.
+		 */
+		return apply_filters( "geodir_rest_{$this->taxonomy}_item_links", $links, $term, $request );
 	}
 
 	/**
