@@ -78,7 +78,7 @@ class GeoDir_REST_Post_Tags_Controller extends GeoDir_REST_Terms_Controller {
 
 		$response = rest_ensure_response( $data );
 
-		$response->add_links( $this->prepare_links( $item ) );
+		$response->add_links( $this->prepare_links( $item, $request ) );
 
 		/**
 		 * Filters a term item returned from the API.
