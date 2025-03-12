@@ -385,6 +385,10 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
         query_string += '&search=' + jQuery('#' + map_canvas + '_search_string').val();
     }
 
+    if (options.customQueryArgs) {
+        query_string += options.customQueryArgs;
+    }
+
     map_ajax_search(map_canvas, query_string, '', hide_loading);
 }
 
