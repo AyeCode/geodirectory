@@ -301,6 +301,10 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		global $wp_query;
 
 		$posts_query  = new WP_Query();
+
+		// Set a var so we can track APi calls
+		$query_args['gd_is_api_posts_call'] = true;
+
 		$query_result = $posts_query->query( $query_args );
 
 		// Allow access to all password protected posts if the context is edit.
@@ -1550,12 +1554,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				)
 			),
 		);
-		
+
 		$custom_fields_schema = $this->get_custom_fields_schema();
 		if ( ! empty( $custom_fields_schema ) ) {
 			$schema['properties'] = array_merge( $schema['properties'], $custom_fields_schema );
 		}
-		
+
 		/*
 		if ( post_type_supports( $this->post_type, 'title' ) ) {
 			$schema['properties']['title'] = array(
@@ -1613,7 +1617,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				),
 			);
 		}*/
-		
+
 		$taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
 
 		foreach ( $taxonomies as $taxonomy ) {
@@ -1621,7 +1625,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				if ( isset( $query_params['properties'][ $taxonomy->rest_base ] ) ) {
 					unset( $query_params['properties'][ $taxonomy->rest_base ] );
 				}
-				
+
 				if ( isset( $query_params['properties'][ $taxonomy->rest_base . '_exclude' ] ) ) {
 					unset( $query_params['properties'][ $taxonomy->rest_base . '_exclude' ] );
 				}
@@ -1695,10 +1699,10 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				);
 			}
 		}
-		
+
 		unset($schema['properties'][ $this->post_type . '_category' ]);
 		unset($schema['properties'][ $this->post_type . '_tags' ]);
-		
+
 		$schema['properties']['slug'] = array(
 			'description' => __( 'An alphanumeric identifier for the object unique to its type.' ),
 			'type'        => 'string',
@@ -1766,7 +1770,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				'context'     => array( 'view', 'edit' ),
 			);
 		}
-		
+
 		/*
 		$schema['properties']['images'] = array(
 			'description' => __( 'List of images.', 'geodirectory' ),
@@ -1866,7 +1870,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			'type'        => 'string',
 			'context'     => array( 'edit' ),
 		);
-		
+
 		if ( $post_type_obj->hierarchical ) {
 			$schema['properties']['parent'] = array(
 				'description' => __( 'The ID for the parent of the object.' ),
@@ -1874,7 +1878,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				'context'     => array( 'view', 'edit' ),
 			);
 		}
-		
+
 		$post_type_attributes = array(
 			'title',
 			'editor',
@@ -1911,7 +1915,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				if ( isset( $query_params[ $taxonomy->rest_base ] ) ) {
 					unset( $query_params[ $taxonomy->rest_base ] );
 				}
-				
+
 				if ( isset( $query_params[ $taxonomy->rest_base . '_exclude' ] ) ) {
 					unset( $query_params[ $taxonomy->rest_base . '_exclude' ] );
 				}
@@ -2138,16 +2142,16 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	public function get_custom_fields_schema( $package_id = '', $default = 'all' ) {
 		global $geodirectory;
         $custom_fields  = geodir_post_custom_fields( $package_id, $default, $this->post_type );
-        
+
         $schema = array();
-        
+
         foreach ( $custom_fields as $id => $field ) {
             $admin_use              = (bool)$field['for_admin_use'];
-            
+
             if ( $admin_use ) {
                 continue;
             }
-            
+
             $name                   = $field['htmlvar_name'];
             $data_type              = $field['data_type'];
             $field_type             = $field['field_type'];
@@ -2159,10 +2163,10 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             $options                = !empty( $field['option_values'] ) ? stripslashes_deep( $field['options'] ) : array();
             $rendered_options       = !empty( $field['option_values'] ) ? stripslashes_deep( geodir_string_values_to_options( $field['option_values'], true ) ) : array();
             $enum                   = $rendered_options ? geodir_rest_get_enum_values( $rendered_options ) : array();
-            $arg_options            = array( 
-                'validate_callback' => 'geodir_rest_validate_request_arg' 
+            $arg_options            = array(
+                'validate_callback' => 'geodir_rest_validate_request_arg'
             );
-            
+
             $args                   = array();
             $args['type']           = 'string';
             $args['context']        = array( 'view', 'edit' );
@@ -2175,9 +2179,9 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             if ( (bool)$required || $default !== '' ) {
                 $args['default']    = $default;
             }
-            
+
             $continue = false;
-            
+
             switch ( $field_type ) {
                 case 'address':
                     $name       		= 'street';
@@ -2187,7 +2191,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     $city       		= !empty( $default_location->city ) ? $default_location->city : '';
                     $latitude   		= !empty( $default_location->latitude ) ? $default_location->latitude : '';
                     $longitude  		= !empty( $default_location->longitude ) ? $default_location->longitude : '';
-                    
+
                     $schema[ $name ] 	= $args;
 
 					$schema[ 'country' ] = array(
@@ -2231,7 +2235,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 							'show' => (bool) ! empty( $extra_fields['show_city'] )
 						)
 					);
-				
+
 					$schema[ 'zip' ] = array(
 						'type'          => 'string',
 						'field_type'   => $field_type,
@@ -2244,7 +2248,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 							'show' => (bool) ! empty( $extra_fields['show_zip'] )
 						)
 					);
-				
+
 					$schema[ 'map' ] = array(
 						'type'          => 'string',
 						'field_type'   => $field_type,
@@ -2257,7 +2261,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 							'show' => (bool) ! empty( $extra_fields['show_map'] )
 						)
 					);
-				
+
 					$schema[ 'latitude' ] = array(
 						'type'          => 'string',
 						'field_type'   => $field_type,
@@ -2272,7 +2276,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 							'show' => (bool) ! empty( $extra_fields['show_latlng'] )
 						)
 					);
-					
+
 					$schema[ 'longitude' ] = array(
 						'type'          => 'string',
 						'field_type'   => $field_type,
@@ -2287,7 +2291,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 							'show' => (bool) ! empty( $extra_fields['show_latlng'] )
 						)
 					);
-                    
+
 					$schema[ 'mapview' ] = array(
 						'type'          => 'string',
 						'field_type'   => $field_type,
@@ -2300,7 +2304,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 							'show' => (bool) ! empty( $extra_fields['show_mapview'] )
 						)
 					);
-                    
+
 					$schema[ 'mapzoom' ] = array(
 						'type'          => 'string',
 						'field_type'   => $field_type,
@@ -2371,7 +2375,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'readonly'    => true,
                         ),
                     );
-                    
+
                     if ( !empty( $extra_fields['gd_file_types'] ) ) {
                         $arg_options['file_types'] = $extra_fields['gd_file_types'];
                     }
@@ -2393,8 +2397,8 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         ),
                     );
 
-					$arg_options        = array( 
-						'sanitize_callback' => 'geodir_rest_sanitize_request_arg' 
+					$arg_options        = array(
+						'sanitize_callback' => 'geodir_rest_sanitize_request_arg'
 					);
                     break;
 				case 'images' :
@@ -2515,30 +2519,30 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 					}
                     break;
             }
-            
+
             if ( $continue ) {
                 continue;
             }
-            
+
             if ( !empty( $rendered_options ) ) {
                 $arg_options['rendered_options']   = $rendered_options;
             }
-            
+
             $args['field_type']     = $field_type;
             $args['data_type']      = $data_type;
             $args['extra_fields']   = $extra_fields;
             if ( !empty( $options ) ) {
                 $args['field_options']   = $options;
             }
-            
+
             $args['arg_options']   = $arg_options;
-            
+
             $schema[ $name ]    = apply_filters( 'geodir_listing_fields_args', $args, $field );
         }
 
         return apply_filters( 'geodir_listing_item_schema', $schema, $this->post_type, $package_id, $default );
     }
-	
+
 	/**
 	 * Get taxonomy terms.
 	 *
@@ -2600,7 +2604,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
      */
 	public function get_post_images( $gd_post ) {
 		$post_images = geodir_get_images( $gd_post->ID );
-		
+
 		$images = array();
 		if ( ! empty( $post_images ) ) {
 			foreach ( $post_images as $image ) {
@@ -2652,7 +2656,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		if ( ! empty( $schema['properties']['id'] ) ) {
 			$data['id'] = $gd_post->ID;
 		}
-		
+
 		// Title
 		if ( ! empty( $schema['properties']['title'] ) ) {
 			add_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
@@ -2664,17 +2668,17 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 			remove_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
 		}
-		
+
 		// Slug
 		if ( ! empty( $schema['properties']['slug'] ) ) {
 			$data['slug'] = $gd_post->post_name;
 		}
-		
+
 		// Link
 		if ( ! empty( $schema['properties']['link'] ) ) {
 			$data['link'] = get_permalink( $gd_post->ID );
 		}
-		
+
 		// Status
 		if ( ! empty( $schema['properties']['status'] ) ) {
 			$data['status'] = $gd_post->post_status;
@@ -2684,7 +2688,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		if ( ! empty( $schema['properties']['type'] ) ) {
 			$data['type'] = $gd_post->post_type;
 		}
-		
+
 		// Author
 		if ( ! empty( $schema['properties']['author'] ) ) {
 			$data['author'] = (int) $gd_post->post_author;
@@ -2727,7 +2731,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			}
 			$data['modified_gmt'] = $this->prepare_date_response( $post_modified_gmt );
 		}
-		
+
 		// Content
 		$has_password_filter = false;
 
@@ -2761,24 +2765,24 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			// Reset filter.
 			remove_filter( 'post_password_required', '__return_false' );
 		}
-		
+
 		// Categories
 		if ( isset( $taxonomies[ $this->cat_taxonomy ] ) && ! empty( $schema['properties']['post_category'] ) ) {
 			$data['default_category'] = $gd_post->default_category;
 			$data['post_category'] = $this->get_taxonomy_terms( $post, $this->cat_taxonomy );
 		}
-		
+
 		// Tags
 		if ( isset( $taxonomies[ $this->tag_taxonomy ] ) && ! empty( $schema['properties']['post_tags'] ) ) {
 			$data['post_tags'] = $this->get_taxonomy_terms( $post, $this->tag_taxonomy );
 		}
-		
+
 		// Custom fields
 		foreach ( $schema['properties'] as $field_name => $field_info ) {
 			if ( empty( $field_name ) || empty( $field_info['field_type'] ) ) {
 				continue;
 			}
-			
+
 			if ( in_array( $field_name, array( 'title', 'post_title', 'content', 'post_content', 'post_tags', 'post_category', 'images', 'post_images' ) ) || ! in_array( $field_name, $post_fields ) ) {
 				continue;
 			}
@@ -2829,7 +2833,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 							}
 						}
 					}
-			
+
 					$data[ $field_name ] = array(
 						'raw'		=> $field_value,
 						'rendered' 	=> $rendered_value
@@ -2872,7 +2876,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 							}
 						}
 					}
-			
+
 					$data[ $field_name ] = array(
 						'raw'		=> $field_value,
 						'rendered' 	=> $rendered_value
@@ -2905,18 +2909,18 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			}
 
 		}
-		
+
 		// Extra fields
 		$data['featured'] 		= (bool) $gd_post->featured;
 		$data['rating'] 		= geodir_sanitize_float( $gd_post->overall_rating );
 		$data['rating_count'] 	= (int) $gd_post->rating_count;
-		
+
 		// Featured image
 		if ( ! empty( $schema['properties']['featured_media'] ) ) {
 			$data['featured_media'] = (int) get_post_thumbnail_id( $gd_post->ID );
 			$data['featured_image'] = $this->get_featured_image( $gd_post );
 		}
-		
+
 		// Images
 		if ( ! empty( $schema['properties']['post_images'] ) ) {
 			$data['images'] = $this->get_post_images( $gd_post );

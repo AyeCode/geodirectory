@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.8.105 - 2025-03-TBD =
+* Added further BIG Data improvements when setting active - ADDED
+
 = GeoDirectory v2.8.104 - 2025-03-06 =
 * Map don't load when selected post type is deleted - FIXED
 * Show error message instead of blank page during save CPT setting - CHANGED

@@ -17,6 +17,42 @@ class GeoDir_Big_Data {
         // Set priority 11 so we call it after GD
 		add_action( 'pre_get_posts', array( $this, 'pre_get_posts' ), 11 );
 
+		// Location manager calls function to create all location on activation, this should not fire on activation on very large sites.
+		add_filter( 'geodir_location_skip_merge_post_locations', array( $this, 'skip_merge_post_locations_on_activation' ) );
+
+
+		// disable LM taxonomy location counts
+		if ( defined( 'GEODIRLOCATION_VERSION' ) ) {
+			add_action( 'init', array( $this, 'lm_init' ), 0 );
+		}
+
+	}
+
+	/**
+	 * Prevent Location Manger taking over the taxonomies class.
+	 *
+	 * @return void
+	 */
+	public function lm_init() {
+		global $geodir_location_manager;
+		remove_filter('geodir_class_taxonomies',array( $geodir_location_manager, 'extend_taxonomies'));
+	}
+
+	/**
+	 * Skip post location creations on plugin activation.
+	 *
+	 * @param $skip
+	 *
+	 * @return mixed|true
+	 */
+	public function skip_merge_post_locations_on_activation( $skip ) {
+
+		// skip on location manager activation
+		if (!empty($_REQUEST['activate'])) {
+			$skip = true;
+		}
+
+		return $skip;
 	}
 
     /**
@@ -65,7 +101,7 @@ class GeoDir_Big_Data {
 	public function maybe_get_cached_page_numbers() {
 
 		global $wp_query;
-		if ($wp_query->is_main_query() && !is_admin() && $wp_query->query_vars['gd_is_geodir_page'] && geodir_is_page('archive') ) {
+		if ($wp_query->is_main_query() && !is_admin() && !empty( $wp_query->query_vars['gd_is_geodir_page'] ) && geodir_is_page('archive') ) {
 
 			// Generate a unique key for the query
 			$tmp_qv = $wp_query->query_vars;
