@@ -73,15 +73,42 @@ class GeoDir_Bricks_Query_Filters {
 	public static function posts_join( $join, $query = array() ) {
 		global $wpdb;
 
-
 		if ( self::is_gd_post_type( $query ) ) {
-			$post_type = sanitize_key( $query->query_vars['post_type'][0] );
+			$post_type = self::query_post_type( $query->query_vars );
 
 			$table = geodir_db_cpt_table( $post_type );
-			$join  .= " INNER JOIN " . $table . " ON (" . $table . ".post_id = $wpdb->posts.ID)  ";
+			$_join = " INNER JOIN " . $table . " ON (" . $table . ".post_id = $wpdb->posts.ID) ";
+
+			if ( strpos( $join, $_join ) === false ) {
+				$join .= $_join;
+			}
 		}
 
 		return $join;
+	}
+
+	/**
+	 * Get the Query post type.
+	 *
+	 * @since 2.8.106
+	 *
+	 * @param array $query_vars Query vars.
+	 * @return string The post type.
+	 */
+	public static function query_post_type( $query_vars ) {
+		$post_type = '';
+
+		if ( empty( $query_vars['post_type'] ) ) {
+			return $post_type;
+		}
+
+		if ( is_array( $query_vars['post_type'] ) && count( $query_vars['post_type'] ) === 1 ) {
+			$post_type = sanitize_key( $query_vars['post_type'][0] );
+		} else if ( is_scalar( $query_vars['post_type'] ) ) {
+			$post_type = sanitize_key( $query_vars['post_type'] );
+		}
+
+		return $post_type;
 	}
 
 	/**
@@ -97,9 +124,11 @@ class GeoDir_Bricks_Query_Filters {
 	public static function add_query_vars( $query_vars, $settings, $element_id, $element_name ) {
 		global $geodirectory;
 
+		$post_type = self::query_post_type( $query_vars );
+
 		if (
 			! empty( $settings['hasLoop'] ) && ! empty( $settings['isGDLoop'] ) &&
-			! empty( $query_vars['post_type'] ) && count( $query_vars['post_type'] ) === 1 && geodir_is_gd_post_type( $query_vars['post_type'][0] ) // ONE post type only
+			! empty( $post_type ) && geodir_is_gd_post_type( $post_type ) // ONE post type only
 		) {
 
 			$query_vars['gd_is_geodir_page'] = 1;
@@ -162,18 +191,13 @@ class GeoDir_Bricks_Query_Filters {
 	 * @return string
 	 */
 	public static function is_gd_post_type( $query ) {
-
-		// get the post type only if 1
+		// Get the post type only if 1
 		$post_type = '';
+
 		if ( ! empty( $query->query_vars['is_bricks_geodir_loop'] ) && ! empty( $query->query_vars['is_geodir_loop'] ) ) {
-			if ( ! empty( $query->query_vars['post_type'] ) && count( $query->query_vars['post_type'] ) === 1 ) {
-				$post_type = sanitize_key( $query->query_vars['post_type'][0] );
-			} elseif ( ! empty( $query->query_vars['post_type'] ) ) {
-				$post_type = sanitize_key( $query->query_vars['post_type'] );
-			}
+			$post_type = self::query_post_type( $query->query_vars );
 
-
-			// check its a GD post type
+			// Check its a GD post type
 			if ( $post_type && ! geodir_is_gd_post_type( $post_type ) ) {
 				$post_type = '';
 			}
@@ -198,19 +222,19 @@ class GeoDir_Bricks_Query_Filters {
 		if ( $post_type ) {
 			$table = geodir_db_cpt_table( $post_type );
 
-			// filter by location
+			// Filter by location
 			if ( function_exists( 'geodir_location_posts_where' ) ) {
 				$location_where = geodir_location_posts_where( $post_type, $query );
+
 				if ( ! empty( $location_where ) ) {
 					$where .= " AND {$location_where} ";
 				}
 			}
 
-			$where .= self::convert_meta_query_to_sql( $query->query['meta_query'], $table );
-
-
+			if ( ! empty( $query->query['meta_query'] ) ) {
+				$where .= self::convert_meta_query_to_sql( $query->query['meta_query'], $table );
+			}
 		}
-
 
 		return $where;
 	}

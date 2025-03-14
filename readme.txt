@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.106 - TBD =
 * AJAX search is not working with Bricks template - FIXED
+* Bricks Query loop is not working on cpt + location page - FIXED
 
 = GeoDirectory v2.8.105 - 2025-03-13 =
 * Hook added to customize terms API response - ADDED
