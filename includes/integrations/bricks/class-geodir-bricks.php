@@ -393,6 +393,11 @@ class GeoDir_Bricks {
 
 		$post_type = ! empty( $gd_post->post_type ) ? '_' . $gd_post->post_type : '';
 
+		// Set active templates on AJAX call.
+		if ( wp_doing_ajax() && Bricks\Helpers::render_with_bricks( $page_id ) ) {
+			Bricks\Database::set_active_templates( $page_id );
+		}
+
 		$bricks_data = Bricks\Helpers::get_bricks_data( $page_id, 'gd_archive_item' . $post_type );
 
 		if ( ! empty( $bricks_data ) ) {
