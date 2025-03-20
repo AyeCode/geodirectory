@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.105\n"
+"Project-Id-Version: GeoDirectory 2.8.106\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-13 18:23+0530\n"
-"PO-Revision-Date: 2025-03-13 18:24+0530\n"
+"POT-Creation-Date: 2025-03-20 21:04+0530\n"
+"PO-Revision-Date: 2025-03-20 21:06+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -430,7 +430,7 @@ msgstr ""
 #: includes/class-geodir-elementor.php:157 includes/class-geodir-privacy.php:39
 #: includes/core-functions.php:936
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
-#: includes/integrations/bricks/class-geodir-bricks.php:477
+#: includes/integrations/bricks/class-geodir-bricks.php:482
 msgid "GeoDirectory"
 msgstr ""
 
@@ -14601,11 +14601,11 @@ msgstr ""
 msgid "Placeholder image"
 msgstr ""
 
-#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:405
+#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:429
 msgid "GeoDirectory Query"
 msgstr ""
 
-#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:415
+#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:439
 msgid "Disable GD Location Filtering"
 msgstr ""
 
