@@ -3138,7 +3138,7 @@ function geodir_load_scripts_on_call() {
 	$active = wp_doing_ajax() || wp_doing_cron() || ! is_admin();
 
 	if ( $active ) {
-		if ( ! ( ! empty( $ayecode_ui_settings ) && is_object( $ayecode_ui_settings ) ) ) {
+		if ( ! ( ! empty( $ayecode_ui_settings ) && is_object( $ayecode_ui_settings ) ) && class_exists( 'AyeCode_UI_Settings' ) ) {
 			$ayecode_ui_settings = AyeCode_UI_Settings::instance();
 		}
 
