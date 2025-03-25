@@ -225,6 +225,15 @@ class GeoDir_Bricks {
 		// Bricks
 		add_filter( 'bricks/builder/i18n', array( __CLASS__, 'builder_i18n' ), 10, 1 );
 		add_filter( 'bricks/setup/control_options', array( __CLASS__, 'add_template_types' ), 10, 1 );
+
+		// Bricks loads some init hooks with priority > 10000.
+		if ( defined( 'GEODIR_FAST_AJAX' ) && ! empty( $_REQUEST['gd-ajax'] ) && ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'geodir_ajax_search' && empty( $_REQUEST['gd-no-auth'] ) ) {
+			if ( $priority = has_action( 'init', array( 'GeoDir_Fast_AJAX', 'do_gd_ajax' ) ) ) {
+				remove_action( 'init', array( 'GeoDir_Fast_AJAX', 'do_gd_ajax' ), $priority );
+
+				add_action( 'init', array( 'GeoDir_Fast_AJAX', 'do_gd_ajax' ), 99999 );
+			}
+		}
 	}
 
 	public static function set_post_id() {
