@@ -53,6 +53,13 @@ class GeoDir_Post_types {
 	 * @return bool
 	 */
 	public static function disable_gutenberg( $is_enabled, $post_type) {
+
+		// maybe force enable block editor for a CPT
+		$force_block_editor = apply_filters('geodir_force_block_editor', false, $post_type );
+		if ( $force_block_editor ) {
+			return true;
+		}
+
 		if ( in_array( $post_type, geodir_get_posttypes() ) ) {
 			return false;
 		}
@@ -347,6 +354,13 @@ class GeoDir_Post_types {
 				 * @param string $post_type The post type.
 				 */
 				$args = apply_filters( 'geodir_post_type_args', $args, $post_type );
+
+
+				// maybe force enable block editor for a CPT
+				$force_block_editor = apply_filters('geodir_force_block_editor', false, $post_type );
+				if ( $force_block_editor ) {
+					$args['show_in_rest'] = true;
+				}
 
 				register_post_type( $post_type, $args );
 			endforeach;

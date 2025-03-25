@@ -41,7 +41,7 @@ class GeoDir_Admin_Menus {
 
 
 	/**
-	 * Show the pending posst counts on the CPT admin menu item.
+	 * Show the pending post counts on the CPT admin menu item.
 	 *
 	 * @since 2.0.0.49
 	 * @param $menu
@@ -58,6 +58,7 @@ class GeoDir_Admin_Menus {
 		$cache = wp_cache_get("geodir_post_counts");
 		if($cache !== false){
 			// we have cache so no need to count again
+			$counts = $cache;
 		}else{
 			if(!empty($cpts )){
 				foreach($cpts as $cpt){
@@ -114,7 +115,7 @@ class GeoDir_Admin_Menus {
 	 */
 	public function dashboard_page(){
 		$dashboard = GeoDir_Admin_Dashboard::instance();
-		
+
 		$dashboard->output();
 	}
 
@@ -399,7 +400,7 @@ class GeoDir_Admin_Menus {
 				$items['cpt_add_listing'][$name] = $add_item;
 			}
 		}
-		
+
 
 		return apply_filters( 'geodirectory_menu_items', $items,$loop_index );
 	}

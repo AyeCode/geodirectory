@@ -263,7 +263,14 @@ class GeoDir_API {
 					$wp_post_types[$post_type]->gd_listing = true;
 					$wp_post_types[$post_type]->show_in_rest = true;
 					$wp_post_types[$post_type]->rest_base = $data['has_archive'];
-					$wp_post_types[$post_type]->rest_controller_class = 'GeoDir_REST_Posts_Controller';
+
+
+					// Use the GD controller if its a GD API cal @todo test if this breaks anything
+					// maybe force enable block editor for a CPT
+					$force_block_editor = apply_filters('geodir_force_block_editor', false, $post_type );
+					if ( !$force_block_editor || strpos( $_SERVER['REQUEST_URI'], '/geodir/' ) !== false ) {
+						$wp_post_types[ $post_type ]->rest_controller_class = 'GeoDir_REST_Posts_Controller';
+					}
 
 					if ( ! empty( $data['taxonomies'] ) ) {
 						foreach ( $data['taxonomies'] as $taxonomy ) {
