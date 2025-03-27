@@ -949,13 +949,14 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			'new'      => __( 'New', 'geodirectory' ),
 			'featured' => __( 'Featured', 'geodirectory' ),
 			'favorite' => __( 'Favorite', 'geodirectory' ),
-			'category' => __( 'Category', 'geodirectory' ),
-		//          'custom' => __( 'Custom', 'geodirectory' ),
+			'category' => __( 'Category', 'geodirectory' )
 		);
 
 		if ( ! $over_image ) {
 			$badge_options['rating']         = __( 'Rating', 'geodirectory' );
 			$badge_options['business_hours'] = __( 'Business Hours', 'geodirectory' );
+			$badge_options['author_actions_dropdown'] = __( 'Author Actions Dropdown', 'geodirectory' );
+			$badge_options['author_actions_dropdown_dots'] = __( 'Author Actions 3 Dots Dropdown', 'geodirectory' );
 
 			$custom_fields = $this->get_custom_field_keys();
 
@@ -1041,6 +1042,10 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		} elseif ( $type == 'business_hours' ) {
 			$lhs    = $this->is_preview() ? '1' : '2';
 			$output = "[gd_post_meta title=''  id=''  key='business_hours'  show=''  no_wrap='false'  $alignment text_alignment=''  list_hide=''  list_hide_secondary='$lhs'  location=''  css_class='' ]";
+		} else if ( $type == 'author_actions_dropdown' ) {
+			$output = "[gd_author_actions hide_edit='false'  hide_delete='false'  author_page_only='true'  display='dropdown'  size='small'  alignment=''  color='primary'  text_color='white'  btn_mt='1'  btn_mr=''  btn_mb='1'  btn_ml=''  bg='' $position_args  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]";
+		} else if ( $type == 'author_actions_dropdown_dots' ) {
+			$output = "[gd_author_actions hide_edit='false'  hide_delete='false'  author_page_only='true'  display='dropdown-dots'  size='medium'  alignment=''  color='dark'  text_color='white'  btn_mt='1'  btn_mr=''  btn_mb='1'  btn_ml=''  bg='' $position_args  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]";
 		} elseif ( $type == 'custom_badge' ) {
 			$args_out = '';
 			if ( $badge_args ) {
