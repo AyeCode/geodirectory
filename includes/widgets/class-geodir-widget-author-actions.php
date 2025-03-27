@@ -80,6 +80,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 				'options' => array(
 					"" => __( 'Buttons (default)', 'geodirectory' ),
 					"dropdown" => __( 'Dropdown', 'geodirectory' ),
+					"dropdown-dots" => __( 'Dropdown (3 Dots)', 'geodirectory' ),
 				),
 				'default' => '',
 				'desc_tip' => true,
@@ -191,9 +192,9 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		global $post;
 
 		$defaults = array(
-			'hide_edit'      => 0,
-			'hide_delete'      => 0,
-			'author_page_only'      => 0,
+			'hide_edit'   => 0,
+			'hide_delete' => 0,
+			'author_page_only' => 0,
 			'display' => '',
 			'size' => '',
 			'alignment' => '',
@@ -210,10 +211,10 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			'pb'    => '',
 			'pr'    => '',
 			'pl'    => '',
-			'border'    => '',
-			'rounded'    => '',
-			'rounded_size'    => '',
-			'shadow'    => '',
+			'border' => '',
+			'rounded' => '',
+			'rounded_size' => '',
+			'shadow' => ''
 		);
 
 		/**
@@ -224,7 +225,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		$is_preview = $this->is_preview();
 
 		$show = true;
-		if ( $args['author_page_only'] && ! self::is_author_page()  ) {
+		if ( $args['author_page_only'] && ! self::is_author_page( $args ) ) {
 			$show = false;
 		}
 
@@ -239,7 +240,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			$author_actions = array();
 
 			// status
-			$post_status = self::post_status_author_page();// the post status on the author page
+			$post_status = self::post_status_author_page( $args );// the post status on the author page
 			if ( ! empty( $post_status ) ) {
 				$author_actions['status'] = $post_status;
 			}
@@ -283,7 +284,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : geodir_design_style();
 
 			if ( $design_style ) {
-				if ( $args['display'] == 'dropdown' ) {
+				if ( $args['display'] == 'dropdown' || $args['display'] == 'dropdown-dots' ) {
 					$template = 'author-actions-dropdown.php';
 				} else {
 					$template = 'author-actions.php';
@@ -294,7 +295,11 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 				if ( ! empty( $args['color'] ) ) {
 					$args['color'] = $args['color'];
 				} else {
-					$args['color'] = 'primary';
+					if ( $args['display'] == 'dropdown-dots' ) {
+						$args['color'] = 'muted';
+					} else {
+						$args['color'] = 'primary';
+					}
 				}
 
 				// text_color
@@ -343,12 +348,12 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 	 * @global object $wpdb WordPress Database object.
 	 * @global object $post The current post object.
 	 */
-	public static function post_status_author_page() {
+	public static function post_status_author_page( $args = array() ) {
 		global $wpdb, $post;
 
 		$status_parts = array();
 		if ( get_current_user_id() ) {
-			$is_author_page = self::is_author_page();
+			$is_author_page = self::is_author_page( $args );
 
 			if ( $is_author_page && ! empty( $post ) && isset( $post->post_author ) && $post->post_author == get_current_user_id() ) {
 				// We need to query real status direct as we dynamically change the status for author on author page so even non author status can view them.
@@ -376,12 +381,12 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		 * @since 2.1.0
 		 * @param array $status_parts The array of status elements.
 		 */
-		return  apply_filters('geodir_filter_status_array_on_author_page', $status_parts );
+		return  apply_filters('geodir_filter_status_array_on_author_page', $status_parts, $args );
 
 	}
 
-	public static function is_author_page() {
-		$is_author_page = apply_filters( 'geodir_post_status_is_author_page', geodir_is_page( 'author' ) );
+	public static function is_author_page( $args = array() ) {
+		$is_author_page = apply_filters( 'geodir_post_status_is_author_page', geodir_is_page( 'author' ), $args );
 
 		if ( ! $is_author_page && wp_doing_ajax() && ! empty( $_REQUEST['is_gd_author'] ) ) {
 			$is_author_page = true;

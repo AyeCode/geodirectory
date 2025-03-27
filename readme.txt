@@ -322,6 +322,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.107 - TBD =
 * Fast AJAX + AJAX search compatibility with Bricks template - FIXED
 * Added filter to allow CPT to use block editor - ADDED
+* GD > Author Actions option added to show dropdown with 3 dots icon - ADDED
 
 = GeoDirectory v2.8.106 - 2025-03-20 =
 * AJAX search is not working with Bricks template - FIXED
