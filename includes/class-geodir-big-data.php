@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class GeoDir_Big_Data {
 
+	public $cache_key = 'geodir_big_data_paging';
 
 	public function __construct() {
 
@@ -72,7 +73,7 @@ class GeoDir_Big_Data {
      * @return void
      */
     public function clear_total_query_cache() {
-        delete_option('gd_found_posts_cache');
+        delete_option($this->cache_key);
     }
 
 
@@ -104,24 +105,34 @@ class GeoDir_Big_Data {
 		if ($wp_query->is_main_query() && !is_admin() && !empty( $wp_query->query_vars['gd_is_geodir_page'] ) && geodir_is_page('archive') ) {
 
 			// Generate a unique key for the query
-			$tmp_qv = $wp_query->query_vars;
+			$tmp_qv = $this->prepare_qv( $wp_query->query_vars ) ;
 
 			// search as this can cause caches to fill up too quick
-			if (empty($tmp_qv['search_orderby_title'])) {
-
-				unset($tmp_qv['paged']); // remove pages as it will always be the same
-				unset($tmp_qv['search_orderby_title']); // can have dynamic changes on every call
+			if (empty($tmp_qv['search_orderby_title']) ) {
 
 				$query_key = md5(serialize($tmp_qv));
-				$found_posts_cache = get_option('gd_found_posts_cache', []);
+				$found_posts_cache = get_option($this->cache_key, []);
 
 				if (!isset($found_posts_cache[$query_key])) {
 					// Store the found_posts and max_num_pages values after query execution
+
+					// bail if conditions not met
+					if ( !isset($wp_query->found_posts) || $wp_query->found_posts < 10 ) {
+						return;
+					}
+
 					$found_posts_cache[$query_key] = [
 						'found_posts' => $wp_query->found_posts,
 						'max_num_pages' => $wp_query->max_num_pages,
 					];
-					update_option('gd_found_posts_cache', $found_posts_cache);
+
+					// Check if the array count exceeds 500
+					if (count($found_posts_cache) > 500) {
+						// Keep only the last 500 elements
+						$found_posts_cache = array_slice($found_posts_cache, -500, 500, true);
+					}
+
+					update_option($this->cache_key, $found_posts_cache);
 				} else {
 					// if we have a cache then set it
 					global $wp_query;
@@ -144,11 +155,11 @@ class GeoDir_Big_Data {
 		// Only apply to the main query
 		if ($wp_query->is_main_query()) {
 			// Generate a unique key for the query (you can improve the uniqueness)
-			$tmp_qv = $wp_query->query_vars;
-			unset($tmp_qv['paged']);
+			$tmp_qv = $this->prepare_qv( $wp_query->query_vars );
+
 			$query_key = md5(serialize($tmp_qv));
 
-			$found_posts_cache = get_option('gd_found_posts_cache', []);
+			$found_posts_cache = get_option($this->cache_key, []);
 
 			if (isset($found_posts_cache[$query_key])) {
 				// If we have cached found posts, remove SQL_CALC_FOUND_ROWS
@@ -156,6 +167,21 @@ class GeoDir_Big_Data {
 			}
 		}
 		return $query;
+	}
+
+	/**
+	 * Prepare query args to be hashed.
+	 *
+	 * @param $query_vars
+	 *
+	 * @return mixed
+	 */
+	public function prepare_qv( $query_vars ) {
+
+		unset($query_vars['paged']);
+		unset($query_vars['order']);
+
+		return $query_vars;
 	}
 
 	/**
