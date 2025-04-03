@@ -39,7 +39,7 @@ function geodir_predefined_custom_field_output_twitter_feed($html,$location,$cf)
 			return $gd_post->{$cf['htmlvar_name']};
 		}
 
-		$value = '<a class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/'.$gd_post->{$cf['htmlvar_name']}.'">' . wp_sprintf( __( 'Tweets by %s', 'geodirectory' ), $gd_post->{$cf['htmlvar_name']} ) . '</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
+		$value = '<a class="twitter-timeline" data-height="600" data-dnt="true" href="https://x.com/'.$gd_post->{$cf['htmlvar_name']}.'">' . wp_sprintf( __( 'Tweets by %s', 'geodirectory' ), $gd_post->{$cf['htmlvar_name']} ) . '</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
 
 		// Stripped value.
 		if ( ! empty( $output ) && isset( $output['strip'] ) ) {
