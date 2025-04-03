@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.107\n"
+"Project-Id-Version: GeoDirectory 2.8.108\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-27 20:14+0530\n"
-"PO-Revision-Date: 2025-03-27 20:14+0530\n"
+"POT-Creation-Date: 2025-04-03 19:27+0530\n"
+"PO-Revision-Date: 2025-04-03 19:27+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1598,11 +1598,11 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:679
 #: includes/helper-functions.php:1909 language.php:57
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1144
-msgid "Twitter"
+msgid "X"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1052
-msgid "You can enter your business or listing twitter url."
+msgid "You can enter your business or listing X url."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1066
@@ -5138,8 +5138,8 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:680
 msgid ""
-"Adds a twitter url input. This can be used by other plugins if the htmlvar "
-"remains `twitter`."
+"Adds a X url input. This can be used by other plugins if the htmlvar remains "
+"`twitter`."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:708
@@ -5277,11 +5277,11 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1123
-msgid "Twitter feed"
+msgid "X feed"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1124
-msgid "Adds a input for twitter username and outputs feed."
+msgid "Adds a input for X username and outputs feed."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1155
@@ -19940,7 +19940,7 @@ msgid "Enter website URL. eg. : <b>http://myplace.com</b>"
 msgstr ""
 
 #: language.php:97
-msgid "Enter twitter URL. eg. : <b>http://twitter.com/myplace</b>"
+msgid "Enter X URL. eg. : <b>http://x.com/myplace</b>"
 msgstr ""
 
 #: language.php:98
