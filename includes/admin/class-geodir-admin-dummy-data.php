@@ -1048,9 +1048,9 @@ class GeoDir_Admin_Dummy_Data {
 		$fields[] = array('post_type' => $post_type,
 		                  'data_type' => 'TEXT',
 		                  'field_type' => 'url',
-		                  'admin_title' => __('Twitter', 'geodirectory'),
-		                  'frontend_desc' => __('You can enter your business or listing twitter url.', 'geodirectory'),
-		                  'frontend_title' => __('Twitter', 'geodirectory'),
+		                  'admin_title' => __('X', 'geodirectory'),
+		                  'frontend_desc' => __('You can enter your business or listing X url.', 'geodirectory'),
+		                  'frontend_title' => __('X', 'geodirectory'),
 		                  'htmlvar_name' => 'twitter',
 		                  'default_value' => '',
 		                  'is_active' => '1',
@@ -1058,7 +1058,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'is_default' => '0',
 		                  'show_in' => '[detail]',
 		                  'show_on_pkg' => $package,
-		                  'clabels' => __('Twitter', 'geodirectory'));
+		                  'clabels' => __('X', 'geodirectory'));
 
 		$fields[] = array('post_type' => $post_type,
 		                  'data_type' => 'TEXT',

@@ -671,18 +671,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
-			// Twitter
+			// X
 			$custom_fields['twitter'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'url',
 				'class'       => 'gd-twitter',
 				'icon'        => 'fab fa-twitter',
-				'name'        => __( 'Twitter', 'geodirectory' ),
-				'description' => __( 'Adds a twitter url input. This can be used by other plugins if the htmlvar remains `twitter`.', 'geodirectory' ),
+				'name'        => __( 'X', 'geodirectory' ),
+				'description' => __( 'Adds a X url input. This can be used by other plugins if the htmlvar remains `twitter`.', 'geodirectory' ),
 				'defaults'    => array(
 					'data_type'          => 'TEXT',
-					'admin_title'        => 'Twitter',
-					'frontend_title'     => 'Twitter',
-					'frontend_desc'      => 'You can enter your business or listing twitter url.',
+					'admin_title'        => 'X',
+					'frontend_title'     => 'X',
+					'frontend_desc'      => 'You can enter your business or listing X url.',
 					'htmlvar_name'       => 'twitter',
 					'is_active'          => true,
 					'for_admin_use'      => false,
@@ -1115,18 +1115,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
-			// Twitter feed
+			// X feed
 			$custom_fields['twitter_feed'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'text',
 				'class'       => 'gd-twitter',
 				'icon'        => 'fab fa-twitter',
-				'name'        => __( 'Twitter feed', 'geodirectory' ),
-				'description' => __( 'Adds a input for twitter username and outputs feed.', 'geodirectory' ),
+				'name'        => __( 'X feed', 'geodirectory' ),
+				'description' => __( 'Adds a input for X username and outputs feed.', 'geodirectory' ),
 				'defaults'    => array(
 					'data_type'          => 'VARCHAR',
-					'admin_title'        => 'Twitter',
-					'frontend_title'         => 'Twitter',
-					'frontend_desc'         => 'Enter your Twitter username',
+					'admin_title'        => 'X',
+					'frontend_title'         => 'X',
+					'frontend_desc'         => 'Enter your X username',
 					'htmlvar_name'       => 'twitterusername',
 					'is_active'          => true,
 					'for_admin_use'      => false,
@@ -1134,7 +1134,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'show_in'            => '[detail],[owntab]',
 					'is_required'        => false,
 					'validation_pattern' => '^[A-Za-z0-9_]{1,32}$',
-					'validation_msg'     => 'Please enter a valid twitter username.',
+					'validation_msg'     => 'Please enter a valid X username.',
 					'required_msg'       => '',
 					'field_icon'         => 'fab fa-twitter',
 					'css_class'          => '',

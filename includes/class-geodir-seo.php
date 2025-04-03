@@ -1083,7 +1083,7 @@ class GeoDir_SEO {
 				add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_setup_meta' ), 0 );
 				add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_unset_meta' ), 99 );
 
-				// Twitter
+				// X
 				if ( WPSEO_Options::get( 'twitter' ) === true ) {
 					add_action( 'wpseo_head', array( __CLASS__, 'wpseo_head_setup_meta' ), 39 );
 					add_action( 'wpseo_head', array( __CLASS__, 'wpseo_head_unset_meta' ), 41 );
@@ -1567,11 +1567,11 @@ class GeoDir_SEO {
 	}
 
 	/**
-	 * Yoast filter the Twitter title.
+	 * Yoast filter the X title.
 	 *
 	 * @since 2.1.0.9
 	 *
-	 * @param string                 $title Twitter title.
+	 * @param string                 $title X title.
 	 * @param Indexable_Presentation $presentation The presentation of an indexable.
 	 * @return string Filtered title.
 	 */

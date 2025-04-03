@@ -1906,7 +1906,7 @@ function geodir_aui_colors($include_branding = false, $include_outlines = false,
 function geodir_aui_branding_colors(){
 	return array(
 		"facebook" => __('Facebook', 'geodirectory'),
-		"twitter" => __('Twitter', 'geodirectory'),
+		"twitter" => __('X', 'geodirectory'),
 		"instagram" => __('Instagram', 'geodirectory'),
 		"linkedin" => __('Linkedin', 'geodirectory'),
 		"flickr" => __('Flickr', 'geodirectory'),

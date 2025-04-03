@@ -54,7 +54,7 @@ define('PLACE_TIMING', __('Time', 'geodirectory'));
 define('PLACE_CONTACT_INFO', __('Phone', 'geodirectory'));
 define('PLACE_CONTACT_EMAIL', __('Email', 'geodirectory'));
 define('WEBSITE_TEXT', __('Website', 'geodirectory'));
-define('TWITTER_TEXT', __('Twitter', 'geodirectory'));
+define('TWITTER_TEXT', __('X', 'geodirectory'));
 define('FACEBOOK_TEXT', __('Facebook', 'geodirectory'));
 define('PLACE_CATEGORY_TEXT', __('Category', 'geodirectory'));
 define('PRO_PHOTO_TEXT', __('Add Images : <small>(You can upload more than one images to create image gallery on detail page)</small>', 'geodirectory'));
@@ -94,7 +94,7 @@ define('GEODIR_LATITUDE_ERROR_MSG', __('A numeric value is required. Please make
 define('GEODIR_LOGNGITUDE_ERROR_MSG', __('A numeric value is required. Please make sure you have either dragged the marker or clicked the button: Set Address On Map', 'geodirectory'));
 define('CONTACT_MSG', __('You can enter phone number,cell phone number etc.', 'geodirectory'));
 define('WEBSITE_MSG', __('Enter website URL. eg. : <b>http://myplace.com</b>', 'geodirectory'));
-define('TWITTER_MSG', __('Enter twitter URL. eg. : <b>http://twitter.com/myplace</b>', 'geodirectory'));
+define('TWITTER_MSG', __('Enter X URL. eg. : <b>http://x.com/myplace</b>', 'geodirectory'));
 define('FACEBOOK_MSG', __('Enter facebook URL. eg. : <b>http://facebook.com/myplace</b>', 'geodirectory'));
 define('CATEGORY_MSG', __('Select listing category from here. Select at least one category', 'geodirectory'));
 define('HTML_TAGS_ALLOW_MSG', __('Note : Basic HTML tags are allowed', 'geodirectory'));
