@@ -237,7 +237,7 @@ function geodir_rest_get_countries( $params = array() ) {
  */
 function geodir_rest_country_by_id( $value ) {
     $rows = geodir_rest_get_countries( array( 'where' => "AND CountryId = '" . (int)$value . "'", 'limit' => 1 ) );
-    
+
     if ( !empty( $rows ) ) {
 		return $rows[0];
     }
@@ -253,7 +253,7 @@ function geodir_rest_country_by_id( $value ) {
  */
 function geodir_rest_country_by_name( $value ) {
     $rows = geodir_rest_get_countries( array( 'where' => "AND Country LIKE '" . wp_slash( $value ) . "'", 'limit' => 1 ) );
-    
+
     if ( !empty( $rows ) ) {
         return $rows[0];
     }
@@ -273,7 +273,7 @@ function geodir_rest_country_by_iso2( $value ) {
     if ( !empty( $rows ) ) {
         return $rows[0];
     }
-    
+
     return NULL;
 }
 
@@ -303,7 +303,7 @@ function geodir_rest_data_type_to_field_type( $data_type ) {
             $type = 'string';
             break;
     }
-    
+
     return $type;
 }
 
@@ -322,15 +322,15 @@ function geodir_rest_data_type_to_field_type( $data_type ) {
  */
 function geodir_rest_get_enum_values( $options ) {
     $values = array();
-    
+
     if ( !empty( $options ) ) {
         foreach ( $options as $option ) {
             if ( isset( $option['value'] ) && $option['value'] !== '' && empty( $option['optgroup'] ) ) {
                 $values[] = $option['value'];
-            }            
+            }
         }
     }
-    
+
     return $values;
 }
 
@@ -553,8 +553,8 @@ function geodir_rest_url($rest_base = '', $query_args = array() ) {
  */
 function geodir_rest_post_sort_options( $post_type ) {
     $sort_options = geodir_get_sort_options( $post_type );
-    
-    $default_orderby = 'post_date';
+
+    $default_orderby = !empty($_REQUEST['search']) && (empty($_REQUEST['orderby']) || 'relevance' == $_REQUEST['orderby']) ? 'relevance' : 'post_date';
     $default_order = 'desc';
 
 	$orderby_options = array();
@@ -588,11 +588,16 @@ function geodir_rest_post_sort_options( $post_type ) {
 
             $fields[] = $field_name;
         }
-        
+
         if ( ! $has_default && ! in_array( $default_orderby, $fields ) ) {
             $default_orderby = $default_orderby . '_' . $default_order;
         }
     }
+
+	// add relevance as a sort option if search is detected
+	if(!empty($_REQUEST['search'])){
+		$orderby_options['relevance'] = __( 'Relevance', 'geodirectory' );
+	}
 
 	$options = array( 'orderby_options' => $orderby_options, 'default_orderby' => $default_orderby, 'default_order' => $default_order );
 
