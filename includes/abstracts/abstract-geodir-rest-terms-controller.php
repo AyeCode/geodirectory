@@ -64,7 +64,7 @@ class Geodir_REST_Terms_Controller extends WP_REST_Terms_Controller {
 
 		$this->meta = new WP_REST_Term_Meta_Fields( $taxonomy );
 	}
-	
+
 	/**
 	 * Registers the routes for the objects of the controller.
 	 *
