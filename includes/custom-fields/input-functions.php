@@ -1109,7 +1109,7 @@ function geodir_cfi_address( $html, $cf ) {
         ($extra_fields['map_lable'] != '') ? $map_title = $extra_fields['map_lable'] : $map_title = geodir_ucwords('set address on map');
         ($extra_fields['mapview_lable'] != '') ? $mapview_title = $extra_fields['mapview_lable'] : $mapview_title = geodir_ucwords($prefix . ' mapview');
 
-        $street  = $gd_post->street;
+        $street  = isset( $gd_post->street ) ? $gd_post->street : '';
         $street2 = isset( $gd_post->street2 ) ? $gd_post->street2 : '';
         $zip     = isset( $gd_post->zip ) ? $gd_post->zip : '';
         $lat     = isset( $gd_post->latitude) ? $gd_post->latitude : '';
