@@ -1355,7 +1355,7 @@ function geodir_search_form() {
 
 	if ( wp_doing_ajax() && ! empty( $_POST['keepArgs'] ) ) {
 		// Yes this has 4 html codes, all 4 are needed.
-		$KeepArgs = str_replace( array('“', '”', '″', '„' ), '"', $_POST['keepArgs'] );
+		$KeepArgs = str_replace( array( '“', '”', '″', '„', '«', '»' ), '"', $_POST['keepArgs'] );
 
 		$_args = json_decode( stripslashes( sanitize_text_field( $KeepArgs  ) ), true );
 
