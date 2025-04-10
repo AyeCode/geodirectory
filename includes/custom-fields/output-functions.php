@@ -2487,16 +2487,16 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 $address_fields['longitude'] = '<span itemprop="addressLongitude">' . $gd_post->longitude . '</span>';
             }
 
-            // trick LM to add hoods if
-            if (strpos($address_template, '%%neighbourhood') !== false) {
-                if(!empty($cf['extra_fields'])){
-                  $extras = maybe_unserialize($cf['extra_fields']);
-                    $extras['show_neighbourhood'] = true;
-                    $cf['extra_fields'] = maybe_serialize($extras);
-                }else{
-                    $cf['extra_fields']['show_neighbourhood'] = true;
-                }
-            }
+            // Trick LM to add hoods if
+			if ( strpos( $address_template, '%%neighbourhood' ) !== false ) {
+				if ( ! empty( $extra_fields ) ) {
+					$extras = is_array( $extra_fields ) ? $extra_fields : array();
+					$extras['show_neighbourhood'] = true;
+					$cf['extra_fields'] = maybe_serialize( $extras );
+				} else {
+					$cf['extra_fields']['show_neighbourhood'] = true;
+				}
+			}
 
             /**
              * Filter the address fields array being displayed.
