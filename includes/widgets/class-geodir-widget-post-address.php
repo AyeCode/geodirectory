@@ -381,7 +381,7 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 				}
 
 				if ( ! empty( $field ) ) {
-					$field = stripslashes_deep( $field );
+					$field = geodir_stripslashes_field( $field );
 
 					// Apply CSS css
 					if ( ! empty( $args['css_class'] ) ) {

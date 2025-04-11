@@ -2278,303 +2278,322 @@ add_filter('geodir_custom_field_output_taxonomy','geodir_cf_taxonomy',10,5);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_address($html,$location,$cf,$p='',$output=''){
+function geodir_cf_address( $html, $location, $cf, $p = '', $output = '' ) {
+	// Check we have the post value
+	if ( is_numeric( $p ) ) {
+		$gd_post = geodir_get_post_info( $p );
+	} else {
+		global $gd_post;
+	}
 
-    // check we have the post value
-    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
-    else{ global $gd_post;}
+	if ( ! is_array( $cf ) && $cf != '' ) {
+		$cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
 
-    if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
-        if(!$cf){return NULL;}
-    }
+		if ( ! $cf ) {
+			return NULL;
+		}
+	}
 
+	// Block demo content
+	if ( geodir_is_block_demo() ){
+		$gd_post->{$cf['htmlvar_name']} = '123 Demo Street';
+		$gd_post->street = '123 Demo Street';
+		$gd_post->street2 = 'Street line 2';
+		$gd_post->region = 'Pennsylvania';
+		$gd_post->city = 'Philadelphia';
+		$gd_post->zip = '19107';
+		$gd_post->neighbourhood = 'Chinatown';
+	}
 
-    // Block demo content
-    if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = '123 Demo Street';
-        $gd_post->street = '123 Demo Street';
-        $gd_post->street2 = 'Street line 2';
-        $gd_post->region = 'Pennsylvania';
-        $gd_post->city = 'Philadelphia';
-        $gd_post->zip = '19107';
-        $gd_post->neighbourhood = 'Chinatown';
+	$html_var = $cf['htmlvar_name'];
 
-    }
+	// Check if there is a location specific filter.
+	if ( has_filter( "geodir_custom_field_output_address_loc_{$location}" ) ) {
+		/**
+		 * Filter the address html by location.
+		 *
+		 * @param string $html The html to filter.
+		 * @param array $cf The custom field array.
+		 * @param string $output The output string that tells us what to output.
+		 * @since 2.0.0 $output param added.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_output_address_loc_{$location}", $html, $cf, $output );
+	}
 
-    $html_var = $cf['htmlvar_name'];
+	// Check if there is a custom field specific filter.
+	if ( has_filter( "geodir_custom_field_output_address_var_{$html_var}" ) ) {
+		/**
+		 * Filter the address html by individual custom field.
+		 *
+		 * @param string $html The html to filter.
+		 * @param string $location The location to output the html.
+		 * @param array $cf The custom field array.
+		 * @param string $output The output string that tells us what to output.
+		 * @since 2.0.0 $output param added.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_output_address_var_{$html_var}", $html, $location, $cf, $output );
+	}
 
-    // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_address_loc_{$location}")){
-        /**
-         * Filter the address html by location.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 2.0.0 $output param added.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_output_address_loc_{$location}",$html,$cf,$output);
-    }
+	// Check if there is a custom field key specific filter.
+	if ( has_filter( "geodir_custom_field_output_address_key_{$cf['field_type_key']}" ) ){
+		/**
+		 * Filter the address html by field type key.
+		 *
+		 * @param string $html The html to filter.
+		 * @param string $location The location to output the html.
+		 * @param array $cf The custom field array.
+		 * @param string $output The output string that tells us what to output.
+		 * @since 2.0.0 $output param added.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_output_address_key_{$cf['field_type_key']}", $html, $location, $cf, $output );
+	}
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_address_var_{$html_var}")){
-        /**
-         * Filter the address html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param string $location The location to output the html.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 2.0.0 $output param added.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_output_address_var_{$html_var}",$html,$location,$cf,$output);
-    }
+	// If not html then we run the standard output.
+	if ( empty( $html ) ) {
+		$show_street_in_address = true;
+		$show_street2_in_address = true;
+		$show_city_in_address = true;
+		$show_region_in_address = true;
+		$show_country_in_address = true;
+		$show_zip_in_address = true;
 
-    // Check if there is a custom field key specific filter.
-    if(has_filter("geodir_custom_field_output_address_key_{$cf['field_type_key']}")){
-        /**
-         * Filter the address html by field type key.
-         *
-         * @param string $html The html to filter.
-         * @param string $location The location to output the html.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 2.0.0 $output param added.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_output_address_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
-    }
+		/**
+		 * Filter "show street in address" value.
+		 *
+		 * @since 2.8.92
+		 */
+		$show_street_in_address = apply_filters( 'geodir_show_street_in_address', $show_street_in_address, $gd_post );
 
-    // If not html then we run the standard output.
-    if(empty($html)){
+		$extra_fields = geodir_parse_cf_extra_fields( $cf );
 
-        $show_street_in_address = true;
-        $show_street2_in_address = true;
-        $show_city_in_address = true;
-        $show_region_in_address = true;
-        $show_country_in_address = true;
-        $show_zip_in_address = true;
+		if ( ! empty( $extra_fields ) && is_array( $extra_fields ) ) {
+			$show_street2_in_address = false;
+			if ( isset( $extra_fields['show_street2'] ) && $extra_fields['show_street2'] ) {
+				 $show_street2_in_address = true;
+			}
 
-        /**
-         * Filter "show street in address" value.
-         *
-         * @since 2.8.92
-         */
-        $show_street_in_address = apply_filters( 'geodir_show_street_in_address', $show_street_in_address, $gd_post );
+			/**
+			 * Filter "show city in address" value.
+			 *
+			 * @since 1.0.0
+			 */
+			$show_street2_in_address = apply_filters( 'geodir_show_street2_in_address', $show_street2_in_address );
 
-        if (!empty($cf['extra_fields'])) {
-            $extra_fields = stripslashes_deep(maybe_unserialize($cf['extra_fields']));
-            $addition_fields = '';
-            if (!empty($extra_fields)) {
-                $show_street2_in_address = false;
-                if (isset($extra_fields['show_street2']) && $extra_fields['show_street2']) {
-                    $show_street2_in_address = true;
-                }
-                /**
-                 * Filter "show city in address" value.
-                 *
-                 * @since 1.0.0
-                 */
-                $show_street2_in_address = apply_filters('geodir_show_street2_in_address', $show_street2_in_address);
-                $show_city_in_address = false;
-                if (isset($extra_fields['show_city']) && $extra_fields['show_city']) {
-                    $show_city_in_address = true;
-                }
-                /**
-                 * Filter "show city in address" value.
-                 *
-                 * @since 1.0.0
-                 */
-                $show_city_in_address = apply_filters('geodir_show_city_in_address', $show_city_in_address);
-                $show_region_in_address = false;
-                if (isset($extra_fields['show_region']) && $extra_fields['show_region']) {
-                    $show_region_in_address = true;
-                }
-                /**
-                 * Filter "show region in address" value.
-                 *
-                 * @since 1.6.6
-                 */
-                $show_region_in_address = apply_filters('geodir_show_region_in_address', $show_region_in_address);
-                $show_country_in_address = false;
-                if (isset($extra_fields['show_country']) && $extra_fields['show_country']) {
-                    $show_country_in_address = true;
-                }
-                /**
-                 * Filter "show country in address" value.
-                 *
-                 * @since 1.6.6
-                 */
-                $show_country_in_address = apply_filters('geodir_show_country_in_address', $show_country_in_address);
-                $show_zip_in_address = false;
-                if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) {
-                    $show_zip_in_address = true;
-                }
-                /**
-                 * Filter "show zip in address" value.
-                 *
-                 * @since 1.6.6
-                 */
-                $show_zip_in_address = apply_filters('geodir_show_zip_in_address', $show_zip_in_address);
-            }
-        }
+			$show_city_in_address = false;
+			if ( isset( $extra_fields['show_city'] ) && $extra_fields['show_city'] ) {
+				$show_city_in_address = true;
+			}
 
-        if ( $gd_post->street || $gd_post->city || $gd_post->region || $gd_post->country ) {
-            $design_style = geodir_design_style();
-            $field_icon = geodir_field_icon_proccess( $cf );
-            $output = geodir_field_output_process($output);
-            if ( strpos( $field_icon, 'http' ) !== false ) {
-                $field_icon_af = '';
-            } elseif ( $field_icon == '' ) {
-                $field_icon_af = $design_style ? '<i class="fas fa-home fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-home" aria-hidden="true"></i>';
-            } else {
-                $field_icon_af = $field_icon;
-                $field_icon    = '';
-            }
+			/**
+			 * Filter "show city in address" value.
+			 *
+			 * @since 1.0.0
+			 */
+			$show_city_in_address = apply_filters( 'geodir_show_city_in_address', $show_city_in_address );
 
-            $address_items = array(
-                'post_title',
-                'street',
-                'street2',
-                'neighbourhood',
-                'city',
-                'region',
-                'zip',
-                'country',
-                'latitude',
-                'longitude'
-            );
+			$show_region_in_address = false;
+			if ( isset( $extra_fields['show_region'] ) && $extra_fields['show_region'] ) {
+				$show_region_in_address = true;
+			}
 
-            $address_template = !empty($cf['address_template']) ? $cf['address_template'] : '%%street_br%% %%street2_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%';
+			/**
+			 * Filter "show region in address" value.
+			 *
+			 * @since 1.6.6
+			 */
+			$show_region_in_address = apply_filters( 'geodir_show_region_in_address', $show_region_in_address );
 
-            $address_template = apply_filters(
-                "geodir_cf_address_template",
-                $address_template,
-                $cf,
-                $location
-            );
+			$show_country_in_address = false;
+			if ( isset( $extra_fields['show_country'] ) && $extra_fields['show_country'] ) {
+				$show_country_in_address = true;
+			}
 
-            $address_fields = array();
+			/**
+			 * Filter "show country in address" value.
+			 *
+			 * @since 1.6.6
+			 */
+			$show_country_in_address = apply_filters( 'geodir_show_country_in_address', $show_country_in_address );
 
-            if ( isset($gd_post->post_title) ) {
-                $address_fields['post_title'] = '<span itemprop="placeName">' . $gd_post->post_title . '</span>';
-            }
-            if ( $show_street_in_address && isset( $gd_post->street ) && $gd_post->street ) {
-                $address_fields['street'] = '<span itemprop="streetAddress">' . $gd_post->street . '</span>';
-            }
-            if ( $show_street2_in_address && isset( $gd_post->street2 ) && $gd_post->street2 ) {
-                $address_fields['street2'] = '<span itemprop="streetAddress2">' . $gd_post->street2. '</span>';
-            }
-            if ( $show_city_in_address && isset( $gd_post->city ) && $gd_post->city ) {
-                $address_fields['city'] = '<span itemprop="addressLocality">' . $gd_post->city. '</span>';
-            }
-            if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
-                $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
-            }
-            if ( $show_zip_in_address && isset( $gd_post->zip ) && $gd_post->zip ) {
-                $address_fields['zip'] = '<span itemprop="postalCode">' . $gd_post->zip . '</span>';
-            }
-            if ($show_country_in_address && isset( $gd_post->country ) && $gd_post->country ) {
-                $address_fields['country'] = '<span itemprop="addressCountry">' . __( $gd_post->country, 'geodirectory' ) . '</span>';
-            }
-            if ( isset( $gd_post->latitude ) && $gd_post->latitude ) {
-                $address_fields['latitude'] = '<span itemprop="addressLatitude">' . $gd_post->latitude . '</span>';
-            }
-            if ( isset( $gd_post->longitude ) && $gd_post->longitude ) {
-                $address_fields['longitude'] = '<span itemprop="addressLongitude">' . $gd_post->longitude . '</span>';
-            }
+			$show_zip_in_address = false;
+			if ( isset( $extra_fields['show_zip'] ) && $extra_fields['show_zip'] ) {
+				$show_zip_in_address = true;
+			}
 
-            // Trick LM to add hoods if
-			if ( strpos( $address_template, '%%neighbourhood' ) !== false ) {
-				if ( ! empty( $extra_fields ) ) {
-					$extras = is_array( $extra_fields ) ? $extra_fields : array();
-					$extras['show_neighbourhood'] = true;
-					$cf['extra_fields'] = maybe_serialize( $extras );
-				} else {
-					$cf['extra_fields']['show_neighbourhood'] = true;
+			/**
+			 * Filter "show zip in address" value.
+			 *
+			 * @since 1.6.6
+			 */
+			$show_zip_in_address = apply_filters( 'geodir_show_zip_in_address', $show_zip_in_address );
+		}
+
+		if ( $gd_post->street || $gd_post->city || $gd_post->region || $gd_post->country ) {
+			$design_style = geodir_design_style();
+			$field_icon = geodir_field_icon_proccess( $cf );
+			$output = geodir_field_output_process($output);
+			if ( strpos( $field_icon, 'http' ) !== false ) {
+				$field_icon_af = '';
+			} elseif ( $field_icon == '' ) {
+				$field_icon_af = $design_style ? '<i class="fas fa-home fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-home" aria-hidden="true"></i>';
+			} else {
+				$field_icon_af = $field_icon;
+				$field_icon    = '';
+			}
+
+			$address_items = array(
+				'post_title',
+				'street',
+				'street2',
+				'neighbourhood',
+				'city',
+				'region',
+				'zip',
+				'country',
+				'latitude',
+				'longitude'
+			);
+
+			$address_template = ! empty( $cf['address_template'] ) ? $cf['address_template'] : '%%street_br%% %%street2_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%';
+
+			$address_template = apply_filters(
+				"geodir_cf_address_template",
+				$address_template,
+				$cf,
+				$location
+			);
+
+			$address_fields = array();
+
+			if ( isset( $gd_post->post_title ) ) {
+				$address_fields['post_title'] = '<span itemprop="placeName">' . $gd_post->post_title . '</span>';
+			}
+			if ( $show_street_in_address && isset( $gd_post->street ) && $gd_post->street ) {
+				$address_fields['street'] = '<span itemprop="streetAddress">' . $gd_post->street . '</span>';
+			}
+			if ( $show_street2_in_address && isset( $gd_post->street2 ) && $gd_post->street2 ) {
+				$address_fields['street2'] = '<span itemprop="streetAddress2">' . $gd_post->street2. '</span>';
+			}
+			if ( $show_city_in_address && isset( $gd_post->city ) && $gd_post->city ) {
+				$address_fields['city'] = '<span itemprop="addressLocality">' . $gd_post->city. '</span>';
+			}
+			if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
+				$address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
+			}
+			if ( $show_zip_in_address && isset( $gd_post->zip ) && $gd_post->zip ) {
+				$address_fields['zip'] = '<span itemprop="postalCode">' . $gd_post->zip . '</span>';
+			}
+			if ($show_country_in_address && isset( $gd_post->country ) && $gd_post->country ) {
+				$address_fields['country'] = '<span itemprop="addressCountry">' . __( $gd_post->country, 'geodirectory' ) . '</span>';
+			}
+			if ( isset( $gd_post->latitude ) && $gd_post->latitude ) {
+				$address_fields['latitude'] = '<span itemprop="addressLatitude">' . $gd_post->latitude . '</span>';
+			}
+			if ( isset( $gd_post->longitude ) && $gd_post->longitude ) {
+				$address_fields['longitude'] = '<span itemprop="addressLongitude">' . $gd_post->longitude . '</span>';
+			}
+
+			// Trick LM to add hoods if
+			if ( strpos( $address_template, '%%neighbourhood' ) !== false && ! empty( $extra_fields ) && is_array( $extra_fields ) ) {
+				if ( ! isset( $extra_fields['show_neighbourhood'] ) ) {
+					$extra_fields['show_neighbourhood'] = true;
+
+					$cf['extra_fields'] = maybe_serialize( $extra_fields );
 				}
 			}
 
-            /**
-             * Filter the address fields array being displayed.
-             *
-             * @param array $address_fields The array of address fields.
-             * @param object $gd_post The current post object.
-             * @param array $cf The custom field array details.
-             * @param string $location The location to output the html.
-             *
-             * @since 1.6.21
-             */
-            $address_fields = apply_filters('geodir_custom_field_output_address_fields', $address_fields, $gd_post, $cf, $location);
+			/**
+			 * Filter the address fields array being displayed.
+			 *
+			 * @param array $address_fields The array of address fields.
+			 * @param object $gd_post The current post object.
+			 * @param array $cf The custom field array details.
+			 * @param string $location The location to output the html.
+			 *
+			 * @since 1.6.21
+			 */
+			$address_fields = apply_filters( 'geodir_custom_field_output_address_fields', $address_fields, $gd_post, $cf, $location );
 
-            $address_fields_extra = array(
-                'c' => ', ', // Value with comma
-                'br' => '<br>', // Value with line break
-                'brc' => ',<br>', // Value with comma & line break
-                'space' => ' ', // Value with space
-                'dash' => ' - ' // Value with dash
-            );
+			$address_fields_extra = array(
+				'c' => ', ', // Value with comma
+				'br' => '<br>', // Value with line break
+				'brc' => ',<br>', // Value with comma & line break
+				'space' => ' ', // Value with space
+				'dash' => ' - ' // Value with dash
+			);
 
-            /**
-             * Filter the address fields array being displayed.
-             *
-             * @param array $address_fields The array of address fields.
-             * @param object $gd_post The current post object.
-             * @param array $cf The custom field array details.
-             * @param string $location The location to output the html.
-             *
-             * @since 2.1.1.13
-             */
-            $address_fields_extra = apply_filters( 'geodir_custom_field_output_address_fields_extra', $address_fields_extra, $gd_post, $cf, $location );
+			/**
+			 * Filter the address fields array being displayed.
+			 *
+			 * @param array $address_fields The array of address fields.
+			 * @param object $gd_post The current post object.
+			 * @param array $cf The custom field array details.
+			 * @param string $location The location to output the html.
+			 *
+			 * @since 2.1.1.13
+			 */
+			$address_fields_extra = apply_filters( 'geodir_custom_field_output_address_fields_extra', $address_fields_extra, $gd_post, $cf, $location );
 
-            foreach ( $address_items as $type ) {
-                // Normal value
-                $value = isset( $address_fields[ $type ] ) ? $address_fields[ $type ] : '';
-                $address_template = str_replace( '%%' . $type . '%%', $value, $address_template );
+			foreach ( $address_items as $type ) {
+				// Normal value
+				$value = isset( $address_fields[ $type ] ) ? $address_fields[ $type ] : '';
+				$address_template = str_replace( '%%' . $type . '%%', $value, $address_template );
 
-                foreach ( $address_fields_extra as $_var => $_rep ) {
-                    $address_template = str_replace( '%%' . $_var . '_' . $type . '%%', ( $value != '' ? $_rep . $value : '' ), $address_template );
-                    $address_template = str_replace( '%%' . $type  . '_' . $_var . '%%', ( $value != '' ? $value . $_rep : '' ), $address_template );
-                }
-            }
+				foreach ( $address_fields_extra as $_var => $_rep ) {
+					$address_template = str_replace( '%%' . $_var . '_' . $type . '%%', ( $value != '' ? $_rep . $value : '' ), $address_template );
+					$address_template = str_replace( '%%' . $type  . '_' . $_var . '%%', ( $value != '' ? $value . $_rep : '' ), $address_template );
+				}
+			}
 
-            foreach ( $address_fields_extra as $_var => $_rep ) {
-                $address_template = str_replace( '%%' . $_var . '%%', $_rep, $address_template );
-            }
+			foreach ( $address_fields_extra as $_var => $_rep ) {
+				$address_template = str_replace( '%%' . $_var . '%%', $_rep, $address_template );
+			}
 
-            $address_fields = $address_template;
+			$address_fields = $address_template;
 
-            // Render private address.
-            $address_fields = geodir_post_address( $address_fields, 'address', $gd_post );
+			// Render private address.
+			$address_fields = geodir_post_address( $address_fields, 'address', $gd_post );
 
-            $plain_value = wp_strip_all_tags( $address_fields, true );
-            if ( $plain_value == '' ) {
-                return $html;
-            }
+			$plain_value = wp_strip_all_tags( $address_fields, true );
+			if ( $plain_value == '' ) {
+				return $html;
+			}
 
-            // Database value.
-            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                $address_fields = str_replace( "<br>", "", $address_fields );
-                return stripslashes( wp_strip_all_tags( $address_fields, true ) );
-            }
+			// Database value.
+			if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+				$address_fields = str_replace( "<br>", "", $address_fields );
+				return stripslashes( wp_strip_all_tags( $address_fields, true ) );
+			}
 
-            // Stripped value.
-            if ( ! empty( $output ) && isset( $output['strip'] ) ) {
-                $address_fields = str_replace( "<br>", ",", $address_fields );
-                return stripslashes( wp_strip_all_tags( $address_fields, true ) );
-            }
+			// Stripped value.
+			if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+				$address_fields = str_replace( "<br>", ",", $address_fields );
+				return stripslashes( wp_strip_all_tags( $address_fields, true ) );
+			}
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" itemscope itemtype="http://schema.org/PostalAddress">';
+			$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" itemscope itemtype="http://schema.org/PostalAddress">';
 
-            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+			$maybe_secondary_class = isset( $output['icon'] ) ? 'gv-secondary' : '';
 
-            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-address" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
-            if($output=='' || isset($output['icon']))$html .= '</span>';
-            if($output=='' || isset($output['value']))$html .= stripslashes( $address_fields );
+			if ( $output == '' || isset( $output['icon'] ) ) {
+				$html .= '<span class="geodir_post_meta_icon geodir-i-address" style="' . $field_icon . '">' . $field_icon_af;
+			}
+
+			if ( $output == '' || isset( $output['label'] ) ) {
+				$html .= trim( $cf['frontend_title'] ) != "" ? '<span class="geodir_post_meta_title ' . $maybe_secondary_class . '" >' . __( $cf['frontend_title'], 'geodirectory' ) . ': '. '</span>' : '';
+			}
+
+			if ( $output == '' || isset( $output['icon'] ) ) {
+				$html .= '</span>';
+			}
+
+			if ( $output == '' || isset( $output['value'] ) ) {
+				$html .= stripslashes( $address_fields );
+			}
+
 			if ( ! empty( $output ) && isset( $output['link'] ) ) {
 				$value = stripslashes( $address_fields );
 				$address = normalize_whitespace( wp_strip_all_tags( $value ) );
@@ -2597,13 +2616,13 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
 				$html .= '</a>';
 			}
 
-            $html .= '</div>';
-        }
-    }
+			$html .= '</div>';
+		}
+	}
 
-    return $html;
+	return $html;
 }
-add_filter('geodir_custom_field_output_address','geodir_cf_address',10,5);
+add_filter( 'geodir_custom_field_output_address', 'geodir_cf_address', 10, 5 );
 
 /**
  * Filter the business hours custom field output to show a link.

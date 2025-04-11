@@ -408,7 +408,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 				}
 
 				if ( ! empty( $field ) ) {
-					$field = stripslashes_deep( $field );
+					$field = geodir_stripslashes_field( $field );
 
 					// apply standard css
 					if ( ! empty( $args['css_class'] ) ) {
