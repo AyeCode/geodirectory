@@ -252,7 +252,7 @@ class GeoDir_Admin_Conditional_Fields {
 				}
 
 				$field = stripslashes_deep( $field );
-				$fields[ $field['name'] ] = ! empty( $field['admin_title'] ) ? __( $field['admin_title'], 'geodirectory' ) : __( $field['frontend_title'], 'geodirectory' );
+				$fields[ $field['name'] ] = ! empty( $field['admin_title'] ) ? stripslashes( __( $field['admin_title'], 'geodirectory' ) ) : stripslashes( __( $field['frontend_title'], 'geodirectory' ) );
 
 				if ( $field['name'] == 'post_category' ) {
 					$fields[ 'default_category' ] = __( 'Default Category', 'geodirectory' );
@@ -294,7 +294,7 @@ class GeoDir_Admin_Conditional_Fields {
 				if ( $key == 'map_directions' ) {
 					continue;
 				}
-				$fields[ $key ] = $_field['frontend_title'];
+				$fields[ $key ] = stripslashes( $_field['frontend_title'] );
 			}
 		}
 

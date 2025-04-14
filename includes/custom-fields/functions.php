@@ -383,7 +383,16 @@ if ( ! function_exists( 'geodir_get_field_infoby' ) ) {
 		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND " . $key . "='" . $value . "'", array( $post_type ) ), ARRAY_A );
 
 		if ( ! empty( $row ) ) {
-			$row = $stripslashes ? stripslashes_deep( $row ) : $row;
+			if ( $stripslashes ) {
+				$_row = $row;
+
+				$row = stripslashes_deep( $row );
+
+				// Don't apply stripslashes to extra_fields.
+				if ( ! empty( $_row['extra_fields'] ) && is_serialized( $_row['extra_fields'] ) ) {
+					$row['extra_fields'] = $_row['extra_fields']; 
+				}
+			}
 		} else {
 			$row = false;
 		}
@@ -1314,8 +1323,8 @@ function geodir_conditional_field_attrs( $field, $_key = '', $_type = '' ) {
  * @return array Field conditions.
  */
 function geodir_parse_field_conditions( $extra_fields ) {
-	if ( ! empty( $extra_fields ) ) {
-		$extra_fields = maybe_unserialize( stripslashes_deep( $extra_fields ) );
+	if ( ! empty( $extra_fields ) && is_scalar( $extra_fields ) && is_serialized( $extra_fields ) ) {
+		$extra_fields = maybe_unserialize( $extra_fields );
 	}
 
 	$_conditions = ! empty( $extra_fields ) && is_array( $extra_fields ) && ! empty( $extra_fields['conditions'] ) && is_array( $extra_fields['conditions'] ) ? $extra_fields['conditions'] : array();
@@ -1527,4 +1536,74 @@ function geodir_get_field_condition_options( $args = array() ) {
 	);
 
 	return apply_filters( 'geodir_get_field_condition_options', $options, $args );
+}
+
+/**
+ * Stripslashes custom field data.
+ *
+ * @since 2.3.110
+ *
+ * @param array|object $data Field data.
+ * @return array|object Field after stripslashes.
+ */
+function geodir_stripslashes_field( $data ) {
+	if ( empty( $data ) ) {
+		return $data;
+	}
+
+	$_data = $data;
+
+	$data = stripslashes_deep( $data );
+
+	// Don't apply stripslashes to extra_fields.
+	if ( is_array( $_data ) ) {
+		if ( ! empty( $_data['extra_fields'] ) && is_serialized( $_data['extra_fields'] ) ) {
+			$data['extra_fields'] = $_data['extra_fields']; 
+		}
+	} else if ( is_object( $_data ) ) {
+		if ( ! empty( $_data->extra_fields ) && is_serialized( $_data->extra_fields ) ) {
+			$data->extra_fields = $_data->extra_fields; 
+		}
+	}
+
+	return $data;
+}
+
+/**
+ * Get custom field extra fields meta.
+ *
+ * @since 2.3.110
+ *
+ * @param array|object $field Field data.
+ * @param bool $stripslashes Apply stripslashes() or not. Default true.
+ * @param bool $keep_serialize Keep serialized or not. Default false.
+ * @return array|string Custom fields meta.
+ */
+function geodir_parse_cf_extra_fields( $field, $stripslashes = true, $keep_serialize = false ) {
+	if ( empty( $field ) ) {
+		return $field;
+	}
+
+	// Don't apply stripslashes to extra_fields.
+	if ( is_array( $field ) && isset( $field['extra_fields'] ) ) {
+		$extra_fields = $field['extra_fields'];
+	} else if ( is_object( $field ) && isset( $field->extra_fields ) ) {
+		$extra_fields = $field->extra_fields;
+	} else {
+		$extra_fields = array();
+	}
+
+	if ( ! empty( $extra_fields ) && is_serialized( $extra_fields ) ) {
+		if ( $keep_serialize ) {
+			return $extra_fields;
+		}
+
+		$extra_fields = maybe_unserialize( $extra_fields );
+	}
+
+	if ( ! empty( $extra_fields ) && $stripslashes ) {
+		$extra_fields = stripslashes_deep( $extra_fields );
+	}
+
+	return $extra_fields;
 }

@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.8.110 - TBD =
+* Quotes in address fields labels and conditional fields shows PHP notice - FIXED
+
 = GeoDirectory v2.8.109 - 2025-04-10 =
 * GD Posts API default sort option set to relevance if search term used - CHANGED
 * French language double quote breaks AJAX search args on CPT switch - FIXED

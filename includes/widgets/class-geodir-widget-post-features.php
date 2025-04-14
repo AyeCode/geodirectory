@@ -938,9 +938,9 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 
 			if ( ! empty( $fields ) ) {
 				$features = array();
-				foreach ( $fields as $field ) {
 
-					$field = stripslashes_deep( $field );
+				foreach ( $fields as $field ) {
+					$field = geodir_stripslashes_field( $field );
 
 					$type = $field['type'];
 					if ( isset( $args['key'] ) && $args['key'] == 'post_images' ) {
@@ -948,18 +948,15 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 					}
 
 					$output = apply_filters( "geodir_custom_field_output_{$type}", '', $args['location'], $field, $args['id'], $args['show'] );
+
 					if ( $output ) {
 						$features[] = $this->get_parsed_values( $output, $field );
-
 					}
 				}
-
-			}elseif(!empty($tags)){
-
+			} else if ( ! empty( $tags ) ) {
 			}
 
 			if ( ! empty( $features ) ) {
-
 				$wrap_class = sd_build_aui_class( $args );
 
 				$styles = sd_build_aui_styles( $args );
@@ -972,7 +969,6 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 				$output  = '<div class="row geodir-features ' . esc_attr( $wrap_class ) . '" ' . $style . '>';
 				$output .= $this->get_rendered_features( $features, $args );
 				$output .= '</div>';
-				//              $output .= print_r($_REQUEST,true);
 			}
 
 			if ( ! $output && $this->is_preview() ) {

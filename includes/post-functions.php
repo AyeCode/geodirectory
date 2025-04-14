@@ -1182,7 +1182,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				// badge text
 				if ( empty( $badge ) && empty( $args['icon_class'] ) ) {
 					if ( isset( $field['frontend_title'] ) ) {
-						$badge = $field['frontend_title'];
+						$badge = $field['frontend_title'] ? stripslashes( __( $field['frontend_title'], 'geodirectory' ) ) : '';
 					} else if ( $match_field == 'default_category' ) {
 						$badge = __( 'Default Category', 'geodirectory' ); // default_category don't have frontend_title.
 					}

@@ -15,8 +15,8 @@ $tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' 
 	<div class="dd-form hover-shadow d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-left text-start bg-light <?php if(empty($field->is_active)){echo 'border-warning';} ?>" onclick="gd_tabs_item_settings(this);">
 		<div class="  flex-fill font-weight-bold fw-bold">
 			<?php echo $field_icon; ?>
-			<?php echo isset($field->frontend_title) ? geodir_ucwords( ' ' . esc_html( $field->frontend_title ) ) : ''; ?>
-			<span class="float-right text-right float-end text-end small" title="<?php _e('Open/Close','geodirectory');?>"><?php echo ' ('.esc_attr( $tab_field_name ).')';?></span>
+			<?php echo isset( $field->frontend_title ) ? ' ' . $field->frontend_title : ''; ?>
+			<span class="float-right text-right float-end text-end small" title="<?php _e( 'Open/Close', 'geodirectory' ); ?>"><?php echo ' (' . esc_html( $tab_field_name ) . ')'; ?></span>
 		</div>
 		<div class="dd-handle">
 			<?php
