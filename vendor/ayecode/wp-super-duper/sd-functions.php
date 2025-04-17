@@ -1141,7 +1141,7 @@ function sd_aui_colors( $include_branding = false, $include_outlines = false, $o
 function sd_aui_branding_colors() {
 	return array(
 		'facebook'  => __( 'Facebook', 'ayecode-connect' ),
-		'twitter'   => __( 'X', 'ayecode-connect' ),
+		'twitter'   => __( 'Twitter', 'ayecode-connect' ),
 		'instagram' => __( 'Instagram', 'ayecode-connect' ),
 		'linkedin'  => __( 'Linkedin', 'ayecode-connect' ),
 		'flickr'    => __( 'Flickr', 'ayecode-connect' ),
