@@ -321,6 +321,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.110 - TBD =
 * Quotes in address fields labels and conditional fields shows PHP notice - FIXED
+* Extra sanitation on term icon inputs - ADDED
+* Post rating block new design option added for full stars and count - ADDED
 
 = GeoDirectory v2.8.109 - 2025-04-10 =
 * GD Posts API default sort option set to relevance if search term used - CHANGED

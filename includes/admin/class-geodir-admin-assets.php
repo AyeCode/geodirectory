@@ -358,7 +358,7 @@ class GeoDir_Admin_Assets {
 						var $widget_id = jQuery(this).parent().find('.widget-id').val();
 						var $key = jQuery('#widget-'+$widget_id+'-key').val();
 						if($key){
-							jQuery(this).closest('.widget').find('.in-widget-title').html(": "+$key);
+							jQuery(this).closest('.widget').find('.in-widget-title').text(": "+$key);
 						}
 					}
 				});

@@ -109,6 +109,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 				'text'        => __( 'Text only', 'geodirectory' ),
 				'short'       => __( 'Short with no count', 'geodirectory' ),
 				'short-count' => __( 'Short with count', 'geodirectory' ),
+				'long-count' => __( 'Long with counts', 'geodirectory' ),
 			),
 			'desc_tip' => true,
 			'advanced' => false,
@@ -328,6 +329,9 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 			$main .= $this->get_short_style( false );
 		} elseif ( 'short-count' === $args['show'] ) {
 			$main .= $this->get_short_style();
+		} elseif ( 'long-count' === $args['show'] ) {
+			$main .= $this->get_rating_stars();
+			$main .= $this->get_short_style(true, true);
 		} else {
 			$main .= $this->get_rating_stars();
 			$main .= $this->get_rating_text();
@@ -359,7 +363,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 	 *
 	 * @return string Rating stars html.
 	 */
-	public function get_short_style( $show_count = true ) {
+	public function get_short_style( $show_count = true, $hide_icon = false ) {
 		global $post, $gd_post;
 
 		if ( ! empty( $gd_post ) && ! empty( $gd_post->ID ) ) {
@@ -395,7 +399,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 				$rating_title = '';
 				$icon_class   = esc_attr( geodir_get_option( 'rating_icon', 'fas fa-star' ) );
 				$color        = $post_rating > 0 ? esc_attr( geodir_get_option( 'rating_color' ) ) : esc_attr( geodir_get_option( 'rating_color_off' ) );
-				echo '<i class="' . esc_attr( $icon_class ) . ' me-1 mr-1 fa-lg" aria-hidden="true" ' . esc_attr( $rating_title ) . ' style="vertical-align: unset;color: ' . esc_attr( $color ) . '"></i>';
+				echo $hide_icon ? '' : '<i class="' . esc_attr( $icon_class ) . ' me-1 mr-1 fa-lg" aria-hidden="true" ' . esc_attr( $rating_title ) . ' style="vertical-align: unset;color: ' . esc_attr( $color ) . '"></i>';
 				echo '<b class="">' . esc_attr( number_format( $post_rating, 1 ) ) . '</b>';
 				echo $show_count ? '<span class="text-muted ml-1 ms-1">(' . absint( $number ) . ')</span>' : '';
 			}

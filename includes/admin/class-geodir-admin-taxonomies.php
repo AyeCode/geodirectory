@@ -478,11 +478,11 @@ class GeoDir_Admin_Taxonomies {
 
         ob_start();
         ?>
-        <div class="gd-upload-img" data-field="<?php echo $name; ?>">
-            <div class="gd-upload-display thumbnail"><div class="centered"><img src="<?php echo $show_img; ?>" /></div></div>
+        <div class="gd-upload-img" data-field="<?php echo esc_attr( $name ); ?>">
+            <div class="gd-upload-display thumbnail"><div class="centered"><img src="<?php echo esc_url( $show_img ); ?>" /></div></div>
             <div class="gd-upload-fields">
-                <input type="hidden" id="<?php echo $id; ?>[id]" name="<?php echo $name; ?>[id]" value="<?php echo $img_id; ?>" />
-                <input type="hidden" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" />
+                <input type="hidden" id="<?php echo esc_attr( $id ); ?>[id]" name="<?php echo esc_attr( $name ); ?>[id]" value="<?php echo esc_attr( $img_id ); ?>" />
+                <input type="hidden" id="<?php echo esc_attr( $id ); ?>[src]" name="<?php echo esc_attr( $name ); ?>[src]" value="<?php echo esc_attr( $img_src ); ?>" />
                 <button type="button" class="gd_upload_image_button button"><?php _e( 'Select Image', 'geodirectory' ); ?></button>
                 <button type="button" class="gd_remove_image_button button"><?php _e( 'Remove Image', 'geodirectory' ); ?></button>
             </div>
@@ -513,11 +513,11 @@ class GeoDir_Admin_Taxonomies {
 
         ob_start();
         ?>
-        <div class="gd-upload-img" data-field="<?php echo $name; ?>">
-            <div class="gd-upload-display thumbnail"><div class="centered"><img src="<?php echo $show_img; ?>" /></div></div>
+        <div class="gd-upload-img" data-field="<?php echo esc_attr( $name ); ?>">
+            <div class="gd-upload-display thumbnail"><div class="centered"><img src="<?php echo esc_url( $show_img ); ?>" /></div></div>
             <div class="gd-upload-fields">
-                <input type="hidden" id="<?php echo $id; ?>[id]" name="<?php echo $name; ?>[id]" value="<?php echo $img_id; ?>" />
-                <input type="text" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" style="position:absolute;left:-500px;width:50px;" />
+                <input type="hidden" id="<?php echo esc_attr( $id ); ?>[id]" name="<?php echo esc_attr( $name ); ?>[id]" value="<?php echo esc_attr( $img_id ); ?>" />
+                <input type="text" id="<?php echo esc_attr( $id ); ?>[src]" name="<?php echo esc_attr( $name ); ?>[src]" value="<?php echo esc_attr( $img_src ); ?>" style="position:absolute;left:-500px;width:50px;" />
                 <button type="button" class="gd_upload_image_button button"><?php _e( 'Select Icon', 'geodirectory' ); ?></button>
                 <button type="button" class="gd_remove_image_button button"><?php _e( 'Remove Icon', 'geodirectory' ); ?></button>
             </div>
@@ -685,7 +685,7 @@ class GeoDir_Admin_Taxonomies {
             $cat_icon = $_POST['ct_cat_icon'];
 
             if ( !empty( $cat_icon['src'] ) ) {
-                $cat_icon['src'] = geodir_file_relative_url( $cat_icon['src'] );
+                $cat_icon['src'] = esc_url( geodir_file_relative_url( $cat_icon['src'] ) );
             } elseif(!empty($_POST['ct_cat_font_icon'])) {
                 $cat_icon = $this->generate_cat_icon($_POST['ct_cat_font_icon'],$_POST['ct_cat_color']);
             } else {
