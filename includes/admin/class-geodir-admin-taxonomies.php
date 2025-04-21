@@ -672,7 +672,7 @@ class GeoDir_Admin_Taxonomies {
             $cat_default_img = $_POST['ct_cat_default_img'];
 
             if ( !empty( $cat_default_img['src'] ) ) {
-                $cat_default_img['src'] = geodir_file_relative_url( $cat_default_img['src'] );
+                $cat_default_img['src'] = geodir_file_relative_url( sanitize_text_field( $cat_default_img['src'] ) );
             } else {
                 $cat_default_img = array();
             }
@@ -685,7 +685,7 @@ class GeoDir_Admin_Taxonomies {
             $cat_icon = $_POST['ct_cat_icon'];
 
             if ( !empty( $cat_icon['src'] ) ) {
-                $cat_icon['src'] = esc_url( geodir_file_relative_url( $cat_icon['src'] ) );
+                $cat_icon['src'] = geodir_file_relative_url( sanitize_text_field( $cat_icon['src'] ) );
             } elseif(!empty($_POST['ct_cat_font_icon'])) {
                 $cat_icon = $this->generate_cat_icon($_POST['ct_cat_font_icon'],$_POST['ct_cat_color']);
             } else {
