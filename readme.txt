@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.8.111 - TBD =
+* File upload is not working for Category Icon - FIXED
+
 = GeoDirectory v2.8.110 - 2025-04-17 =
 * Quotes in address fields labels and conditional fields shows PHP notice - FIXED
 * Extra sanitation on term icon inputs - ADDED
@@ -352,7 +355,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.103 - 2025-02-27 =
 * GD > Categories looses BS5 style on AJAX CPT change - FIXED
-* GD > Categories append post type name setting is not wokring - FIXED
+* GD > Categories append post type name setting is not working - FIXED
 * GD > Tags widget added to show GD post type tags - ADDED
 * Greedy menu should auto close on tab select - CHANGED
 * Non float distance value in near me search sometimes throws error - FIXED
