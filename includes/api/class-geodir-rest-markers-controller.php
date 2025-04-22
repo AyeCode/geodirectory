@@ -181,6 +181,15 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 				$response[ 'items' ] 		= $items;
 			}
 		}
+		/**
+		 * Filter the markers response.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param array $response The response array.
+		 * @param WP_REST_Request $request The request object.
+		 */
+		$response = apply_filters( 'geodir_rest_markers_response', $response, $request );
 
 		return rest_ensure_response( $response );
 	}
