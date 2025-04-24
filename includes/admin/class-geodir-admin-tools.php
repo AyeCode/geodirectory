@@ -877,6 +877,14 @@ class GeoDir_Admin_Tools {
 			}
 		}
 
+		$options[ 'country' ] = __( 'Country', 'geodirectory' ) . ' (country)';
+		$options[ 'region' ] = __( 'Region', 'geodirectory' ) . ' (region)';
+		$options[ 'city' ] = __( 'City', 'geodirectory' ) . ' (city)';
+		if ( class_exists( 'GeoDir_Location_Neighbourhood', false ) && GeoDir_Location_Neighbourhood::is_active() ) {
+			$options[ 'neighbourhood' ] = __( 'Neighbourhood', 'geodirectory' ) . ' (neighbourhood)';
+		}
+		$options[ 'zip' ] = __( 'Zip', 'geodirectory' ) . ' (zip)';
+
 		return $options;
 	}
 }

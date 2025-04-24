@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.111\n"
+"Project-Id-Version: GeoDirectory 2.8.112\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-21 12:24+0530\n"
-"PO-Revision-Date: 2025-04-21 12:26+0530\n"
+"POT-Creation-Date: 2025-04-24 19:52+0530\n"
+"PO-Revision-Date: 2025-04-24 19:52+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -189,6 +189,7 @@ msgstr ""
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:852
 #: includes/admin/class-geodir-admin-dummy-data.php:1226
 #: includes/admin/class-geodir-admin-settings.php:1251
+#: includes/admin/class-geodir-admin-tools.php:880
 #: includes/admin/settings/class-geodir-settings-general.php:845
 #: includes/api/class-geodir-rest-posts-controller.php:2203
 #: includes/class-geodir-location.php:365
@@ -203,6 +204,7 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:861
 #: includes/admin/class-geodir-admin-dummy-data.php:1225
+#: includes/admin/class-geodir-admin-tools.php:881
 #: includes/admin/settings/class-geodir-settings-general.php:835
 #: includes/api/class-geodir-rest-posts-controller.php:2217
 #: includes/class-geodir-location.php:384
@@ -217,6 +219,7 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:870
 #: includes/admin/class-geodir-admin-dummy-data.php:1224
+#: includes/admin/class-geodir-admin-tools.php:882
 #: includes/admin/settings/class-geodir-settings-general.php:825
 #: includes/api/class-geodir-rest-posts-controller.php:2231
 #: includes/class-geodir-location.php:404
@@ -230,6 +233,7 @@ msgid "Choose a city"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:880
+#: includes/admin/class-geodir-admin-tools.php:884
 msgid "Neighbourhood"
 msgstr ""
 
@@ -3645,6 +3649,10 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-tools.php:818
 msgid "Replace Keyword"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:886
+msgid "Zip"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-users.php:38
@@ -9345,7 +9353,7 @@ msgstr ""
 msgid "Enter a valid GD post type for post_type parameter."
 msgstr ""
 
-#: includes/api/class-geodir-rest-markers-controller.php:212
+#: includes/api/class-geodir-rest-markers-controller.php:221
 msgid "Invalid latitude/longitude."
 msgstr ""
 
@@ -10959,49 +10967,49 @@ msgstr ""
 msgid "Post Review"
 msgstr ""
 
-#: includes/class-geodir-comments.php:676
+#: includes/class-geodir-comments.php:677
 msgid "Pingback:"
 msgstr ""
 
-#: includes/class-geodir-comments.php:676
+#: includes/class-geodir-comments.php:677
 msgid "(Edit)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:837
+#: includes/class-geodir-comments.php:838
 #, php-format
 msgid "%d star rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:840
+#: includes/class-geodir-comments.php:841
 msgid "No rating yet!"
 msgstr ""
 
-#: includes/class-geodir-comments.php:894
-#: includes/class-geodir-comments.php:921
+#: includes/class-geodir-comments.php:895
+#: includes/class-geodir-comments.php:922
 msgid "Select a rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:954
+#: includes/class-geodir-comments.php:955
 msgid "Terrible"
 msgstr ""
 
-#: includes/class-geodir-comments.php:955
+#: includes/class-geodir-comments.php:956
 msgid "Poor"
 msgstr ""
 
-#: includes/class-geodir-comments.php:956
+#: includes/class-geodir-comments.php:957
 msgid "Average"
 msgstr ""
 
-#: includes/class-geodir-comments.php:957
+#: includes/class-geodir-comments.php:958
 msgid "Very Good"
 msgstr ""
 
-#: includes/class-geodir-comments.php:958
+#: includes/class-geodir-comments.php:959
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-comments.php:1290
+#: includes/class-geodir-comments.php:1291
 #, php-format
 msgid "%d review"
 msgid_plural "%d reviews"
