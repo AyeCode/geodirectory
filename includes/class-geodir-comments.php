@@ -225,11 +225,12 @@ class GeoDir_Comments {
 		 *
 		 * @since 1.0.0
 		 * @since 1.4.3 Added `$post_id` param.
+		 * @since 2.8.112 Added `$post_newrating` and `$post_newrating_count` params.
 		 * @package GeoDirectory
 		 *
 		 * @param int $post_id The post ID.
 		 */
-		do_action( 'geodir_update_post_rating', $post_id );
+		do_action( 'geodir_update_post_rating', $post_id, $post_newrating, $post_newrating_count );
 	}
 
 	/**
