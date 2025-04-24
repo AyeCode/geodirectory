@@ -356,6 +356,14 @@ function gd_init_sort_options() {
 }
 
 function gd_save_sort_field(id, ev) {
+    if(!gd_doing_field_auto_save) {
+        jQuery('#geodir-field-settings #save').addClass('geodir-item-saved');
+    } else {
+        if (jQuery('#geodir-field-settings #save').length && jQuery('#geodir-field-settings #save').hasClass('geodir-item-saved')) {
+            jQuery('#geodir-field-settings #save').removeClass('geodir-item-saved');
+            return;
+        }
+    }
     var fieldrequest = jQuery('.gd-form-settings-view .dd-setting').find("select, textarea, input").serialize();
     var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest;
     jQuery.ajax({
@@ -363,7 +371,6 @@ function gd_save_sort_field(id, ev) {
         'type': 'POST',
         'data': request_data,
         'success': function(result) {
-            console.log(result);
             if (result.success == false) {
                 alert(result.data);
             } else {

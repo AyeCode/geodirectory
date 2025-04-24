@@ -7,11 +7,11 @@
  * @package GeoDirectory
  */
 
-//print_r($field);
-$tab_class = isset($field->field_type) && $field->field_type=='random' ? 'mjs-nestedSortable-no-nesting' : '';
+$tab_class = isset( $field->id ) && strpos( $field->id, 'new' ) === 0 ? ' geodir-tab-new' : '';
+$tab_class .= isset($field->field_type) && $field->field_type=='random' ? ' mjs-nestedSortable-no-nesting' : '';
 $tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' ? 'random' : $field->htmlvar_name;
 ?>
-<li class="dd-item mb-0 <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo esc_attr( $field->id );?>" data-field-nonce="<?php echo esc_attr( $nonce ); ?>">
+<li class="dd-item mb-0<?php echo $tab_class;?>" data-id="1" id="setName_<?php echo esc_attr( $field->id );?>" data-field-nonce="<?php echo esc_attr( $nonce ); ?>">
 	<div class="dd-form hover-shadow d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-left text-start bg-light <?php if(empty($field->is_active)){echo 'border-warning';} ?>" onclick="gd_tabs_item_settings(this);">
 		<div class="  flex-fill font-weight-bold fw-bold">
 			<?php echo $field_icon; ?>
