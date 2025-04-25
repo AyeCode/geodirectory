@@ -319,6 +319,10 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+
+= GeoDirectory v2.8.113 - TBD =
+* CF settings CSS class not showing on checkbox field - FIXED
+
 = GeoDirectory v2.8.112 - 2025-04-24 =
 * Added hook to filter map markers response - ADDED
 * `geodir_update_post_rating` hook added new post_type, rating and rating count params - ADDED

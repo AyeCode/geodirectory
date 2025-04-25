@@ -389,102 +389,102 @@ add_filter('geodir_custom_field_input_radio','geodir_cfi_radio',10,2);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cfi_checkbox($html,$cf){
+function geodir_cfi_checkbox( $html, $cf ) {
+	// check it its a terms and conditions in admin area
+	if ( is_admin() && isset( $cf['field_type_key'] ) && $cf['field_type_key'] == 'terms_conditions' ) {
+		return $html;
+	}
 
-    // check it its a terms and conditions in admin area
-    if(is_admin() && isset($cf['field_type_key']) && $cf['field_type_key']=='terms_conditions'){ return $html;}
+	$html_var = $cf['htmlvar_name'];
 
-    $html_var = $cf['htmlvar_name'];
+	// Check if there is a custom field specific filter.
+	if ( has_filter( "geodir_custom_field_input_checkbox_{$html_var}" ) ) {
+		/**
+		 * Filter the checkbox html by individual custom field.
+		 *
+		 * @param string $html The html to filter.
+		 * @param array $cf The custom field array.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_input_checkbox_{$html_var}", $html, $cf );
+	}
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_input_checkbox_{$html_var}")){
-        /**
-         * Filter the checkbox html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_input_checkbox_{$html_var}",$html,$cf);
-    }
+	// If no html then we run the standard output.
+	if ( empty( $html ) ) {
+		global $geodir_label_type;
 
-    // If no html then we run the standard output.
-    if ( empty( $html ) ) {
-        global $geodir_label_type;
+		$title = '';
+		$value = geodir_get_cf_value( $cf );
+		// Set default checked.
+		if ( $value === '' && $cf['default'] ) {
+			$value = '1';
+		}
+		$checked          = $value == '1' ? true : false;
+		$extra_attributes = array();
+		$validation_text = '';
 
-        $title = '';
-        $value = geodir_get_cf_value( $cf );
-        // Set default checked.
-        if ( $value === '' && $cf['default'] ) {
-            $value = '1';
-        }
-        $checked          = $value == '1' ? true : false;
-        $extra_attributes = array();
-        $validation_text = '';
+		//validation
+		if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+			$extra_attributes['pattern'] = $cf['validation_pattern'];
+		}
 
-        //validation
-        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
-            $extra_attributes['pattern'] = $cf['validation_pattern'];
-        }
+		// required message
+		if ( ! empty( $cf['is_required'] ) && ! empty( $cf['required_msg'] ) ) {
+			$title = __( $cf['required_msg'], 'geodirectory' );
+			$validation_text = $title;
+		}
 
-        // required message
-        if ( ! empty( $cf['is_required'] ) && ! empty( $cf['required_msg'] ) ) {
-            $title = __( $cf['required_msg'], 'geodirectory' );
-            $validation_text = $title;
-        }
+		// validation message
+		if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
+			$title = $cf['validation_msg'];
+			$validation_text = $title;
+		}
 
-        // validation message
-        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
-            $title = $cf['validation_msg'];
-            $validation_text = $title;
-        }
+		// field type (used for validation)
+		$extra_attributes['field_type'] = $cf['type'];
 
-        // field type (used for validation)
-        $extra_attributes['field_type'] = $cf['type'];
+		// required
+		$required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
+		// help text
+		$help_text = __( $cf['desc'], 'geodirectory' );
 
-        // required
-        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+		if ( isset( $cf['field_type_key'] ) && $cf['field_type_key'] == 'terms_conditions' ) {
+			$tc        = geodir_terms_and_conditions_page_id();
+			$tc_link   = get_permalink( $tc );
+			$help_text = "<a href='$tc_link' target='_blank'>" . __( $cf['desc'], 'geodirectory' ) . " <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
+		}
 
-        // help text
-        $help_text = __( $cf['desc'], 'geodirectory' );
+		$html = '<input type="hidden" name="' . $cf['name'] . '" id="checkbox_' . $cf['name'] . '" value="0"/>'; // this ensures a value is sent, if the next one is checked then that will set it as true
 
-        if ( isset( $cf['field_type_key'] ) && $cf['field_type_key'] == 'terms_conditions' ) {
-            $tc        = geodir_terms_and_conditions_page_id();
-            $tc_link   = get_permalink( $tc );
-            $help_text = "<a href='$tc_link' target='_blank'>" . __( $cf['desc'], 'geodirectory' ) . " <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
-        }
+		// admin only
+		$admin_only = geodir_cfi_admin_only($cf);
+		$conditional_attrs = geodir_conditional_field_attrs( $cf );
 
-        $html = '<input type="hidden" name="' . $cf['name'] . '" id="checkbox_' . $cf['name'] . '" value="0"/>'; // this ensures a value is sent, if the next one is checked then that will set it as true
+		$html .= aui()->input(
+			array(
+				'id'               => $cf['name'],
+				'name'             => $cf['name'],
+				'type'             => "checkbox",
+				'value'            => '1',
+				'title'            => $title,
+				'label'            => __( $cf['frontend_title'], 'geodirectory' ) . $admin_only. $required,
+				'label_show'       => true,
+				'required'         => ! empty( $cf['is_required'] ) ? true : false,
+				'label_type'       => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
+				'checked'          => $checked,
+				'help_text'        => $help_text,
+				'wrap_class'       => ! empty( $cf['css_class'] ) ? geodir_sanitize_html_class( $cf['css_class'] ) : '',
+				'extra_attributes' => $extra_attributes,
+				'validation_text'  => $validation_text,
+				'wrap_attributes'  => $conditional_attrs
+			)
+		);
+	}
 
-        // admin only
-        $admin_only = geodir_cfi_admin_only($cf);
-        $conditional_attrs = geodir_conditional_field_attrs( $cf );
-
-        $html .= aui()->input(
-            array(
-                'id'               => $cf['name'],
-                'name'             => $cf['name'],
-                'type'             => "checkbox",
-                'value'            => '1',
-                'title'            => $title,
-                'label'            => __( $cf['frontend_title'], 'geodirectory' ) . $admin_only. $required,
-                'label_show'       => true,
-                'required'          => !empty($cf['is_required']) ? true : false,
-                'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
-                'checked'          => $checked,
-                'help_text'        => $help_text,
-                'extra_attributes' => $extra_attributes,
-                'validation_text'  => $validation_text,
-                'wrap_attributes'  => $conditional_attrs
-            )
-        );
-
-    }
-
-    return $html;
+	return $html;
 }
-add_filter('geodir_custom_field_input_checkbox','geodir_cfi_checkbox',10,2);
+add_filter( 'geodir_custom_field_input_checkbox','geodir_cfi_checkbox', 10, 2 );
 
 
 /**
