@@ -322,6 +322,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.113 - TBD =
 * CF settings CSS class not showing on checkbox field - FIXED
+* Tags archive map with All Posts setting not working when tag contains & # characters - FIXED
 
 = GeoDirectory v2.8.112 - 2025-04-24 =
 * Added hook to filter map markers response - ADDED

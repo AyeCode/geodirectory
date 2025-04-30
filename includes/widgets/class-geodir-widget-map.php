@@ -1131,7 +1131,7 @@ jQuery(function ($) {
 			$params['tags'] = array_map( 'trim', $params['tags'] );
 		}
 		if ( is_array( $params['tags'] ) ) {
-			$params['tags'] = ! empty( $params['tags'] ) ? implode( ',', array_unique( array_filter( $params['tags'] ) ) ) : '';
+			$params['tags'] = ! empty( $params['tags'] ) ? implode( ',', array_map( 'urlencode', array_unique( array_filter( $params['tags'] ) ) ) ) : '';
 		}
 		// posts
 		if ( is_array( $params['posts'] ) ) {
