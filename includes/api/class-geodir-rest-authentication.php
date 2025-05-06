@@ -78,7 +78,7 @@ class GeoDir_REST_Authentication {
 			return $user_id;
 		}
 
-		if ( is_ssl() ) {
+		if ( is_ssl() || $this->is_localhost() ) {
 			return $this->perform_basic_authentication();
 		} else {
 			return $this->perform_oauth_authentication();
@@ -155,6 +155,7 @@ class GeoDir_REST_Authentication {
 
 		// Get user data.
 		$this->user = $this->get_user_data_by_consumer_key( $consumer_key );
+
 		if ( empty( $this->user ) ) {
 			return false;
 		}
@@ -596,6 +597,31 @@ class GeoDir_REST_Authentication {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Check if maybe localhost.
+	 *
+	 * @since 2.8.114
+	 *
+	 * @return bool
+	 */
+	public function is_localhost() {
+		$localhost = false;
+
+		$host              = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : '';
+		$localhost_domains = array(
+			'localhost',
+			'localhost.localdomain',
+			'127.0.0.1',
+			'::1'
+		);
+
+		if ( in_array( $host, $localhost_domains ) ) {
+			$localhost = true;
+		}
+
+		return $localhost;
 	}
 }
 

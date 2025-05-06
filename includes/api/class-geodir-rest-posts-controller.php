@@ -1067,6 +1067,15 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			$prepared_post->ping_status = $request['ping_status'];
 		}
 
+		$can_manage_options = current_user_can( 'manage_options' );
+
+		foreach ( $prepared_post as $key => $value ) {
+			// Validate & prevent admin use only field save.
+			if ( ! empty( $schema['properties'][ $key ] ) && ! empty( $schema['properties'][ $key ]['for_admin_use'] ) && ! $can_manage_options ) {
+				unset( $prepared_post->$key );
+			}
+		}
+
 		/**
 		 * Filters a post before it is inserted via the REST API.
 		 *
@@ -2140,16 +2149,32 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
      * @param string $default Optional. Default. Default all.
      * @return array $schema.
      */
-	public function get_custom_fields_schema( $package_id = '', $default = 'all' ) {
-		global $geodirectory;
+    public function get_custom_fields_schema( $package_id = '', $default = 'all' ) {
+        global $geodirectory;
+
+        $can_manage_options = current_user_can( 'manage_options' );
         $custom_fields  = geodir_post_custom_fields( $package_id, $default, $this->post_type );
 
         $schema = array();
+        
 
         foreach ( $custom_fields as $id => $field ) {
-            $admin_use              = (bool)$field['for_admin_use'];
+            $admin_use_only = (bool) $field['for_admin_use'];
 
-            if ( $admin_use ) {
+           /**
+            * REST API listing schema skip field.
+            *
+            * @since 2.8.114
+            *
+            * @param bool $skip_field True to skip field. Default false.
+            * @param array $field Custom field array.
+            * @param string $this->post_type The post type.
+            * @param int|string $package_id The package ID.
+            * @param string $default Default. Default all.
+            */
+            $skip_field = apply_filters( 'geodir_rest_listing_item_schema_skip_field', false, $field, $this->post_type, $package_id, $default );
+
+            if ( $skip_field ) {
                 continue;
             }
 
@@ -2170,7 +2195,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
             $args                   = array();
             $args['type']           = 'string';
-            $args['context']        = array( 'view', 'edit' );
+            if ( $admin_use_only ) {
+                $args['context']    = $can_manage_options ? array( 'view', 'edit' ) : array( 'view' );
+            } else {
+                $args['context']    = array( 'view', 'edit' );
+            }
+
             $args['title']          = $title;
             $args['description']    = !empty( $description ) ? $description : $title;
             $args['required']       = (bool)$required;
@@ -2199,7 +2229,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'type'          => 'string',
 						'field_type'   => $field_type,
 						'data_type'    => $data_type,
-						'context'       => array( 'view', 'edit' ),
+						'context'       => $args['context'],
 						'title'         => !empty( $extra_fields['country_lable'] ) ? __( $extra_fields['country_lable'], 'geodirectory' ) : __( 'Country', 'geodirectory' ),
 						'description'   => __( 'Choose a country', 'geodirectory' ),
 						'required'      => (bool) ( $required && !empty( $extra_fields['show_region'] ) ),
@@ -2213,7 +2243,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'type'          => 'string',
 						'field_type'   => $field_type,
 						'data_type'    => $data_type,
-						'context'       => array( 'view', 'edit' ),
+						'context'       => $args['context'],
 						'title'         => !empty( $extra_fields['region_lable'] ) ? __( $extra_fields['region_lable'], 'geodirectory' ) : __( 'Region', 'geodirectory' ),
 						'description'   => __( 'Choose a region', 'geodirectory' ),
 						'required'      => (bool) ( $required && !empty( $extra_fields['show_region'] ) ),
@@ -2227,7 +2257,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'type'          => 'string',
 						'field_type'   => $field_type,
 						'data_type'    => $data_type,
-						'context'       => array( 'view', 'edit' ),
+						'context'       => $args['context'],
 						'title'         => !empty( $extra_fields['city_lable'] ) ? __( $extra_fields['city_lable'], 'geodirectory' ) : __( 'City', 'geodirectory' ),
 						'description'   => __( 'Choose a city', 'geodirectory' ),
 						'required'      => (bool) ( $required && !empty( $extra_fields['show_city'] ) ),
@@ -2241,7 +2271,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'type'          => 'string',
 						'field_type'   => $field_type,
 						'data_type'    => $data_type,
-						'context'       => array( 'view', 'edit' ),
+						'context'       => $args['context'],
 						'title'         => !empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ),
 						'description'   => __( 'Zip/Post Code', 'geodirectory' ),
 						'required'      => (bool) ( ! empty( $extra_fields['zip_required'] ) && ! empty( $extra_fields['show_zip'] ) ),
@@ -2254,7 +2284,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'type'          => 'string',
 						'field_type'   => $field_type,
 						'data_type'    => $data_type,
-						'context'       => array( 'view', 'edit' ),
+						'context'       => $args['context'],
 						'title'         => !empty( $extra_fields['map_lable'] ) ? __( $extra_fields['map_lable'], 'geodirectory' ) : __( 'Map', 'geodirectory' ),
 						'description'   => __( 'Click on "Set Address on Map" and then you can also drag pinpoint to locate the correct address', 'geodirectory' ),
 						'readonly'      => true,
@@ -2267,7 +2297,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'type'          => 'string',
 						'field_type'   => $field_type,
 						'data_type'    => $data_type,
-						'context'       => array( 'view', 'edit' ),
+						'context'       => $args['context'],
 						'title'         => __( 'Address Latitude', 'geodirectory' ),
 						'description'   => __( 'Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory' ),
 						'required'      => (bool) ( $required && !empty( $extra_fields['show_latlng'] ) ),
@@ -2282,7 +2312,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'type'          => 'string',
 						'field_type'   => $field_type,
 						'data_type'    => $data_type,
-						'context'       => array( 'view', 'edit' ),
+						'context'       => $args['context'],
 						'title'         => __( 'Address Longitude', 'geodirectory' ),
 						'description'   => __( 'Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>', 'geodirectory' ),
 						'required'      => (bool) ( $required && !empty( $extra_fields['show_latlng'] ) ),
@@ -2297,7 +2327,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'type'          => 'string',
 						'field_type'   => $field_type,
 						'data_type'    => $data_type,
-						'context'       => array( 'view', 'edit' ),
+						'context'       => $args['context'],
 						'title'         => !empty( $extra_fields['mapview_lable'] ) ? __( $extra_fields['mapview_lable'], 'geodirectory' ) : __( 'Map View', 'geodirectory' ),
 						'default'       => 'ROADMAP',
 						'enum'          => array( 'ROADMAP', 'SATELLITE', 'HYBRID', 'TERRAIN' ),
@@ -2310,7 +2340,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'type'          => 'string',
 						'field_type'   => $field_type,
 						'data_type'    => $data_type,
-						'context'       => array( 'view', 'edit' ),
+						'context'       => $args['context'],
 						'title'         => __( 'Map Zoom', 'geodirectory' ),
 						'readonly'      => true,
 						'extra_fields'  => array(
@@ -2324,12 +2354,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         'raw' => array(
                             'description' => __( 'Field for the object, as it exists in the database.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                         ),
                         'rendered' => array(
                             'description' => __( 'Field for the object, transformed for display.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                             'readonly'    => true,
                         ),
                     );
@@ -2344,12 +2374,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         'raw' => array(
                             'description' => __( 'Date for the object, as it exists in the database.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                         ),
                         'rendered' => array(
                             'description' => __( 'Date for the object, transformed for display.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                             'readonly'    => true,
                         ),
                     );
@@ -2367,12 +2397,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         'raw' => array(
                             'description' => __( 'File for the object, as it exists in the database.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                         ),
                         'rendered' => array(
                             'description' => __( 'File for the object, transformed for display.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                             'readonly'    => true,
                         ),
                     );
@@ -2388,12 +2418,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         'raw' => array(
                             'description' => __( 'Content for the object, as it exists in the database.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                         ),
                         'rendered' => array(
                             'description' => __( 'Content for the object, transformed for display.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                             'readonly'    => true,
                         ),
                     );
@@ -2413,12 +2443,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         'raw' => array(
                             'description' => __( 'Field for the object, as it exists in the database.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                         ),
                         'rendered' => array(
                             'description' => __( 'Field for the object, transformed for display.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                             'readonly'    => true,
                         ),
                     );
@@ -2437,12 +2467,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                         'raw' => array(
                             'description' => __( 'Field for the object, as it exists in the database.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                         ),
                         'rendered' => array(
                             'description' => __( 'Field for the object, transformed for display.' ),
                             'type'        => 'string',
-                            'context'     => array( 'view', 'edit' ),
+                            'context'     => $args['context'],
                             'readonly'    => true,
                         ),
                     );
@@ -2458,7 +2488,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'title'		  => __( 'Default category.' ),
 						'description' => __( 'Select default category.' ),
 						'type'        => 'integer',
-						'context'     => array( 'view', 'edit' ),
+						'context'     => $args['context'],
 						'readonly'    => true,
 						'field_type'  => $field_type,
 						'data_type'   => 'TEXT'
@@ -2484,7 +2514,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 								'rendered' => array(
 									'description' => __( 'HTML title for the object, transformed for display.' ),
 									'type'        => 'string',
-									'context'     => array( 'view', 'edit' ),
+									'context'     => $args['context'],
 									'readonly'    => true,
 								),
 							);*/
@@ -2537,6 +2567,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             }
 
             $args['arg_options']   = $arg_options;
+            $args['for_admin_use'] = $admin_use_only;
 
             $schema[ $name ]    = apply_filters( 'geodir_listing_fields_args', $args, $field );
         }
@@ -2810,15 +2841,24 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 					);
 					break;
 				case 'datepicker':
-					if ( ! empty( $field_value ) ) {
+					$raw_value = $field_value;
+					$rendered_vlaue = '';
+
+					if ( ! empty( $field_value ) && strpos( $field_value, '0000-00-00' ) !== 0 ) {
 						$date_format = ! empty( $extra_fields['date_format'] ) ? $extra_fields['date_format'] : geodir_date_format();
-						$data[ $field_name ] = array(
-							'raw'		=> $field_value,
-							'rendered' 	=> date_i18n( $date_format, strtotime( $field_value ) )
-						);
-					} else {
-						$data[ $field_name ] = NULL;
+
+						$raw_value = $field_value;
+						$rendered_vlaue = date_i18n( $date_format, strtotime( $field_value ) );
+					} else if ( $field_name == 'expire_date' ) {
+						$raw_value = '';
+						$rendered_vlaue = _x( 'Never', 'expire date', 'geodirectory' );
 					}
+
+					$data[ $field_name ] = array(
+						'raw'      => $raw_value,
+						'rendered' => $rendered_vlaue
+					);
+
 					break;
 				case 'multiselect':
 					$rendered_value = array();
