@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.114\n"
+"Project-Id-Version: GeoDirectory 2.8.115\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-08 18:28+0530\n"
-"PO-Revision-Date: 2025-05-08 18:28+0530\n"
+"POT-Creation-Date: 2025-05-15 20:07+0530\n"
+"PO-Revision-Date: 2025-05-15 20:07+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -434,7 +434,7 @@ msgstr ""
 #: includes/class-geodir-elementor.php:157 includes/class-geodir-privacy.php:39
 #: includes/core-functions.php:936
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
-#: includes/integrations/bricks/class-geodir-bricks.php:491
+#: includes/integrations/bricks/class-geodir-bricks.php:512
 msgid "GeoDirectory"
 msgstr ""
 
@@ -516,7 +516,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-simple-archive.php:180
 #: includes/widgets/class-geodir-widget-simple-archive.php:193
 #: includes/widgets/class-geodir-widget-simple-archive.php:423
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:63
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:72
 #: includes/widgets/class-geodir-widget-tags.php:330
 #: includes/widgets/class-geodir-widget-tags.php:444
 #: includes/widgets/class-geodir-widget-tags.php:457
@@ -6094,10 +6094,10 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-report-post.php:169
 #: includes/widgets/class-geodir-widget-report-post.php:179
 #: includes/widgets/class-geodir-widget-report-post.php:195
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:87
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:100
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:110
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:121
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:96
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:109
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:119
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:130
 msgid "Design"
 msgstr ""
 
@@ -13915,12 +13915,12 @@ msgid "%s Tags Archive"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-template-archive.php:59
-#: includes/integrations/bricks/class-geodir-bricks.php:295
+#: includes/integrations/bricks/class-geodir-bricks.php:316
 msgid "Search Results"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-template-archive.php:63
-#: includes/integrations/bricks/class-geodir-bricks.php:293
+#: includes/integrations/bricks/class-geodir-bricks.php:314
 msgid "Archive"
 msgstr ""
 
@@ -14625,7 +14625,7 @@ msgstr ""
 msgid "Disable GD Location Filtering"
 msgstr ""
 
-#: includes/integrations/bricks/class-geodir-bricks.php:292
+#: includes/integrations/bricks/class-geodir-bricks.php:313
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:144
 msgid "Single"
 msgstr ""
@@ -14734,7 +14734,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-images.php:247
 #: includes/widgets/class-geodir-widget-post-images.php:264
 #: includes/widgets/class-geodir-widget-report-post.php:94
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:82
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:91
 #: vendor/ayecode/wp-super-duper/sd-functions.php:2117
 #: vendor/ayecode/wp-super-duper/sd-functions.php:2138
 #: vendor/ayecode/wp-super-duper/sd-functions.php:2243
@@ -16293,7 +16293,7 @@ msgid "CPT Categories"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:1252
-#: includes/widgets/class-geodir-widget-tags.php:1013
+#: includes/widgets/class-geodir-widget-tags.php:1024
 #, php-format
 msgid "%s option"
 msgid_plural "%s options"
@@ -16301,7 +16301,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/widgets/class-geodir-widget-categories.php:1255
-#: includes/widgets/class-geodir-widget-tags.php:1016
+#: includes/widgets/class-geodir-widget-tags.php:1027
 #, php-format
 msgid "%s listing"
 msgid_plural "%s listings"
@@ -16309,7 +16309,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/widgets/class-geodir-widget-categories.php:1258
-#: includes/widgets/class-geodir-widget-tags.php:1019
+#: includes/widgets/class-geodir-widget-tags.php:1030
 #, php-format
 msgid "%s item"
 msgid_plural "%s items"
@@ -16325,7 +16325,9 @@ msgid "GD > Category Description"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-category-description.php:34
-msgid "Shows the current category description text."
+msgid ""
+"Shows the current category description text. This will show on archive and "
+"single templates."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-category-description.php:51
@@ -16363,7 +16365,7 @@ msgstr ""
 msgid "Main Description"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-category-description.php:162
+#: includes/widgets/class-geodir-widget-category-description.php:168
 #, php-format
 msgid ""
 "<b>This is a placeholder</b> for the category <b>%s</b> description. You set "
@@ -17175,7 +17177,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-report-post.php:92
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1205
 #: includes/widgets/class-geodir-widget-simple-archive.php:675
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:80
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:89
 msgid "Badge"
 msgstr ""
 
@@ -17188,7 +17190,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-report-post.php:93
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1206
 #: includes/widgets/class-geodir-widget-simple-archive.php:676
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:81
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:90
 msgid "Pill"
 msgstr ""
 
@@ -18448,7 +18450,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-features.php:431
 #: includes/widgets/class-geodir-widget-post-features.php:432
 #: includes/widgets/class-geodir-widget-post-features.php:444
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:62
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:71
 msgid "Icons"
 msgstr ""
 
@@ -19599,75 +19601,83 @@ msgid "Categories and Tags"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:57
-msgid "Prefix"
+msgid "Limit"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:58
+msgid "Set a limit of the number to output."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:66
+msgid "Prefix"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:67
 msgid "Select the taxonomy types to output"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:61
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:70
 msgid "Taxonomy names"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:76
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:85
 msgid "Link style"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:77
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:86
 msgid "Select the style for the links."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:91
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:100
 msgid "Link color"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:92
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:101
 msgid "Sets the link color."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:95
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:104
 msgid "Category color"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:105
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:114
 msgid "Link custom color"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:106
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:115
 msgid "Sets the link color to a custom color."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:115
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:124
 msgid "Link icons"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:116
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:125
 msgid "Show icons for the links."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:379
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:391
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:413
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:425
 msgid "%s%l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:381
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:415
 msgid "%s%s Categories%s %l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:384
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:418
 msgid "%s Categories: %l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:386
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:420
 msgid "%s Category: %l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:393
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:427
 msgid "%s%s Tags%s %l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:395
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:429
 msgid "%s Tags: %l"
 msgstr ""
 
@@ -19759,7 +19769,7 @@ msgstr ""
 msgid "CPT Tags"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-tags.php:1100
+#: includes/widgets/class-geodir-widget-tags.php:1111
 msgid "No tags found"
 msgstr ""
 
