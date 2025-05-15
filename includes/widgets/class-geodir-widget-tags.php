@@ -982,7 +982,18 @@ class GeoDir_Widget_Tags extends WP_Super_Duper {
 
 	public static function get_tags_loop_content( $term, $args = array(), $hide_count = false, $hide_icon = false, $term_fa_icon = '', $term_color = '' ) {
 		if ( class_exists( 'GeoDir_Location_SEO', false ) ) {
-			$term_link = GeoDir_Location_SEO::get_term_link( $term, false );
+
+			/**
+			 * Filter whether to use location link for tags widget term URL.
+			 *
+			 * @param bool $use_location_link Whether to use location link. Default false.
+			 * @param WP_Term|mixed $term The term object.
+			 *
+			 * @since 2.8.103
+			 *
+			 */
+			$use_location_link = apply_filters( 'geodir_tags_widget_use_location_link', false, $term );
+			$term_link = GeoDir_Location_SEO::get_term_link( $term, $use_location_link );
 		} else {
 			$term_link = get_term_link( $term, $term->taxonomy );
 		}
