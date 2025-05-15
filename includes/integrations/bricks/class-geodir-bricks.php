@@ -50,6 +50,27 @@ class GeoDir_Bricks {
 		add_action( 'after_setup_theme',array( __CLASS__, 'remove_bricks_image_attributes_filter'), 10 );
 		add_filter( 'wp_get_attachment_image_src', array( __CLASS__, 'maybe_gd_image_id'), 10, 4 );
 
+		// Remote templates @todo i dont think this will work till v2
+		//add_filter( 'bricks/remote_templates/sources', array( __CLASS__, 'remote_templates') );
+
+	}
+
+	/**
+	 * Add our remote template sources.
+	 *
+	 * @param $sources
+	 *
+	 * @return mixed
+	 */
+	public static function remote_templates( $sources ) {
+
+		// Cracks Directory Site
+		$sources[] = [
+			'name' => 'GeoDirectory (Cracka Template)',
+			'url'  => 'https://n7dcyg6k.mygeodirectory.com/',
+		];
+
+		return $sources;
 	}
 
 	/**

@@ -428,7 +428,7 @@ public function setup_wizard_header() {
 		$bs_prefix = $aui_bs5 ? 'bs-' : '';
 		?>
 
-		<div class="modal-content border-0 shadow mb-4 collapse show gd-setup-welcome" data-<?php echo $bs_prefix;?>toggle="collapse">
+		<div class="modal-content border-0 shadow mb-4 collapse show gd-setup-welcome" >
 			<div class="modal-body p-5">
 				<div class="gd-setup-content">
 					<h1 class="h3"><?php esc_html_e( 'Welcome to the world of GeoDirectory!', 'geodirectory' ); ?></h1>
