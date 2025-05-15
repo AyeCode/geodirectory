@@ -53,6 +53,15 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false,
 				),
+				'limit' => array(
+					'title'    => __( 'Limit', 'geodirectory' ),
+					'desc'     => __( 'Set a limit of the number to output.', 'geodirectory' ),
+					'type'     => 'number',
+					'placeholder' => '10 (would limit to 10)',
+					'default'  => '',
+					'desc_tip' => true,
+					'advanced' => false,
+				),
 				'prefix'   => array(
 					'title'    => __( 'Prefix', 'geodirectory' ),
 					'desc'     => __( 'Select the taxonomy types to output', 'geodirectory' ),
@@ -158,6 +167,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 		// Default options.
 		$defaults = array(
 			'taxonomy'          => '',
+			'limit'             => '',
 			'prefix'            => '',
 			'link_style'        => '',
 			'link_color'        => '',
@@ -214,8 +224,10 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 
 				$terms = array();
 				$links = array();
+				$limit = !empty($args['limit']) ? absint($args['limit']) : '';
+				$count = 0;
 				foreach ( $post_tags as $post_term ) {
-					// Fix slug creation order for tags & location
+										// Fix slug creation order for tags & location
 					$post_term = trim( $post_term );
 
 					if ( $insert_term = term_exists( $post_term, $tag_taxonomy ) ) {
@@ -241,10 +253,23 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 						$tag_link = apply_filters( 'geodir_details_taxonomies_tag_link', $tag_link, $term );
 						$links[]  = $tag_link;
 						$terms[]  = $term;
+
+						$count++;
+
+						// limit
+						if($limit && $count >= $limit) {
+							break;
+						}
+
 					}
+
+
+
 				}
 
 				$taxonomies[ $tag_taxonomy ] = $this->output_tax_list( 'tag', $post_type_name, $links, $terms, $args );
+
+
 
 			}
 		}
@@ -264,6 +289,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 			$terms        = array();
 			$links        = array();
 			$termsOrdered = array();
+			$count = 0;
 			if ( ! empty( $post_terms ) ) {
 				foreach ( $post_terms as $post_term ) {
 					$post_term = trim( $post_term );
@@ -289,6 +315,14 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 							$term_link = apply_filters( 'geodir_details_taxonomies_cat_link', $term_link, $term );
 							$links[]   = $term_link;
 							$terms[]   = $term;
+
+							$count++;
+
+							// limit
+							if($limit && $count >= $limit) {
+								break;
+							}
+
 						}
 					}
 				}

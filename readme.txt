@@ -319,6 +319,11 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
 
+= GeoDirectory v2.8.114 - 2025-TBD =
+* GD > Single Taxonomies, setting added to limit taxonomy count output - ADDED
+* GD> Category Description can now be used on single page templates using the default category field - ADDED
+* Setup Wizard "Not right now" link not working - FIXED
+
 = GeoDirectory v2.8.114 - 2025-05-08 =
 * REST API response don't contains Admin Use field - CHANGED
 

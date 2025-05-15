@@ -31,7 +31,7 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
 			'name'          => __('GD > Category Description','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
 				'classname'   => 'geodir-category-description-container '.geodir_bsui_class(), // widget class
-				'description' => esc_html__('Shows the current category description text.','geodirectory'), // widget description
+				'description' => esc_html__('Shows the current category description text. This will show on archive and single templates.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,
 				'gd_wgt_showhide' => 'show_on',
@@ -115,9 +115,15 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
 
 		$is_preview = $this->is_preview();
 
-		if ( geodir_is_page( 'archive' ) ) {
-			$current_category = get_queried_object();
-			$term_id = isset( $current_category->term_id ) ?  absint( $current_category->term_id ) : '';
+		if ( geodir_is_page( 'archive' ) ||  geodir_is_page( 'single' )) {
+
+			if ( geodir_is_page( 'single' ) ) {
+				global $gd_post;
+				$term_id = !empty( $gd_post->default_category ) ? absint( $gd_post->default_category ) : 0;
+			}else{
+				$current_category = get_queried_object();
+				$term_id = isset( $current_category->term_id ) ?  absint( $current_category->term_id ) : '';
+			}
 
 			if ( $term_id ) {
 				$design_style = geodir_design_style();
