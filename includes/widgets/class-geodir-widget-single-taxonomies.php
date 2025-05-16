@@ -189,7 +189,6 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 		$args      = wp_parse_args( $args, $defaults );
 		$css_rules = array();
 
-
 		$post_id   = isset( $post->ID ) ? $post->ID : '';
 		$post_type = ! empty( $post->post_type ) ? $post->post_type : '';
 		if ( $is_preview ) {
@@ -199,8 +198,8 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 		$cat_taxonomy   = $post_type . 'category';
 		$tag_taxonomy   = $post_type . '_tags';
 		$design_style   = geodir_design_style();
-
-		$taxonomies = array();
+		$taxonomies     = array();
+		$limit          = ! empty( $args['limit'] ) ? absint( $args['limit'] ) : 0;
 
 		if ( ! empty( $gd_post->post_tags ) && $args['taxonomy'] != 'cats' ) {
 			if ( taxonomy_exists( $tag_taxonomy ) ) {
@@ -224,10 +223,9 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 
 				$terms = array();
 				$links = array();
-				$limit = !empty($args['limit']) ? absint($args['limit']) : '';
 				$count = 0;
 				foreach ( $post_tags as $post_term ) {
-										// Fix slug creation order for tags & location
+					// Fix slug creation order for tags & location
 					$post_term = trim( $post_term );
 
 					if ( $insert_term = term_exists( $post_term, $tag_taxonomy ) ) {
@@ -237,9 +235,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 					}
 
 					if ( ! empty( $term ) && ! is_wp_error( $term ) && is_object( $term ) ) {
-
 						$tag_href = esc_attr( get_term_link( $term->term_id, $term->taxonomy ) );
-
 						$tag_link = $this->style_tax_link( 'tag', $term->name, $tag_href, $term, $args );
 
 						/**
@@ -257,20 +253,13 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 						$count++;
 
 						// limit
-						if($limit && $count >= $limit) {
+						if ( $limit && $count >= $limit ) {
 							break;
 						}
-
 					}
-
-
-
 				}
 
 				$taxonomies[ $tag_taxonomy ] = $this->output_tax_list( 'tag', $post_type_name, $links, $terms, $args );
-
-
-
 			}
 		}
 
@@ -289,7 +278,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 			$terms        = array();
 			$links        = array();
 			$termsOrdered = array();
-			$count = 0;
+			$count        = 0;
 			if ( ! empty( $post_terms ) ) {
 				foreach ( $post_terms as $post_term ) {
 					$post_term = trim( $post_term );
@@ -298,12 +287,9 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 						$term = get_term_by( 'id', $post_term, $cat_taxonomy );
 
 						if ( ! empty( $term ) && ! is_wp_error( $term ) && is_object( $term ) ) {
-
 							$cat_href = esc_attr( get_term_link( $term->term_id, $term->taxonomy ) );
-
 							$term_link = $this->style_tax_link( 'cat', $term->name, $cat_href, $term, $args );
 
-//                            $term_link = "<a href='" . esc_attr( get_term_link( $term, $cat_taxonomy ) ) . "'>" . $term->name ."</a>";
 							/**
 							 * Filter the category name on the details page.
 							 *
@@ -319,10 +305,9 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 							$count++;
 
 							// limit
-							if($limit && $count >= $limit) {
+							if ( $limit && $count >= $limit ) {
 								break;
 							}
-
 						}
 					}
 				}
@@ -335,7 +320,6 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 			}
 
 			$taxonomies[ $cat_taxonomy ] = $this->output_tax_list( 'cat', $post_type_name, $links, $terms, $args );
-
 		}
 
 		/**
@@ -368,13 +352,12 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 			}
 		}
 
-
 		$template = $design_style ? $design_style . "/single/taxonomies.php" : "legacy/single/taxonomies.php";
 
 		// wrapper class
 		$wrap_class = geodir_build_aui_class( $args );
 
-		$args    = array(
+		$args = array(
 			'args'         => $args,
 			'taxonomies'   => $taxonomies,
 			'cat_taxonomy' => $cat_taxonomy,
@@ -387,7 +370,6 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 		if ( ! empty( $this->css_rules ) && method_exists( $this, 'get_instance_style' ) ) {
 			$content .= $this->get_instance_style( $this->css_rules );
 		}
-
 
 		return $content;
 	}
