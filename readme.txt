@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.116 - 2025-05-TBD =
 * GD > Single Taxonomies shows PHP notice when Categories only option selected - FIXED
+* Allow importing images with url .googleusercontent.com - CHANGED
 
 = GeoDirectory v2.8.115 - 2025-05-15 =
 * GD > Single Taxonomies, setting added to limit taxonomy count output - ADDED
