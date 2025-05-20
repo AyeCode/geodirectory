@@ -46,6 +46,7 @@ class GeoDir_Admin_Import_Export {
 		add_filter('geodir_get_export_posts', array( __CLASS__ , 'filter_where_query' ), 10, 2);
 		add_filter('geodir_ajax_prepare_export_reviews', array( __CLASS__ , 'prepare_export_reviews' ));
 		add_filter('geodir_ajax_export_reviews', array( __CLASS__ , 'export_reviews' ));
+		add_filter( 'geodir_media_attachment_file_url', array( __CLASS__ , 'filter_external_file_url' ), 10, 6 );
 
 		// set the task
 		//$task = isset( $_POST['task'] ) ? esc_attr( $_POST['task'] ) : '';
@@ -2185,5 +2186,52 @@ class GeoDir_Admin_Import_Export {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Filter the file url.
+	 *
+	 * @since 2.8.116
+	 *
+	 * @param string $url URl.
+	 * @param int    $post_id Post ID.
+	 * @param string $post_type Optional. The post type.
+	 * @param string $type Optional. Type. Default file.
+	 * @param string $title Optional. Title. Default null.
+	 * @param string $caption Optional. Caption. Default null.
+	 */
+	public static function filter_external_file_url( $url, $post_id, $post_type = '', $type = '', $title = '', $caption = '' ) {
+		$is_external = $url && ( strpos( $url, 'http://' ) === 0 || strpos( $url, 'https://' ) === 0 ) ? true : false;
+		$is_custom = $is_external && ( strpos( $url, ".googleusercontent.com/" ) !== false || strpos( $url, "/thumbnail?" ) !== false || strpos( $url, "/watermark?" ) !== false ) ? true : false;
+
+		/**
+		 * Skip handling the external file url.
+		 *
+		 * @since 2.8.116
+		 *
+		 * @param bool   $is_custom If true then check external file url.
+		 * @param string $url URl.
+		 * @param int    $post_id Post ID.
+		 * @param string $post_type Optional. The post type.
+		 * @param string $type Optional. Type. Default file.
+		 * @param string $title Optional. Title. Default null.
+		 * @param string $caption Optional. Caption. Default null.
+		 */
+		$is_custom = apply_filters( 'geodir_media_is_custom_external_image', $is_custom, $url, $post_id, $post_type, $type, $title, $caption );
+
+		if ( $is_custom ) {
+			$uploads = wp_upload_dir();
+			$temp_file_name = substr( md5( $url ), 0, 12 );
+
+			$dest_url = $uploads['basedir'] . '/geodir_temp/' . $post_id . '-' . $temp_file_name . '.jpg';
+
+			if ( $response = wp_remote_get( $url, array( 'timeout' => 300, 'stream' => true, 'filename' => $dest_url ) ) ) {
+				if ( ! empty( $response ) && ! is_wp_error( $response ) && 200 == wp_remote_retrieve_response_code( $response ) ) {
+					$url = str_replace( $uploads['basedir'], $uploads['baseurl'], $dest_url );
+				}
+			}
+		}
+
+		return $url;
 	}
 }

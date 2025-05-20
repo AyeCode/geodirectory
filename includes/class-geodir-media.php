@@ -313,6 +313,20 @@ class GeoDir_Media {
 				$allowed_file_types = geodir_image_extensions();
 			}
 
+			/**
+			 * Filter the file url before get imported and assigned as attachment to the listing.
+			 *
+			 * @since 2.8.116
+			 *
+			 * @param string $url URl.
+			 * @param int    $post_id Post ID.
+			 * @param string $post_type Optional. The post type.
+			 * @param string $type Optional. Type. Default file.
+			 * @param string $title Optional. Title. Default null.
+			 * @param string $caption Optional. Caption. Default null.
+			 */
+			$url = apply_filters( 'geodir_media_attachment_file_url', $url, $post_id, $post_type, $type, $title, $caption );
+
 			if ( $order === 0 && $type == 'post_images' ) {
 				$attachment_id = media_sideload_image( $url, $post_id, $title, 'id' ); // Uses the post date for the upload time /2009/12/image.jpg
 
