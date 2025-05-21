@@ -949,7 +949,8 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			'new'      => __( 'New', 'geodirectory' ),
 			'featured' => __( 'Featured', 'geodirectory' ),
 			'favorite' => __( 'Favorite', 'geodirectory' ),
-			'category' => __( 'Category', 'geodirectory' )
+			'category' => __( 'Category', 'geodirectory' ),
+			'distance_to_post' => __( 'Distance To Post', 'geodirectory' ),
 		);
 
 		if ( ! $over_image ) {
@@ -1009,16 +1010,21 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		// possition
 		$position_args = '';
 		$position      = ! empty( $args['position'] ) ? esc_attr( $args['position'] ) : '';
+		$position_class= '';
 		$mb            = $type == 'favorite' ? 'n1' : '0';
 		$mt            = $type == 'favorite' ? '0' : '1';
 		if ( $position == 'top-left' ) {
 			$position_args = " position='ab-top-left'  mt='$mt'  ml='1' ";
+			$position_class = "ab-top-left ml-1 mt-" . (int) $mt;
 		} elseif ( $position == 'top-right' ) {
 			$position_args = " position='ab-top-right'  mt='$mt'  mr='1' ";
+			$position_class = "ab-top-right mr-1 mt-" . (int) $mt;
 		} elseif ( $position == 'bottom-left' ) {
 			$position_args = " position='ab-bottom-left'  mt=''  mr=''  mb='$mb'  ml='1' ";
+			$position_class = "ab-bottom-left ml-1 mb-" . (int) $mb;
 		} elseif ( $position == 'bottom-right' ) {
 			$position_args = " position='ab-bottom-right'  mt=''  mr='1'  mb='$mb'  ml='' ";
+			$position_class = "ab-bottom-right mr-1 mb-" . (int) $mb;
 		}
 
 		// alignment
@@ -1046,6 +1052,8 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			$output = "[gd_author_actions hide_edit='false'  hide_delete='false'  author_page_only='true'  display='dropdown'  size='small'  alignment=''  color='primary'  text_color='white'  btn_mt='1'  btn_mr=''  btn_mb='1'  btn_ml=''  bg='' $position_args  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]";
 		} else if ( $type == 'author_actions_dropdown_dots' ) {
 			$output = "[gd_author_actions hide_edit='false'  hide_delete='false'  author_page_only='true'  display='dropdown-dots'  size='medium'  alignment=''  color='dark'  text_color='white'  btn_mt='1'  btn_mr=''  btn_mb='1'  btn_ml=''  bg='' $position_args  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]";
+		} else if ( $type == 'distance_to_post' ) {
+			$output = "[gd_post_distance type='' shadow=''  color=''  bg_color='" . ( $position_class ? 'rgba(0,115,170,0.5)' : '#0073aa' ) . "'  txt_color='#ffffff'  size=''  $alignment  list_hide=''  list_hide_secondary=''  css_class='" . esc_attr( $position_class ) . "' ]";
 		} elseif ( $type == 'custom_badge' ) {
 			$args_out = '';
 			if ( $badge_args ) {
