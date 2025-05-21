@@ -231,7 +231,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 
 		$output = '';
 		if ( $show && ! empty( $post->ID ) && geodir_listing_belong_to_current_user( $post->ID ) || $is_preview ) {
-			$post_id = $post->ID;
+			$post_id = ! empty( $post ) ? (int) $post->ID : 0;
 
 			if ( isset( $_REQUEST['pid'] ) && $_REQUEST['pid'] != '' ) {
 				$post_id = absint( $_REQUEST['pid'] );
