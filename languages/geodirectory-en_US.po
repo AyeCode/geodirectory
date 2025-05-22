@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.115\n"
+"Project-Id-Version: GeoDirectory 2.8.116\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-15 20:07+0530\n"
-"PO-Revision-Date: 2025-05-15 20:07+0530\n"
+"POT-Creation-Date: 2025-05-22 18:54+0530\n"
+"PO-Revision-Date: 2025-05-22 18:54+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1886,146 +1886,146 @@ msgstr ""
 msgid "You don't have permission to do this."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:56
+#: includes/admin/class-geodir-admin-import-export.php:57
 msgid "No task is set"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:68
+#: includes/admin/class-geodir-admin-import-export.php:69
 msgid "Filesystem ERROR: "
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:70
+#: includes/admin/class-geodir-admin-import-export.php:71
 msgid "There was a problem accessing the filesystem."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:77
+#: includes/admin/class-geodir-admin-import-export.php:78
 msgid ""
 "ERROR: Could not create cache directory. This is usually due to inconsistent "
 "file permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:111
-#: includes/admin/class-geodir-admin-import-export.php:118
-#: includes/admin/class-geodir-admin-import-export.php:125
-#: includes/admin/class-geodir-admin-import-export.php:147
+#: includes/admin/class-geodir-admin-import-export.php:112
+#: includes/admin/class-geodir-admin-import-export.php:119
+#: includes/admin/class-geodir-admin-import-export.php:126
+#: includes/admin/class-geodir-admin-import-export.php:148
 msgid "Your favorite color is neither red, blue, nor green!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:216
+#: includes/admin/class-geodir-admin-import-export.php:217
 msgid "The uploaded file is not a valid csv file. Please try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:240
-#: includes/admin/class-geodir-admin-import-export.php:336
-#: includes/admin/class-geodir-admin-import-export.php:1305
-#: includes/admin/class-geodir-admin-import-export.php:2130
+#: includes/admin/class-geodir-admin-import-export.php:241
+#: includes/admin/class-geodir-admin-import-export.php:337
+#: includes/admin/class-geodir-admin-import-export.php:1306
+#: includes/admin/class-geodir-admin-import-export.php:2131
 msgid "No data found in csv file."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:275
+#: includes/admin/class-geodir-admin-import-export.php:276
 #, php-format
 msgid "GD IMPORT LISTING [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:309
-#: includes/admin/class-geodir-admin-import-export.php:320
-#: includes/admin/class-geodir-admin-import-export.php:332
+#: includes/admin/class-geodir-admin-import-export.php:310
+#: includes/admin/class-geodir-admin-import-export.php:321
+#: includes/admin/class-geodir-admin-import-export.php:333
 #, php-format
 msgid "Row %d Error: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:438
+#: includes/admin/class-geodir-admin-import-export.php:439
 #, php-format
 msgid "Invalid post type - %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:441
+#: includes/admin/class-geodir-admin-import-export.php:442
 msgid "Post type missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:446
+#: includes/admin/class-geodir-admin-import-export.php:447
 msgid "Title missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:508
+#: includes/admin/class-geodir-admin-import-export.php:509
 msgid "Address city, region or country missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:546
+#: includes/admin/class-geodir-admin-import-export.php:547
 #: includes/location-functions.php:823
 msgid "Failed to retrieve GPS data from a address using API."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:570
+#: includes/admin/class-geodir-admin-import-export.php:571
 msgid "Not enough GPS info for address."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:593
-#: includes/admin/class-geodir-admin-import-export.php:611
+#: includes/admin/class-geodir-admin-import-export.php:594
+#: includes/admin/class-geodir-admin-import-export.php:612
 #: includes/location-functions.php:932 includes/location-functions.php:957
 msgid "Failed to reach Google geocode server."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:608
+#: includes/admin/class-geodir-admin-import-export.php:609
 #: includes/location-functions.php:955
 #, php-format
 msgid "Google geocode failed: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:706
-#: includes/admin/class-geodir-admin-import-export.php:1021
-#: includes/admin/class-geodir-admin-import-export.php:1973
+#: includes/admin/class-geodir-admin-import-export.php:707
+#: includes/admin/class-geodir-admin-import-export.php:1022
+#: includes/admin/class-geodir-admin-import-export.php:1974
 #: includes/admin/settings/class-geodir-settings-import-export.php:903
 msgid "No records to export."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:752
-#: includes/admin/class-geodir-admin-import-export.php:1063
-#: includes/admin/class-geodir-admin-import-export.php:2017
+#: includes/admin/class-geodir-admin-import-export.php:753
+#: includes/admin/class-geodir-admin-import-export.php:1064
+#: includes/admin/class-geodir-admin-import-export.php:2018
 msgid ""
 "ERROR: Could not create csv file. This is usually due to inconsistent file "
 "permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1610
+#: includes/admin/class-geodir-admin-import-export.php:1611
 msgid "json file is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1612
+#: includes/admin/class-geodir-admin-import-export.php:1613
 msgid "json file is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1624
+#: includes/admin/class-geodir-admin-import-export.php:1625
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2048
+#: includes/admin/class-geodir-admin-import-export.php:2049
 #, php-format
 msgid "GD IMPORT REVIEW [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2056
+#: includes/admin/class-geodir-admin-import-export.php:2057
 msgid "data is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2069
+#: includes/admin/class-geodir-admin-import-export.php:2070
 msgid "invalid comment content."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2073
+#: includes/admin/class-geodir-admin-import-export.php:2074
 msgid "invalid comment post ID."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2077
+#: includes/admin/class-geodir-admin-import-export.php:2078
 msgid "invalid user details(user id or author name, author email)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2081
+#: includes/admin/class-geodir-admin-import-export.php:2082
 msgid "invalid rating."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2107
-#: includes/admin/class-geodir-admin-import-export.php:2124
+#: includes/admin/class-geodir-admin-import-export.php:2108
+#: includes/admin/class-geodir-admin-import-export.php:2125
 msgid "invalid data."
 msgstr ""
 
@@ -3973,7 +3973,7 @@ msgstr ""
 #: includes/admin/dummy-data/standard_places.php:117
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:352
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:255
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:956
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:957
 #: includes/widgets/class-geodir-widget-simple-archive.php:432
 msgid "Rating"
 msgstr ""
@@ -4575,7 +4575,7 @@ msgstr ""
 #: includes/admin/dummy-data/standard_places.php:73
 #: includes/admin/dummy-data/standard_places.php:82
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:521
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:957
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:958
 #: includes/widgets/class-geodir-widget-simple-archive.php:433
 msgid "Business Hours"
 msgstr ""
@@ -10645,7 +10645,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1220
+#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1234
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -11720,61 +11720,61 @@ msgstr ""
 msgid "No post_id or file url, file insert failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:381 includes/class-geodir-media.php:423
+#: includes/class-geodir-media.php:395 includes/class-geodir-media.php:437
 msgid "Failed to insert file info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:515
+#: includes/class-geodir-media.php:529
 msgid "No image_id, post_id or image url, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:598
+#: includes/class-geodir-media.php:612
 msgid "Failed to update image info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:729
+#: includes/class-geodir-media.php:743
 msgid "Invalid URL Provided."
 msgstr ""
 
-#: includes/class-geodir-media.php:735
+#: includes/class-geodir-media.php:749
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:1208
+#: includes/class-geodir-media.php:1222
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1220 includes/class-geodir-media.php:1222
+#: includes/class-geodir-media.php:1234 includes/class-geodir-media.php:1236
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1243
+#: includes/class-geodir-media.php:1257
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:1261
+#: includes/class-geodir-media.php:1275
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-media.php:1378 includes/class-geodir-media.php:1420
+#: includes/class-geodir-media.php:1392 includes/class-geodir-media.php:1434
 msgid "Generate attachment metadata"
 msgstr ""
 
-#: includes/class-geodir-media.php:1405
+#: includes/class-geodir-media.php:1419
 msgid "Invalid post id!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1446
+#: includes/class-geodir-media.php:1460
 msgid "Invalid attachment!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1451
+#: includes/class-geodir-media.php:1465
 msgid "Attachment metadata not generated for external image!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1469
+#: includes/class-geodir-media.php:1483
 #, php-format
 msgid "%s not exists!"
 msgstr ""
@@ -13302,7 +13302,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:285
 #: includes/widgets/class-geodir-widget-dynamic-content.php:524
 #: includes/widgets/class-geodir-widget-post-badge.php:522
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1262
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1270
 #: includes/widgets/class-geodir-widget-simple-archive.php:732
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3136
 msgid "is empty"
@@ -13312,7 +13312,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:286
 #: includes/widgets/class-geodir-widget-dynamic-content.php:525
 #: includes/widgets/class-geodir-widget-post-badge.php:523
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1263
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1271
 #: includes/widgets/class-geodir-widget-simple-archive.php:733
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3137
 msgid "is not empty"
@@ -13322,7 +13322,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:281
 #: includes/widgets/class-geodir-widget-dynamic-content.php:520
 #: includes/widgets/class-geodir-widget-post-badge.php:518
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1258
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1266
 #: includes/widgets/class-geodir-widget-simple-archive.php:728
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3138
 msgid "is equal"
@@ -13332,7 +13332,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:282
 #: includes/widgets/class-geodir-widget-dynamic-content.php:521
 #: includes/widgets/class-geodir-widget-post-badge.php:519
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1259
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1267
 #: includes/widgets/class-geodir-widget-simple-archive.php:729
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3139
 msgid "is not equal"
@@ -13342,7 +13342,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:283
 #: includes/widgets/class-geodir-widget-dynamic-content.php:522
 #: includes/widgets/class-geodir-widget-post-badge.php:520
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1260
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1268
 #: includes/widgets/class-geodir-widget-simple-archive.php:730
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3140
 msgid "is greater than"
@@ -13352,7 +13352,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:284
 #: includes/widgets/class-geodir-widget-dynamic-content.php:523
 #: includes/widgets/class-geodir-widget-post-badge.php:521
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1261
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1269
 #: includes/widgets/class-geodir-widget-simple-archive.php:731
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3141
 msgid "is less than"
@@ -13362,7 +13362,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:287
 #: includes/widgets/class-geodir-widget-dynamic-content.php:526
 #: includes/widgets/class-geodir-widget-post-badge.php:524
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1264
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1272
 #: includes/widgets/class-geodir-widget-simple-archive.php:734
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3142
 msgid "is contains"
@@ -13372,7 +13372,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:288
 #: includes/widgets/class-geodir-widget-dynamic-content.php:527
 #: includes/widgets/class-geodir-widget-post-badge.php:525
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1265
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1273
 #: includes/widgets/class-geodir-widget-simple-archive.php:735
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3143
 msgid "is not contains"
@@ -15384,7 +15384,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:72
 #: includes/widgets/class-geodir-widget-post-fav.php:173
 #: includes/widgets/class-geodir-widget-report-post.php:124
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1219
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1227
 #: includes/widgets/class-geodir-widget-simple-archive.php:689
 msgid "Custom colors"
 msgstr ""
@@ -16233,7 +16233,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:68
 #: includes/widgets/class-geodir-widget-post-fav.php:169
 #: includes/widgets/class-geodir-widget-report-post.php:120
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1215
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1223
 #: includes/widgets/class-geodir-widget-simple-archive.php:685
 #: includes/widgets/class-geodir-widget-tags.php:440
 msgid "Badge Color"
@@ -16341,7 +16341,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:509
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:540
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:571
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1201
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1209
 #: includes/widgets/class-geodir-widget-simple-archive.php:671
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:468
 #: vendor/ayecode/wp-super-duper/sd-functions.php:567
@@ -16544,7 +16544,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:54
 #: includes/widgets/class-geodir-widget-post-badge.php:59
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1134
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1142
 #: includes/widgets/class-geodir-widget-simple-archive.php:604
 msgid "Field Key:"
 msgstr ""
@@ -16553,28 +16553,28 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-badge.php:60
 #: includes/widgets/class-geodir-widget-post-content.php:55
 #: includes/widgets/class-geodir-widget-post-meta.php:120
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1135
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1143
 #: includes/widgets/class-geodir-widget-simple-archive.php:605
 msgid "This is the custom field key."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:64
 #: includes/widgets/class-geodir-widget-post-badge.php:69
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1147
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1155
 #: includes/widgets/class-geodir-widget-simple-archive.php:617
 msgid "Field condition:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:65
 #: includes/widgets/class-geodir-widget-post-badge.php:70
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1148
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1156
 #: includes/widgets/class-geodir-widget-simple-archive.php:618
 msgid "Select the custom field condition."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-dynamic-content.php:75
 #: includes/widgets/class-geodir-widget-post-badge.php:79
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1159
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1167
 #: includes/widgets/class-geodir-widget-simple-archive.php:629
 msgid "Value to match:"
 msgstr ""
@@ -17010,7 +17010,7 @@ msgid "Default (primary outline)"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-loop-actions.php:117
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:969
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:970
 #: includes/widgets/class-geodir-widget-simple-archive.php:443
 msgid "Custom"
 msgstr ""
@@ -17144,7 +17144,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:86
 #: includes/widgets/class-geodir-widget-post-badge.php:89
 #: includes/widgets/class-geodir-widget-post-directions.php:48
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1170
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1178
 #: includes/widgets/class-geodir-widget-simple-archive.php:640
 msgid "Icon class:"
 msgstr ""
@@ -17153,7 +17153,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-badge.php:90
 #: includes/widgets/class-geodir-widget-post-directions.php:49
 #: includes/widgets/class-geodir-widget-report-post.php:175
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1171
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1179
 #: includes/widgets/class-geodir-widget-simple-archive.php:641
 msgid "You can show a font-awesome icon here by entering the icon class."
 msgstr ""
@@ -17163,7 +17163,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-directions.php:59
 #: includes/widgets/class-geodir-widget-post-distance.php:39
 #: includes/widgets/class-geodir-widget-post-fav.php:155
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1202
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1210
 #: includes/widgets/class-geodir-widget-simple-archive.php:672
 msgid "Select the badge type."
 msgstr ""
@@ -17175,7 +17175,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:42
 #: includes/widgets/class-geodir-widget-post-fav.php:159
 #: includes/widgets/class-geodir-widget-report-post.php:92
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1205
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1213
 #: includes/widgets/class-geodir-widget-simple-archive.php:675
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:89
 msgid "Badge"
@@ -17188,7 +17188,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:43
 #: includes/widgets/class-geodir-widget-post-fav.php:160
 #: includes/widgets/class-geodir-widget-report-post.php:93
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1206
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1214
 #: includes/widgets/class-geodir-widget-simple-archive.php:676
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:90
 msgid "Pill"
@@ -17237,7 +17237,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:69
 #: includes/widgets/class-geodir-widget-post-fav.php:170
 #: includes/widgets/class-geodir-widget-report-post.php:121
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1216
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1224
 #: includes/widgets/class-geodir-widget-simple-archive.php:686
 msgid "Select the the badge color."
 msgstr ""
@@ -17248,7 +17248,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-directions.php:101
 #: includes/widgets/class-geodir-widget-post-distance.php:81
 #: includes/widgets/class-geodir-widget-post-fav.php:183
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1229
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1237
 #: includes/widgets/class-geodir-widget-simple-archive.php:699
 msgid "Badge background color:"
 msgstr ""
@@ -17260,7 +17260,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:82
 #: includes/widgets/class-geodir-widget-post-fav.php:184
 #: includes/widgets/class-geodir-widget-report-post.php:135
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1230
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1238
 #: includes/widgets/class-geodir-widget-simple-archive.php:700
 msgid "Color for the badge background."
 msgstr ""
@@ -17271,7 +17271,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-directions.php:111
 #: includes/widgets/class-geodir-widget-post-distance.php:91
 #: includes/widgets/class-geodir-widget-post-fav.php:193
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1239
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1247
 #: includes/widgets/class-geodir-widget-simple-archive.php:709
 msgid "Badge text color:"
 msgstr ""
@@ -17283,7 +17283,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-distance.php:92
 #: includes/widgets/class-geodir-widget-post-fav.php:194
 #: includes/widgets/class-geodir-widget-report-post.php:145
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1240
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1248
 #: includes/widgets/class-geodir-widget-simple-archive.php:710
 msgid "Color for the badge text."
 msgstr ""
@@ -18082,7 +18082,7 @@ msgid "Displays the post badge."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:80
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1160
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1168
 #: includes/widgets/class-geodir-widget-simple-archive.php:630
 msgid ""
 "Match this text with field value to display post badge. For post date enter "
@@ -18090,13 +18090,13 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:98
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1180
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1188
 #: includes/widgets/class-geodir-widget-simple-archive.php:650
 msgid "Badge:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:99
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1181
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1189
 #: includes/widgets/class-geodir-widget-simple-archive.php:651
 #, php-format
 msgid ""
@@ -18106,13 +18106,13 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:107
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1191
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1199
 #: includes/widgets/class-geodir-widget-simple-archive.php:661
 msgid "Link url:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:108
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1192
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1200
 #: includes/widgets/class-geodir-widget-simple-archive.php:662
 #, php-format
 msgid ""
@@ -19290,65 +19290,69 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:958
-msgid "Author Actions Dropdown"
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:953
+msgid "Distance To Post"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:959
+msgid "Author Actions Dropdown"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:960
 msgid "Author Actions 3 Dots Dropdown"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1031
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1037
 msgctxt "featured badge"
 msgid "FEATURED"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1033
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1039
 msgctxt "new badge"
 msgid "New"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1100
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1108
 #: includes/widgets/class-geodir-widget-simple-archive.php:570
 msgid "Top Left Badge"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1101
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1109
 #: includes/widgets/class-geodir-widget-simple-archive.php:571
 msgid "Image Badge (top left)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1104
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1112
 #: includes/widgets/class-geodir-widget-simple-archive.php:574
 msgid "Top Right Badge"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1105
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1113
 #: includes/widgets/class-geodir-widget-simple-archive.php:575
 msgid "Image Badge (top right)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1108
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1116
 #: includes/widgets/class-geodir-widget-simple-archive.php:578
 msgid "Bottom Left Badge"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1109
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1117
 #: includes/widgets/class-geodir-widget-simple-archive.php:579
 msgid "Image Badge (bottom left)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1112
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1120
 #: includes/widgets/class-geodir-widget-simple-archive.php:582
 msgid "Bottom Right Badge"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1113
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1121
 #: includes/widgets/class-geodir-widget-simple-archive.php:583
 msgid "Image Badge (bottom right)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1122
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1130
 #: includes/widgets/class-geodir-widget-simple-archive.php:592
 msgid "Select the badge to show"
 msgstr ""
@@ -19656,28 +19660,28 @@ msgstr ""
 msgid "Show icons for the links."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:413
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:425
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:395
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:407
 msgid "%s%l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:415
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:397
 msgid "%s%s Categories%s %l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:418
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:400
 msgid "%s Categories: %l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:420
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:402
 msgid "%s Category: %l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:427
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:409
 msgid "%s%s Tags%s %l"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-single-taxonomies.php:429
+#: includes/widgets/class-geodir-widget-single-taxonomies.php:411
 msgid "%s Tags: %l"
 msgstr ""
 
