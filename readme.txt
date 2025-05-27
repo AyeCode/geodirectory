@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.117 - 2025-TBD =
 * Added constant to be able to define an array of allowed fast-ajax plugins - ADDED
+* Redis object cache for logo not cleared on update listing - FIXED
 
 = GeoDirectory v2.8.116 - 2025-05-22 =
 * GD > Single Taxonomies shows PHP notice when Categories only option selected - FIXED
