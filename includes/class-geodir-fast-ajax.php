@@ -157,7 +157,7 @@ class GeoDir_Fast_AJAX {
 			}
 		}
 
-		$allowed_plugins = array();
+		$allowed_plugins = defined('GEODIR_FAST_AJAX_ALLOWED_PLUGINS') ? GEODIR_FAST_AJAX_ALLOWED_PLUGINS : array();
 		foreach ( $plugins as $plugin ) {
 			// Skip not allowed plugins
 			if ( in_array( $plugin, $not_allowed ) ) {
@@ -177,10 +177,10 @@ class GeoDir_Fast_AJAX {
 			}
 
 			// Page builder plugins
-			if ( in_array( $action, array( 'geodir_ajax_search' ) ) 
-				&& ( strpos( $plugin, 'elementor' ) !== false || strpos( $plugin, 'kadence' ) !== false || strpos( $plugin, 'bb-custom-attributes' ) !== false || strpos( $plugin, 'bb-plugin' ) !== false || strpos( $plugin, 'bb-theme-builder' ) !== false || strpos( $plugin, 'buddyboss-platform' ) !== false || strpos( $plugin, 'userswp' ) !== false || strpos( $plugin, 'fusion-builder' ) !== false || strpos( $plugin, 'all-in-one-wp-security-and-firewall' ) !== false || ( in_array( 'geodir_list_manager/geodir_list_manager.php', $plugins ) && ( in_array( 'posts-to-posts/posts-to-posts.php', $plugins ) || in_array( 'wp-posts-to-posts/posts-to-posts.php', $plugins ) ) && ( strpos( $plugin, 'geodir_list_manager' ) !== false || strpos( $plugin, 'posts-to-posts' ) !== false ) ) ) 
-				|| ( ! empty( $_REQUEST['gdbdate'] ) && ( strpos( $plugin, 'invoicing' ) !== false || strpos( $plugin, 'getpaid-wallet' ) !== false ) ) 
-				|| ( in_array( $action, array( 'geodir_cpt_search_field_form', 'geodir_cpt_search_save_field' ) ) && ! empty( $_REQUEST['htmlvar_name'] ) && $_REQUEST['htmlvar_name'] == 'gdbdate' && strpos( $plugin, 'invoicing' ) !== false ) 
+			if ( in_array( $action, array( 'geodir_ajax_search' ) )
+				&& ( strpos( $plugin, 'elementor' ) !== false || strpos( $plugin, 'kadence' ) !== false || strpos( $plugin, 'bb-custom-attributes' ) !== false || strpos( $plugin, 'bb-plugin' ) !== false || strpos( $plugin, 'bb-theme-builder' ) !== false || strpos( $plugin, 'buddyboss-platform' ) !== false || strpos( $plugin, 'userswp' ) !== false || strpos( $plugin, 'fusion-builder' ) !== false || strpos( $plugin, 'all-in-one-wp-security-and-firewall' ) !== false || ( in_array( 'geodir_list_manager/geodir_list_manager.php', $plugins ) && ( in_array( 'posts-to-posts/posts-to-posts.php', $plugins ) || in_array( 'wp-posts-to-posts/posts-to-posts.php', $plugins ) ) && ( strpos( $plugin, 'geodir_list_manager' ) !== false || strpos( $plugin, 'posts-to-posts' ) !== false ) ) )
+				|| ( ! empty( $_REQUEST['gdbdate'] ) && ( strpos( $plugin, 'invoicing' ) !== false || strpos( $plugin, 'getpaid-wallet' ) !== false ) )
+				|| ( in_array( $action, array( 'geodir_cpt_search_field_form', 'geodir_cpt_search_save_field' ) ) && ! empty( $_REQUEST['htmlvar_name'] ) && $_REQUEST['htmlvar_name'] == 'gdbdate' && strpos( $plugin, 'invoicing' ) !== false )
 			) {
 				$allowed_plugins[] = $plugin;
 				continue;

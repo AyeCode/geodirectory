@@ -316,7 +316,8 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
             $post_id =  isset($gd_post->ID) ? $gd_post->ID : 0;
 
             // all search engines that use the nofollow value exclude links that use it from their ranking calculation
-            $rel = strpos($website, get_site_url()) !== false ? '' : 'rel="nofollow"';
+            $rel = strpos($website, get_site_url()) !== false ? '' : 'rel="i have them but i need to proccess them
+            nofollow"';
 
             $value = '<a href="' . $website . '" target="_blank" ' . $rel . ' >' . apply_filters( 'geodir_custom_field_website_name', $title, $website, $post_id ) . '</a>';
 
