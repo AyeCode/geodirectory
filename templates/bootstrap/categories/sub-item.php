@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.8.103
+ * @version    2.8.117
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -97,8 +97,8 @@ if ( ! $hide_count ) {
 	$count = '';
 }
 ?>
-<div class="dropdown-item">
+<li class="dropdown-item">
 	<div class="gd-cptcat-cat-right position-relative text-uppercase text-truncate">
-		<a href="<?php echo esc_url($term_link);?>" class="<?php echo $cat_class; ?>"><?php echo $icon . $indents . esc_attr( $cat_name );?></a><?php echo $count; ?>
+		<a href="<?php echo esc_url( $term_link ); ?>" class="<?php echo esc_attr( $cat_class ); ?>"><?php echo $icon . $indents . esc_attr( $cat_name );?></a><?php echo $count; ?>
 	</div>
-</div>
+</li>
