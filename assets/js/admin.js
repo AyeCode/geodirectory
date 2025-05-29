@@ -1424,15 +1424,15 @@ function geodir_get_map_error($message){
         if (propVal.indexOf("#key-looks-like-project-number") >= 0){
             $id = 'geodir_validate_google_api_key_error_project';
             $body = geodir_params.txt_google_key_error_project;
-            $docs = '<a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_documentation+'</a>';
+            $docs = '<a href="https://wpgeodirectory.com/documentation/article/installation/get-a-google-api-key/" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_documentation+'</a>';
         }else if(propVal.indexOf("#invalid-key") >= 0){
             $id = 'geodir_validate_google_api_key_error_invalid';
             $body = geodir_params.txt_google_key_error_invalid;
-            $docs = '<a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_documentation+'</a>';
+            $docs = '<a href="https://wpgeodirectory.com/documentation/article/installation/get-a-google-api-key/" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_documentation+'</a>';
         }else if(propVal.indexOf("#referer-not-allowed-map-error") >= 0){
             $id = 'geodir_validate_google_api_key_error_referer';
             $body = geodir_params.txt_google_key_error_referer;
-            $docs = '<a href="https://docs.wpgeodirectory.com/article/186-google-api#step-4-restrict-api-key-access" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_documentation+'</a>';
+            $docs = '<a href="https://wpgeodirectory.com/documentation/article/installation/get-a-google-api-key/#step-4-restrict-api-key-access" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_documentation+'</a>';
         }else if(propVal.indexOf("You must enable Billing") >= 0){
             $id = 'geodir_validate_google_api_key_error_billing';
             $body = geodir_params.txt_google_key_error_billing;

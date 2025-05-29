@@ -1,6 +1,6 @@
 <?php
 /**
- * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @see        https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
  * @package    GeoDirectory\Templates
  * @version    2.8.103
  *

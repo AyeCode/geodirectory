@@ -30,7 +30,7 @@ Add all your business listings at once and tap into an impressive set of blocks,
  
 Do it all stress-free and in style with 100% compatible WordPress page builders like Gutenberg (Kadence WP, Astra, Neve, OceanWP), Elementor, Bricks, Divi, Beaver Builder, and Breakdance!
 
-✅ [Demos](https://demos.ayecode.io/) ✅ [Addons](https://wpgeodirectory.com/downloads/category/addons/) ✅ [Themes](https://wpgeodirectory.com/downloads/category/themes/) ✅ [Docs](https://docs.wpgeodirectory.com/) ✅ [Showcase](https://wpgeodirectory.com/category/showcase/)
+✅ [Demos](https://demos.ayecode.io/) ✅ [Addons](https://wpgeodirectory.com/downloads/category/addons/) ✅ [Themes](https://wpgeodirectory.com/downloads/category/themes/) ✅ [Docs](https://wpgeodirectory.com/documentation/) ✅ [Showcase](https://wpgeodirectory.com/category/showcase/)
 
 == ⚡ A PROFESSIONAL WORDPRESS BUSINESS DIRECTORY PLUGIN ==
 
@@ -242,11 +242,11 @@ The same templates are available for the Kadence Theme with Gutenberg and the Ka
 
 The easiest option is automatic installation. To automatically install GeoDirectory, log in to your WordPress dashboard, navigate to the Plugins menu, and click Add New.
 
-In the search field, type GeoDirectory and click Search Plugins. Once you've found our business directory plugin, install it by clicking Install Now. [GeoDirectory basic installation](https://docs.wpgeodirectory.com/category/7-installation)
+In the search field, type GeoDirectory and click Search Plugins. Once you've found our business directory plugin, install it by clicking Install Now. [GeoDirectory basic installation](https://wpgeodirectory.com/documentation/article/category/installation)
 
 = MANUAL INSTALLATION =
 
-The manual installation method involves downloading our Directory plugin and uploading it to your webserver via your favorite FTP application. The WordPress codex will tell you more [here](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation). [GeoDirectory basic installation](https://docs.wpgeodirectory.com/category/7-installation)
+The manual installation method involves downloading our Directory plugin and uploading it to your webserver via your favorite FTP application. The WordPress codex will tell you more [here](https://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation). [GeoDirectory basic installation](https://wpgeodirectory.com/documentation/article/category/installation)
 
 = UPDATING =
 
@@ -317,7 +317,7 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 == Changelog ==
 
-__WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
+__WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2)__
 
 = GeoDirectory v2.8.117 - 2025-TBD =
 * Added constant to be able to define an array of allowed fast-ajax plugins - ADDED
@@ -685,7 +685,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 NOTICE: The latest version of GDv2 (2.0.0.58+) contains a security release (does not affect GDv1), please update to 2.0.0.58+.
 
 = 2.0.0.0 =
-NOTICE: GDv2 is a major update that will require some manual steps to restore some directory functionality when updating from GDv1. [Documentation](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)
+NOTICE: GDv2 is a major update that will require some manual steps to restore some directory functionality when updating from GDv1. [Documentation](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2)
 
 
 = Resources used to build this plugin =

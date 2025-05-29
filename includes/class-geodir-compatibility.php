@@ -721,7 +721,7 @@ class GeoDir_Compatibility {
 						__('GeoDirectory template pages work much better with %sBeaver Themer%s :: %sLearn more%s', 'geodirectory'),
 						'<a href="https://www.wpbeaverbuilder.com/beaver-themer/" target="_blank">',
 						' <i class="fas fa-external-link-alt"></i></a>',
-						'<a href="https://wpgeodirectory.com/docs-v2/integrations/builders/#bb-themer" target="_blank">',
+						'<a href="https://wpgeodirectory.com/documentation/article/builders/beaver-builder-getting-started/" target="_blank">',
 						' <i class="fas fa-external-link-alt"></i></a>'
 					);
 					$warning_html = '<div class="gd-notification gd-warning  "><i class="fas fa-exclamation-triangle"></i> '.$warning_message.'</div>';
@@ -4255,7 +4255,7 @@ jQuery(function($){
 
 		if ( $pagenow === 'post.php' && ! empty( $post ) && ! empty( $post->post_type ) && $post->post_type == 'page' && function_exists( 'et_divi_load_scripts_styles' ) && geodir_is_geodir_page_id( (int) $post->ID ) ) {
 			echo '<div class="notice notice-warning is-dismissible geodir-builder-notice"><p>';
-			echo wp_sprintf( __( 'Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages with Divi Builder.', 'geodirectory' ), '<a href="https://docs.wpgeodirectory.com/article/210-getting-started-with-divi-builder" target="_blank">', '</a>' );
+			echo wp_sprintf( __( 'Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages with Divi Builder.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/documentation/article/builders/getting-started-with-divi-builder" target="_blank">', '</a>' );
 			echo '</p></div>';
 		}
 	}

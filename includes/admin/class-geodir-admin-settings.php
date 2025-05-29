@@ -1402,7 +1402,7 @@ class GeoDir_Admin_Settings {
 							'value' => $option_value,
 							'help_text'  => $description,
 							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
-							'input_group_right' => '<button class="btn btn-success text-white" type="button"  onclick="geodir_validate_google_api_key(jQuery(\'#google_maps_api_key\').val());">'.esc_attr__( 'Verify', 'geodirectory' ).'</button><div class="input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'API Key Guide', 'geodirectory' ) . '"><a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="text-dark"><i class="fas fa-info-circle"></i></a></div><button class="btn btn-primary" type="button"  onclick=\'window.open("'.wp_slash($gm_api_url).'", "newwindow", "width=600, height=400"); return false;\' >' . esc_attr__( 'Generate Key', 'geodirectory' ) . '</button>',
+							'input_group_right' => '<button class="btn btn-success text-white" type="button"  onclick="geodir_validate_google_api_key(jQuery(\'#google_maps_api_key\').val());">'.esc_attr__( 'Verify', 'geodirectory' ).'</button><div class="input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'API Key Guide', 'geodirectory' ) . '"><a href="https://wpgeodirectory.com/documentation/article/installation/get-a-google-api-key/" target="_blank" class="text-dark"><i class="fas fa-info-circle"></i></a></div><button class="btn btn-primary" type="button"  onclick=\'window.open("'.wp_slash($gm_api_url).'", "newwindow", "width=600, height=400"); return false;\' >' . esc_attr__( 'Generate Key', 'geodirectory' ) . '</button>',
 							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
 						)
 					);
@@ -1432,7 +1432,7 @@ class GeoDir_Admin_Settings {
 							'value' => $option_value,
 							'help_text'  => $description,
 							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
-							'input_group_right' => '<div class="input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'API Key Guide', 'geodirectory' ) . '"><a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="text-dark"><i class="fas fa-info-circle"></i></a></div><button class="btn btn-primary" type="button"  onclick=\'window.open("'.wp_slash($gm_api_url).'", "newwindow", "width=600, height=400"); return false;\' >' . esc_attr__( 'Generate Key', 'geodirectory' ) . '</button>',
+							'input_group_right' => '<div class="input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'API Key Guide', 'geodirectory' ) . '"><a href="https://wpgeodirectory.com/documentation/article/installation/get-a-google-api-key/" target="_blank" class="text-dark"><i class="fas fa-info-circle"></i></a></div><button class="btn btn-primary" type="button"  onclick=\'window.open("'.wp_slash($gm_api_url).'", "newwindow", "width=600, height=400"); return false;\' >' . esc_attr__( 'Generate Key', 'geodirectory' ) . '</button>',
 							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
 						)
 					);

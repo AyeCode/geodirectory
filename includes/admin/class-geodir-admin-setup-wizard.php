@@ -1623,7 +1623,7 @@ public function setup_wizard_header() {
 				<div>
 					<a
 						class="btn btn-sm btn-outline-primary gd-getting-started"
-						href="https://docs.wpgeodirectory.com/collection/1-getting-started?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=geodirectoryplugin"
+						href="https://wpgeodirectory.com/documentation/article/category/getting-started/?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=geodirectoryplugin"
 						target="_blank"><?php esc_html_e( 'Getting started guide', 'geodirectory' ); ?></a>
 					<a
 						class="btn btn-sm btn-outline-primary gd-newsletter"
