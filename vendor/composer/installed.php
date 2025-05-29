@@ -56,9 +56,9 @@
             'dev_requirement' => false,
         ),
         'ayecode/wp-font-awesome-settings' => array(
-            'pretty_version' => '1.1.7',
-            'version' => '1.1.7.0',
-            'reference' => 'f52f48d05ff760eb1e22e747a2d011c669f25ed1',
+            'pretty_version' => '1.1.8',
+            'version' => '1.1.8.0',
+            'reference' => '7e294058197360c13f83d925436ae0e4871308f4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ayecode/wp-font-awesome-settings',
             'aliases' => array(),

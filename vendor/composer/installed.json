@@ -199,24 +199,24 @@
         },
         {
             "name": "ayecode/wp-font-awesome-settings",
-            "version": "1.1.7",
-            "version_normalized": "1.1.7.0",
+            "version": "1.1.8",
+            "version_normalized": "1.1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
-                "reference": "f52f48d05ff760eb1e22e747a2d011c669f25ed1"
+                "reference": "7e294058197360c13f83d925436ae0e4871308f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/f52f48d05ff760eb1e22e747a2d011c669f25ed1",
-                "reference": "f52f48d05ff760eb1e22e747a2d011c669f25ed1",
+                "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/7e294058197360c13f83d925436ae0e4871308f4",
+                "reference": "7e294058197360c13f83d925436ae0e4871308f4",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.6.0"
             },
-            "time": "2023-12-14T17:12:22+00:00",
+            "time": "2025-05-29T12:45:05+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
