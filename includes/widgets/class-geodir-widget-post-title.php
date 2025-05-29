@@ -193,14 +193,24 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		}
 
 		$title = get_the_title();
-		if(empty($title) && $block_preview ){$title = "Demo title preview";}
-		$title = apply_filters( 'geodir_widget_post_title', $title, $instance, $args, $content );
+		if ( empty( $title ) && $block_preview ) {
+			$title = "Demo title preview";
+		}
+
+		$title = (string) apply_filters( 'geodir_widget_post_title', $title, $instance, $args, $content );
+
+		if ( $title ) {
+			$title = strip_tags( stripslashes( $title ) );
+		}
+
+		$title_attribute = (string) the_title_attribute( array( 'echo' => false ) );
+		if ( $title_attribute ) {
+			$title_attribute = stripslashes( $title_attribute );
+		}
 
 		ob_start();
 		?>
-		<<?php echo esc_attr($title_tag);?> class="geodir-entry-title <?php echo $classes;?>">
-			<a href="<?php the_permalink(); ?>" class="<?php echo esc_attr( $link_class );?>" title="<?php echo esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), stripslashes( the_title_attribute( array( 'echo' => false ) ) ) ) ); ?>"><?php echo trim( esc_html( strip_tags( stripslashes( $title ) ) ) ); ?></a>
-		</<?php echo esc_attr($title_tag);?>>
+		<<?php echo esc_attr( $title_tag ); ?> class="geodir-entry-title <?php echo esc_attr( $classes ); ?>"><a href="<?php esc_url( the_permalink() ); ?>" class="<?php echo esc_attr( $link_class );?>" title="<?php echo esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), $title_attribute ) ); ?>"><?php echo trim( esc_html( $title ) ); ?></a></<?php echo esc_attr( $title_tag ); ?>>
 		<?php
 		$output = ob_get_clean();
 
@@ -216,7 +226,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		 * @param string $content Shortcode content.
 		 * @param object $this The GeoDir_Widget_Post_Title object.
 		 */
-		$output = apply_filters( 'geodir_widget_post_title_output', $output, $title_tag, $instance, $args, $content, $this );
+		$output = apply_filters( 'geodir_widget_post_title_output', trim( $output ), $title_tag, $instance, $args, $content, $this );
 
 		$post = $backup_post;
 
