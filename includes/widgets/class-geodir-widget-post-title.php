@@ -210,7 +210,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 
 		ob_start();
 		?>
-		<<?php echo esc_attr( $title_tag ); ?> class="geodir-entry-title <?php echo esc_attr( $classes ); ?>"><a href="<?php esc_url( the_permalink() ); ?>" class="<?php echo esc_attr( $link_class );?>" title="<?php echo esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), $title_attribute ) ); ?>"><?php echo trim( esc_html( $title ) ); ?></a></<?php echo esc_attr( $title_tag ); ?>>
+		<<?php echo esc_attr( $title_tag ); ?> class="geodir-entry-title <?php echo esc_attr( $classes ); ?>"><a href="<?php the_permalink(); ?>" class="<?php echo esc_attr( $link_class );?>" title="<?php echo esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), $title_attribute ) ); ?>"><?php echo trim( esc_html( $title ) ); ?></a></<?php echo esc_attr( $title_tag ); ?>>
 		<?php
 		$output = ob_get_clean();
 

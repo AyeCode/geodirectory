@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.116\n"
+"Project-Id-Version: GeoDirectory 2.8.117\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-22 18:54+0530\n"
-"PO-Revision-Date: 2025-05-22 18:54+0530\n"
+"POT-Creation-Date: 2025-05-29 18:49+0530\n"
+"PO-Revision-Date: 2025-05-29 18:49+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -8181,7 +8181,7 @@ msgstr ""
 #: includes/admin/views/html-admin-page-status-report.php:583
 #: includes/admin/views/html-notice-v2-update.php:202
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:937
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:493
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:501
 msgid "Version"
 msgstr ""
 
@@ -10645,7 +10645,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1234
+#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1235
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -11740,41 +11740,41 @@ msgstr ""
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:1222
+#: includes/class-geodir-media.php:1223
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1234 includes/class-geodir-media.php:1236
+#: includes/class-geodir-media.php:1235 includes/class-geodir-media.php:1237
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1257
+#: includes/class-geodir-media.php:1258
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:1275
+#: includes/class-geodir-media.php:1276
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-media.php:1392 includes/class-geodir-media.php:1434
+#: includes/class-geodir-media.php:1393 includes/class-geodir-media.php:1435
 msgid "Generate attachment metadata"
 msgstr ""
 
-#: includes/class-geodir-media.php:1419
+#: includes/class-geodir-media.php:1420
 msgid "Invalid post id!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1460
+#: includes/class-geodir-media.php:1461
 msgid "Invalid attachment!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1465
+#: includes/class-geodir-media.php:1466
 msgid "Attachment metadata not generated for external image!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1483
+#: includes/class-geodir-media.php:1484
 #, php-format
 msgid "%s not exists!"
 msgstr ""
@@ -13136,8 +13136,8 @@ msgid "Would you like to manually set your location?"
 msgstr ""
 
 #: includes/core-functions.php:371
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:741
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:773
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:749
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:781
 msgid "ERROR:"
 msgstr ""
 
@@ -13573,7 +13573,7 @@ msgid "View on Map"
 msgstr ""
 
 #: includes/custom-fields/output-filter-functions.php:817
-#: includes/widgets/class-geodir-widget-post-title.php:202
+#: includes/widgets/class-geodir-widget-post-title.php:213
 #, php-format
 msgctxt "listing title hover"
 msgid "View: %s"
@@ -16343,7 +16343,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:571
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1209
 #: includes/widgets/class-geodir-widget-simple-archive.php:671
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:468
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:476
 #: vendor/ayecode/wp-super-duper/sd-functions.php:567
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1195
 msgid "Type"
@@ -21711,7 +21711,7 @@ msgid ""
 msgstr ""
 
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:910
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:414
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:422
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
@@ -21742,7 +21742,7 @@ msgid "v4 (legacy)"
 msgstr ""
 
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:947
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:516
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:524
 msgid "Frontend"
 msgstr ""
 
@@ -21796,7 +21796,7 @@ msgid ""
 msgstr ""
 
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:982
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:517
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:525
 msgid "Backend"
 msgstr ""
 
@@ -21960,126 +21960,126 @@ msgstr ""
 msgid "It's a temporary deactivation, I'm troubleshooting"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:461
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:469
 msgid "Font Awesome fonts are loading locally."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:463
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:471
 msgid "Font Awesome fonts are not loading locally!"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:471
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:479
 msgid "CSS (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:473
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:481
 msgid "Kits (settings managed on fontawesome.com)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:479
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:487
 msgid "Kit URL"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:484
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:492
 #, php-format
 msgid "Requires a free account with Font Awesome. %sGet kit url%s"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:496
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:504
 #, php-format
 msgid "Latest - %s (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:512
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:520
 msgid "Enqueue"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:515
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:523
 msgid "Frontend + Backend (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:524
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:532
 msgid "Enable pro"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:530
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:538
 #, php-format
 msgid "Requires a subscription. %sLearn more%s  %sManage my allowed domains%s"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:541
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:549
 msgid "Load Fonts Locally"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:546
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:554
 msgid ""
 "(For free version only) Load FontAwesome fonts from locally. This downloads "
 "FontAwesome fonts from fontawesome.com & stores at the local site."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:552
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:560
 msgid "Enable v4 shims compatibility"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:558
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:566
 msgid ""
 "This enables v4 classes to work with v5, sort of like a band-aid until "
 "everyone has updated everything to v5."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:564
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:572
 msgid "Enable JS pseudo elements (not recommended)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:571
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:579
 msgid ""
 "Used only with the JS version, this will make pseudo-elements work but can "
 "be CPU intensive on some sites."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:577
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:585
 msgid "Dequeue"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:583
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:591
 msgid ""
 "This will try to dequeue any other Font Awesome versions loaded by other "
 "sources if they are added with `font-awesome` or `fontawesome` in the name."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:592
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:600
 msgid "Get 24,000+ more icons with Font Awesome Pro"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:597
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:605
 #, php-format
 msgid "Version: %s (affiliate links provided)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:702
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:710
 msgid ""
 "The Official Font Awesome Plugin is active, please adjust your settings "
 "there."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:712
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:720
 #, php-format
 msgid ""
 "Font Awesome Pro v6 requires the use of a kit, please setup your kit in "
 "%ssettings.%s"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:888
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:896
 msgid "Something went wrong in downloading the font awesome to store locally."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:932
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:940
 msgid ""
 "Failed to initialise WP_Filesystem while trying to download the Font Awesome "
 "package."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:968
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:976
 msgid "Fail to move font awesome package!"
 msgstr ""
 
