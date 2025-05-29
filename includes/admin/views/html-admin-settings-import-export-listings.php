@@ -100,7 +100,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 									'class'     => 'btn btn-link btn-sm',
 									'content'   => __( 'How To Get Sample CSV File To Prepare Import Listings', 'geodirectory' ),
 									'icon'      => 'fas fa-exclamation-circle',
-									'href'      => 'https://docs.wpgeodirectory.com/article/463-csv-imports-useful-tips',
+									'href'      => 'https://wpgeodirectory.com/documentation/article/how-tos/csv-imports-useful-tips',
 									'new_window'=> true
 								)
 							);

@@ -79,7 +79,7 @@ class GeoDir_Hints {
 
 		$hints[] = wp_sprintf(
 			__( "You can use shortcodes or blocks to build the page or some page builders such as %sBeaver Themer or Elementor Pro.%s", "geodirectory" ),
-			"<a href='https://wpgeodirectory.com/docs-v2/integrations/builders/#theme-builders'>",
+			"<a href='https://wpgeodirectory.com/documentation/article/category/builders/#theme-builders'>",
 			"</a>"
 		);
 
@@ -102,7 +102,7 @@ class GeoDir_Hints {
 
 		return self::format_hints(
 			$hints,
-			"https://docs.wpgeodirectory.com/article/39-geodirectory-pages", // documentation url
+			"https://wpgeodirectory.com/documentation/article/explore-settings/settings-overview-for-general-pages", // documentation url
 			"https://www.youtube.com/watch?v=o8zgcNwNKyY", // video documentation url
 			"archive_template" // feedback id
 		);
@@ -128,7 +128,7 @@ class GeoDir_Hints {
 
 		$hints[] = wp_sprintf(
 			__( "You can use shortcodes or blocks to build the page or some page builders such as %sBeaver Themer or Elementor Pro.%s", "geodirectory" ),
-			"<a href='https://wpgeodirectory.com/docs-v2/integrations/builders/#theme-builders'>",
+			"<a href='https://wpgeodirectory.com/documentation/article/category/builders/#theme-builders'>",
 			"</a>"
 		);
 
@@ -143,7 +143,7 @@ class GeoDir_Hints {
 
 		return self::format_hints(
 			$hints,
-			"https://docs.wpgeodirectory.com/article/39-geodirectory-pages", // documentation url
+			"https://wpgeodirectory.com/documentation/article/explore-settings/settings-overview-for-general-pages", // documentation url
 			"https://www.youtube.com/watch?v=o8zgcNwNKyY", // video documentation url
 			"search_template" // feedback id
 		);
@@ -169,7 +169,7 @@ class GeoDir_Hints {
 
 		$hints[] = wp_sprintf(
 			__( "You can use shortcodes or blocks to build the page or some page builders such as %sBeaver Themer or Elementor Pro.%s", "geodirectory" ),
-			"<a href='https://wpgeodirectory.com/docs-v2/integrations/builders/#theme-builders'>",
+			"<a href='https://wpgeodirectory.com/documentation/article/category/builders/#theme-builders'>",
 			"</a>"
 		);
 
@@ -179,13 +179,13 @@ class GeoDir_Hints {
 			__( "The tabs output can be changed via drag and drop %shere%s. %sDocumentation%s", "geodirectory" ),
 			"<a href='$tabs_link'>",
 			"</a>",
-			"<a href='https://docs.wpgeodirectory.com/article/323-how-to-use-the-tabs-builder-in-geodirectory'>",
+			"<a href='https://wpgeodirectory.com/documentation/article/how-tos/how-to-use-the-tabs-builder-in-geodirectory'>",
 			"</a>"
 		);
 
 		return self::format_hints(
 			$hints,
-			"https://docs.wpgeodirectory.com/article/39-geodirectory-pages", // documentation url
+			"https://wpgeodirectory.com/documentation/article/explore-settings/settings-overview-for-general-pages", // documentation url
 			"https://www.youtube.com/watch?v=o8zgcNwNKyY", // video documentation url
 			"single_template" // feedback id
 		);
@@ -209,7 +209,7 @@ class GeoDir_Hints {
 
 		$hints[] = wp_sprintf(
 			__( "You can use shortcodes or blocks to build the page or %smost page builders%s", "geodirectory" ),
-			"<a href='https://wpgeodirectory.com/docs-v2/integrations/builders/'>",
+			"<a href='https://wpgeodirectory.com/documentation/article/category/builders/'>",
 			"</a>"
 		);
 
@@ -221,7 +221,7 @@ class GeoDir_Hints {
 
 		return self::format_hints(
 			$hints,
-			"https://docs.wpgeodirectory.com/article/39-geodirectory-pages", // documentation url
+			"https://wpgeodirectory.com/documentation/article/explore-settings/settings-overview-for-general-pages", // documentation url
 			"https://www.youtube.com/watch?v=o8zgcNwNKyY", // video documentation url
 			"location_template" // feedback id
 		);

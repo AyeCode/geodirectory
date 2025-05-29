@@ -66,7 +66,7 @@ class GeoDir_Admin {
 			'slug'		=> 'geodirectory',
 			'version'	=> GEODIRECTORY_VERSION,
 			'support_url'=> 'https://wpgeodirectory.com/support/',
-			'documentation_url'=> 'https://docs.wpgeodirectory.com/',
+			'documentation_url'=> 'https://wpgeodirectory.com/documentation/',
 			'activated' => 0 // a timestamp of when original activated @todo implement
 		));
 	}

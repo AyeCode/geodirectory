@@ -549,7 +549,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 						gdMsg += '<p><?php echo addslashes( $upload_dir );?></p>';
 					}
 					if ( ( updated > 0 || created > 0 ) && type=='post' ) {
-						gdMsg += '<p><i class="fas fa-info-circle" aria-hidden="true"></i> <?php echo addslashes( sprintf( __( 'Visit GeoDirectory -> Status -> Tools -> Term counts. Run that tool to update term counts after your import. Check more at %shere%s.', 'geodirectory' ), '<a href="https://docs.wpgeodirectory.com/article/367-settings-overview-for-gd-status-tools" target="_blank">', '</a>' ) ); ?></p>';
+						gdMsg += '<p><i class="fas fa-info-circle" aria-hidden="true"></i> <?php echo addslashes( sprintf( __( 'Visit GeoDirectory -> Status -> Tools -> Term counts. Run that tool to update term counts after your import. Check more at %shere%s.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/documentation/article/explore-settings/settings-overview-for-gd-status-tools" target="_blank">', '</a>' ) ); ?></p>';
 					}
 					jQuery('#gd-import-msg', cont).find('#message').removeClass('error').addClass('updated').html(gdMsg);
 					jQuery('#gd-import-msg', cont).show();
