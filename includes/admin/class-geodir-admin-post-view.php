@@ -329,6 +329,11 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 		public static function attachment_settings() {
 			global $post, $post_id, $aui_bs5;
 
+			// if the image input in edit post backend is placed below the comment settings then $post_id is set to 0
+			if ( ! $post_id && !empty($post->ID) ) {
+				$post_id = $post->ID;
+			}
+
 			wp_nonce_field( plugin_basename( __FILE__ ), 'geodir_post_attachments_noncename' );
 
 			if ( $featured_image = get_the_post_thumbnail( $post_id, 'medium' ) ) {
