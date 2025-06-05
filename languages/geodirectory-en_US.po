@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.117\n"
+"Project-Id-Version: GeoDirectory 2.8.118\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 18:49+0530\n"
-"PO-Revision-Date: 2025-05-29 18:49+0530\n"
+"POT-Creation-Date: 2025-06-05 20:52+0530\n"
+"PO-Revision-Date: 2025-06-05 20:52+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -2466,59 +2466,59 @@ msgstr ""
 msgid "Search for a user&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:335
+#: includes/admin/class-geodir-admin-post-view.php:340
 #: includes/class-geodir-privacy-exporters.php:276
 #: includes/custom-fields/functions.php:1472
 #: includes/custom-fields/functions.php:1474
 msgid "Featured Image"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:346
-#: includes/admin/class-geodir-admin-post-view.php:349
+#: includes/admin/class-geodir-admin-post-view.php:351
+#: includes/admin/class-geodir-admin-post-view.php:354
 msgid "You can upload"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:346
+#: includes/admin/class-geodir-admin-post-view.php:351
 msgid "image with this package"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:349
+#: includes/admin/class-geodir-admin-post-view.php:354
 msgid "images with this package"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:352
+#: includes/admin/class-geodir-admin-post-view.php:357
 msgid "You can upload unlimited images with this package"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:371
+#: includes/admin/class-geodir-admin-post-view.php:376
 msgid "Drop files to upload"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:373
+#: includes/admin/class-geodir-admin-post-view.php:378
 #: templates/bootstrap/file-upload.php:29 templates/file-upload.php:27
 msgid "Select Files"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:382
+#: includes/admin/class-geodir-admin-post-view.php:387
 msgid "Please drag & drop the images to rearrange the order"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:383
-#: includes/admin/class-geodir-admin-post-view.php:568
+#: includes/admin/class-geodir-admin-post-view.php:388
+#: includes/admin/class-geodir-admin-post-view.php:573
 #: includes/admin/class-geodir-admin-tools.php:84
 msgid "Regenerate Thumbnails"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:383
+#: includes/admin/class-geodir-admin-post-view.php:388
 msgid "Regenerate thumbnails & metadata."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:389
+#: includes/admin/class-geodir-admin-post-view.php:394
 #: templates/bootstrap/file-upload.php:68
 msgid "Set Image Texts"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:516
+#: includes/admin/class-geodir-admin-post-view.php:521
 #, php-format
 msgid "Save as %s"
 msgstr ""
