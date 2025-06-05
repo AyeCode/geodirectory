@@ -2,7 +2,7 @@
 /**
  * @see        https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.8.103
+ * @version    2.8.118
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -94,14 +94,14 @@ if(!$hide_icon){
 	if($icon_size_class=='box-large'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconlarge';}
 	if($icon_size_class=='box-medium'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconmedium';}
 	if($icon_size_class=='box-small'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconsmall';}
-	$icon_size_class .= ' d-inline-block mr-1 me-1 align-middle';
-	$img_class =  $icon_size_class;
+	$icon_size_class .= ' d-inline-block mr-2 me-2 align-middle';
+	$img_class = $icon_size_class;
 	$icon_color_class = '';
 	$icon_color =  !empty($args['icon_color']) ? sanitize_html_class($args['icon_color']) : '';
 	if($icon_color){$icon_color_class = " text-$icon_color"; $cat_color = '';}
 	$cat_color = $cat_color ? ' style="color:' . sanitize_hex_color( $cat_color ) . '"' : '';
 
-	$icon = "<div class='gd-cptcat-cat-left border-0 m-0 overflow-hidden $img_class'><span class='gd-cptcat-icon" . $icon_color_class . "'" . $cat_color . ">$cat_icon</span></div> ";
+	$icon = "<div class='gd-cptcat-cat-left border-0 m-0 overflow-hidden $img_class'><span class='gd-cptcat-icon" . $icon_color_class . "'" . $cat_color . ">$cat_icon</span></div>";
 }
 ?>
 <div class="card h-100 p-0 m-0 border-0 bg-transparent <?php echo $card_class; ?>">
