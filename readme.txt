@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.117 - 2025-TBD =
 * If when editing a place the backend image upload form is moved below the comments settings, images fail to load and can be removed when saved - FIXED
+* GD Categories remove extra space before category name when icon left layout selected - FIXED
 
 = GeoDirectory v2.8.117 - 2025-05-29 =
 * Added constant to be able to define an array of allowed fast-ajax plugins - ADDED
