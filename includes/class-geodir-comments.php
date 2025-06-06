@@ -107,7 +107,7 @@ class GeoDir_Comments {
 				array(
 					'id'               => 'url',
 					'name'             => 'url',
-					'required'         => true,
+					'required'         => false,
 					'label'            => esc_html__( 'Website', 'geodirectory' ),
 					'type'             => 'url',
 					'placeholder'      => esc_html__( 'Website', 'geodirectory' ),
