@@ -1,31 +1,50 @@
 <?php
 /**
- * Select Sort (default)
+ * Select Sort
  *
- * @ver 1.0.0
+ * @ver 2.8.119
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-?>
-<div class="geodir-tax-sort">
 
-	<select name="sort_by" class="geodir-select geodir-sort-by" aria-label="<?php esc_attr_e( 'Sort By' ,'geodirectory' ); ?>">>
-		<option
-			value="<?php echo esc_url( add_query_arg( 'sort_by', '' ) ); ?>" <?php if ( empty($_REQUEST['sort_by']) ) {
-			echo 'selected="selected"';
-		} ?>><?php _e( 'Sort By', 'geodirectory' ); ?></option>
-		<?php
-		foreach($sort_options as $sort){
-			$value = '';
-			if($sort->field_type == 'random'){$value = "random";}
-			elseif($sort->sort == 'asc'){$value = esc_attr($sort->htmlvar_name."_asc");}
-			elseif($sort->sort == 'desc'){$value = esc_attr($sort->htmlvar_name."_desc");}
-			$selected = ( $value && !empty($_REQUEST['sort_by']) && esc_attr($_REQUEST['sort_by']) == $value ) || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) )  ?  'selected="selected"' : '';
-			echo '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $value ) ) . '">' . esc_attr($sort->frontend_title) . '</option>';
+global $aui_bs5;
+
+// Get the items first so we can label the button with current sort option
+$button_label = __( 'Sort By', 'geodirectory' );
+$sort_options_html = '';
+
+if ( ! empty( $sort_options ) ) {
+	foreach ( $sort_options as $sort ) {
+		$value = '';
+
+		if ( $sort->field_type == 'random' ) {
+			$value = "random";
+		} else if ( $sort->sort == 'asc' ) {
+			$value = $sort->htmlvar_name . "_asc";
+		} else if ( $sort->sort == 'desc' ) {
+			$value = $sort->htmlvar_name . "_desc";
 		}
-		?>
-	</select>
 
+		$active = ( $value && ! empty( $_REQUEST['sort_by'] ) && $_REQUEST['sort_by'] == $value ) || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) ) ? 'active' : '';
+
+		if ( $active ) {
+			$button_label = $sort->frontend_title;
+		}
+
+		$sort_options_html .= '<a href="' . esc_url( add_query_arg( 'sort_by', $value ) ) . '" class="dropdown-item ' . esc_attr( $active ) . '" rel="nofollow">' . esc_html( $sort->frontend_title ) . '</a>';
+	}
+}
+?>
+<div class="btn-group btn-group-sm geodir-sort-by" role="group" aria-label="<?php esc_attr_e( "Sort by", "geodirectory" ); ?>">
+	<div class="btn-group btn-group-sm" role="group">
+		<button id="geodir-sort-by" type="button" class="btn btn-outline-primary <?php echo $aui_bs5 ? 'rounded-end dropdown-toggle dropdown-toggle-0' : 'rounded-right'; ?>" data-<?php echo ( $aui_bs5 ? 'bs-' : '' ); ?>toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo esc_html( $button_label ); ?> <i class="fas fa-sort"></i></button>
+		<div class="dropdown-menu dropdown-caret-0 my-3 p-0" aria-labelledby="gd-list-view-select-grid">
+			<h6 class="dropdown-header"><?php echo esc_html__( "Sort Options", "geodirectory" ); ?></h6>
+			<?php echo $sort_options_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<div class="dropdown-divider"></div>
+			<a class="dropdown-item" href="<?php echo esc_url( remove_query_arg( 'sort_by' ) );?>" rel="nofollow"><?php echo esc_html__( "Default", "geodirectory" ); ?></a>
+		</div>
+	</div>
 </div>
