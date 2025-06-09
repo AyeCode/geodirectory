@@ -322,6 +322,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.119 - 2025-06-TBD =
 * Comment form default field website should be optional - CHANGED
 * Add nofollow attribute to sorting dropdown links - CHANGED
+* Non-float rating value display error for bar rating style - FIXED
 
 = GeoDirectory v2.8.118 - 2025-06-05 =
 * If when editing a place the backend image upload form is moved below the comments settings, images fail to load and can be removed when saved - FIXED
