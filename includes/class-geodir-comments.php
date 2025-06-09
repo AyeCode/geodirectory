@@ -1353,24 +1353,22 @@ class GeoDir_Comments {
 	 *
 	 * @return false|string
 	 */
-	public static function get_bar_rating_html($rating,$overrides){
-		$title = !empty($overrides['rating_label']) ? esc_attr($overrides['rating_label']) : '';
-		$rating_input_count = !empty($overrides['rating_input_count']) ? esc_attr($overrides['rating_input_count']) :  self::rating_input_count();
-		$percent = $rating ? round( ( $rating / $rating_input_count ) * 100 ) : 0;
-
-		$title = !empty($overrides['rating_label']) ? esc_attr($overrides['rating_label']) : '';
-		ob_start();
-//		print_r($overrides);
-		$rating_color = !empty($overrides['rating_color']) ? 'background: ' . esc_attr( $overrides['rating_color'] ) : '';
+	public static function get_bar_rating_html( $rating, $overrides ) {
+		$title = ! empty( $overrides['rating_label'] ) ? $overrides['rating_label'] : '';
+		$rating_input_count = ! empty( $overrides['rating_input_count'] ) ? (int) $overrides['rating_input_count'] : self::rating_input_count();
+		$percent = $rating && $rating_input_count > 0 ? round( ( (float) $rating / $rating_input_count ) * 100 ) : 0;
+		$rating_color = ! empty( $overrides['rating_color'] ) ? 'background:' . esc_attr( $overrides['rating_color'] ) : '';
 		$rating_color_class = $rating_color ? '' : 'bg-warning';
+
+		ob_start();
 		?>
 		<div class="col">
-			<div class="text-dark"><?php echo esc_attr( $title ); ?></div>
+			<div class="text-dark"><?php echo esc_html( $title ); ?></div>
 			<div class="d-flex align-items-center">
 				<div class="progress w-100" style="height: 4px;">
-					<div class="progress-bar <?php echo esc_attr( $rating_color_class ); ?>" role="progressbar" style="width: <?php echo esc_attr( $percent ) ?>%; <?php echo esc_attr( $rating_color ); ?>" aria-valuenow="<?php echo esc_attr( $percent ); ?>" aria-valuemin="0" aria-valuemax="100"></div>
+					<div class="progress-bar <?php echo esc_attr( $rating_color_class ); ?>" role="progressbar" style="width:<?php echo esc_attr( $percent ) ?>%;<?php echo esc_attr( $rating_color ); ?>" aria-valuenow="<?php echo esc_attr( $percent ); ?>" aria-valuemin="0" aria-valuemax="100"></div>
 				</div>
-				<div class="ms-2 ps-1 fs-sm"><?php echo esc_attr( number_format_i18n( $rating,1) ); ?></div>
+				<div class="ms-2 ps-1 fs-sm"><?php echo esc_html( number_format_i18n( (float) $rating, 1 ) ); ?></div>
 			</div>
 		</div>
 		<?php
