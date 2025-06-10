@@ -33,7 +33,7 @@ $comment_excerpt = geodir_utf8_substr( $comment_content, 0, 150 ) . '&#8230;';
 		</div>
 
 		<div class="card-footer border-0 pt-0 d-flex align-items-center">
-			<span class="li<?php echo absint( $comment_id ); ?> geodir_reviewer_image mr-2">
+			<span class="li<?php echo absint( $comment_id ); ?> geodir_reviewer_image mr-2 me-2">
 			<?php echo get_avatar( $comment, $avatar_size, '', $comment_id . ' comment avatar', array( 'class' => 'comment_avatar rounded-circle position-static' ) ); ?>
 			</span>
 			<strong class="geodir_reviewer_author text-dark fs-sm">
