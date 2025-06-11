@@ -446,7 +446,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'zoom'                    => '0',
 			'hide_zoom_control'       => false,
 			'hide_street_control'     => false,
-			'post_type'               => 'gd_place',
+			//'post_type'               => 'gd_place', // removed as builder such as bricks dont send empty args so this default takes over even if not on gd_place
 			'terms'                   => array(), // can be string or array
 			'tick_terms'              => '',
 			'tags'                    => array(), // can be string or array
