@@ -543,7 +543,7 @@ class GeoDir_User {
     }
 
 	public static function login_link( $redirect = '' ) {
-		$login_title = esc_attr__( 'Login', 'geodirectory' );
+		$login_title = __( 'Login', 'geodirectory' );
 
 		if ( $redirect == '' ) {
 			$redirect = geodir_curPageURL();
@@ -555,14 +555,15 @@ class GeoDir_User {
 		$btn_class = $design_style ? 'btn btn-primary' : '';
 
 		$output = "<div class='gd-login-links'>";
-		$output .= '<a class="login-link uwp-login-link '.$btn_class.'" href="' . esc_url( $login_link ) . '" title="' . $login_title . '">' . $login_title . '</a>';
+		$output .= '<a class="login-link uwp-login-link ' . esc_attr( $btn_class ) . '" href="' . esc_url( $login_link ) . '" title="' . esc_attr( $login_title ) . '" rel="nofollow">' . esc_html( $login_title ) . '</a>';
 
 		if ( get_option( 'users_can_register' ) ) {
-			$btn_class = $design_style ? 'btn btn-outline-primary' : '';
-			$register_title = esc_attr__( 'Register', 'geodirectory' );
+			$btn_class = $design_style ? 'btn btn-outline-primary ms-2 ml-2' : '';
+			$register_title = __( 'Register', 'geodirectory' );
 			$register_link = wp_registration_url();
-			$output .= $design_style ? ' ' : ' | ';
-			$output .= '<a class="register-link uwp-register-link '.$btn_class.'" href="' . esc_url( $register_link ) . '" title="' . $register_title . '">' . $register_title . '</a>';
+
+			$output .= $design_style ? '' : ' | ';
+			$output .= '<a class="register-link uwp-register-link ' . esc_attr( $btn_class ) . '" href="' . esc_url( $register_link ) . '" title="' . esc_attr( $register_title ) . '" rel="nofollow">' . esc_html( $register_title ) . '</a>';
 		}
 
 		$output .= "</div>";
