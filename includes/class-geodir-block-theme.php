@@ -388,7 +388,7 @@ class GeoDir_Block_Theme {
 			}  else if ( geodir_is_page( 'single' ) ) {
 				// GD Single
 				$post_type = geodir_get_current_posttype();
-				$offset = 0;
+				$offset = 1;
 				$push = array();
 
 				$template_id = (int) geodir_details_template_id( $post_type );

@@ -98,14 +98,16 @@ class GeoDir_Bricks_Query_Filters {
 	public static function query_post_type( $query_vars ) {
 		$post_type = '';
 
-		if ( empty( $query_vars['post_type'] ) ) {
+		if ( empty( $query_vars['post_type'] ) && !isset( $query_vars['gd_is_geodir_page'] ) ) {
 			return $post_type;
 		}
 
-		if ( is_array( $query_vars['post_type'] ) && count( $query_vars['post_type'] ) === 1 ) {
+		if ( !empty( $query_vars['post_type'] ) && is_array( $query_vars['post_type'] ) && count( $query_vars['post_type'] ) === 1 ) {
 			$post_type = sanitize_key( $query_vars['post_type'][0] );
-		} else if ( is_scalar( $query_vars['post_type'] ) ) {
+		} else if ( !empty( $query_vars['post_type'] ) &&  is_scalar( $query_vars['post_type'] ) ) {
 			$post_type = sanitize_key( $query_vars['post_type'] );
+		} else if ( geodir_is_page( 'search' ) && ! empty( $_REQUEST['stype'] ) ) {
+			$post_type = geodir_is_gd_post_type( $_REQUEST['stype'] ) ? sanitize_key( $_REQUEST['stype'] ) : '';
 		}
 
 		return $post_type;
@@ -194,7 +196,7 @@ class GeoDir_Bricks_Query_Filters {
 		// Get the post type only if 1
 		$post_type = '';
 
-		if ( ! empty( $query->query_vars['is_bricks_geodir_loop'] ) && ! empty( $query->query_vars['is_geodir_loop'] ) ) {
+		if ( ! empty( $query->query_vars['is_bricks_geodir_loop'] ) && ! empty( $query->query_vars['is_geodir_loop'] ) || (!empty($query->query_vars['gd_is_geodir_page']) && geodir_is_page( 'search' ) ) ) {
 			$post_type = self::query_post_type( $query->query_vars );
 
 			// Check its a GD post type
@@ -287,6 +289,22 @@ class GeoDir_Bricks_Query_Filters {
 	}
 
 	/**
+	 * @param $limits
+	 * @param $query
+	 *
+	 * @return mixed
+	 */
+	public static function post_limits( $limits, $query ) {
+		global $wpdb;
+
+		if ( ! $limits && $query->query_vars['gd_is_geodir_page'] && !empty($query->query_vars['posts_per_page']) && $query->query_vars['posts_per_page'] > 1 ) {
+			return $wpdb->prepare( 'LIMIT %d, %d', $query->query_vars['paged'], $query->query_vars['posts_per_page'] );
+		}
+
+		return $limits;
+	}
+
+	/**
 	 * Add filters to affect certain queries for the bricks query loop.
 	 *
 	 * @return void
@@ -296,6 +314,7 @@ class GeoDir_Bricks_Query_Filters {
 		add_filter( 'posts_join', array( __CLASS__, 'posts_join' ), 10, 2 );
 		add_filter( 'posts_where', array( __CLASS__, 'posts_where' ), 10, 2 );
 		add_filter( 'posts_orderby', array( __CLASS__, 'posts_orderby' ), 10, 2 );
+		add_filter( 'post_limits', array( __CLASS__, 'post_limits' ), 10, 2 );
 
 
 		add_filter( 'get_meta_sql', array( __CLASS__, 'get_meta_sql' ), 10, 6 );
@@ -311,7 +330,8 @@ class GeoDir_Bricks_Query_Filters {
 		remove_filter( 'posts_fields', array( __CLASS__, 'posts_fields' ), 10 );
 		remove_filter( 'posts_join', array( __CLASS__, 'posts_join' ), 10 );
 		remove_filter( 'posts_where', array( __CLASS__, 'posts_where' ), 10 );
-		remove_filter( 'posts_orderby', array( __CLASS__, 'posts_orderby' ), 10, 2 );
+		remove_filter( 'posts_orderby', array( __CLASS__, 'posts_orderby' ), 10 );
+		remove_filter( 'post_limits', array( __CLASS__, 'post_limits' ), 10 );
 
 
 		remove_filter( 'get_meta_sql', array( __CLASS__, 'get_meta_sql' ), 10 );
