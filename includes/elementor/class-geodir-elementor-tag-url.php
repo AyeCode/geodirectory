@@ -124,12 +124,23 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 				$value = esc_url_raw( $url );
 			}
 
-			// set fallback
-			if(empty($value) && !empty($fallback)){
-				$value = esc_url_raw($fallback);
+			/*
+			 * Filter Elemntor tag url value.
+			 *
+			 * @since 2.8.119
+			 *
+			 * @param mixed  $value Tag value.
+			 * @param string $key Tag key.
+			 * @param object $this Tag object.
+			 */
+			$value = apply_filters( 'geodir_elementor_tag_url_render_value', $value, $key, $this );
+
+			// Set fallback value.
+			if ( empty( $value ) && ! empty( $fallback ) ) {
+				$value = esc_url_raw( $fallback );
 			}
 
-			echo $value;
+			echo $value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
@@ -145,13 +156,11 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 	 * Register controls for the tag.
 	 */
 	protected function register_controls() {
-
 		$this->add_control(
 			'key',
 			[
 				'label' => __( 'Key', 'geodirectory' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
-//				'groups' => GeoDir_Elementor::get_control_options( $this->get_supported_fields() ),
 				'options' => $this->get_custom_field_options(),
 			]
 		);
@@ -169,8 +178,7 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 	 *
 	 * @return array
 	 */
-	public function get_custom_field_options(){
-
+	public function get_custom_field_options() {
 		$fields = geodir_post_custom_fields('', 'all', 'all' ,'none');
 
 		$supported_fields = $this->get_supported_fields();
@@ -180,7 +188,6 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 				unset($fields[$key]);
 			}
 		}
-
 
 		$keys = array();
 		$keys[] = __('Select Key','geodirectory');
@@ -194,10 +201,7 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 			}
 		}
 
-
-
 		return $keys;
-
 	}
 
 	/**
