@@ -326,6 +326,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Bricks builder GD search page pagination not working - FIXED
 * Block theme allow direct name template to work - ADDED
 * Removed GD Map block post_type default value as it breaks Bricks builder block - CHANGED
+* Allow REST API key & secret via $_REQUEST parameters - CHANGED
 
 = GeoDirectory v2.8.118 - 2025-06-05 =
 * If when editing a place the backend image upload form is moved below the comments settings, images fail to load and can be removed when saved - FIXED
