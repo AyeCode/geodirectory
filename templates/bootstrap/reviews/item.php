@@ -41,15 +41,15 @@ global $post, $aui_bs5;
 			$avatar_size = apply_filters( 'geodir_comment_avatar_size', 44 );
 			?>
 				<?php if ( $avatar_size != 0  ): ?>
-					<?php if(!empty($comment->user_id)){ ?><a href="<?php echo get_author_posts_url($comment->user_id); ?>" class="media-object <?php echo ( $aui_bs5 ? 'float-start' : 'float-left' ); ?>"><?php }?>
+					<?php if(!empty($comment->user_id)){ ?><a href="<?php echo get_author_posts_url($comment->user_id); ?>" class="media-object <?php echo ( $aui_bs5 ? 'float-start' : 'float-left' ); ?>" style="min-width:<?php echo (int) $avatar_size; ?>px"><?php }?>
 						<?php echo get_avatar( $comment, $avatar_size,'mm','', array('class'=>"comment_avatar rounded-circle position-relative") ); ?>
 					<?php if(!empty($comment->user_id)){ ?></a><?php }?>
 				<?php endif; ?>
-				<span class="media-heading pl-2 ps-2 mr-auto me-auto h4 m-0 align-items-center d-flex justify-content-center h5">
+				<span class="media-heading pl-2 ps-2 mr-auto me-auto h4 m-0 align-items-center d-flex flex-wrap justify-content-center h5">
 					<?php
-					if(!empty($comment->user_id)){ echo "<a href='".get_author_posts_url($comment->user_id)."' class='text-reset' >"; }
+					if(!empty($comment->user_id)){ echo "<a href='".get_author_posts_url($comment->user_id)."' class='text-reset' style='min-width:90px'>"; } else { echo "<span class='text-reset' style='min-width:90px'>"; }
 					echo get_comment_author($comment->comment_ID);
-					if(!empty($comment->user_id)){ echo "</a>"; }
+					if(!empty($comment->user_id)){ echo "</a>"; } else { echo '</span>'; }
 					if ( ! empty( $comment->user_id ) && ! empty( $comment->comment_post_ID ) && ( (int) $comment->user_id == (int) get_post_field( 'post_author', (int) $comment->comment_post_ID ) ) ) {
 						echo ' <span class="ml-2 ms-2 h6 m-0 fs-sm"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">'. GeoDir_Comments::get_listing_owner_label( get_post_type( (int) $comment->comment_post_ID ) ) . '</span></span>';
 					}
@@ -82,11 +82,11 @@ global $post, $aui_bs5;
 		<div class="card-footer py-2 px-3 bg-white">
 			<div class="row">
 				<div class="col-5 align-items-center d-flex">
-					<a class="hidden-xs-down text-muted " href="<?php echo esc_url( get_comment_link( $comment->comment_ID, $args ) ); ?>">
-						<time class="chip timeago" datetime="<?php comment_time( 'c' ); ?>">
+					<a class="hidden-xs-down text-muted text-nowrap" href="<?php echo esc_url( get_comment_link( $comment->comment_ID, $args ) ); ?>">
+						<small><time class="chip timeago" datetime="<?php comment_time( 'c' ); ?>">
 							<?php comment_date() ?>,
 							<?php comment_time() ?>
-						</time>
+						</time></small>
 					</a>
 				</div>
 				<div class="col-7 text-right text-end">

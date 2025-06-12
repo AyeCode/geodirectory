@@ -1368,7 +1368,7 @@ class GeoDir_Comments {
 				<div class="progress w-100" style="height: 4px;">
 					<div class="progress-bar <?php echo esc_attr( $rating_color_class ); ?>" role="progressbar" style="width:<?php echo esc_attr( $percent ) ?>%;<?php echo esc_attr( $rating_color ); ?>" aria-valuenow="<?php echo esc_attr( $percent ); ?>" aria-valuemin="0" aria-valuemax="100"></div>
 				</div>
-				<div class="ms-2 ps-1 fs-sm"><?php echo esc_html( number_format_i18n( (float) $rating, 1 ) ); ?></div>
+				<div class="ms-2 ps-1 fs-sm text-nowrap"><?php echo esc_html( number_format_i18n( (float) $rating, 1 ) ); ?></div>
 			</div>
 		</div>
 		<?php
