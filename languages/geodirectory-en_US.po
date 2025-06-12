@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.118\n"
+"Project-Id-Version: GeoDirectory 2.8.119\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-05 20:52+0530\n"
-"PO-Revision-Date: 2025-06-05 20:52+0530\n"
+"POT-Creation-Date: 2025-06-12 19:38+0530\n"
+"PO-Revision-Date: 2025-06-12 19:38+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -695,7 +695,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-simple-archive.php:179
 #: includes/widgets/class-geodir-widget-single-reviews.php:74
 #: includes/widgets/class-geodir-widget-single-tabs.php:122
-#: templates/bootstrap/loop/select-sort.php:46
+#: templates/bootstrap/loop/select-sort.php:57
 #: vendor/ayecode/wp-super-duper/sd-functions.php:228
 #: vendor/ayecode/wp-super-duper/sd-functions.php:241
 #: vendor/ayecode/wp-super-duper/sd-functions.php:252
@@ -6940,8 +6940,8 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:796
 #: includes/admin/views/html-notice-v2-update.php:231
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:955
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:990
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:957
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:992
 msgid "Disabled"
 msgstr ""
 
@@ -8180,7 +8180,7 @@ msgstr ""
 
 #: includes/admin/views/html-admin-page-status-report.php:583
 #: includes/admin/views/html-notice-v2-update.php:202
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:937
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:939
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:501
 msgid "Version"
 msgstr ""
@@ -8317,7 +8317,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-image.php:279
 #: includes/elementor/class-geodir-elementor-tag-number.php:93
 #: includes/elementor/class-geodir-elementor-tag-text.php:221
-#: includes/elementor/class-geodir-elementor-tag-url.php:152
+#: includes/elementor/class-geodir-elementor-tag-url.php:162
 msgid "Key"
 msgstr ""
 
@@ -10362,85 +10362,85 @@ msgstr ""
 
 #: includes/business-hours-functions.php:29 includes/general-functions.php:229
 #: includes/helper-functions.php:639
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2348
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2350
 msgid "Monday"
 msgstr ""
 
 #: includes/business-hours-functions.php:30 includes/general-functions.php:230
 #: includes/helper-functions.php:640
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2349
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2351
 msgid "Tuesday"
 msgstr ""
 
 #: includes/business-hours-functions.php:31 includes/general-functions.php:231
 #: includes/helper-functions.php:641
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2350
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2352
 msgid "Wednesday"
 msgstr ""
 
 #: includes/business-hours-functions.php:32 includes/general-functions.php:232
 #: includes/helper-functions.php:642
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2351
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2353
 msgid "Thursday"
 msgstr ""
 
 #: includes/business-hours-functions.php:33 includes/general-functions.php:233
 #: includes/helper-functions.php:643
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2352
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2354
 msgid "Friday"
 msgstr ""
 
 #: includes/business-hours-functions.php:34 includes/general-functions.php:234
 #: includes/helper-functions.php:644
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2353
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2355
 msgid "Saturday"
 msgstr ""
 
 #: includes/business-hours-functions.php:35 includes/general-functions.php:228
 #: includes/helper-functions.php:638
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2347
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2349
 msgid "Sunday"
 msgstr ""
 
 #: includes/business-hours-functions.php:62
 #: includes/business-hours-functions.php:2057 includes/helper-functions.php:676
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2341
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2343
 msgid "Mon"
 msgstr ""
 
 #: includes/business-hours-functions.php:63
 #: includes/business-hours-functions.php:2058 includes/helper-functions.php:677
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2342
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2344
 msgid "Tue"
 msgstr ""
 
 #: includes/business-hours-functions.php:64
 #: includes/business-hours-functions.php:2059 includes/helper-functions.php:678
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2343
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2345
 msgid "Wed"
 msgstr ""
 
 #: includes/business-hours-functions.php:65
 #: includes/business-hours-functions.php:2060 includes/helper-functions.php:679
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2344
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2346
 msgid "Thu"
 msgstr ""
 
 #: includes/business-hours-functions.php:66
 #: includes/business-hours-functions.php:2061 includes/helper-functions.php:680
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2345
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2347
 msgid "Fri"
 msgstr ""
 
 #: includes/business-hours-functions.php:67
 #: includes/business-hours-functions.php:2062 includes/helper-functions.php:681
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2346
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2348
 msgid "Sat"
 msgstr ""
 
 #: includes/business-hours-functions.php:68
 #: includes/business-hours-functions.php:2063 includes/helper-functions.php:675
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2340
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2342
 msgid "Sun"
 msgstr ""
 
@@ -11526,66 +11526,66 @@ msgid "Remove from Favorites"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:914
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2464
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2466
 msgid "Select an option&hellip;"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:915
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2465
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2467
 msgctxt "enhanced select"
 msgid "No matches found"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:916
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2466
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2468
 msgctxt "enhanced select"
 msgid "Loading failed"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:917
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2467
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2469
 msgctxt "enhanced select"
 msgid "Please enter 1 or more characters"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:918
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2468
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2470
 msgctxt "enhanced select"
 msgid "Please enter %item% or more characters"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:919
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2469
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2471
 msgctxt "enhanced select"
 msgid "Please delete 1 character"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:920
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2470
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2472
 msgctxt "enhanced select"
 msgid "Please delete %item% characters"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:921
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2471
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2473
 msgctxt "enhanced select"
 msgid "You can only select 1 item"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:922
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2472
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2474
 msgctxt "enhanced select"
 msgid "You can only select %item% items"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:923
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2473
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2475
 msgctxt "enhanced select"
 msgid "Loading more results&hellip;"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:924
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2474
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2476
 msgctxt "enhanced select"
 msgid "Searching&hellip;"
 msgstr ""
@@ -13151,83 +13151,83 @@ msgid "Set"
 msgstr ""
 
 #: includes/core-functions.php:380
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2513
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2515
 msgctxt "time ago"
 msgid "ago"
 msgstr ""
 
 #: includes/core-functions.php:381
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2514
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2516
 msgctxt "time ago"
 msgid "after"
 msgstr ""
 
 #: includes/core-functions.php:383
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2516
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2518
 msgctxt "time ago"
 msgid "less than a minute"
 msgstr ""
 
 #: includes/core-functions.php:384
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2517
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2519
 msgctxt "time ago"
 msgid "about a minute"
 msgstr ""
 
 #: includes/core-functions.php:385
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2518
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2520
 #, php-format
 msgctxt "time ago"
 msgid "%d minutes"
 msgstr ""
 
 #: includes/core-functions.php:386
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2519
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2521
 msgctxt "time ago"
 msgid "about an hour"
 msgstr ""
 
 #: includes/core-functions.php:387
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2520
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2522
 #, php-format
 msgctxt "time ago"
 msgid "about %d hours"
 msgstr ""
 
 #: includes/core-functions.php:388
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2521
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2523
 msgctxt "time ago"
 msgid "a day"
 msgstr ""
 
 #: includes/core-functions.php:389
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2522
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2524
 #, php-format
 msgctxt "time ago"
 msgid "%d days"
 msgstr ""
 
 #: includes/core-functions.php:390
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2523
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2525
 msgctxt "time ago"
 msgid "about a month"
 msgstr ""
 
 #: includes/core-functions.php:391
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2524
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2526
 #, php-format
 msgctxt "time ago"
 msgid "%d months"
 msgstr ""
 
 #: includes/core-functions.php:392
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2525
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2527
 msgctxt "time ago"
 msgid "about a year"
 msgstr ""
 
 #: includes/core-functions.php:393
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2526
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2528
 #, php-format
 msgctxt "time ago"
 msgid "%d years"
@@ -13751,7 +13751,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-color.php:114
 #: includes/elementor/class-geodir-elementor-tag-gallery.php:132
 #: includes/elementor/class-geodir-elementor-tag-number.php:114
-#: includes/elementor/class-geodir-elementor-tag-url.php:186
+#: includes/elementor/class-geodir-elementor-tag-url.php:193
 #: includes/widgets/class-geodir-widget-post-content.php:306
 #: includes/widgets/class-geodir-widget-post-features.php:680
 #: includes/widgets/class-geodir-widget-post-meta.php:265
@@ -13887,7 +13887,7 @@ msgstr ""
 msgid "URL Field"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-tag-url.php:162
+#: includes/elementor/class-geodir-elementor-tag-url.php:171
 msgid "Fallback URL"
 msgstr ""
 
@@ -13998,12 +13998,12 @@ msgid "Choose Time"
 msgstr ""
 
 #: includes/general-functions.php:2657
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2361
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2363
 msgid "Hour"
 msgstr ""
 
 #: includes/general-functions.php:2658
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2362
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2364
 msgid "Minute"
 msgstr ""
 
@@ -14028,12 +14028,12 @@ msgid "Done"
 msgstr ""
 
 #: includes/general-functions.php:2665 includes/helper-functions.php:695
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2356
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2358
 msgid "AM"
 msgstr ""
 
 #: includes/general-functions.php:2666 includes/helper-functions.php:696
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2357
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2359
 msgid "PM"
 msgstr ""
 
@@ -14201,157 +14201,157 @@ msgid "Relevance"
 msgstr ""
 
 #: includes/helper-functions.php:647
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2302
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2304
 msgid "January"
 msgstr ""
 
 #: includes/helper-functions.php:648
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2303
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2305
 msgid "February"
 msgstr ""
 
 #: includes/helper-functions.php:649
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2304
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2306
 msgid "March"
 msgstr ""
 
 #: includes/helper-functions.php:650
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2305
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2307
 msgid "April"
 msgstr ""
 
 #: includes/helper-functions.php:651
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2306
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2308
 msgid "May"
 msgstr ""
 
 #: includes/helper-functions.php:652
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2307
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2309
 msgid "June"
 msgstr ""
 
 #: includes/helper-functions.php:653
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2308
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2310
 msgid "July"
 msgstr ""
 
 #: includes/helper-functions.php:654
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2309
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2311
 msgid "August"
 msgstr ""
 
 #: includes/helper-functions.php:655
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2310
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2312
 msgid "September"
 msgstr ""
 
 #: includes/helper-functions.php:656
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2311
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2313
 msgid "October"
 msgstr ""
 
 #: includes/helper-functions.php:657
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2312
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2314
 msgid "November"
 msgstr ""
 
 #: includes/helper-functions.php:658
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2313
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2315
 msgid "December"
 msgstr ""
 
 #: includes/helper-functions.php:661
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2314
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2316
 msgctxt "January abbreviation"
 msgid "Jan"
 msgstr ""
 
 #: includes/helper-functions.php:662
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2315
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2317
 msgctxt "February abbreviation"
 msgid "Feb"
 msgstr ""
 
 #: includes/helper-functions.php:663
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2316
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2318
 msgctxt "March abbreviation"
 msgid "Mar"
 msgstr ""
 
 #: includes/helper-functions.php:664
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2317
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2319
 msgctxt "April abbreviation"
 msgid "Apr"
 msgstr ""
 
 #: includes/helper-functions.php:665
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2318
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2320
 msgctxt "May abbreviation"
 msgid "May"
 msgstr ""
 
 #: includes/helper-functions.php:666
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2319
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2321
 msgctxt "June abbreviation"
 msgid "Jun"
 msgstr ""
 
 #: includes/helper-functions.php:667
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2320
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2322
 msgctxt "July abbreviation"
 msgid "Jul"
 msgstr ""
 
 #: includes/helper-functions.php:668
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2321
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2323
 msgctxt "August abbreviation"
 msgid "Aug"
 msgstr ""
 
 #: includes/helper-functions.php:669
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2322
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2324
 msgctxt "September abbreviation"
 msgid "Sep"
 msgstr ""
 
 #: includes/helper-functions.php:670
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2323
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2325
 msgctxt "October abbreviation"
 msgid "Oct"
 msgstr ""
 
 #: includes/helper-functions.php:671
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2324
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2326
 msgctxt "November abbreviation"
 msgid "Nov"
 msgstr ""
 
 #: includes/helper-functions.php:672
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2325
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2327
 msgctxt "December abbreviation"
 msgid "Dec"
 msgstr ""
 
 #: includes/helper-functions.php:684
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2326
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2328
 msgctxt "Sunday initial"
 msgid "S"
 msgstr ""
 
 #: includes/helper-functions.php:685
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2327
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2329
 msgctxt "Monday initial"
 msgid "M"
 msgstr ""
 
 #: includes/helper-functions.php:686
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2328
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2330
 msgctxt "Tuesday initial"
 msgid "T"
 msgstr ""
 
 #: includes/helper-functions.php:687
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2329
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2331
 msgctxt "Wednesday initial"
 msgid "W"
 msgstr ""
@@ -14367,18 +14367,18 @@ msgid "F"
 msgstr ""
 
 #: includes/helper-functions.php:690
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2332
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2334
 msgctxt "Saturday initial"
 msgid "S"
 msgstr ""
 
 #: includes/helper-functions.php:693
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2354
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2356
 msgid "am"
 msgstr ""
 
 #: includes/helper-functions.php:694
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2355
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2357
 msgid "pm"
 msgstr ""
 
@@ -14617,11 +14617,11 @@ msgstr ""
 msgid "Placeholder image"
 msgstr ""
 
-#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:429
+#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:449
 msgid "GeoDirectory Query"
 msgstr ""
 
-#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:439
+#: includes/integrations/bricks/class-geodir-bricks-query-filters.php:459
 msgid "Disable GD Location Filtering"
 msgstr ""
 
@@ -21502,16 +21502,16 @@ msgstr ""
 msgid "View: Grid %d"
 msgstr ""
 
-#: templates/bootstrap/loop/select-sort.php:15
-#: templates/loop/select-sort.php:14 templates/loop/select-sort.php:18
+#: templates/bootstrap/loop/select-sort.php:25
+#: templates/loop/select-sort.php:43 templates/loop/select-sort.php:44
 msgid "Sort By"
 msgstr ""
 
-#: templates/bootstrap/loop/select-sort.php:37
+#: templates/bootstrap/loop/select-sort.php:50
 msgid "Sort by"
 msgstr ""
 
-#: templates/bootstrap/loop/select-sort.php:43
+#: templates/bootstrap/loop/select-sort.php:54
 msgid "Sort Options"
 msgstr ""
 
@@ -21710,177 +21710,177 @@ msgid ""
 "settings page will remove this notice)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:910
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:912
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:422
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:917
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:919
 msgid "Here you can adjust settings if you are having compatibility issues."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:924
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:926
 msgid "BootStrap Version"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:925
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:927
 msgid ""
 "V5 is recommended, however if you have another plugin installed using v4, "
 "you may need to use v4 also."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:930
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:932
 msgid "Some options are disabled as your current theme is overriding them."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:940
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:942
 msgid "v5 (recommended)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:941
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:943
 msgid "v4 (legacy)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:947
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:949
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:524
 msgid "Frontend"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:950
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:985
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:952
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:987
 msgid "Load CSS"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:953
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:988
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:955
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:990
 msgid "Compatibility Mode (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:954
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:956
 msgid "Full Mode"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:961
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:996
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:963
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:998
 msgid "Load JS"
-msgstr ""
-
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:964
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:999
-msgid "Core + Popper (default)"
-msgstr ""
-
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:965
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1000
-msgid "Popper"
 msgstr ""
 
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:966
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1001
-msgid "Required functions only"
+msgid "Core + Popper (default)"
 msgstr ""
 
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:967
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1002
+msgid "Popper"
+msgstr ""
+
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:968
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1003
+msgid "Required functions only"
+msgstr ""
+
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:969
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1004
 msgid "Disabled (not recommended)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:973
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:975
 msgid "HTML Font Size (px)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:976
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:978
 msgid ""
 "Our font sizing is rem (responsive based) here you can set the html font "
 "size in-case your theme is setting it too low."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:982
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:984
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:525
 msgid "Backend"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:989
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:991
 msgid "Full Mode (will cause style issues)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1008
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1010
 msgid "Disable load on URL"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1010
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1012
 msgid ""
 "If you have backend conflict you can enter a partial URL argument that will "
 "disable the loading of AUI on those pages. Add each argument on a new line."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1046
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1048
 msgid "AyeCode UI"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1061
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1063
 msgid "Primary Color"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1074
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1076
 msgid "Secondary Color"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2330
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2332
 msgctxt "Friday initial"
 msgid "T"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2331
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2333
 msgctxt "Thursday initial"
 msgid "F"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2333
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2335
 msgid "Su"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2334
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2336
 msgid "Mo"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2335
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2337
 msgid "Tu"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2336
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2338
 msgid "We"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2337
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2339
 msgid "Th"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2338
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2340
 msgid "Fr"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2339
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2341
 msgid "Sa"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2360
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2362
 msgid "Year"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2363
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2365
 msgid "Wk"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2364
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2366
 msgid " to "
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2365
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2367
 msgid "Scroll to increment"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2366
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2368
 msgid "Click to toggle"
 msgstr ""
 
