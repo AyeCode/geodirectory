@@ -136,16 +136,16 @@ class GeoDir_REST_Authentication {
 		$consumer_key      = '';
 		$consumer_secret   = '';
 
-		// If the $_GET parameters are present, use those first.
-		if ( ! empty( $_GET['consumer_key'] ) && ! empty( $_GET['consumer_secret'] ) ) {
-			$consumer_key    = $_GET['consumer_key'];
-			$consumer_secret = $_GET['consumer_secret'];
+		// If the $_REQUEST parameters are present, use those first.
+		if ( ! empty( $_REQUEST['consumer_key'] ) && ! empty( $_REQUEST['consumer_secret'] ) ) { // WPCS: CSRF ok.
+			$consumer_key    = $_REQUEST['consumer_key']; // WPCS: CSRF ok, sanitization ok.
+			$consumer_secret = $_REQUEST['consumer_secret']; // WPCS: CSRF ok, sanitization ok.
 		}
 
 		// If the above is not present, we will do full basic auth.
 		if ( ! $consumer_key && ! empty( $_SERVER['PHP_AUTH_USER'] ) && ! empty( $_SERVER['PHP_AUTH_PW'] ) ) {
-			$consumer_key    = $_SERVER['PHP_AUTH_USER'];
-			$consumer_secret = $_SERVER['PHP_AUTH_PW'];
+			$consumer_key    = $_SERVER['PHP_AUTH_USER']; // WPCS: CSRF ok, sanitization ok.
+			$consumer_secret = $_SERVER['PHP_AUTH_PW']; // WPCS: CSRF ok, sanitization ok.
 		}
 
 		// Stop if don't have any key.
