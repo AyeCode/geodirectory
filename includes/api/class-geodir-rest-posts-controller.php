@@ -304,8 +304,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		// Set a var so we can track APi calls
 		$query_args['gd_is_api_posts_call'] = true;
-//		print_r($query_args);exit;
-		$query_args['orderby'] = 'relevance';
+
 		$query_result = $posts_query->query( $query_args );
 
 		// Allow access to all password protected posts if the context is edit.
