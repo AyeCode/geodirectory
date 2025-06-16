@@ -456,18 +456,19 @@ class GeoDir_API {
 		return $groupby;
 	}
 
-    /**
-     * Orderby to rest posts.
-     *
-     * @since 2.0.0
-     *
-     * @param string $orderby Query orderby value.
-     * @param object $wp_query Wp_query object.
-     * @param string $post_type Post type.
-     * @return string $orderby.
-     */
+	/**
+	 * Orderby to rest posts.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $orderby Query orderby value.
+	 * @param object $wp_query Wp_query object.
+	 * @param string $post_type Post type.
+	 * @return string $orderby.
+	 */
 	public static function rest_posts_orderby( $orderby, $wp_query, $post_type ) {
 		global $geodir_post_type;
+
 		$geodir_post_type = $post_type;
 
 		$table = geodir_db_cpt_table( $post_type );
@@ -475,8 +476,12 @@ class GeoDir_API {
 
 		$sort_by = apply_filters( 'geodir_rest_posts_order_sort_by_key', $sort_by, $orderby, $post_type, $wp_query );
 
-		$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type, $wp_query );
-		$orderby = GeoDir_Query::sort_by_children( $orderby, $sort_by, $post_type, $wp_query );
+		if ( ! empty( $wp_query->query_vars['s'] ) && ! empty( $wp_query->query_vars['gd_is_api_posts_call'] ) && 'relevance' === $sort_by ) {
+			// Order by relevance search.
+		} else {
+			$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type, $wp_query );
+			$orderby = GeoDir_Query::sort_by_children( $orderby, $sort_by, $post_type, $wp_query );
+		}
 
 		return apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $wp_query );
 	}
