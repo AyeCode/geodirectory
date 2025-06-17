@@ -766,21 +766,21 @@ class GeoDir_Post_Data {
 	 * @return array
 	 */
 	public static function wp_insert_post_data( $data, $postarr ) {
-
 		// Non GD post
 		if ( ! empty( $data['post_type'] ) && $data['post_type'] != 'revision' && ! geodir_is_gd_post_type( $data['post_type'] ) ) {
 			return $data;
 		}
 
-		// check its a GD CPT first
+		// Check its a GD CPT first
 		if (
 			( isset( $data['post_type'] ) && in_array( $data['post_type'], geodir_get_posttypes() ) )
 			|| ( isset( $data['post_type'] ) && $data['post_type'] == 'revision' && in_array( get_post_type( $data['post_parent'] ), geodir_get_posttypes() ) && ( ! isset( self::$post_temp ) || empty( self::$post_temp ) ) )
 		) {
-			//if the post_category or tags_input are empty and not sent as a $_REQUEST we remove them so they don't blank values
+			// If the post_category or tags_input are empty and not sent as a $_REQUEST we remove them so they don't blank values
 			if ( empty( $postarr['post_category'] ) && ! isset( $_REQUEST['post_category'] ) && ! isset( $_REQUEST['tax_input'] ) ) {
 				unset( $postarr['post_category'] );
 			}
+
 			if ( empty( $postarr['tags_input'] ) && ! isset( $_REQUEST['tags_input'] ) && ! isset( $_REQUEST['tax_input'] ) ) {
 				unset( $postarr['tags_input'] );
 			}
@@ -790,11 +790,21 @@ class GeoDir_Post_Data {
 				unset( $postarr['tags_input'] );
 			}
 
-			// assign the temp post data
+			// Assign the temp post data
 			self::$post_temp = $postarr;
-		}elseif(!empty( self::$post_temp ) && $data['post_type'] == 'revision' && isset($data['post_parent']) && $data['post_parent']== self::$post_temp['ID']){
-			// we might be saving a post revision at the same time so we don't blank the post_temp here
-		}else{
+
+			if ( ! empty( $data['post_content'] ) ) {
+				/** This filter is documented in includes/post-functions.php */
+				$strip_shortcodes = apply_filters( 'geodir_field_strip_shortcodes_check', true, 'post_content', $data['post_content'], array( 'data' => $data, 'postarr' => $postarr ) );
+
+				// Post_content is saved before custom fields.
+				if ( $strip_shortcodes ) {
+					$data['post_content'] = geodir_strip_shortcodes( $data['post_content'] );
+				}
+			}
+		} else if ( ! empty( self::$post_temp ) && $data['post_type'] == 'revision' && isset( $data['post_parent'] ) && $data['post_parent'] == self::$post_temp['ID'] ) {
+			// We might be saving a post revision at the same time so we don't blank the post_temp here
+		} else {
 			self::$post_temp = null;
 		}
 

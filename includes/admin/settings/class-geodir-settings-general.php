@@ -952,6 +952,18 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc_tip'   => true
 				),
 
+				array(
+					'name'       => __( 'Allow shortcodes in description to', 'geodirectory' ),
+					'desc'       => __( 'The user roles that should be allowed to use shortcodes/blocks in listing description.', 'geodirectory' ),
+					'id'         => 'shortcodes_allowed_roles',
+					'default'    => array( 'administrator' ),
+					'type'       => 'multiselect',
+					'placeholder'=> __( 'Select User Roles...', 'geodirectory' ),
+					'class'      => $aui_bs5 ? 'aui-select2' : 'geodir-select',
+					'options'    => geodir_user_roles(),
+					'desc_tip'   => true
+				),
+
 				array( 'type' => 'sectionend', 'id' => 'general_options' ),
 
 				array(

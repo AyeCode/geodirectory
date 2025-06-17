@@ -473,6 +473,69 @@ function geodir_sanitize_textarea_field( $str ) {
 }
 
 /**
+ * Strip shortcodes/blocks from content.
+ *
+ *
+ * @since 2.8.120
+ *
+ * @param string $content Content to sanitize.
+ * @return string Sanitized Content.
+ */
+function geodir_strip_shortcodes( $content ) {
+	if ( empty( $content ) ) {
+		return $content;
+	}
+
+	if ( ! ( str_contains( $content, '[' ) && str_contains( $content, ']' ) ) ) {
+		return $content;
+	}
+
+	$strip = true;
+
+	if ( is_user_logged_in() ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			$strip = false;
+		} else {
+			$roles = wp_get_current_user()->roles;
+
+			if ( ! empty( $roles ) && is_array( $roles ) ) {
+				$allowed_roles = geodir_get_option( 'shortcodes_allowed_roles', array( 'administrator' ) );
+
+				if ( empty( $allowed_roles ) || ! is_array( $allowed_roles ) ) {
+					$allowed_roles = array();
+				}
+
+				$allowed_roles[] = 'administrator'; // Admin always allowed to use shortcodes in description.
+
+				foreach ( $roles as $role ) {
+					if ( in_array( $role, $allowed_roles ) ) {
+						$strip = false;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	if ( $strip ) {
+		// Strip shortcodes.
+		$filtered = trim( strip_shortcodes( $content ) );
+	} else {
+		$filtered = $content;
+	}
+
+	/**
+	 * Filter a sanitized content.
+	 *
+	 * @since 2.8.120
+	 *
+	 * @param string $filtered The sanitized content.
+	 * @param string $content  The content prior to being sanitized.
+	 */
+	return apply_filters( 'geodir_strip_shortcodes', $filtered, $strip, $content );
+}
+
+/**
  * Sanitizes a keyword.
  *
  * @since 2.0.0.82

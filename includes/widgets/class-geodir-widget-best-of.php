@@ -79,7 +79,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 					'left' => __('Tabs on left','geodirectory'),
 					'dropdown' => __('Tabs as dropdown','geodirectory'),
 				),
-				'default'  => 'bestof-tabs-on-top',
+				'default'  => 'top',
 				'desc_tip' => true,
 				'advanced' => false,
 				'group' => __( 'Design', 'geodirectory')
@@ -95,7 +95,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 					'center' => __('Center','geodirectory'),
 					'right' => __('Right','geodirectory'),
 				),
-				'default'  => 'bestof-tabs-on-top',
+				'default'  => '',
 				'desc_tip' => true,
 				'advanced' => false,
 				'element_require' => '[%tab_layout%]=="top"',
@@ -354,11 +354,20 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
      * @param array $instance Saved values from database.
      */
     public static function best_of( $args, $instance, $id_base = 'gd_best_of' ) {
-		global $geodirectory;
+		global $geodirectory, $geodir_is_widget_listing;
+
+		// Prevent infinite loop.
+		if ( $geodir_is_widget_listing ) {
+			return;
+		}
 
 		$is_ajax = wp_doing_ajax() ? true : false;
 
 		extract( $args );
+
+		if ( ! empty( $instance['tab_layout'] ) && ! in_array( $instance['tab_layout'], array( 'top', 'left', 'dropdown' ) ) ) {
+			$instance['tab_layout'] = 'top';
+		}
 
 		/**
 		 * Filter the best of widget tab layout.
@@ -377,9 +386,12 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		// wrap class
 		$wrap_class = geodir_build_aui_class( $instance );
 
-		if ( ! $is_ajax || isset( $_REQUEST['shortcode'] ) ) echo '<div class="geodir_bestof_widget bestof-widget-tab-layout ' . $tab_layout . ' '.$wrap_class .'">';
+		if ( ! $is_ajax || isset( $_REQUEST['shortcode'] ) ) {
+			echo '<div class="geodir_bestof_widget bestof-widget-tab-layout ' . geodir_sanitize_html_class( $tab_layout . ' '.$wrap_class ) . '">';
+		}
 
 		$loc_terms = geodir_get_current_location_terms();
+
 		if ( ! empty( $loc_terms ) ) {
 			$cur_location = ' : ' . geodir_ucwords(str_replace('-', ' ', end($loc_terms)));
 		} else {
