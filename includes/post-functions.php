@@ -1914,7 +1914,29 @@ function geodir_validate_custom_field_value_textarea( $value, $gd_post, $custom_
 				$value = is_scalar( $value ) ? geodir_sanitize_textarea_field( $value ) : $value;
 			}
 		}
+
+		/**
+		 * Strip shortcodes for a given field.
+		 *
+		 * @since 2.9.120
+		 *
+		 * @param bool   $strip_shortcodes True to strip shortcodes.
+		 * @param string $htmlvar_name Custom field name.
+		 * @param string $value Field value.
+		 * @param array  $args Extra args.
+		 */
+		$strip_shortcodes = apply_filters( 'geodir_field_strip_shortcodes_check', true, $custom_field->htmlvar_name, $value, array( 'gd_post' => $gd_post, 'html' => $html ) );
+
+		// post_content is saved before custom fields.
+		if ( $strip_shortcodes && ! empty( $value ) && $custom_field->htmlvar_name != 'post_content' ) {
+			if ( is_array( $value ) ) {
+				$value = array_map( 'geodir_strip_shortcodes', $value );
+			} else {
+				$value = is_scalar( $value ) ? geodir_strip_shortcodes( $value ) : $value;
+			}
+		}
 	}
+
 	return $value;
 }
 add_filter( 'geodir_custom_field_value_html', 'geodir_validate_custom_field_value_textarea', 10, 6 );
