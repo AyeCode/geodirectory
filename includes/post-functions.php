@@ -1915,25 +1915,10 @@ function geodir_validate_custom_field_value_textarea( $value, $gd_post, $custom_
 			}
 		}
 
-		/**
-		 * Strip shortcodes for a given field.
-		 *
-		 * @since 2.9.120
-		 *
-		 * @param bool   $strip_shortcodes True to strip shortcodes.
-		 * @param string $htmlvar_name Custom field name.
-		 * @param string $value Field value.
-		 * @param array  $args Extra args.
-		 */
-		$strip_shortcodes = apply_filters( 'geodir_field_strip_shortcodes_check', true, $custom_field->htmlvar_name, $value, array( 'gd_post' => $gd_post, 'html' => $html ) );
-
-		// post_content is saved before custom fields.
-		if ( $strip_shortcodes && ! empty( $value ) && $custom_field->htmlvar_name != 'post_content' ) {
-			if ( is_array( $value ) ) {
-				$value = array_map( 'geodir_strip_shortcodes', $value );
-			} else {
-				$value = is_scalar( $value ) ? geodir_strip_shortcodes( $value ) : $value;
-			}
+		// post_content saved early, so don't need sanitize.
+		if ( ! empty( $value ) && $custom_field->htmlvar_name != 'post_content' ) {
+			/** This filter is documented in includes/class-geodir-post-data.php */
+			$value = apply_filters( 'geodir_extra_sanitize_textarea_field', $value, array( 'default' => $value, 'field_key' => $custom_field->htmlvar_name, 'gd_post' => $gd_post, 'allow_html' => $html ) );
 		}
 	}
 
