@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.120 - 2025-06-TBD =
 * REST API orderby relevance search is not working - FIXED
+* Category limit with checkbox field is not working - FIXED
 
 = GeoDirectory v2.8.119 - 2025-06-12 =
 * Comment form default field website should be optional - CHANGED

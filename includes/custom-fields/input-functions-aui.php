@@ -1914,8 +1914,17 @@ function geodir_cfi_categories($html,$cf){
 
                 if ($cat_display != '') {
                     $required_limit_msg = '';
+
+                    if ( $cat_display == 'checkbox' && $category_limit == 1 ) {
+                        $cat_display = 'radio';
+                    }
+
                     if ($category_limit > 0 && $cat_display != 'select' && $cat_display != 'radio') {
-                        $required_limit_msg = wp_sprintf( __('Only select %d categories for this package.', 'geodirectory'), $category_limit );
+                        if ( $category_limit > 1 ) {
+                            $required_limit_msg = wp_sprintf( __('Only select %d categories for this package.', 'geodirectory' ), $category_limit );
+                        } else {
+                            $required_limit_msg = __('Only select 1 category for this package.', 'geodirectory' );
+                        }
                     } else {
                         $required_limit_msg = $required_msg;
                     }
@@ -1954,17 +1963,16 @@ function geodir_cfi_categories($html,$cf){
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect')
                         echo '</select>';
-
                 }
 
-                echo class_exists("AUI_Component_Helper") ? AUI_Component_Helper::help_text(__($frontend_desc, 'geodirectory')) : '';
+                $help_text = $category_limit > 0 && $required_limit_msg ? ' (' . $required_limit_msg . ')' : '';
+                echo class_exists("AUI_Component_Helper") ? AUI_Component_Helper::help_text( __( $frontend_desc, 'geodirectory' ) . esc_attr( $help_text ) ) : '';
                 ?>
+                <div class="geodir_message_error alert alert-danger my-2 px-3 py-2" style="display:none"></div>
             </div>
+            <input type="hidden" cat_limit="<?php echo (int) $category_limit; ?>" id="cat_limit" value="<?php echo esc_attr( $required_limit_msg ); ?>" name="cat_limit[<?php echo esc_attr( $taxonomy ); ?>]" />
         </div>
         <?php
-        // cat limit
-        echo '<input type="hidden" cat_limit="' . $category_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
-
         $html = ob_get_clean();
 
         // Default category select
