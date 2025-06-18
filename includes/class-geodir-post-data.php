@@ -82,6 +82,8 @@ class GeoDir_Post_Data {
 		// Private Address
 		add_filter( 'geodir_check_display_map', array( __CLASS__, 'check_display_map' ), 11, 2 );
 		add_action( 'clean_post_cache', array( __CLASS__, 'on_clean_post_cache' ), 10, 2 );
+
+		add_filter( 'geodir_extra_sanitize_textarea_field', array( __CLASS__, 'extra_sanitize_textarea_field' ), 10, 2 );
 	}
 
 	/**
@@ -794,13 +796,15 @@ class GeoDir_Post_Data {
 			self::$post_temp = $postarr;
 
 			if ( ! empty( $data['post_content'] ) ) {
-				/** This filter is documented in includes/post-functions.php */
-				$strip_shortcodes = apply_filters( 'geodir_field_strip_shortcodes_check', true, 'post_content', $data['post_content'], array( 'data' => $data, 'postarr' => $postarr ) );
-
-				// Post_content is saved before custom fields.
-				if ( $strip_shortcodes ) {
-					$data['post_content'] = geodir_strip_shortcodes( $data['post_content'] );
-				}
+				/**
+				 * Set filter for textarea extra sanitization.
+				 *
+				 * @since 2.8.120
+				 *
+				 * @param string $post_content The post content.
+				 * @param array  $args Args array.
+				 */
+				$data['post_content'] = apply_filters( 'geodir_extra_sanitize_textarea_field', $data['post_content'], array( 'default' => $data['post_content'], 'field_key' => 'post_content', 'postdata' => $data, 'postarr' => $postarr ) );
 			}
 		} else if ( ! empty( self::$post_temp ) && $data['post_type'] == 'revision' && isset( $data['post_parent'] ) && $data['post_parent'] == self::$post_temp['ID'] ) {
 			// We might be saving a post revision at the same time so we don't blank the post_temp here
@@ -2569,5 +2573,42 @@ class GeoDir_Post_Data {
 			// Flush widget listings cache.
 			geodir_cache_flush_group( 'widget_listings_' . $post->post_type );
 		}
+	}
+
+	/**
+	 * Textarea field extra sanitization.
+	 *
+	 * @since 2.8.120
+	 *
+	 * @param array|string $content The content.
+	 * @param array  $args Args array.
+	 * @return mixed Sanitized content.
+	 */
+	public static function extra_sanitize_textarea_field( $content, $args = array() ) {
+		if ( empty( $content ) ) {
+			return $content;
+		}
+
+		/**
+		 * Check to strip shortcodes for a given content.
+		 *
+		 * @since 2.9.120
+		 *
+		 * @param bool   $strip_shortcodes True to strip shortcodes.
+		 * @param string $htmlvar_name Custom field name.
+		 * @param string $value Field value.
+		 * @param array  $args Extra args.
+		 */
+		$strip_shortcodes = apply_filters( 'geodir_textarea_field_strip_shortcodes', true, $content, $args );
+
+		if ( $strip_shortcodes ) {
+			if ( is_array( $content ) ) {
+				$content = array_map( 'geodir_strip_shortcodes', $content );
+			} else if ( is_scalar( $content ) ) {
+				$content = geodir_strip_shortcodes( $content );
+			}
+		}
+
+		return $content;
 	}
 }

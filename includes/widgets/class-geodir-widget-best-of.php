@@ -659,7 +659,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 						if ( $design_style ) {
 							$nav_html .= '<a class="nav-link' . ( $cat_count == 1 ? ' active' : '' ) . '" data-termid="' . esc_attr( $cat->term_id ) . '" href="' . esc_url( $term_link ) . '" data-toggle="pill">';
-							$nav_html .= '<span class="gd-cptcat-icon" style="' . esc_attr( 'color:' . $cat_color ) . '">' . $term_icon . '</span>';
+							$nav_html .= '<span class="gd-cptcat-icon mr-1 me-1" style="' . esc_attr( 'color:' . $cat_color ) . '">' . $term_icon . '</span>';
 							$nav_html .= esc_html( $cat->name );
 							$nav_html .= '</a>';
 						} else {

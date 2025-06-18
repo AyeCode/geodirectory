@@ -323,6 +323,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * REST API orderby relevance search is not working - FIXED
 * Category limit with checkbox field is not working - FIXED
 * GD > Categories outputs unclosed div when CPT AJAX enabled - FIXED
+* Extra sanitization the post content to prevent shortcodes in description - FIXED/SECURITY
 
 = GeoDirectory v2.8.119 - 2025-06-12 =
 * Comment form default field website should be optional - CHANGED
