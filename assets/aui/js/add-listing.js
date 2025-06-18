@@ -380,13 +380,15 @@ function geodir_validate_field(field) {
     switch (jQuery(field).attr('field_type')) {
         case 'radio':
         case 'checkbox':
-            if (jQuery(field).closest('.required_field').find('#cat_limit').length) {
-                var cat_limit = jQuery(field).closest('.required_field').find('#cat_limit').attr('cat_limit');
-                var cat_msg = jQuery(field).closest('.required_field').find('#cat_limit').val();
-                if (jQuery(field).closest('.required_field').find(":checked").length > cat_limit && cat_limit > 0) {
-                    jQuery(field).closest('.required_field').find('.geodir_message_error').show();
-                    jQuery(field).closest('.required_field').find('.geodir_message_error').html(cat_msg);
+            var $fieldWrap = jQuery(field).closest('.required_field');
+            if ($fieldWrap.find('#cat_limit').length) {
+                var cat_limit = parseInt($fieldWrap.find('#cat_limit').attr('cat_limit'));
+                var cat_msg = $fieldWrap.find('#cat_limit').val();
+                if ($fieldWrap.find(":checked").length > cat_limit && cat_limit > 0) {
+                    $fieldWrap.find('.geodir_message_error').html(cat_msg).show();
                     return false;
+                } else {
+                    $fieldWrap.find('.geodir_message_error').html('').hide();
                 }
             }
             if (jQuery(field).closest('.required_field').find(":checked").length > 0) {
