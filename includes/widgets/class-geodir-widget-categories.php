@@ -1014,14 +1014,15 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				if ( ! empty( $categories ) ) {
 					$term_icons = ! $hide_icon ? geodir_get_term_icon() : array();
 
-					//                  print_r($term_icons);
 					$row_class = '';
 
 					if ( $is_listing ) {
 						$row_class = $is_category ? ' gd-cptcat-categ' : ' gd-cptcat-listing';
 					}
+
 					$cpt_row   = '';
 					$open_wrap = true;
+
 					if ( $design_style ) {
 						if ( empty( $args['cpt_title'] ) && $cpt_opened ) {
 							$open_wrap = false;
@@ -1029,8 +1030,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					}
 
 					if ( $open_wrap ) {
-						$cpt_row   .= '<div class="gd-cptcat-row gd-cptcat-' . $cpt . $row_class . ' ' . $cpt_left_class . '">';
-						$cpt_opened = true;
+						$cpt_row .= '<div class="gd-cptcat-row gd-cptcat-' . $cpt . $row_class . ' ' . $cpt_left_class . '">';
+
+						if ( ! $cpt_ajax ) {
+							$cpt_opened = true;
+						}
 					}
 
 					if ( ! empty( $args['cpt_title'] ) && ! $cpt_ajax ) {
