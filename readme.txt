@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.121 - 2025-06-TBD =
+* GD > Post Features shows error when tag count value set but tags value is empty - FIXED
+
 = GeoDirectory v2.8.120 - 2025-06-18 =
 * REST API orderby relevance search is not working - FIXED
 * Category limit with checkbox field is not working - FIXED
