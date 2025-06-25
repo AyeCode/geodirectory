@@ -893,10 +893,10 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 					);
 				}
 
-				$tag_include = !empty($args['tag_include']) ? array_map('trim', explode(',', $args['tag_include'])) : '';
+				$tag_include = ! empty( $args['tag_include'] ) ? array_map( 'trim', explode( ',', $args['tag_include'] ) ) : array();
 
 				// If we can cut the size before links then better.
-				if ( empty( $tag_include  ) && ! empty( $args['tag_count'] ) && count( $tag_include ) > $args['tag_count'] ) {
+				if ( ! empty( $tag_include  ) && ! empty( $args['tag_count'] ) && count( $tag_include ) > absint( $args['tag_count'] ) ) {
 					$tag_include = array_slice( $tag_include, 0, absint( $args['tag_count'] ) );
 				}
 
