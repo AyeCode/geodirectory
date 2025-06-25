@@ -319,7 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
-= GeoDirectory v2.8.121 - 2025-06-TBD =
+= GeoDirectory v2.8.121 - 2025-TBD =
+* GD Simple Archive Item block now has image aspect and cover options - ADDED
+* API for setting checkbox not accepting 0 or 1 values - FIXED
 * GD > Post Features shows error when tag count value set but tags value is empty - FIXED
 
 = GeoDirectory v2.8.120 - 2025-06-18 =

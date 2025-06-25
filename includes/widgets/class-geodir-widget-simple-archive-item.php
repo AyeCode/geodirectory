@@ -150,6 +150,39 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 				'advanced' => false,
 				'group'    => __( 'Image', 'geodirectory' ),
 			),
+			'aspect'  => array(
+				'title' => __('Aspect ratio', 'geodirectory')." ".__('(bootstrap only)', 'geodirectory'),
+				'desc' => __('For a more consistent image view you can set the aspect ratio of the image view port.', 'geodirectory'),
+				'type' => 'select',
+				'options' => array(
+					'' => __("Default (16by9)","geodirectory"),
+					'21x9' => __("21by9","geodirectory"),
+					'4x3' => __("4by3","geodirectory"),
+					'1x1' => __("1by1 (square)","geodirectory"),
+					'n' => __("No ratio (natural)","geodirectory"),
+				),
+				'desc_tip' => true,
+				'value'  => '',
+				'default'  => '',
+				'advanced' => false,
+				'group'    => __( 'Image', 'geodirectory' ),
+			),
+			'cover'  => array(
+				'title' => __('Image cover type:', 'geodirectory'),
+				'desc' => __('This is how the image should cover the image viewport.', 'geodirectory'),
+				'type' => 'select',
+				'options' => array(
+					'' => __("Default (cover both)","geodirectory"),
+					'x' => __("Width cover","geodirectory"),
+					'y' => __("height cover","geodirectory"),
+					'n' => __("No cover (contain)","geodirectory"),
+				),
+				'desc_tip' => true,
+				'value'  => '',
+				'default'  => '',
+				'advanced' => false,
+				'group'    => __( 'Image', 'geodirectory' ),
+			),
 			'image_link'   => array(
 				'title'           => __( 'Image Link', 'geodirectory' ),
 				'desc'            => __( 'Image link action', 'geodirectory' ),
@@ -752,9 +785,22 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			// bottom right badge
 			$content .= $instance['bottom_right_badge_preset'] == 'custom' ? $this->get_custom_badge( 'bottom_right', $instance ) : self::get_badge_type( $instance['bottom_right_badge_preset'], array( 'position' => 'bottom-right' ) );
 
+
+			// image
+			$aspect = ! empty( $instance['aspect'] ) && in_array( $instance['aspect'], array(
+				'21x9',
+				'4x3',
+				'1x1',
+				'n'
+			) ) ? ' aspect="' . esc_attr( $instance['aspect'] ) . '"' : '';
+			$cover  = ! empty( $instance['cover'] ) && in_array( $instance['cover'], array(
+				'x',
+				'y',
+				'n'
+			) ) ? ' cover="' . esc_attr( $instance['cover'] ) . '"' : '';
 			$image_type = esc_attr( $instance['image_type'] );
 			$image_link = $instance['image_link'] == 'none' ? '' : esc_attr( $instance['image_link'] );
-			$content   .= "[gd_post_images type='$image_type' ajax_load='true' link_to='$image_link' types='logo,post_images' controlnav='0']";
+			$content   .= "[gd_post_images type='$image_type' ajax_load='true' link_to='$image_link' types='logo,post_images' controlnav='0' $aspect $cover]";
 
 			// Close header
 			$content .= $is_preview ? '</div>' : "[gd_archive_item_section type='close' position='left']";

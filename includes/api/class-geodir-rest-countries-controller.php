@@ -79,17 +79,17 @@ class GeoDir_REST_Countries_Controller extends WP_REST_Controller {
 
         // Retrieve the list of registered collection query parameters.
         $registered = $this->get_collection_params();
-        
+
         $args = array();
-        
+
         if ( !empty( $request['order'] ) ) {
             $args['order'] = $request['order'];
         }
-        
+
         if ( !empty( $request['orderby'] ) ) {
             $args['orderby'] = $request['orderby'];
         }
-        
+
         if ( !empty( $request['search'] ) ) {
             $args['search'] = $request['search'];
         }
@@ -134,19 +134,19 @@ class GeoDir_REST_Countries_Controller extends WP_REST_Controller {
      * @param WP_REST_Request $request Full details about the request.
      * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
      */
-    public function get_item( $request ) {        
+    public function get_item( $request ) {
         $country = NULL;
-        
+
         if ( !empty( $request['iso2'] ) && !( absint( $request['iso2'] ) > 0 && $country = geodir_rest_country_by_id( $request['iso2'] ) ) ) {
             $country = geodir_rest_country_by_iso2( $request['iso2'] );
         }
-        
+
         if ( empty( $country ) ) {
             return new WP_Error( 'rest_country_code_invalid', __( 'Invalid country id OR ISO2 code.' ), array( 'status' => 404 ) );
         }
-        
+
         $data = $this->prepare_item_for_response( $country, $request );
-        
+
         return rest_ensure_response( $data );
     }
 

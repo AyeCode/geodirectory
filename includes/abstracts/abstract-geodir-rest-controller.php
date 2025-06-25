@@ -297,14 +297,28 @@ abstract class GeoDir_REST_Controller extends WP_REST_Controller {
 	 * @return string|WP_Error
 	 */
 	public function validate_setting_checkbox_field( $value, $setting ) {
+		// Handle 'yes'/'no' values (unchanged)
 		if ( in_array( $value, array( 'yes', 'no' ) ) ) {
 			return $value;
-		} elseif ( empty( $value ) ) {
+		}
+
+		// Convert '1'/'0' strings to integers
+		if ( $value === '1' || $value === '0' ) {
+			return absint( $value );
+		}
+
+		// Handle empty values (fallback to default)
+		if ( empty( $value ) ) {
 			$value = isset( $setting['default'] ) ? $setting['default'] : 'no';
 			return $value;
-		} else {
-			return new WP_Error( 'rest_setting_value_invalid', __( 'An invalid setting value was passed.', 'geodirectory' ), array( 'status' => 400 ) );
 		}
+
+		// Everything else is invalid
+		return new WP_Error(
+			'rest_setting_value_invalid',
+			__( 'An invalid setting value was passed.', 'geodirectory' ),
+			array( 'status' => 400 )
+		);
 	}
 
 	/**
