@@ -323,6 +323,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * GD Simple Archive Item block now has image aspect and cover options - ADDED
 * API for setting checkbox not accepting 0 or 1 values - FIXED
 * GD > Post Features shows error when tag count value set but tags value is empty - FIXED
+* Restrict wp-admin conflicts with MailPoet manage subscription - FIXED
 
 = GeoDirectory v2.8.120 - 2025-06-18 =
 * REST API orderby relevance search is not working - FIXED
