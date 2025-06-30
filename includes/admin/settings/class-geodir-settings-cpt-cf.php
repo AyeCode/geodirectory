@@ -2131,6 +2131,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'post_author',
 				'post_date',
 				'post_date_gmt',
+				'excerpt',
 				'post_excerpt',
 				'post_status',
 				'comment_status',
