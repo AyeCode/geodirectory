@@ -104,6 +104,23 @@ class GeoDir_SEO {
 	}
 
 	/**
+	 * Check All in One SEO options enabled or not.
+	 *
+	 * @since 2.8.122
+	 *
+	 * @return bool True if All in One SEO is enabled else False.
+	 */
+	public static function aioseo_enabled() {
+		global $geodir_options;
+
+		if ( ! function_exists( 'aioseo' ) ) {
+			return false;
+		}
+
+		return empty( $geodir_options['aioseo_disable'] ) ? true : false;
+	}
+
+	/**
 	 * Check SEOPress options enabled or not.
 	 *
 	 * @since 2.2.7
@@ -140,7 +157,7 @@ class GeoDir_SEO {
 			self::yoast_enabled() // Don't run if active and not set to be disabled
 			|| self::rank_math_enabled() // Don't run if active and not set to be disabled
 			|| self::seopress_enabled() // SEOPress
-			|| class_exists( 'All_in_One_SEO_Pack' )  // don't run if active
+			|| self::aioseo_enabled() // All in One SEO is enabled
 			|| ( is_admin() && ! $ajax_search ) // No need to run in wp-admin
 		) {
 			// Even if disabled we still need to replace title vars

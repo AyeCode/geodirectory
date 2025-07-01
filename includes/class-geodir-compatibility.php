@@ -342,6 +342,31 @@ class GeoDir_Compatibility {
 			array_splice( $options, 2, 0, $new_options ); // splice in at position 1
 		}
 
+		// All in One SEO
+		if ( function_exists( 'aioseo' ) ) {
+			$new_options = array(
+				array(
+					'id' => 'aioseo_detected',
+					'type' => 'title',
+					'title' => __( 'All in One SEO Detected', 'geodirectory' ),
+					'desc' => geodir_notification( array( 'info' => __( 'The All in One SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta)', 'geodirectory' ) ) ),
+				),
+				array(
+					'id' => 'aioseo_disable',
+					'type' => 'checkbox',
+					'name' => __( 'Disable All in One SEO', 'geodirectory' ),
+					'desc' => __( 'Disable overwrite by All in One SEO titles & metas on GD pages?', 'geodirectory' ),
+					'default' => '0',
+				),
+				array(
+					'id' => 'aioseo_detected',
+					'type' => 'sectionend'
+				)
+			);
+
+			array_splice( $options, 2, 0, $new_options );
+		}
+
 		// SEOPress
 		if ( function_exists( 'seopress_activation' ) ) {
 			$new_options = array(
@@ -1098,17 +1123,34 @@ class GeoDir_Compatibility {
 
 			if ( ! empty( $template_page_id ) ) {
 				if ( empty( $meta_key ) ) {
-					// Don't overwrite Yoast SEO meta for the individual post.
-					$reserve_post_meta = defined( 'WPSEO_VERSION' ) && ! geodir_get_option( 'wpseo_disable' ) && geodir_is_page( 'detail' ) ? true : false;
+					$reserve_post_meta = false;
 
-					// Don't overwrite Rank Math SEO meta for the individual post.
-					$reserve_post_meta = defined( 'RANK_MATH_VERSION' ) && ! geodir_get_option( 'rank_math_disable' ) && geodir_is_page( 'detail' ) ? true : $reserve_post_meta;
+					// Don't overwrite 3rd party plugin SEO meta for the individual post.
+					if ( geodir_is_page( 'single' ) ) {
+						// Yoast SEO
+						if ( GeoDir_SEO::yoast_enabled() ) {
+							$reserve_post_meta = true;
+						}
 
-					// Don't overwrite SEOPress SEO meta for the individual post.
-					$reserve_post_meta = function_exists( 'seopress_activation' ) && ! geodir_get_option( 'seopress_disable' ) && geodir_is_page( 'detail' ) ? true : $reserve_post_meta;
+						// Rank Math SEO
+						if ( GeoDir_SEO::rank_math_enabled() ) {
+							$reserve_post_meta = true;
+						}
+
+						// All in One SEO
+						if ( GeoDir_SEO::aioseo_enabled() ) {
+							$reserve_post_meta = true;
+						}
+
+						// SEOPress SEO
+						if ( GeoDir_SEO::seopress_enabled() ) {
+							$reserve_post_meta = true;
+						}
+					}
 
 					if ( $reserve_post_meta ) {
 						global $gd_post_metadata;
+
 						if ( $gd_post_metadata ) {
 							return null;
 						} else {

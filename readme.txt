@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.122 - 2025-07-TBD =
 * Prevent allowing a new field with key excerpt - CHANGED
+* Option added to disable meta overwrite by All in One SEO - CHANGED
 
 = GeoDirectory v2.8.121 - 2025-06-26 =
 * GD Simple Archive Item block now has image aspect and cover options - ADDED
