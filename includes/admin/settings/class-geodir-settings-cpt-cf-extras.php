@@ -970,24 +970,25 @@ optgroup-close', 'geodirectory' );
 				);
 
 				if ( is_array( $extra ) && ! empty( $extra['no_of_tag'] ) ) {
-					$no_of_tag = $extra['no_of_tag'];
+					$no_of_tag = absint( $extra['no_of_tag'] );
 				} else {
 					$no_of_tag = '';
 				}
+
 				$output .= aui()->input(
 					array(
-						'id'                => 'no_of_tag',
-						'name'              => 'extra[no_of_tag]',
-						'label_type'        => 'top',
-						'label'              => __('Number of allowed tags','geodirectory') . geodir_help_tip( __( 'Enter number of allowed tags', 'geodirectory' ) ),
-						'type'              => 'number',
-						'value' => $no_of_tag,
-						'wrap_class' => geodir_advanced_toggle_class(),
-						'extra_attributes'  => array(
+						'id'               => 'no_of_tag',
+						'name'             => 'extra[no_of_tag]',
+						'label_type'       => 'top',
+						'label'            => __( 'Number of allowed tags', 'geodirectory' ) . geodir_help_tip( __( 'Enter number of allowed tags. Default: 10', 'geodirectory' ) ),
+						'type'             => 'number',
+						'placeholder'      => 10,
+						'value'            => $no_of_tag,
+						'wrap_class'       => geodir_advanced_toggle_class(),
+						'extra_attributes' => array(
 							'step'  => "1",
 							'min'   => "0"
 						)
-//					'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
 					)
 				);
 			}
