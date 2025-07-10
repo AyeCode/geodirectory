@@ -471,6 +471,7 @@ var GeoDir_Business_Hours = {
         jQuery(".gd-bh-add", this.$wrap).on("click", function(e) {
             $this.addSlot(jQuery(this));
             $this.onAddSlot();
+            jQuery(this).closest('.gd-bh-item').find("[data-field-alt='open']:last").trigger("change");
             e.preventDefault();
         });
         setTimeout(function() {
