@@ -70,12 +70,7 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 
 		if ( ! empty( $key ) ) {
 			if ( isset( $gd_post->{$key} ) ) {
-				if ( $show == 'value-raw' ) {
-					$value = $gd_post->{$key};
-				} else {
-					$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
-				}
-
+				$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
 			} else if ( $key == 'latitude,longitude' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
 				$value = geodir_sanitize_float( $gd_post->latitude ) . "," . geodir_sanitize_float( $gd_post->longitude );
 			} else if ( $key == 'address' && ! empty( $gd_post->city ) ) {
