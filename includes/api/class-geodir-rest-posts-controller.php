@@ -1195,6 +1195,10 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				continue;
 			}
 
+			if ( is_scalar( $request[ $base ] ) ) {
+				$request[ $base ] = array( $request[ $base ] );
+			}
+
 			foreach ( $request[ $base ] as $term_id ) {
 				// Invalid terms will be rejected later.
 				if ( ! get_term( $term_id, $taxonomy->name ) ) {
@@ -1640,77 +1644,19 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				}
 			}
 
-			if ( $taxonomy->name == $this->post_type . 'category' ) {
-				$schema['properties'][ $this->post_type . 'category' ] = array(
-					'description' => __( 'List of categories.', 'geodirectory' ),
-					'type'        => 'array',
-					'context'     => array( 'view', 'edit' ),
-					'items'       => array(
-						'type'       => 'object',
-						'properties' => array(
-							'id' => array(
-								'description' => __( 'Category ID.', 'geodirectory' ),
-								'type'        => 'integer',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'name' => array(
-								'description' => __( 'Category name.', 'geodirectory' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-							'slug' => array(
-								'description' => __( 'Category slug.', 'geodirectory' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-						),
-					),
-				);
-			} else if ( $taxonomy->name == $this->post_type . '_tags' ) {
-				$schema['properties'][ $this->post_type . '_tags' ] = array(
-					'description' => __( 'List of tags.', 'geodirectory' ),
-					'type'        => 'array',
-					'context'     => array( 'view', 'edit' ),
-					'items'       => array(
-						'type'       => 'object',
-						'properties' => array(
-							'id' => array(
-								'description' => __( 'Tag ID.', 'geodirectory' ),
-								'type'        => 'integer',
-								'context'     => array( 'view', 'edit' ),
-							),
-							'name' => array(
-								'description' => __( 'Tag name.', 'geodirectory' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-							'slug' => array(
-								'description' => __( 'Tag slug.', 'geodirectory' ),
-								'type'        => 'string',
-								'context'     => array( 'view', 'edit' ),
-								'readonly'    => true,
-							),
-						),
-					),
-				);
-			} else {
-				$schema['properties'][ $taxonomy->name ] = array(
-					/* translators: %s: taxonomy name */
-					'description' => sprintf( __( 'The terms assigned to the object in the %s taxonomy.' ), $taxonomy->name ),
-					'type'        => 'array',
-					'items'       => array(
-						'type'    => 'integer',
-					),
-					'context'     => array( 'view', 'edit' ),
-				);
-			}
+			$schema['properties'][ $taxonomy->name ] = array(
+				/* translators: %s: Taxonomy name. */
+				'description' => wp_sprintf( __( 'The terms assigned to the post in the %s taxonomy.', 'geodirectory' ), $taxonomy->name ),
+				'type'        => 'array',
+				'items'       => array(
+					'type' => 'integer',
+				),
+				'context'     => array( 'view', 'edit' ),
+			);
 		}
 
-		unset($schema['properties'][ $this->post_type . '_category' ]);
-		unset($schema['properties'][ $this->post_type . '_tags' ]);
+		unset( $schema['properties'][ $this->post_type . 'category' ] );
+		unset( $schema['properties'][ $this->post_type . '_tags' ] );
 
 		$schema['properties']['slug'] = array(
 			'description' => __( 'An alphanumeric identifier for the object unique to its type.' ),
