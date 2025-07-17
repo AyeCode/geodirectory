@@ -609,7 +609,7 @@ $tab_class .= ( isset( $field->field_type ) && $field->field_type == 'fieldset' 
 						'name'              => 'field_icon',
 						'label_type'        => 'top',
 						'label'              => __('Icon','geodirectory') . geodir_help_tip( __( 'Upload icon using media and enter its url path, or enter font awesome class eg:"fas fa-home"', 'geodirectory' )),
-						'type'              =>   'iconpicker',
+						'type'              => 'iconpicker',
 						'wrap_class'        => geodir_advanced_toggle_class(),
 						'value' => $value,
 						'extra_attributes' => defined('FAS_PRO') && FAS_PRO ? array(
@@ -618,6 +618,7 @@ $tab_class .= ( isset( $field->field_type ) && $field->field_type == 'fieldset' 
 							'data-bs-trigger' => "focus",
 							'title'           => __('For pro icon variants (light, thin, duotone), paste the class here','geodirectory'),
 						) : array(),
+						'allow_icon_url'      => true // Allow icon url.
 					)
 				);
 

@@ -2930,3 +2930,30 @@ function geodir_cf_author($html,$location,$cf,$p='',$output=''){
     return $html;
 }
 add_filter('geodir_custom_field_output_author','geodir_cf_author',10,5);
+
+/**
+ * Check and sanitize field icon.
+ *
+ * @since 
+ *
+ * @param string $icon The icon.
+ * @param string $orig_icon Original icon.
+ * @param array $args Icon args.
+ * @return string Sanitized icon.
+ */
+function geodir_cf_aui_sanitize_fa_icon( $icon, $orig_icon, $args = array() ) {
+	if ( $icon && $icon != $orig_icon && ! empty( $args ) && isset( $args['allow_icon_url'] ) && geodir_is_icon_url( $orig_icon ) ) {
+		$icon = '';
+
+		if ( ! empty( $args['allow_icon_url'] ) ) {
+			$_icon = sanitize_url( $orig_icon );
+
+			if ( geodir_is_image_file( $_icon ) ) {
+				$icon = $_icon;
+			}
+		}
+	}
+
+	return $icon;
+}
+add_filter( 'ayecode_ui_sanitize_fa_icon', 'geodir_cf_aui_sanitize_fa_icon', 10, 3 );
