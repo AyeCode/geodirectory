@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'ayecode/wp-ayecode-ui' => array(
-            'pretty_version' => '0.2.38',
-            'version' => '0.2.38.0',
-            'reference' => 'effb1c5d380def7261f313da6b40218a0efadd4a',
+            'pretty_version' => '0.2.39',
+            'version' => '0.2.39.0',
+            'reference' => '6495a1073d0fe3f04f0be00bc5c8311feddaf7ee',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ayecode/wp-ayecode-ui',
             'aliases' => array(),

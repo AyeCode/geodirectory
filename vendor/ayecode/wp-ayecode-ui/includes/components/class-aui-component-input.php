@@ -141,7 +141,7 @@ class AUI_Component_Input {
 				$type = 'text';
 
 				// Validate FA icon.
-				$args['value'] = AUI_Component_Helper::sanitize_fa_icon( $args['value'] );
+				$args['value'] = AUI_Component_Helper::sanitize_fa_icon( $args['value'], $args );
 
 				$args['extra_attributes']['data-aui-init'] = 'iconpicker';
 				$args['extra_attributes']['data-placement'] = 'bottomRight';
