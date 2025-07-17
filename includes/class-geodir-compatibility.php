@@ -1736,6 +1736,151 @@ class GeoDir_Compatibility {
 	public static function ninja_forms() {
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-ninja-forms.php' );
 		Ninja_Forms()->merge_tags['geodirectory'] = new GeoDir_Ninja_Forms_MergeTags();
+
+		$field_types = array( 'textbox', 'phone', 'email', 'textarea', 'listselect', 'hidden', 'submit', 'successmessage' );
+
+		foreach ( $field_types as $type ) {
+			add_filter( 'ninja_forms_localize_field_settings_' . $type, array( __CLASS__, 'ninja_forms_localize_field_settings' ), 11, 2 );
+		}
+
+		add_filter( 'ninja_forms_display_form_settings', array( __CLASS__, 'ninja_forms_display_form_settings' ), 11, 2 );
+		add_filter( 'ninja_forms_run_action_settings', array( __CLASS__, 'ninja_forms_run_action_settings' ), 9, 4 );
+		add_filter( 'ninja_forms_merge_label', array( __CLASS__, 'ninja_forms_merge_label' ), 11, 3 );
+	}
+
+	/**
+	 * Get ninja form object.
+	 *
+	 * @since 2.8.124
+	 *
+	 * @param int $form_id Ninja form ID.
+	 * @return object Ninja form object.
+	 */
+	public static function get_ninja_form( $form_id ) {
+		global $geodir_nf_cache;
+
+		if ( ! is_array( $geodir_nf_cache ) ) {
+			$geodir_nf_cache = array();
+		}
+
+		if ( ! empty( $geodir_nf_cache[ $form_id ] ) ) {
+			$form = $geodir_nf_cache[ $form_id ];
+		} else {
+			$form = Ninja_Forms()->form( $form_id )->get();
+		}
+
+		return $form;
+	}
+
+	/**
+	 * Check if GD ninja form.
+	 *
+	 * @since 2.8.124
+	 *
+	 * @param array|int $form Ninja form.
+	 * @return bool True if GD ninja form.
+	 */
+	public static function is_geodir_ninja_form( $form ) {
+		if ( is_array( $form ) ) {
+			if ( ! empty( $form['key'] ) && $form['key'] == 'geodirectory_contact' ) {
+				return true;
+			}
+
+			return false;
+		}
+
+		$form = self::get_ninja_form( $form );
+
+		if ( ! empty( $form ) && $form->get_setting( 'key' ) == 'geodirectory_contact' ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Localize field settings for GD ninja form.
+	 *
+	 * @since 2.8.124
+	 *
+	 * @param array  $settings Form action settings.
+	 * @param object $form Ninja form object.
+	 * @return array Field settings.
+	 */
+	public static function ninja_forms_localize_field_settings( $settings, $form ) {
+		if ( ! empty( $form ) && self::is_geodir_ninja_form( $form->get_settings() ) ) {
+			foreach ( array( 'label', 'processing_label', 'desc_text', 'default', 'value' ) as $type ) {
+				if ( ! empty( $settings[ $type ] ) && is_scalar( $settings[ $type ] ) ) {
+					if ( $type == 'value' && isset( $settings['type'] ) && $settings['type'] != 'textarea' ) {
+						continue;
+					}
+
+					$settings[ $type ] = _x( $settings[ $type ], 'GD ninja form', 'geodirectory' );
+				}
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Filter display settings for GD ninja form.
+	 *
+	 * @since 2.8.124
+	 *
+	 * @param array  $settings Form settings.
+	 * @param int    $form_id Ninja form ID.
+	 * @return array Filtered form settings.
+	 */
+	public static function ninja_forms_display_form_settings( $settings, $form_id ) {
+		if ( self::is_geodir_ninja_form( $settings ) ) {
+			$settings['title'] = esc_html_x( $settings['title'], 'GD ninja form', 'geodirectory' );
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Filter action settings for GD ninja form.
+	 *
+	 * @since 2.8.124
+	 *
+	 * @param array  $settings Form action settings.
+	 * @param int    $form_id Ninja form ID.
+	 * @param int    $action_id Ninja form action ID.
+	 * @param array  $form_data The form data.
+	 * @return array Filtered action settings.
+	 */
+	public static function ninja_forms_run_action_settings( $settings, $form_id, $action_id, $form_data ) {
+		if ( ! self::is_geodir_ninja_form( $form_data ) ) {
+			return $settings;
+		}
+
+		foreach ( array( 'message', 'email_subject', 'email_message', 'success_msg' ) as $type ) {
+			if ( ! empty( $settings[ $type ] ) && is_scalar( $settings[ $type ] ) ) {
+				$settings[ $type ] = _x( $settings[ $type ], 'GD ninja form', 'geodirectory' );
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Translate GD ninja form fields label.
+	 *
+	 * @since 2.8.124
+	 *
+	 * @param string $label The label.
+	 * @param array  $field The field.
+	 * @param int    $form_id Ninja form ID.
+	 * @return string Translated label.
+	 */
+	public static function ninja_forms_merge_label( $label, $field, $form_id ) {
+		if ( ! empty( $label ) && self::is_geodir_ninja_form( $form_id ) ) {
+			$label = _x( $label, 'GD ninja form', 'geodirectory' );
+		}
+
+		return $label;
 	}
 
 	/**
