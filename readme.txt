@@ -321,6 +321,8 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.124 - 2025-07-TBD =
 * Elementor tag value-raw don't validates package exclude field - FIXED
+* Allow to translate GD Contact ninja form fields - CHANGED
+* Sanitize custom field icon url - CHANGED
 
 = GeoDirectory v2.8.123 - 2025-07-10 =
 * Default business hours not saved when adding a new day - FIXED

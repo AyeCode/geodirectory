@@ -550,7 +550,7 @@ function geodir_add_ninja_forms_template( $templates ) {
 function geodir_ninja_forms_contact_template(){
     return '{
     "settings": {
-        "title": "GeoDirectory Contact Form",
+        "title": "' . esc_attr_x( 'GeoDirectory Contact Form', 'GD ninja form', 'geodirectory' ) . '",
         "key": "geodirectory_contact",
         "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "default_label_pos": "above",
@@ -683,7 +683,7 @@ function geodir_ninja_forms_contact_template(){
         "objectDomain": "fields",
         "editActive": false,
         "order": 1,
-        "label": "Listing ID",
+        "label": "' . esc_attr_x( 'Listing ID', 'GD ninja form', 'geodirectory' ) . '",
         "type": "hidden",
         "key": "listing_id",
         "default": "{wp:post_id}",
@@ -694,7 +694,7 @@ function geodir_ninja_forms_contact_template(){
         "objectDomain": "fields",
         "editActive": false,
         "order": 2,
-        "label": "Contact",
+        "label": "' . esc_attr_x( 'Contact', 'GD ninja form', 'geodirectory' ) . '",
         "type": "textbox",
         "key": "contact",
         "label_pos": "default",
@@ -715,7 +715,7 @@ function geodir_ninja_forms_contact_template(){
         "custom_mask": "",
         "custom_name_attribute": "",
         "drawerDisabled": false,
-        "desc_text": "<p>This is for your reference only and can\'t be changed.</p>"
+        "desc_text": "' . esc_attr_x( '<p>This is for your reference only and can\'t be changed.</p>', 'GD ninja form', 'geodirectory' ) . '"
     },{
         "objectType": "Field",
         "objectDomain": "fields",
@@ -728,7 +728,7 @@ function geodir_ninja_forms_contact_template(){
         "key": "hr",
         "drawerDisabled": false
     },{
-        "label": "Name",
+        "label": "' . esc_attr_x( 'Name', 'GD ninja form', 'geodirectory' ) . '",
         "key": "name",
         "parent_id": "1",
         "type": "textbox",
@@ -799,7 +799,7 @@ function geodir_ninja_forms_contact_template(){
         "element_styles_advanced": "",
         "cellcid": "c3277"
     }, {
-        "label": "Email",
+        "label": "' . esc_attr_x( 'Email', 'GD ninja form', 'geodirectory' ) . '",
         "key": "email",
         "parent_id": "1",
         "type": "email",
@@ -866,7 +866,7 @@ function geodir_ninja_forms_contact_template(){
         "objectDomain": "fields",
         "editActive": false,
         "order": 6,
-        "label": "Phone",
+        "label": "' . esc_attr_x( 'Phone', 'GD ninja form', 'geodirectory' ) . '",
         "type": "phone",
         "key": "phone",
         "label_pos": "default",
@@ -886,7 +886,7 @@ function geodir_ninja_forms_contact_template(){
         "custom_name_attribute": "phone",
         "drawerDisabled": false
     }, {
-        "label": "Message",
+        "label": "' . esc_attr_x( 'Message', 'GD ninja form', 'geodirectory' ) . '",
         "key": "message",
         "parent_id": "1",
         "type": "textarea",
@@ -958,12 +958,12 @@ function geodir_ninja_forms_contact_template(){
         "element_styles_advanced": "",
         "cellcid": "c3284"
     }, {
-        "label": "Submit",
+        "label": "' . esc_attr_x( 'Submit', 'GD ninja form', 'geodirectory' ) . '",
         "key": "submit",
         "parent_id": "1",
         "type": "submit",
         "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
-        "processing_label": "Processing",
+        "processing_label": "' . esc_attr_x( 'Processing', 'GD ninja form', 'geodirectory' ) . '",
         "order": "8",
         "objectType": "Field",
         "objectDomain": "fields",
@@ -1104,8 +1104,8 @@ function geodir_ninja_forms_contact_template(){
         "payment_gateways": "",
         "payment_total": "",
         "tag": "",
-        "email_subject": "Submission Confirmation ",
-        "email_message": "<p>{all_fields_table}<br><\/p>",
+        "email_subject": "' . esc_attr_x( 'Submission Confirmation', 'GD ninja form', 'geodirectory' ) . '",
+        "email_message": "' . esc_attr_x( '<p>{all_fields_table}<br></p>', 'GD ninja form', 'geodirectory' ) . '",
         "from_name": "",
         "from_address": "",
         "reply_to": "",
@@ -1149,8 +1149,8 @@ function geodir_ninja_forms_contact_template(){
         "payment_total": "",
         "tag": "",
         "to": "{GD:listing_email}",
-        "email_subject": "New contact form: {wp:site_title}",
-        "email_message": "<p>{all_fields_table}<\/p><p>-{field:name} ( {field:email} )<\/p>",
+        "email_subject": "' . esc_attr_x( 'New contact form: {wp:site_title}', 'GD ninja form', 'geodirectory' ) . '",
+        "email_message": "' . esc_attr_x( '<p>{all_fields_table}</p><p>-{field:name} ( {field:email} )</p>', 'GD ninja form', 'geodirectory' ) . '",
         "from_name": "",
         "from_address": "",
         "reply_to": "{field:email}",
@@ -1166,7 +1166,7 @@ function geodir_ninja_forms_contact_template(){
         "active": "1",
         "created_at": "' . esc_attr( date( 'Y-m-d H:i:s' ) ) . '",
         "label": "Success Message",
-        "message": "Thank you {field:name} your contact form has been sent to the user!",
+        "message": "' . esc_attr_x( 'Thank you {field:name} your contact form has been sent to the user!', 'GD ninja form', 'geodirectory' ) . '",
         "objectType": "Action",
         "objectDomain": "actions",
         "editActive": "",
@@ -1205,7 +1205,7 @@ function geodir_ninja_forms_contact_template(){
         "bcc": "",
         "attach_csv": "",
         "redirect_url": "",
-        "success_msg": "<p>Form submitted successfully.<\/p><p>A confirmation email was sent to {field:email}.<\/p>",
+        "success_msg": "' . esc_attr_x( '<p>Form submitted successfully.</p><p>A confirmation email was sent to {field:email}.</p>', 'GD ninja form', 'geodirectory' ) . '",
         "email_message_plain": ""
     }]
 }';
