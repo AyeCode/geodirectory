@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.125 - 2025-07-TBD =
+* GD Map widget Category Restrictions shows type error for comma separated value - FIXED
+
 = GeoDirectory v2.8.124 - 2025-07-17 =
 * Elementor tag value-raw don't validates package exclude field - FIXED
 * Allow to translate GD Contact ninja form fields - CHANGED
