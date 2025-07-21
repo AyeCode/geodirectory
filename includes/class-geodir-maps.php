@@ -301,15 +301,17 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 		if ( $terms !== false && $terms !== true && $terms != '' ) {
 			$terms_array = explode( ",", $terms );
+
 			foreach( $terms_array as $term_id ) {
-				$tmp_id = trim( $term_id );
-				if ( $tmp_id == '' ) {
-					continue;
-				}
-				if ( abs( $tmp_id ) != $tmp_id ) {
-					$exclude[] = absint( $tmp_id );
-				} else {
-					$include[] = absint( $tmp_id );
+				$term_id = (int) trim( $term_id );
+				$absint_term_id = absint( $term_id );
+
+				if ( $absint_term_id > 0 ) {
+					if ( $absint_term_id != $term_id ) {
+						$exclude[] = $absint_term_id;
+					} else {
+						$include[] = $absint_term_id;
+					}
 				}
 			}
 		}
@@ -319,20 +321,17 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		// Tick/untick terms
 		if ( ! empty( $tick_terms ) ) {
 			$tick_terms_arr = explode( ',', $tick_terms );
+
 			foreach( $tick_terms_arr as $term_id ) {
-				$tmp_id = trim( $term_id );
-				if ( $tmp_id == '' ) {
-					continue;
-				}
+				$term_id = (int) trim( $term_id );
+				$absint_term_id = absint( $term_id );
 
-				if ( geodir_term_post_type( absint( $tmp_id ) ) != $post_type ) {
-					continue; // Bail for other CPT
-				}
-
-				if ( abs( $tmp_id ) != $tmp_id ) {
-					$_untick_terms[] = absint( $tmp_id );
-				} else {
-					$_tick_terms[] = absint( $tmp_id );
+				if ( $absint_term_id > 0 && geodir_term_post_type( $absint_term_id ) == $post_type ) {
+					if ( $absint_term_id != $term_id ) {
+						$_untick_terms[] = $absint_term_id;
+					} else {
+						$_tick_terms[] = $absint_term_id;
+					}
 				}
 			}
 		}
