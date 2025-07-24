@@ -450,7 +450,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 
 		// Spinner
 		if ( $design_style ) {
-			$spinner = '<div class="spinner-border" role="status"><span class="sr-only">' . esc_html__( "Loading...", "geodirectory" ) . '</span></div>';
+			$spinner = '<div class="spinner-border" role="status"><span class="sr-only visually-hidden">' . esc_html__( "Loading...", "geodirectory" ) . '</span></div>';
 		} else {
 			$spinner = '<i class="fas fa-sync fa-spin fa-2x"></i>';
 		}

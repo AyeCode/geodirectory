@@ -38,7 +38,7 @@ if (post_password_required() || $preview)
     do_action('geodir_before_review_list'); ?>
 
     <?php if (have_comments()) :
-		$sr_class = $aui_bs5 ? 'sr-only' : '';
+		$sr_class = $aui_bs5 ? 'visually-hidden' : '';
 			?>
         <h3 class="comments-title h3 <?php echo esc_attr($sr_class );?>">
             <?php

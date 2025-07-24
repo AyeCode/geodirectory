@@ -1653,7 +1653,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				if ( $design_style ) {
 					echo '<div class="geodir-ajax-listings-loader loading_div overlay overlay-black position-absolute row m-0 z-index-1 w-100 h-100 rounded overflow-hidden" style="display: none;z-index: 3;top:0;">
 								<div class="spinner-border mx-auto align-self-center text-white" role="status">
-									<span class="sr-only">' . __( 'Loading...', 'geodirectory' ) . '</span>
+									<span class="sr-only visually-hidden">' . __( 'Loading...', 'geodirectory' ) . '</span>
 								</div>
 							</div>';
 				} else {
