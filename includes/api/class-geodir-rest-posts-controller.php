@@ -2127,7 +2127,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             $data_type              = $field['data_type'];
             $field_type             = $field['field_type'];
             $title                  = $field['frontend_title'] ? stripslashes( __( $field['frontend_title'], 'geodirectory' ) ) : stripslashes( __( $field['admin_title'], 'geodirectory' ) );
-            $description            = stripslashes( __( $field['desc'], 'geodirectory' ) );
+            $description            = ! empty( $field['desc'] ) ? stripslashes( __( $field['desc'], 'geodirectory' ) ) : "";
             $required               = $field['is_required'];
             $default                = $field['default'];
             $extra_fields           = !empty( $field['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $field['extra_fields'] ) ) : NULL;
