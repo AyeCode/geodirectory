@@ -3,7 +3,7 @@
         'name' => 'ayecode/geodirectory',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'f9a2a3965f56142d0c9f957ca2a05a243ed01e69',
+        'reference' => '96b59fd90c99590c3b5187ae76048f12e36ecc94',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'ayecode/geodirectory' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'f9a2a3965f56142d0c9f957ca2a05a243ed01e69',
+            'reference' => '96b59fd90c99590c3b5187ae76048f12e36ecc94',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
