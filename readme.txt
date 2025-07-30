@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.126 - 2025-07-TBD =
+* GD > Single Taxonomies remove tooltip for prefix icons as it not required - CHANGED
+
 = GeoDirectory v2.8.125 - 2025-07-24 =
 * GD Map widget Category Restrictions shows type error for comma separated value - FIXED
 * .sr-only with BS5 forces to display hidden label - FIXED
