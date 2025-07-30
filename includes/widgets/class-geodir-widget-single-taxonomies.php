@@ -394,7 +394,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 			if ( $args['prefix'] === '0' ) {
 				$output = wp_sprintf( __( '%s%l', 'geodirectory' ), '', $links, (object) $terms );
 			} elseif ( $args['prefix'] == 'icons' ) {
-				$output = wp_sprintf( __( '%s%s Categories%s %l', 'geodirectory' ), '<i class="fas fa-folder" data-toggle="tooltip" title="', $post_type_name, '"></i>', $links, (object) $terms );
+				$output = wp_sprintf( __( '%s%s Categories%s %l', 'geodirectory' ), '<i class="fas fa-folder" title="', $post_type_name, '"></i>', $links, (object) $terms );
 			} else {
 				if ( count( $links_array ) > 1 ) {
 					$output = wp_sprintf( __( '%s Categories: %l', 'geodirectory' ), $post_type_name, $links, (object) $terms );
@@ -406,7 +406,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 			if ( $args['prefix'] === '0' ) {
 				$output = wp_sprintf( __( '%s%l', 'geodirectory' ), '', $links, (object) $terms );
 			} elseif ( $args['prefix'] == 'icons' ) {
-				$output = wp_sprintf( __( '%s%s Tags%s %l', 'geodirectory' ), '<i class="fas fa-tags" data-toggle="tooltip" title="', $post_type_name, '"></i>', $links, (object) $terms );
+				$output = wp_sprintf( __( '%s%s Tags%s %l', 'geodirectory' ), '<i class="fas fa-tags" title="', $post_type_name, '"></i>', $links, (object) $terms );
 			} else {
 				$output = wp_sprintf( __( '%s Tags: %l', 'geodirectory' ), $post_type_name, $links, (object) $terms );
 			}
