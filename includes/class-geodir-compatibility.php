@@ -3338,7 +3338,7 @@ class GeoDir_Compatibility {
 		}
 
 		// Don't overwrite Yoast SEO or Rank Math SEO.
-		if ( GeoDir_SEO::yoast_enabled() || GeoDir_SEO::rank_math_enabled() ) {
+		if ( GeoDir_SEO::yoast_enabled() || GeoDir_SEO::rank_math_enabled() || GeoDir_SEO::aioseo_enabled() ) {
 			return $title;
 		}
 

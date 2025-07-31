@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.126 - 2025-07-TBD =
 * GD > Single Taxonomies remove tooltip for prefix icons as it not required - CHANGED
+* BlockStrap Post Title leads to wrong meta title with AISEO - FIXED
 
 = GeoDirectory v2.8.125 - 2025-07-24 =
 * GD Map widget Category Restrictions shows type error for comma separated value - FIXED
