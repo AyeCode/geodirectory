@@ -455,6 +455,12 @@ class GeoDir_SEO {
      * @since 2.0.0
 	 */
 	public static function set_meta() {
+		global $post, $geodir_is_widget_listing;
+
+		if ( ! ( empty( $geodir_is_widget_listing ) && ! empty( $post ) && ! empty( $post->post_type ) && ( $post->post_type == 'page' || geodir_is_gd_post_type( $post->post_type ) ) ) ) {
+			return;
+		}
+
 		$gd_settings = geodir_get_settings();
 
 		if ( geodir_is_page( 'pt' ) ) {
