@@ -397,10 +397,17 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 					$icon_width 	= $geodir_rest_cache_marker[ $icon_url ]['w'];
 					$icon_height 	= $geodir_rest_cache_marker[ $icon_url ]['h'];
 				} else {
-					$icon_size = GeoDir_Maps::get_marker_size( trailingslashit( $geodir_icon_basedir ) . trim( $icon_url, '/\\' ) );
-					if ( ! empty( $icon_size ) ) {
-						$icon_width 	= $icon_size['w'];
-						$icon_height 	= $icon_size['h'];
+					if ( strpos( $icon_url, '/geodirectory/assets/images/pin.png' ) !== false ) {
+						// Default marker icon.
+						$icon_width 	= 50;
+						$icon_height 	= 50;
+					} else {
+						$icon_size = GeoDir_Maps::get_marker_size( trailingslashit( $geodir_icon_basedir ) . trim( $icon_url, '/\\' ) );
+
+						if ( ! empty( $icon_size ) ) {
+							$icon_width 	= $icon_size['w'];
+							$icon_height 	= $icon_size['h'];
+						}
 					}
 
 					$geodir_rest_cache_marker[ $icon_url ]['w'] = $icon_width;
