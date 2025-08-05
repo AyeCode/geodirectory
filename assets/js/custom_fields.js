@@ -10,6 +10,8 @@ jQuery(document).ready(function($) {
         if (!jQuery(this).attr('id')) {
             return;
         }
+        var $el = jQuery(this);
+        $el.addClass("disabled");
         // check if its a single use item and if its already in use.
         var type = jQuery(this).data("field-type");
         var type_key = jQuery(this).data("field-type-key");
@@ -21,14 +23,25 @@ jQuery(document).ready(function($) {
         var single_use = jQuery(this).data("field-single-use");
         if (single_use) {
             var is_used = false;
-            jQuery('input[name^="htmlvar_name"]').each(function(i) {
-                if (jQuery(this).val() == single_use) {
-                    is_used = true;
-                    alert(geodir_params.txt_single_use);
-                    jQuery('#setName_new-1').trigger("click");
-                }
-            });
+            if (jQuery('#geodir-selected-fields [data-htmlvar_name]').length) {
+                jQuery('[data-htmlvar_name]').each(function(i) {
+                    if (jQuery(this).data('htmlvar_name') == single_use) {
+                        is_used = true;
+                        alert(geodir_params.txt_single_use);
+                        jQuery('#setName_new-1').trigger("click");
+                    }
+                });
+            } else if (jQuery('input[name^="htmlvar_name"]').length) {
+                jQuery('input[name^="htmlvar_name"]').each(function(i) {
+                    if (jQuery(this).val() == single_use) {
+                        is_used = true;
+                        alert(geodir_params.txt_single_use);
+                        jQuery('#setName_new-1').trigger("click");
+                    }
+                });
+            }
             if (is_used) {
+                $el.removeClass("disabled");
                 return false;
             }
         }
@@ -40,6 +53,7 @@ jQuery(document).ready(function($) {
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#setName_" + id).offset().top
                 }, 1000);
+                $el.removeClass("disabled");
                 return;
             }
             // close all other settings first
@@ -59,6 +73,7 @@ jQuery(document).ready(function($) {
                 custom_type: custom_type,
                 security: gd_nonce
             }, function(data) {
+                $el.removeClass("disabled");
                 if (jQuery('.field_row_main ul.dd-list li').length > 0) {
                     jQuery('.field_row_main ul.dd-list').append(data);
                 } else {

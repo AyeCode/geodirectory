@@ -78,7 +78,7 @@ function geodir_user_post_listing_count( $user_id = null, $unpublished = false )
 
 		$statuses = array_unique( $statuses );
 
-		$total_posts = $wpdb->get_var( "SELECT count( ID ) FROM " . $wpdb->posts . " WHERE post_author = " . $user_id . " AND post_type = '" . $post_type . "' AND {$wpdb->posts}.post_status IN( '" . implode( "', '", $statuses ) . "' )");
+		$total_posts = $wpdb->get_var( "SELECT count( ID ) FROM " . $wpdb->posts . " WHERE post_author = " . $user_id . " AND post_type = '" . $post_type . "' AND post_parent = 0 AND {$wpdb->posts}.post_status IN( '" . implode( "', '", $statuses ) . "' )");
 
 		if ( $total_posts > 0 ) {
 			$user_listing[ $post_type ] = $total_posts;
