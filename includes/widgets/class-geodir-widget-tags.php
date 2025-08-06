@@ -847,6 +847,10 @@ class GeoDir_Widget_Tags extends WP_Super_Duper {
 					$terms = geodir_filter_empty_terms( $terms );
 				}
 
+				if ( $sort_by == 'count' ) {
+					$terms = geodir_sort_terms( $terms, 'count' );
+				}
+
 				$close_wrap = false;
 
 				if ( ! empty( $terms ) ) {
