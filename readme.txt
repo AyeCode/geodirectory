@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.127 - 2025-08-TBD =
 * Default marker icon sets incorrect marker size for OSM - FIXED
+* GD > Tags default sorting by count is not working for events - FIXED
 
 = GeoDirectory v2.8.126 - 2025-07-31 =
 * GD > Single Taxonomies remove tooltip for prefix icons as it not required - CHANGED
