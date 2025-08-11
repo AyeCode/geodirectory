@@ -1,4 +1,5 @@
 <?php
+//return;
 /**
  * Display Add Listing Map
  *
@@ -955,8 +956,8 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 		}
 	});<?php } ?>
 });
-<?php } 
-	if ( ! empty( $gd_move_inline_script ) ) { 
+<?php }
+	if ( ! empty( $gd_move_inline_script ) ) {
 		$inline_script = ob_get_clean(); $inline_script = apply_filters( 'geodir_add_listing_map_inline_script', trim( $inline_script ), $geodir_map_name, $geodir_manual_map ); wp_add_inline_script( 'geodir-add-listing', $inline_script );
 	} else { ?>
     /* ]]> */

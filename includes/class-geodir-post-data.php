@@ -938,7 +938,7 @@ class GeoDir_Post_Data {
 		}
 
 		// wrap class
-		$wrap_class = geodir_build_aui_class($params);
+		$wrap_class = sd_build_aui_class($params);
 
 		do_action( 'geodir_before_add_listing_form', $listing_type, $post, $package );
 		?>

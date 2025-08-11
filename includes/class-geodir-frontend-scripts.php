@@ -604,11 +604,11 @@ class GeoDir_Frontend_Scripts {
 		}
 
 		$register_scripts = array(
-			'select2' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js',
-				'deps'    => array( 'jquery' ),
-				'version' => '4.0.4',
-			),
+//			'select2' => array(
+//				'src'     => geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js',
+//				'deps'    => array( 'jquery' ),
+//				'version' => '4.0.4',
+//			),
 			'geodir-select2' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/geodir-select2' . $suffix . '.js',
 				'deps'    => array( 'jquery', 'select2' ),
@@ -702,12 +702,12 @@ class GeoDir_Frontend_Scripts {
 	 */
 	private static function register_styles() {
 		$register_styles = array(
-			'select2' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/css/select2/select2.css',
-				'deps'    => array(),
-				'version' => GEODIRECTORY_VERSION,
-				'has_rtl' => false,
-			),
+//			'select2' => array(
+//				'src'     =>  geodir_plugin_url() . '/assets/css/select2/select2.css',
+//				'deps'    => array(),
+//				'version' => GEODIRECTORY_VERSION,
+//				'has_rtl' => false,
+//			),
 			'geodir-core' => array(
 				'src'     => geodir_plugin_url() . '/assets/css/gd_core_frontend.css',
 				'deps'    => array(),
@@ -767,10 +767,10 @@ class GeoDir_Frontend_Scripts {
 		if ( ! $design_style ) {
 			// global enqueues
 			// css
-			self::enqueue_style( 'select2' );
+//			self::enqueue_style( 'select2' );
 			self::enqueue_style( 'geodir-core' );
 			// js
-			self::enqueue_script( 'select2' );
+//			self::enqueue_script( 'select2' );
 			self::enqueue_script( 'geodir-select2' );
 			self::enqueue_script( 'geodir' );
 			self::enqueue_script( 'geodir_lity' );

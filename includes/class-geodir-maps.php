@@ -286,7 +286,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @return string|void
 	 */
 	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse = false, $terms = '', $hierarchical = false, $tick_terms = '' ) {
-		global $cat_count, $geodir_cat_icons, $aui_bs5;
+		global $cat_count, $geodir_cat_icons;
 
 		$taxonomy = $post_type . 'category';
 
@@ -461,11 +461,11 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 						$term_html = '<li class="'.$li_class.'">' .aui()->input(
 							array(
 								'id'                => "{$map_canvas}_tick_cat_{$cat_term->term_id}",
-								'name'              => "{$map_canvas}_cat[]",
-								'type'              => "checkbox",
-								'value'             => absint( $cat_term->term_id),
-								'label'             => $term_img . esc_attr(geodir_utf8_ucfirst($cat_term->name)),
-								'class'             => $aui_bs5 ? 'group_selector ' . $main_list_class : 'group_selector h-100 ' . $main_list_class,
+								'name'  => "{$map_canvas}_cat[]",
+								'type'  => "checkbox",
+								'value' => absint( $cat_term->term_id ),
+								'label' => $term_img . esc_attr( geodir_utf8_ucfirst( $cat_term->name ) ),
+								'class' => 'group_selector ' . $main_list_class,
 								'label_class'       => 'text-light mb-0',
 								'checked'           => $checked,
 								'no_wrap'            => true,
@@ -591,7 +591,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			'api' => self::active_map(),
 			'lazyLoad' => self::lazy_load_map(),
 			'language' => $language,
-			'lazyLoadButton' => '<div class="btn btn-light text-center mx-auto align-self-center shadow-lg c-pointer' . ( $aui_bs5 ? ' w-auto z-index-1' : '' ) . '"><i class="far fa-map"></i> ' . __( 'Load Map', 'geodirectory' ) . '</div>',
+			'lazyLoadButton' => '<div class="btn btn-light text-center mx-auto align-self-center shadow-lg c-pointer w-auto z-index-1"><i class="far fa-map"></i> ' . __( 'Load Map', 'geodirectory' ) . '</div>',
 			'lazyLoadPlaceholder' => geodir_plugin_url() . '/assets/images/placeholder.svg',
 			'apis' => array(
 				'google' => apply_filters( 'geodir_map_api_google_data',

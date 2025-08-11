@@ -57,7 +57,7 @@ defined( 'ABSPATH' ) || exit;
 						'type'              => "search",
 						'placeholder'       => esc_attr__( 'Search by name', 'geodirectory' ),
 						'title'       => esc_attr__( 'hit enter to search', 'geodirectory' ),
-						'class'             => 'form-control-sm',
+						'class'             => 'form-control-sm bg-light-subtle',
 						'no_wrap'           => true,
 						'extra_attributes'  => array(
 							'autocomplete' => 'off',

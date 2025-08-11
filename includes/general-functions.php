@@ -2621,19 +2621,15 @@ function geodir_cpt_template_post_type( $page_id, $page = '' ) {
 /**
  * Check if we are in an empty archive.
  */
-function geodir_is_empty_archive(){
-	if(geodir_is_page('archive') || geodir_is_page('post_type')) {
-		global $wp_query;
-
-		/*if(
-			$wp_query->post_count == 1
-			&& ( empty( $wp_query->posts ) || (isset($wp_query->post->post_type) && $wp_query->post->post_type=='page'))
-		){*/ // Does not validate for one result.
-		if ( empty( $wp_query->found_posts ) ) {
-			return true;
-		}
-	}
-
+/**
+ * Merge missing listing categories.
+ *
+ * @since      1.0.0
+ * @deprecated 2.0.0 Use GeoDir_Admin_Tools::merge_missing_terms() instead.
+ *
+ * @param array $post_types Optional. Array of post types. Default array().
+ */
+function geodir_merge_missing_terms( $post_types = array() ) {
 	return false;
 }
 
@@ -3047,78 +3043,7 @@ function geodir_cache_flush_group( $group ) {
 	}
 }
 
-/**
- * Merge missing categories in details table.
- *
- * @since 2.3.57
- *
- * @return int No. of updated items.
- */
-function geodir_merge_missing_terms( $post_types = array() ) {
-	global $wpdb;
 
-	$post_types = ! empty( $post_types ) && is_array( $post_types ) ? $post_types : geodir_get_posttypes();
-	$updated = 0;
-
-	foreach ( $post_types as $post_type ) {
-		$table = geodir_db_cpt_table( $post_type );
-
-		$results = $wpdb->get_results( $wpdb->prepare( "SELECT p.ID, pd.post_category, pd.default_category, pd.post_tags FROM {$wpdb->posts} AS p INNER JOIN {$table} pd ON pd.post_id = p.ID WHERE p.post_type = %s AND p.post_status NOT IN( 'draft', 'auto-draft', 'trash', 'inherit' ) AND ( pd.post_category IS NULL OR pd.post_category = '' ) ORDER BY p.ID ASC", $post_type ) );
-
-		if ( ! empty( $results ) ) {
-			foreach ( $results as $k => $row ) {
-				$_results = $wpdb->get_results( $wpdb->prepare( "SELECT t.term_id, t.name, tt.taxonomy FROM {$wpdb->term_relationships} AS tr LEFT JOIN {$wpdb->term_taxonomy} AS tt ON tt.term_taxonomy_id = tr.term_taxonomy_id LEFT JOIN {$wpdb->terms} AS t ON t.term_id = tt.term_id WHERE ( tt.taxonomy = %s OR tt.taxonomy = %s ) AND tr.object_id = %d ORDER BY t.name ASC", $post_type . 'category', $post_type . '_tags', $row->ID ) );
-
-				if ( ! empty( $_results ) ) {
-					$cats = array();
-					$tags = array();
-
-					foreach ( $_results as $_k => $_row ) {
-						if ( $_row->taxonomy == $post_type . 'category' ) {
-							$cats[] = $_row->term_id;
-						} else if ( $_row->taxonomy == $post_type . '_tags' ) {
-							$tags[] = $_row->name;
-						}
-					}
-
-					$data = array();
-					$format = array();
-
-					if ( ! empty( $cats ) ) {
-						$data['post_category'] = ',' . implode( ",", $cats ) . ',';
-						$format[] = '%s';
-
-						if ( empty( $row->default_category ) ) {
-							$data['default_category'] = $cats[0];
-							$format[] = '%d';
-						}
-					}
-
-					if ( ! empty( $tags ) ) {
-						$post_tags = implode( ",", $tags );
-
-						if ( $post_tags != $post_tags ) {
-							$data['post_tags'] = $row->post_tags;
-							$format[] = '%s';
-						}
-					}
-
-					if ( ! empty( $data ) ) {
-						$_updated = $wpdb->update( $table, $data, array( 'post_id' => $row->ID ), $format, array( '%d' ) );
-
-						if ( $_updated ) {
-							$updated++;
-
-							clean_post_cache( $row->ID );
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return $updated;
-}
 
 /**
  * Check to load map scripts on call.

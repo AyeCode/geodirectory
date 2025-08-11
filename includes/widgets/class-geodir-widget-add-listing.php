@@ -21,6 +21,9 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             'block-icon'    => 'fas fa-plus',
             'block-category'=> 'geodirectory',
             'block-keywords'=> "['add','listing','geodir']",
+            'block-supports'    => array(
+	            'customClassName' => false,
+            ),
             'block-outputx'   => array( // the block visual output elements as an array
                 array(
                     'element' => 'div',
@@ -41,6 +44,66 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                 'classname'   => 'geodir-add-listing '.geodir_bsui_class(),
                 'description' => esc_html__('Shows the GeoDirectory add listing form.','geodirectory'), // widget description
                 'geodirectory' => true,
+            ),
+            'block_group_tabs'  => array(
+	            'content'  => array(
+		            'groups' => array(
+			            array(
+				            'id'    => 'general',
+				            'title' => __( 'General', 'geodirectory' ),
+			            ),
+			            array(
+				            'id'    => 'login',
+				            'title' => __( 'Login', 'geodirectory' ),
+			            ),
+		            ),
+		            'tab'    => array(
+			            'title'     => __( 'Content', 'geodirectory' ),
+			            'key'       => 'bs_tab_content',
+			            'tabs_open' => true,
+			            'open'      => true,
+			            'class'     => 'text-center flex-fill d-flex justify-content-center',
+		            ),
+	            ),
+	            'styles'   => array(
+		            'groups' => array(
+			            array(
+				            'id'    => 'inputs',
+				            'title' => __( 'Inputs', 'geodirectory' ) ,
+			            ),
+		            ),
+		            'tab'    => array(
+			            'title'     => __( 'Styles', 'geodirectory' ),
+			            'key'       => 'bs_tab_styles',
+			            'tabs_open' => true,
+			            'open'      => true,
+			            'class'     => 'text-center flex-fill d-flex justify-content-center',
+		            ),
+	            ),
+	            'advanced' => array(
+		            'groups' => array(
+			            array(
+				            'id'    => 'wrapper-styles',
+				            'title' => __( 'Wrapper Styles', 'geodirectory' ),
+			            ),
+			            array(
+				            'id'    => 'visibility-conditions',
+				            'title' => __( 'Visibility Conditions', 'geodirectory' ),
+			            ),
+			            array(
+				            'id'    => 'advanced',
+				            'title' => __( 'Advanced', 'geodirectory' ),
+			            ),
+		            ),
+
+		            'tab'    => array(
+			            'title'     => __( 'Advanced', 'geodirectory' ),
+			            'key'       => 'bs_tab_advanced',
+			            'tabs_open' => true,
+			            'open'      => true,
+			            'class'     => 'text-center flex-fill d-flex justify-content-center',
+		            ),
+	            ),
             ),
         );
 
@@ -107,49 +170,94 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             'group'     => __("General","geodirectory")
         );
 
-        if($design_style ){
-            $args['label_type']  = array(
-                'title' => __('Label type', 'geodirectory'),
-                'desc' => __('Select the label type for inputs.', 'geodirectory'),
-                'type' => 'select',
-                'options'   =>  array(
-                    'horizontal'    => __("Horizontal","geodirectory"),
-                    'top'    => __("Top","geodirectory"),
-                    'floating'    => __("Floating","geodirectory"),
-                    'hidden'    => __("Hidden","geodirectory"),
-                ),
-                'default'  => '',
-                'desc_tip' => true,
-                'advanced' => false,
-                'group'     => __("General","geodirectory")
-            );
+        $args['label_type']  = array(
+            'title' => __('Label type', 'geodirectory'),
+            'desc' => __('Select the label type for inputs.', 'geodirectory'),
+            'type' => 'select',
+            'options'   =>  array(
+                'horizontal'    => __("Horizontal","geodirectory"),
+                'top'    => __("Top","geodirectory"),
+                'floating'    => __("Floating","geodirectory"),
+                'hidden'    => __("Hidden","geodirectory"),
+            ),
+            'default'  => '',
+            'desc_tip' => true,
+            'advanced' => false,
+            'group'     => __("Inputs","geodirectory")
+        );
 
-            // background
-            $arguments['bg']  = geodir_get_sd_background_input('mt');
-
-            // margins
-            $arguments['mt']  = geodir_get_sd_margin_input('mt');
-            $arguments['mr']  = geodir_get_sd_margin_input('mr');
-            $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
-            $arguments['ml']  = geodir_get_sd_margin_input('ml');
-
-            // padding
-            $arguments['pt']  = geodir_get_sd_padding_input('pt');
-            $arguments['pr']  = geodir_get_sd_padding_input('pr');
-            $arguments['pb']  = geodir_get_sd_padding_input('pb');
-            $arguments['pl']  = geodir_get_sd_padding_input('pl');
-
-            // border
-            $arguments['border']  = geodir_get_sd_border_input('border');
-            $arguments['rounded']  = geodir_get_sd_border_input('rounded');
-            $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
-
-            // shadow
-            $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+        // background
+//        $arguments['bg']  = geodir_get_sd_background_input('mt');
+	    $arguments = $args + sd_get_background_inputs( 'bg', array( 'group' => 'wrapper-styles' ), array( 'group' => 'wrapper-styles' ), array( 'group' => 'wrapper-styles' ), false );
 
 
-            $args = $args + $arguments;
-        }
+	    // margins mobile
+	    $arguments['mt'] = sd_get_margin_input( 'mt', array( 'device_type' => 'Mobile' ) );
+	    $arguments['mr'] = sd_get_margin_input( 'mr', array( 'device_type' => 'Mobile' ) );
+	    $arguments['mb'] = sd_get_margin_input( 'mb', array( 'device_type' => 'Mobile' ) );
+	    $arguments['ml'] = sd_get_margin_input( 'ml', array( 'device_type' => 'Mobile' ) );
+
+	    // margins tablet
+	    $arguments['mt_md'] = sd_get_margin_input( 'mt', array( 'device_type' => 'Tablet' ) );
+	    $arguments['mr_md'] = sd_get_margin_input( 'mr', array( 'device_type' => 'Tablet' ) );
+	    $arguments['mb_md'] = sd_get_margin_input( 'mb', array( 'device_type' => 'Tablet' ) );
+	    $arguments['ml_md'] = sd_get_margin_input( 'ml', array( 'device_type' => 'Tablet' ) );
+
+	    // margins desktop
+	    $arguments['mt_lg'] = sd_get_margin_input( 'mt', array( 'device_type' => 'Desktop' ) );
+	    $arguments['mr_lg'] = sd_get_margin_input( 'mr', array( 'device_type' => 'Desktop' ) );
+	    $arguments['mb_lg'] = sd_get_margin_input(
+		    'mb',
+		    array(
+			    'device_type' => 'Desktop',
+			    'default'     => 3,
+		    )
+	    );
+	    $arguments['ml_lg'] = sd_get_margin_input( 'ml', array( 'device_type' => 'Desktop' ) );
+
+	    // padding
+	    $arguments['pt'] = sd_get_padding_input( 'pt', array( 'device_type' => 'Mobile' ) );
+	    $arguments['pr'] = sd_get_padding_input( 'pr', array( 'device_type' => 'Mobile' ) );
+	    $arguments['pb'] = sd_get_padding_input( 'pb', array( 'device_type' => 'Mobile' ) );
+	    $arguments['pl'] = sd_get_padding_input( 'pl', array( 'device_type' => 'Mobile' ) );
+
+	    // padding tablet
+	    $arguments['pt_md'] = sd_get_padding_input( 'pt', array( 'device_type' => 'Tablet' ) );
+	    $arguments['pr_md'] = sd_get_padding_input( 'pr', array( 'device_type' => 'Tablet' ) );
+	    $arguments['pb_md'] = sd_get_padding_input( 'pb', array( 'device_type' => 'Tablet' ) );
+	    $arguments['pl_md'] = sd_get_padding_input( 'pl', array( 'device_type' => 'Tablet' ) );
+
+	    // padding desktop
+	    $arguments['pt_lg'] = sd_get_padding_input( 'pt', array( 'device_type' => 'Desktop' ) );
+	    $arguments['pr_lg'] = sd_get_padding_input( 'pr', array( 'device_type' => 'Desktop' ) );
+	    $arguments['pb_lg'] = sd_get_padding_input( 'pb', array( 'device_type' => 'Desktop' ) );
+	    $arguments['pl_lg'] = sd_get_padding_input( 'pl', array( 'device_type' => 'Desktop' ) );
+
+	    // border
+	    $arguments['border']         = sd_get_border_input( 'border' );
+	    $arguments['border_type']    = sd_get_border_input( 'type' );
+	    $arguments['border_width']   = sd_get_border_input( 'width' ); // BS5 only
+	    $arguments['border_opacity'] = sd_get_border_input( 'opacity' ); // BS5 only
+	    $arguments['rounded']        = sd_get_border_input( 'rounded' );
+	    $arguments['rounded_size']   = sd_get_border_input( 'rounded_size' );
+
+	    // shadow
+	    $arguments['shadow'] = sd_get_shadow_input( 'shadow' );
+
+
+
+
+
+	    // block visibility conditions
+	    $arguments['visibility_conditions'] = sd_get_visibility_conditions_input();
+
+	    $arguments['css_class'] = sd_get_class_input();
+
+		$arguments['metadata_name'] = sd_get_custom_name_input();
+
+
+
+	    $args = $args + $arguments;
 
 
         return $args;
@@ -297,10 +405,12 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         global $geodir_label_type;
 
         // wrap class
-        $wrap_class = geodir_build_aui_class($params);
+        $wrap_class = sd_build_aui_class($params);
 
+	    $styles = sd_build_aui_styles( $params );
+	    $style  = $styles ? ' style="' . $styles . '"' : '';
 
-        $output = '<div class="'.$wrap_class.'">';
+        $output = '<div class="'.$wrap_class.'"'.$style.'>';
 
         $output .= aui()->alert(array(
                 'type'=> 'info',

@@ -1,6 +1,7 @@
 <?php
 /**
  * Admin View: Page - Status Report.
+ * @todo, this can be removed
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

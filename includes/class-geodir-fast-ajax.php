@@ -158,6 +158,8 @@ class GeoDir_Fast_AJAX {
 		}
 
 		$allowed_plugins = defined('GEODIR_FAST_AJAX_ALLOWED_PLUGINS') ? GEODIR_FAST_AJAX_ALLOWED_PLUGINS : array();
+		// AUI if fun direct
+		$allowed_plugins[] = 'wp-ayecode-ui/example-plugin.php';
 		foreach ( $plugins as $plugin ) {
 			// Skip not allowed plugins
 			if ( in_array( $plugin, $not_allowed ) ) {

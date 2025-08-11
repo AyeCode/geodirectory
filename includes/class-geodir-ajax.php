@@ -225,7 +225,7 @@ class GeoDir_AJAX {
 		} else {
 			echo "<style>.lity-show #" . esc_attr( $prefix ) . "set_address_button,.lity-show .TopLeft,.lity-show .TopRight,.lity-show .BottomRight,.lity-show .BottomLeft{display:none}.lity-show .geodir_map_container{margin-top:0 !important}</style>";
 
-			include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
+			include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map.php' );
 		}
 		?>
 		<input type="hidden" id="<?php echo esc_attr( $prefix ) . 'latitude'; ?>">

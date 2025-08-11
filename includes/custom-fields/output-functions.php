@@ -2725,7 +2725,7 @@ function geodir_cf_business_hours( $html, $location, $cf, $p = '', $output = '' 
 				$bh_expanded = $location == 'owntab' || strpos( $cf['css_class'], 'gd-bh-expanded' ) !== false ? true : false;
 				$design_style = geodir_design_style();
 				$dropdown_class =  $design_style ? ' dropdown ' : '';
-				$dropdown_toggle_class =  $design_style ? ' dropdown-toggle ' : '';
+				$dropdown_toggle_class =  $design_style ? ' dropdown-toggle nav-link ' : '';
 				$dropdown_item_class =  $design_style ? ' dropdown-item py-1 ' : '';
 				$dropdown_item_inline_class =  $design_style ? ' d-inline-block ' : '';
 				if ( $aui_bs5 ) {
@@ -2768,7 +2768,7 @@ function geodir_cf_business_hours( $html, $location, $cf, $p = '', $output = '' 
 				}
 
 				$html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . $dropdown_class. '" style="">';
-				$html .= $design_style ? '<a class=" text-reset ' . $dropdown_toggle_class . ' d-block text-truncate" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' : '';
+				$html .= $design_style ? '<a class=" text-reset ' . $dropdown_toggle_class . ' text-truncate" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' : '';
 				$html .= '<span class="geodir-i-business_hours geodir-i-biz-hours '.$preview_class.'" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
 				$html .= '<span class="gd-bh-expand-range '.$preview_class.'" data-offset="' . $utc_offset  . '" data-offsetsec="' . $offset . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range gv-secondary">' . $show_value . '</span>';
 				$html .= $design_style ? '' : '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span>';

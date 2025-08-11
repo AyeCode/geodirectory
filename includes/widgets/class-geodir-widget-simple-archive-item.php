@@ -56,9 +56,6 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 	 */
 	public function set_arguments() {
 
-		$design_style = geodir_design_style();
-
-		//      $post_types = geodir_get_posttypes( 'options-plural' );
 
 		$show_options = array(
 			''            => __( 'icon + label + value', 'geodirectory' ),

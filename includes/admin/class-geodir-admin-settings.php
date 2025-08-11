@@ -39,6 +39,29 @@ class GeoDir_Admin_Settings {
 	 */
 	private static $messages = array();
 
+	public static function get_settings_new() {
+		$settings_files = [
+			'general'       => 'settings/general.php',
+			'emails'        => 'settings/emails.php',
+			'design'        => 'settings/design.php',
+			'seo'           => 'settings/seo.php', // Add it here
+			'import-export' => 'settings/import-export.php',
+			'tools'         => 'settings/tools.php',
+			'api'           => 'settings/api.php',
+		];
+
+		$sections = [];
+
+		foreach ($settings_files as $file) {
+			//if (file_exists($file)) {
+				$sections[] = include($file);
+			//}
+		}
+
+		// This is the final configuration array for the framework
+		return ['sections' => $sections];
+	}
+
 	/**
 	 * Include the settings page classes.
 	 */
@@ -1359,7 +1382,7 @@ class GeoDir_Admin_Settings {
                      *
                      * @since 1.0.0
                      */
-                    include( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
+					include( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
 					?>
 					</div>
 

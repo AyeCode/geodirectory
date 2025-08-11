@@ -346,6 +346,30 @@ if ( ! class_exists( 'GeoDirectory' ) ) :
 
 			$this->query = new GeoDir_Query();
 			$this->api   = new GeoDir_API();
+
+
+
+			################### GDv3 from here
+			require_once( GEODIRECTORY_PLUGIN_DIR . 'inc/map-functions.php' );
+
+
+
+			// Settings @todo once in venor folder we cna use th eversion below.
+			if ( is_admin() ) {
+				// In your main plugin file or loader:
+				add_action( 'init', function () {
+					new \GeoDirectory\Admin\Settings();
+					new \GeoDirectory\Admin\Tools();
+					\GeoDirectory\Ajax\AjaxHandler::instance();
+				},5 );
+			}
+
+
+//			if ( is_admin() ) {
+//				// In your main plugin file or loader:
+//				\GeoDirectory\Admin\Settings::instance();
+//			}
+
 		}
 
 		/**

@@ -36,7 +36,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'block-supports'   => array(
 				'customClassName' => false,
 			),
-			'block-api-version' => 1, // this is needed to make the block selectable in the editor if not using innerBlockProps https://wordpress.stackexchange.com/questions/384004/cant-select-my-block-by-clicking-on-it
+			//'block-api-version' => 1, // this is needed to make the block selectable in the editor if not using innerBlockProps https://wordpress.stackexchange.com/questions/384004/cant-select-my-block-by-clicking-on-it // seems fixed with v3
 			'class_name'       => __CLASS__,
 			'base_id'          => 'gd_map',                                            // this us used as the widget id and the shortcode id.
 			'name'             => __( 'GD > Map', 'geodirectory' ),                    // the name of the widget.
