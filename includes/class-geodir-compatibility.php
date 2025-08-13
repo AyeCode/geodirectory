@@ -1808,7 +1808,15 @@ class GeoDir_Compatibility {
 	 * @return array Field settings.
 	 */
 	public static function ninja_forms_localize_field_settings( $settings, $form ) {
-		if ( ! empty( $form ) && self::is_geodir_ninja_form( $form->get_settings() ) ) {
+		if ( ! empty( $form ) && is_array( $form ) && ! empty( $form['settings'] ) ) {
+			$form_settings = $form['settings'];
+		} else if ( ! empty( $form ) && is_object( $form ) ) {
+			$form_settings = $form->get_settings();
+		} else {
+			return $settings;
+		}
+
+		if ( ! empty( $form_settings ) && self::is_geodir_ninja_form( $form_settings ) ) {
 			foreach ( array( 'label', 'processing_label', 'desc_text', 'default', 'value' ) as $type ) {
 				if ( ! empty( $settings[ $type ] ) && is_scalar( $settings[ $type ] ) ) {
 					if ( $type == 'value' && isset( $settings['type'] ) && $settings['type'] != 'textarea' ) {
