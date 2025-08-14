@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.128 - 2025-08-TBD =
 * GD Ninja contact form shows PHP notice - FIXED
+* %%_gd_category%% SEO variable is not working with Yoast SEO - FIXED
 
 = GeoDirectory v2.8.127 - 2025-08-07 =
 * Default marker icon sets incorrect marker size for OSM - FIXED

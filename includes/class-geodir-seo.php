@@ -607,17 +607,17 @@ class GeoDir_SEO {
 		if ( strpos( $string, '%%category%%' ) !== false || strpos( $string, '%%in_category%%' ) !== false ) {
 			$cat_name = '';
 
-			if ( $gd_page == 'single' ) {
+			if ( $gd_page == 'single' || ( empty( $gd_page ) && geodir_is_page( 'single' ) ) ) {
 				if ( $gd_post->default_category ) {
 					$cat      = get_term( $gd_post->default_category, $post->post_type . 'category' );
 					$cat_name = ( isset( $cat->name ) ) ? $cat->name : '';
 				}
-			} else if ( $gd_page == 'archive' ) {
+			} else if ( $gd_page == 'archive' || ( empty( $gd_page ) && geodir_is_page( 'archive' ) ) ) {
 				$queried_object = get_queried_object();
 				if ( isset( $queried_object->name ) ) {
 					$cat_name = $queried_object->name;
 				}
-			} else if ( $gd_page == 'search' ) {
+			} else if ( $gd_page == 'search' || ( empty( $gd_page ) && geodir_is_page( 'search' ) ) ) {
 				$cat_name = self::get_searched_category_name( $post_type . 'category' );
 			}
 
@@ -630,17 +630,18 @@ class GeoDir_SEO {
 		if ( strpos( $string, '%%tag%%' ) !== false ) {
 			$cat_name = '';
 
-			if ( $gd_page == 'single' ) {
+			if ( $gd_page == 'single' || ( empty( $gd_page ) && geodir_is_page( 'single' ) ) ) {
 				if ( $post->default_category ) {
 					$cat      = get_term( $post->default_category, $post->post_type . 'category' );
 					$cat_name = ( isset( $cat->name ) ) ? $cat->name : '';
 				}
-			} else if ( $gd_page == 'archive' ) {
+			} else if ( $gd_page == 'archive' || ( empty( $gd_page ) && geodir_is_page( 'archive' ) ) ) {
 				$queried_object = get_queried_object();
 				if ( isset( $queried_object->name ) ) {
 					$cat_name = $queried_object->name;
 				}
 			}
+
 			$string = str_replace( "%%tag%%", $cat_name, $string );
 		}
 
@@ -821,12 +822,17 @@ class GeoDir_SEO {
 			$vars['%%location_single%%'] = __( 'The current viewing location type single name eg: Philadelphia', 'geodirectory' );
 			$vars['%%in_location%%'] = __( 'The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia', 'geodirectory' );
 			$vars['%%in_location_single%%'] = __( 'The current viewing location type single name prefixed with `in` eg: in Philadelphia', 'geodirectory' );
+			$vars['%%near_location%%'] = __( 'The full current location prefixed with `near` eg: near United States, Pennsylvania, Philadelphia', 'geodirectory' );
+			$vars['%%near_location_single%%'] = __( 'The current viewing location type single name prefixed with `near` eg: near Philadelphia', 'geodirectory' );
 			$vars['%%location_country%%'] = __( 'The current viewing country eg: United States', 'geodirectory' );
 			$vars['%%in_location_country%%'] = __( 'The current viewing country prefixed with `in` eg: in United States', 'geodirectory' );
+			$vars['%%near_location_country%%'] = __( 'The current viewing country prefixed with `near` eg: near United States', 'geodirectory' );
 			$vars['%%location_region%%'] = __( 'The current viewing region eg: Pennsylvania', 'geodirectory' );
 			$vars['%%in_location_region%%']= __( 'The current viewing region prefixed with `in` eg: in Pennsylvania', 'geodirectory' );
+			$vars['%%near_location_region%%']= __( 'The current viewing region prefixed with `near` eg: near Pennsylvania', 'geodirectory' );
 			$vars['%%location_city%%'] = __( 'The current viewing city eg: Philadelphia', 'geodirectory' );
 			$vars['%%in_location_city%%'] = __( 'The current viewing city prefixed with `in` eg: in Philadelphia', 'geodirectory' );
+			$vars['%%near_location_city%%'] = __( 'The current viewing city prefixed with `near` eg: near Philadelphia', 'geodirectory' );
 		}
 
 		// Single page
