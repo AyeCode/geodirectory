@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.127\n"
+"Project-Id-Version: GeoDirectory 2.8.128\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-07 15:13+0530\n"
-"PO-Revision-Date: 2025-08-07 15:13+0530\n"
+"POT-Creation-Date: 2025-08-14 16:16+0530\n"
+"PO-Revision-Date: 2025-08-14 16:16+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1952,7 +1952,7 @@ msgid "Address city, region or country missing"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:547
-#: includes/location-functions.php:823
+#: includes/location-functions.php:826
 msgid "Failed to retrieve GPS data from a address using API."
 msgstr ""
 
@@ -1962,12 +1962,12 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:594
 #: includes/admin/class-geodir-admin-import-export.php:612
-#: includes/location-functions.php:932 includes/location-functions.php:957
+#: includes/location-functions.php:935 includes/location-functions.php:960
 msgid "Failed to reach Google geocode server."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:609
-#: includes/location-functions.php:955
+#: includes/location-functions.php:958
 #, php-format
 msgid "Google geocode failed: %s"
 msgstr ""
@@ -5357,7 +5357,7 @@ msgid "Adds a input to set service area in distance."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1331
-#: includes/location-functions.php:1153
+#: includes/location-functions.php:1156
 msgid "Private Address"
 msgstr ""
 
@@ -11110,43 +11110,43 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3248
+#: includes/class-geodir-compatibility.php:3256
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3259
+#: includes/class-geodir-compatibility.php:3267
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3266
+#: includes/class-geodir-compatibility.php:3274
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3267
+#: includes/class-geodir-compatibility.php:3275
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4067
+#: includes/class-geodir-compatibility.php:4075
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4294
+#: includes/class-geodir-compatibility.php:4302
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4295
+#: includes/class-geodir-compatibility.php:4303
 msgid "Enable Borlabs Cookie integration for GeoDirectory maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4304
+#: includes/class-geodir-compatibility.php:4312
 msgid ""
 "NOTE: Go to Borlabs Cookie > Library > Search \"GeoDirectory\" & install "
 "package."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4445
+#: includes/class-geodir-compatibility.php:4453
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
@@ -11475,7 +11475,7 @@ msgid "Near:"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:119
-#: includes/class-geodir-seo.php:693 includes/core-functions.php:292
+#: includes/class-geodir-seo.php:694 includes/core-functions.php:292
 #: includes/core-functions.php:293 includes/core-functions.php:302
 msgid "My Location"
 msgstr ""
@@ -12529,139 +12529,163 @@ msgctxt "in category"
 msgid "in %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:683 includes/general-functions.php:2117
+#: includes/class-geodir-seo.php:684 includes/general-functions.php:2117
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:699 includes/general-functions.php:2130
+#: includes/class-geodir-seo.php:700 includes/general-functions.php:2130
 #, php-format
 msgid "near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:787
+#: includes/class-geodir-seo.php:788
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:788
+#: includes/class-geodir-seo.php:789
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:789
+#: includes/class-geodir-seo.php:790
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:790
+#: includes/class-geodir-seo.php:791
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:794
+#: includes/class-geodir-seo.php:795
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:795
+#: includes/class-geodir-seo.php:796
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:796
+#: includes/class-geodir-seo.php:797
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:797
+#: includes/class-geodir-seo.php:798
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:798
+#: includes/class-geodir-seo.php:799
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:799
+#: includes/class-geodir-seo.php:800
 msgid "The current category name prefixed with `in` eg: in Attractions"
 msgstr ""
 
-#: includes/class-geodir-seo.php:804
+#: includes/class-geodir-seo.php:805
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:805
+#: includes/class-geodir-seo.php:806
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:806
+#: includes/class-geodir-seo.php:807
 msgid "Total post found eg: 10"
 msgstr ""
 
-#: includes/class-geodir-seo.php:807
+#: includes/class-geodir-seo.php:808
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:812
+#: includes/class-geodir-seo.php:813
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:813
+#: includes/class-geodir-seo.php:814
 msgid "The currently used search for term with `for`. Ex: for dinner."
 msgstr ""
 
-#: includes/class-geodir-seo.php:814
+#: includes/class-geodir-seo.php:815
 msgid "The currently used search near term with `near`. Ex: near Philadelphia."
 msgstr ""
 
-#: includes/class-geodir-seo.php:815
+#: includes/class-geodir-seo.php:816
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:820
+#: includes/class-geodir-seo.php:821
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:821
+#: includes/class-geodir-seo.php:822
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:822
+#: includes/class-geodir-seo.php:823
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:823
+#: includes/class-geodir-seo.php:824
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: in "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:824
-msgid "The current viewing country eg: United States"
-msgstr ""
-
 #: includes/class-geodir-seo.php:825
-msgid "The current viewing country prefixed with `in` eg: in United States"
+msgid ""
+"The full current location prefixed with `near` eg: near United States, "
+"Pennsylvania, Philadelphia"
 msgstr ""
 
 #: includes/class-geodir-seo.php:826
-msgid "The current viewing region eg: Pennsylvania"
+msgid ""
+"The current viewing location type single name prefixed with `near` eg: near "
+"Philadelphia"
 msgstr ""
 
 #: includes/class-geodir-seo.php:827
-msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
+msgid "The current viewing country eg: United States"
 msgstr ""
 
 #: includes/class-geodir-seo.php:828
-msgid "The current viewing city eg: Philadelphia"
+msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
 #: includes/class-geodir-seo.php:829
-msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
+msgid "The current viewing country prefixed with `near` eg: near United States"
+msgstr ""
+
+#: includes/class-geodir-seo.php:830
+msgid "The current viewing region eg: Pennsylvania"
+msgstr ""
+
+#: includes/class-geodir-seo.php:831
+msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
+msgstr ""
+
+#: includes/class-geodir-seo.php:832
+msgid "The current viewing region prefixed with `near` eg: near Pennsylvania"
+msgstr ""
+
+#: includes/class-geodir-seo.php:833
+msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
 #: includes/class-geodir-seo.php:834
+msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
+msgstr ""
+
+#: includes/class-geodir-seo.php:835
+msgid "The current viewing city prefixed with `near` eg: near Philadelphia"
+msgstr ""
+
+#: includes/class-geodir-seo.php:840
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore. "
 "Ex: _phone."
 msgstr ""
 
-#: includes/class-geodir-seo.php:855
+#: includes/class-geodir-seo.php:861
 msgid "Click to copy"
 msgstr ""
 
@@ -14797,42 +14821,65 @@ msgstr ""
 msgid "Select Country"
 msgstr ""
 
-#: includes/location-functions.php:544 includes/location-functions.php:546
-#: includes/location-functions.php:552
+#: includes/location-functions.php:544 includes/location-functions.php:554
 #, php-format
 msgctxt "in location"
 msgid "in %s"
 msgstr ""
 
-#: includes/location-functions.php:784
-msgid "There is an error in timezone data request."
+#: includes/location-functions.php:545
+#, php-format
+msgctxt "near location"
+msgid "near %s"
+msgstr ""
+
+#: includes/location-functions.php:547
+#, php-format
+msgctxt "in location single"
+msgid "in %s"
+msgstr ""
+
+#: includes/location-functions.php:548
+#, php-format
+msgctxt "near location single"
+msgid "near %s"
+msgstr ""
+
+#: includes/location-functions.php:555
+#, php-format
+msgctxt "near location city"
+msgid "near %s"
 msgstr ""
 
 #: includes/location-functions.php:787
+msgid "There is an error in timezone data request."
+msgstr ""
+
+#: includes/location-functions.php:790
 #, php-format
 msgid "Google Timezone API: %s"
 msgstr ""
 
-#: includes/location-functions.php:847 includes/location-functions.php:984
+#: includes/location-functions.php:850 includes/location-functions.php:987
 msgid "Address must be non-empty."
 msgstr ""
 
-#: includes/location-functions.php:882 includes/location-functions.php:892
-#: includes/location-functions.php:1021 includes/location-functions.php:1036
+#: includes/location-functions.php:885 includes/location-functions.php:895
+#: includes/location-functions.php:1024 includes/location-functions.php:1039
 msgid "Not enough location info for address."
 msgstr ""
 
-#: includes/location-functions.php:948
+#: includes/location-functions.php:951
 #, php-format
 msgid ""
 "Could not retrieve GPS info from Google geocode server for the address %s"
 msgstr ""
 
-#: includes/location-functions.php:1068
+#: includes/location-functions.php:1071
 msgid "Failed to reach OpenStreetMap Nominatim server."
 msgstr ""
 
-#: includes/location-functions.php:1086 includes/location-functions.php:1099
+#: includes/location-functions.php:1089 includes/location-functions.php:1102
 #, php-format
 msgid ""
 "Could not retrieve GPS info from OpenStreetMap server for the address %s"
