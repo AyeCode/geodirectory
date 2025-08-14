@@ -16,7 +16,7 @@
 function geodir_db_cpt_table($post_type){
 	if(!empty($post_type)){
 		global $plugin_prefix;
-		return $plugin_prefix . $post_type . '_detail';
+		return esc_attr($plugin_prefix . $post_type . '_detail' );
 	}
 
 	return false;

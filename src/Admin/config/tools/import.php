@@ -18,112 +18,114 @@ if ( ! defined( 'ABSPATH' ) ) {
 return [
 	'id'    => 'import',
 	'name'  => 'Import',
-	'icon'  => 'fa-solid fa-upload',
+	'icon'  => 'fa-solid fa-download',
+	'keywords' => ['upload', 'csv', 'json', 'data', 'migration', 'batch', 'bulk'],
 	'subsections' => [
 		[
 			'id'    => 'import_listings',
-			'name'  => 'Listings',
+			'name'           => __( 'Listings', 'geodirectory' ),
+			'page_title'           => __( 'Import Listings', 'geodirectory' ),
+			'description'  => sprintf(
+				'<a href="#section=export&subsection=export_listings" ><i class="fa-solid fa-shuffle"></i> %s</a>',
+				__( 'Switch to Export...', 'geodirectory' ),
+			),
+			'type'           => 'import_page',
+			'button_text'    => __( 'Import Listings', 'geodirectory' ),
+			'button_class'   => 'btn-warning',
+			'ajax_action'    => 'import_listings',
+			'accept_file_type' => 'csv',
+			'keywords'       => ['posts', 'cpt', 'business', 'places', 'items'],
+
 			'fields' => [
 				[
-					'type'  => 'alert',
-					'alert_type' => 'info',
-					'description' => '<strong>Important:</strong> Do not use Excel as it adds characters that breaks the import process. <a href="#">How to prepare CSV file to import</a>.',
-				],
-				[
-					'id'      => 'import_conflict',
+					'id'      => 'update_existing',
 					'type'    => 'select',
-					'label'   => 'If post ID exists',
+					'label'   => __( 'If post ID exists','geodirectory' ),
+					'description'   => __( 'If the ID column exists in the CSV, you can either update or skip the row.','geodirectory' ),
 					'options' => [
-						'skip'   => 'Skip row',
-						'update' => 'Update row',
+						'0'   => __( 'Skip row','geodirectory' ),
+						'1' => __('Update row','geodirectory' ),
 					],
-					'default' => 'skip',
-				],
-				[
-					'id'    => 'import_file_upload',
-					'type'  => 'custom_html',
-					'label' => 'Upload CSV file',
-					'html'  => '
-                                <div class="d-flex align-items-center">
-                                    <button type="button" class="btn btn-secondary">Select File</button>
-                                    <a href="#" class="btn btn-link ms-3">How To Get Sample CSV File To Prepare Import Listings</a>
-                                </div>
-                            ',
-				],
-				[
-					'id'          => 'run_import_listings_button',
-					'type'        => 'action_button',
-					'label'       => 'Import Listings',
-					'button_text' => 'Import CSV',
-					'button_class'=> 'btn-primary',
-					'ajax_action' => 'geodir_import_listings',
+					'default' => '0',
 				],
 			],
 		],
 		[
-			'id'    => 'import_categories',
-			'name'  => 'Categories',
+			'id'    => 'import_cats',
+			'name'           => __( 'Categories', 'geodirectory' ),
+			'page_title'           => __( 'Import Categories', 'geodirectory' ),
+			'description'  => sprintf(
+				'<a href="#section=export&subsection=export_cats" ><i class="fa-solid fa-shuffle"></i> %s</a>',
+				__( 'Switch to Export...', 'geodirectory' ),
+			),
+			'type'           => 'import_page',
+			'button_text'    => __( 'Import Categories', 'geodirectory' ),
+			'button_class'   => 'btn-warning',
+			'ajax_action'    => 'import_cats',
+			'accept_file_type' => 'csv',
+			'keywords'       => ['taxonomy', 'terms', 'tags'],
+
 			'fields' => [
-				['type' => 'alert', 'alert_type' => 'secondary', 'description' => 'Category import options will be configured here.']
+				[
+					'id'      => 'update_existing',
+					'type'    => 'select',
+					'label'   => __( 'If cat_id/cat_slug exists','geodirectory' ),
+					'description'   => __( 'If the ID or slug column exists in the CSV, you can either update or skip the row.','geodirectory' ),
+					'options' => [
+						'0'   => __( 'Skip row','geodirectory' ),
+						'1' => __('Update row','geodirectory' ),
+					],
+					'default' => '0',
+				],
 			],
 		],
 		[
 			'id'    => 'import_reviews',
-			'name'  => 'Reviews',
+			'name'           => __( 'Reviews', 'geodirectory' ),
+			'page_title'           => __( 'Import Reviews', 'geodirectory' ),
+			'description'  => sprintf(
+				'<a href="#section=export&subsection=export_reviews" ><i class="fa-solid fa-shuffle"></i> %s</a>',
+				__( 'Switch to Export...', 'geodirectory' ),
+			),
+			'type'           => 'import_page',
+			'button_text'    => __( 'Import Reviews', 'geodirectory' ),
+			'button_class'   => 'btn-warning',
+			'ajax_action'    => 'import_reviews',
+			'accept_file_type' => 'csv',
+			'keywords'       => ['comments', 'ratings', 'feedback'],
+
 			'fields' => [
-				['type' => 'alert', 'alert_type' => 'secondary', 'description' => 'Review import options will be configured here.']
+				[
+					'id'      => 'update_existing',
+					'type'    => 'select',
+					'label'   => __( 'If Comment ID exists','geodirectory' ),
+					'description'   => __( 'If the comment_ID column exists in the CSV, you can either update the review or it can be skipped.','geodirectory' ),
+					'options' => [
+						'0'   => __( 'Skip row','geodirectory' ),
+						'1' => __('Update row','geodirectory' ),
+					],
+					'default' => '0',
+				],
 			],
 		],
 		[
 			'id'    => 'import_settings',
-			'name'  => 'Settings',
+			'name'           => __( 'Settings', 'geodirectory' ),
+			'page_title'           => __( 'Import Settings', 'geodirectory' ),
+			'description'  => sprintf(
+				'<a href="#section=export&subsection=export_settings" ><i class="fa-solid fa-shuffle"></i> %s</a>',
+				__( 'Switch to Export...', 'geodirectory' ),
+			),
+			'type'           => 'import_page',
+			'button_text'    => __( 'Import Settings', 'geodirectory' ),
+			'button_class'   => 'btn-warning',
+			'ajax_action'    => 'import_settings',
+			'accept_file_type' => 'json',
+			'keywords'       => ['options', 'configuration', 'setup', 'plugin'],
+
 			'fields' => [
-				['type' => 'alert', 'alert_type' => 'secondary', 'description' => 'Settings import options will be configured here.']
-			],
-		],
-		[
-			'id'    => 'import_post_types',
-			'name'  => 'Post Types',
-			'fields' => [
-				['type' => 'alert', 'alert_type' => 'secondary', 'description' => 'Post Type import options will be configured here.']
-			],
-		],
-		[
-			'id'    => 'import_custom_fields',
-			'name'  => 'Custom Fields',
-			'fields' => [
-				['type' => 'alert', 'alert_type' => 'secondary', 'description' => 'Custom Field import options will be configured here.']
-			],
-		],
-		[
-			'id'    => 'import_cpt_tabs',
-			'name'  => 'CPT Tabs',
-			'fields' => [
-				['type' => 'alert', 'alert_type' => 'secondary', 'description' => 'CPT Tab import options will be configured here.']
-			],
-		],
-		[
-			'id'    => 'import_locations',
-			'name'  => 'Locations',
-			'fields' => [
-				['type' => 'alert', 'alert_type' => 'secondary', 'description' => 'Location import options will be configured here.']
-			],
-		],
-		[
-			'id'    => 'import_locations_cpt_desc',
-			'name'  => 'Locations + CPT Description',
-			'fields' => [
-				['type' => 'alert', 'alert_type' => 'secondary', 'description' => 'Locations + CPT Description import options will be configured here.']
-			],
-		],
-		[
-			'id'    => 'import_category_locations_desc',
-			'name'  => 'Category + Locations Description',
-			'fields' => [
-				['type' => 'alert', 'alert_type' => 'secondary', 'description' => 'Category + Locations Description import options will be configured here.']
+				['type' => 'alert', 'alert_type' => 'info', 'description' => __( 'Please make sure you have backed up your settings before attempting an import.', 'geodirectory' )],
 			],
 		],
 	],
 ];
-
-

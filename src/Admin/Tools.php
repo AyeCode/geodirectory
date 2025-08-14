@@ -11,7 +11,7 @@
  */
 
 // Define the namespace for the class.
-namespace GeoDirectory\Admin;
+namespace AyeCode\GeoDirectory\Admin;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -106,10 +106,11 @@ final class Tools extends Settings_Framework {
 	protected function get_config() {
 		// Define the list of config files for the Tools page.
 		$settings_files = [
-			'tools'  => 'config/tools/tools.php',
-			'status' => 'config/tools/status.php',
-			'import' => 'config/tools/import.php',
-			'export' => 'config/tools/export.php',
+			'dummy-data' => 'config/tools/dummy-data.php',
+			'tools'      => 'config/tools/tools.php',
+			'import'     => 'config/tools/import.php',
+			'export'     => 'config/tools/export.php',
+			'status'     => 'config/tools/status.php',
 		];
 
 		$sections = [];
@@ -159,5 +160,72 @@ final class Tools extends Settings_Framework {
 		$options['zip'] = __( 'Zip', 'geodirectory' ) . ' (zip)';
 
 		return $options;
+	}
+
+	/**
+	 * The types of dummy data available.
+	 *
+	 * @return array
+	 */
+	public static function dummy_data_types( $post_type = 'gd_place' ) {
+		$data = array(
+			'standard_places' => array(
+				'name'  => __( 'Default', 'geodirectory' ),
+				'count' => 30
+			),
+			'property_sale'   => array(
+				'name'  => __( 'Property for sale', 'geodirectory' ),
+				'count' => 10
+			),
+			'property_rent'   => array(
+				'name'  => __( 'Property for rent', 'geodirectory' ),
+				'count' => 10
+			),
+			'classifieds'   => array(
+				'name'  => __( 'Classifieds', 'geodirectory' ),
+				'count' => 20,
+				'has_templates' => true
+			),
+			'job_board'   => array(
+				'name'  => __( 'Job Board', 'geodirectory' ),
+				'count' => 20,
+				'has_templates' => true
+			),
+//            'freelancer'   => array(
+//                'name'  => __( 'Freelancer', 'geodirectory' ),
+//                'count' => 20,
+//                'has_templates' => true
+//            )
+		);
+
+		return apply_filters( 'geodir_dummy_data_types', $data, $post_type );
+	}
+
+	public static function dummy_data_types_for_import($post_type) {
+		$types = self::dummy_data_types($post_type);
+		$options = [];
+//		print_r($types);exit;
+		foreach ($types as $key => $type) {
+			$options[ $key ] = esc_attr($type['name']);
+		}
+
+		return $options;
+	}
+
+	public static function has_dummy_data($post_type) {
+		global $wpdb,$plugin_prefix;
+		$result = 0;
+		$table_name = geodir_db_cpt_table($post_type);
+		if(geodir_column_exist($table_name , "post_dummy")){
+
+//			$post_counts = $wpdb->get_var( "SELECT count(post_id) FROM `$table_name` WHERE post_dummy='1'" );
+			$post_counts = $wpdb->get_var( "SELECT count(post_id) FROM " . $plugin_prefix . $post_type . "_detail WHERE post_dummy='1'" );
+
+			if(absint($post_counts ) > 0){
+				$result = 1;
+			}
+		}
+		//echo $result.$table_name;//exit;
+		return $result;
 	}
 }

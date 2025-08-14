@@ -7,7 +7,7 @@
  */
 
 // Define the namespace for the class. This helps prevent conflicts.
-namespace GeoDirectory\Ajax\Actions;
+namespace AyeCode\GeoDirectory\Ajax\Actions\Tools;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class ClearVersionNumbersAction
  * Handles the process of clearing version numbers and resetting associated data within the GeoDirectory plugin.
  */
-class ClearVersionNumbersAction {
+class ClearPagingCacheAction {
 
 	/**
 	 * Handles the dispatch process.
@@ -26,12 +26,11 @@ class ClearVersionNumbersAction {
 	 * @return void Outputs a JSON success response with a message and progress value.
 	 */
 	public static function dispatch() {
-		delete_site_option( 'wp_country_database_version' ); // Delete countries database version.
-		delete_option( 'geodirectory_version' );
-		wp_cache_delete( 'geodir_noindex_page_ids' );
-		do_action( 'geodir_clear_version_numbers');
+
+		delete_option('gd_found_posts_cache');
+
 		wp_send_json_success(array(
-			'message'  => __( 'Version numbers cleared. Install/upgrade functions will run on next page load.', 'geodirectory' ),
+			'message'  => __( 'Cache successfully cleared.', 'geodirectory' ),
 			'progress' => 100
 		));
 	}

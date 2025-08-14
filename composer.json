@@ -15,7 +15,7 @@
 	],
 	"autoload": {
 		"psr-4": {
-			"GeoDirectory\\": "src/"
+			"AyeCode\\GeoDirectory\\": "src/"
 		}
 	},
 	"require": {

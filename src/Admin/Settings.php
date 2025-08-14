@@ -11,7 +11,7 @@
  */
 
 // Define the namespace for the class.
-namespace GeoDirectory\Admin;
+namespace AyeCode\GeoDirectory\Admin;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -114,13 +114,12 @@ final class Settings extends Settings_Framework {
 	protected function get_config() {
 		// Define the list of settings files to be included.
 		$settings_files = [
-			'general'       => 'config/settings/general.php',
-			'emails'        => 'config/settings/emails.php',
-			'design'        => 'config/settings/design.php',
-			'seo'           => 'config/settings/seo.php',
-			'import-export' => 'config/settings/import-export.php',
-			'developer'     => 'config/settings/developer.php',
-			'api'           => 'config/settings/api.php',
+			'general'        => 'config/settings/general.php',
+			'emails'         => 'config/settings/emails.php',
+			'design'         => 'config/settings/design.php',
+			'seo'            => 'config/settings/seo.php',
+			'developer'      => 'config/settings/developer.php',
+			'api'            => 'config/settings/api.php',
 		];
 
 		$sections = [];
@@ -138,6 +137,27 @@ final class Settings extends Settings_Framework {
 
 		// The final configuration array required by the framework.
 		return [ 'sections' => $sections ];
+	}
+
+	public function get_custom_search_links() {
+		return [
+			[
+				'title'       => 'Generate Dummy Data',
+				'description' => 'Go to the Tools page to generate sample listings and reviews.',
+				'url'         => admin_url('admin.php?page=geodir_tools#section=dummy-data'),
+				'keywords'    => ['dummy', 'sample', 'test data', 'generate'],
+				'icon'        => 'fas fa-fw fa-database', // Example Font Awesome icon
+				'external'    => false, // Is this an external link (opens in new tab)?
+			],
+			[
+				'title'       => 'Read Documentation on Emails',
+				'description' => 'Learn how to configure all email templates.',
+				'url'         => 'https://docs.example.com/emails/',
+				'keywords'    => ['email', 'docs', 'documentation', 'help'],
+				'icon'        => 'fas fa-fw fa-book',
+				'external'    => true,
+			]
+		];
 	}
 
 	/**
@@ -191,12 +211,14 @@ final class Settings extends Settings_Framework {
 	/**
 	 * Helper function to get a specific setting value from the database.
 	 *
-	 * @param string $key     The key of the setting to retrieve.
-	 * @param mixed  $default Optional. The default value to return if the key is not found.
+	 * @param string $key The key of the setting to retrieve.
+	 * @param mixed $default Optional. The default value to return if the key is not found.
+	 *
 	 * @return mixed The value of the setting, or the default value.
 	 */
 	public function get_option( $key, $default = false ) {
 		$options = get_option( $this->option_name );
+
 		return isset( $options[ $key ] ) ? $options[ $key ] : $default;
 	}
 
@@ -285,12 +307,28 @@ final class Settings extends Settings_Framework {
 	 * Generates the HTML content displaying the available email tags.
 	 *
 	 * @param string $type The type of email context for which the tags will be retrieved.
+	 *
 	 * @return string The formatted HTML content containing the template tags.
 	 */
 	public static function get_email_tags_html( $type ) {
 		// This static function's logic remains unchanged.
-		$tags = [];
-		$global_tags = [ '[#blogname#]', '[#site_name#]', '[#site_url#]', '[#site_name_url#]', '[#login_url#]', '[#login_link#]', '[#date#]', '[#time#]', '[#date_time#]', '[#current_date#]', '[#to_name#]', '[#to_email#]', '[#from_name#]', '[#from_email#]' ];
+		$tags        = [];
+		$global_tags = [
+			'[#blogname#]',
+			'[#site_name#]',
+			'[#site_url#]',
+			'[#site_name_url#]',
+			'[#login_url#]',
+			'[#login_link#]',
+			'[#date#]',
+			'[#time#]',
+			'[#date_time#]',
+			'[#current_date#]',
+			'[#to_name#]',
+			'[#to_email#]',
+			'[#from_name#]',
+			'[#from_email#]'
+		];
 		$global_tags = apply_filters( 'geodir_email_global_email_tags', $global_tags );
 
 		switch ( $type ) {
@@ -298,10 +336,50 @@ final class Settings extends Settings_Framework {
 			case 'user_pending_post':
 			case 'user_publish_post':
 			case 'admin_pending_post':
-				$tags = array_merge( $global_tags, [ '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]' ] );
+				$tags = array_merge( $global_tags, [
+					'[#post_id#]',
+					'[#post_status#]',
+					'[#post_date#]',
+					'[#post_author_ID#]',
+					'[#post_author_name#]',
+					'[#client_name#]',
+					'[#listing_title#]',
+					'[#listing_url#]',
+					'[#listing_link#]'
+				] );
 				break;
 			case 'admin_moderate_comment':
-				$tags = array_merge( $global_tags, [ '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]', '[#comment_ID#]', '[#comment_author#]', '[#comment_author_IP#]', '[#comment_author_email#]', '[#comment_date#]', '[#comment_content#]', '[#comment_post_ID#]', '[#comment_post_title#]', '[#comment_post_url#]', '[#comment_approve_link#]', '[#comment_trash_link#]', '[#comment_spam_link#]', '[#comment_moderation_link#]', '[#review_rating_star#]', '[#review_rating_title#]', '[#review_city#]', '[#review_region#]', '[#review_country#]', '[#review_latitude#]', '[#review_longitude#]' ] );
+				$tags = array_merge( $global_tags, [
+					'[#post_id#]',
+					'[#post_status#]',
+					'[#post_date#]',
+					'[#post_author_ID#]',
+					'[#post_author_name#]',
+					'[#client_name#]',
+					'[#listing_title#]',
+					'[#listing_url#]',
+					'[#listing_link#]',
+					'[#comment_ID#]',
+					'[#comment_author#]',
+					'[#comment_author_IP#]',
+					'[#comment_author_email#]',
+					'[#comment_date#]',
+					'[#comment_content#]',
+					'[#comment_post_ID#]',
+					'[#comment_post_title#]',
+					'[#comment_post_url#]',
+					'[#comment_approve_link#]',
+					'[#comment_trash_link#]',
+					'[#comment_spam_link#]',
+					'[#comment_moderation_link#]',
+					'[#review_rating_star#]',
+					'[#review_rating_title#]',
+					'[#review_city#]',
+					'[#review_region#]',
+					'[#review_country#]',
+					'[#review_latitude#]',
+					'[#review_longitude#]'
+				] );
 				break;
 		}
 
@@ -310,6 +388,7 @@ final class Settings extends Settings_Framework {
 		if ( ! empty( $tags ) ) {
 			return __( 'Available template tags:', 'geodirectory' ) . '<code>' . implode( '</code> <code>', $tags ) . '</code>';
 		}
+
 		return '';
 	}
 
@@ -322,10 +401,18 @@ final class Settings extends Settings_Framework {
 		// This static function's logic remains unchanged.
 		$templates = [ '' => __( "Auto", "geodirectory" ) ];
 
-		if ( locate_template( 'single.php' ) ) { $templates['single.php'] = 'single.php'; }
-		if ( locate_template( 'singular.php' ) ) { $templates['singular.php'] = 'singular.php'; }
-		if ( locate_template( 'index.php' ) ) { $templates['index.php'] = 'index.php'; }
-		if ( locate_template( 'page.php' ) ) { $templates['page.php'] = 'page.php'; }
+		if ( locate_template( 'single.php' ) ) {
+			$templates['single.php'] = 'single.php';
+		}
+		if ( locate_template( 'singular.php' ) ) {
+			$templates['singular.php'] = 'singular.php';
+		}
+		if ( locate_template( 'index.php' ) ) {
+			$templates['index.php'] = 'index.php';
+		}
+		if ( locate_template( 'page.php' ) ) {
+			$templates['page.php'] = 'page.php';
+		}
 
 		$page_templates = wp_get_theme()->get_page_templates( null, 'page' );
 		if ( ! empty( $page_templates ) ) {
@@ -333,6 +420,7 @@ final class Settings extends Settings_Framework {
 				$templates[ $page ] = $page . " ( " . $name . " )";
 			}
 		}
+
 		return $templates;
 	}
 	// endregion

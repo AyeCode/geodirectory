@@ -349,26 +349,7 @@ if ( ! class_exists( 'GeoDirectory' ) ) :
 
 
 
-			################### GDv3 from here
-			require_once( GEODIRECTORY_PLUGIN_DIR . 'inc/map-functions.php' );
 
-
-
-			// Settings @todo once in venor folder we cna use th eversion below.
-			if ( is_admin() ) {
-				// In your main plugin file or loader:
-				add_action( 'init', function () {
-					new \GeoDirectory\Admin\Settings();
-					new \GeoDirectory\Admin\Tools();
-					\GeoDirectory\Ajax\AjaxHandler::instance();
-				},5 );
-			}
-
-
-//			if ( is_admin() ) {
-//				// In your main plugin file or loader:
-//				\GeoDirectory\Admin\Settings::instance();
-//			}
 
 		}
 
@@ -581,3 +562,14 @@ function GeoDir() {
 
 // Global for backwards compatibility.
 $GLOBALS['geodirectory'] = GeoDir();
+
+
+/**
+ * The main function to get the plugin running.
+ * Hooks into 'plugins_loaded'.
+ */
+function geodirectory_init() {
+	// This one line starts your entire plugin.
+	new \AyeCode\GeoDirectory\Loader();
+}
+add_action('plugins_loaded', 'geodirectory_init');

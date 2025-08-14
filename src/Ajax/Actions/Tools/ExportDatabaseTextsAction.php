@@ -7,9 +7,11 @@
  */
 
 // Define the namespace for the class. This helps prevent conflicts.
-namespace GeoDirectory\Ajax\Actions;
+namespace AyeCode\GeoDirectory\Ajax\Actions\Tools;
 
 // Exit if accessed directly
+use const AyeCode\GeoDirectory\Ajax\Actions\GEODIRECTORY_VERSION;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

@@ -7,7 +7,7 @@
  */
 
 // Define the namespace for the class. This helps prevent conflicts.
-namespace GeoDirectory\Ajax\Actions;
+namespace AyeCode\GeoDirectory\Ajax\Actions\Panes;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class ClearVersionNumbersAction
  * Handles the process of clearing version numbers and resetting associated data within the GeoDirectory plugin.
  */
-class GenerateKeywordsAction {
+class RenderStatusReportAction {
 
 	/**
 	 * Handles the dispatch process.
@@ -26,16 +26,11 @@ class GenerateKeywordsAction {
 	 * @return void Outputs a JSON success response with a message and progress value.
 	 */
 	public static function dispatch() {
-		$generated = (int) geodir_generate_title_keywords();
 
-		if ( $generated > 0 ) {
-			$message = wp_sprintf( _n( '%d keyword generated.', '%d keywords generated.', $generated, 'geodirectory' ), $generated );
-		} else {
-			$message = __( 'No keyword generated.', 'geodirectory' );
-		}
-		wp_send_json_success(array(
-			'message'  => $message,
-			'progress' => 100
-		));
+		ob_start();
+		include_once( dirname( __FILE__ ) . '/../../../Admin/views/status-report.php' );;
+
+		wp_send_json_success(array('html' => ob_get_clean() ));
+
 	}
 }

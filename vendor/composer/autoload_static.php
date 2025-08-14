@@ -14,24 +14,24 @@ class ComposerStaticInit3225cff1a6fbcb5c09d8a0b088568404
     );
 
     public static $prefixLengthsPsr4 = array (
-        'G' => 
-        array (
-            'GeoDirectory\\' => 13,
-        ),
         'C' => 
         array (
             'Composer\\Installers\\' => 20,
         ),
+        'A' => 
+        array (
+            'AyeCode\\GeoDirectory\\' => 21,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'GeoDirectory\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
         'Composer\\Installers\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
+        ),
+        'AyeCode\\GeoDirectory\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 

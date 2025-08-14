@@ -19,6 +19,7 @@ return array(
 	'type'         => 'custom_page',
 	'ajax_content' => 'status_report',
 	'searchable'   => array( 'report', 'system', 'status', 'support', 'data' ),
+	'keywords'   => array( 'report', 'system', 'status', 'support', 'data' ),
 
 );
 
