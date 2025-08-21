@@ -1409,7 +1409,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$post_ids     = array_filter( array_map( 'trim', explode( ',', $post_ids ) ) );
 
 			foreach ( $post_ids as $pid ) {
-				$tmp_id = $pid;
+				$tmp_id = (int) $pid;
 				if ( abs( $tmp_id ) != $tmp_id ) {
 					$post__not_in[] = absint( $tmp_id );
 				} else {
