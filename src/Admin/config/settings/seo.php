@@ -31,7 +31,7 @@ return array(
 					'type'    => 'helper_tags',
 					'label'   => __( 'Dynamic Tags', 'geodirectory' ),
 					'placeholder' => '%%pt_name%% Archive',
-					'options'   => GeoDir_SEO::variables('pt')
+					'options' => \AyeCode\GeoDirectory\Core\Seo\VariableReplacer::get_variables('pt'),
 				),
 				array(
 					'id'      => 'seo_cpt_title',
@@ -76,7 +76,7 @@ return array(
 					'type'    => 'helper_tags',
 					'label'   => __( 'Dynamic Tags', 'geodirectory' ),
 					'placeholder' => '%%pt_name%% Archive',
-					'options'   => GeoDir_SEO::variables('archive')
+					'options'   => \AyeCode\GeoDirectory\Core\Seo\VariableReplacer::get_variables('archive')
 				),
 				array(
 					'id'      => 'seo_cat_archive_title',
@@ -148,7 +148,7 @@ return array(
 					'type'    => 'helper_tags',
 					'label'   => __( 'Dynamic Tags', 'geodirectory' ),
 					'placeholder' => '%%pt_name%% Archive',
-					'options'   => GeoDir_SEO::variables('single')
+					'options'   => \AyeCode\GeoDirectory\Core\Seo\VariableReplacer::get_variables('single')
 				),
 				array(
 					'id'      => 'seo_single_title',
@@ -193,7 +193,7 @@ return array(
 					'type'    => 'helper_tags',
 					'label'   => __( 'Dynamic Tags', 'geodirectory' ),
 					'placeholder' => '%%pt_name%% Archive',
-					'options'   => GeoDir_SEO::variables('location')
+					'options'   => \AyeCode\GeoDirectory\Core\Seo\VariableReplacer::get_variables('location')
 				),
 				array(
 					'id'      => 'seo_location_title',
@@ -238,7 +238,7 @@ return array(
 					'type'    => 'helper_tags',
 					'label'   => __( 'Dynamic Tags', 'geodirectory' ),
 					'placeholder' => '%%pt_name%% Archive',
-					'options'   => GeoDir_SEO::variables('search')
+					'options'   => \AyeCode\GeoDirectory\Core\Seo\VariableReplacer::get_variables('search')
 				),
 				array(
 					'id'      => 'seo_search_title',
@@ -283,7 +283,7 @@ return array(
 					'type'    => 'helper_tags',
 					'label'   => __( 'Dynamic Tags', 'geodirectory' ),
 					'placeholder' => '%%pt_name%% Archive',
-					'options'   => GeoDir_SEO::variables('add-listing')
+					'options'   => \AyeCode\GeoDirectory\Core\Seo\VariableReplacer::get_variables('add-listing')
 				),
 				array(
 					'id'      => 'seo_add_listing_title',

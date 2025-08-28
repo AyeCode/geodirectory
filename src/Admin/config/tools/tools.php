@@ -155,7 +155,7 @@ return array(
 			'id'           => 'generate_thumbnails',
 			'type'         => 'action_button',
 			'label'        => __( 'Regenerate Thumbnails', 'geodirectory' ),
-			'description'  => wp_sprintf( __( 'Regenerate thumbnails & metadata for the post images. Total image attachments found: %s', 'geodirectory' ), '<b>' . (int) \GeoDir_Media::count_image_attachments() . '</b>' ),
+			'description'  => wp_sprintf( __( 'Regenerate thumbnails & metadata for the post images. Total image attachments found: %s', 'geodirectory' ), '<b>' . (int) geodirectory()->media->count_image_attachments() . '</b>' ),
 			'button_text'  => __( 'Run', 'geodirectory' ),
 			'button_class' => 'btn-primary',
 			'ajax_action'  => 'generate_thumbnails'

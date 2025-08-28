@@ -11,7 +11,7 @@
  */
 
 // Define the namespace for the class.
-namespace AyeCode\GeoDirectory\Admin;
+namespace AyeCode\GeoDirectory\Admin\Pages;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,7 +26,7 @@ use AyeCode\SettingsFramework\Settings_Framework;
  *
  * Extends the core framework to define the GeoDirectory Tools page.
  */
-final class Tools extends Settings_Framework {
+final class ToolsPage extends Settings_Framework {
 
 	// region Framework Properties
 	// These protected properties configure the admin page.
@@ -115,7 +115,7 @@ final class Tools extends Settings_Framework {
 
 		$sections = [];
 
-		$base_path = dirname( __FILE__ ) . '/';
+		$base_path = dirname( __FILE__ ) . '/../';
 
 		// Loop through the files and collect their returned section arrays.
 		foreach ( $settings_files as $file_path ) {
@@ -137,7 +137,10 @@ final class Tools extends Settings_Framework {
 	public function get_cf_with_option_values() {
 		global $wpdb;
 
-		$results = $wpdb->get_results( "SELECT DISTINCT `htmlvar_name`, `frontend_title`, `admin_title` FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE `option_values` != '' AND `option_values` IS NOT NULL AND `field_type` IN ('select', 'multiselect', 'radio', 'checkbox') ORDER BY `admin_title` ASC" );
+		// Get the full, prefixed table name for custom fields.
+		$custom_fields_table = geodirectory()->tables->get('custom_fields');
+
+		$results = $wpdb->get_results( "SELECT DISTINCT `htmlvar_name`, `frontend_title`, `admin_title` FROM {$custom_fields_table} WHERE `option_values` != '' AND `option_values` IS NOT NULL AND `field_type` IN ('select', 'multiselect', 'radio', 'checkbox') ORDER BY `admin_title` ASC" );
 
 		$options = [];
 
@@ -213,19 +216,18 @@ final class Tools extends Settings_Framework {
 	}
 
 	public static function has_dummy_data($post_type) {
-		global $wpdb,$plugin_prefix;
+		global $wpdb;
 		$result = 0;
-		$table_name = geodir_db_cpt_table($post_type);
+		$table_name = geodirectory()->tables->get_cpt_details_table($post_type);
 		if(geodir_column_exist($table_name , "post_dummy")){
 
 //			$post_counts = $wpdb->get_var( "SELECT count(post_id) FROM `$table_name` WHERE post_dummy='1'" );
-			$post_counts = $wpdb->get_var( "SELECT count(post_id) FROM " . $plugin_prefix . $post_type . "_detail WHERE post_dummy='1'" );
+			$post_counts = $wpdb->get_var( "SELECT count(post_id) FROM {$table_name} WHERE post_dummy='1'" );
 
 			if(absint($post_counts ) > 0){
 				$result = 1;
 			}
 		}
-		//echo $result.$table_name;//exit;
 		return $result;
 	}
 }

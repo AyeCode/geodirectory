@@ -42,7 +42,7 @@ class GeoDir_Admin {
 
 		// hide the plugin install button on setup wizard plugin more info iframe
 		add_action("admin_print_footer_scripts-plugin-install.php",array($this,'hide_plugin_install'));
-		
+
 
 		// clear extrnsion transients if activating/deactivating
 		if(isset($_REQUEST['exup_action']) && ($_REQUEST['exup_action']=='activate_membership_key'|| $_REQUEST['exup_action']=='deactivate_membership_key' )){
@@ -70,7 +70,7 @@ class GeoDir_Admin {
 			'activated' => 0 // a timestamp of when original activated @todo implement
 		));
 	}
-	
+
 	/**
 	 * Disable some GD pages for some WP page settings.
 	 *
@@ -215,7 +215,7 @@ class GeoDir_Admin {
 		include_once( dirname( __FILE__ ) . '/admin-functions.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-settings.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-comments.php' );
-		include_once( dirname( __FILE__ ) . '/class-geodir-admin-menus.php' );
+//		include_once( dirname( __FILE__ ) . '/class-geodir-admin-menus.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-notices.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-assets.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-api-keys.php' );
@@ -391,7 +391,7 @@ class GeoDir_Admin {
 			ob_start();
 			include( 'views/html-email-template-preview.php' );
 			$message = ob_get_clean();
-			
+
 			$message 	= GeoDir_Email::email_wrap_message( $message, $email_name, $email_vars, '', $plain_text );
 			$message 	= GeoDir_Email::style_body( $message, $email_name, $email_vars );
 			$message 	= apply_filters( 'geodir_mail_content', $message, $email_name, $email_vars );

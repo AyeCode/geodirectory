@@ -10,4 +10,5 @@ return array(
     '942e926b62933a5c0292cfd46ab28c95' => $vendorDir . '/ayecode/wp-country-database/wp-country-database.php',
     '24583d3588ebda5228dd453cfaa070da' => $vendorDir . '/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php',
     '42671a413efb740d7040437ff2a982cd' => $vendorDir . '/ayecode/wp-super-duper/sd-functions.php',
+    '8beface2edd67568d76863cf13f57ee5' => $baseDir . '/src/functions.php',
 );

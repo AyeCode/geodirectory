@@ -1,158 +1,132 @@
 <?php
+/**
+ * GeoDirectory Loader
+ *
+ * @package GeoDirectory
+ */
+
+declare(strict_types=1);
 
 namespace AyeCode\GeoDirectory;
 
+use AyeCode\GeoDirectory\Admin\CPT_Settings_Manager;
+use AyeCode\GeoDirectory\Admin\Pages\SettingsPage;
+use AyeCode\GeoDirectory\Admin\Pages\ToolsPage;
 use AyeCode\GeoDirectory\Ajax\ActionRegistry;
-use AyeCode\GeoDirectory\Ajax\PaneRegistry;
 use AyeCode\GeoDirectory\Ajax\AjaxHandler;
+use AyeCode\GeoDirectory\Ajax\PaneRegistry;
+use AyeCode\GeoDirectory\Core\Plugin;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 
 /**
- * Loader Class
- *
- * The main bootstrap class for the plugin. Its responsibility is to
- * instantiate other classes and register all necessary actions,
- * filters, and services.
+ * Main bootstrap for GeoDirectory.
  */
-class Loader {
+final class Loader {
+
+	public function __construct() {
+		// --- FIXED ---
+		// We must register actions on 'init' so it runs during AJAX requests.
+		// We give it a priority of -2 so it's guaranteed to run BEFORE maybe_init_ajax() at -1.
+		add_action( 'init', [ $this, 'register' ], -2 );
+
+		// Must be on init so the settings framework can attach admin_menu.
+		add_action( 'init', [ $this, 'boot_admin' ], 10 );
+
+		// Shared light includes.
+		add_action( 'init', [ $this, 'init' ], 0 );
+
+		// AJAX router only when needed.
+		add_action( 'init', [ $this, 'maybe_init_ajax' ], -1 );
+	}
 
 	/**
-	 * Kicks off the plugin initialization.
+	 * Register tool & pane maps (no heavy work).
 	 */
-	public function __construct() {
-		// First, register everything so the system knows what's available.
+	public function register(): void {
 		$this->register_actions();
 		$this->register_panes();
-
-		// Then, hook our main initializer into WordPress.
-		add_action('init', [$this, 'init']);
 	}
 
 	/**
-	 * The main initialization method.
-	 *
-	 * This method is hooked into 'init' and is responsible for setting up
-	 * all major components of the plugin.
+	 * Instantiate admin classes on init so their framework can add menus.
 	 */
-	public function init() {
-		// Include non-class files.
-		require_once GEODIRECTORY_PLUGIN_DIR . 'inc/map-functions.php';
+	public function boot_admin(): void {
+		if ( is_admin() && ! wp_doing_ajax() ) {
+			// Logic for non-AJAX admin pages.
 
-		// The AjaxHandler is now instantiated here, ready for ANY type of
-		// AJAX request (admin, public, etc.).
-		new AjaxHandler();
-
-		// Load admin-only classes.
-		if (is_admin()) {
-			new Admin\Settings();
-			new Admin\Tools();
 		}
 
-		// Load public-only classes here if needed.
-		// new Public\Something();
+		// Logic for AJAX admin pages.
+		if ( is_admin() ||  wp_doing_ajax() ) {
+			new SettingsPage();
+			new ToolsPage();
+			( new CPT_Settings_Manager() )->init();
+		}
+
+
+
 	}
 
 	/**
-	 * Registers all tools with our Action Registry.
-	 * This populates the "phonebook" so the AjaxHandler knows what tools are available.
+	 * Shared init for front & admin: include lightweight functions.
 	 */
-	private function register_actions() {
+	public function init(): void {
+		$functions_file = Plugin::path(  'inc/map-functions.php' );
+		if ( is_readable( $functions_file ) ) {
+			require_once $functions_file;
+		}
+	}
+
+	/**
+	 * Instantiate the AJAX handler only for AJAX requests.
+	 */
+	public function maybe_init_ajax(): void {
+		if ( wp_doing_ajax() ) {
+			new AjaxHandler();
+		}
+	}
+
+	/**
+	 * Register all tools with the Action Registry.
+	 */
+	private function register_actions(): void {
+
 		// Core GeoDirectory Tools
-		ActionRegistry::register(
-			'clear_version_numbers',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\ClearVersionNumbersAction::class
-		);
-		ActionRegistry::register(
-			'check_reviews',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\CheckReviewsAction::class
-		);
-		ActionRegistry::register(
-			'install_pages',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\InstallPagesAction::class
-		);
-		ActionRegistry::register(
-			'merge_missing_terms',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\MergeMissingTermsAction::class
-		);
-		ActionRegistry::register(
-			'recount_terms',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\RecountTermsAction::class
-		);
-		ActionRegistry::register(
-			'generate_keywords',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\GenerateKeywordsAction::class
-		);
-		ActionRegistry::register(
-			'generate_thumbnails',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\RegenerateThumbnailsAction::class
-		);
-		ActionRegistry::register(
-			'export_db_texts',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\ExportDatabaseTextsAction::class
-		);
-		ActionRegistry::register(
-			'clear_paging_cache',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\ClearPagingCacheAction::class
-		);
-		ActionRegistry::register(
-			'search_replace_cf',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\SearchReplaceCustomFieldAction::class
-		);
+		ActionRegistry::register( 'clear_version_numbers', \AyeCode\GeoDirectory\Ajax\Actions\Tools\ClearVersionNumbersAction::class );
+		ActionRegistry::register( 'check_reviews',         \AyeCode\GeoDirectory\Ajax\Actions\Tools\CheckReviewsAction::class );
+		ActionRegistry::register( 'install_pages',         \AyeCode\GeoDirectory\Ajax\Actions\Tools\InstallPagesAction::class );
+		ActionRegistry::register( 'merge_missing_terms',   \AyeCode\GeoDirectory\Ajax\Actions\Tools\MergeMissingTermsAction::class );
+		ActionRegistry::register( 'recount_terms',         \AyeCode\GeoDirectory\Ajax\Actions\Tools\RecountTermsAction::class );
+		ActionRegistry::register( 'generate_keywords',     \AyeCode\GeoDirectory\Ajax\Actions\Tools\GenerateKeywordsAction::class );
+		ActionRegistry::register( 'generate_thumbnails',   \AyeCode\GeoDirectory\Ajax\Actions\Tools\RegenerateThumbnailsAction::class );
+		ActionRegistry::register( 'export_db_texts',       \AyeCode\GeoDirectory\Ajax\Actions\Tools\ExportDatabaseTextsAction::class );
+		ActionRegistry::register( 'clear_paging_cache',    \AyeCode\GeoDirectory\Ajax\Actions\Tools\ClearPagingCacheAction::class );
+		ActionRegistry::register( 'search_replace_cf',     \AyeCode\GeoDirectory\Ajax\Actions\Tools\SearchReplaceCustomFieldAction::class );
 
-		// --- Export Process Actions ---
-		ActionRegistry::register(
-			'export_posts', // Use the tool name from your AJAX call.
-			\AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ExportAction::class
-		);
-		ActionRegistry::register(
-			'export_cats', // Use the tool name from your AJAX call.
-			\AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ExportAction::class
-		);
-		ActionRegistry::register(
-			'export_reviews', // Use the tool name from your AJAX call.
-			\AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ExportAction::class
-		);
-		ActionRegistry::register(
-			'export_settings', // Use the tool name from your AJAX call.
-			\AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ExportAction::class
-		);
+		// Export Process
+		ActionRegistry::register( 'export_posts',    \AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ExportAction::class );
+		ActionRegistry::register( 'export_cats',     \AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ExportAction::class );
+		ActionRegistry::register( 'export_reviews',  \AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ExportAction::class );
+		ActionRegistry::register( 'export_settings', \AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ExportAction::class );
 
-		// --- Import Process Actions ---
-		ActionRegistry::register(
-			'import_settings', // Use the tool name from your AJAX call.
-			\AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ImportAction::class
-		);
-		ActionRegistry::register(
-			'import_reviews', // Use the tool name from your AJAX call.
-			\AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ImportAction::class
-		);
-		ActionRegistry::register(
-			'import_cats', // Use the tool name from your AJAX call.
-			\AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ImportAction::class
-		);
-		ActionRegistry::register(
-			'import_listings', // Use the tool name from your AJAX call.
-			\AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ImportAction::class
-		);
+		// Import Process
+		ActionRegistry::register( 'import_settings', \AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ImportAction::class );
+		ActionRegistry::register( 'import_reviews',  \AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ImportAction::class );
+		ActionRegistry::register( 'import_cats',     \AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ImportAction::class );
+		ActionRegistry::register( 'import_listings', \AyeCode\GeoDirectory\Ajax\Actions\ImportExport\ImportAction::class );
 
-		// --- Dummy Data Actions ---
-		ActionRegistry::register(
-			'dummy_data_install',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\InstallDummyDataAction::class
-		);
-		ActionRegistry::register(
-			'dummy_data_uninstall',
-			\AyeCode\GeoDirectory\Ajax\Actions\Tools\UninstallDummyDataAction::class
-		);
+		// Dummy Data
+		ActionRegistry::register( 'dummy_data_install',   \AyeCode\GeoDirectory\Ajax\Actions\Tools\InstallDummyDataAction::class );
+		ActionRegistry::register( 'dummy_data_uninstall', \AyeCode\GeoDirectory\Ajax\Actions\Tools\UninstallDummyDataAction::class );
 	}
 
 	/**
-	 * Registers all HTML panes with our Pane Registry.
-	 * This populates the "phonebook" for panes.
+	 * Register all panes with the Pane Registry.
 	 */
-	private function register_panes() {
-		PaneRegistry::register(
-			'status_report',
-			\AyeCode\GeoDirectory\Ajax\Actions\Panes\RenderStatusReportAction::class
-		);
+	private function register_panes(): void {
+		PaneRegistry::register( 'status_report', \AyeCode\GeoDirectory\Ajax\Actions\Panes\RenderStatusReportAction::class );
 	}
 }

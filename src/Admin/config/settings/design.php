@@ -142,7 +142,7 @@ return array(
 					'type'    => 'text',
 					'label'   => __( '1-Star Rating Text', 'geodirectory' ),
 					'description' => __( 'The descriptive text shown when a user selects a 1-star rating.', 'geodirectory' ),
-					'placeholder' => GeoDir_Comments::rating_texts_default()[1],
+					'placeholder' => \AyeCode\GeoDirectory\Frontend\ReviewForm::get_default_rating_texts()[1],
 					'searchable' => array('design', 'review', 'rating', 'text', 'label', '1 star'),
 				),
 				array(
@@ -150,7 +150,7 @@ return array(
 					'type'    => 'text',
 					'label'   => __( '2-Star Rating Text', 'geodirectory' ),
 					'description' => __( 'The descriptive text shown for a 2-star rating.', 'geodirectory' ),
-					'placeholder' => GeoDir_Comments::rating_texts_default()[2],
+					'placeholder' => \AyeCode\GeoDirectory\Frontend\ReviewForm::get_default_rating_texts()[2],
 					'searchable' => array('design', 'review', 'rating', 'text', 'label', '2 star'),
 				),
 				array(
@@ -158,7 +158,7 @@ return array(
 					'type'    => 'text',
 					'label'   => __( '3-Star Rating Text', 'geodirectory' ),
 					'description' => __( 'The descriptive text shown for a 3-star rating.', 'geodirectory' ),
-					'placeholder' => GeoDir_Comments::rating_texts_default()[3],
+					'placeholder' => \AyeCode\GeoDirectory\Frontend\ReviewForm::get_default_rating_texts()[3],
 					'searchable' => array('design', 'review', 'rating', 'text', 'label', '3 star'),
 				),
 				array(
@@ -166,7 +166,7 @@ return array(
 					'type'    => 'text',
 					'label'   => __( '4-Star Rating Text', 'geodirectory' ),
 					'description' => __( 'The descriptive text shown for a 4-star rating.', 'geodirectory' ),
-					'placeholder' => GeoDir_Comments::rating_texts_default()[4],
+					'placeholder' => \AyeCode\GeoDirectory\Frontend\ReviewForm::get_default_rating_texts()[4],
 					'searchable' => array('design', 'review', 'rating', 'text', 'label', '4 star'),
 				),
 				array(
@@ -174,7 +174,7 @@ return array(
 					'type'    => 'text',
 					'label'   => __( '5-Star Rating Text', 'geodirectory' ),
 					'description' => __( 'The descriptive text shown for a 5-star rating.', 'geodirectory' ),
-					'placeholder' => GeoDir_Comments::rating_texts_default()[5],
+					'placeholder' => \AyeCode\GeoDirectory\Frontend\ReviewForm::get_default_rating_texts()[5],
 					'searchable' => array('design', 'review', 'rating', 'text', 'label', '5 star'),
 				),
 			),

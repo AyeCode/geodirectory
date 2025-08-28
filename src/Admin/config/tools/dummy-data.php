@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 $cpts   = geodir_get_posttypes( 'options-plural' );
+
+//print_r( $cpts );exit;
 $fields = [];
 if ( ! empty( $cpts ) ) {
 	foreach ( $cpts as $cpt => $cpt_name ) {

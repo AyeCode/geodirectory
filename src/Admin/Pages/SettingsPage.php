@@ -11,7 +11,7 @@
  */
 
 // Define the namespace for the class.
-namespace AyeCode\GeoDirectory\Admin;
+namespace AyeCode\GeoDirectory\Admin\Pages;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,7 +26,7 @@ use AyeCode\SettingsFramework\Settings_Framework;
  *
  * Extends the core framework to define the GeoDirectory settings page.
  */
-final class Settings extends Settings_Framework {
+final class SettingsPage extends Settings_Framework {
 
 	// region Framework Properties
 	// These protected properties are used by the parent Settings_Framework class
@@ -125,7 +125,7 @@ final class Settings extends Settings_Framework {
 		$sections = [];
 
 		// Define the base path for the settings files.
-		$base_path = dirname( __FILE__ ) . '/';
+		$base_path = dirname( __FILE__ ) . '/../';
 
 		// Loop through the files, include them, and collect their returned section arrays.
 		foreach ( $settings_files as $file_path ) {
@@ -134,6 +134,7 @@ final class Settings extends Settings_Framework {
 				$sections[] = include( $full_path );
 			}
 		}
+//		print_r( $sections );exit;
 
 		// The final configuration array required by the framework.
 		return [ 'sections' => $sections ];
@@ -171,6 +172,9 @@ final class Settings extends Settings_Framework {
 		if ( $hook !== $this->screen_id ) {
 			return;
 		}
+
+
+		return; //@todo circle back to this
 
 		// Add GeoDirectory-specific inline scripts and styles.
 		wp_add_inline_script( 'ayecode-settings-framework-admin', geodir_settings_map_input_js_function() );
