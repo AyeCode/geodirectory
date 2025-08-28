@@ -955,7 +955,7 @@ class GeoDir_Block_Theme {
 		$template                 = new \WP_Block_Template();
 		$template->id             = $template_is_from_theme ? $theme_name . '//' . $template_file->slug : self::PLUGIN_SLUG . '//' . $template_file->slug;
 		$template->theme          = $template_is_from_theme ? $theme_name : self::PLUGIN_SLUG;
-		$template->content        = @file_get_contents( $template_file->path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$template->content        = ! empty( $template_file->path ) ? @file_get_contents( $template_file->path ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$template->source         = $template_file->source ? $template_file->source : 'plugin';
 		$template->slug           = $template_file->slug;
 		$template->type           = $template_type;
