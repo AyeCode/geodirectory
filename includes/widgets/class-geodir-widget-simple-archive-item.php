@@ -710,16 +710,17 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		);
 
 		$is_preview = $this->is_preview();
-
 		$content = '';
 
 		if ( $is_preview ) {
 			$is_archive_template = false;
+
 			// Is archive item admin view
-			if ( $post->ID == geodir_archive_item_page_id() || ! isset( $post->ID ) ) {
+			if ( empty( $post->ID ) || $post->ID == geodir_archive_item_page_id() ) {
 				$is_archive_template = true;
 			} else {
 				$post_types = geodir_get_posttypes( 'array' );
+
 				foreach ( $post_types as $post_type => $post_type_arr ) {
 					if ( ! empty( $post_type_arr['page_archive_item'] ) && $post->ID == $post_type_arr['page_archive_item'] ) {
 						$is_archive_template = true;
@@ -731,7 +732,6 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 				$is_preview = false;
 			}
 		}
-
 
 		// card border class
 		$card_class = '';
