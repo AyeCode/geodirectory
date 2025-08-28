@@ -884,13 +884,15 @@ function geodir_post_is_closed( $post ) {
  * @package GeoDirectory
  */
 function geodir_edit_post_link( $post_id = '' ) {
-	if ( ! $post_id ) {
-		global $post;
+	global $post;
 
+	if ( empty( $post_id ) && ! empty( $post ) ) {
 		$post_id = $post->ID;
 	}
 
-	return geodir_add_listing_page_url( get_post_type( $post_id ), $post_id );
+	$post_type = ! empty( $post_id ) ? get_post_type( $post_id ) : '';
+
+	return geodir_add_listing_page_url( $post_type, $post_id );
 }
 
 /**
