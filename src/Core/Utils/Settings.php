@@ -75,6 +75,8 @@ final class Settings {
 
 		// Update the value in our in-memory array.
 		$this->options[ $key ] = $value;
+//		print_r( $value );
+//		echo $key.'>>>>>>>>>>>>>>>>>>>>>>';print_r( $this->options );exit;
 
 		// Save the entire options array back to the database.
 		return update_option( 'geodir_settings', $this->options );
