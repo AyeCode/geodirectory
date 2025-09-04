@@ -8,10 +8,6 @@
  * @package GeoDirectory
  * @since 3.0.0
  *
- * @property-read \AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface $locations The Locations service.
- * @property-read \AyeCode\GeoDirectory\Core\Reviews $reviews The Reviews service.
- * @property-read \AyeCode\GeoDirectory\Core\Seo $seo The SEO service.
- * @property-read \AyeCode\GeoDirectory\Database\ReviewRepository $reviewRepository The Review Repository.
  */
 
 declare( strict_types = 1 );
@@ -28,6 +24,22 @@ use AyeCode\GeoDirectory\Core\Tables;
 use AyeCode\GeoDirectory\Core\Utils\Settings;
 use AyeCode\GeoDirectory\Database\ReviewRepository;
 
+/**
+ * The main GeoDirectory class.
+ *
+ * This class acts as a service locator and provides access to various services
+ * within the GeoDirectory system. It is designed to lazy-load services and cache them
+ * for optimized performance.
+ *
+ * @property-read \AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface $locations The Locations service.
+ * @property-read \AyeCode\GeoDirectory\Core\Reviews $reviews The Reviews service.
+ * @property-read \AyeCode\GeoDirectory\Core\Seo $seo The SEO service.
+ * @property-read \AyeCode\GeoDirectory\Database\ReviewRepository $reviewRepository The Review Repository.
+ * @property-read \AyeCode\GeoDirectory\Core\Tables $tables The Tables service.
+ * @property-read \AyeCode\GeoDirectory\Core\Utils\Settings $settings The Settings service.
+ * @property-read \AyeCode\GeoDirectory\Core\Media $media The Media service.
+ * @property-read \AyeCode\GeoDirectory\Core\Statuses $statuses The Statuses service.
+ */
 final class GeoDirectory {
 
 	/**

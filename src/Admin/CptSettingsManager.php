@@ -3,10 +3,10 @@
 
 namespace AyeCode\GeoDirectory\Admin;
 
-use AyeCode\GeoDirectory\Admin\Pages\Dynamic_CPT_Settings;
+use AyeCode\GeoDirectory\Admin\Pages\DynamicCptSettings;
 use AyeCode\GeoDirectory\Core\Lifecycle;
 
-final class CPT_Settings_Manager {
+final class CptSettingsManager {
 
 	public function init(): void {
 		$this->create_settings_pages();
@@ -26,7 +26,7 @@ final class CPT_Settings_Manager {
 		}
 
 		foreach ( $post_types as $cpt_slug => $cpt ) {
-			new Dynamic_CPT_Settings( $cpt_slug, $cpt );
+			new DynamicCptSettings( $cpt_slug, $cpt );
 		}
 	}
 
