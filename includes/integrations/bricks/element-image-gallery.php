@@ -86,15 +86,34 @@ class Geodir_Element_Image_Gallery extends Element {
 			'rerender'    => true,
 		];
 
-		$this->controls['imageRatio'] = [
-			'tab'         => 'content',
-			'label'       => esc_html__( 'Image ratio', 'geodirectory' ),
-			'type'        => 'select',
-			'options'     => $this->control_options['imageRatio'],
-			'inline'      => true,
-			'placeholder' => esc_html__( 'Square', 'geodirectory' ),
-			'required'    => [ 'layout', '!=', [ 'masonry', 'metro' ] ],
-		];
+		// @since Bricks 2.0.2 'imageRatio' is a "text" instead of a "select" control.
+		if ( version_compare( BRICKS_VERSION, '2.0.2', '>=' ) ) {
+			$this->controls['imageRatio'] = [
+				'tab'         => 'content',
+				'label'       => esc_html__( 'Image ratio', 'geodirectory' ),
+				'desc'        => esc_html__( 'Example', 'geodirectory' ) . ': 4/3, 16/9, 1/1 (square)',
+				'type'        => 'text',
+				'css'         => [
+					[
+						'selector' => '.image',
+						'property' => 'aspect-ratio'
+					],
+				],
+				'inline'      => true,
+				'placeholder' => esc_html__( 'Square', 'geodirectory' ),
+				'required'    => [ 'layout', '!=', [ 'masonry', 'metro' ] ]
+			];
+		} else {
+			$this->controls['imageRatio'] = [
+				'tab'         => 'content',
+				'label'       => esc_html__( 'Image ratio', 'geodirectory' ),
+				'type'        => 'select',
+				'options'     => $this->control_options['imageRatio'],
+				'inline'      => true,
+				'placeholder' => esc_html__( 'Square', 'geodirectory' ),
+				'required'    => [ 'layout', '!=', [ 'masonry', 'metro' ] ],
+			];
+		}
 
 		$this->controls['imageHeight'] = [
 			'tab'         => 'content',
@@ -401,7 +420,7 @@ class Geodir_Element_Image_Gallery extends Element {
 				if ( $layout === 'grid' ) {
 					// Precedes imageRatio setting
 					if ( isset( $settings['imageRatio'] ) && ! empty( $settings['imageRatio'] ) ) {
-						$image_classes[] = 'bricks-' . $settings['imageRatio'];
+						$image_classes[] = sanitize_html_class( 'bricks-' . $settings['imageRatio'] );
 					} elseif ( isset( $settings['imageHeight'] ) ) {
 						$image_styles[] = 'width: 100%';
 						$image_styles[] = "height: {$settings['imageHeight']}";
