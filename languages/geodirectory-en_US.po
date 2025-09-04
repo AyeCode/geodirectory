@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.130\n"
+"Project-Id-Version: GeoDirectory 2.8.131\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-28 19:20+0530\n"
-"PO-Revision-Date: 2025-08-28 19:20+0530\n"
+"POT-Creation-Date: 2025-09-04 18:42+0530\n"
+"PO-Revision-Date: 2025-09-04 18:43+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -446,7 +446,7 @@ msgstr ""
 #: includes/admin/admin-functions.php:995
 #: includes/admin/class-geodir-admin-taxonomies.php:575
 #: includes/admin/settings/class-geodir-settings-page.php:63
-#: includes/integrations/bricks/element-image-gallery.php:156
+#: includes/integrations/bricks/element-image-gallery.php:175
 #: includes/widgets/class-geodir-widget-archive-item-section.php:90
 #: includes/widgets/class-geodir-widget-best-of.php:300
 #: includes/widgets/class-geodir-widget-best-of.php:313
@@ -777,7 +777,7 @@ msgid "Border type"
 msgstr ""
 
 #: includes/admin/admin-functions.php:933
-#: includes/integrations/bricks/element-image-gallery.php:164
+#: includes/integrations/bricks/element-image-gallery.php:183
 msgid "Full"
 msgstr ""
 
@@ -13169,7 +13169,7 @@ msgid "ERROR:"
 msgstr ""
 
 #: includes/core-functions.php:373
-#: includes/integrations/bricks/element-image-gallery.php:197
+#: includes/integrations/bricks/element-image-gallery.php:216
 msgid "Caption"
 msgstr ""
 
@@ -14699,67 +14699,73 @@ msgstr ""
 msgid "Metro"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:91
+#: includes/integrations/bricks/element-image-gallery.php:93
+#: includes/integrations/bricks/element-image-gallery.php:109
 msgid "Image ratio"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:95
+#: includes/integrations/bricks/element-image-gallery.php:94
+msgid "Example"
+msgstr ""
+
+#: includes/integrations/bricks/element-image-gallery.php:103
+#: includes/integrations/bricks/element-image-gallery.php:113
 msgid "Square"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:101
+#: includes/integrations/bricks/element-image-gallery.php:120
 msgid "Image height"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:117
+#: includes/integrations/bricks/element-image-gallery.php:136
 msgid "Columns"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:133
+#: includes/integrations/bricks/element-image-gallery.php:152
 msgid "Spacing"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:147
+#: includes/integrations/bricks/element-image-gallery.php:166
 msgid "Link to"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:150
+#: includes/integrations/bricks/element-image-gallery.php:169
 msgid "Lightbox"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:151
+#: includes/integrations/bricks/element-image-gallery.php:170
 #: includes/widgets/class-geodir-widget-post-images.php:241
 #: includes/widgets/class-geodir-widget-post-images.php:255
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:191
 msgid "Post"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:152
+#: includes/integrations/bricks/element-image-gallery.php:171
 msgid "Media File"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:153
+#: includes/integrations/bricks/element-image-gallery.php:172
 msgid "Custom URL"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:161
+#: includes/integrations/bricks/element-image-gallery.php:180
 msgid "Lightbox image size"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:170
+#: includes/integrations/bricks/element-image-gallery.php:189
 msgid "Lightbox animation type"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:173
+#: includes/integrations/bricks/element-image-gallery.php:192
 #: vendor/ayecode/wp-super-duper/sd-functions.php:1659
 msgid "Zoom"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:179
+#: includes/integrations/bricks/element-image-gallery.php:198
 msgid "Custom links"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:183
+#: includes/integrations/bricks/element-image-gallery.php:202
 #: includes/widgets/class-geodir-widget-ninja-forms.php:134
 #: includes/widgets/class-geodir-widget-post-fav.php:158
 #: includes/widgets/class-geodir-widget-post-images.php:247
@@ -14772,21 +14778,21 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:191
+#: includes/integrations/bricks/element-image-gallery.php:210
 msgid "Custom link"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:340
+#: includes/integrations/bricks/element-image-gallery.php:359
 msgid "No image found."
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:575
+#: includes/integrations/bricks/element-image-gallery.php:594
 #: includes/widgets/class-geodir-widget-post-images.php:655
 #, php-format
 msgid "Demo image title %d"
 msgstr ""
 
-#: includes/integrations/bricks/element-image-gallery.php:576
+#: includes/integrations/bricks/element-image-gallery.php:595
 #: includes/widgets/class-geodir-widget-post-images.php:656
 #, php-format
 msgid "Demo image caption %d"
