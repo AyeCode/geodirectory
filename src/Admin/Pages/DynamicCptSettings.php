@@ -3,6 +3,7 @@
 namespace AyeCode\GeoDirectory\Admin\Pages;
 
 use AyeCode\GeoDirectory\Admin\Settings\SettingsPersistenceManager;
+use AyeCode\GeoDirectory\Admin\Utils\SortFieldFactory;
 use AyeCode\GeoDirectory\Admin\Utils\TabFieldFactory;
 use AyeCode\SettingsFramework\Settings_Framework;
 
@@ -80,8 +81,10 @@ final class DynamicCptSettings extends Settings_Framework {
 			}
 		}
 
-		// Now, call our new private method to get the dynamic tabs config
-		// and add it to the sections array.
+		// Dynamic sorting config
+		$sections[] = $this->get_sorting_config();
+
+		// Dynamic tabs config
 		$sections[] = $this->get_tabs_config();
 
 
@@ -115,7 +118,166 @@ final class DynamicCptSettings extends Settings_Framework {
 		return $this->persistence_manager->save_all( $this->cpt_slug, $new_settings );
 	}
 
-	// Inside the DynamicCptSettings class...
+	/**
+	 * Generates the dynamic configuration for the 'Tabs' settings section.
+	 *
+	 * This method builds the configuration array for the tab builder,
+	 * allowing for different fields or defaults based on the current post type.
+	 *
+	 * @return array The configuration array for the 'tabs' section.
+	 */
+	private function get_sorting_config(): array {
+		global $wpdb;
+		$post_type = $this->cpt_slug;
+		// Start with a base configuration. You can still keep this in a file if you want.
+		$base_path = dirname( __FILE__ ) . '/../config/cpt-settings/sorting.php';
+		$config = include( $base_path );
+		$options = [];
+
+
+		// preset fields
+
+		$options[] = [
+			'title' => esc_attr__('Random', 'geodirectory'),
+			'id' => 'post_status',
+			'icon' => 'fas fa-random',
+			'description'    => __( 'Random sort (not recommended for large sites)', 'geodirectory' ),
+			'fields' => SortFieldFactory::build([
+				'name'=>['default' => esc_attr__('Random', 'geodirectory') ],
+				'uid',
+				'parent_id',
+				'sort',
+				'is_active',
+				'field_type'=>['default' => 'random'],
+				'type'=>['default' => 'post_status'],
+			])
+		];
+
+		// datetime → post_date
+		$options[] = [
+			'title' => esc_attr__( 'Add date', 'geodirectory' ),
+			'id' => 'post_date',
+			'icon' => 'fas fa-calendar',
+			'description' => __( 'Sort by date added', 'geodirectory' ),
+			'fields' => SortFieldFactory::build([
+				'name'       => ['default' => esc_attr__( 'Add date', 'geodirectory' )],
+				'uid',
+				'parent_id',
+				'sort',
+				'is_active',
+				'field_type' => ['default' => 'datetime'],
+				'type'       => ['default' => 'post_date'],
+			]),
+		];
+
+		// bigint → comment_count
+		$options[] = [
+			'title' => esc_attr__( 'Review', 'geodirectory' ),
+			'id' => 'comment_count',
+			'icon' => 'far fa-comment-dots',
+			'description' => __( 'Sort by the number of reviews', 'geodirectory' ),
+			'fields' => SortFieldFactory::build([
+				'name'       => ['default' => esc_attr__( 'Review', 'geodirectory' )],
+				'uid',
+				'parent_id',
+				'sort',
+				'is_active',
+				'field_type' => ['default' => 'bigint'],
+				'type'       => ['default' => 'comment_count'],
+			]),
+		];
+
+		// float → overall_rating
+		$options[] = [
+			'title' => esc_attr__( 'Rating', 'geodirectory' ),
+			'id' => 'overall_rating',
+			'icon' => 'fas fa-star',
+			'description' => __( 'Sort by the overall rating value', 'geodirectory' ),
+			'fields' => SortFieldFactory::build([
+				'name'       => ['default' => esc_attr__( 'Rating', 'geodirectory' )],
+				'uid',
+				'parent_id',
+				'sort',
+				'is_active',
+				'field_type' => ['default' => 'float'],
+				'type'       => ['default' => 'overall_rating'],
+			]),
+		];
+
+		// text → post_title
+		$options[] = [
+			'title' => esc_attr__( 'Title', 'geodirectory' ),
+			'id' => 'post_title',
+			'icon' => 'fas fa-sort-alpha-up',
+			'description' => __( 'Sort alphabetically by title', 'geodirectory' ),
+			'fields' => SortFieldFactory::build([
+				'name'       => ['default' => esc_attr__( 'Title', 'geodirectory' )],
+				'uid',
+				'parent_id',
+				'sort',
+				'is_active',
+				'field_type' => ['default' => 'text'],
+				'type'       => ['default' => 'post_title'],
+			]),
+		];
+
+
+
+
+//		$config['templates'][]
+
+
+		// Standard Fields
+		$table_name = geodirectory()->tables->get( 'custom_fields' );
+		$standard = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE post_type = %s AND data_type != %s AND cat_sort = '1' ORDER BY sort_order ASC",
+				$post_type,
+				'TEXT'
+			),
+			ARRAY_A // Return as an array of associative arrays
+		);
+
+		if(!empty($standard)){
+			foreach ($standard as $key => $result) {
+
+				$options[] = [
+					'title' => esc_attr($result['frontend_title']),
+					'id' => esc_attr($result['htmlvar_name']),
+					'icon' => esc_attr($result['field_icon']),
+					'fields' => SortFieldFactory::build([
+						'name'       => ['default' => esc_attr($result['frontend_title'])],
+						'uid',
+						'parent_id',
+						'sort',
+						'is_active',
+						'data_type' => ['default' => esc_attr($result['data_type'])],
+						'field_type' => ['default' => esc_attr($result['field_type'])],
+						'type'       => ['default' => esc_attr($result['htmlvar_name'])],
+					]),
+				];
+			}
+		}
+
+		if(!empty($options)){
+			$config['templates'][] =[
+//				'group_title' =>  __( 'Standard Fields', 'geodirectory' ), // title not needed as only one section
+				'options' => $options
+			];
+		}
+
+
+
+		/**
+		 * Filters the final tabs configuration array for a specific post type.
+		 * This allows addons to easily modify the tab builder settings.
+		 *
+		 * @param array  $config    The tabs configuration array.
+		 * @param string $cpt_slug  The current post type slug.
+		 */
+		return apply_filters( 'geodir_cpt_settings_sort_config', $config, $this->cpt_slug );
+	}
+
 
 	/**
 	 * Generates the dynamic configuration for the 'Tabs' settings section.
@@ -157,13 +319,11 @@ final class DynamicCptSettings extends Settings_Framework {
 //						'tab_content' =>[
 //							'type' => 'hidden',
 //						],
-						'tab_content' =>[
-							'type' => 'textarea',
-						],
+						'tab_content_hidden',
 						'uid',
 						'parent_id',
-						'post_type',
-						'tab_layout',
+//						'post_type',
+//						'tab_layout',
 						'tab_type'=>['default' => 'meta'],
 //						'tab_key'=>['default' => esc_attr($result['htmlvar_name'])],
 						'type'=>['default' => esc_attr($result['htmlvar_name'])],
@@ -190,9 +350,7 @@ final class DynamicCptSettings extends Settings_Framework {
 			'fields' => TabFieldFactory::build([
 				'tab_name'=>['default' => esc_attr__('Fieldset', 'geodirectory')],
 				'tab_icon'=>['default' => 'fas fa-minus'],
-				'tab_content' =>[
-					'type' => 'textarea',
-				],
+				'tab_content_hidden',
 				'uid',
 				'tab_type'=>['default' => 'fieldset'],
 				'type'=>['default' => 'fieldset'],
@@ -206,9 +364,7 @@ final class DynamicCptSettings extends Settings_Framework {
 			'fields' => TabFieldFactory::build([
 				'tab_name'=>['default' => esc_attr__('Reviews', 'geodirectory')],
 				'tab_icon'=>['default' => 'fas fa-comments'],
-				'tab_content' =>[
-					'type' => 'textarea',
-				],
+				'tab_content_hidden',
 				'uid',
 				'tab_type'=>['default' => 'standard'],
 				'type'=>['default' => 'reviews'],
@@ -222,8 +378,7 @@ final class DynamicCptSettings extends Settings_Framework {
 			'fields' => TabFieldFactory::build([
 				'tab_name'=>['default' => esc_attr__('Map', 'geodirectory')],
 				'tab_icon'=>['default' => 'fas fa-globe-americas'],
-				'tab_content' =>[
-					'type' => 'textarea',
+				'tab_content_hidden' =>[
 					'default' => '[gd_map width="100%" height="425px" maptype="ROADMAP" zoom="0" map_type="post" map_directions="1"]',
 				],
 				'uid',
@@ -239,8 +394,7 @@ final class DynamicCptSettings extends Settings_Framework {
 			'fields' => TabFieldFactory::build([
 				'tab_name'=>['default' => esc_attr__('Photos', 'geodirectory')],
 				'tab_icon'=>['default' => 'fas fa-image'],
-				'tab_content' =>[
-					'type' => 'textarea',
+				'tab_content_hidden' =>[
 					'default' => '[gd_post_images type="gallery" ajax_load="1" slideshow="1" show_title="1" animation="slide" controlnav="1" link_to="lightbox"]',
 				],
 				'uid',
@@ -271,7 +425,6 @@ final class DynamicCptSettings extends Settings_Framework {
 				'tab_name'=>['default' => esc_attr__('Shortcode', 'geodirectory')],
 				'tab_icon'=>['default' => 'fas fa-cubes'],
 				'tab_content' =>[
-					'type' => 'textarea',
 					'label' => esc_attr__('Contentx', 'geodirectory').'<button class="btn btn-sm btn-primary" onclick="sd_ajax_get_picker(\'tab_content\')">Insert Shortcode</button>',//\WP_Super_Duper_Shortcode_Inserter::shortcode_button( $id = '', $search_for_id = '' ), //sd_ajax_get_picker
 					'placeholder' => esc_attr__('Add shortcode or custom HTML here', 'geodirectory')
 				],

@@ -86,6 +86,7 @@ final class FormFields {
 		$defaults = [
 			'type'        => 'toggle',
 			'label'       => '',
+			'value'       => '1',
 			'description' => '',
 			'default'     => false,
 			'searchable'  => [],

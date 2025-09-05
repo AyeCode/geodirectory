@@ -39,7 +39,7 @@ final class SettingsPersistenceManager {
 			'general' => GeneralSettingsHandler::class,
 //			'fields'  => FieldSettingsHandler::class,
 			'tabs'    => TabSettingsHandler::class,
-//			'sorting' => SortingSettingsHandler::class,
+			'sorting' => SortingSettingsHandler::class,
 		];
 
 		/**

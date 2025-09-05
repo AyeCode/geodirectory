@@ -3,43 +3,66 @@
 namespace AyeCode\GeoDirectory\Admin\Settings\Handlers;
 
 use AyeCode\GeoDirectory\Admin\Settings\PersistenceHandlerInterface;
+use AyeCode\GeoDirectory\Database\SortRepository;
+use AyeCode\GeoDirectory\Admin\Utils\DataMapper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Class SortingSettingsHandler
- *
- * Handles persistence for the sorting options builder.
- *
- * @package AyeCode\GeoDirectory\Admin\Settings\Handlers
- * @since 2.1.0
+ * Handles persistence for the CPT sorting options builder.
  */
 class SortingSettingsHandler implements PersistenceHandlerInterface {
+
 	/**
-	 * Retrieves sorting settings for a CPT.
-	 *
-	 * @param string $post_type The post type slug.
-	 *
-	 * @return array The sorting settings.
+	 * @var SortRepository
 	 */
-	public function get( string $post_type ): array {
-		// Sorting options are stored as a single option array, prefixed for the CPT.
-		// Example option name: 'geodir_sorting_gd_place'
-		$options = get_option( 'geodir_sorting_' . $post_type, array() );
-		return is_array( $options ) ? $options : array();
+	private $repository;
+
+	/**
+	 * @var DataMapper
+	 */
+	private $mapper;
+
+	public function __construct() {
+		$this->repository = new SortRepository();
+		$this->mapper = new DataMapper( $this->get_data_map() );
 	}
 
 	/**
-	 * Saves sorting settings for a CPT.
+	 * Defines the mapping between database columns and UI fields.
+	 * This is the single source of truth for this handler's data structure.
 	 *
-	 * @param string $post_type The post type slug.
-	 * @param array  $data      The settings data to save.
-	 *
-	 * @return bool Result of the update_option call.
+	 * @return array
 	 */
-	public function save( string $post_type, array $data ): bool {
-		return update_option( 'geodir_sorting_' . $post_type, $data );
+	private function get_data_map(): array {
+		return [
+			// DB Column      => [ UI Key,       Sanitize for UI, Sanitize for DB ]
+			'id'             => [ '_uid',         'absint', 'absint' ],
+			'tab_parent'     => [ '_parent_id',   'absint', 'absint' ],
+			'frontend_title' => [ 'label',        'esc_attr', 'sanitize_text_field' ],
+			'htmlvar_name'   => [ 'type',         'esc_attr', 'sanitize_key' ],
+			'is_active'      => [ 'is_active',    'absint', 'absint' ],
+			'sort'           => [ 'sort',         'esc_attr', 'sanitize_text_field' ],
+			'data_type'      => [ 'data_type',    'esc_attr', 'sanitize_text_field' ],
+			'field_type'     => [ 'field_type',   'esc_attr', 'sanitize_text_field' ],
+		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function get( string $post_type ): array {
+		$raw_data = $this->repository->get_by_post_type( $post_type );
+		return $this->mapper->transform( $raw_data, 'to_ui' );
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function save( string $post_type, array $data_from_ui ): bool {
+		$data_for_db = $this->mapper->transform( $data_from_ui, 'to_db' );
+		return $this->repository->sync_by_post_type( $post_type, $data_for_db );
 	}
 }

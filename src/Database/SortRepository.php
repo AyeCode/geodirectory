@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Manages all database interactions for the CPT tabs table.
  */
-final class TabRepository {
+final class SortRepository {
 
 	/**
 	 * @var \wpdb The WordPress database object.
@@ -24,7 +24,7 @@ final class TabRepository {
 	public function __construct() {
 		global $wpdb;
 		$this->db = $wpdb;
-		$this->table_name = geodirectory()->tables->get( 'tabs_layout' );
+		$this->table_name = geodirectory()->tables->get( 'custom_sort_fields' );
 	}
 
 	/**
@@ -69,15 +69,16 @@ final class TabRepository {
 			foreach ( $tabs as $sort_order => $tab_data ) {
 				$data_to_save = [
 					'post_type'   => $post_type,
+					'data_type'     => sanitize_text_field( $tab_data['data_type'] ?? '' ),
+					'field_type'     => sanitize_key( $tab_data['field_type'] ?? '' ),
+					'frontend_title'     =>  sanitize_text_field( $tab_data['frontend_title'] ?? '' ),
+					'htmlvar_name'     => sanitize_key( $tab_data['htmlvar_name'] ?? '' ),
 					'sort_order'  => $sort_order + 1,
-					'tab_layout'  => sanitize_text_field( $tab_data['tab_layout'] ?? 'post' ),
-					'tab_parent'  => sanitize_key( $tab_data['tab_parent'] ?? '' ),
-					'tab_type'    => sanitize_key( $tab_data['tab_type'] ?? 'standard' ),
-					'tab_level'   => isset( $tab_data['tab_level'] ) ? absint( $tab_data['tab_level'] ) : 0,
-					'tab_name'    => sanitize_text_field( $tab_data['tab_name'] ?? '' ),
-					'tab_icon'    => sanitize_text_field( $tab_data['tab_icon'] ?? '' ),
-					'tab_key'     => sanitize_key( $tab_data['tab_key'] ?? '' ),
-					'tab_content' => wp_kses_post( $tab_data['tab_content'] ?? '' ),
+					'tab_parent'  => absint( $tab_data['tab_parent'] ?? 0 ),
+					'tab_level'   => !empty($tab_data['tab_parent']) ? 1 : 0,
+					'is_active'  => absint( $tab_data['is_active'] ?? 0 ),
+					'is_default'  => $sort_order === 0 ? 1 : 0,
+					'sort'     => sanitize_key( $tab_data['sort'] ?? 'asc' ),
 				];
 
 				$tab_id = isset( $tab_data['id'] ) ? absint( $tab_data['id'] ) : 0;
@@ -88,7 +89,7 @@ final class TabRepository {
 						$this->table_name,
 						$data_to_save,
 						[ 'id' => $tab_id ],
-						[ '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s' ],
+						[ '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%s' ],
 					);
 					$processed_ids[] = $tab_id;
 				} else {
@@ -98,7 +99,7 @@ final class TabRepository {
 					$r = $this->db->insert(
 						$this->table_name,
 						$data_to_save,
-						[ '%s', '%d', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s' ],
+						[ '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%s' ],
 					);
 //					print_r( $r );exit;
 					// We don't add the new ID to processed_ids because it wasn't in the original $existing_ids list.

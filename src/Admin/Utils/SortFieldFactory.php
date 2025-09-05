@@ -13,7 +13,7 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Admin\Utils;
 
-final class TabFieldFactory {
+final class SortFieldFactory {
 
 	/**
 	 * The master library of all possible sub-field components for the Tab Builder.
@@ -24,37 +24,21 @@ final class TabFieldFactory {
 	 */
 	private static function get_master_library(): array {
 		return [
-			// Core Tab Properties
-
-			'tab_name'    => FormFields::text( [ 'id' => 'label', 'name' => 'tab_name', 'label' => __( 'Name', 'geodirectory' ), 'placeholder' => __( 'Tab Name', 'geodirectory' ) ] ),
-			'tab_icon'    => FormFields::font_awesome( [ 'id' => 'icon', 'name' => 'tab_icon', 'label' => __( 'Icon', 'geodirectory' ) ] ),
-
-			'tab_content' => FormFields::textarea( [
-				'id' => 'tab_content',
-				'name' => 'tab_content',
-				'label' => __( 'Content', 'geodirectory' ),
-				'description' => __( 'Enter the content for this tab. Shortcodes are supported.', 'geodirectory' ),
-				'show_if' => '[%tab_type%] == "shortcode"' // Only show if tab_type is 'shortcode' @todo not working
-			] ),
-
-			'tab_content_hidden' => FormFields::hidden( [
-				'id' => 'tab_content',
-				'name' => 'tab_content',
-				'label' => __( 'Content', 'geodirectory' ),
-				'description' => __( 'Enter the content for this tab. Shortcodes are supported.', 'geodirectory' ),
-				'show_if' => '[%tab_type%] == "shortcode"' // Only show if tab_type is 'shortcode' @todo not working
-			] ),
-
+			// Core Properties
+			'name'    => FormFields::text( [ 'id' => 'label', 'name' => 'frontend_title', 'label' => __( 'Name', 'geodirectory' ), 'placeholder' => __( 'Name', 'geodirectory' ) ] ),
+			'icon'    => FormFields::font_awesome( [ 'id' => 'icon', 'name' => 'tab_icon', 'label' => __( 'Icon', 'geodirectory' ) ] ),
 			'uid' => FormFields::hidden( [ 'id' => '_uid', 'name' => 'id' ] ),
 			'parent_id' => FormFields::hidden( [ 'id' => '_parent_id', 'name' => 'tab_parent' ] ),
-			'post_type' => FormFields::hidden( [ 'id' => 'post_type', 'name' => 'post_type' ] ),
-			'tab_layout' => FormFields::hidden( [ 'id' => 'tab_layout', 'name' => 'tab_layout' ] ),
-			'tab_type' => FormFields::hidden( [ 'id' => 'tab_type', 'name' => 'tab_type' ] ),
-			'tab_key' => FormFields::hidden( [ 'id' => 'tab_key', 'name' => 'tab_key' ] ),
-
-			// Behavior
 			'type'    => FormFields::hidden( [ 'id' => 'type', 'name' => 'type', 'label' => __( 'Key', 'geodirectory' )] ),
 
+
+			// fields
+			'post_type' => FormFields::hidden( [ 'id' => 'post_type', 'name' => 'post_type' ] ),
+			'data_type' => FormFields::hidden( [ 'id' => 'data_type', 'name' => 'data_type' ] ),
+			'field_type' => FormFields::hidden( [ 'id' => 'field_type', 'name' => 'field_type' ] ),
+			'sort' => FormFields::select( [ 'id' => 'sort', 'name' => 'sort', 'label' => __( 'Ascending or Descending', 'geodirectory' ),  'options' => [ 'asc' => 'Ascending', 'desc' => 'Descending' ], 'default' => 'asc' ] ),
+
+			'is_active' => FormFields::toggle( [ 'id' => 'is_active', 'name' => 'is_active', 'label' => __( 'Active', 'geodirectory' ), 'default' => true] ),
 		];
 	}
 
