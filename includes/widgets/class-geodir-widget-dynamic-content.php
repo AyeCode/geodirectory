@@ -133,6 +133,8 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		 */
 		$args = wp_parse_args( $args, $defaults );
 
+		$args = apply_filters( 'geodir_dynamic_content_widget_args', $args );
+
 		// Errors.
 		$errors = array();
 		if ( empty( $args['id'] ) ) {
@@ -161,6 +163,15 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 
 			$html = strtr( $html, $trans );
 			$html = geodir_unwptexturize( $html );
+		}
+
+		if ( $html ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				// Register string for WPML translation.
+				do_action( 'geodir_language_file_add_string', $html );
+			}
+
+			$html = __( $html, 'geodirectory' );
 		}
 
 		if ( $args['key'] == 'street' ) {
