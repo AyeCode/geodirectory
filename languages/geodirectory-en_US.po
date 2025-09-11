@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.131\n"
+"Project-Id-Version: GeoDirectory 2.8.132\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-04 18:42+0530\n"
-"PO-Revision-Date: 2025-09-04 18:43+0530\n"
+"POT-Creation-Date: 2025-09-11 20:05+0530\n"
+"PO-Revision-Date: 2025-09-11 20:05+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1374,9 +1374,9 @@ msgstr ""
 #: includes/class-geodir-privacy-exporters.php:344
 #: includes/custom-fields/input-functions-aui.php:1992
 #: includes/post-functions.php:1189 includes/post-functions.php:1978
-#: includes/widgets/class-geodir-widget-dynamic-content.php:407
-#: includes/widgets/class-geodir-widget-dynamic-content.php:470
-#: includes/widgets/class-geodir-widget-dynamic-content.php:495
+#: includes/widgets/class-geodir-widget-dynamic-content.php:418
+#: includes/widgets/class-geodir-widget-dynamic-content.php:481
+#: includes/widgets/class-geodir-widget-dynamic-content.php:506
 #: includes/widgets/class-geodir-widget-post-badge.php:504
 msgid "Default Category"
 msgstr ""
@@ -3622,7 +3622,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-listings.php:197
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:193
 #: includes/core-functions.php:1110 includes/post-functions.php:2011
-#: includes/widgets/class-geodir-widget-dynamic-content.php:499
+#: includes/widgets/class-geodir-widget-dynamic-content.php:510
 #: language.php:174 templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
 msgstr ""
@@ -12153,7 +12153,7 @@ msgid "Post Modified Date"
 msgstr ""
 
 #: includes/class-geodir-privacy-exporters.php:85
-#: includes/widgets/class-geodir-widget-dynamic-content.php:501
+#: includes/widgets/class-geodir-widget-dynamic-content.php:512
 #: includes/widgets/class-geodir-widget-post-badge.php:506
 msgid "Post Status"
 msgstr ""
@@ -12347,7 +12347,7 @@ msgid "- Monitor the contact system for spam and abuse."
 msgstr ""
 
 #: includes/class-geodir-report-post.php:41
-#: includes/widgets/class-geodir-widget-dynamic-content.php:500
+#: includes/widgets/class-geodir-widget-dynamic-content.php:511
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3039
 msgid "Post Author"
 msgstr ""
@@ -13327,7 +13327,7 @@ msgstr ""
 
 #: includes/custom-fields/functions.php:1528
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:280
-#: includes/widgets/class-geodir-widget-dynamic-content.php:524
+#: includes/widgets/class-geodir-widget-dynamic-content.php:535
 #: includes/widgets/class-geodir-widget-post-badge.php:522
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1316
 #: includes/widgets/class-geodir-widget-simple-archive.php:732
@@ -13337,7 +13337,7 @@ msgstr ""
 
 #: includes/custom-fields/functions.php:1529
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:281
-#: includes/widgets/class-geodir-widget-dynamic-content.php:525
+#: includes/widgets/class-geodir-widget-dynamic-content.php:536
 #: includes/widgets/class-geodir-widget-post-badge.php:523
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1317
 #: includes/widgets/class-geodir-widget-simple-archive.php:733
@@ -13347,7 +13347,7 @@ msgstr ""
 
 #: includes/custom-fields/functions.php:1530
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:276
-#: includes/widgets/class-geodir-widget-dynamic-content.php:520
+#: includes/widgets/class-geodir-widget-dynamic-content.php:531
 #: includes/widgets/class-geodir-widget-post-badge.php:518
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1312
 #: includes/widgets/class-geodir-widget-simple-archive.php:728
@@ -13357,7 +13357,7 @@ msgstr ""
 
 #: includes/custom-fields/functions.php:1531
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:277
-#: includes/widgets/class-geodir-widget-dynamic-content.php:521
+#: includes/widgets/class-geodir-widget-dynamic-content.php:532
 #: includes/widgets/class-geodir-widget-post-badge.php:519
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1313
 #: includes/widgets/class-geodir-widget-simple-archive.php:729
@@ -13367,7 +13367,7 @@ msgstr ""
 
 #: includes/custom-fields/functions.php:1532
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:278
-#: includes/widgets/class-geodir-widget-dynamic-content.php:522
+#: includes/widgets/class-geodir-widget-dynamic-content.php:533
 #: includes/widgets/class-geodir-widget-post-badge.php:520
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1314
 #: includes/widgets/class-geodir-widget-simple-archive.php:730
@@ -13377,7 +13377,7 @@ msgstr ""
 
 #: includes/custom-fields/functions.php:1533
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:279
-#: includes/widgets/class-geodir-widget-dynamic-content.php:523
+#: includes/widgets/class-geodir-widget-dynamic-content.php:534
 #: includes/widgets/class-geodir-widget-post-badge.php:521
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1315
 #: includes/widgets/class-geodir-widget-simple-archive.php:731
@@ -13387,7 +13387,7 @@ msgstr ""
 
 #: includes/custom-fields/functions.php:1534
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:282
-#: includes/widgets/class-geodir-widget-dynamic-content.php:526
+#: includes/widgets/class-geodir-widget-dynamic-content.php:537
 #: includes/widgets/class-geodir-widget-post-badge.php:524
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1318
 #: includes/widgets/class-geodir-widget-simple-archive.php:734
@@ -13397,7 +13397,7 @@ msgstr ""
 
 #: includes/custom-fields/functions.php:1535
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:283
-#: includes/widgets/class-geodir-widget-dynamic-content.php:527
+#: includes/widgets/class-geodir-widget-dynamic-content.php:538
 #: includes/widgets/class-geodir-widget-post-badge.php:525
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1319
 #: includes/widgets/class-geodir-widget-simple-archive.php:735
@@ -14904,12 +14904,12 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/post-functions.php:1257
-#: includes/widgets/class-geodir-widget-dynamic-content.php:421
+#: includes/widgets/class-geodir-widget-dynamic-content.php:432
 msgid "NEW"
 msgstr ""
 
 #: includes/post-functions.php:1259
-#: includes/widgets/class-geodir-widget-dynamic-content.php:423
+#: includes/widgets/class-geodir-widget-dynamic-content.php:434
 msgid "UPDATED"
 msgstr ""
 
@@ -14918,12 +14918,12 @@ msgid "Watch Video"
 msgstr ""
 
 #: includes/post-functions.php:1989
-#: includes/widgets/class-geodir-widget-dynamic-content.php:496
+#: includes/widgets/class-geodir-widget-dynamic-content.php:507
 msgid "Overall Rating"
 msgstr ""
 
 #: includes/post-functions.php:2000
-#: includes/widgets/class-geodir-widget-dynamic-content.php:497
+#: includes/widgets/class-geodir-widget-dynamic-content.php:508
 msgid "Rating Count"
 msgstr ""
 
@@ -16660,12 +16660,12 @@ msgid ""
 "post url, or the field key for any other info %%email%%."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:139
+#: includes/widgets/class-geodir-widget-dynamic-content.php:141
 #: includes/widgets/class-geodir-widget-post-badge.php:409
 msgid "post id is missing"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:142
+#: includes/widgets/class-geodir-widget-dynamic-content.php:144
 #: includes/widgets/class-geodir-widget-post-address.php:353
 #: includes/widgets/class-geodir-widget-post-badge.php:412
 #: includes/widgets/class-geodir-widget-post-content.php:218
@@ -16674,45 +16674,45 @@ msgstr ""
 msgid "invalid post type"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:145
+#: includes/widgets/class-geodir-widget-dynamic-content.php:147
 #: includes/widgets/class-geodir-widget-post-badge.php:415
 msgid "field key is missing"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:498
+#: includes/widgets/class-geodir-widget-dynamic-content.php:509
 #: includes/widgets/class-geodir-widget-post-badge.php:505
 msgid "post id"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:502
+#: includes/widgets/class-geodir-widget-dynamic-content.php:513
 #: includes/widgets/class-geodir-widget-post-badge.php:502
 msgid "post date"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:503
+#: includes/widgets/class-geodir-widget-dynamic-content.php:514
 msgid "post date gmt"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:504
+#: includes/widgets/class-geodir-widget-dynamic-content.php:515
 #: includes/widgets/class-geodir-widget-post-badge.php:503
 msgid "post modified"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:505
+#: includes/widgets/class-geodir-widget-dynamic-content.php:516
 msgid "post modified gmt"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:506
+#: includes/widgets/class-geodir-widget-dynamic-content.php:517
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3037
 msgid "Logged In"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:507
+#: includes/widgets/class-geodir-widget-dynamic-content.php:518
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3038
 msgid "Logged Out"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-dynamic-content.php:508
+#: includes/widgets/class-geodir-widget-dynamic-content.php:519
 #: vendor/ayecode/wp-super-duper/sd-functions.php:3040
 msgid "Specific User Roles"
 msgstr ""
