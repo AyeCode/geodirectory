@@ -654,17 +654,34 @@ class GeoDir_Elementor {
 					continue;
 				}
 
-				$image_meta = isset( $item->metadata ) ? maybe_unserialize( $item->metadata ) : '';
+				$image_meta = isset( $item->metadata ) ? maybe_unserialize( $item->metadata ) : array();
+
+				$width = '';
+				$height = '';
+
+				if ( ! empty( $image_meta ) && is_array( $image_meta ) ) {
+					if ( ! empty( $image_meta['sizes'][ $thumbnail_size ]['width'] ) ) {
+						$width = $image_meta['sizes'][ $thumbnail_size ]['width'];
+					} else if ( ! empty( $image_meta['width'] ) ) {
+						$width = $image_meta['width'];
+					}
+
+					if ( ! empty( $image_meta['sizes'][ $thumbnail_size ]['height'] ) ) {
+						$height = $image_meta['sizes'][ $thumbnail_size ]['height'];
+					} else if ( ! empty( $image_meta['height'] ) ) {
+						$height = $image_meta['height'];
+					}
+				}
 
 				$image_data = [
-					'alt' => stripslashes_deep( $item->caption ),
+					'alt' => stripslashes( $item->caption ),
 					'media' => geodir_get_image_src( $item, 'full' ),
 					'src' => $img_src,
-					'width' => !empty($image_meta['sizes'][$thumbnail_size]['width']) ? $image_meta['sizes'][$thumbnail_size]['width'] : $image_meta['width'],
-					'height' => !empty($image_meta['sizes'][$thumbnail_size]['height']) ? $image_meta['sizes'][$thumbnail_size]['height'] : $image_meta['height'],
-					'caption' =>stripslashes_deep(  $item->caption ),
-					'description' => stripslashes_deep( $item->caption ),
-					'title' => stripslashes_deep( $item->title ),
+					'width' => $width,
+					'height' => $height,
+					'caption' =>stripslashes( $item->caption ),
+					'description' => stripslashes( $item->caption ),
+					'title' => stripslashes( $item->title )
 				];
 
 				$widget->add_render_attribute( 'gallery_item_' . $unique_index, [
