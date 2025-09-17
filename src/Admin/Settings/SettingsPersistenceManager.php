@@ -37,7 +37,7 @@ final class SettingsPersistenceManager {
 	public function __construct() {
 		$this->handler_classes = [
 			'general' => GeneralSettingsHandler::class,
-//			'fields'  => FieldSettingsHandler::class,
+			'fields'  => FieldSettingsHandler::class,
 			'tabs'    => TabSettingsHandler::class,
 			'sorting' => SortingSettingsHandler::class,
 		];

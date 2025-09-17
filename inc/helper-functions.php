@@ -2190,3 +2190,118 @@ function geodir_column_exist( $db, $column ) {
 
 	return $exists;
 }
+
+
+/**
+ * Get the show in locations.
+ *
+ * @param string $field
+ * @param string $field_type
+ *
+ * @return mixed|void
+ */
+function geodir_show_in_locations($field = '', $field_type=''){
+
+	/*
+	 * We wrap the key values in [] so we can search the DB easier with a LIKE query.
+	 */
+	$show_in_locations = array(
+//		""    => __( "Select Options", 'geodirectory' ),
+		"[detail]"    => __( "Details page sidebar", 'geodirectory' ),
+		//"[moreinfo]"  => __( "More info tab", 'geodirectory' ),
+		"[listing]"   => __( "Listings page", 'geodirectory' ),
+		//"[owntab]"    => __( "Details page own tab", 'geodirectory' ),
+		"[mapbubble]" => __( "Map bubble", 'geodirectory' ),
+	);
+
+	/**
+	 * Filter the locations array for where to display custom fields.
+	 *
+	 * @since 1.6.6
+	 *
+	 * @param array $show_in_locations The array of locations and descriptions.
+	 * @param object $field The field being displayed info.
+	 * @param string $field The type of field.
+	 */
+	return apply_filters( 'geodir_show_in_locations', $show_in_locations, $field, $field_type );
+}
+
+
+/**
+ * Retrieve list of mime types and file extensions allowed for file upload.
+ *
+ * @since   1.4.7
+ * @package GeoDirectory
+ *
+ * @return array Array of mime types.
+ */
+function geodir_allowed_mime_types() {
+	/**
+	 * Filter the list of mime types and file extensions allowed for file upload.
+	 *
+	 * @since   1.4.7
+	 * @package GeoDirectory
+	 *
+	 * @param array $geodir_allowed_mime_types and file extensions.
+	 */
+	return apply_filters( 'geodir_allowed_mime_types', array(
+			'Image'       => array( // Image formats.
+				'jpg'  => 'image/jpeg',
+				'jpe'  => 'image/jpeg',
+				'jpeg' => 'image/jpeg',
+				'gif'  => 'image/gif',
+				'png'  => 'image/png',
+				'bmp'  => 'image/bmp',
+				'ico'  => 'image/x-icon',
+				'webp' => 'image/webp',
+				'avif' => 'image/avif'
+			),
+			'Video'       => array( // Video formats.
+				'asf'  => 'video/x-ms-asf',
+				'avi'  => 'video/avi',
+				'flv'  => 'video/x-flv',
+				'mkv'  => 'video/x-matroska',
+				'mp4'  => 'video/mp4',
+				'mpeg' => 'video/mpeg',
+				'mpg'  => 'video/mpeg',
+				'wmv'  => 'video/x-ms-wmv',
+				'3gp'  => 'video/3gpp',
+			),
+			'Audio'       => array( // Audio formats.
+				'ogg' => 'audio/ogg',
+				'mp3' => 'audio/mpeg',
+				'wav' => 'audio/wav',
+				'wma' => 'audio/x-ms-wma',
+			),
+			'Text'        => array( // Text formats.
+				'css'  => 'text/css',
+				'csv'  => 'text/csv',
+				'htm'  => 'text/html',
+				'html' => 'text/html',
+				'txt'  => 'text/plain',
+				'rtx'  => 'text/richtext',
+				'vtt'  => 'text/vtt',
+			),
+			'Application' => array( // Application formats.
+				'doc'  => 'application/msword',
+				'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+				'exe'  => 'application/x-msdownload',
+				'js'   => 'application/javascript',
+				'odt'  => 'application/vnd.oasis.opendocument.text',
+				'pdf'  => 'application/pdf',
+				'pot'  => 'application/vnd.ms-powerpoint',
+				'ppt'  => 'application/vnd.ms-powerpoint',
+				'pptx' => 'application/vnd.ms-powerpoint',
+				'psd'  => 'application/octet-stream',
+				'rar'  => 'application/rar',
+				'rtf'  => 'application/rtf',
+				'swf'  => 'application/x-shockwave-flash',
+				'tar'  => 'application/x-tar',
+				'xls'  => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+				'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+				'zip'  => 'application/zip',
+				'gpx'  => 'application/gpx',
+			)
+		)
+	);
+}

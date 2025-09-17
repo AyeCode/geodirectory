@@ -12,7 +12,7 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Core;
 
-use AyeCode\GeoDirectory\Database\AttachmentRepository;
+use AyeCode\GeoDirectory\Database\Repository\AttachmentRepository;
 
 final class Media {
 	private AttachmentRepository $repository;

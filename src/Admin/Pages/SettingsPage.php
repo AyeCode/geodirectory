@@ -223,6 +223,8 @@ final class SettingsPage extends Settings_Framework {
 	public function get_option( $key, $default = false ) {
 		$options = get_option( $this->option_name );
 
+//		print_r( $options );exit;
+
 		return isset( $options[ $key ] ) ? $options[ $key ] : $default;
 	}
 

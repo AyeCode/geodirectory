@@ -71,9 +71,9 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\Statuses::class );
 
 	// Database Repositories (Data Layer)
-	$container->bind( \AyeCode\GeoDirectory\Database\ReviewRepository::class );
-	$container->bind( \AyeCode\GeoDirectory\Database\CustomFieldRepository::class );
-	$container->bind( \AyeCode\GeoDirectory\Database\AttachmentRepository::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Repository\ReviewRepository::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Repository\CustomFieldRepository::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Repository\AttachmentRepository::class );
 
 	// Common Services (CPTs, Taxonomies, etc.)
 	$container->bind( \AyeCode\GeoDirectory\Common\CptConfig::class );

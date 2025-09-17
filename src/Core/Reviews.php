@@ -15,7 +15,7 @@ namespace AyeCode\GeoDirectory\Core;
 
 use AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface;
 use AyeCode\GeoDirectory\Core\Utils\Settings;
-use AyeCode\GeoDirectory\Database\ReviewRepository;
+use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
 
 final class Reviews {
 	private \wpdb $db;

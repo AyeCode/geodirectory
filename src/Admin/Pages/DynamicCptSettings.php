@@ -82,6 +82,9 @@ final class DynamicCptSettings extends Settings_Framework {
 		}
 
 		// Dynamic sorting config
+		$sections[] = $this->get_fields_config();
+
+		// Dynamic sorting config
 		$sections[] = $this->get_sorting_config();
 
 		// Dynamic tabs config
@@ -117,6 +120,31 @@ final class DynamicCptSettings extends Settings_Framework {
 	public function save_settings( $new_settings = array() ): bool {
 		return $this->persistence_manager->save_all( $this->cpt_slug, $new_settings );
 	}
+
+	private function get_fields_config(): array {
+		global $wpdb;
+		$post_type = $this->cpt_slug;
+		// Start with a base configuration. You can still keep this in a file if you want.
+		$base_path = dirname( __FILE__ ) . '/../config/cpt-settings/fields.php';
+		$config = include( $base_path );
+
+
+//		$config['templates'][] =[
+//			'group_title' =>  __( 'Custom Fields', 'geodirectory' ),
+//			'options' => $custom_options
+//		];
+
+
+		/**
+		 * Filters the final tabs configuration array for a specific post type.
+		 * This allows addons to easily modify the tab builder settings.
+		 *
+		 * @param array  $config    The tabs configuration array.
+		 * @param string $cpt_slug  The current post type slug.
+		 */
+		return apply_filters( 'geodir_cpt_settings_fields_config', $config, $this->cpt_slug );
+	}
+
 
 	/**
 	 * Generates the dynamic configuration for the 'Tabs' settings section.
@@ -221,12 +249,6 @@ final class DynamicCptSettings extends Settings_Framework {
 			]),
 		];
 
-
-
-
-//		$config['templates'][]
-
-
 		// Standard Fields
 		$table_name = geodirectory()->tables->get( 'custom_fields' );
 		$standard = $wpdb->get_results(
@@ -316,16 +338,10 @@ final class DynamicCptSettings extends Settings_Framework {
 					'fields' => TabFieldFactory::build([
 						'tab_name'=>['default' => esc_attr($result['admin_title'])],
 						'tab_icon'=>['default' => esc_attr($result['field_icon'])],
-//						'tab_content' =>[
-//							'type' => 'hidden',
-//						],
 						'tab_content_hidden',
 						'uid',
 						'parent_id',
-//						'post_type',
-//						'tab_layout',
 						'tab_type'=>['default' => 'meta'],
-//						'tab_key'=>['default' => esc_attr($result['htmlvar_name'])],
 						'type'=>['default' => esc_attr($result['htmlvar_name'])],
 					])
 				];

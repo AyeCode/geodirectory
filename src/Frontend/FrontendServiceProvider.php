@@ -11,10 +11,6 @@ declare( strict_types=1 );
 
 namespace AyeCode\GeoDirectory\Frontend;
 
-use AyeCode\GeoDirectory\Core\Container;
-use AyeCode\GeoDirectory\Core\Reviews;
-use AyeCode\GeoDirectory\Database\ReviewRepository;
-
 /**
  * The main service provider for the frontend.
  *

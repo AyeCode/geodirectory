@@ -22,7 +22,7 @@ use AyeCode\GeoDirectory\Core\Seo;
 use AyeCode\GeoDirectory\Core\Statuses;
 use AyeCode\GeoDirectory\Core\Tables;
 use AyeCode\GeoDirectory\Core\Utils\Settings;
-use AyeCode\GeoDirectory\Database\ReviewRepository;
+use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
 
 /**
  * The main GeoDirectory class.
@@ -34,7 +34,7 @@ use AyeCode\GeoDirectory\Database\ReviewRepository;
  * @property-read \AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface $locations The Locations service.
  * @property-read \AyeCode\GeoDirectory\Core\Reviews $reviews The Reviews service.
  * @property-read \AyeCode\GeoDirectory\Core\Seo $seo The SEO service.
- * @property-read \AyeCode\GeoDirectory\Database\ReviewRepository $reviewRepository The Review Repository.
+ * @property-read \AyeCode\GeoDirectory\Database\Repository\ReviewRepository $reviewRepository The Review Repository.
  * @property-read \AyeCode\GeoDirectory\Core\Tables $tables The Tables service.
  * @property-read \AyeCode\GeoDirectory\Core\Utils\Settings $settings The Settings service.
  * @property-read \AyeCode\GeoDirectory\Core\Media $media The Media service.

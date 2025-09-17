@@ -16,20 +16,248 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Import our new factory class to build the field settings.
 use AyeCode\GeoDirectory\Admin\Utils\FormFieldFactory;
+use AyeCode\GeoDirectory\Admin\Utils\FormFields;
 
 return [
-	'id'    => 'fields_form_builder',
-	'name'  => __( 'Fields', 'geodirectory' ),
-	'icon'  => 'fa-solid fa-bars',
-	'type'  => 'form_builder',
+	'id'        => 'fields_form_builder',
+	'name'      => __( 'Fields', 'geodirectory' ),
+	'icon'      => 'fa-solid fa-bars',
+	'type'      => 'form_builder',
 	'templates' => [
 		[
 			'group_title' => __( 'Standard Fields', 'geodirectory' ),
-			'options' => [
+			'options'     => [
+				// Text
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Text', 'geodirectory' ),
+					'id'     => 'text',
+					'icon'   => 'fas fa-minus',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'text' ],
+						],
+//						'display' => [
+//							'show_in' => ['default'     => [ '[mapbubble]','[listing]' ] ],
+//						]
+					],
+				] ),
+
+				// Textarea
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Textarea', 'geodirectory' ),
+					'icon'   => 'fas fa-bars',
+					'id'     => 'textarea',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'textarea' ],
+						],
+					],
+				] ),
+
+				// Select
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Select', 'geodirectory' ),
+					'icon'   => 'fas fa-caret-square-down',
+					'id'     => 'select',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'select' ],
+						],
+					],
+				] ),
+
+				// MultiSelect
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Multiselect', 'geodirectory' ),
+					'icon'   => 'fas fa-caret-square-down',
+					'id'     => 'multiselect',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'multiselect' ],
+						],
+					],
+				] ),
+
+				// Checkbox
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Checkbox', 'geodirectory' ),
+					'icon'   => 'fas fa-check-square',
+					'id'     => 'checkbox',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'checkbox' ],
+						],
+						'behavior' => [
+							'default_value' => [
+								'type'        => 'toggle',
+								'description' => __( 'Should the checkbox be checked by default?', 'geodirectory' ),
+							],
+							'db_default' => [
+								'type'        => 'toggle',
+								'description' => __( 'Should the value be set by default in the database?', 'geodirectory' ),
+							]
+						]
+					],
+				] ),
+
+				// Radio
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Radio', 'geodirectory' ),
+					'icon'   => 'far fa-dot-circle',
+					'id'     => 'radio',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'radio' ],
+						],
+					],
+				] ),
+
+				// Email
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Email', 'geodirectory' ),
+					'icon'   => 'far fa-envelope',
+					'id'     => 'email',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'email' ],
+							'admin_title' => [ 'default' => 'Email Address' ],
+							'frontend_title' => [ 'default' => 'Email Address' ],
+						],
+						'display' => [
+							'field_icon' => [ 'default' => 'fas fa-envelope' ],
+						]
+					],
+				] ),
+
+				// Phone
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Phone', 'geodirectory' ),
+					'icon'   => 'fas fa-phone',
+					'id'     => 'phone',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'phone' ],
+							'admin_title' => [ 'default' => 'Phone Number' ],
+							'frontend_title' => [ 'default' => 'Phone Number' ],
+						],
+						'display' => [
+							'field_icon' => [ 'default' => 'fas fa-phone' ],
+						]
+					],
+				] ),
+
+				// URL
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'URL', 'geodirectory' ),
+					'icon'   => 'fas fa-link',
+					'id'     => 'url',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'url' ],
+							'admin_title' => [ 'default' => 'Website' ],
+							'frontend_title' => [ 'default' => 'Website' ],
+						],
+						'display' => [
+							'field_icon' => [ 'default' => 'fas fa-globe' ],
+						]
+					],
+				] ),
+
+				// Date
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Date', 'geodirectory' ),
+					'icon'   => 'fas fa-calendar',
+					'id'     => 'datepicker',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'date' ],
+							'admin_title' => [ 'default' => 'Date' ],
+							'frontend_title' => [ 'default' => 'Date' ],
+						],
+						'display' => [
+							'field_icon' => [ 'default' => 'fas fa-calendar' ],
+						]
+					],
+				] ),
+
+				// Time
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'Time', 'geodirectory' ),
+					'icon'   => 'fas fa-clock',
+					'id'     => 'time',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'time' ],
+							'admin_title' => [ 'default' => 'Time' ],
+							'frontend_title' => [ 'default' => 'Time' ],
+						],
+						'display' => [
+							'field_icon' => [ 'default' => 'fas fa-clock' ],
+						]
+					],
+				] ),
+
+				// HTML
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'HTML', 'geodirectory' ),
+					'icon'   => 'fas fa-code',
+					'id'     => 'html',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'html' ],
+							'admin_title' => [ 'default' => 'HTML' ],
+							'frontend_title' => [ 'default' => 'HTML' ],
+						],
+						'display' => [
+							'field_icon' => [ 'default' => 'fas fa-code' ],
+						]
+					],
+				] ),
+
+				// File Upload
+				FormFieldFactory::build_field_settings( [
+					'title'  => __( 'File Upload', 'geodirectory' ),
+					'icon'   => 'far fa-file',
+					'id'     => 'file',
+					'panels' => [
+						'general' => [
+							'type' => [ 'default' => 'file' ],
+							'admin_title' => [ 'default' => 'File Upload' ],
+							'frontend_title' => [ 'default' => 'File Upload' ],
+						],
+						'display' => [
+							'field_icon' => [ 'default' => 'far fa-file' ],
+						],
+						'validation' => [
+							'validation_pattern' => [ 'type' => 'hidden' ],
+						]
+					],
+				] ),
+
+			]
+		],
+		[
+			'group_title' => __( 'Predefined Fields', 'geodirectory' ),
+			'options'     => [
 				[
-					'title'   => __( 'Text', 'geodirectory' ),
-					'icon'    => 'fas fa-minus',
-					'fields'  => FormFieldFactory::build([
+					'id'       => 'custom_title_skeleton',
+					'title'    => 'Listing Title',
+					'icon'     => 'fa-solid fa-heading',
+					'limit'    => 1,
+					'base_id'  => 'text', // <-- The actual field type to create.
+					'defaults' => [           // <-- The values to apply to the new instance.
+						'label'       => 'Listing Title',
+						'key'         => 'listing_title',
+						'description' => 'The main title for the listing.',
+						'is_active'   => true,
+						'is_required' => true,
+					]
+				],
+				[
+					'title'  => __( 'Text', 'geodirectory' ),
+					'id'     => 'textx',
+					'icon'   => 'fas fa-minus',
+					'fields' => FormFieldFactory::build( [
 						'type'           => [ 'default' => 'text' ],
 						'admin_title'    => [ 'default' => 'New Text Field' ],
 						'frontend_title' => [ 'default' => 'New Text Field' ],
@@ -45,242 +273,9 @@ return [
 						'show_in',
 						'css_class',
 						'cat_sort',
-					]),
-				],
-				[
-					'title'   => __( 'Textarea', 'geodirectory' ),
-					'icon'    => 'fas fa-bars',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'textarea' ],
-						'admin_title'    => [ 'default' => 'New Textarea' ],
-						'frontend_title' => [ 'default' => 'New Textarea' ],
-						'htmlvar_name',
-						'field_icon',
-						'frontend_desc',
-						'default_value',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-					]),
-				],
-				[
-					'title'   => __( 'Select', 'geodirectory' ),
-					'icon'    => 'fas fa-caret-square-down',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'select' ],
-						'admin_title'    => [ 'default' => 'New Select' ],
-						'frontend_title' => [ 'default' => 'New Select' ],
-						'htmlvar_name',
-						'field_icon',
-						'frontend_desc',
-						'options'        => [ 'default' => "option_1 : Option 1\noption_2 : Option 2" ],
-						'default_value',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-						'cat_sort',
-					]),
-				],
-				[
-					'title'   => __( 'Multiselect', 'geodirectory' ),
-					'icon'    => 'fas fa-caret-square-down',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'multiselect' ],
-						'admin_title'    => [ 'default' => 'New Multiselect' ],
-						'frontend_title' => [ 'default' => 'New Multiselect' ],
-						'htmlvar_name',
-						'field_icon',
-						'frontend_desc',
-						'options'        => [ 'default' => "option_1 : Option 1\noption_2 : Option 2" ],
-						'default_value',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-						'cat_sort',
-					]),
-				],
-				[
-					'title'   => __( 'Checkbox', 'geodirectory' ),
-					'icon'    => 'fas fa-check-square',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'checkbox' ],
-						'admin_title'    => [ 'default' => 'New Checkbox' ],
-						'frontend_title' => [ 'default' => 'New Checkbox' ],
-						'htmlvar_name',
-						'field_icon',
-						'frontend_desc',
-						'default_value'  => [ 'description' => __( 'Should this be checked by default? Use 1 for checked, 0 for unchecked.', 'geodirectory' ) ],
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-						'cat_sort',
-					]),
-				],
-				[
-					'title'   => __( 'Radio', 'geodirectory' ),
-					'icon'    => 'far fa-dot-circle',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'radio' ],
-						'admin_title'    => [ 'default' => 'New Radio Buttons' ],
-						'frontend_title' => [ 'default' => 'New Radio Buttons' ],
-						'htmlvar_name',
-						'field_icon',
-						'frontend_desc',
-						'options'        => [ 'default' => "option_1 : Option 1\noption_2 : Option 2" ],
-						'default_value',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-						'cat_sort',
-					]),
-				],
-				[
-					'title'   => __( 'Email', 'geodirectory' ),
-					'icon'    => 'far fa-envelope',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'email' ],
-						'admin_title'    => [ 'default' => 'New Email Field' ],
-						'frontend_title' => [ 'default' => 'Email Address' ],
-						'htmlvar_name',
-						'field_icon'     => [ 'default' => 'fas fa-envelope' ],
-						'frontend_desc',
-						'placeholder',
-						'default_value',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-					]),
-				],
-				[
-					'title'   => __( 'Phone', 'geodirectory' ),
-					'icon'    => 'fas fa-phone',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'phone' ],
-						'admin_title'    => [ 'default' => 'New Phone Field' ],
-						'frontend_title' => [ 'default' => 'Phone Number' ],
-						'htmlvar_name',
-						'field_icon'     => [ 'default' => 'fas fa-phone' ],
-						'frontend_desc',
-						'placeholder',
-						'default_value',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-					]),
-				],
-				[
-					'title'   => __( 'URL', 'geodirectory' ),
-					'icon'    => 'fas fa-link',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'url' ],
-						'admin_title'    => [ 'default' => 'New URL Field' ],
-						'frontend_title' => [ 'default' => 'Website' ],
-						'htmlvar_name',
-						'field_icon'     => [ 'default' => 'fas fa-globe' ],
-						'frontend_desc',
-						'placeholder',
-						'default_value',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-					]),
-				],
-				[
-					'title'   => __( 'Date', 'geodirectory' ),
-					'icon'    => 'fas fa-calendar',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'datepicker' ],
-						'admin_title'    => [ 'default' => 'New Date Field' ],
-						'frontend_title' => [ 'default' => 'New Date Field' ],
-						'htmlvar_name',
-						'field_icon',
-						'frontend_desc',
-						'default_value',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-						'cat_sort',
-					]),
-				],
-				[
-					'title'   => __( 'Time', 'geodirectory' ),
-					'icon'    => 'fas fa-clock',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'time' ],
-						'admin_title'    => [ 'default' => 'New Time Field' ],
-						'frontend_title' => [ 'default' => 'New Time Field' ],
-						'htmlvar_name',
-						'field_icon',
-						'frontend_desc',
-						'default_value',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-						'cat_sort',
-					]),
-				],
-				[
-					'title'   => __( 'HTML', 'geodirectory' ),
-					'icon'    => 'fas fa-code',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'html' ],
-						'admin_title'    => [ 'default' => 'New HTML Block' ],
-						'frontend_title' => [ 'default' => 'New HTML Block' ],
-						'htmlvar_name',
-						'frontend_desc',
-						'default_value',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-					]),
-				],
-				[
-					'title'   => __( 'File Upload', 'geodirectory' ),
-					'icon'    => 'far fa-file',
-					'fields'  => FormFieldFactory::build([
-						'type'           => [ 'default' => 'file' ],
-						'admin_title'    => [ 'default' => 'New File Upload' ],
-						'frontend_title' => [ 'default' => 'New File Upload' ],
-						'htmlvar_name',
-						'field_icon',
-						'frontend_desc',
-						'is_required',
-						'required_msg',
-						'is_active',
-						'for_admin_use',
-						'show_in',
-						'css_class',
-					]),
-				],
+					] ),
+				]
 			]
-		],
+		]
 	]
 ];

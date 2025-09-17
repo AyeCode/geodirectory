@@ -3,8 +3,8 @@
 namespace AyeCode\GeoDirectory\Admin\Settings\Handlers;
 
 use AyeCode\GeoDirectory\Admin\Settings\PersistenceHandlerInterface;
-use AyeCode\GeoDirectory\Database\TabRepository;
 use AyeCode\GeoDirectory\Admin\Utils\DataMapper;
+use AyeCode\GeoDirectory\Database\Repository\TabRepository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

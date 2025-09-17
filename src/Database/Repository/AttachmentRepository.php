@@ -10,7 +10,7 @@
 
 declare( strict_types = 1 );
 
-namespace AyeCode\GeoDirectory\Database;
+namespace AyeCode\GeoDirectory\Database\Repository;
 
 final class AttachmentRepository {
 	private \wpdb $db;

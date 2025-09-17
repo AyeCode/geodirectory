@@ -1,6 +1,6 @@
 <?php
 
-namespace AyeCode\GeoDirectory\Database;
+namespace AyeCode\GeoDirectory\Database\Repository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
