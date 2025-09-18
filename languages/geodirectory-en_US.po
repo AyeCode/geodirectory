@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.132\n"
+"Project-Id-Version: GeoDirectory 2.8.133\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-11 20:05+0530\n"
-"PO-Revision-Date: 2025-09-11 20:05+0530\n"
+"POT-Creation-Date: 2025-09-18 20:07+0530\n"
+"PO-Revision-Date: 2025-09-18 20:07+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -3368,7 +3368,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:1034
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:185
-#: includes/class-geodir-elementor.php:1800 includes/helper-functions.php:1682
+#: includes/class-geodir-elementor.php:1817 includes/helper-functions.php:1682
 #: includes/helper-functions.php:1782
 #: includes/widgets/class-geodir-widget-categories.php:163
 #: includes/widgets/class-geodir-widget-categories.php:173
@@ -11446,7 +11446,7 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:1204
+#: includes/class-geodir-elementor.php:1221
 msgid "Could not retrieve template."
 msgstr ""
 
