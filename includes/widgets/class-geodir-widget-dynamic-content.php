@@ -241,7 +241,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			 */
 			$is_date = apply_filters( 'geodir_dynamic_content_is_date', $is_date, $match_field, $field, $args, $find_post );
 
-			$match_value = in_array( $match_field, $find_post_keys ) ? esc_attr( trim( $find_post->{$match_field} ) ) : '';
+			$match_value = in_array( $match_field, $find_post_keys ) && ! is_null( $find_post->{$match_field} ) ? esc_attr( trim( $find_post->{$match_field} ) ) : '';
 			$match_found = $match_field === '' ? true : false;
 
 			if ( in_array( $match_field, array( 'logged_in', 'logged_out', 'user_roles' ) ) ) {
