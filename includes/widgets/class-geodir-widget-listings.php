@@ -185,6 +185,16 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			'advanced'    => true,
 			'group'       => __( 'Filters', 'geodirectory' ),
 		);
+		$arguments['rating'] = array(
+			'title'    => __( 'Filter by rating:', 'geodirectory' ),
+			'desc'     => __( 'Filter listings by star rating.', 'geodirectory' ),
+			'type'     => 'select',
+			'options'  => geodir_search_rating_options( true ),
+			'default'  => '',
+			'desc_tip' => true,
+			'advanced' => true,
+			'group'    => __( 'Filters', 'geodirectory' )
+		);
 		$arguments['post_author']           = array(
 			'title'    => __( 'Filter by author:', 'geodirectory' ),
 			'desc'     => __( 'Filter by current_user, current_author or ID (default = unfiltered). current_user: Filters the listings by author id of the logged in user. current_author: Filters the listings by author id of current viewing post/listing. 11: Filters the listings by author id = 11. Leave blank to show posts from all authors.', 'geodirectory' ),
@@ -797,6 +807,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				'category'              => array(),
 				'related_to'            => '',
 				'tags'                  => '',
+				'rating'                => '',
 				'post_author'           => '',
 				'category_title'        => '',
 				'sort_by'               => 'az',
@@ -1426,6 +1437,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				$query_args['post__not_in'] = implode( ',', $post__not_in );
 			}
 		}
+
+		// Rating filter
+		$query_args['rating'] = ! empty( $instance['rating'] ) ? min( (float) $instance['rating'], 5 ) : '';
 
 		global $geodir_widget_cpt, $gd_layout_class, $geodir_is_widget_listing;
 

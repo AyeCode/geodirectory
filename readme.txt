@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 2.8.133
+Stable tag: 2.8.134
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -318,6 +318,10 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 == Changelog ==
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
+
+= GeoDirectory v2.8.134 - 2025-09-25 =
+* Option added to sort listings by modified date - ADDED
+* GD > Listings option added to filter listing by rating - ADDED
 
 = GeoDirectory v2.8.133 - 2025-09-18 =
 * External image don't work with Elementor Pro Image Gallery - FIXED
