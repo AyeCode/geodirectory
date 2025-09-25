@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.134 - 2025-09-TBD =
 * Option added to sort listings by modified date - ADDED
+* GD > Listings option added to filter listing by rating - ADDED
 
 = GeoDirectory v2.8.133 - 2025-09-18 =
 * External image don't work with Elementor Pro Image Gallery - FIXED

@@ -1691,3 +1691,26 @@ function geodir_check_fast_ajax_file( $active = 0, $force_copy = false ) {
 
 	return $return;
 }
+
+/**
+ * Get the rating filter options.
+ *
+ * @since 2.8.134
+ *
+ * @param string $post_type Post type. Default empty.
+ * @return array Array of rating options.
+ */
+function geodir_search_rating_options( $placeholder = false, $post_type = '' ) {
+	$options = array();
+
+	if ( $placeholder ) {
+		$options[''] = _x( 'Any', 'rating filter', 'geodirectory' );
+	}
+
+	$options['5.0'] = __( '5-star', 'geodirectory' );
+	$options['4.0'] = __( '4-star & up', 'geodirectory' );
+	$options['3.0'] = __( '3-star & up', 'geodirectory' );
+	$options['2.0'] = __( '2-star & up', 'geodirectory' );
+
+	return apply_filters( 'geodir_search_rating_options', $options, $placeholder, $post_type );
+}

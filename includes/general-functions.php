@@ -1421,6 +1421,10 @@ function geodir_function_widget_listings_where( $where ) {
 			}
 		}
 
+		if ( ! empty( $query_args['rating'] ) && (float) $query_args['rating'] > 0 && ! geodir_cpt_has_rating_disabled( $post_type ) ) {
+			$where .= $wpdb->prepare( " AND `{$table}`.`overall_rating` >= %f", array( (float) $query_args['rating'] ) );
+		}
+
 		if ( ! empty( $query_args['post_author'] ) ) {
 			$where .= " AND " . $wpdb->posts . ".post_author = " . (int) $query_args['post_author'];
 		}
