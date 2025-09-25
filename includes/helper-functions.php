@@ -1726,6 +1726,8 @@ function geodir_sort_by_options( $post_type = 'gd_place' ) {
 		"latest" => __('Latest', 'geodirectory'),
 		"high_review" => __('Most reviews', 'geodirectory'),
 		"high_rating" => __('Highest rating', 'geodirectory'),
+		"post_modified_desc" => __( 'Recently Updated', 'geodirectory' ),
+		"post_modified_asc" => __( 'Least Recently Updated', 'geodirectory' ),
 		"random" => __('Random', 'geodirectory'),
 	);
 

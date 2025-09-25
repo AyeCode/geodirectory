@@ -1051,6 +1051,12 @@ class GeoDir_Query {
 			case 'add_date_desc':
 				$order_by_parts[] = "$wpdb->posts.post_date desc";
 				break;
+			case 'post_modified_asc':
+				$order_by_parts[] = "{$wpdb->posts}.post_modified asc";
+				break;
+			case 'post_modified_desc':
+				$order_by_parts[] = "{$wpdb->posts}.post_modified desc";
+				break;
 			case 'review_asc':
 				$order_by_parts[] = $table . ".rating_count ASC";
 				$order_by_parts[] = $table . ".overall_rating ASC";

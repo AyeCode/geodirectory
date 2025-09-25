@@ -336,6 +336,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					'field_icon'     => 'fas fa-calendar',
 					'description'    => __( 'Sort by date added', 'geodirectory' )
 				);
+
+				$fields['post_modified'] = array(
+					'post_type'      => $post_type,
+					'data_type'      => '',
+					'field_type'     => 'datetime',
+					'frontend_title' => __( 'Date Updated', 'geodirectory' ),
+					'htmlvar_name'   => 'post_modified',
+					'field_icon'     => 'fas fa-calendar',
+					'description'    => __( 'Sort by date updated', 'geodirectory' )
+				);
+
 				$fields['bigint'] = array(
 					'post_type'      => $post_type,
 					'data_type'      => '',
