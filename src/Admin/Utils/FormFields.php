@@ -218,7 +218,7 @@ final class FormFields {
 	 * @return array The final configuration array.
 	 */
 	public static function hidden( array $overrides = [] ): array {
-		return self::text( array_merge( [ 'type' => 'text'], $overrides ) );
+		return self::text( array_merge( [ 'type' => 'hidden'], $overrides ) );
 	}
 
 	/**

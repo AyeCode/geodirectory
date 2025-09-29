@@ -4,13 +4,15 @@
  *
  * Handles all database interactions for the custom fields table.
  *
- * @package GeoDirectory\Database
- * @since 3.0.0
+ * @package GeoDirectory\Database\Repository
  */
 
 declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Database\Repository;
+
+// Make sure to import the new Schema class.
+use AyeCode\GeoDirectory\Database\Schema\CustomFieldSchema;
 
 final class CustomFieldRepository {
 
@@ -20,18 +22,18 @@ final class CustomFieldRepository {
 	private $db;
 
 	/**
-	 * @var string The name of the tabs table.
+	 * @var string The name of the custom_fields table.
 	 */
 	private $table_name;
 
 	public function __construct() {
 		global $wpdb;
-		$this->db = $wpdb;
+		$this->db         = $wpdb;
 		$this->table_name = geodirectory()->tables->get( 'custom_fields' );
 	}
 
 	/**
-	 * Gets all tabs for a given post type, ordered by sort_order.
+	 * Gets all custom fields for a given post type, ordered by sort_order.
 	 *
 	 * @param string $post_type The post type slug.
 	 * @return array The raw data from the database.
@@ -44,84 +46,128 @@ final class CustomFieldRepository {
 			),
 			ARRAY_A
 		);
+
 		return $results ? $results : [];
 	}
 
 	/**
-	 * Synchronizes the tabs in the database with the provided data array.
+	 * Synchronizes the custom fields in the database with the provided data array.
 	 *
-	 * This method intelligently handles updates for existing tabs, inserts for new tabs,
-	 * and deletes any tabs that are no longer present.
+	 * This method intelligently handles updates for existing fields, inserts for new fields,
+	 * and deletes any fields that are no longer present. It is now driven by the
+	 * CustomFieldSchema class to ensure data integrity.
 	 *
 	 * @param string $post_type The post type slug.
-	 * @param array $tabs The numerically indexed array of tabs to save.
+	 * @param array $fields The numerically indexed array of fields to save.
 	 * @return bool True on success.
 	 */
-	public function sync_by_post_type( string $post_type, array $tabs ): bool {
-//		echo '###'.$post_type;print_r( $tabs );exit;
-		// 1. Get the current state of tab IDs from the database.
+	public function sync_by_post_type( string $post_type, array $fields ): bool {
+		// 1. Get schema information. This is our single source of truth.
+		$schema         = new CustomFieldSchema();
+		$schema_columns = $schema->get_column_names();
+		$schema_formats = $schema->get_formats();
+
+		// 2. Get the current state of field IDs from the database.
 		$existing_ids = $this->db->get_col(
 			$this->db->prepare( "SELECT id FROM {$this->table_name} WHERE post_type = %s", $post_type )
 		);
 		$existing_ids = array_map( 'intval', $existing_ids ); // Ensure they are integers.
 
 		$processed_ids = [];
+		$temp_to_real_id_map = []; // Map to track temporary UIDs to new DB IDs
 
-		// 2. Loop through incoming data to handle inserts and updates.
-		if ( !empty( $tabs ) ) {
-			foreach ( $tabs as $sort_order => $tab_data ) {
-				$data_to_save = [
-					'post_type'   => $post_type,
-					'data_type'     => sanitize_text_field( $tab_data['data_type'] ?? '' ),
-					'field_type'     => sanitize_key( $tab_data['field_type'] ?? '' ),
-					'frontend_title'     =>  sanitize_text_field( $tab_data['frontend_title'] ?? '' ),
-					'htmlvar_name'     => sanitize_key( $tab_data['htmlvar_name'] ?? '' ),
-					'sort_order'  => $sort_order + 1,
-					'tab_parent'  => absint( $tab_data['tab_parent'] ?? 0 ),
-					'tab_level'   => !empty($tab_data['tab_parent']) ? 1 : 0,
-					'is_active'  => absint( $tab_data['is_active'] ?? 0 ),
-					'is_default'  => $sort_order === 0 ? 1 : 0,
-					'sort'     => sanitize_key( $tab_data['sort'] ?? 'asc' ),
-				];
+		// 3. Loop through incoming data to handle inserts and updates.
+		if ( ! empty( $fields ) ) {
 
-				$tab_id = isset( $tab_data['id'] ) ? absint( $tab_data['id'] ) : 0;
+			// Get the schema defaults ONCE before the loop.
+			$schema_defaults = $schema->get_defaults();
 
-				if ( $tab_id > 0 && in_array( $tab_id, $existing_ids, true ) ) {
+			foreach ( $fields as $sort_order => $field_data ) {
+				// Start with the full set of schema defaults.
+				$data_to_save = $schema_defaults;
+
+				// Merge the submitted data over the defaults.
+				foreach ( $field_data as $key => $value ) {
+					if ( array_key_exists( $key, $data_to_save ) ) {
+						$data_to_save[ $key ] = $value;
+					}
+				}
+
+				if ( empty( $data_to_save ) ) {
+					continue;
+				}
+
+				// --- THE FIX: PART 1 ---
+				// Handle parent ID mapping first. We check the original `$field_data`
+				// because it reliably contains the temporary `_parent_id`.
+				if (isset($field_data['_parent_id']) && is_string($field_data['_parent_id']) && strpos($field_data['_parent_id'], 'new_') === 0) {
+					$temp_parent_id = $field_data['_parent_id'];
+					if (isset($temp_to_real_id_map[$temp_parent_id])) {
+						// Set the correct database parent key.
+						$data_to_save['tab_parent'] = $temp_to_real_id_map[$temp_parent_id];
+					} else {
+						// This should not happen if parents are always first in the array.
+						$data_to_save['tab_parent'] = 0;
+					}
+				}
+
+				// Override specific values controlled by the sync logic.
+				$data_to_save['post_type']  = $post_type;
+				$data_to_save['sort_order'] = $sort_order + 1;
+				// --- THE FIX: PART 2 ---
+				// Calculate `tab_level` based on the potentially updated `tab_parent` in `$data_to_save`.
+				$data_to_save['tab_level']  = ! empty( $data_to_save['tab_parent'] ) ? 1 : 0;
+				$data_to_save['field_type_key']  = ! empty( $field_data['field_type_key'] ) ?  esc_attr( $field_data['field_type_key'] ) :  esc_attr( $field_data['field_type'] );
+
+				// Never try to write the primary key.
+				unset( $data_to_save['id'] );
+
+				$field_id = isset( $field_data['id'] ) ? absint( $field_data['id'] ) : 0;
+
+				// Create a new formats array that is correctly ordered to match $data_to_save.
+				$ordered_formats = [];
+				foreach ($data_to_save as $key => $value) {
+					if (isset($schema_formats[$key])) {
+						$ordered_formats[] = $schema_formats[$key];
+					}
+				}
+
+				if ( $field_id > 0 && in_array( $field_id, $existing_ids, true ) ) {
 					// This is an UPDATE.
 					$this->db->update(
 						$this->table_name,
 						$data_to_save,
-						[ 'id' => $tab_id ],
-						[ '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%s' ],
+						[ 'id' => $field_id ],
+						$ordered_formats,
+						[ '%d' ]
 					);
-					$processed_ids[] = $tab_id;
+					$processed_ids[] = $field_id;
 				} else {
-//					echo $this->table_name.'###'.$tab_id;
-//					print_r( $data_to_save );
 					// This is an INSERT.
-					$r = $this->db->insert(
+					$this->db->insert(
 						$this->table_name,
 						$data_to_save,
-						[ '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%s' ],
+						$ordered_formats
 					);
-//					print_r( $r );exit;
-					// We don't add the new ID to processed_ids because it wasn't in the original $existing_ids list.
+
+					$newly_inserted_id = $this->db->insert_id;
+					$processed_ids[] = $newly_inserted_id;
+
+					// If the original field from the frontend had a temporary UID, map it to the new real ID.
+					if ( isset($field_data['_uid']) && is_string($field_data['_uid']) && strpos($field_data['_uid'], 'new_') === 0 ) {
+						$temp_uid = $field_data['_uid'];
+						$temp_to_real_id_map[$temp_uid] = $newly_inserted_id;
+					}
 				}
 			}
 		}
 
-		//print_r( $processed_ids );exit;
-		// 3. Determine which tabs to delete.
+		// 4. Determine which fields to delete.
 		$ids_to_delete = array_diff( $existing_ids, $processed_ids );
 
-		// 4. Execute deletion if necessary.
+		// 5. Execute deletion if necessary.
 		if ( ! empty( $ids_to_delete ) ) {
-
-			//print_r( $ids_to_delete );exit;
-			// Create a string of placeholders for the IN clause.
 			$placeholders = implode( ', ', array_fill( 0, count( $ids_to_delete ), '%d' ) );
-
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$this->db->query(
 				$this->db->prepare( "DELETE FROM {$this->table_name} WHERE id IN ( $placeholders )", $ids_to_delete )
 			);
@@ -131,35 +177,35 @@ final class CustomFieldRepository {
 	}
 
 	/**
-	 * Deletes a single tab by its primary ID.
+	 * Deletes a single field by its primary ID.
 	 *
-	 * @param int $tab_id The ID of the tab to delete.
+	 * @param int $field_id The ID of the field to delete.
 	 * @return bool True on success, false on failure.
 	 */
-	public function delete_tab( int $tab_id ): bool {
-		if ( $tab_id <= 0 ) {
+	public function delete_field( int $field_id ): bool {
+		if ( $field_id <= 0 ) {
 			return false;
 		}
 
-		$result = $this->db->delete( $this->table_name, [ 'id' => $tab_id ], [ '%d' ] );
+		$result = $this->db->delete( $this->table_name, [ 'id' => $field_id ], [ '%d' ] );
 
 		return $result !== false;
 	}
 
 	/**
-	 * Installs the default set of tabs for a given post type. @todo check this, it snot the correct format yet
+	 * Installs the default set of fields for a given post type.
 	 *
 	 * @param string $post_type
 	 */
 	public function install_defaults( string $post_type ): void {
-		$default_tabs = [
-			[ 'tab_name' => 'Profile', 'tab_icon' => 'fas fa-home', 'tab_key' => 'post_content', 'tab_type' => 'meta' ],
-			[ 'tab_name' => 'Photos', 'tab_icon' => 'fas fa-image', 'tab_key' => 'post_images', 'tab_content' => '[gd_post_images]' ],
-			[ 'tab_name' => 'Map', 'tab_icon' => 'fas fa-globe-americas', 'tab_key' => 'post_map', 'tab_content' => '[gd_map]' ],
-			[ 'tab_name' => 'Reviews', 'tab_icon' => 'fas fa-comments', 'tab_key' => 'reviews' ],
+		$default_fields = [
+			// Example:
+			// [ 'frontend_title' => 'Business Name', 'htmlvar_name' => 'post_title', 'field_type' => 'text', 'is_active' => 1 ],
+			// [ 'frontend_title' => 'Business Description', 'htmlvar_name' => 'post_content', 'field_type' => 'textarea', 'is_active' => 1 ],
 		];
 
-		// We now use the sync method for installation as well.
-		$this->sync_by_post_type( $post_type, $default_tabs );
+		if (!empty($default_fields)) {
+			$this->sync_by_post_type( $post_type, $default_fields );
+		}
 	}
 }

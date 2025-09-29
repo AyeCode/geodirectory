@@ -55,7 +55,6 @@ final class SortRepository {
 	 * @return bool True on success.
 	 */
 	public function sync_by_post_type( string $post_type, array $tabs ): bool {
-//		echo '###'.$post_type;print_r( $tabs );exit;
 		// 1. Get the current state of tab IDs from the database.
 		$existing_ids = $this->db->get_col(
 			$this->db->prepare( "SELECT id FROM {$this->table_name} WHERE post_type = %s", $post_type )
@@ -63,10 +62,26 @@ final class SortRepository {
 		$existing_ids = array_map( 'intval', $existing_ids ); // Ensure they are integers.
 
 		$processed_ids = [];
+		// --- THE FIX: PART 1 ---
+		// Map to track temporary frontend UIDs to their new permanent DB IDs.
+		$temp_to_real_id_map = [];
 
 		// 2. Loop through incoming data to handle inserts and updates.
 		if ( !empty( $tabs ) ) {
 			foreach ( $tabs as $sort_order => $tab_data ) {
+
+				// --- THE FIX: PART 2 ---
+				// Handle parent ID mapping first.
+				$tab_parent_id = $tab_data['tab_parent'] ?? 0;
+				if (isset($tab_data['_parent_id']) && is_string($tab_data['_parent_id']) && strpos($tab_data['_parent_id'], 'new_') === 0) {
+					$temp_parent_id = $tab_data['_parent_id'];
+					if (isset($temp_to_real_id_map[$temp_parent_id])) {
+						$tab_parent_id = $temp_to_real_id_map[$temp_parent_id];
+					} else {
+						$tab_parent_id = 0; // Fallback
+					}
+				}
+
 				$data_to_save = [
 					'post_type'   => $post_type,
 					'data_type'     => sanitize_text_field( $tab_data['data_type'] ?? '' ),
@@ -74,8 +89,8 @@ final class SortRepository {
 					'frontend_title'     =>  sanitize_text_field( $tab_data['frontend_title'] ?? '' ),
 					'htmlvar_name'     => sanitize_key( $tab_data['htmlvar_name'] ?? '' ),
 					'sort_order'  => $sort_order + 1,
-					'tab_parent'  => absint( $tab_data['tab_parent'] ?? 0 ),
-					'tab_level'   => !empty($tab_data['tab_parent']) ? 1 : 0,
+					'tab_parent'  => absint( $tab_parent_id ), // Use the corrected parent ID
+					'tab_level'   => !empty($tab_parent_id) ? 1 : 0, // Calculate level based on the correct parent ID
 					'is_active'  => absint( $tab_data['is_active'] ?? 0 ),
 					'is_default'  => $sort_order === 0 ? 1 : 0,
 					'sort'     => sanitize_key( $tab_data['sort'] ?? 'asc' ),
@@ -89,34 +104,37 @@ final class SortRepository {
 						$this->table_name,
 						$data_to_save,
 						[ 'id' => $tab_id ],
-						[ '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%s' ],
+						[ '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%s' ]
 					);
 					$processed_ids[] = $tab_id;
 				} else {
-//					echo $this->table_name.'###'.$tab_id;
-//					print_r( $data_to_save );
 					// This is an INSERT.
-					$r = $this->db->insert(
+					$this->db->insert(
 						$this->table_name,
 						$data_to_save,
-						[ '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%s' ],
+						[ '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%s' ]
 					);
-//					print_r( $r );exit;
-					// We don't add the new ID to processed_ids because it wasn't in the original $existing_ids list.
+
+					$newly_inserted_id = $this->db->insert_id;
+					$processed_ids[] = $newly_inserted_id;
+
+					// --- THE FIX: PART 3 ---
+					// If the original tab had a temporary UID, map it to the new real ID.
+					if ( isset($tab_data['_uid']) && is_string($tab_data['_uid']) && strpos($tab_data['_uid'], 'new_') === 0 ) {
+						$temp_uid = $tab_data['_uid'];
+						$temp_to_real_id_map[$temp_uid] = $newly_inserted_id;
+					}
 				}
 			}
 		}
 
-//		print_r( $processed_ids );exit;
 		// 3. Determine which tabs to delete.
 		$ids_to_delete = array_diff( $existing_ids, $processed_ids );
 
 		// 4. Execute deletion if necessary.
 		if ( ! empty( $ids_to_delete ) ) {
-			// Create a string of placeholders for the IN clause.
 			$placeholders = implode( ', ', array_fill( 0, count( $ids_to_delete ), '%d' ) );
 
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$this->db->query(
 				$this->db->prepare( "DELETE FROM {$this->table_name} WHERE id IN ( $placeholders )", $ids_to_delete )
 			);

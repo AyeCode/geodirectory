@@ -57,6 +57,23 @@ final class DataMapper {
 			// Unpack serialized data. For 'to_db', this gets existing data to merge with.
 			$unpacked_fields = $this->unpack_serialized_fields( $row );
 
+
+			// Manually preserve the temporary frontend IDs BEFORE the mapping loop.
+			// The mapper will strip them out because they aren't in the schema.
+			if ($is_to_db) {
+				if (isset($row['_uid'])) {
+					$new_row['_uid'] = $row['_uid'];
+				}
+				if (isset($row['_parent_id'])) {
+					$new_row['_parent_id'] = $row['_parent_id'];
+				}
+				if (isset($row['is_new'])) {
+					$new_row['is_new'] = $row['is_new'];
+				}
+			}
+
+
+
 			foreach ( $this->map as $db_key => $rules ) {
 				$ui_key     = $rules[0];
 				$source_key = $is_to_db ? $ui_key : $db_key;

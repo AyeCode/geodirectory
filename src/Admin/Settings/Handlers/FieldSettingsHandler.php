@@ -1,154 +1,137 @@
 <?php
+/**
+ * Handles persistence for the custom fields settings builder.
+ *
+ * This handler is driven by the CustomFieldSchema, which provides all the necessary
+ * rules for mapping data between the UI and the database. It also defines special
+ * rules for "packed" data stored in serialized columns like 'extra_fields'.
+ *
+ * @package GeoDirectory\Admin\Settings\Handlers
+ */
 
 namespace AyeCode\GeoDirectory\Admin\Settings\Handlers;
 
 use AyeCode\GeoDirectory\Admin\Settings\PersistenceHandlerInterface;
 use AyeCode\GeoDirectory\Admin\Utils\DataMapper;
 use AyeCode\GeoDirectory\Database\Repository\CustomFieldRepository;
+use AyeCode\GeoDirectory\Database\Schema\CustomFieldSchema;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * Handles persistence for the detail page tabs builder.
- */
-class FieldSettingsHandler implements PersistenceHandlerInterface {
+final class FieldSettingsHandler implements PersistenceHandlerInterface {
 
-	/**
-	 * @var TabRepository
-	 */
+	/** @var CustomFieldRepository */
 	private $repository;
 
-	/**
-	 * @var DataMapper
-	 */
+	/** @var DataMapper */
 	private $mapper;
 
 	public function __construct() {
 		$this->repository = new CustomFieldRepository();
-		// Instantiate the mapper with this handler's specific data map.
-		$this->mapper = new DataMapper( $this->get_data_map() );
+		$this->mapper     = new DataMapper( $this->get_data_map() );
 	}
 
 	/**
-	 * Defines the mapping between the tabs database table and the UI fields.
-	 * This is the single source of truth for the tab data structure.
+	 * Generates a smart data map for all columns defined in the schema.
+	 *
+	 * This method reads the schema to build the main mapping, then merges in
+	 * special rules for packed/serialized data fields.
 	 *
 	 * @return array
 	 */
 	private function get_data_map(): array {
-		return [
-			// DB Column   => [ UI Key,       Sanitize for UI,  Sanitize for DB,      Transform DB,      Transform UI  ]
-			'id'             => [ '_uid', 'absint', 'absint' ],
-			'is_default'             => [ '_is_default', 'absint', 'absint' ],
+		$schema            = new CustomFieldSchema();
+		$schema_definition = $schema->get_schema();
+		$base_map          = [];
 
-			'field_type'     => [ 'field_type', 'esc_attr', 'sanitize_text_field' ],
-			'field_type_key' => [ 'type', 'esc_attr', 'sanitize_key' ],
-			// type
-			'admin_title'    => [ 'label', 'esc_attr', 'sanitize_text_field' ],
+		// Unset any special fields that are re-built later
+		unset( $schema_definition['extra_fields'] );
 
-			'frontend_title' => [ 'frontend_title', 'esc_attr', 'sanitize_text_field' ],
-			'htmlvar_name'   => [ 'htmlvar_name', 'esc_attr', 'sanitize_key' ],
+		foreach ( $schema_definition as $db_column => $props ) {
+			// Read the UI hints from the schema, providing sensible fallbacks for each.
+			$ui_key            = $props['ui_key'] ?? $db_column;
+			$ui_sanitize       = $props['ui_sanitize'] ?? 'esc_attr';
+			$db_sanitize       = $props['db_sanitize'] ?? 'sanitize_text_field';
+			$to_db_transform   = $props['to_db_transform'] ?? null;
+			$from_db_transform = $props['from_db_transform'] ?? null;
 
-			// type
+			// Build the map entry in the exact order the DataMapper expects.
+			$base_map[ $db_column ] = [ $ui_key, $ui_sanitize, $db_sanitize, $to_db_transform, $from_db_transform ];
+		}
 
-			'frontend_desc' => [ 'frontend_desc', 'esc_attr', 'sanitize_text_field' ],
-			'placeholder_value' => [ 'placeholder_value', 'esc_attr', 'sanitize_text_field' ],
-			'field_icon' => [ 'icon', 'esc_attr', 'sanitize_text_field' ],
-			'css_class' => [ 'css_class', 'esc_attr', 'sanitize_text_field' ],
-			'show_in' => [
-				'show_in',
-				'esc_attr',
-				'sanitize_text_field',
-				'array_to_string',
-				'string_to_array'
-			],
-			'data_type'      => [
-				'data_type',
+		// Define the special rules for fields packed inside the 'extra_fields' column.
+		// The DataMapper knows how to handle the "dot.notation" keys.
+		$packed_field_map = [
+			'extra_fields.is_price'                  => [ 'is_price', 'absint', 'absint' ],
+			'extra_fields.currency_symbol'           => [ 'currency_symbol', 'esc_attr', 'sanitize_text_field' ],
+			'extra_fields.currency_symbol_placement' => [
+				'currency_symbol_placement',
 				'esc_attr',
 				'sanitize_text_field'
 			],
-			'is_price' => [ 'is_price', 'absint', 'absint' ],
-			'extra_fields.currency_symbol' => [ 'currency_symbol', 'esc_attr', 'sanitize_text_field' ],
-			'extra_fields.currency_symbol_placement' => [ 'currency_symbol', 'esc_attr', 'sanitize_text_field' ],
-			'extra_fields.thousand_separator' => [ 'thousand_separator', 'esc_attr', 'sanitize_text_field' ],
-			'extra_fields.decimal_separator' => [ 'decimal_separator', 'esc_attr', 'sanitize_text_field' ],
-			'extra_fields.decimal_display' => [ 'decimal_display', 'esc_attr', 'sanitize_text_field' ],
-
-			// behaviour
-			'is_active' => [ 'is_active', 'absint', 'absint' ],
-			'is_required' => [ 'is_required', 'absint', 'absint' ],
-			'for_admin_use' => [ 'for_admin_use', 'absint', 'absint' ],
-			'option_values' => [ 'option_values', 'esc_textarea', 'sanitize_textarea_field' ],
-			'default_value' => [ 'default_value', 'esc_attr', 'sanitize_text_field' ],
-			'db_default' => [ 'db_default', 'esc_attr', 'sanitize_text_field' ],
-			//@todo this does not exists, will validation still work
-			'required_msg' => [ 'required_msg', 'esc_attr', 'sanitize_text_field' ],
-			'cat_sort' => [ 'cat_sort', 'absint', 'absint' ],
-			'extra_fields.advanced_editor' => [ 'advanced_editor', 'absint', 'absint' ],
-			'extra_fields.embed' => [ 'embed', 'absint', 'absint' ],
-
-			// validation
-			'validation_pattern' => [ 'validation_pattern', 'esc_attr', 'sanitize_text_field' ],
-			//@todo this will be kinda regex, we need to find the best validation functions
-			'validation_msg' => [ 'validation_msg', 'esc_attr', 'sanitize_text_field' ],
-
-			'extra_fields.conditions' => [
+			'extra_fields.thousand_separator'        => [ 'thousand_separator', 'esc_attr', 'sanitize_text_field' ],
+			'extra_fields.decimal_separator'         => [ 'decimal_separator', 'esc_attr', 'sanitize_text_field' ],
+			'extra_fields.decimal_display'           => [ 'decimal_display', 'esc_attr', 'sanitize_text_field' ],
+			'extra_fields.advanced_editor'           => [ 'advanced_editor', 'absint', 'absint' ],
+			'extra_fields.embed'                     => [ 'embed', 'absint', 'absint' ],
+			'extra_fields.conditions'                => [
 				'conditions',
-				'pass_through',           // from_db sanitize: none needed, it's an array
-				'pass_through',           // to_db sanitize: the transformer will handle it
-				null,                     // from_db transform: none needed
-				'transform_conditions'    // to_db transform: use our new custom method
+				'pass_through',
+				'pass_through',
+				'transform_conditions',
+				null
 			],
 
 
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			''           => [ '', 'esc_attr', 'sanitize_text_field' ],
-			'tab_parent' => [ '_parent_id', 'absint', 'absint' ],
-//			'tab_type'     => [ 'tab_type',     'esc_attr', 'sanitize_key' ],
-//			'tab_content'  => [ 'tab_content',  'esc_attr', 'wp_kses_post' ],
+			// taxonomy stuff
+			'extra_fields.cat_display_type'          => [ 'cat_display_type', 'esc_attr', 'sanitize_text_field' ],
+
+			// Address stuff
+			'extra_fields.show_street2'              => [ 'show_street2', 'absint', 'absint' ],
+			'extra_fields.street2_lable'             => [ 'street2_lable', 'esc_attr', 'sanitize_text_field' ],
+			'extra_fields.show_zip'                  => [ 'show_zip', 'absint', 'absint' ],
+			'extra_fields.zip_lable'                 => [ 'zip_lable', 'esc_attr', 'sanitize_text_field' ],
+			'extra_fields.show_mapview'              => [ 'show_mapview', 'absint', 'absint' ],
+			'extra_fields.mapview_lable'             => [ 'mapview_lable', 'esc_attr', 'sanitize_text_field' ],
+			'extra_fields.show_mapzoom'              => [ 'show_mapzoom', 'absint', 'absint' ],
+			'extra_fields.show_latlng'               => [ 'show_latlng', 'absint', 'absint' ],
+			'extra_fields.zip_required'              => [ 'zip_required', 'absint', 'absint' ],
+
+			// Tags
+			'extra_fields.disable_new_tags'          => [ 'disable_new_tags', 'absint', 'absint' ],
+			'extra_fields.spellcheck'                => [ 'spellcheck', 'absint', 'absint' ],
+			'extra_fields.no_of_tag'                 => [ 'no_of_tag', 'absint', 'absint' ],
+
+
+			// --- Fields without specific UI mappings or with default behaviour ---
+//			'tab_parent'                => [ 'date_range', 'absint', 'absint' ],
 		];
+
+		// Merge the two maps. The packed field rules are added to the base map.
+		return array_merge( $base_map, $packed_field_map );
 	}
 
 	/**
-	 * Retrieves tab settings for a CPT.
+	 * Retrieves custom field settings for a CPT.
 	 *
 	 * @param string $post_type The post type slug.
 	 *
-	 * @return array The tab settings, formatted for the UI.
+	 * @return array The settings, formatted for the UI.
 	 */
 	public function get( string $post_type ): array {
 		$raw_data = $this->repository->get_by_post_type( $post_type );
 
-//		$stuff =  $this->mapper->transform( $raw_data, 'to_ui' );
-////		$stuff[3]['show_in'] = array( '[mapbubble]');
-//		print_r( $stuff );exit;
-//		return $stuff;
-//		print_r( $this->mapper->transform( $raw_data, 'to_ui' ) );
 //		print_r( $raw_data );exit;
-		// Delegate the transformation to the mapper.
+
+//		print_r($this->mapper->transform( $raw_data, 'to_db' ));exit;
+//		print_r($this->mapper->transform( $raw_data, 'to_ui' ));exit;
 		return $this->mapper->transform( $raw_data, 'to_ui' );
 	}
 
 	/**
-	 * Saves tab settings for a CPT.
+	 * Saves custom field settings for a CPT.
 	 *
 	 * @param string $post_type The post type slug.
 	 * @param array $data_from_ui The settings data from the UI.
@@ -157,15 +140,11 @@ class FieldSettingsHandler implements PersistenceHandlerInterface {
 	 */
 	public function save( string $post_type, array $data_from_ui ): bool {
 
-//		print_r( $data_from_ui );
-//		exit;
-
-		// Delegate the transformation to the mapper.
+//		print_r($data_from_ui);exit;
 		$data_for_db = $this->mapper->transform( $data_from_ui, 'to_db' );
 
-
-		print_r( $data_for_db );
-		exit;
+//		print_r( $data_for_db );
+//		exit;
 
 		return $this->repository->sync_by_post_type( $post_type, $data_for_db );
 	}

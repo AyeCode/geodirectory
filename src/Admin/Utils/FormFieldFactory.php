@@ -29,17 +29,42 @@ final class FormFieldFactory {
 		return [
 			// Core Identifiers & Labels
 			'type'                         => FormFields::hidden( [ 'id' => 'type', 'name' => 'type' ] ),
+			'field_type_key'                         => FormFields::hidden( [ 'id' => 'field_type_key', 'name' => 'field_type_key' ] ),
 			'admin_title'                  => FormFields::text( [
 				'id'          => 'label',
 				'name'        => 'label',
 				'label'       => __( 'Admin Title', 'geodirectory' ),
-				'description' => __( 'This is used as the field setting name here in the backend only.', 'geodirectory' )
+				'extra_attributes' => [
+					'required' => true,
+				],
+				'description' => __( 'This is used as the field setting name here in the backend only.', 'geodirectory' ),
+				'syncs_with' => [
+					[
+						'target' => 'frontend_title',
+					],
+					[
+						'target' => 'htmlvar_name',
+						'transform' => 'slugify'
+					]
+				]
 			] ),
 			'frontend_title'               => FormFields::text( [
 				'id'          => 'frontend_title',
 				'name'        => 'frontend_title',
 				'label'       => __( 'Label', 'geodirectory' ),
-				'description' => __( 'This will be the label for the field input on the frontend.', 'geodirectory' )
+				'description' => __( 'This will be the label for the field input on the frontend.', 'geodirectory' ),
+				'extra_attributes' => [
+					'required' => true,
+				],
+				'syncs_with' => [
+					[
+						'target' => 'label',
+					],
+					[
+						'target' => 'htmlvar_name',
+						'transform' => 'slugify'
+					]
+				]
 			] ),
 			'htmlvar_name'                 => FormFields::text( [
 				'id'               => 'htmlvar_name',
@@ -48,8 +73,9 @@ final class FormFieldFactory {
 				'description'      => __( 'A unique identifier used in the database and HTML. Must not contain spaces or special characters.', 'geodirectory' ),
 				'extra_attributes' => [
 					'maxlength' => 50,
-					'pattern'   => '[a-zA-Z0-9_]+'
-				]
+					'pattern'   => '[a-zA-Z0-9_]+',
+					'required' => true,
+				],
 			] ),
 
 			// Descriptions & Placeholders
@@ -72,19 +98,28 @@ final class FormFieldFactory {
 				'name'        => 'is_active',
 				'label'       => __( 'Is Active', 'geodirectory' ),
 				'description' => __( 'If disabled, the field will not be displayed anywhere.', 'geodirectory' ),
-				'default'     => true
+				'default'     => true,
+				'show_if'     => '[%htmlvar_name%] != "post_title" && [%htmlvar_name%] != "post_content" && [%htmlvar_name%] != "post_tags" && [%htmlvar_name%] != "post_category"',
 			] ),
 			'for_admin_use'                => FormFields::toggle( [
 				'id'          => 'for_admin_use',
 				'name'        => 'for_admin_use',
 				'label'       => __( 'Admin Edit Only', 'geodirectory' ),
-				'description' => __( 'If enabled, only site admins can see and edit this field.', 'geodirectory' )
+				'description' => __( 'If enabled, only site admins can see and edit this field.', 'geodirectory' ),
+				'show_if'     => '[%htmlvar_name%] != "post_title" && [%htmlvar_name%] != "post_content"  && [%htmlvar_name%] != "post_category"',
 			] ),
 			'is_required'                  => FormFields::toggle( [
 				'id'          => 'is_required',
 				'name'        => 'is_required',
 				'label'       => __( 'Is Required', 'geodirectory' ),
 				'description' => __( 'Set this field as required on the submission form.', 'geodirectory' )
+			] ),
+			'required_msg'                 => FormFields::text( [
+				'id'          => 'required_msg',
+				'name'        => 'required_msg',
+				'label'       => __( 'Required Message', 'geodirectory' ),
+				'description' => __( 'The error message to show if the field is required and left empty.', 'geodirectory' ),
+				'show_if'     => '[%is_required%] > 0'
 			] ),
 			'cat_sort'                     => FormFields::toggle( [
 				'id'          => 'cat_sort',
@@ -135,13 +170,7 @@ optgroup-close', 'geodirectory' ),
 				'description' => __( 'A default value for the field when it is first created in the database.', 'geodirectory' ),
 				'show_if'     => '[%is_new%]', // only show on new fields
 			] ),
-			'required_msg'                 => FormFields::text( [
-				'id'          => 'required_msg',
-				'name'        => 'required_msg',
-				'label'       => __( 'Required Message', 'geodirectory' ),
-				'description' => __( 'The error message to show if the field is required and left empty.', 'geodirectory' ),
-				'show_if'     => '[%is_required%]'
-			] ),
+
 
 			// Display & Styling
 			'field_icon'                   => FormFields::font_awesome( [
@@ -163,6 +192,20 @@ optgroup-close', 'geodirectory' ),
 				'description' => __( 'Select where you want this field to be displayed.', 'geodirectory' ),
 				'placeholder' => __( 'Select locations', 'geodirectory' ),
 				'options'     => geodir_show_in_locations(),
+			] ),
+			'extra_fields.cat_display_type'     => FormFields::select( [
+				'id'          => 'cat_display_type',
+				'name'        => 'cat_display_type',
+				'label'       => __( 'Category display type', 'geodirectory' ),
+				'description' => __( 'Show categories list as select, multiselect, checkbox or radio', 'geodirectory' ),
+				'default'     => 'multiselect',
+				'options'     => [
+					'select' => __( 'Select', 'geodirectory' ),
+					'multiselect' => __( 'Multiselect', 'geodirectory' ),
+					'checkbox' => __( 'Checkbox', 'geodirectory' ),
+					'radio' => __( 'Radio', 'geodirectory' ),
+				],
+				'show_if'     => '[%type%] == "categories"',
 			] ),
 
 			// Number Stuff
@@ -191,7 +234,7 @@ optgroup-close', 'geodirectory' ),
 				'name'        => 'currency_symbol',
 				'label'       => __( 'Currency symbol', 'geodirectory' ),
 				'description' => __( 'Set the currency symbol.', 'geodirectory' ),
-				'show_if'     => '[%is_price%]',
+				'show_if'     => '[%is_price%] > 0',
 			] ),
 			'currency_symbol_placement'    => FormFields::select( [
 				'id'          => 'currency_symbol_placement',
@@ -203,7 +246,7 @@ optgroup-close', 'geodirectory' ),
 					'left'  => __( 'Left', 'geodirectory' ),
 					'right' => __( 'Right', 'geodirectory' ),
 				],
-				'show_if'     => '[%is_price%] && [%currency_symbol%]',
+				'show_if'     => '[%is_price%] > 0 && [%currency_symbol%]',
 			] ),
 			'thousand_separator'           => FormFields::select( [
 				'id'          => 'thousand_separator',
@@ -263,6 +306,97 @@ optgroup-close', 'geodirectory' ),
 				'show_if'     => '[%type%] == "date"',
 			] ),
 
+			// Address stuff
+			'extra_fields.show_street2'                     => FormFields::toggle( [
+				'id'          => 'show_street2',
+				'name'        => 'show_street2',
+				'label'       => __( 'Display Address line 2', 'geodirectory' ),
+				'description' => __( 'Select if you want to show address line 2 field in address section.', 'geodirectory' ),
+				'show_if'     => '[%type%] == "address"',
+			] ),
+			'extra_fields.street2_lable'                     => FormFields::text( [
+				'id'          => 'street2_lable',
+				'name'        => 'street2_lable',
+				'label'       => __( 'Address line 2 label', 'geodirectory' ),
+				'description' => __( 'Enter Address line 2 field label in address section.', 'geodirectory' ),
+				'show_if'     => '[%type%] == "address" && [%show_street2%] == "1"',
+			] ),
+			'extra_fields.show_zip'                     => FormFields::toggle( [
+				'id'          => 'show_zip',
+				'name'        => 'show_zip',
+				'label'       => __( 'Display zip/post code', 'geodirectory' ),
+				'description' => __( 'Select if you want to show zip/post code field in address section.', 'geodirectory' ),
+				'show_if'     => '[%type%] == "address"',
+			] ),
+			'extra_fields.zip_lable'                     => FormFields::text( [
+				'id'          => 'zip_lable',
+				'name'        => 'zip_lable',
+				'label'       => __( 'Zip/Post code label', 'geodirectory' ),
+				'description' => __( 'Enter zip/post code field label in address section.', 'geodirectory' ),
+				'show_if'     => '[%type%] == "address" && [%show_zip%] == "1"',
+			] ),
+
+			'extra_fields.show_mapview'                     => FormFields::toggle( [
+				'id'          => 'show_mapview',
+				'name'        => 'show_mapview',
+				'label'       => __( 'Display map view', 'geodirectory' ),
+				'description' => __( 'Select if you want to show `set default map` options in address section. ( Satellite Map, Hybrid Map, Terrain Map)', 'geodirectory' ),
+				'show_if'     => '[%type%] == "address"',
+			] ),
+			'extra_fields.mapview_lable'                     => FormFields::text( [
+				'id'          => 'mapview_lable',
+				'name'        => 'mapview_lable',
+				'label'       => __( 'Map view label', 'geodirectory' ),
+				'description' => __( 'Enter mapview field label in address section.', 'geodirectory' ),
+				'show_if'     => '[%type%] == "address" && [%show_mapview%] == "1"',
+			] ),
+
+			'extra_fields.zip_required'                     => FormFields::toggle( [
+				'id'          => 'zip_required',
+				'name'        => 'zip_required',
+				'label'       => __( 'Make zip code required', 'geodirectory' ),
+				'description' => __( 'Tick to set zip/post code field as required. Some countries do not use ZIP codes, please only enable if your directory is limited to countries that do.', 'geodirectory' ),
+				'show_if'     => '[%type%] == "address"',
+			] ),
+			'extra_fields.show_mapzoom'                     => FormFields::toggle( [
+				'id'          => 'show_mapzoom',
+				'name'        => 'show_mapzoom',
+				'label'       => __( 'Use user zoom level', 'geodirectory' ),
+				'description' => __( 'Do you want to use the user defined map zoom level from the add listing page?', 'geodirectory' ),
+				'show_if'     => '[%type%] == "address"',
+			] ),
+			'extra_fields.show_latlng'                     => FormFields::toggle( [
+				'id'          => 'show_latlng',
+				'name'        => 'show_latlng',
+				'label'       => __( 'Show latitude and longitude', 'geodirectory' ),
+				'description' => __( 'This will show/hide the longitude fields in the address section add listing form.', 'geodirectory' ),
+				'show_if'     => '[%type%] == "address"',
+			] ),
+
+			// Tags stuff
+			'extra_fields.disable_new_tags'                     => FormFields::toggle( [
+				'id'          => 'disable_new_tags',
+				'name'        => 'disable_new_tags',
+				'label'       => __( 'Disable New Tags', 'geodirectory' ),
+				'description' => __( 'Disable create a new tags dynamically from frontend users.', 'geodirectory' ),
+				'show_if'     => '[%type%] == "tags"',
+			] ),
+			'extra_fields.spellcheck'                     => FormFields::toggle( [
+				'id'          => 'spellcheck',
+				'name'        => 'spellcheck',
+				'label'       => __( 'Spell Check', 'geodirectory' ),
+				'description' => __( 'Enable spell check for the new tag.', 'geodirectory' ),
+				'show_if'     => '[%type%] == "tags"',
+			] ),
+			'extra_fields.no_of_tag'      => FormFields::number( [
+				'id'          => 'no_of_tag',
+				'name'        => 'no_of_tag',
+				'default'     => 10,
+				'label'       => __( 'Number of allowed tags', 'geodirectory' ),
+				'description' => __( 'Enter number of allowed tags. Default: 10', 'geodirectory' ),
+				'show_if'     => '[%type%] == "tags"',
+			] ),
+
 			// Validation
 			'validation_pattern'           => FormFields::text( [
 				'id'          => 'validation_pattern',
@@ -292,7 +426,7 @@ optgroup-close', 'geodirectory' ),
 				'description' => __( 'Select file types to allowed for file uploading.', 'geodirectory' ),
 				'placeholder' => __( 'Select file types', 'geodirectory' ),
 				'options'     => FieldOptionsProvider::get_allowed_mime_types(),
-//				'show_if'     => '[%type%] == "file"',
+				'show_if'     => '[%type%] == "file"',
 			] ),
 			'extra_fields.file_limit'      => FormFields::number( [
 				'id'          => 'file_limit',
@@ -305,6 +439,8 @@ optgroup-close', 'geodirectory' ),
 			'extra_fields.conditions'      =>  [
 				'id'          => 'conditions',
 				'type'        => 'conditions',
+				'warning_key' => 'htmlvar_name',
+				'warning_fields' => ['post_title', 'post_category', 'address'],
 			],
 		];
 	}
@@ -319,13 +455,20 @@ optgroup-close', 'geodirectory' ),
 	 */
 	private static function get_default_panel_fields(): array {
 		return [
-			'general'           => [ 'type', 'admin_title', 'frontend_title', 'htmlvar_name' ],
+			'general' => [
+				'type',
+				'field_type_key',
+				'admin_title',
+				'frontend_title',
+				'htmlvar_name'
+			],
 			'display'           => [
 				'frontend_desc',
 				'placeholder',
 				'field_icon',
 				'css_class',
 				'show_in',
+				'extra_fields.cat_display_type',
 				'data_type',
 				'is_price',
 				'currency_symbol',
@@ -335,6 +478,15 @@ optgroup-close', 'geodirectory' ),
 				'decimal_point',
 				'decimal_display',
 				'extra_fields.date_format',
+
+				// address stuff
+				'extra_fields.show_street2',
+				'extra_fields.street2_lable',
+				'extra_fields.show_zip',
+				'extra_fields.zip_lable',
+				'extra_fields.show_mapview',
+				'extra_fields.mapview_lable',
+				'extra_fields.show_latlng',
 			],
 			'behavior'          => [
 				'is_active',
@@ -342,6 +494,9 @@ optgroup-close', 'geodirectory' ),
 				'required_msg',
 				'for_admin_use',
 				'cat_sort',
+				'extra_fields.show_mapzoom',
+				'extra_fields.disable_new_tags',
+				'extra_fields.spellcheck',
 				'extra_fields.advanced_editor',
 				'extra_fields.embed',
 				'option_values',
@@ -354,6 +509,8 @@ optgroup-close', 'geodirectory' ),
 				'extra_fields.date_range',
 				'extra_fields.gd_file_types',
 				'extra_fields.file_limit',
+				'extra_fields.zip_required',
+				'extra_fields.no_of_tag',
 			],
 			'conditional_logic' => [
 				'extra_fields.conditions',
@@ -467,6 +624,12 @@ optgroup-close', 'geodirectory' ),
 			'title'  => $definition['title'],
 			'id'     => $definition['id'],
 			'icon'   => $definition['icon'],
+			'description'   => !empty($definition['description']) ? $definition['description'] : '',
+			'limit'   => !empty($definition['limit']) ? $definition['limit'] : 0,
+			'hidden'   => !empty($definition['hidden']),
+			'nestable'   => !empty($definition['nestable']),
+			'allowed_children'   => !empty($definition['allowed_children']) ? $definition['allowed_children'] : null,
+
 			'fields' => [
 				[
 					'id'           => 'builder_fields_accordion',
