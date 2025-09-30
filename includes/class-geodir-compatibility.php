@@ -4488,8 +4488,8 @@ jQuery(function($){
 			return;
 		}
 
-		// Check block theme / BREAKDANCE theme.
-		if ( ! ( ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) || defined( '__BREAKDANCE_VERSION' ) ) ) {
+		// Check block theme / BREAKDANCE theme / Sage Starter Theme.
+		if ( ! ( ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) || defined( '__BREAKDANCE_VERSION' ) || function_exists( '\Roots\bootloader' ) ) ) {
 			return;
 		}
 
