@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace AyeCode\GeoDirectory;
 
 use AyeCode\GeoDirectory\Admin\CptSettingsManager;
+use AyeCode\GeoDirectory\Admin\Pages\ModerationPage;
 use AyeCode\GeoDirectory\Admin\Pages\SettingsPage;
 use AyeCode\GeoDirectory\Admin\Pages\ToolsPage;
 use AyeCode\GeoDirectory\Ajax\ActionRegistry;
@@ -62,6 +63,7 @@ final class Loader {
 		// Logic for AJAX admin pages.
 		if ( is_admin() ||  wp_doing_ajax() ) {
 			new SettingsPage();
+			new ModerationPage();
 			new ToolsPage();
 			( new CptSettingsManager() )->init();
 		}

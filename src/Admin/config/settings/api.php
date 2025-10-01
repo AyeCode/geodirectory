@@ -59,7 +59,8 @@ return array(
 				'columns' => [
 					'description'   => [ 'label' => __( 'Description', 'geodirectory' ) ],
 					'truncated_key' => [ 'label' => __( 'Key Ending In', 'geodirectory' ) ],
-					'user_id'       => [ 'label' => __( 'User ID', 'geodirectory' ) ],
+//					'user_id'       => [ 'label' => __( 'User ID', 'geodirectory' ) ],
+					'user_name'       => [ 'label' => __( 'User', 'geodirectory' ) ], // dynamic column
 					'permissions'   => [ 'label' => __( 'Permissions', 'geodirectory' ) ],
 					'last_access'   => [ 'label' => __( 'Last Access', 'geodirectory' ) ],
 				],

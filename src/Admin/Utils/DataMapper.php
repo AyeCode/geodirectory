@@ -39,10 +39,11 @@ final class DataMapper {
 	 *
 	 * @param array $source_data The array of data to transform.
 	 * @param string $direction Either 'to_ui' or 'to_db'.
+	 * @param bool $keep_empty_values If empty rows should be kept.
 	 *
 	 * @return array The transformed data array.
 	 */
-	public function transform( array $source_data, string $direction ): array {
+	public function transform( array $source_data, string $direction, bool $keep_empty_values = false ): array {
 		$transformed = [];
 		if ( empty( $source_data ) ) {
 			return $transformed;
@@ -91,19 +92,20 @@ final class DataMapper {
 				$value = null;
 				if ( $is_to_db ) {
 					// When going to DB, source is the flat UI row.
-					if ( isset( $row[ $source_key ] ) ) {
+					if ( array_key_exists( $source_key, $row ) ) {
 						$value = $row[ $source_key ];
 					}
 				} else {
 					// When going to UI, check for packed data first, then the main row.
 					if ( $parent_key && isset( $unpacked_fields[ $parent_key ][ $child_key ] ) ) {
 						$value = $unpacked_fields[ $parent_key ][ $child_key ];
-					} elseif ( isset( $row[ $source_key ] ) ) {
+					} elseif ( array_key_exists( $source_key, $row ) ) {
 						$value = $row[ $source_key ];
 					}
 				}
 
-				if ( $value !== null ) {
+				// If we are keeping empty values, or if the value is not null, process it.
+				if ( $keep_empty_values || $value !== null ) {
 					// Apply firewall fix if the key matches our watchlist.
 					if ( in_array( $target_key, self::$firewall_fix_keys, true ) && is_string( $value ) ) {
 						$value = $is_to_db ? str_replace( 'XVARCHAR', 'VARCHAR', $value ) : str_replace( 'VARCHAR', 'XVARCHAR', $value );

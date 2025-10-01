@@ -43,7 +43,21 @@ class ApiKeySettingsHandler {
 
 	public function get_keys(): array {
 		$raw_data = $this->repository->get_all();
-		return $this->mapper->transform( $raw_data, 'to_ui' );
+
+		$ui_data = $this->mapper->transform( $raw_data, 'to_ui', true );
+
+		if ( ! empty( $ui_data ) ) {
+//			print_r( $ui_data );
+			foreach ( $ui_data as $key => $value ) {
+				$user = get_user_by('id', $value['user_id']);
+				if ( $user ) {
+					$url = get_edit_user_link($user->ID);
+					$ui_data[ $key ]['user_name'] = "<a href='".esc_url($url)."'>".esc_attr( $user->display_name )."</a>";
+				}
+
+			}
+		}
+		return $ui_data;
 	}
 
 	public function create_key( array $ui_data ): array {
