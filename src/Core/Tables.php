@@ -43,6 +43,7 @@ final class Tables {
 			'api_keys'           => $this->db->prefix . 'geodir_api_keys',
 			'tabs_layout'        => $this->db->prefix . 'geodir_tabs_layout',
 			'post_reports'       => $this->db->prefix . 'geodir_post_reports',
+			'api_keys'           => $this->db->prefix . 'geodir_api_keys',
 		];
 
 		/**

@@ -24,6 +24,13 @@ final class CustomFieldSchema extends AbstractTableSchema {
 	/**
 	 * @inheritdoc
 	 */
+	public function get_primary_key(): string {
+		return 'id';
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	protected function define_schema(): array {
 		return [
 			'id'                 => [ 'type' => 'int(11)', 'extra' => 'NOT NULL AUTO_INCREMENT', 'format' => '%d', 'default' => 0, 'ui_key' => '_uid', 'ui_sanitize' => 'absint', 'db_sanitize' => 'absint' ],

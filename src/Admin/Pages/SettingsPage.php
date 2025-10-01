@@ -429,5 +429,17 @@ final class SettingsPage extends Settings_Framework {
 
 		return $templates;
 	}
-	// endregion
+
+	/**
+	 * Helper function to get a list of users for select dropdowns.
+	 * @return array
+	 */
+	public function get_user_options() {
+		$users = get_users(['fields' => ['ID', 'display_name']]);
+		$options = [];
+		foreach ($users as $user) {
+			$options[$user->ID] = $user->display_name;
+		}
+		return $options;
+	}
 }

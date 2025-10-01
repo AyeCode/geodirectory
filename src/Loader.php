@@ -94,6 +94,8 @@ final class Loader {
 	 */
 	private function register_actions(): void {
 
+		//print_r( $_POST );exit;
+
 		// Core GeoDirectory Tools
 		ActionRegistry::register( 'clear_version_numbers', \AyeCode\GeoDirectory\Ajax\Actions\Tools\ClearVersionNumbersAction::class );
 		ActionRegistry::register( 'check_reviews',         \AyeCode\GeoDirectory\Ajax\Actions\Tools\CheckReviewsAction::class );
@@ -121,6 +123,13 @@ final class Loader {
 		// Dummy Data
 		ActionRegistry::register( 'dummy_data_install',   \AyeCode\GeoDirectory\Ajax\Actions\Tools\InstallDummyDataAction::class );
 		ActionRegistry::register( 'dummy_data_uninstall', \AyeCode\GeoDirectory\Ajax\Actions\Tools\UninstallDummyDataAction::class );
+
+		// API Keys
+		ActionRegistry::register( 'get_api_keys',   \AyeCode\GeoDirectory\Ajax\Actions\ApiKeys\GetApiKeysAction::class );
+		ActionRegistry::register( 'create_api_key',   \AyeCode\GeoDirectory\Ajax\Actions\ApiKeys\CreateApiKeyAction::class );
+		ActionRegistry::register( 'update_api_key',   \AyeCode\GeoDirectory\Ajax\Actions\ApiKeys\UpdateApiKeyAction::class );
+		ActionRegistry::register( 'delete_api_key',   \AyeCode\GeoDirectory\Ajax\Actions\ApiKeys\DeleteApiKeyAction::class );
+
 	}
 
 	/**

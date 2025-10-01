@@ -22,6 +22,7 @@ use AyeCode\GeoDirectory\Core\Seo;
 use AyeCode\GeoDirectory\Core\Statuses;
 use AyeCode\GeoDirectory\Core\Tables;
 use AyeCode\GeoDirectory\Core\Utils\Settings;
+use AyeCode\GeoDirectory\Core\Utils\Utils;
 use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
 
 /**
@@ -37,6 +38,7 @@ use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
  * @property-read \AyeCode\GeoDirectory\Database\Repository\ReviewRepository $reviewRepository The Review Repository.
  * @property-read \AyeCode\GeoDirectory\Core\Tables $tables The Tables service.
  * @property-read \AyeCode\GeoDirectory\Core\Utils\Settings $settings The Settings service.
+ * @property-read \AyeCode\GeoDirectory\Core\Utils\Utils $utils The Utils service.
  * @property-read \AyeCode\GeoDirectory\Core\Media $media The Media service.
  * @property-read \AyeCode\GeoDirectory\Core\Statuses $statuses The Statuses service.
  */
@@ -81,6 +83,9 @@ final class GeoDirectory {
 		// Figure out which service class to load from the container.
 		// This is the PHP 7.4 compatible version of a `match` expression.
 		switch ( $name ) {
+			case 'utils':
+				$service_id = Utils::class;
+				break;
 			case 'tables':
 				$service_id = Tables::class;
 				break;

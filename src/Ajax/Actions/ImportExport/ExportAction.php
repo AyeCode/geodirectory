@@ -100,7 +100,8 @@ class ExportAction {
 		}
 
 		$processed_count = $offset + count($data);
-		$progress = $total > 0 ? round(($processed_count / $total) * 100) : 100;
+		$progress = $total > 0 ? \round(($processed_count / $total) * 100) : 100;
+
 		$next_step = null;
 		$response_data = [];
 

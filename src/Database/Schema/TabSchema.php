@@ -24,6 +24,14 @@ final class TabSchema extends AbstractTableSchema {
 	/**
 	 * @inheritdoc
 	 */
+	public function get_primary_key(): string {
+		return 'id';
+	}
+
+
+	/**
+	 * @inheritdoc
+	 */
 	protected function define_schema(): array {
 		return [
 			// DB Column => [ DB Properties..., Optional UI Hints... ]

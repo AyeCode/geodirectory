@@ -26,6 +26,9 @@ class ActionRegistry {
 	 * @param string $name The name of the tool to execute.
 	 */
 	public static function dispatch(string $name) {
+
+//		print_r( self::$actions );
+//		print_r($_POST);echo '###'.$name;exit;
 		if (isset(self::$actions[$name])) {
 			$class_name = self::$actions[$name];
 

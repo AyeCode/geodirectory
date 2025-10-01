@@ -67,7 +67,8 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface::class, \AyeCode\GeoDirectory\Core\Locations::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Reviews::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Media::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Settings::class ); // Assuming you have this utility class
+	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Settings::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Utils::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Statuses::class );
 
 	// Database Repositories (Data Layer)

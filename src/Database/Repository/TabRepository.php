@@ -65,7 +65,7 @@ final class TabRepository {
 	 */
 	public function sync_by_post_type( string $post_type, array $tabs ): bool {
 
-		print_r($tabs);exit;
+//		print_r($tabs);exit;
 		// 1. Get schema information. This is our single source of truth.
 		$schema         = new TabSchema();
 		$schema_columns = $schema->get_column_names();
