@@ -1446,7 +1446,7 @@ function create_marker_osm(item, map_canvas) {
         var marker = jQuery.goMap.createMarker({
             id: marker_id,
             title: title,
-            alt: item.alt ? geodir_htmlEscape(item.alt) : '',
+            alt: item.alt ? geodir_htmlEscape(item.alt) : 'marker ' + marker_id,
             position: coord,
             visible: true,
             clickable: true,

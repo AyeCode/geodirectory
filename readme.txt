@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.135 - 2025-10-TBD =
 * Map widget inline script is not loading with Sage Starter Theme - FIXED
+* Search form web accessibility changes - CHANGED
 
 = GeoDirectory v2.8.134 - 2025-09-25 =
 * Option added to sort listings by modified date - ADDED

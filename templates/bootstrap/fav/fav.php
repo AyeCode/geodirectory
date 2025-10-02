@@ -37,9 +37,9 @@
 defined( 'ABSPATH' ) || exit;
 
 $text_class .= $show == 'icon' ? 'sr-only visually-hidden' : '';
-$text        = '<span class="geodir-fav-text gv-secondary ' . $text_class . '" style="' . $text_style . '">' . $text . '</span>';
+$text        = '<span class="geodir-fav-text gv-secondary ' . $text_class . '" style="' . $text_style . '" aria-hidden="true">' . $text . '</span>';
 
-echo '<span class="geodir-addtofav favorite_property_' . absint( $post_id ) . ' ' . esc_attr( $wrap_class ) . '">';
+echo '<span class="geodir-addtofav favorite_property_' . absint( $post_id ) . ' ' . esc_attr( $wrap_class ) . '" aria-hidden="true">';
 	echo aui()->badge(
 		array(
 			'type'                  => 'badge',
@@ -56,6 +56,7 @@ echo '<span class="geodir-addtofav favorite_property_' . absint( $post_id ) . ' 
 				'data-color-off' => $icon_color_off,
 				'data-text-color'=> $text_color,
 				'data-toggle'    => 'tooltip',
+				'aria-hidden'    => 'true'
 			),
 			'icon_extra_attributes' => array(
 				'style' => $icon_style,
