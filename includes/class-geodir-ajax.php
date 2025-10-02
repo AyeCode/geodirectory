@@ -278,7 +278,7 @@ class GeoDir_AJAX {
 	}
 
 	public static function recently_viewed_listings(){
-		global $post, $gd_post, $geodir_item_tmpl, $gd_layout_class;
+		global $post, $gd_post, $geodir_is_widget_listing, $geodir_item_tmpl, $gd_layout_class;
 
 		$design_style = geodir_design_style();
 		$list_per_page = ! empty( $_REQUEST['list_per_page'] ) ? absint( $_REQUEST['list_per_page'] ) : '';
@@ -405,6 +405,8 @@ class GeoDir_AJAX {
 				}
 			}
 
+			$geodir_is_widget_listing = true;
+
 			if ( $skin_active ) {
 				ob_start();
 
@@ -434,6 +436,8 @@ class GeoDir_AJAX {
 					)
 				);
 			}
+
+			$geodir_is_widget_listing = false;
 		} else {
 			$output = aui()->alert( array(
 					'type'=> 'info',
