@@ -34,7 +34,7 @@ echo $aui_bs5 ? ' px-0' : '';
 	<?php
 	do_action( 'geodir_before_search_near_input' );
 
-	$input_group_html  = '<span class="geodir-search-input-label hover-swap text-muted" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');jQuery(\'.sgeo_lat,.sgeo_lon\').val(\'\');">';
+	$input_group_html  = '<span class="geodir-search-input-label hover-swap text-muted" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');jQuery(\'.sgeo_lat,.sgeo_lon\').val(\'\');" aria-hidden="true">';
 	$input_group_html .= '<i class="fas fa-map-marker-alt hover-content-original"></i>';
 	$input_group_html .= '<i class="fas fa-times geodir-search-input-label-clear hover-content c-pointer" title="' . __( 'Clear field', 'geodirectory' ) . '"></i>';
 	$input_group_html .= '</span>';

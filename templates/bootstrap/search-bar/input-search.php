@@ -33,7 +33,7 @@ echo $aui_bs5 ? ' px-0' : '';
 	<?php
 	do_action( 'geodir_before_search_for_input' );
 
-	$input_group_html  = '<span class="geodir-search-input-label hover-swap text-muted" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
+	$input_group_html  = '<span class="geodir-search-input-label hover-swap text-muted" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');" aria-hidden="true">';
 	$input_group_html .= '<i class="fas fa-search hover-content-original"></i>';
 	$input_group_html .= '<i class="fas fa-times geodir-search-input-label-clear hover-content c-pointer" title="' . __( 'Clear field', 'geodirectory' ) . '"></i>';
 	$input_group_html .= '</span>';

@@ -1298,7 +1298,7 @@ add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
  */
 function geodir_search_near_label() {
 	if(!geodir_design_style()){
-		echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');jQuery(\'.sgeo_lat,.sgeo_lon\').val(\'\');">';
+		echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');jQuery(\'.sgeo_lat,.sgeo_lon\').val(\'\');" aria-hidden="true">';
 		echo '<i class="fas fa-map-marker-alt gd-show"></i>';
 		echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
 		echo '</span>';
@@ -1312,7 +1312,7 @@ add_action('geodir_before_search_near_input','geodir_search_near_label');
  */
 function geodir_search_for_label() {
 	if(!geodir_design_style()) {
-		echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
+		echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');" aria-hidden="true">';
 		echo '<i class="fas fa-search gd-show"></i>';
 		echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="' . __( 'Clear field', 'geodirectory' ) . '"></i>';
 		echo '</span>';

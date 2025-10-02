@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 ?>
-<span class="geodir-addtofav favorite_property_<?php echo absint($post_id); ?>">
+<span class="geodir-addtofav favorite_property_<?php echo absint($post_id); ?>" aria-hidden="true">
 	<a class="<?php echo esc_attr($link_class);?>"
 	   href="javascript:void(0);"
 	   onclick="<?php echo $onclick; ?>"
