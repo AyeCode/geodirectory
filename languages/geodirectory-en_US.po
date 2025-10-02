@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.134\n"
+"Project-Id-Version: GeoDirectory 2.8.135\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-25 20:42+0530\n"
-"PO-Revision-Date: 2025-09-25 20:43+0530\n"
+"POT-Creation-Date: 2025-10-02 19:16+0530\n"
+"PO-Revision-Date: 2025-10-02 19:16+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -2459,7 +2459,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:310
 #: includes/admin/views/html-keys-edit.php:12
-#: includes/class-geodir-ajax.php:1387 includes/user-functions.php:213
+#: includes/class-geodir-ajax.php:1391 includes/user-functions.php:213
 #, php-format
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
@@ -8867,7 +8867,7 @@ msgid "Generate API key"
 msgstr ""
 
 #: includes/admin/views/html-keys-edit.php:127
-#: includes/class-geodir-ajax.php:1323
+#: includes/class-geodir-ajax.php:1327
 msgid "Revoke key"
 msgstr ""
 
@@ -10501,34 +10501,34 @@ msgstr ""
 msgid "No tab_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:440
+#: includes/class-geodir-ajax.php:444
 msgid "Your recently viewed listings will show here."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:467 includes/class-geodir-ajax.php:1191
-#: includes/class-geodir-ajax.php:1224
+#: includes/class-geodir-ajax.php:471 includes/class-geodir-ajax.php:1195
+#: includes/class-geodir-ajax.php:1228
 msgid "No tabs provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:496 includes/class-geodir-ajax.php:525
+#: includes/class-geodir-ajax.php:500 includes/class-geodir-ajax.php:529
 msgid "No tab_type provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:726
+#: includes/class-geodir-ajax.php:730
 msgid "No post_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:737
+#: includes/class-geodir-ajax.php:741
 msgid "You have successfully deleted the Listing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:852
+#: includes/class-geodir-ajax.php:856
 #: includes/class-geodir-frontend-scripts.php:905
 #: includes/post-functions.php:397 language.php:82
 msgid "Unfavorite"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:857
+#: includes/class-geodir-ajax.php:861
 #: includes/class-geodir-frontend-scripts.php:903
 #: includes/post-functions.php:377
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:997
@@ -10536,49 +10536,49 @@ msgstr ""
 msgid "Favorite"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:864 includes/class-geodir-ajax.php:867
+#: includes/class-geodir-ajax.php:868 includes/class-geodir-ajax.php:871
 msgid "Action failed."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:976
+#: includes/class-geodir-ajax.php:980
 msgid "Invalid post type"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1257
+#: includes/class-geodir-ajax.php:1261
 msgid "Description is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1260
+#: includes/class-geodir-ajax.php:1264
 msgid "User is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1263
+#: includes/class-geodir-ajax.php:1267
 msgid "Permissions is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1292
+#: includes/class-geodir-ajax.php:1296
 msgid "API Key updated successfully."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1322
+#: includes/class-geodir-ajax.php:1326
 msgid ""
 "API Key generated successfully. Make sure to copy your new keys now as the "
 "secret key will be hidden once you leave this page."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1551 includes/class-geodir-ajax.php:1555
-#: includes/class-geodir-ajax.php:1596
+#: includes/class-geodir-ajax.php:1555 includes/class-geodir-ajax.php:1559
+#: includes/class-geodir-ajax.php:1600
 #: includes/class-geodir-report-post.php:425
 msgid "Invalid post."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1589
+#: includes/class-geodir-ajax.php:1593
 #: includes/widgets/class-geodir-widget-report-post.php:52
 #: includes/widgets/class-geodir-widget-report-post.php:258
 msgid "Report Post"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1605
+#: includes/class-geodir-ajax.php:1609
 #: includes/class-geodir-report-post.php:429
 msgid "You can' report this post."
 msgstr ""
