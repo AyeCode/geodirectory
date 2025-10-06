@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.136 - 2025-10-TBD =
+* jQuery.exists() conflicts with Newspaperly theme - FIXED
+
 = GeoDirectory v2.8.135 - 2025-10-02 =
 * Map widget inline script is not loading with Sage Starter Theme - FIXED
 * Search form web accessibility changes - CHANGED

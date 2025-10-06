@@ -1,9 +1,5 @@
-jQuery.fn.exists = function() {
-    return jQuery(this).length > 0;
-}
-
 jQuery(document).ready(function($) {
-    if ($(".plupload-upload-uic").exists()) {
+    if ($(".plupload-upload-uic").length) {
         var pconfig = false;
         var msgErr = '';
         var post_id = '';
