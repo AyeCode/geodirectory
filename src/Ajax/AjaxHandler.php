@@ -12,7 +12,8 @@ class AjaxHandler {
 
 	public function __construct() {
 		// Hook into your settings framework for both types of actions.
-		add_action( 'asf_execute_tool_geodir_settings', [$this, 'execute_settings_tool']);
+		add_action( 'asf_execute_tool_geodir_moderation', [$this, 'execute_tool']);
+		add_action( 'asf_execute_tool_geodir_settings', [$this, 'execute_tool']);
 		add_action( 'asf_execute_tool_geodir_tools', [$this, 'execute_tool']);
 		add_action( 'asf_render_content_pane_geodir_tools', [$this, 'render_html']);
 	}
@@ -21,17 +22,6 @@ class AjaxHandler {
 	 * Delegates a tool execution request to the Action Registry.
 	 */
 	public function execute_tool(string $name) {
-		ActionRegistry::dispatch($name);
-	}
-
-	/**
-	 * Currently only for the API Key Settings
-	 *
-	 * @param string $name
-	 *
-	 * @return void
-	 */
-	public function execute_settings_tool(string $name) {
 		ActionRegistry::dispatch($name);
 	}
 

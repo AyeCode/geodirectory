@@ -132,6 +132,13 @@ final class Loader {
 		ActionRegistry::register( 'update_api_key',   \AyeCode\GeoDirectory\Ajax\Actions\ApiKeys\UpdateApiKeyAction::class );
 		ActionRegistry::register( 'delete_api_key',   \AyeCode\GeoDirectory\Ajax\Actions\ApiKeys\DeleteApiKeyAction::class );
 
+		// Moderation
+		ActionRegistry::register( 'get_reported_posts',   \AyeCode\GeoDirectory\Ajax\Actions\Moderation\GetReportedAction::class );
+		ActionRegistry::register( 'bulk_reported_posts',   \AyeCode\GeoDirectory\Ajax\Actions\Moderation\BulkActions::class );
+		ActionRegistry::register( 'update_reported_post',   \AyeCode\GeoDirectory\Ajax\Actions\Moderation\UpdateReportedAction::class );
+		ActionRegistry::register( 'delete_reported_post',   \AyeCode\GeoDirectory\Ajax\Actions\Moderation\DeleteReportedAction::class );
+
+
 	}
 
 	/**

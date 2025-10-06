@@ -92,6 +92,13 @@ return array(
 						'label'   => __( 'Permissions', 'geodirectory' ),
 						'options' => ['read' => 'Read', 'write' => 'Write', 'read_write' => 'Read/Write'],
 						'default' => 'read_write'
+					],
+					[
+						'id'      => 'key_notice',
+						'type'    => 'alert',
+						'alert_type' => 'info',
+//						'label'   => __( 'Description', 'geodirectory' ),
+						'description' => __( 'API keys are encrypted for security and can’t be viewed again. If you lose a key, delete it and create a new one.', 'geodirectory' )
 					]
 				]
 			],
