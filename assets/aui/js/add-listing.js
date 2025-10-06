@@ -242,6 +242,12 @@ function geodir_get_form_data() {
 function geodir_save_post() {
     var form_data = geodir_get_form_data() + '&target=submit';
     console.log(form_data);
+    if (window.geodirUploading) {
+        if (jQuery('.plupload-upload-uic .fileprogress:visible').length) {
+            jQuery(window).scrollTop(jQuery('.plupload-upload-uic .fileprogress:visible:first').offset().top - 200);
+        }
+        return false;
+    }
     $button_text = jQuery('#geodir-add-listing-submit button').html();
     jQuery.ajax({
         type: "POST",
@@ -270,7 +276,7 @@ function geodir_save_post() {
                 if (typeof data == 'object' && data.success === false && data.data) {
                     alert(data.data);
                 }
-				document.dispatchEvent(new Event('ayecode_reset_captcha'));
+                document.dispatchEvent(new Event('ayecode_reset_captcha'));
                 return false;
             }
         },
@@ -278,7 +284,7 @@ function geodir_save_post() {
             jQuery('#geodir-add-listing-submit button').html($button_text).removeClass('gd-disabled').prop('disabled', false);
             alert(geodir_params.rating_error_msg);
             console.log(textStatus);
-			document.dispatchEvent(new Event('ayecode_reset_captcha'));
+            document.dispatchEvent(new Event('ayecode_reset_captcha'));
         }
     });
 }

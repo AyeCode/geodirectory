@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.136 - 2025-10-TBD =
 * jQuery.exists() conflicts with Newspaperly theme - FIXED
+* Prevent add listing form from being submitted while an image is uploading - CHANGED
 
 = GeoDirectory v2.8.135 - 2025-10-02 =
 * Map widget inline script is not loading with Sage Starter Theme - FIXED
