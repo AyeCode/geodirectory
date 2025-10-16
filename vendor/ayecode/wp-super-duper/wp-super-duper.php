@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
-	define( 'SUPER_DUPER_VER', '1.2.26' );
+	define( 'SUPER_DUPER_VER', '1.2.27' );
 
 	/**
 	 * A Class to be able to create a Widget, Shortcode or Block to be able to output content for WordPress.
@@ -2791,9 +2791,26 @@ function handleDrop(item) {
 }
 <?php } ?>
 
-							if (typeof(props.attributes.styleid) !== 'undefined'){
-								if(props.attributes.styleid==''){ props.setAttributes({ 'styleid': 'block-'+(Math.random() + 1).toString(36).substring(2) } ); }
-							}
+	if (typeof(props.attributes.styleid) !== 'undefined') {
+		var _styleId = props.attributes.styleid, setStyleId;
+		if (!window.sdStyleId) {
+			window.sdStyleId = [];
+		}
+		if (_styleId) {
+			if (window.sdStyleId && window.sdStyleId[_styleId] && window.sdStyleId[_styleId] != props.clientId) {
+				setStyleId = true;
+			}
+		} else {
+			setStyleId = true;
+		}
+		if (setStyleId) {
+			_styleId = 'block-' + (Math.random() + 1).toString(36).substring(2);
+		}
+		window.sdStyleId[_styleId] = props.clientId;
+		if (setStyleId) {
+			props.setAttributes({'styleid': _styleId});
+		}
+	}
 
 							<?php
 							if(!empty($this->options['block-edit-raw'])) {
