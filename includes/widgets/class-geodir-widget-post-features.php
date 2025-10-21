@@ -904,7 +904,7 @@ class GeoDir_Widget_Post_Features extends WP_Super_Duper {
 					$tag_icon = ! empty( $args['tag_icon'] ) ? esc_attr( $args['tag_icon'] ) : 'far fa-check-circle';
 
 					foreach ( $tags as $tag ) {
-						$slug = sanitize_title_with_dashes( $tag );
+						$slug = sanitize_title_with_dashes( remove_accents( $tag ) );
 
 						if ( ! empty( $tag_include ) && ! in_array( $slug, $tag_include ) ) {
 							continue;
