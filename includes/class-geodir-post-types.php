@@ -250,23 +250,26 @@ class GeoDir_Post_types {
 
 		// Loop the taxonomies
 		if ( ! empty( $taxonomies ) ) {
-			$tag_slug = geodir_get_option( 'permalink_tag_base','tags' );
-			$cat_slug = geodir_get_option( 'permalink_category_base','category' );
+			$tag_slug = geodir_get_option( 'permalink_tag_base', 'tags' );
+			$cat_slug = geodir_get_option( 'permalink_category_base', 'category' );
 
-			foreach( $taxonomies as $key => $taxonomy) {
+			foreach ( $taxonomies as $key => $taxonomy ) {
 				// add capability to assign terms to any user, if not added then subscribers listings wont have terms
-				$taxonomies[$key]['args']['capabilities']['assign_terms'] = 'read';
+				$taxonomies[ $key ]['args']['capabilities']['assign_terms'] = 'read';
+
+				// Get object_type as scalar value (taxonomies can have array or string for object_type).
+				$object_type = is_array( $taxonomy['object_type'] ) ? reset( $taxonomy['object_type'] ) : $taxonomy['object_type'];
 
 				// adjust rewrite rules _tags
-				$listing_slug = isset( $post_types[ $taxonomy['object_type'] ]['rewrite']['slug']) ? $post_types[ $taxonomy['object_type'] ]['rewrite']['slug'] : 'places';
-				if ( stripos( strrev( $key ), "sgat_" ) === 0 ) { // its a tag
+				$listing_slug = isset( $post_types[ $object_type ]['rewrite']['slug'] ) ? $post_types[ $object_type ]['rewrite']['slug'] : 'places';
+				if ( stripos( strrev( $key ), 'sgat_' ) === 0 ) { // its a tag
 					$taxonomies[ $key ]['args']['rewrite']['slug'] = $tag_slug ? $listing_slug . '/' . $tag_slug : $listing_slug;
-				} else {// its a category
+				} else { // its a category
 					$taxonomies[ $key ]['args']['rewrite']['slug'] = $cat_slug ? $listing_slug . '/' . $cat_slug : $listing_slug;
 				}
 
 				// Dynamically create the labels from the CPT labels
-				$singular_name = isset( $post_types[ $taxonomy['object_type'] ]['labels']['singular_name']) ? $post_types[ $taxonomy['object_type'] ]['labels']['singular_name'] : 'Place';
+				$singular_name = isset( $post_types[ $object_type ]['labels']['singular_name'] ) ? $post_types[ $object_type ]['labels']['singular_name'] : 'Place';
 				if ( stripos( strrev( $key ), "sgat_" ) === 0 ) { // its a tag
 					$taxonomies[ $key ]['args']['labels'] = array(
 						'name' => wp_sprintf( __( '%s Tags', 'geodirectory' ), $singular_name ),

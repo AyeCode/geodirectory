@@ -322,6 +322,9 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Special Character in tags breaking tag display in gd_post_features block - FIXED
 
 
+= GeoDirectory v2.8.138 - TBD =
+* PHP warning "Illegal offset type" when taxonomy object_type is an array - FIXED
+
 = GeoDirectory v2.8.137 - 2025-10-16 =
 * Hover style is not working on clone BS element - FIXED
 
