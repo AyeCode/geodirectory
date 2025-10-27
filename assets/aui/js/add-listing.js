@@ -265,10 +265,17 @@ function geodir_save_post() {
                 console.log('saved');
                 console.log(data.data);
                 geodir_changes_made = false; // set the changes flag to false.
+                jQuery(window).trigger('geodir_ajax_save_post_success', data.data);
                 jQuery('.gd-notification').remove(); // remove current notes
-                $container = jQuery('#gd-add-listing-replace-container').length ? jQuery('#gd-add-listing-replace-container').val() : '#geodirectory-add-post'
-                jQuery($container).replaceWith(data.data); // remove the form and replace with the notification
-                jQuery(window).scrollTop(jQuery('.gd-notification').offset().top - 100); // scroll to new notification
+                if (typeof data.data === 'object') {
+                    if (data.data.redirect_to) {
+                        window.location = data.data.redirect_to;
+                    }
+                } else {
+                    $container = jQuery('#gd-add-listing-replace-container').length ? jQuery('#gd-add-listing-replace-container').val() : '#geodirectory-add-post';
+                    jQuery($container).replaceWith(data.data); // remove the form and replace with the notification
+                    jQuery(window).scrollTop(jQuery('.gd-notification').offset().top - 100); // scroll to new notification
+                }
                 return true;
             } else {
                 jQuery('#geodir-add-listing-submit button').html($button_text).removeClass('gd-disabled').prop('disabled', false);

@@ -318,12 +318,11 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 == Changelog ==
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
-= GeoDirectory v2.8.138 - 2025-10-21 =
-* Special Character in tags breaking tag display in gd_post_features block - FIXED
 
-
-= GeoDirectory v2.8.138 - TBD =
+= GeoDirectory v2.8.138 - 2025-10-TBD =
 * PHP warning "Illegal offset type" when taxonomy object_type is an array - FIXED
+* Special Character in tags breaking tag display in gd_post_features block - FIXED
+* Hook added to filter AJAX post success response - ADDED
 
 = GeoDirectory v2.8.137 - 2025-10-16 =
 * Hover style is not working on clone BS element - FIXED
