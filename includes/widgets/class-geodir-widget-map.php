@@ -521,6 +521,14 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		switch ( $map_args['map_type'] ) {
 			case 'archive':
 				if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) {
+					if ( ! empty( $wp_query ) && $wp_query->is_main_query() ) {
+						if ( geodir_is_page( 'search' ) ) {
+							$map_args['map_page'] = 'se'; // Search
+						} else {
+							$map_args['map_page'] = 'ar'; // Archive
+						}
+					}
+
 					if ( empty( $map_args['all_posts'] ) ) {
 						$map_args['posts'] = array( '-1' ); // No results
 
@@ -531,11 +539,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							$map_args['posts'] = 'geodir-loop-container';
 							$map_args['terms'] = array();
 							$map_args['tags']  = array();
-							//                          if ( ! empty( $wp_query->posts ) ) {
-							//                              foreach ( $wp_query->posts as $post ) {
-							//                                  $map_args['posts'][] = $post->ID;
-							//                              }
-							//                          }
 						}
 					} else {
 						if ( ! empty( $wp_query ) && $wp_query->is_main_query() ) {
@@ -577,6 +580,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				}
 				break;
 			case 'post':
+				$map_args['map_page'] = 'po'; // Post
+
 				if ( $map_args['default_map_type'] == 'post' && ! empty( $map_args['post_id'] ) ) {
 					if ( ! ( ! empty( $gd_post ) && ! empty( $gd_post->ID ) && $gd_post->ID == (int) $map_args['post_id'] ) ) {
 						$gd_post = geodir_get_post_info( (int) $map_args['post_id'] );

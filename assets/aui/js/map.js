@@ -226,6 +226,14 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
     query_string += 'post_type=' + post_type;
     query_string += '&_wpnonce=' + options._wpnonce;
 
+    if (options.map_page) {
+        query_string += '&_mp=' + options.map_page;
+    }
+
+    if (options.all_posts) {
+        query_string += '&_ap=1';
+    }
+
     // locations
     if (options.country) {
         query_string += "&country=" + options.country;
