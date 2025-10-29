@@ -528,7 +528,35 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 
 			if ( ! empty( $terms_include_where ) ) {
 				$terms_include_where = array_unique( $terms_include_where );
-				$where .= count( $terms_include_where ) > 1 ? " AND ( " . implode( " OR ", $terms_include_where ) . " )" : " AND " . implode( " OR ", $terms_include_where );
+
+				/**
+				 * Filters markers query terms query operator.
+				 *
+				 * @since 2.8.138
+				 *
+				 * @param string $operator Terms query operator. Default OR.
+				 * @param array  $terms_include_where Terms where parts.
+				 * @param WP_REST_Request $request REST request params.
+				 */
+				$operator = apply_filters( 'geodir_rest_markers_query_terms_operator', 'OR', $terms_include_where, $request );
+
+				$terms_where = count( $terms_include_where ) > 1 ? "( " . implode( " {$operator} ", $terms_include_where ) . " )" : $terms_include_where[0];
+
+				/**
+				 * Filters markers query terms query where.
+				 *
+				 * @since 2.8.138
+				 *
+				 * @param string $terms_where Terms query where.
+				 * @param array  $terms_include_where Terms where parts.
+				 * @param string $operator Terms query operator.
+				 * @param WP_REST_Request $request REST request params.
+				 */
+				$terms_where = apply_filters( 'geodir_rest_markers_query_terms_where', $terms_where, $terms_include_where, $operator, $request );
+
+				if ( $terms_where ) {
+					$where .= " AND " . $terms_where;
+				}
 			}
 
 			if ( ! empty( $terms_exclude_where ) ) {
