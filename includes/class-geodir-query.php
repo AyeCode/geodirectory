@@ -128,6 +128,8 @@ class GeoDir_Query {
 	 * @param mixed $q query object
 	 */
 	public function pre_get_posts( $q ) {
+		global $wp_post_types;
+
 		// We only want to affect the main query
 		if ( ! $q->is_main_query() ) {
 			return;
@@ -184,6 +186,15 @@ class GeoDir_Query {
 			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 10, 2 );
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ), 10, 2 );
 		} elseif ( geodir_is_page( 'search' ) ) {
+			// Prevent conflict with LearnDash LMS.
+			if ( class_exists( 'LearnDash_Search', false ) ) {
+				foreach ( array( 'sfwd-courses', 'sfwd-lessons', 'sfwd-topic', 'sfwd-quiz' ) as $ld_post_type ) {
+					if ( ! empty( $wp_post_types[ $ld_post_type ] ) ) {
+						$wp_post_types[ $ld_post_type ]->exclude_from_search = true;
+					}
+				}
+			}
+
 			// Some page builders breaks editor.
 			if (
 				( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) // Divi

@@ -323,6 +323,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * PHP warning "Illegal offset type" when taxonomy object_type is an array - FIXED
 * Special Character in tags breaking tag display in gd_post_features block - FIXED
 * Hook added to filter AJAX post success response - ADDED
+* Conflict with LearnDash LMS on search page - FIXED
 
 = GeoDirectory v2.8.137 - 2025-10-16 =
 * Hover style is not working on clone BS element - FIXED

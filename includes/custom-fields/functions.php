@@ -190,7 +190,7 @@ function geodir_get_cf_value( $cf ) {
 	}
 
 	// Set defaults
-	if ( ( $value == '' || $cf['type'] == 'checkbox' ) && ! empty( $gd_post ) && $gd_post->post_status == 'auto-draft' ) {
+	if ( ( $value == '' || $cf['type'] == 'checkbox' ) && ! empty( $gd_post ) && ! empty( $gd_post->post_status ) && $gd_post->post_status == 'auto-draft' ) {
 		$value = $cf['default'];
 	}
 
