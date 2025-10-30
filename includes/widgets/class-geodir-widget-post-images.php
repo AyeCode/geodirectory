@@ -563,10 +563,19 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			}
 
 			$main_wrapper_class_x = 'card-img-top embed-responsive-item';
+			$main_wrapper_class = trim( $main_wrapper_class );
+
+			if ( $design_style ) {
+				$main_wrapper_class .= ' overflow-hidden';
+			}
+
+			if ( $options['css_class'] && strpos( $main_wrapper_class, " " . $options['css_class'] ) === false ) {
+				$main_wrapper_class .= ' ' . geodir_sanitize_html_class( $options['css_class'] );
+			}
 
 			$args = array(
 				'current_post' => $current_post,
-				'main_wrapper_class' => " " . $main_wrapper_class . " " . geodir_sanitize_html_class( $options['css_class'] ),
+				'main_wrapper_class' => $main_wrapper_class,
 				'type' => $options['type'],
 				'slider_id' => $slider_id,
 				'second_wrapper_class' => $second_wrapper_class,
