@@ -17,7 +17,8 @@ return array(
 	'name'         => __( 'System Status', 'wp-ayecode-settings-framework' ),
 	'icon'         => 'fa-solid fa-server',
 	'type'         => 'custom_page',
-	'ajax_content' => 'status_report',
+//	'ajax_content' => 'status_report',
+	'ajax_content' => 'get_system_status_content',
 	'searchable'   => array( 'report', 'system', 'status', 'support', 'data' ),
 	'keywords'   => array( 'report', 'system', 'status', 'support', 'data' ),
 

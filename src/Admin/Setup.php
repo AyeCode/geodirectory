@@ -13,11 +13,6 @@ declare( strict_types = 1 );
 namespace AyeCode\GeoDirectory\Admin;
 
 // @todo Create these new Page and Feature classes.
-use AyeCode\GeoDirectory\Admin\Pages\DashboardPage;
-use AyeCode\GeoDirectory\Admin\Pages\SettingsPage;
-use AyeCode\GeoDirectory\Admin\Pages\ToolsPage;
-use AyeCode\GeoDirectory\Admin\Pages\StatusPage;
-use AyeCode\GeoDirectory\Admin\Pages\AddonsPage;
 use AyeCode\GeoDirectory\Admin\Features\PendingBubbles;
 use AyeCode\GeoDirectory\Admin\Features\NavMenuMetaBox;
 
@@ -55,7 +50,7 @@ final class Setup {
 	 */
 	public function add_menus(): void {
 		// @todo Create the page classes this method depends on.
-		$dashboard_page = new DashboardPage();
+		//$dashboard_page = new DashboardPage();
 
 		// Note: Settings and Tools page added in Loader.php
 
@@ -65,13 +60,14 @@ final class Setup {
 			__( 'GeoDirectory', 'geodirectory' ),
 			'manage_options',
 			'geodirectory',
-			[ $dashboard_page, 'render' ],
+//			[ $dashboard_page, 'render' ],
+			'',
 			'dashicons-admin-site', // Replaced admin-site with a more relevant icon.
 			'55.1984'
 		);
 
 		// Add core submenus.
-		add_submenu_page( 'geodirectory', __( 'Dashboard', 'geodirectory' ), __( 'Dashboard', 'geodirectory' ), 'manage_options', 'geodirectory', [ $dashboard_page, 'render' ] );
+//		add_submenu_page( 'geodirectory', __( 'Dashboard', 'geodirectory' ), __( 'Dashboard', 'geodirectory' ), 'manage_options', 'geodirectory', [ $dashboard_page, 'render' ] );
 
 //		if ( apply_filters( 'geodirectory_show_addons_page', true ) ) {
 //			add_submenu_page( 'geodirectory', __( 'Extensions', 'geodirectory' ), __( 'Extensions', 'geodirectory' ), 'manage_options', 'gd-addons', [ $addons_page, 'render' ] );

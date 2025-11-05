@@ -33,6 +33,7 @@ require_once __DIR__ . '/src/functions.php';
 require_once __DIR__ . '/inc/wrapper-functions.php';
 require_once __DIR__ . '/inc/map-functions.php';
 require_once __DIR__ . '/inc/helper-functions.php';
+require_once __DIR__ . '/inc/location-functions.php';
 
 // 2. Define essential constants.
 define( 'GEODIRECTORY_VERSION', '3.0.0' );

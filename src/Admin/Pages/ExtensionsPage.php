@@ -26,7 +26,7 @@ use AyeCode\SettingsFramework\Settings_Framework;
  *
  * Extends the core framework to define the GeoDirectory Tools page.
  */
-final class DashboardPage extends Settings_Framework {
+final class ExtensionsPage extends Settings_Framework {
 
 	// region Framework Properties
 	// These protected properties configure the admin page.
@@ -37,14 +37,14 @@ final class DashboardPage extends Settings_Framework {
 	 *
 	 * @var string
 	 */
-	protected $option_name = 'geodir_dashboard_page';
+	protected $option_name = 'geodir_extensions_page';
 
 	/**
 	 * The unique slug for the admin page.
 	 *
 	 * @var string
 	 */
-	protected $page_slug = 'geodirectory';
+	protected $page_slug = 'geodir_extensions';
 
 	/**
 	 * The name/logo of the plugin, displayed in the settings header.
@@ -58,14 +58,14 @@ final class DashboardPage extends Settings_Framework {
 	 *
 	 * @var string
 	 */
-	protected $page_title = 'Dashboard';
+	protected $page_title = 'Extensions';
 
 	/**
 	 * The text for the admin menu item.
 	 *
 	 * @var string
 	 */
-	protected $menu_title = 'Dashboard';
+	protected $menu_title = 'Extensions';
 
 	/**
 	 * The Tools page is a submenu under the main 'geodirectory' menu.
@@ -90,16 +90,14 @@ final class DashboardPage extends Settings_Framework {
 	public function __construct() {
 
 		// Localize translatable properties before the parent constructor uses them.
-		$this->page_title = __( 'Dashboard', 'geodirectory' );
-		$this->menu_title = __( 'Dashboard', 'geodirectory' );
+		$this->page_title = __( 'Extensions', 'geodirectory' );
+		$this->menu_title = __( 'Extensions', 'geodirectory' );
 
 		// Call the parent constructor which handles all the WordPress hooks.
 		parent::__construct();
 	}
 
-	public function render(): void {
-	// fake render class so we can use our settings framework as the main page
-	}
+
 	/**
 	 * Builds and returns the tools page configuration array.
 	 * This method is required by the abstract parent class.
@@ -109,8 +107,10 @@ final class DashboardPage extends Settings_Framework {
 	protected function get_config() {
 		// Define the list of config files for the Tools page.
 		$settings_files = [
-			'dashboard' => 'config/dashboard/dashboard.php',
-
+			'addons'      => 'config/extensions/addons.php',
+			'themes'      => 'config/extensions/themes.php',
+			'recommended' => 'config/extensions/recommended.php',
+			'membership'  => 'config/extensions/membership.php',
 		];
 
 		$sections = [];
@@ -125,7 +125,20 @@ final class DashboardPage extends Settings_Framework {
 			}
 		}
 
-		return [ 'sections' => $sections ];
+
+		return [
+			'sections'    => $sections,
+			'page_config' => [
+				'api_url'        => 'https://wpgeodirectory.com/edd-api/v2/products/',
+				'membership_url' => 'https://wpgeodirectory.com/downloads/membership/',
+//				'connect_banner' => [
+//					'is_connected'   => $is_connected,
+//					'is_localhost'   => false, //$this->is_localhost(), @todo undo before launch
+//					'connect_url'    => '#',
+//					'learn_more_url' => 'https://wpgeodirectory.com/docs-v2/addons/ayecode-connect/',
+//				],
+			]
+		];
 	}
 
 }
