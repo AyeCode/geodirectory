@@ -419,11 +419,11 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 					}
 				}
 
-				if ( ( ! empty( $html ) || $html === '0' ) && ( $html = str_replace( "%%input%%", $match_value, $html ) ) ) {
+				if ( ( ! empty( $html ) || $html === '0' ) && strpos( $html, '[gd_post_badge ' ) === false && ( $html = str_replace( "%%input%%", $match_value, $html ) ) ) {
 					// Will be replace in condition check
 				}
 
-				if ( ( ! empty( $html ) || $html === '0' ) && $post_id && ( $html = str_replace( "%%post_url%%", get_permalink( $post_id ),$html ) ) ) {
+				if ( ( ! empty( $html ) || $html === '0' ) && $post_id && strpos( $html, '[gd_post_badge ' ) === false && ( $html = str_replace( "%%post_url%%", get_permalink( $post_id ),$html ) ) ) {
 					// Will be replace in condition check
 				}
 
