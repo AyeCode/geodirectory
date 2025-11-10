@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.139\n"
+"Project-Id-Version: GeoDirectory 2.8.140\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 18:28+0530\n"
-"PO-Revision-Date: 2025-11-06 18:28+0530\n"
+"POT-Creation-Date: 2025-11-10 20:31+0530\n"
+"PO-Revision-Date: 2025-11-10 20:31+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -434,7 +434,7 @@ msgstr ""
 #: includes/class-geodir-elementor.php:157 includes/class-geodir-privacy.php:39
 #: includes/core-functions.php:936
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
-#: includes/integrations/bricks/class-geodir-bricks.php:512
+#: includes/integrations/bricks/class-geodir-bricks.php:528
 msgid "GeoDirectory"
 msgstr ""
 
@@ -10637,7 +10637,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1235
+#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1272
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -11727,65 +11727,77 @@ msgstr ""
 msgid "Load Map"
 msgstr ""
 
-#: includes/class-geodir-media.php:281
+#: includes/class-geodir-media.php:83 includes/class-geodir-media.php:88
+msgid "You are not allowed to perform this action."
+msgstr ""
+
+#: includes/class-geodir-media.php:130
+msgid "Fail to upload the post attachment."
+msgstr ""
+
+#: includes/class-geodir-media.php:144
+msgid "Fail to upload the file."
+msgstr ""
+
+#: includes/class-geodir-media.php:318
 msgid "No post_id or file url, file insert failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:395 includes/class-geodir-media.php:437
+#: includes/class-geodir-media.php:432 includes/class-geodir-media.php:474
 msgid "Failed to insert file info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:529
+#: includes/class-geodir-media.php:566
 msgid "No image_id, post_id or image url, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:612
+#: includes/class-geodir-media.php:649
 msgid "Failed to update image info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:743
+#: includes/class-geodir-media.php:780
 msgid "Invalid URL Provided."
 msgstr ""
 
-#: includes/class-geodir-media.php:749
+#: includes/class-geodir-media.php:786
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:1223
+#: includes/class-geodir-media.php:1260
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1235 includes/class-geodir-media.php:1237
+#: includes/class-geodir-media.php:1272 includes/class-geodir-media.php:1274
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1258
+#: includes/class-geodir-media.php:1295
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:1276
+#: includes/class-geodir-media.php:1313
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-media.php:1393 includes/class-geodir-media.php:1435
+#: includes/class-geodir-media.php:1430 includes/class-geodir-media.php:1472
 msgid "Generate attachment metadata"
 msgstr ""
 
-#: includes/class-geodir-media.php:1420
+#: includes/class-geodir-media.php:1457
 msgid "Invalid post id!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1461
+#: includes/class-geodir-media.php:1498
 msgid "Invalid attachment!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1466
+#: includes/class-geodir-media.php:1503
 msgid "Attachment metadata not generated for external image!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1484
+#: includes/class-geodir-media.php:1521
 #, php-format
 msgid "%s not exists!"
 msgstr ""
