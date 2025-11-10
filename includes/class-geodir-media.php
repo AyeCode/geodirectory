@@ -69,59 +69,96 @@ class GeoDir_Media {
 	 * @package GeoDirectory
 	 */
 	public static function post_attachment_upload() {
+		$field_id = isset( $_POST['imgid'] ) ? sanitize_text_field( $_POST['imgid'] ) : '';
+		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : '';
+		$error = '';
 
-		// the post id
-		$field_id = isset($_POST["imgid"]) ? esc_attr($_POST["imgid"]) : '';
-		$post_id = isset($_POST["post_id"]) ? absint($_POST["post_id"]) : '';
+		if ( $post_id ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				// Check if user has privileges to edit the post
+				$maybe_parent = wp_get_post_parent_id( $post_id  );
+				$parent_id = $maybe_parent ? absint( $maybe_parent ) : '';
 
-		// set GD temp upload dir
+				if ( ! GeoDir_Post_Data::can_edit( $post_id, (int) get_current_user_id(), $parent_id ) ) {
+					$error = __( 'You are not allowed to perform this action.', 'geodirectory' );
+				}
+			}
+		} else {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				$error = __( 'You are not allowed to perform this action.', 'geodirectory' );
+			}
+		}
+
+		// Return error.
+		if ( $error ) {
+			wp_send_json_error( array( 'message' => $error ) );
+		}
+
+		do_action( 'geodir_before_post_attachment_upload', $field_id, $post_id );
+
+		// Set GD temp upload dir
 		add_filter( 'upload_dir', array( __CLASS__, 'temp_upload_dir' ) );
-
-		// change file orientation if needed
-		//$fixed_file = geodir_exif($_FILES[$imgid . 'async-upload']);
 
 		$fixed_file = $_FILES[ $field_id . 'async-upload' ];
 
-		// handle file upload
+		// Handle file upload
 		$status = wp_handle_upload( $fixed_file, array(
 			'test_form' => true,
 			'action'    => 'geodir_post_attachment_upload'
 		) );
-		// unset GD temp upload dir
+
+		do_action( 'geodir_after_post_attachment_upload', $status, $field_id, $post_id );
+
+		// Unset GD temp upload dir
 		remove_filter( 'upload_dir', array( __CLASS__, 'temp_upload_dir' ) );
 
-		if ( ! isset( $status['url'] ) && isset( $status['error'] ) ) {
-			print_r( $status );
-		}
-		//print_r( $status );exit;
+		$file_url = '';
 
+		if ( is_wp_error( $status ) ) {
+			$error = $status->get_error_message();
+		} else if ( is_array( $status ) ) {
+			if ( ! empty( $status['error'] ) ) {
+				$error = $status['error'];
+			} else if ( $post_id && ! empty( $status['url'] ) ) {
+				// Insert to DB
+				$file_info = self::insert_attachment( $post_id, $field_id, $status['url'], '', '', -1, 0 );
 
-		// send the uploaded file url in response
-		if ( isset( $status['url'] ) && $post_id) {
+				if ( is_wp_error( $file_info ) ) {
+					if ( current_user_can( 'manage_options' ) ) {
+						$error = $file_info->get_error_message();
+					} else {
+						$error = __( 'Fail to upload the post attachment.', 'geodirectory' );
+					}
+				} else {
+					$wp_upload_dir = wp_upload_dir();
 
-			// insert to DB
-			$file_info = self::insert_attachment($post_id,$field_id,$status['url'],'', '', -1,0);
+					$file_url = $wp_upload_dir['baseurl'] . $file_info['file'] . '|' . $file_info['ID'] . '||';
+				}
 
-			if ( is_wp_error( $file_info ) ) {
-				//geodir_error_log( $file_info->get_error_message(), 'post_attachment_upload', __FILE__, __LINE__ );
+			} else if ( ! empty( $status['url'] ) ) {
+				$file_url = $status['url'];
 			} else {
-				$wp_upload_dir = wp_upload_dir();
-				echo $wp_upload_dir['baseurl'] . $file_info['file'] ."|".$file_info['ID']."||";
+				echo 'x';
 			}
-
-		} elseif( isset( $status['url'] )) {
-			echo $status['url'];
-		}
-		else
-		{
-			echo 'x';
+		} else {
+			$error = __( 'Fail to upload the file.', 'geodirectory' );
 		}
 
-		// if file exists it should have been moved if uploaded correctly so now we can remove it
-		if(!empty($status['file']) && $post_id){
+		// If file exists it should have been moved if uploaded correctly so now we can remove it
+		if ( $post_id && is_array( $status ) && ! empty( $status['file'] ) ) {
 			wp_delete_file( $status['file'] );
 		}
 
+		// Return error.
+		if ( $error ) {
+			wp_send_json_error( array( 'message' => $error ) );
+		}
+
+		if ( $file_url ) {
+			do_action( 'geodir_post_attachment_uploaded', $status, $file_url, $field_id, $post_id );
+
+			echo esc_html( $file_url );
+		}
 
 		exit;
 	}
@@ -169,8 +206,8 @@ class GeoDir_Media {
 
 		$metadata = array();
 		$imagesize = function_exists( 'wp_getimagesize' ) ? wp_getimagesize( $file ) : @getimagesize( $file );
-		$metadata['width'] = $imagesize[0];
-		$metadata['height'] = $imagesize[1];
+		$metadata['width'] = is_array( $imagesize ) && isset( $imagesize[0] ) ? $imagesize[0] : 0;
+		$metadata['height'] = is_array( $imagesize ) && isset( $imagesize[1] ) ? $imagesize[1] : 0;
 
 		// Make the file path relative to the upload dir.
 		$metadata['file'] = _wp_relative_upload_path( $file );
