@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.140 - 2025-11-TBD =
 * Extra validation for post attachment upload - FIXED
+* GD Loop issue with the Bricks elements with same parent block - FIXED
 
 = GeoDirectory v2.8.139 - 2025-11-06 =
 * Badge with %%input%% replaces incorrect value when used in GD > Dynamic Content - FIXED

@@ -396,11 +396,19 @@ class GeoDir_Bricks {
 		if ( ! empty( $bricks_data ) ) {
 			remove_filter( 'geodir_overwrite_archive_template_content', array( __CLASS__, 'overwrite_archive_template_content' ), 10, 3 );
 
+			// Backup current elements.
+			$current_elements = Bricks\Frontend::$elements;
+
 			ob_start();
 			Bricks\Frontend::render_content( $bricks_data );
 			$_content = ob_get_clean();
 
 			$content = trim( $_content );
+
+			// Restore current elements.
+			if ( ! empty( $current_elements ) ) {
+				Bricks\Frontend::$elements = $current_elements;
+			}
 
 			add_filter( 'geodir_overwrite_archive_template_content', array( __CLASS__, 'overwrite_archive_template_content' ), 10, 3 );
 		}
@@ -437,6 +445,9 @@ class GeoDir_Bricks {
 				$geodir_brocks_css = array();
 			}
 
+			// Backup current elements.
+			$current_elements = Bricks\Frontend::$elements;
+
 			ob_start();
 			Bricks\Frontend::render_content( $bricks_data );
 			$_content = ob_get_clean();
@@ -452,6 +463,11 @@ class GeoDir_Bricks {
 				}
 
 				$geodir_brocks_css[ $page_id ] = true;
+			}
+
+			// Restore current elements.
+			if ( ! empty( $current_elements ) ) {
+				Bricks\Frontend::$elements = $current_elements;
 			}
 
 			add_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'overwrite_archive_item_template_content' ), 10, 3 );
