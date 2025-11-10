@@ -10,7 +10,6 @@ jQuery(document).ready(function($) {
             post_id = jQuery("#post input[name='post_ID']").val(); // backend
         }
 
-
         $(".plupload-upload-uic").each(function() {
             var $this = $(this);
             var id1 = $this.attr("id");
@@ -124,8 +123,12 @@ jQuery(document).ready(function($) {
 
                     jQuery('#' + imgId + 'upload-error').html(msgErr);
                 } else {
-                    jQuery('#' + imgId + 'upload-error').removeClass('d-none').addClass('d-block');
-                    jQuery('#' + imgId + 'upload-error').html(files.message);
+                    if (files.fileElement && jQuery(files.fileElement).length) {
+                        jQuery(files.fileElement).removeClass('progress-bar-striped').addClass('bg-danger text-light').html(files.message);
+                    } else {
+                        jQuery('#' + imgId + 'upload-error').removeClass('d-none').addClass('d-block');
+                        jQuery('#' + imgId + 'upload-error').html(files.message);
+                    }
                 }
             });
 
@@ -192,9 +195,22 @@ jQuery(document).ready(function($) {
             var i = 0;
             var indexes = new Array();
             uploader.bind('FileUploaded', function(up, file, response) {
-
                 // stop the animated bar
                 $('#' + file.id + ' .fileprogress').removeClass('progress-bar-animated');
+                try {
+                    var _res = jQuery.parseJSON(response.response);
+                    if (typeof _res == 'object' && !_res.success && _res.data.message) {
+                        uploader.trigger('Error', {
+                            code: _res.data.code ? _res.data.code : -200,
+                            message: _res.data.message,
+                            file: file,
+                            status: response.status,
+                            fileElement: $('#' + file.id + ' .fileprogress')
+                        });
+                        return;
+                    }
+                } catch (e) {}
+
                 //up.removeFile(up.files[0]); // remove images
                 var totalImg = parseInt(jQuery("#" + imgId + "totImg").val());
                 indexes[i] = up;
