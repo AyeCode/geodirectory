@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.140\n"
+"Project-Id-Version: GeoDirectory 2.8.141\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-10 20:31+0530\n"
-"PO-Revision-Date: 2025-11-10 20:31+0530\n"
+"POT-Creation-Date: 2025-11-13 19:59+0530\n"
+"PO-Revision-Date: 2025-11-13 19:59+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -22322,6 +22322,16 @@ msgstr ""
 
 #: vendor/ayecode/wp-super-duper/hello-world.php:132
 msgid "This is an input added via filter."
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/includes/class-super-duper-bricks-element.php:192
+msgctxt "Widget option: Yes"
+msgid "Yes"
+msgstr ""
+
+#: vendor/ayecode/wp-super-duper/includes/class-super-duper-bricks-element.php:193
+msgctxt "Widget option: No"
+msgid "No"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/map.php:25
