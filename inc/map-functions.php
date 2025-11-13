@@ -263,7 +263,9 @@ function geodir_settings_map_input_js_function(){
 	 */
 	$auto_change_address_fields_pin_move = apply_filters('geodir_auto_change_address_fields_pin_move', true);
 	global $geodirectory;
-	$default_location = $geodirectory->location->get_default_location();
+//	print_r( geodirectory()->locations->get_default() );exit;
+//	$default_location = $geodirectory->location->get_default_location();
+	$default_location = geodirectory()->locations->get_default();
 	$defaultcity = isset($default_location->city) ? $default_location->city : '';
 	$lat_lng_blank = false;
 	if ( (!isset($lat) || $lat == '' ) && (!isset($lat) || $lng == '')) {
@@ -290,8 +292,8 @@ function geodir_settings_map_input_js_function(){
 	 * @param bool $var Whether to auto fill country, state, city values in fields.
 	 */
 	$auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
-	$marker_icon = GeoDir_Maps::default_marker_icon( true );
-	$icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
+	$marker_icon = geodirectory()->maps->default_marker_icon( true );
+	$icon_size = geodirectory()->maps->get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
 	$resize_marker = apply_filters( 'geodir_map_marker_resize_marker', false );
 
 if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
@@ -328,7 +330,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 		<?php if($lat_lng_blank){$lat='';$lng='';}?>
 		var <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT = <?php echo ($mapzoom) ? absint( $mapzoom ) : 12;?>;
 		var minZoomLevel = <?php echo ($is_map_restrict) ? 5 : 0; ?>;
-		var mapLang = '<?php echo esc_js( GeoDir_Maps::map_language() ); ?>';
+		var mapLang = '<?php echo esc_js( geodirectory()->maps->map_language() ); ?>';
 		var oldstr_address;
 		var oldstr_address2;
 		var oldstr_zip;
@@ -823,10 +825,10 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 			if(!ISO2){
 				<?php
 				if ( ! defined( 'GEODIRLOCATION_TEXTDOMAIN' ) ) {
-					$location_result = $geodirectory->location->get_default_location();
+					$location_result = geodirectory()->locations->get_default();
 
 					if ( ! empty( $location_result ) ) {
-						$ISO2 = $geodirectory->location->get_country_iso2( $location_result->country );
+						$ISO2 = geodirectory()->locations->get_country_iso2( $location_result->country );
 						echo "ISO2 = '$ISO2';";
 					}
 				}

@@ -78,7 +78,7 @@ final class Container {
 
 		// If there's no blueprint for this service, we can't build it.
 		if ( ! isset( $this->bindings[ $id ] ) ) {
-			throw new \Exception( "Service '{$id}' is not registered in the container." );
+			throw new \Exception( "Service '{$id}' is not registered in the container. Check it is added in geodirectory_boot()" );
 		}
 
 		$concrete = $this->bindings[ $id ];

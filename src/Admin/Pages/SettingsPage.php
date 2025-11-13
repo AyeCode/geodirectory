@@ -180,7 +180,11 @@ final class SettingsPage extends Settings_Framework {
 		wp_add_inline_script( 'ayecode-settings-framework-admin', geodir_settings_map_input_js_function() );
 
 		$suffix          = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$geodir_map_name = \GeoDir_Maps::active_map();
+//		print_r(geodirectory()->settings);exit;
+//		print_r(geodirectory()->maps);exit;
+//		print_r( geodirectory() );exit;
+//		echo geodirectory()->settings->get( 'maps_api', 'google' );
+		$geodir_map_name = geodirectory()->maps->active_map();
 
 		$required_scripts = [ 'geodir-admin-script' ];
 
@@ -194,16 +198,16 @@ final class SettingsPage extends Settings_Framework {
 			$required_scripts[] = 'geodir-o-overlappingmarker-script';
 		}
 
-		$osm_extra = \GeoDir_Maps::footer_script();
-		wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '" . \GeoDir_Maps::active_map() . "';" . $osm_extra, 'before' );
+		$osm_extra = geodirectory()->maps->footer_script();
+		wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '" . geodirectory()->maps->active_map() . "';" . $osm_extra, 'before' );
 		$required_scripts[] = 'geodir-goMap';
 
-		wp_register_script( 'geodir-setup', GEODIRECTORY_PLUGIN_URL . '/assets/js/setup-wizard' . $suffix . '.js', $required_scripts, GEODIRECTORY_VERSION );
+		wp_register_script( 'geodir-setup', \GEODIRECTORY_PLUGIN_URL . '/assets/js/setup-wizard' . $suffix . '.js', $required_scripts, GEODIRECTORY_VERSION );
 		wp_enqueue_script( 'geodir-setup' );
 
 		wp_localize_script( 'geodir-setup', 'geodir_params', geodir_params() );
 		if ( in_array( 'geodir-google-maps', $required_scripts ) ) {
-			wp_add_inline_script( 'geodir-google-maps', \GeoDir_Maps::google_map_callback(), 'before' );
+			wp_add_inline_script( 'geodir-google-maps', geodirectory()->maps->google_map_callback(), 'before' );
 		}
 	}
 

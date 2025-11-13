@@ -34,10 +34,21 @@ require_once __DIR__ . '/inc/wrapper-functions.php';
 require_once __DIR__ . '/inc/map-functions.php';
 require_once __DIR__ . '/inc/helper-functions.php';
 require_once __DIR__ . '/inc/location-functions.php';
+require_once __DIR__ . '/inc/core-functions.php';
+require_once __DIR__ . '/inc/general-functions.php';
+require_once __DIR__ . '/inc/image-functions.php';
+require_once __DIR__ . '/inc/rest-functions.php';
+require_once __DIR__ . '/inc/template-functions.php';
+require_once __DIR__ . '/inc/business-hours-functions.php';
+require_once __DIR__ . '/inc/formatting-functions.php';
 
 // 2. Define essential constants.
 define( 'GEODIRECTORY_VERSION', '3.0.0' );
 define( 'GEODIRECTORY_FILE', __FILE__ );
+define( 'GEODIRECTORY_PLUGIN_URL', untrailingslashit( plugins_url( '/', __FILE__ ) )  );
+define( 'GEODIR_REST_SLUG', 'geodir');
+define( 'GEODIR_REST_API_VERSION', '2');
+
 
 // 3. Initialize the core path helper. This is done early as it has no dependencies.
 \AyeCode\GeoDirectory\Core\Plugin::init( GEODIRECTORY_FILE );
@@ -70,6 +81,8 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\Media::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Settings::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Utils::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Maps::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Image::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Statuses::class );
 
 	// Database Repositories (Data Layer)
