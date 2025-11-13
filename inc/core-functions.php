@@ -18,36 +18,7 @@
  * @package GeoDirectory
  */
 function geodir_error_log( $log, $title = '', $file = '', $line = '', $exit = false ) {
-	/**
-	 * A filter to override the WP_DEBUG setting for function geodir_error_log().
-	 *
-	 * @since 1.5.7
-	 */
-	$should_log = apply_filters( 'geodir_log_errors', WP_DEBUG );
-
-	if ( $should_log ) {
-		$label = '';
-		if ( $file && $file !== '' ) {
-			$label .= basename( $file ) . ( $line ? '(' . $line . ')' : '' );
-		}
-
-		if ( $title && $title !== '' ) {
-			$label = $label !== '' ? $label . ' ' : '';
-			$label .= $title . ' ';
-		}
-
-		$label = $label !== '' ? trim( $label ) . ' : ' : '';
-
-		if ( is_array( $log ) || is_object( $log ) ) {
-			error_log( $label . print_r( $log, true ) );
-		} else {
-			error_log( $label . $log );
-		}
-
-		if ( $exit ) {
-			exit;
-		}
-	}
+	geodirectory()->debug->error_log( $log, $title, $file, $line, $exit );
 }
 
 /**
@@ -62,14 +33,7 @@ function geodir_error_log( $log, $title = '', $file = '', $line = '', $exit = fa
  * @param $version The version of WordPress where the message was added.
  */
 function geodir_doing_it_wrong( $function, $message, $version ) {
-	$message .= ' Backtrace: ' . wp_debug_backtrace_summary();
-
-	if ( defined( 'DOING_AJAX' ) ) {
-		do_action( 'doing_it_wrong_run', $function, $message, $version );
-		geodir_error_log( $function . ' was called incorrectly. ' . $message . '. This message was added in version ' . $version . '.' );
-	} else {
-		_doing_it_wrong( $function, $message, $version );
-	}
+	geodirectory()->debug->doing_it_wrong( $function, $message, $version );
 }
 
 /**
@@ -142,15 +106,7 @@ function geodir_is_post_type_archive( $post_types = array() ) {
  * @return string
  */
 function geodir_help_tip( $tip, $allow_html = false ) {
-	global $aui_bs5;
-	if ( $allow_html ) {
-		$tip = geodir_sanitize_tooltip( $tip );
-	} else {
-		$tip = esc_attr( $tip );
-	}
-	$ml = $aui_bs5 ? 'ms-2' : 'ml-2';
-
-	return '<i class="fas fa-question-circle gd-help-tip ' . $ml . ' text-muted" title="' . $tip . '" data-bs-toggle="tooltip" data-bd-html="true"></i>';
+	return geodirectory()->debug->help_tip( $tip, $allow_html );
 }
 
 /**

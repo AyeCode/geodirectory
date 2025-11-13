@@ -81,6 +81,9 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\LocationFormatter::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Formatter::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Images::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Debug::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\BusinessHours::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Templates::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Reviews::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Media::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Settings::class );

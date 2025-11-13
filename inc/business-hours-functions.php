@@ -2,6 +2,9 @@
 /**
  * Business hours related functions.
  *
+ * These functions act as thin wrappers around the Core classes.
+ * For direct access, use: geodirectory()->business_hours
+ *
  * @since 2.0.0
  * @package GeoDirectory
  */
@@ -14,29 +17,7 @@
  * @param bool $untranslated If the returned day names should be translated or not.
  */
 function geodir_get_weekdays( $untranslated = false ) {
-	if ( $untranslated ) {
-		$weekdays = array(
-			'Mo'    => 'Monday',
-			'Tu'  	=> 'Tuesday',
-			'We' 	=> 'Wednesday',
-			'Th'  	=> 'Thursday',
-			'Fr'    => 'Friday',
-			'Sa'  	=> 'Saturday',
-			'Su'    => 'Sunday'
-		);
-	} else {
-		$weekdays = array(
-			'Mo'    => __( 'Monday' ),
-			'Tu'  	=> __( 'Tuesday' ),
-			'We' 	=> __( 'Wednesday' ),
-			'Th'  	=> __( 'Thursday' ),
-			'Fr'    => __( 'Friday' ),
-			'Sa'  	=> __( 'Saturday' ),
-			'Su'    => __( 'Sunday' )
-		);
-	}
-
-	return apply_filters( 'geodir_get_weekdays', $weekdays, $untranslated );
+	return geodirectory()->business_hours->get_weekdays( $untranslated );
 }
 
 /**
@@ -47,29 +28,7 @@ function geodir_get_weekdays( $untranslated = false ) {
  * @param bool $untranslated If the returned day names should be translated or not.
  */
 function geodir_get_short_weekdays( $untranslated = false ) {
-	if ( $untranslated ) {
-		$weekdays = array(
-			'Mo'    => 'Mon',
-			'Tu'  	=> 'Tue',
-			'We' 	=> 'Wed',
-			'Th'  	=> 'Thu',
-			'Fr'    => 'Fri',
-			'Sa'  	=> 'Sat',
-			'Su'    => 'Sun'
-		);
-	} else {
-		$weekdays = array(
-			'Mo'    => __( 'Mon' ),
-			'Tu'  	=> __( 'Tue' ),
-			'We' 	=> __( 'Wed' ),
-			'Th'  	=> __( 'Thu' ),
-			'Fr'    => __( 'Fri' ),
-			'Sa'  	=> __( 'Sat' ),
-			'Su'    => __( 'Sun' )
-		);
-	}
-
-	return apply_filters( 'geodir_get_short_weekdays', $weekdays, $untranslated );
+	return geodirectory()->business_hours->get_short_weekdays( $untranslated );
 }
 
 /**
@@ -79,17 +38,7 @@ function geodir_get_short_weekdays( $untranslated = false ) {
  * @return array $weekdays The days of the week
  */
 function geodir_day_short_names() {
-   $days = array( 
-       '1'	=> 'Mo', 
-       '2'	=> 'Tu',  
-       '3' 	=> 'We',  
-       '4'  => 'Th',  
-       '5'  => 'Fr',  
-       '6'  => 'Sa',
-       '7'  => 'Su'
-   );
-
-   return apply_filters( 'geodir_day_short_names', $days );
+	return geodirectory()->business_hours->day_short_names();
 }
 
 /**
@@ -270,43 +219,11 @@ function geodir_wp_gmt_offset( $formatted = true ) {
  *
  * @since 2.0.0
  *
- * @param bool $formatted Format the offset.
- * @return string Formatted offset.
+ * @param string $timezone Timezone string.
+ * @return float Offset value.
  */
 function geodir_timezone_default_utc_offset( $timezone = '' ) {
-
-	$timezone = get_option('timezone_string');
-	$manual_offset = get_option( 'gmt_offset' );
-	$manual = false;
-	if ( ! $timezone && $manual_offset) {
-		$manual = true;
-	}elseif(! $timezone){
-		$timezone = 'Europe/Berlin';
-	}
-
-	if( $manual ){
-		$offset_h = $manual_offset;
-	}else{
-		$original_timezone = date_default_timezone_get();
-		// Set UTC as default time zone.
-		date_default_timezone_set( 'UTC' ); // @codingStandardsIgnoreEnd
-		$utc = new DateTime();
-		// Calculate offset.
-		$gmt_offset_s = timezone_offset_get( new DateTimeZone("Europe/London"), $utc ); // seconds
-		$current   = timezone_open( $timezone );
-		$offset_s  = timezone_offset_get( $current, $utc ); // seconds
-		$offset_s = $offset_s - $gmt_offset_s; // remove DST
-		$offset_h  = $offset_s / ( 60 * 60 ); // hours
-		date_default_timezone_set( $original_timezone ); // @codingStandardsIgnoreEnd
-	}
-
-	// Prepend “+” when positive
-	$offset_h  = (string) $offset_h;
-	if ( strpos( $offset_h, '-' ) === FALSE ) {
-		$offset_h = '+' . $offset_h; // prepend +
-	}
-
-	return $offset_h;
+	return geodirectory()->business_hours->timezone_default_utc_offset( $timezone );
 }
 
 /**
@@ -317,16 +234,7 @@ function geodir_timezone_default_utc_offset( $timezone = '' ) {
  * @return array $default Default business hour.
  */
 function geodir_bh_default_values() {
-	$weekdays = geodir_get_weekdays();
-	
-	$default = array();
-	foreach( $weekdays as $day_short => $day_name ) {
-		if ( in_array( $day_short, array( 'Mo', 'Tu', 'We', 'Th', 'Fr' ) ) ) {
-			$default[$day_short] = array( array( 'opens' => '09:00', 'closes' => '17:00' ) );
-		}
-	}
-
-	return apply_filters( 'geodir_bh_default_values', $default );
+	return geodirectory()->business_hours->default_values();
 }
 
 /**

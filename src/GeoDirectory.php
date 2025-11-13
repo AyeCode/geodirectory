@@ -20,6 +20,9 @@ use AyeCode\GeoDirectory\Core\Geolocation;
 use AyeCode\GeoDirectory\Core\LocationFormatter;
 use AyeCode\GeoDirectory\Core\Formatter;
 use AyeCode\GeoDirectory\Core\Images;
+use AyeCode\GeoDirectory\Core\Debug;
+use AyeCode\GeoDirectory\Core\BusinessHours;
+use AyeCode\GeoDirectory\Core\Templates;
 use AyeCode\GeoDirectory\Core\Media;
 use AyeCode\GeoDirectory\Core\Reviews;
 use AyeCode\GeoDirectory\Core\Seo;
@@ -44,6 +47,9 @@ use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
  * @property-read \AyeCode\GeoDirectory\Core\LocationFormatter $location_formatter The Location Formatter service.
  * @property-read \AyeCode\GeoDirectory\Core\Formatter $formatter The Formatter service.
  * @property-read \AyeCode\GeoDirectory\Core\Images $images The Images service.
+ * @property-read \AyeCode\GeoDirectory\Core\Debug $debug The Debug service.
+ * @property-read \AyeCode\GeoDirectory\Core\BusinessHours $business_hours The Business Hours service.
+ * @property-read \AyeCode\GeoDirectory\Core\Templates $templates The Templates service.
  * @property-read \AyeCode\GeoDirectory\Core\Reviews $reviews The Reviews service.
  * @property-read \AyeCode\GeoDirectory\Core\Seo $seo The SEO service.
  * @property-read \AyeCode\GeoDirectory\Database\Repository\ReviewRepository $reviewRepository The Review Repository.
@@ -119,6 +125,15 @@ final class GeoDirectory {
 				break;
 			case 'images':
 				$service_id = Images::class;
+				break;
+			case 'debug':
+				$service_id = Debug::class;
+				break;
+			case 'business_hours':
+				$service_id = BusinessHours::class;
+				break;
+			case 'templates':
+				$service_id = Templates::class;
 				break;
 			case 'reviews':
 				$service_id = Reviews::class;

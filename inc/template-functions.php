@@ -2,6 +2,9 @@
 /**
  * Template functions
  *
+ * These functions act as thin wrappers around the Core classes.
+ * For direct access, use: geodirectory()->templates
+ *
  * @since 1.0.0
  * @package GeoDirectory
  */
@@ -16,7 +19,7 @@
  * @return string Templates dir path.
  */
 function geodir_get_templates_dir() {
-	return GEODIRECTORY_PLUGIN_DIR . 'templates';
+	return geodirectory()->templates->get_templates_dir();
 }
 
 /**
@@ -29,7 +32,7 @@ function geodir_get_templates_dir() {
  * @return string Templates dir url.
  */
 function geodir_get_templates_url() {
-	return GEODIRECTORY_PLUGIN_URL . '/templates';
+	return geodirectory()->templates->get_templates_url();
 }
 
 /**
@@ -42,7 +45,7 @@ function geodir_get_templates_url() {
  * @return string Theme template dir name.
  */
 function geodir_get_theme_template_dir_name() {
-	return untrailingslashit( apply_filters( 'geodir_templates_dir', 'geodirectory' ) );
+	return geodirectory()->templates->get_theme_template_dir_name();
 }
 
 /**
