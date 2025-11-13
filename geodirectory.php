@@ -77,6 +77,10 @@ function geodirectory_boot() {
 	// Core Services (Business Logic & Utilities)
 	$container->bind( \AyeCode\GeoDirectory\Core\Tables::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface::class, \AyeCode\GeoDirectory\Core\Locations::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Geolocation::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\LocationFormatter::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Formatter::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Images::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Reviews::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Media::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Settings::class );

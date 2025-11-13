@@ -16,6 +16,10 @@ namespace AyeCode\GeoDirectory;
 
 use AyeCode\GeoDirectory\Core\Container;
 use AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface;
+use AyeCode\GeoDirectory\Core\Geolocation;
+use AyeCode\GeoDirectory\Core\LocationFormatter;
+use AyeCode\GeoDirectory\Core\Formatter;
+use AyeCode\GeoDirectory\Core\Images;
 use AyeCode\GeoDirectory\Core\Media;
 use AyeCode\GeoDirectory\Core\Reviews;
 use AyeCode\GeoDirectory\Core\Seo;
@@ -36,6 +40,10 @@ use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
  * for optimized performance.
  *
  * @property-read \AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface $locations The Locations service.
+ * @property-read \AyeCode\GeoDirectory\Core\Geolocation $geolocation The Geolocation service.
+ * @property-read \AyeCode\GeoDirectory\Core\LocationFormatter $location_formatter The Location Formatter service.
+ * @property-read \AyeCode\GeoDirectory\Core\Formatter $formatter The Formatter service.
+ * @property-read \AyeCode\GeoDirectory\Core\Images $images The Images service.
  * @property-read \AyeCode\GeoDirectory\Core\Reviews $reviews The Reviews service.
  * @property-read \AyeCode\GeoDirectory\Core\Seo $seo The SEO service.
  * @property-read \AyeCode\GeoDirectory\Database\Repository\ReviewRepository $reviewRepository The Review Repository.
@@ -99,6 +107,18 @@ final class GeoDirectory {
 				break;
 			case 'locations':
 				$service_id = LocationsInterface::class;
+				break;
+			case 'geolocation':
+				$service_id = Geolocation::class;
+				break;
+			case 'location_formatter':
+				$service_id = LocationFormatter::class;
+				break;
+			case 'formatter':
+				$service_id = Formatter::class;
+				break;
+			case 'images':
+				$service_id = Images::class;
 				break;
 			case 'reviews':
 				$service_id = Reviews::class;
