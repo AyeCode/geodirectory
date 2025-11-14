@@ -10,7 +10,7 @@
 // Use strict types for better code quality.
 declare( strict_types = 1 );
 
-namespace AyeCode\GeoDirectory\Core\Utils;
+namespace AyeCode\GeoDirectory\Core\Services;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {

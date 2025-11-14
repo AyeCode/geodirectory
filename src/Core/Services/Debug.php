@@ -10,7 +10,7 @@
 
 declare( strict_types = 1 );
 
-namespace AyeCode\GeoDirectory\Core;
+namespace AyeCode\GeoDirectory\Core\Services;
 
 /**
  * Debug class for error logging and debugging.

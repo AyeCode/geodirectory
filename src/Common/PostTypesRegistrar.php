@@ -10,7 +10,7 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Common;
 
-final class PostTypes {
+final class PostTypesRegistrar {
 	private CptConfig $config;
 
 	public function __construct( CptConfig $config ) {

@@ -10,7 +10,7 @@
 // Use strict types for better code quality.
 declare( strict_types = 1 );
 
-namespace AyeCode\GeoDirectory\Core\Utils;
+namespace AyeCode\GeoDirectory\Core\Services;
 
 use stdClass;
 
@@ -19,7 +19,7 @@ use stdClass;
  *
  * @since 3.0.0
  */
-final class Image {
+final class Images {
 
 	/**
 	 * Array of cached image dimension.

@@ -12,15 +12,18 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Frontend;
 
-use AyeCode\GeoDirectory\Core\Utils\Settings;
+use AyeCode\GeoDirectory\Core\Services\Settings;
 
 final class ReviewForm {
+	private Settings $settings;
+
 	/**
 	 * Constructor.
 	 *
 	 * @param Settings $settings The settings utility.
 	 */
-	public function __construct( private Settings $settings ) {
+	public function __construct( Settings $settings ) {
+		$this->settings = $settings;
 	}
 
 	/**

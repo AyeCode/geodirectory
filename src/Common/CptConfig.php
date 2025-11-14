@@ -13,7 +13,7 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Common;
 
-use AyeCode\GeoDirectory\Core\Utils\Settings;
+use AyeCode\GeoDirectory\Core\Services\Settings;
 
 final class CptConfig {
 	private Settings $settings;

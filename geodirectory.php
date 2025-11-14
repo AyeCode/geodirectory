@@ -41,6 +41,7 @@ require_once __DIR__ . '/inc/rest-functions.php';
 require_once __DIR__ . '/inc/template-functions.php';
 require_once __DIR__ . '/inc/business-hours-functions.php';
 require_once __DIR__ . '/inc/formatting-functions.php';
+require_once __DIR__ . '/inc/post-types-functions.php';
 
 // 2. Define essential constants.
 define( 'GEODIRECTORY_VERSION', '3.0.0' );
@@ -75,22 +76,24 @@ function geodirectory_boot() {
 	// how to build each service.
 
 	// Core Services (Business Logic & Utilities)
-	$container->bind( \AyeCode\GeoDirectory\Core\Tables::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface::class, \AyeCode\GeoDirectory\Core\Locations::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Geolocation::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\LocationFormatter::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Formatter::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Images::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Debug::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\BusinessHours::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Templates::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Reviews::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Media::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Settings::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Tables::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface::class, \AyeCode\GeoDirectory\Core\Services\Locations::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Geolocation::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\LocationFormatter::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Formatter::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Images::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Debug::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\BusinessHours::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Templates::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Helpers::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Reviews::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Media::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Settings::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Utils::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Maps::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Utils\Image::class );
-	$container->bind( \AyeCode\GeoDirectory\Core\Statuses::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Maps::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Statuses::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostTypes::class );
+//	$container->bind( \AyeCode\GeoDirectory\Core\Services\Statuses::class );
 
 	// Database Repositories (Data Layer)
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\ReviewRepository::class );
@@ -99,9 +102,9 @@ function geodirectory_boot() {
 
 	// Common Services (CPTs, Taxonomies, etc.)
 	$container->bind( \AyeCode\GeoDirectory\Common\CptConfig::class );
-	$container->bind( \AyeCode\GeoDirectory\Common\PostTypes::class );
-	$container->bind( \AyeCode\GeoDirectory\Common\Taxonomies::class );
-	$container->bind( \AyeCode\GeoDirectory\Common\PostStatuses::class );
+	$container->bind( \AyeCode\GeoDirectory\Common\PostTypesRegistrar::class );
+	$container->bind( \AyeCode\GeoDirectory\Common\TaxonomiesRegistrar::class );
+	$container->bind( \AyeCode\GeoDirectory\Common\PostStatusesRegistrar::class );
 
 	// Frontend Services (Rendering & Hooks)
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewForm::class );

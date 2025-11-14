@@ -23,10 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.5.1 options case added to get post type options array.
  */
 function geodir_get_posttypes( $output = 'names' ) {
-	return \AyeCode\GeoDirectory\Core\Utils\PostTypes::get_posttypes( $output );
+//	return \AyeCode\GeoDirectory\Core\Services\PostTypes::get_all( $output );
+	return geodirectory()->post_types->get_all( $output );
 }
 
 
 function geodir_get_option($key = '', $default = false ){
-	return ( new AyeCode\GeoDirectory\Core\Utils\Settings )->get($key, $default);
+	return geodirectory()->settings->get($key, $default);
 }

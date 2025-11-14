@@ -10,9 +10,9 @@
 
 declare( strict_types = 1 );
 
-namespace AyeCode\GeoDirectory\Core;
+namespace AyeCode\GeoDirectory\Core\Services;
 
-use AyeCode\GeoDirectory\Core\Utils\PostTypes;
+use AyeCode\GeoDirectory\Core\Services\PostTypes;
 
 /**
  * LocationFormatter class for formatting location data for display.

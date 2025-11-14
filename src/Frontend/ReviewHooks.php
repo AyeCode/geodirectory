@@ -12,7 +12,7 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Frontend;
 
-use AyeCode\GeoDirectory\Core\Reviews;
+use AyeCode\GeoDirectory\Core\Services\Reviews;
 use AyeCode\GeoDirectory\Support\Hookable;
 
 final class ReviewHooks {

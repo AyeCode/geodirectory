@@ -12,7 +12,7 @@ namespace AyeCode\GeoDirectory\Integrations\Seo;
 
 use AyeCode\GeoDirectory\Core\Interfaces\SeoIntegrationInterface;
 use AyeCode\GeoDirectory\Core\Seo\VariableReplacer;
-use AyeCode\GeoDirectory\Core\Utils\Settings;
+use AyeCode\GeoDirectory\Core\Services\Settings;
 
 final class Yoast implements SeoIntegrationInterface {
 	private VariableReplacer $replacer;

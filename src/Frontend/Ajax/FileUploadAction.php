@@ -10,7 +10,7 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Frontend\Ajax;
 
-use AyeCode\GeoDirectory\Core\Media;
+use AyeCode\GeoDirectory\Core\Services\Media;
 
 final class FileUploadAction {
 	private Media $media;

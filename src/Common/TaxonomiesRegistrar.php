@@ -10,7 +10,7 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Common;
 
-final class Taxonomies {
+final class TaxonomiesRegistrar {
 	private CptConfig $config;
 
 	public function __construct( CptConfig $config ) {

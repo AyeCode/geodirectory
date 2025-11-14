@@ -10,9 +10,9 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Common;
 
-use AyeCode\GeoDirectory\Core\Statuses;
+use AyeCode\GeoDirectory\Core\Services\Statuses;
 
-final class PostStatuses {
+final class PostStatusesRegistrar {
 	private Statuses $statuses_service;
 
 	public function __construct( Statuses $statuses_service ) {

@@ -16,21 +16,22 @@ namespace AyeCode\GeoDirectory;
 
 use AyeCode\GeoDirectory\Core\Container;
 use AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface;
-use AyeCode\GeoDirectory\Core\Geolocation;
-use AyeCode\GeoDirectory\Core\LocationFormatter;
-use AyeCode\GeoDirectory\Core\Formatter;
-use AyeCode\GeoDirectory\Core\Images;
-use AyeCode\GeoDirectory\Core\Debug;
-use AyeCode\GeoDirectory\Core\BusinessHours;
-use AyeCode\GeoDirectory\Core\Templates;
-use AyeCode\GeoDirectory\Core\Media;
-use AyeCode\GeoDirectory\Core\Reviews;
-use AyeCode\GeoDirectory\Core\Seo;
-use AyeCode\GeoDirectory\Core\Statuses;
-use AyeCode\GeoDirectory\Core\Tables;
-use AyeCode\GeoDirectory\Core\Utils\Settings;
-use AyeCode\GeoDirectory\Core\Utils\Maps;
-use AyeCode\GeoDirectory\Core\Utils\Image;
+use AyeCode\GeoDirectory\Core\Services\Geolocation;
+use AyeCode\GeoDirectory\Core\Services\LocationFormatter;
+use AyeCode\GeoDirectory\Core\Utils\Formatter;
+use AyeCode\GeoDirectory\Core\Services\Images;
+use AyeCode\GeoDirectory\Core\Services\Debug;
+use AyeCode\GeoDirectory\Core\Services\BusinessHours;
+use AyeCode\GeoDirectory\Core\Services\Templates;
+use AyeCode\GeoDirectory\Core\Utils\Helpers;
+use AyeCode\GeoDirectory\Core\Services\Media;
+use AyeCode\GeoDirectory\Core\Services\Reviews;
+use AyeCode\GeoDirectory\Core\Services\Seo;
+use AyeCode\GeoDirectory\Core\Services\Statuses;
+use AyeCode\GeoDirectory\Core\Services\Tables;
+use AyeCode\GeoDirectory\Core\Services\Settings;
+use AyeCode\GeoDirectory\Core\Services\Maps;
+use AyeCode\GeoDirectory\Core\Services\PostTypes;
 use AyeCode\GeoDirectory\Core\Utils\Utils;
 use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
 
@@ -43,23 +44,24 @@ use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
  * for optimized performance.
  *
  * @property-read \AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface $locations The Locations service.
- * @property-read \AyeCode\GeoDirectory\Core\Geolocation $geolocation The Geolocation service.
- * @property-read \AyeCode\GeoDirectory\Core\LocationFormatter $location_formatter The Location Formatter service.
- * @property-read \AyeCode\GeoDirectory\Core\Formatter $formatter The Formatter service.
- * @property-read \AyeCode\GeoDirectory\Core\Images $images The Images service.
- * @property-read \AyeCode\GeoDirectory\Core\Debug $debug The Debug service.
- * @property-read \AyeCode\GeoDirectory\Core\BusinessHours $business_hours The Business Hours service.
- * @property-read \AyeCode\GeoDirectory\Core\Templates $templates The Templates service.
- * @property-read \AyeCode\GeoDirectory\Core\Reviews $reviews The Reviews service.
- * @property-read \AyeCode\GeoDirectory\Core\Seo $seo The SEO service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Geolocation $geolocation The Geolocation service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\LocationFormatter $location_formatter The Location Formatter service.
+ * @property-read \AyeCode\GeoDirectory\Core\Utils\Formatter $formatter The Formatter service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Images $images The Images service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Debug $debug The Debug service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\BusinessHours $business_hours The Business Hours service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Templates $templates The Templates service.
+ * @property-read \AyeCode\GeoDirectory\Core\Utils\Helpers $helpers The Helpers service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Reviews $reviews The Reviews service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Seo $seo The SEO service.
  * @property-read \AyeCode\GeoDirectory\Database\Repository\ReviewRepository $reviewRepository The Review Repository.
- * @property-read \AyeCode\GeoDirectory\Core\Tables $tables The Tables service.
- * @property-read \AyeCode\GeoDirectory\Core\Utils\Settings $settings The Settings service.
- * @property-read \AyeCode\GeoDirectory\Core\Utils\Maps $maps The Maps service.
- * @property-read \AyeCode\GeoDirectory\Core\Utils\Image $image The Image service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Tables $tables The Tables service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Settings $settings The Settings service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Maps $maps The Maps service.
  * @property-read \AyeCode\GeoDirectory\Core\Utils\Utils $utils The Utils service.
- * @property-read \AyeCode\GeoDirectory\Core\Media $media The Media service.
- * @property-read \AyeCode\GeoDirectory\Core\Statuses $statuses The Statuses service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Media $media The Media service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Statuses $statuses The Statuses service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\PostTypes $post_types The Statuses service.
  */
 final class GeoDirectory {
 
@@ -135,6 +137,9 @@ final class GeoDirectory {
 			case 'templates':
 				$service_id = Templates::class;
 				break;
+			case 'helpers':
+				$service_id = Helpers::class;
+				break;
 			case 'reviews':
 				$service_id = Reviews::class;
 				break;
@@ -153,8 +158,8 @@ final class GeoDirectory {
 			case 'maps':
 				$service_id = Maps::class;
 				break;
-			case 'image':
-				$service_id = Image::class;
+			case 'post_types':
+				$service_id = PostTypes::class;
 				break;
 			default:
 				throw new \InvalidArgumentException( "Error: The service '{$name}' is not registered in the main GeoDirectory class." );

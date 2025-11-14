@@ -11,10 +11,10 @@
 
 declare( strict_types = 1 );
 
-namespace AyeCode\GeoDirectory\Core;
+namespace AyeCode\GeoDirectory\Core\Services;
 
 use AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface;
-use AyeCode\GeoDirectory\Core\Utils\Settings;
+use AyeCode\GeoDirectory\Core\Services\Settings;
 use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
 
 final class Reviews {

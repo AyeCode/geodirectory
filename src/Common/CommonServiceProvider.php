@@ -15,9 +15,9 @@ final class CommonServiceProvider {
 		$container = geodirectory()->container();
 
 		// Get our registrar instances from the container.
-		$post_types = $container->get( PostTypes::class );
-		$taxonomies = $container->get( Taxonomies::class );
-		$statuses   = $container->get( PostStatuses::class );
+		$post_types = $container->get( PostTypesRegistrar::class );
+		$taxonomies = $container->get( TaxonomiesRegistrar::class );
+		$statuses   = $container->get( PostStatusesRegistrar::class );
 
 		// Hook them into the WordPress init action at the correct priorities.
 		add_action( 'init', [ $taxonomies, 'register' ], 5 );
