@@ -42,6 +42,7 @@ require_once __DIR__ . '/inc/template-functions.php';
 require_once __DIR__ . '/inc/business-hours-functions.php';
 require_once __DIR__ . '/inc/formatting-functions.php';
 require_once __DIR__ . '/inc/post-types-functions.php';
+require_once __DIR__ . '/inc/post-functions.php';
 
 // 2. Define essential constants.
 define( 'GEODIRECTORY_VERSION', '3.0.0' );
@@ -93,12 +94,13 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Maps::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Statuses::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostTypes::class );
-//	$container->bind( \AyeCode\GeoDirectory\Core\Services\Statuses::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Posts::class );
 
 	// Database Repositories (Data Layer)
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\ReviewRepository::class );
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\CustomFieldRepository::class );
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\AttachmentRepository::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Repository\PostRepository::class );
 
 	// Common Services (CPTs, Taxonomies, etc.)
 	$container->bind( \AyeCode\GeoDirectory\Common\CptConfig::class );
@@ -109,6 +111,7 @@ function geodirectory_boot() {
 	// Frontend Services (Rendering & Hooks)
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewForm::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewHooks::class );
+	$container->bind( \AyeCode\GeoDirectory\Frontend\PostHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\Ajax\FileUploadAction::class );
 
 	// Service Providers (Orchestrators)

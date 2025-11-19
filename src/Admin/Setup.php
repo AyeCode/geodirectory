@@ -12,9 +12,13 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Admin;
 
-// @todo Create these new Page and Feature classes.
-use AyeCode\GeoDirectory\Admin\Features\PendingBubbles;
 use AyeCode\GeoDirectory\Admin\Features\NavMenuMetaBox;
+use AyeCode\GeoDirectory\Admin\Features\PendingBubbles;
+use AyeCode\GeoDirectory\Admin\Features\PostListColumns;
+use AyeCode\GeoDirectory\Admin\Features\PostListWidgets;
+use AyeCode\GeoDirectory\Admin\Features\PostMetaBoxCleanup;
+use AyeCode\GeoDirectory\Admin\Features\PostMetaBoxes;
+use AyeCode\GeoDirectory\Admin\Features\PostStatusScripts;
 
 /**
  * Handles the setup of the admin area, including menus, features, and scripts.
@@ -41,6 +45,23 @@ final class Setup {
 
 		$nav_menu_meta_box = new NavMenuMetaBox();
 		$nav_menu_meta_box->register_hooks();
+
+		// Post list customization features.
+		$post_list_columns = new PostListColumns();
+		$post_list_columns->register_hooks();
+
+		$post_list_widgets = new PostListWidgets();
+		$post_list_widgets->register_hooks();
+
+		// Post edit screen features.
+		$post_meta_boxes = new PostMetaBoxes();
+		$post_meta_boxes->register_hooks();
+
+		$post_meta_box_cleanup = new PostMetaBoxCleanup();
+		$post_meta_box_cleanup->register_hooks();
+
+		$post_status_scripts = new PostStatusScripts();
+		$post_status_scripts->register_hooks();
 	}
 
 	/**

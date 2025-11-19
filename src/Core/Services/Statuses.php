@@ -81,4 +81,155 @@ final class Statuses {
 	public function get_pending(): array {
 		return apply_filters( 'geodir_get_pending_statuses', [ 'pending' ] );
 	}
+
+	/**
+	 * Get a list of post statuses for a specific context.
+	 *
+	 * @param string $context The context (e.g., 'search', 'map', 'author-archive', 'widget-listings').
+	 * @param array  $args    Optional arguments (e.g., ['post_type' => 'gd_place']).
+	 * @return array Array of status keys for the given context.
+	 */
+	public function get_stati_for_context( string $context, array $args = [] ): array {
+		$statuses         = [];
+		$publish_statuses = $this->get_publishable();
+
+		switch ( $context ) {
+			case 'author-archive':
+			case 'widget-listings-author':
+				$custom_statuses = $this->get_registration_args();
+
+				if ( ! empty( $custom_statuses ) ) {
+					$publish_statuses = array_merge( $publish_statuses, array_keys( $custom_statuses ) );
+				}
+
+				$statuses = array_merge( $publish_statuses, [ 'pending', 'draft', 'private', 'future' ] );
+				break;
+
+			case 'search':
+				$statuses = $publish_statuses;
+				break;
+
+			case 'single-map':
+				$statuses = array_merge( $publish_statuses, [ 'pending', 'draft', 'inherit', 'auto-draft' ] );
+
+				$non_public_statuses = $this->get_stati_for_context( 'non-public', $args );
+
+				if ( ! empty( $non_public_statuses ) && is_array( $non_public_statuses ) ) {
+					$statuses = array_merge( $statuses, $non_public_statuses );
+				}
+				break;
+
+			case 'map':
+				$statuses = $publish_statuses;
+				break;
+
+			case 'non-public':
+				$custom_statuses = $this->get_registration_args();
+
+				foreach ( $custom_statuses as $status => $data ) {
+					if ( isset( $data['public'] ) && $data['public'] === false ) {
+						$statuses[] = $status;
+					}
+				}
+				break;
+
+			case 'widget-listings':
+				$statuses = $publish_statuses;
+
+				if ( current_user_can( 'manage_options' ) ) {
+					// Private posts can be shown to admins if needed (commented out for performance).
+					// $statuses[] = 'private';
+				}
+				break;
+
+			case 'import':
+				$post_type = ! empty( $args['post_type'] ) ? $args['post_type'] : '';
+				$statuses  = array_keys( $this->get_all( $post_type ) );
+				break;
+
+			case 'posts-count-live':
+				$statuses = $publish_statuses;
+				break;
+
+			case 'posts-count-offline':
+				$statuses = $this->get_stati_for_context( 'non-public', $args );
+				$statuses = array_merge( $statuses, [ 'pending', 'draft', 'private', 'future' ] );
+				break;
+
+			case 'unpublished':
+				$statuses = [ 'pending', 'draft', 'auto-draft', 'trash' ];
+				break;
+
+			default:
+				$statuses = $publish_statuses;
+				break;
+		}
+
+		/**
+		 * Filter post statuses for a specific context.
+		 *
+		 * @since 2.1.1.5
+		 * @since 3.0.0 Moved to Statuses service.
+		 *
+		 * @param array  $statuses Array of status keys.
+		 * @param string $context  The context.
+		 * @param array  $args     Optional arguments.
+		 */
+		$statuses = apply_filters( 'geodir_get_post_stati', $statuses, $context, $args );
+
+		if ( ! empty( $statuses ) ) {
+			$statuses = array_unique( $statuses );
+		}
+
+		return $statuses;
+	}
+
+	/**
+	 * Get the nice name for a post status.
+	 *
+	 * @param string $status The status key.
+	 * @return string The human-readable status name.
+	 */
+	public function get_status_name( string $status ): string {
+		$statuses = $this->get_all();
+
+		if ( ! empty( $statuses ) && isset( $statuses[ $status ] ) ) {
+			$status_name = $statuses[ $status ];
+		} else {
+			$status_object = get_post_status_object( $status );
+			if ( ! empty( $status_object->label ) ) {
+				$status_name = $status_object->label;
+			} else {
+				$status_name = $status;
+			}
+		}
+
+		return $status_name;
+	}
+
+	/**
+	 * Check if a post is closed.
+	 *
+	 * @param object|int $post Post object or post ID.
+	 * @return bool True if the post is closed, false otherwise.
+	 */
+	public function is_post_closed( $post ): bool {
+		if ( empty( $post ) ) {
+			return false;
+		}
+
+		$status = ! empty( $post->post_status ) ? $post->post_status : get_post_status( $post );
+		$closed = $status === 'gd-closed';
+
+		/**
+		 * Filter whether a post is closed.
+		 *
+		 * @since 2.0.0
+		 * @since 3.0.0 Moved to Statuses service.
+		 *
+		 * @param bool       $closed True if closed, false otherwise.
+		 * @param object|int $post   Post object or post ID.
+		 */
+		return apply_filters( 'geodir_post_is_closed', $closed, $post );
+	}
 }

@@ -31,7 +31,12 @@ final class FrontendServiceProvider {
 	 */
 	public function register_hooks(): void {
 		// Get the main container instance using our global helper.
-		//$container = geodir();
+		$container = geodirectory()->container();
+
+		// --- Post System ---
+		// Get the PostHooks class from the container and register its hooks.
+		$post_hooks = $container->get( PostHooks::class );
+		$post_hooks->register_hooks();
 
 //		// --- Review System ---
 //		// Register all the classes for our new review system.

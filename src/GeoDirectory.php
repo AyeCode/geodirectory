@@ -32,6 +32,7 @@ use AyeCode\GeoDirectory\Core\Services\Tables;
 use AyeCode\GeoDirectory\Core\Services\Settings;
 use AyeCode\GeoDirectory\Core\Services\Maps;
 use AyeCode\GeoDirectory\Core\Services\PostTypes;
+use AyeCode\GeoDirectory\Core\Services\Posts;
 use AyeCode\GeoDirectory\Core\Utils\Utils;
 use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
 
@@ -62,6 +63,7 @@ use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
  * @property-read \AyeCode\GeoDirectory\Core\Services\Media $media The Media service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Statuses $statuses The Statuses service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\PostTypes $post_types The Statuses service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Posts $posts The Posts service.
  */
 final class GeoDirectory {
 
@@ -160,6 +162,9 @@ final class GeoDirectory {
 				break;
 			case 'post_types':
 				$service_id = PostTypes::class;
+				break;
+			case 'posts':
+				$service_id = Posts::class;
 				break;
 			default:
 				throw new \InvalidArgumentException( "Error: The service '{$name}' is not registered in the main GeoDirectory class." );
