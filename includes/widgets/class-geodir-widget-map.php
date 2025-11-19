@@ -1224,6 +1224,8 @@ jQuery(function ($) {
 
 		$map_options['map_canvas'] = isset( $gd_maps_canvas[ $map_options['map_canvas'] ] ) ? $map_options['map_canvas'] . count( $gd_maps_canvas ) : $map_options['map_canvas'];
 
+		$map_options = apply_filters( 'geodir_map_widget_map_options', $map_options, $params, $widget );
+
 		$map_type   = $map_options['map_type'];
 		$map_canvas = $map_options['map_canvas'];
 		$width      = $map_options['width'];
