@@ -253,6 +253,10 @@ class GeoDir_Compatibility {
 			}
 		}
 
+		// GhostPool Core compatibility
+		add_filter( 'ghostpool_data_types', array( __CLASS__, 'ghostpool_data_types' ), 20, 2 );
+		add_filter( 'ghostpool_template_conditional_value', array( __CLASS__, 'ghostpool_template_conditional_value' ), 20, 2 );
+
 		// Relevanssi compatibility
 		add_filter( 'relevanssi_search_ok', array( __CLASS__, 'relevanssi_search_ok' ), 10, 2 );
 		add_filter( 'relevanssi_prevent_default_request', array( __CLASS__, 'relevanssi_prevent_default_request' ), 10, 2 );
@@ -1106,6 +1110,7 @@ class GeoDir_Compatibility {
 			 || ( defined( 'UAGB_FILE' ) && ( strpos( $meta_key, 'spectra' ) === 0 || strpos( $meta_key, '_uag_' ) === 0 || strpos( $meta_key, '_uagb_' ) === 0 ) ) // Spectra
 			 || ( defined( 'BRICKS_VERSION' ) && strpos( $meta_key, '_bricks_' ) === 0 ) // Bricks Theme
 			 || ( function_exists( 'thrive_theme' ) && ( strpos( $meta_key, 'tve_' ) === 0 || strpos( $meta_key, '_tve_' ) === 0 || strpos( $meta_key, 'thrive_' ) === 0 ) || in_array( $meta_key, array( 'default', 'layout', 'layout_data', 'structure', 'sidebar-type', 'sticky-sidebar', 'off-screen-sidebar', 'comments', 'sections', 'icons', 'style', 'format', 'tag', 'no_search_results', 'primary_template', 'secondary_template', 'variable_template', 'sidebar_on_left', 'hide_sidebar', 'content_width' ) ) ) // Thrive Theme
+			 || ( class_exists( 'GhostPool_Core' ) && strpos( $meta_key, 'gp_' ) === 0 ) // GhostPool Core Plugin
 			 ) && geodir_is_gd_post_type( $object_post_type ) ) {
 			if ( geodir_is_page( 'single' ) ) {
 				$template_page_id = geodir_details_page_id( $object_post_type );
@@ -4649,5 +4654,86 @@ jQuery(function($){
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Filter GhostPool conditions for GD pages.
+	 *
+	 * @since 2.8.142
+	 *
+	 * @param array $data_types
+	 * @param array $data
+	 * @return array
+	 */
+	public static function ghostpool_data_types( $data_types, $data ) {
+		if ( is_array( $data ) && array_key_exists( 'condition', $data ) ) {
+			$options = array(
+				"gd-all" => __( 'GD: All Pages', 'geodirectory' ),
+				"gd-pt" => __( 'GD: Post Type Archives', 'geodirectory' ),
+				"gd-listing" => __( 'GD: All Taxonomies', 'geodirectory' ),
+				"gd-search" => __( 'GD: Search Results Page', 'geodirectory' ),
+				"gd-author" => __( 'GD: Author Page', 'geodirectory' ),
+				"gd-add-listing" => __( 'GD: Add Listing Page', 'geodirectory' ),
+				"gd-detail" => __( 'GD: Listing Detail Page', 'geodirectory' ),
+				"gd-location" => __( 'GD: Location Page', 'geodirectory' ),
+			);
+
+			$options = apply_filters( 'geodir_ghostpool_gd_data_types', $options, $data_types, $data );
+
+			$data_types['geodirectory'] = array(
+				'label' => _x( 'GeoDirectory', 'ghostpool core conditions', 'geodirectory' ),
+				'options' => $options
+			);
+		}
+
+		return $data_types;
+	}
+
+	/**
+	 * Check GhostPool conditions value for GD pages.
+	 *
+	 * @since 2.8.142
+	 *
+	 * @param bool   $value
+	 * @param string $condition
+	 * @return bool
+	 */
+	public static function ghostpool_template_conditional_value( $value, $condition ) {
+		if ( $condition == 'gd-all' ) {
+			if ( geodir_is_geodir_page() ) {
+				$value = true;
+			} else {
+				$value = false;
+			}
+		} else if ( $condition == 'gd-detail' || $condition == 'gd-single' ) {
+			if ( geodir_is_page( 'single' ) || geodir_is_page( 'preview' ) ) {
+				$value = true;
+			} else {
+				$value = false;
+			}
+		} else if ( $condition == 'gd-listing' || $condition == 'gd-archive' ) {
+			if ( geodir_is_page( 'archive' ) && is_tax() ) {
+				$value = true;
+			} else {
+				$value = false;
+			}
+		} else if ( strpos( $condition, "gd-" ) === 0 ) {
+			$_page = str_replace( "gd-", "", $condition );
+			$gd_widget_pages = geodir_widget_pages_options();
+			$gd_pages = ! empty( $gd_widget_pages['gd']['pages'] ) ? $gd_widget_pages['gd']['pages'] : array();
+
+			if ( ! empty( $gd_pages ) && isset( $gd_pages[ $_page ] ) ) {
+				$value = false;
+
+				foreach ( $gd_pages as $page => $page_title ) {
+					if ( $page == $_page && geodir_is_page( $_page ) ) {
+						$value = true;
+						break;
+					}
+				}
+			}
+		}
+
+		return $value;
 	}
 }
