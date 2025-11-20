@@ -152,6 +152,15 @@ class GeoDir_Query {
 			return;
 		}
 
+		/**
+		 * Handle before pre_get_posts GD hooks.
+		 *
+		 * @since 1.8.142
+		 *
+		 * @param WP_Query $q WP_Query object.
+		 */
+		do_action( 'geodir_before_pre_get_posts', $q );
+
 		// Remove all pre filters, controversial but should only affect our own queries.
 		remove_all_filters( 'query' );
 		remove_all_filters( 'posts_search' );
@@ -296,6 +305,15 @@ class GeoDir_Query {
 			//add_filter( 'posts_where', array( $this, 'search_post_excerpt' ) );
 			//add_filter( 'wp', array( $this, 'remove_posts_where' ) );
 		}
+
+		/**
+		 * Handle after pre_get_posts GD hooks.
+		 *
+		 * @since 1.8.142
+		 *
+		 * @param WP_Query $q WP_Query object.
+		 */
+		do_action( 'geodir_after_pre_get_posts', $q );
 
 		// And remove the pre_get_posts hook
 		$this->remove_product_query();
