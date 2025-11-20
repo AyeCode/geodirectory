@@ -1,0 +1,38 @@
+{
+  "resources/scripts/admin.js": {
+    "file": "js/geodir-admin.js",
+    "name": "geodir-admin",
+    "src": "resources/scripts/admin.js",
+    "isEntry": true
+  },
+  "resources/scripts/frontend.js": {
+    "file": "js/geodir-frontend.js",
+    "name": "geodir-frontend",
+    "src": "resources/scripts/frontend.js",
+    "isEntry": true
+  },
+  "resources/scripts/map-handler.js": {
+    "file": "js/geodir-map-handler.js",
+    "name": "geodir-map-handler",
+    "src": "resources/scripts/map-handler.js",
+    "isEntry": true
+  },
+  "resources/styles/admin.scss": {
+    "file": "css/geodir-admin-styles.css",
+    "src": "resources/styles/admin.scss",
+    "isEntry": true,
+    "name": "geodir-admin-styles",
+    "names": [
+      "geodir-admin-styles.css"
+    ]
+  },
+  "resources/styles/frontend.scss": {
+    "file": "css/geodir-frontend-styles.css",
+    "src": "resources/styles/frontend.scss",
+    "isEntry": true,
+    "name": "geodir-frontend-styles",
+    "names": [
+      "geodir-frontend-styles.css"
+    ]
+  }
+}

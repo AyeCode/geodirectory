@@ -18,11 +18,13 @@ final class CommonServiceProvider {
 		$post_types = $container->get( PostTypesRegistrar::class );
 		$taxonomies = $container->get( TaxonomiesRegistrar::class );
 		$statuses   = $container->get( PostStatusesRegistrar::class );
+		$assets     = $container->get( Assets::class );
 
 		// Hook them into the WordPress init action at the correct priorities.
 		add_action( 'init', [ $taxonomies, 'register' ], 5 );
 		add_action( 'init', [ $post_types, 'register' ], 5 );
 		add_action( 'init', [ $statuses, 'register' ], 9 );
+		add_action( 'init', [ $assets, 'register' ] );
 
 		// Register AJAX actions that are available on both front and back end.
 		$file_upload_action = $container->get( \AyeCode\GeoDirectory\Frontend\Ajax\FileUploadAction::class );

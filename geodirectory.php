@@ -113,6 +113,7 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Common\PostTypesRegistrar::class );
 	$container->bind( \AyeCode\GeoDirectory\Common\TaxonomiesRegistrar::class );
 	$container->bind( \AyeCode\GeoDirectory\Common\PostStatusesRegistrar::class );
+	$container->bind( \AyeCode\GeoDirectory\Common\Assets::class );
 
 	// Frontend Services (Rendering & Hooks)
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewForm::class );

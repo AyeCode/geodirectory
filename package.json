@@ -1,0 +1,30 @@
+{
+	"name": "geodirectory",
+	"private": true,
+	"version": "3.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite build --watch",
+		"build": "vite build"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ayecode/geodirectory.git"
+	},
+	"keywords": [
+		"wordpress",
+		"geodirectory",
+		"directory",
+		"plugin"
+	],
+	"author": "AyeCode Ltd",
+	"license": "GPL-3.0+",
+	"bugs": {
+		"url": "https://github.com/ayecode/geodirectory/issues"
+	},
+	"homepage": "https://wpgeodirectory.com",
+	"devDependencies": {
+		"sass": "^1.77.4",
+		"vite": "^7.1.2"
+	}
+}

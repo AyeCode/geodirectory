@@ -4,3 +4,4 @@
 # Composer
 composer.phar
 composer.lock
+/assets-legacy/
