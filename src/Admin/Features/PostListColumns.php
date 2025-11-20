@@ -288,7 +288,10 @@ final class PostListColumns {
 			return;
 		}
 
-		echo do_shortcode( '[gd_post_images types="post_images" fallback_types="post_images" limit="1" limit_show="1" type="image" slideshow="0" controlnav="0" show_title="0" show_caption="0" image_size="thumbnail"]' );
+		$post_images = geodir_get_images($gd_post->ID, 1, false, '', array('post_images') );
+		if ( ! empty( $post_images[0] ) ) {
+			echo geodir_get_image_tag($post_images[0], 'thumbnail' );
+		}
 	}
 
 	/**

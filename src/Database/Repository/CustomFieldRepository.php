@@ -33,6 +33,69 @@ final class CustomFieldRepository {
 	}
 
 	/**
+	 * Retrieve fields based on specific criteria.
+	 *
+	 * @param array $args {
+	 * Optional. Arguments to retrieve fields.
+	 *
+	 * @type string $post_type  The post type slug.
+	 * @type string $location   The location context (e.g., 'listing', 'search', 'admin').
+	 * If 'admin' or 'all', location filtering is skipped (returns all fields).
+	 * @type int    $active     Filter by active status. 1 for active, 0 for inactive. Default 1.
+	 * Pass null to skip active check.
+	 * }
+	 * @return array Array of field row arrays.
+	 */
+	public function get_fields( array $args = [] ): array {
+		$defaults = [
+			'post_type' => '',
+			'location'  => '',
+			'active'    => 1,
+		];
+
+		$args = wp_parse_args( $args, $defaults );
+		$where = [];
+		$query_args = [];
+
+		// Post Type
+		if ( ! empty( $args['post_type'] ) && $args['post_type'] !== 'all' ) {
+			$where[] = 'post_type = %s';
+			$query_args[] = $args['post_type'];
+		}
+
+		// Active Status
+		if ( $args['active'] !== null ) {
+			$where[] = 'is_active = %d';
+			$query_args[] = (int) $args['active'];
+		}
+
+		// Location (show_in)
+		// We map the 'location' arg to the 'show_in' column logic from v2.
+		// If location is 'admin', we usually want to retrieve all fields so they can be edited, hence we skip this check.
+		if ( ! empty( $args['location'] ) && $args['location'] !== 'admin' && $args['location'] !== 'all' ) {
+			$where[] = 'show_in LIKE %s';
+			$query_args[] = '%[' . $this->db->esc_like( $args['location'] ) . ']%';
+		}
+
+		// Construct Query
+		$sql = "SELECT * FROM {$this->table_name}";
+
+		if ( ! empty( $where ) ) {
+			$sql .= ' WHERE ' . implode( ' AND ', $where );
+		}
+
+		$sql .= " ORDER BY sort_order ASC, admin_title ASC";
+
+		if ( ! empty( $query_args ) ) {
+			$sql = $this->db->prepare( $sql, $query_args );
+		}
+
+		$results = $this->db->get_results( $sql, ARRAY_A );
+
+		return $results ? $results : [];
+	}
+
+	/**
 	 * Gets all custom fields for a given post type, ordered by sort_order.
 	 *
 	 * @param string $post_type The post type slug.

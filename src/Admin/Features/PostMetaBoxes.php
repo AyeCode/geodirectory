@@ -51,14 +51,14 @@ final class PostMetaBoxes {
 		$post_typename = __( $post_types_array[ $post_type ]['labels']['singular_name'], 'geodirectory' );
 		$post_typename = geodir_ucwords( $post_typename );
 
-		// Add attachments meta box.
-		add_meta_box(
-			'geodir_post_images',
-			$post_typename . ' ' . __( 'Attachments', 'geodirectory' ),
-			[ $this, 'render_attachment_meta_box' ],
-			$post_type,
-			'side'
-		);
+		// Add attachments meta box. @todo uncomment when implementing
+//		add_meta_box(
+//			'geodir_post_images',
+//			$post_typename . ' ' . __( 'Attachments', 'geodirectory' ),
+//			[ $this, 'render_attachment_meta_box' ],
+//			$post_type,
+//			'side'
+//		);
 
 		// Add listing information meta box.
 		add_meta_box(

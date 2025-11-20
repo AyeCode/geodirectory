@@ -15,7 +15,6 @@ namespace AyeCode\GeoDirectory\Admin;
 use AyeCode\GeoDirectory\Admin\Features\NavMenuMetaBox;
 use AyeCode\GeoDirectory\Admin\Features\PendingBubbles;
 use AyeCode\GeoDirectory\Admin\Features\PostListColumns;
-use AyeCode\GeoDirectory\Admin\Features\PostListWidgets;
 use AyeCode\GeoDirectory\Admin\Features\PostMetaBoxCleanup;
 use AyeCode\GeoDirectory\Admin\Features\PostMetaBoxes;
 use AyeCode\GeoDirectory\Admin\Features\PostStatusScripts;
@@ -49,9 +48,6 @@ final class Setup {
 		// Post list customization features.
 		$post_list_columns = new PostListColumns();
 		$post_list_columns->register_hooks();
-
-		$post_list_widgets = new PostListWidgets();
-		$post_list_widgets->register_hooks();
 
 		// Post edit screen features.
 		$post_meta_boxes = new PostMetaBoxes();

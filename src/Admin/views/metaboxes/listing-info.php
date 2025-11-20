@@ -15,9 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$wrapper_class = geodir_design_style() ? 'bsui' : '';
 ?>
-<div id="geodir_wrapper" class="<?php echo esc_attr( $wrapper_class ); ?>">
+<div id="geodir_wrapper" class="bsui">
 	<?php
 	/**
 	 * Called before the GD custom fields are output in the wp-admin area.
@@ -27,8 +26,12 @@ $wrapper_class = geodir_design_style() ? 'bsui' : '';
 	 */
 	do_action( 'geodir_before_default_field_in_meta_box' );
 
-	// Display all fields in one information box.
-	geodir_get_custom_fields_html( $package_id, 'all', $post_type );
+	/**
+	 * V3 REFACTOR: Use FieldsService to render inputs.
+	 * * Context: 'admin' ensures we render all fields appropriate for the backend.
+	 * Note: We pass $post_id so the fields can pre-populate their values.
+	 */
+	geodirectory()->fields->render_fields( $post_id, $post_type, 'admin', (string) $package_id );
 
 	/**
 	 * Called after the GD custom fields are output in the wp-admin area.

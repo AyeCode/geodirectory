@@ -56,6 +56,11 @@ final class PostMetaBoxCleanup {
 
 		// Remove author meta box (we have our own owner box).
 		remove_meta_box( 'authordiv', $post_type, 'normal' );
+
+		// template page parent
+		remove_meta_box( 'pageparentdiv', $post_type, 'side' );
+
+
 	}
 
 	/**
@@ -83,6 +88,7 @@ final class PostMetaBoxCleanup {
 			foreach ( $taxonomies as $taxonomy ) {
 				// Remove the taxonomy meta box.
 				remove_meta_box( $taxonomy . 'div', $post_type, 'normal' );
+				remove_meta_box( 'tagsdiv-' . $taxonomy , $post_type, 'normal' );
 			}
 		}
 	}
@@ -104,7 +110,7 @@ final class PostMetaBoxCleanup {
 	 * @return array List of taxonomy slugs.
 	 */
 	private function get_taxonomies( string $post_type ): array {
-		return function_exists( 'geodir_get_taxonomies' ) ? (array) geodir_get_taxonomies( $post_type ) : [];
+		return geodirectory()->taxonomies->get_taxonomies( $post_type, true );
 	}
 
 	/**

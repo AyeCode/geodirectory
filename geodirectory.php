@@ -47,6 +47,7 @@ require_once __DIR__ . '/inc/post-functions.php';
 // 2. Define essential constants.
 define( 'GEODIRECTORY_VERSION', '3.0.0' );
 define( 'GEODIRECTORY_FILE', __FILE__ );
+define( 'GEODIRECTORY_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GEODIRECTORY_PLUGIN_URL', untrailingslashit( plugins_url( '/', __FILE__ ) )  );
 define( 'GEODIR_REST_SLUG', 'geodir');
 define( 'GEODIR_REST_API_VERSION', '2');
@@ -95,6 +96,11 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Statuses::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostTypes::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Posts::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Taxonomies::class );
+
+	// Fields Service
+	$container->bind( \AyeCode\GeoDirectory\Fields\FieldsService::class );
+	$container->bind( \AyeCode\GeoDirectory\Fields\FieldRegistry::class );
 
 	// Database Repositories (Data Layer)
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\ReviewRepository::class );

@@ -216,80 +216,21 @@ function geodir_delete_post_meta( $post_id, $postmeta ) {
 
 
 /**
- * Get post custom meta.
+ * Get post custom meta value.
+ *
+ * Wrapper for V3 PostRepository.
  *
  * @since 1.0.0
- * @since 1.6.20 Hook added to filter value.
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @since 3.0.0 Refactored to use PostRepository.
  *
- * @param int $post_id The post ID.
+ * @param int    $post_id  The post ID.
  * @param string $meta_key The meta key to retrieve.
- * @param bool $single Optional. Whether to return a single value. Default false.
+ * @param bool   $single   Optional. Whether to return a single value. Default false.
  *
- * @todo single variable not yet implemented.
- * @return bool|mixed|null|string Will be an array if $single is false. Will be value of meta data field if $single is true.
+ * @return mixed|false Meta value or false if not found.
  */
-if ( ! function_exists( 'geodir_get_post_meta' ) ) {
 function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
-	if ( ! $post_id ) {
-		return false;
-	}
-	global $wpdb, $plugin_prefix, $preview;
-
-	$all_postypes = geodir_get_posttypes();
-
-	$post_type = get_post_type( $post_id );
-
-	if ( $post_type == 'revision' ) {
-		$post_type = get_post_type( wp_get_post_parent_id( $post_id ) );
-	}
-
-	// check if preview
-	if ( $preview ) {
-		$post_id = GeoDir_Post_Data::get_post_preview_id( $post_id );
-	}
-
-	if ( ! in_array( $post_type, $all_postypes ) ) {
-		return false;
-	}
-
-	/**
-	 * Short circuit the DB query if needed.
-	 */
-	$pre_value = apply_filters( 'geodir_pre_get_post_meta', null, $post_id, $meta_key, $single );
-	if($pre_value!==null){
-		return $pre_value;
-	}
-
-	$table = $plugin_prefix . $post_type . '_detail';
-
-	if ( $table && $meta_key ) {
-		//if ( $wpdb->get_var( "SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'" ) != '' ) {
-		$meta_value = $wpdb->get_var( $wpdb->prepare( "SELECT `" . $meta_key . "` from " . $table . " where post_id = %d", array( $post_id ) ) );
-
-		if ( ($meta_value || $meta_value==='0') && $meta_value !== '' ) {
-			$meta_value = maybe_serialize( $meta_value );
-		}else{
-			$meta_value = false;
-		}
-	} else {
-		$meta_value = false;
-	}
-
-	/**
-	 * Filter the listing custom meta.
-	 *
-	 * @since 1.6.20
-	 *
-	 * @param bool|mixed|null|string $meta_value Will be an array if $single is false. Will be value of meta data field if $single is true.
-	 * @param int $post_id The post ID.
-	 * @param string $meta_key The meta key to retrieve.
-	 * @param bool $single Optional. Whether to return a single value. Default false.
-	 */
-	return apply_filters( 'geodir_get_post_meta', $meta_value, $post_id, $meta_key, $single );
-}
+	return geodirectory()->posts->get_meta( $post_id, $meta_key, $single );
 }
 
 /**

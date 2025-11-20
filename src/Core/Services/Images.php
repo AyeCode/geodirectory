@@ -356,13 +356,11 @@ final class Images {
 				}
 			}
 
-			// @todo: Replace `self::post_has_image_types` with `$this->post_has_image_types`
 			// We are calling the static method here because it relies on other global functions
 			// that should also be refactored.
-			$types = self::geodir_post_has_image_types( $types, $post_id, $revision_id );
+			$types = $this->post_has_image_types( $types, $post_id, $revision_id );
 
 			if ( ! empty( $types ) ) {
-				// @todo: This `GeoDir_Media` class needs to be refactored into a service.
 				// For now, we leave the static calls to the old class.
 				if ( $has_screenshots ) {
 					foreach ( $types as $type ) {
@@ -378,7 +376,7 @@ final class Images {
 								$file_fields = \GeoDir_Media::get_file_fields( $the_post->post_type );
 
 								if ( ! empty( $file_fields ) && isset( $file_fields[ $field ] ) ) {
-									$attachments = \GeoDir_Media::get_attachments_by_type( $post_id, $field, $limit, $revision_id, '', $status );
+									$attachments = geodirectory()->media->get_attachments_by_type( $post_id, $field, $limit, $revision_id, '', $status );
 								} else {
 									$attachments = [];
 								}
@@ -428,7 +426,7 @@ final class Images {
 								}
 							}
 						} else {
-							$new_images = \GeoDir_Media::get_attachments_by_type( $post_id, $type, $limit, $revision_id, '', $status );
+							$new_images = geodirectory()->media->get_attachments_by_type( $post_id, $type, $limit, $revision_id, '', $status );
 						}
 
 						if ( ! empty( $new_images ) ) {
@@ -441,20 +439,17 @@ final class Images {
 						}
 					}
 				} else {
-					$post_images = \GeoDir_Media::get_attachments_by_type( $post_id, $types, $limit, $revision_id, '', $status );
+					$post_images = geodirectory()->media->get_attachments_by_type( $post_id, $types[0], $limit, $revision_id, '', $status );
 				}
 			}
 		} else {
-			// @todo: Refactor `GeoDir_Media` to a service.
-			$post_images = \GeoDir_Media::get_post_images( $post_id, $limit, $revision_id, $status );
+			$post_images = $this->get_post_images( $post_id, $limit, $revision_id, $status );
 		}
 
 		if ( ! empty( $post_images ) ) {
 			// wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id );
-			// @todo: Refactor `self::post_has_image_types`
-			if ( $logo && self::geodir_post_has_image_types( 'logo', $post_id, $revision_id ) ) {
-				// @todo: Refactor `GeoDir_Media`
-				$logo_image = \GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1, $revision_id, '', $status );
+			if ( $logo && $this->post_has_image_types( 'logo', $post_id, $revision_id ) ) {
+				$logo_image = geodirectory()->media->get_attachments_by_type( $post_id, 'logo', 1, $revision_id, '', $status );
 				if ( $logo_image ) {
 					$post_images = $logo_image + $post_images;
 				}
@@ -467,9 +462,8 @@ final class Images {
 			foreach ( $fallback_types as $fallback_type ) {
 				// Logo
 				// @todo: Refactor `self::post_has_image_types`
-				if ( $fallback_type == 'logo' && isset( $the_post->logo ) && $the_post->logo && self::geodir_post_has_image_types( 'logo', $post_id ) ) {
-					// @todo: Refactor `GeoDir_Media`
-					$logo_image = \GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1, '', '', $status );
+				if ( $fallback_type == 'logo' && isset( $the_post->logo ) && $the_post->logo && $this->post_has_image_types( 'logo', $post_id ) ) {
+					$logo_image = geodirectory()->media->get_attachments_by_type( $post_id, 'logo', 1, '', '', $status );
 					if ( $logo_image ) {
 						$post_images = $logo_image;
 						break;
@@ -625,6 +619,20 @@ final class Images {
 		}
 
 		return $post_images;
+	}
+
+	/**
+	 * Get the post_images of the post.
+	 *
+	 * @param $post_id
+	 * @param string $limit
+	 * @param string $revision_id
+	 * @param int|string $status Optional. Retrieve images with status passed.
+	 *
+	 * @return array|null|object
+	 */
+	public function get_post_images( $post_id, $limit = '', $revision_id = '', $status = '' ) {
+		return geodirectory()->media->get_attachments_by_type( $post_id, 'post_images', $limit, $revision_id, '', $status );
 	}
 
 	/**
