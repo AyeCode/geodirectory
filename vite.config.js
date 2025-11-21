@@ -1,8 +1,28 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 
+/**
+ * Plugin to wrap output in IIFE to prevent global namespace pollution
+ * Excludes plupload script which needs immediate execution to register Alpine components
+ */
+function wrapIIFE() {
+	return {
+		name: 'wrap-iife',
+		generateBundle(options, bundle) {
+			for (const fileName in bundle) {
+				const file = bundle[fileName];
+				// Skip plupload - it needs immediate execution for Alpine component registration
+				if (file.type === 'chunk' && file.fileName.endsWith('.js') && !file.fileName.includes('geodir-plupload')) {
+					// Wrap the code in an IIFE
+					file.code = `(function(){${file.code}})();`;
+				}
+			}
+		}
+	};
+}
+
 export default defineConfig({
-	plugins: [],
+	plugins: [wrapIIFE()],
 	build: {
 		outDir: 'assets',
 		emptyOutDir: true,
@@ -20,7 +40,7 @@ export default defineConfig({
 					alpinejs: 'Alpine'
 				},
 
-				// 3. Output JS to assets/js/name.js
+				// 4. Output JS to assets/js/name.js
 				entryFileNames: `js/[name].js`,
 				chunkFileNames: `js/[name].js`,
 
@@ -41,6 +61,8 @@ export default defineConfig({
 				'geodir-frontend': path.resolve(__dirname, 'resources/scripts/frontend.js'),
 				'geodir-admin': path.resolve(__dirname, 'resources/scripts/admin.js'),
 				'geodir-map-handler': path.resolve(__dirname, 'resources/scripts/map-handler.js'),
+				'geodir-add-listing': path.resolve(__dirname, 'resources/scripts/add-listing.js'),
+				'geodir-plupload': path.resolve(__dirname, 'resources/scripts/plupload.js'),
 
 				// Styles (SCSS) - These will be output as separate .css files
 				'geodir-frontend-styles': path.resolve(__dirname, 'resources/styles/frontend.scss'),

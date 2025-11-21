@@ -104,7 +104,7 @@ final class Media {
 			'post_id'     => $post_id,
 			'user_id'     => get_current_user_id(),
 			'type'        => $type,
-			'file'        => $file_rel_path,
+			'file'        =>  '/' . $file_rel_path,
 			'mime_type'   => $attachment->post_mime_type,
 			'featured'    => 0, // Logic for featured image can be a separate method.
 			'is_approved' => 1,

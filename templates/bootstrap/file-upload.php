@@ -56,7 +56,63 @@ if ( $multiple ) {
 			<span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce( $id . 'pluploadan' ); ?>"></span>
 			<div class="filelist"></div>
 		</div>
-		<div class="plupload-thumbs mt-3 <?php if ( $multiple ) { echo "plupload-thumbs-multiple"; } ?> row row-cols-3 mx-auto px-1" id="<?php echo esc_attr( $id ); ?>plupload-thumbs"></div>
+		<div
+			class="plupload-thumbs mt-3 <?php if ( $multiple ) { echo "plupload-thumbs-multiple"; } ?> row row-cols-3 mx-auto px-1"
+			id="<?php echo esc_attr( $id ); ?>plupload-thumbs"
+			x-data="gdThumbnails('<?php echo esc_attr( $id ); ?>')"
+			x-sort="handleSort">
+			<template x-for="(image, index) in images" :key="index">
+				<div class="col px-2 mb-2">
+					<div class="thumb ratio ratio-16x9 embed-responsive embed-responsive-16by9 bg-white border c-move"
+						 :class="{ 'file-thumb': !isImageFile(image) }">
+
+						<!-- Image Title Preview -->
+						<span x-show="image.title && image.title.trim()"
+							  class="gd-title-preview badge badge-light ab-top-left text-truncate mw-100 h-auto text-dark w-auto"
+							  style="background: #ffffffc7"
+							  x-text="image.title"></span>
+
+						<!-- Image/File Display -->
+						<template x-if="isImageFile(image)">
+							<img class="gd-file-info embed-responsive-item embed-item-cover-xy"
+								 :src="image.url"
+								 :alt="image.title" />
+						</template>
+						<template x-if="!isImageFile(image)">
+							<i class="fas gd-file-info embed-responsive-item embed-item-cover-xy display-1"
+							   :class="getFileIcon(image)"
+							   aria-hidden="true"></i>
+						</template>
+
+						<!-- Image Caption Preview -->
+						<span x-show="image.caption && image.caption.trim()"
+							  class="gd-caption-preview badge badge-light ab-top-left mt-4 text-truncate mw-100 h-auto text-dark w-auto"
+							  style="background: #ffffffc7"
+							  x-text="image.caption"></span>
+
+						<!-- Action Buttons -->
+						<div class="gd-thumb-actions position-absolute text-white w-100 d-flex justify-content-around"
+							 style="bottom: 0; background: #00000063; top: auto; height: 20px;">
+							<span class="thumbpreviewlink c-pointer text-white"
+								  :title="'<?php echo esc_js( __( 'Preview', 'geodirectory' ) ); ?>'"
+								  @click="previewImage(index)">
+								<i class="far fa-eye" aria-hidden="true"></i>
+							</span>
+							<span class="thumbeditlink c-pointer"
+								  :title="'<?php echo esc_js( __( 'Edit', 'geodirectory' ) ); ?>'"
+								  @click="editImage(index)">
+								<i class="far fa-edit" aria-hidden="true"></i>
+							</span>
+							<span class="thumbremovelink c-pointer"
+								  :title="'<?php echo esc_js( __( 'Delete', 'geodirectory' ) ); ?>'"
+								  @click="removeImage(index)">
+								<i class="fas fa-trash-alt" aria-hidden="true"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+			</template>
+		</div>
 		<?php if ( $multiple ) { ?>
 		<span id="upload-msg" class="text-muted"><?php _e( 'Please drag &amp; drop the files to rearrange the order', 'geodirectory' ); ?></span>
 		<?php } ?>

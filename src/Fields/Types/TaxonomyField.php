@@ -144,6 +144,20 @@ class TaxonomyField extends AbstractFieldType {
 				'element_require' => '[%' . $taxonomy . '%]!=null',
 				// 'wrap_attributes' => ... (conditional logic if needed)
 			]);
+//			$html .= aui()->select( array(
+//				'id'              => "default_category",
+//				'name'            => "default_category",
+//				'placeholder'     => esc_attr__( "Select Default Category", 'geodirectory' ),
+//				'value'           => $default_cat_val,
+//				'required'        => true,
+//				'label_type'      => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
+//				'label'           => __( "Default Category", 'geodirectory' ),// . $required,
+//				'help_text'       => esc_attr__( "The default category can affect the listing URL and map marker.", 'geodirectory' ),
+//				'multiple'        => false,
+//				'options'         => $default_cat_val ? array( $default_cat_val => '' ) : array(),
+//				'element_require' => '[%' . $taxonomy . '%]!=null',
+//				'wrap_attributes' => geodir_conditional_field_attrs( $cf, 'default_category', 'select' )
+//			) );
 		} else {
 			// For single select, we just ensure the value is synced via hidden input if not handled above
 			// (Note: The hidden input was already printed above inside the wrapper for non-select types,

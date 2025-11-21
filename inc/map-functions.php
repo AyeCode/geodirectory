@@ -208,9 +208,9 @@ function my_geodirectory_enqueue_map_scripts() {
 	}
 }
 
-// Ensure the hook exists. If you already have one, just modify the inside of the function.
-add_action( 'wp_enqueue_scripts', 'my_geodirectory_enqueue_map_scripts' );
-add_action( 'admin_enqueue_scripts', 'my_geodirectory_enqueue_map_scripts' );
+// Ensure the hook exists. If you already have one, just modify the inside of the function. // @todo we need to cvome ack to this
+//add_action( 'wp_enqueue_scripts', 'my_geodirectory_enqueue_map_scripts' );
+//add_action( 'admin_enqueue_scripts', 'my_geodirectory_enqueue_map_scripts' );
 
 
 function geodir_settings_map_input_js_function(){

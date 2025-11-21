@@ -72,7 +72,7 @@ final class FileUploadAction {
 
 		// The old class returned a custom pipe-delimited string. We'll return structured JSON.
 		wp_send_json_success( [
-			'url' => \wp_upload_dir()['baseurl'] . $result['file'],
+			'url' => \esc_url( \trailingslashit( \wp_upload_dir()['baseurl'] ) . $result['file'] ),
 			'id'  => $result['ID'],
 		] );
 	}

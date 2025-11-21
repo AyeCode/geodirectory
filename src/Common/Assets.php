@@ -38,6 +38,10 @@ class Assets {
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', [ $this, 'register_frontend_scripts' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_admin_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_add_listing_scripts' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'maybe_enqueue_add_listing_scripts' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_plupload_scripts' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'maybe_enqueue_plupload_scripts' ] );
 	}
 
 	/**
@@ -132,5 +136,186 @@ class Assets {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Conditionally enqueue add/edit listing scripts on frontend and backend.
+	 * Only loads on add-listing forms and edit screens.
+	 */
+	public function maybe_enqueue_add_listing_scripts() {
+		// Check if we should load add-listing assets
+		if ( ! $this->should_load_add_listing_assets() ) {
+			return;
+		}
+
+		// Enqueue the add-listing script
+		wp_enqueue_script(
+			'geodir-add-listing',
+			$this->assets_url . 'js/geodir-add-listing.js',
+			[], // No jQuery dependency
+			$this->version,
+//			true
+		);
+
+		// Localize script with necessary data
+		wp_localize_script(
+			'geodir-add-listing',
+			'geodir_params',
+			[
+				'ajax_url'              => admin_url( 'admin-ajax.php' ),
+				'gd_ajax_url'           => admin_url( 'admin-ajax.php' ),
+				'autosave'              => 10000, // 10 seconds autosave interval
+				'txt_lose_changes'      => __( 'You have unsaved changes. Are you sure you want to leave?', 'geodirectory' ),
+				'txt_closed'            => __( 'Closed', 'geodirectory' ),
+				'field_id_required'     => __( 'This field is required.', 'geodirectory' ),
+				'latitude_error_msg'    => __( 'Please enter a valid latitude.', 'geodirectory' ),
+				'longgitude_error_msg'  => __( 'Please enter a valid longitude.', 'geodirectory' ),
+				'rating_error_msg'      => __( 'An error occurred. Please try again.', 'geodirectory' ),
+				'timezone_string'       => wp_timezone_string(),
+				'gmt_offset'            => get_option( 'gmt_offset' ),
+				'basic_nonce'           => wp_create_nonce( 'geodir_basic_nonce' ),
+			]
+		);
+	}
+
+	/**
+	 * Check if we should load add-listing assets.
+	 * Checks for add-listing shortcode or edit post screens.
+	 *
+	 * @return bool
+	 */
+	private function should_load_add_listing_assets() {
+		global $post;
+
+		// Backend: Check if editing a GeoDirectory post type
+		if ( is_admin() ) {
+			$screen = get_current_screen();
+			if ( $screen && $screen->base === 'post' && strpos( $screen->post_type, 'gd_' ) === 0 ) {
+				return true;
+			}
+			return false;
+		}
+
+		// Frontend: Check for add-listing form
+		// Check if the post has the add-listing shortcode
+		if ( $post && has_shortcode( $post->post_content, 'gd_add_listing' ) ) {
+			return true;
+		}
+
+		// Check if we're on a known add-listing page (you may need to adjust this)
+		if ( is_page() && $post ) {
+			// Check post meta or template
+			$template = get_page_template_slug( $post->ID );
+			if ( $template === 'geodirectory-add-listing.php' ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Conditionally enqueue plupload scripts on frontend and backend.
+	 * Only loads on pages with file upload widgets (add-listing forms).
+	 */
+	public function maybe_enqueue_plupload_scripts() {
+		// Check if we should load plupload assets (same condition as add-listing)
+		if ( ! $this->should_load_add_listing_assets() ) {
+			return;
+		}
+
+		// IMPORTANT: Enqueue plupload script BEFORE Alpine to ensure component registration happens first
+		wp_enqueue_script(
+			'geodir-plupload',
+			$this->assets_url . 'js/geodir-plupload.js',
+			[], // No dependencies
+			$this->version,
+			false // Load in head (before body scripts)
+		);
+
+		// Localize plupload params
+		$this->localize_plupload_params();
+
+		// Enqueue Alpine Sort plugin
+		wp_enqueue_script( 'alpine-js-sort' );
+
+		// Enqueue Alpine.js core (this should load after our plupload script)
+		wp_enqueue_script( 'alpine-js' );
+	}
+
+	/**
+	 * Localize plupload parameters for file uploads
+	 */
+	private function localize_plupload_params() {
+		// Build plupload configuration
+		$plupload_init = [
+			'runtimes'            => 'html5,silverlight,html4',
+			'browse_button'       => 'plupload-browse-button', // Will be adjusted per uploader
+			'container'           => 'plupload-upload-ui', // Will be adjusted per uploader
+			'file_data_name'      => 'async-upload', // Will be adjusted per uploader
+			'multiple_queues'     => true,
+			'max_file_size'       => $this->get_max_upload_size(),
+			'url'                 => admin_url( 'admin-ajax.php' ),
+			'flash_swf_url'       => includes_url( 'js/plupload/plupload.flash.swf' ),
+			'silverlight_xap_url' => includes_url( 'js/plupload/plupload.silverlight.xap' ),
+			'filters'             => [
+				[
+					'title'      => __( 'Allowed Files', 'geodirectory' ),
+					'extensions' => '*'
+				]
+			],
+			'multipart'           => true,
+			'urlstream_upload'    => true,
+			'multi_selection'     => false, // Will be added per uploader
+			'multipart_params'    => [
+				'_ajax_nonce' => wp_create_nonce( 'geodir_attachment_upload' ),
+				'action'      => 'geodir_post_attachment_upload',
+				'imgid'       => 0 // Will be added per uploader
+			]
+		];
+
+		// Get existing images if editing a post
+		$thumb_img_arr = [];
+		$post_id       = 0;
+
+		if ( isset( $_REQUEST['pid'] ) && $_REQUEST['pid'] != '' ) {
+			$post_id = absint( $_REQUEST['pid'] );
+			if ( function_exists( 'geodir_get_images' ) ) {
+				$thumb_img_arr = geodir_get_images( $post_id );
+			}
+		} elseif ( isset( $_GET['post'] ) ) {
+			$post_id = absint( $_GET['post'] );
+			if ( function_exists( 'geodir_get_images' ) ) {
+				$thumb_img_arr = geodir_get_images( $post_id );
+			}
+		}
+
+		$total_images = ! empty( $thumb_img_arr ) ? count( $thumb_img_arr ) : 0;
+
+		// Build the params array
+		$gd_plupload_params = [
+			'base_plupload_config' => wp_json_encode( $plupload_init ),
+			'totalImg'             => $total_images,
+			'image_limit'          => '', // Will be set by individual upload fields
+			'upload_img_size'      => $this->get_max_upload_size()
+		];
+
+		// Localize the script
+		wp_localize_script( 'geodir-plupload', 'geodir_plupload_params', $gd_plupload_params );
+	}
+
+	/**
+	 * Get maximum upload file size
+	 *
+	 * @return string
+	 */
+	private function get_max_upload_size() {
+		if ( function_exists( 'geodir_max_upload_size' ) ) {
+			return geodir_max_upload_size();
+		}
+
+		// Fallback to WordPress default
+		$max_upload = wp_max_upload_size();
+		return size_format( $max_upload );
 	}
 }

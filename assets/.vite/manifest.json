@@ -1,4 +1,10 @@
 {
+  "resources/scripts/add-listing.js": {
+    "file": "js/geodir-add-listing.js",
+    "name": "geodir-add-listing",
+    "src": "resources/scripts/add-listing.js",
+    "isEntry": true
+  },
   "resources/scripts/admin.js": {
     "file": "js/geodir-admin.js",
     "name": "geodir-admin",
@@ -15,6 +21,12 @@
     "file": "js/geodir-map-handler.js",
     "name": "geodir-map-handler",
     "src": "resources/scripts/map-handler.js",
+    "isEntry": true
+  },
+  "resources/scripts/plupload.js": {
+    "file": "js/geodir-plupload.js",
+    "name": "geodir-plupload",
+    "src": "resources/scripts/plupload.js",
     "isEntry": true
   },
   "resources/styles/admin.scss": {
