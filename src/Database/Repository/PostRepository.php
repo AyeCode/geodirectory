@@ -249,4 +249,297 @@ final class PostRepository {
 
 		return geodir_column_exist( $table, $column );
 	}
+
+	// ========================================================================
+	// Schema Management (DDL Operations)
+	// ========================================================================
+
+	/**
+	 * Get the CPT-specific table name.
+	 *
+	 * @param string $post_type The post type slug (e.g., 'gd_place', 'gd_event').
+	 * @return string|false The full table name or false if invalid.
+	 */
+	public function get_table_name( string $post_type ) {
+		if ( empty( $post_type ) ) {
+			return false;
+		}
+
+		if ( function_exists( 'geodir_db_cpt_table' ) ) {
+			return geodir_db_cpt_table( $post_type );
+		}
+
+		return $this->plugin_prefix . $post_type . '_detail';
+	}
+
+	/**
+	 * Check if a CPT table exists.
+	 *
+	 * @param string $post_type The post type slug.
+	 * @return bool True if table exists, false otherwise.
+	 */
+	public function table_exists( string $post_type ): bool {
+		$table_name = $this->get_table_name( $post_type );
+
+		if ( ! $table_name ) {
+			return false;
+		}
+
+		$result = $this->db->get_var( $this->db->prepare( 'SHOW TABLES LIKE %s', $table_name ) );
+
+		return $result === $table_name;
+	}
+
+	/**
+	 * Add a column to a CPT table based on custom field data.
+	 *
+	 * @param string $post_type  The post type slug.
+	 * @param array  $field_data The custom field data array.
+	 * @return bool True on success, false on failure.
+	 */
+	public function add_column( string $post_type, array $field_data ): bool {
+		$table_name = $this->get_table_name( $post_type );
+
+		if ( ! $table_name || empty( $field_data['htmlvar_name'] ) ) {
+			return false;
+		}
+
+		$column_name = $field_data['htmlvar_name'];
+
+		// Don't add if column already exists.
+		if ( $this->column_exists( $table_name, $column_name ) ) {
+			return true;
+		}
+
+		$column_definition = $this->get_column_definition( $field_data );
+
+		if ( ! $column_definition ) {
+			return false;
+		}
+
+		/**
+		 * Filter the column definition before adding.
+		 *
+		 * @param string $column_definition The MySQL column definition.
+		 * @param array  $field_data        The custom field data.
+		 * @param string $post_type         The post type slug.
+		 */
+		$column_definition = apply_filters( 'geodir_post_repo_add_column_definition', $column_definition, $field_data, $post_type );
+
+		/**
+		 * Fires before adding a column to a CPT table.
+		 *
+		 * @param string $table_name   The table name.
+		 * @param string $column_name  The column name.
+		 * @param array  $field_data   The custom field data.
+		 * @param string $post_type    The post type slug.
+		 */
+		do_action( 'geodir_before_add_custom_field_column', $table_name, $column_name, $field_data, $post_type );
+
+		$result = $this->db->query(
+			"ALTER TABLE `{$table_name}` ADD `{$column_name}` {$column_definition}"
+		);
+
+		/**
+		 * Fires after adding a column to a CPT table.
+		 *
+		 * @param bool   $success      Whether the operation was successful.
+		 * @param string $table_name   The table name.
+		 * @param string $column_name  The column name.
+		 * @param array  $field_data   The custom field data.
+		 * @param string $post_type    The post type slug.
+		 */
+		do_action( 'geodir_after_add_custom_field_column', $result !== false, $table_name, $column_name, $field_data, $post_type );
+
+		return $result !== false;
+	}
+
+	/**
+	 * Remove a column from a CPT table.
+	 *
+	 * @param string $post_type   The post type slug.
+	 * @param string $column_name The column name to remove.
+	 * @return bool True on success, false on failure.
+	 */
+	public function remove_column( string $post_type, string $column_name ): bool {
+		$table_name = $this->get_table_name( $post_type );
+
+		if ( ! $table_name || empty( $column_name ) ) {
+			return false;
+		}
+
+		// Don't attempt to remove if column doesn't exist.
+		if ( ! $this->column_exists( $table_name, $column_name ) ) {
+			return true;
+		}
+
+		/**
+		 * Fires before removing a column from a CPT table.
+		 *
+		 * @param string $table_name  The table name.
+		 * @param string $column_name The column name.
+		 * @param string $post_type   The post type slug.
+		 */
+		do_action( 'geodir_before_remove_custom_field_column', $table_name, $column_name, $post_type );
+
+		$result = $this->db->query(
+			"ALTER TABLE `{$table_name}` DROP COLUMN `{$column_name}`"
+		);
+
+		/**
+		 * Fires after removing a column from a CPT table.
+		 *
+		 * @param bool   $success     Whether the operation was successful.
+		 * @param string $table_name  The table name.
+		 * @param string $column_name The column name.
+		 * @param string $post_type   The post type slug.
+		 */
+		do_action( 'geodir_after_remove_custom_field_column', $result !== false, $table_name, $column_name, $post_type );
+
+		return $result !== false;
+	}
+
+	/**
+	 * Update/modify an existing column in a CPT table.
+	 *
+	 * @param string $post_type  The post type slug.
+	 * @param array  $field_data The custom field data array.
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_column( string $post_type, array $field_data ): bool {
+		$table_name = $this->get_table_name( $post_type );
+
+		if ( ! $table_name || empty( $field_data['htmlvar_name'] ) ) {
+			return false;
+		}
+
+		$column_name = $field_data['htmlvar_name'];
+
+		// Only update if column exists.
+		if ( ! $this->column_exists( $table_name, $column_name ) ) {
+			return false;
+		}
+
+		$column_definition = $this->get_column_definition( $field_data );
+
+		if ( ! $column_definition ) {
+			return false;
+		}
+
+		/**
+		 * Filter the column definition before updating.
+		 *
+		 * @param string $column_definition The MySQL column definition.
+		 * @param array  $field_data        The custom field data.
+		 * @param string $post_type         The post type slug.
+		 */
+		$column_definition = apply_filters( 'geodir_post_repo_update_column_definition', $column_definition, $field_data, $post_type );
+
+		/**
+		 * Fires before updating a column in a CPT table.
+		 *
+		 * @param string $table_name   The table name.
+		 * @param string $column_name  The column name.
+		 * @param array  $field_data   The custom field data.
+		 * @param string $post_type    The post type slug.
+		 */
+		do_action( 'geodir_before_update_custom_field_column', $table_name, $column_name, $field_data, $post_type );
+
+		$result = $this->db->query(
+			"ALTER TABLE `{$table_name}` CHANGE `{$column_name}` `{$column_name}` {$column_definition}"
+		);
+
+		/**
+		 * Fires after updating a column in a CPT table.
+		 *
+		 * @param bool   $success      Whether the operation was successful.
+		 * @param string $table_name   The table name.
+		 * @param string $column_name  The column name.
+		 * @param array  $field_data   The custom field data.
+		 * @param string $post_type    The post type slug.
+		 */
+		do_action( 'geodir_after_update_custom_field_column', $result !== false, $table_name, $column_name, $field_data, $post_type );
+
+		return $result !== false;
+	}
+
+	/**
+	 * Get the MySQL column definition for a custom field.
+	 *
+	 * Maps field types and data types to appropriate MySQL column definitions.
+	 *
+	 * @param array $field_data The custom field data array.
+	 * @return string The MySQL column definition (e.g., "VARCHAR(254) NULL DEFAULT ''").
+	 */
+	protected function get_column_definition( array $field_data ): string {
+		$field_type = $field_data['field_type'] ?? 'text';
+		$data_type  = $field_data['data_type'] ?? '';
+		$default    = $field_data['default_value'] ?? '';
+
+		$definition = '';
+
+		// Handle specific field types.
+		switch ( $field_type ) {
+			case 'text':
+				if ( $data_type === 'DECIMAL' || $data_type === 'FLOAT' ) {
+					$decimal_places = isset( $field_data['decimal_point'] ) ? absint( $field_data['decimal_point'] ) : 2;
+					$definition = "DECIMAL(" . ( 14 + $decimal_places ) . ", {$decimal_places})";
+					$definition .= $default !== '' ? $this->db->prepare( ' DEFAULT %f', (float) $default ) : ' DEFAULT NULL';
+				} elseif ( $data_type === 'INT' ) {
+					$definition = 'BIGINT(20)';
+					$definition .= $default !== '' ? $this->db->prepare( ' DEFAULT %d', (int) $default ) : ' DEFAULT NULL';
+				} else {
+					$definition = 'VARCHAR(254) NULL';
+					$definition .= $default !== '' ? $this->db->prepare( ' DEFAULT %s', $default ) : ' DEFAULT NULL';
+				}
+				break;
+
+			case 'datepicker':
+				$definition = 'DATE DEFAULT NULL';
+				break;
+
+			case 'textarea':
+			case 'html':
+			case 'url':
+				$definition = 'TEXT NULL';
+				break;
+
+			case 'checkbox':
+				$definition = 'TINYINT(1) DEFAULT 0';
+				break;
+
+			case 'select':
+			case 'multiselect':
+			case 'radio':
+				$definition = 'VARCHAR(254) NULL DEFAULT NULL';
+				break;
+
+			case 'email':
+			case 'phone':
+				$definition = 'VARCHAR(254) NULL DEFAULT NULL';
+				break;
+
+			case 'file':
+			case 'taxonomy':
+				$definition = 'TEXT NULL';
+				break;
+
+			case 'fieldset':
+			case 'categories':
+				// These don't create columns.
+				return '';
+
+			default:
+				$definition = 'VARCHAR(254) NULL DEFAULT NULL';
+				break;
+		}
+
+		/**
+		 * Filter the column definition for a custom field.
+		 *
+		 * @param string $definition The MySQL column definition.
+		 * @param array  $field_data The custom field data.
+		 */
+		return apply_filters( 'geodir_post_repo_column_definition', $definition, $field_data );
+	}
 }

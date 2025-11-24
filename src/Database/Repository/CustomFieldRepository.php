@@ -26,10 +26,16 @@ final class CustomFieldRepository {
 	 */
 	private $table_name;
 
-	public function __construct() {
+	/**
+	 * @var PostRepository The post repository for managing CPT table columns.
+	 */
+	private $post_repository;
+
+	public function __construct( PostRepository $post_repository = null ) {
 		global $wpdb;
-		$this->db         = $wpdb;
-		$this->table_name = geodirectory()->tables->get( 'custom_fields' );
+		$this->db              = $wpdb;
+		$this->table_name      = geodirectory()->tables->get( 'custom_fields' );
+		$this->post_repository = $post_repository ?? new PostRepository();
 	}
 
 	/**
@@ -205,6 +211,11 @@ final class CustomFieldRepository {
 						[ '%d' ]
 					);
 					$processed_ids[] = $field_id;
+
+					// Check if we need to update the column definition (e.g., data_type changed).
+					if ( ! empty( $data_to_save['htmlvar_name'] ) ) {
+						$this->post_repository->update_column( $post_type, $data_to_save );
+					}
 				} else {
 					// This is an INSERT.
 					$this->db->insert(
@@ -221,6 +232,11 @@ final class CustomFieldRepository {
 						$temp_uid = $field_data['_uid'];
 						$temp_to_real_id_map[$temp_uid] = $newly_inserted_id;
 					}
+
+					// Add column to CPT table for the new field.
+					if ( ! empty( $data_to_save['htmlvar_name'] ) ) {
+						$this->post_repository->add_column( $post_type, $data_to_save );
+					}
 				}
 			}
 		}
@@ -228,12 +244,29 @@ final class CustomFieldRepository {
 		// 4. Determine which fields to delete.
 		$ids_to_delete = array_diff( $existing_ids, $processed_ids );
 
-		// 5. Execute deletion if necessary.
+		// 5. Execute deletion if necessary - loop through each to handle column removal.
 		if ( ! empty( $ids_to_delete ) ) {
+			// Fetch field data for all fields that need to be deleted (in one query for efficiency).
 			$placeholders = implode( ', ', array_fill( 0, count( $ids_to_delete ), '%d' ) );
-			$this->db->query(
-				$this->db->prepare( "DELETE FROM {$this->table_name} WHERE id IN ( $placeholders )", $ids_to_delete )
+			$fields_to_delete = $this->db->get_results(
+				$this->db->prepare(
+					"SELECT id, htmlvar_name, field_type FROM {$this->table_name} WHERE id IN ($placeholders)",
+					...$ids_to_delete
+				),
+				ARRAY_A
 			);
+
+			// Delete each field individually to handle column removal.
+			foreach ( $fields_to_delete as $field ) {
+				// Remove column from CPT table first (if field has a column).
+				if ( ! empty( $field['htmlvar_name'] ) ) {
+					$this->post_repository->remove_column( $post_type, $field['htmlvar_name'] );
+				}
+
+				// Then delete the field definition from custom_fields table.
+				// Pass false for $remove_column since we already handled it above.
+				$this->delete_field( (int) $field['id'], null, false );
+			}
 		}
 
 		return true;
@@ -242,14 +275,32 @@ final class CustomFieldRepository {
 	/**
 	 * Deletes a single field by its primary ID.
 	 *
-	 * @param int $field_id The ID of the field to delete.
+	 * @param int         $field_id        The ID of the field to delete.
+	 * @param string|null $post_type       Optional. If provided, also removes the column from CPT table.
+	 * @param bool        $remove_column   Optional. Whether to remove the column from CPT table. Default true.
 	 * @return bool True on success, false on failure.
 	 */
-	public function delete_field( int $field_id ): bool {
+	public function delete_field( int $field_id, string $post_type = null, bool $remove_column = true ): bool {
 		if ( $field_id <= 0 ) {
 			return false;
 		}
 
+		// If post_type is provided and we should remove the column, fetch field data first.
+		if ( $post_type && $remove_column ) {
+			$field = $this->db->get_row(
+				$this->db->prepare(
+					"SELECT htmlvar_name FROM {$this->table_name} WHERE id = %d",
+					$field_id
+				),
+				ARRAY_A
+			);
+
+			if ( $field && ! empty( $field['htmlvar_name'] ) ) {
+				$this->post_repository->remove_column( $post_type, $field['htmlvar_name'] );
+			}
+		}
+
+		// Delete the field definition from custom_fields table.
 		$result = $this->db->delete( $this->table_name, [ 'id' => $field_id ], [ '%d' ] );
 
 		return $result !== false;
