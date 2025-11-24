@@ -67,7 +67,7 @@ if ( $multiple ) {
 						 :class="{ 'file-thumb': !isImageFile(image) }">
 
 						<!-- Image Title Preview -->
-						<span x-show="image.title && image.title.trim()"
+						<span x-show="image.title && String(image.title).trim()"
 							  class="gd-title-preview badge badge-light ab-top-left text-truncate mw-100 h-auto text-dark w-auto"
 							  style="background: #ffffffc7"
 							  x-text="image.title"></span>
@@ -85,7 +85,7 @@ if ( $multiple ) {
 						</template>
 
 						<!-- Image Caption Preview -->
-						<span x-show="image.caption && image.caption.trim()"
+						<span x-show="image.caption && String(image.caption).trim()"
 							  class="gd-caption-preview badge badge-light ab-top-left mt-4 text-truncate mw-100 h-auto text-dark w-auto"
 							  style="background: #ffffffc7"
 							  x-text="image.caption"></span>

@@ -165,11 +165,11 @@ export function registerThumbnailComponent() {
 					alt="${safeTitle}"
 					data-index="${index}" />`;
 
-				if (image.title && image.title.trim()) {
+				if (image.title && String(image.title).trim()) {
 					imageTitleHTML = `<span class="gd-title-preview badge badge-light ab-top-left text-truncate mw-100 h-auto text-dark w-auto" style="background: #ffffffc7">${safeTitle}</span>`;
 				}
 
-				if (image.caption && image.caption.trim()) {
+				if (image.caption && String(image.caption).trim()) {
 					imageCaptionHTML = `<span class="gd-caption-preview badge badge-light ab-top-left mt-4 text-truncate mw-100 h-auto text-dark w-auto" style="background: #ffffffc7">${safeCaption}</span>`;
 				}
 			} else {

@@ -118,14 +118,14 @@ abstract class AbstractFieldType implements FieldTypeInterface {
 			'value'       => $this->value,
 			'required'    => ! empty( $cf['is_required'] ),
 			'placeholder' => esc_html__( isset( $cf['placeholder_value'] ) ? $cf['placeholder_value'] : '', 'geodirectory' ),
-			'help_text'   => __( isset( $cf['frontend_desc'] ) ? $cf['frontend_desc'] : '', 'geodirectory' ),
+			'help_text'   => __( isset( $cf['desc'] ) ? $cf['desc'] : '', 'geodirectory' ),
 			'class'       => isset( $cf['css_class'] ) ? $cf['css_class'] : '',
 			'label_type'  => 'horizontal', // Default
 		];
 
-		// Admin Only Icon
-		if ( ! empty( $cf['for_admin_use'] ) ) {
-			$args['label'] .= ' <i class="far fa-eye text-warning c-pointer" data-toggle="tooltip" title="' . __( "Admin only", "geodirectory" ) . '"></i>';
+		// Admin Only Icon - Use the helper function for consistency
+		if ( function_exists( 'geodir_cfi_admin_only' ) ) {
+			$args['label'] .= geodir_cfi_admin_only( $cf );
 		}
 
 		// Required Indicator
@@ -150,7 +150,7 @@ abstract class AbstractFieldType implements FieldTypeInterface {
 		// Field Type for JS validation
 		$extra_attributes['field_type'] = $cf['field_type'];
 
-		// Conditional Logic (Ported from input-functions-aui.php)
+		// Conditional Logic - Use the helper function
 		if ( function_exists( 'geodir_conditional_field_attrs' ) ) {
 			$args['wrap_attributes'] = geodir_conditional_field_attrs( $cf );
 		}
