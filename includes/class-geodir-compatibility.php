@@ -21,6 +21,7 @@ class GeoDir_Compatibility {
 	public static function init() {
 		add_action( 'plugins_loaded', array( __CLASS__, 'plugins_loaded' ) );
 		add_action( 'cron_schedules', array( __CLASS__, 'cron_schedules' ), 10, 1 );
+		add_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'overwrite_archive_item_content' ), 10, 4 );
 
 		/*######################################################
 		Yoast (WP SEO)
@@ -4735,5 +4736,26 @@ jQuery(function($){
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Check and overwrite archive item content.
+	 *
+	 * @since 2.8.142
+	 *
+	 * @param string $content The template content.
+	 * @param string $original_content The template original content.
+	 * @param int $tmpl_id The template id.
+	 * @param string $type Template type.
+	 * @return string Filtered template content.
+	 */
+	public static function overwrite_archive_item_content( $content, $original_content, $tmpl_id, $type = '' ) {
+		if ( defined( '__BREAKDANCE_VERSION' ) && function_exists( '\Breakdance\Render\render' ) ) {
+			if ( ! empty( $original_content ) && ! empty( $tmpl_id ) && $type == 'page_id' && preg_match( '#wp:breakdance/block-breakdance-launcher#', $original_content ) ) {
+				return \Breakdance\Render\render( $tmpl_id );
+			}
+		}
+
+		return $content;
 	}
 }
