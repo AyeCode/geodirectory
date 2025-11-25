@@ -542,4 +542,68 @@ final class PostRepository {
 		 */
 		return apply_filters( 'geodir_post_repo_column_definition', $definition, $field_data );
 	}
+
+	// ========================================================================
+	// Post Data Save Operations
+	// ========================================================================
+
+	/**
+	 * Save or update post data in the CPT detail table.
+	 *
+	 * This method handles both INSERT (new post) and UPDATE (existing post) operations.
+	 *
+	 * @param int    $post_id   The post ID.
+	 * @param array  $data      The data to save (column => value pairs).
+	 * @param string $post_type The post type slug.
+	 * @param bool   $update    Whether this is an update (true) or insert (false).
+	 * @return bool True on success, false on failure.
+	 */
+	public function save_post_data( int $post_id, array $data, string $post_type, bool $update ): bool {
+		$table_name = $this->get_table_name( $post_type );
+
+		if ( ! $table_name ) {
+			return false;
+		}
+
+
+		// Prepare format array (all as strings by default).
+		$format = array_fill( 0, count( $data ), '%s' );
+
+		if ( $update ) {
+			//@todo clanup debuggin
+//			global $wpdb;
+//			$wpdb->show_errors();
+//			$wpdb->print_error();
+
+			// Update existing record.
+			$result = $this->db->update(
+				$table_name,
+				$data,
+				array( 'post_id' => $post_id ),
+				$format,
+				array( '%d' )
+			);
+
+//			print_r( $wpdb->last_error );
+//			print_r( $wpdb );
+//			print_r( $data );
+//			print_r($format );
+//			var_dump($result);
+//			print_r( $result );echo $result.'###1'.$table_name;exit;
+			return $result !== false;
+		} else {
+			// Insert new record.
+			$result = $this->db->insert(
+				$table_name,
+				$data,
+				$format
+			);
+//			print_r( $result );echo '###2';exit;
+			return $result !== false;
+		}
+
+
+
+//		print_r($data);exit;
+	}
 }

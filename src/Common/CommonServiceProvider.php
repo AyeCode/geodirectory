@@ -30,6 +30,10 @@ final class CommonServiceProvider {
 		$file_upload_action = $container->get( \AyeCode\GeoDirectory\Frontend\Ajax\FileUploadAction::class );
 		$file_upload_action->register();
 
+		// Register post save hooks.
+		$post_save_hooks = $container->get( \AyeCode\GeoDirectory\Core\PostSaveHooks::class );
+		$post_save_hooks->hook();
+
 		// Other common hooks from your old class.
 		add_action( 'geodir_flush_rewrite_rules', [ $this, 'flush_rewrite_rules' ] );
 		add_filter( 'use_block_editor_for_post_type', [ $this, 'disable_gutenberg' ], 10, 2 );

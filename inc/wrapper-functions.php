@@ -31,3 +31,21 @@ function geodir_get_posttypes( $output = 'names' ) {
 function geodir_get_option($key = '', $default = false ){
 	return geodirectory()->settings->get($key, $default);
 }
+
+
+/**
+ * Get custom field using key and value.
+ *
+ * @since 1.0.0
+ * @since 2.0.0 Returns array instead of object.
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param string $key The key you want to look for.
+ * @param string $value The value of the key you want to look for.
+ * @param string $post_type The post type.
+ * @param bool $stripslashes Return with stripslashes. Default True.
+ * @return bool|mixed Returns field info when available. otherwise returns false.
+ */
+function geodir_get_field_infoby( $key = '', $value = '', $post_type = '', $stripslashes = true ) {
+	return geodirectory()->fields->get_field_info( $key, $value, $post_type, $stripslashes );
+}

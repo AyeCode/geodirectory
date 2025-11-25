@@ -307,6 +307,85 @@ final class CustomFieldRepository {
 	}
 
 	/**
+	 * Get a single field by a specific column value.
+	 *
+	 * This is a flexible query method that allows you to retrieve a field by any column,
+	 * such as 'id', 'htmlvar_name', 'field_type_key', etc.
+	 *
+	 * @param string $column       Column name to query by (e.g., 'id', 'htmlvar_name').
+	 * @param mixed  $value        Value to search for.
+	 * @param string $post_type    Post type slug.
+	 * @param bool   $stripslashes Whether to stripslashes the result. Default true.
+	 * @return array|false Field data array or false if not found.
+	 */
+	public function get_field_by( string $column, $value, string $post_type, bool $stripslashes = true ) {
+		// Build cache key for internal caching.
+		$cache_key = 'gd_field_' . $column . '_' . $value . '_' . $post_type . '_' . (int) $stripslashes;
+
+		// Check WordPress object cache first.
+		$cached = wp_cache_get( $cache_key, 'gd_custom_fields' );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
+		// Sanitize column name to prevent SQL injection (only allow known columns).
+		$allowed_columns = [
+			'id',
+			'post_type',
+			'data_type',
+			'field_type',
+			'field_type_key',
+			'admin_title',
+			'frontend_title',
+			'htmlvar_name',
+			'default_value',
+			'sort_order',
+			'is_active',
+			'is_default',
+			'is_required',
+			'for_admin_use',
+			'show_in',
+		];
+
+		if ( ! in_array( $column, $allowed_columns, true ) ) {
+			return false;
+		}
+
+		// Determine the format based on column type.
+		$format = ( $column === 'id' || $column === 'sort_order' || $column === 'is_active' || $column === 'is_default' || $column === 'is_required' || $column === 'for_admin_use' ) ? '%d' : '%s';
+
+		// Query the database.
+		$row = $this->db->get_row(
+			$this->db->prepare(
+				"SELECT * FROM {$this->table_name} WHERE post_type = %s AND `{$column}` = {$format}",
+				$post_type,
+				$value
+			),
+			ARRAY_A
+		);
+
+		if ( ! empty( $row ) ) {
+			if ( $stripslashes ) {
+				$_row = $row;
+
+				$row = stripslashes_deep( $row );
+
+				// Don't apply stripslashes to extra_fields (it's serialized).
+				if ( ! empty( $_row['extra_fields'] ) && is_serialized( $_row['extra_fields'] ) ) {
+					$row['extra_fields'] = $_row['extra_fields'];
+				}
+			}
+		} else {
+			$row = false;
+		}
+
+		// Cache the result.
+		wp_cache_set( $cache_key, $row, 'gd_custom_fields', 3600 );
+
+		return $row;
+	}
+
+	/**
 	 * Installs the default set of fields for a given post type.
 	 *
 	 * @param string $post_type

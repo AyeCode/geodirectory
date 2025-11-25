@@ -98,6 +98,8 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostTypes::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Posts::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Taxonomies::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostSaveService::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\PostSaveHooks::class );
 
 	// Fields Service
 	$container->bind( \AyeCode\GeoDirectory\Fields\FieldsService::class );

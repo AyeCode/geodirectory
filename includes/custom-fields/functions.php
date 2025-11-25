@@ -390,7 +390,7 @@ if ( ! function_exists( 'geodir_get_field_infoby' ) ) {
 
 				// Don't apply stripslashes to extra_fields.
 				if ( ! empty( $_row['extra_fields'] ) && is_serialized( $_row['extra_fields'] ) ) {
-					$row['extra_fields'] = $_row['extra_fields']; 
+					$row['extra_fields'] = $_row['extra_fields'];
 				}
 			}
 		} else {
@@ -1558,11 +1558,11 @@ function geodir_stripslashes_field( $data ) {
 	// Don't apply stripslashes to extra_fields.
 	if ( is_array( $_data ) ) {
 		if ( ! empty( $_data['extra_fields'] ) && is_serialized( $_data['extra_fields'] ) ) {
-			$data['extra_fields'] = $_data['extra_fields']; 
+			$data['extra_fields'] = $_data['extra_fields'];
 		}
 	} else if ( is_object( $_data ) ) {
 		if ( ! empty( $_data->extra_fields ) && is_serialized( $_data->extra_fields ) ) {
-			$data->extra_fields = $_data->extra_fields; 
+			$data->extra_fields = $_data->extra_fields;
 		}
 	}
 

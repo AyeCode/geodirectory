@@ -22,6 +22,22 @@ class FieldsService {
 	}
 
 	/**
+	 * Get a single field by a specific column value.
+	 *
+	 * This provides a convenient API for retrieving field data, delegating to the repository.
+	 * * Replaces: geodir_get_field_infoby()
+	 *
+	 * @param string $column       Column name to query by (e.g., 'id', 'htmlvar_name').
+	 * @param mixed  $value        Value to search for.
+	 * @param string $post_type    Post type slug.
+	 * @param bool   $stripslashes Whether to stripslashes the result. Default true.
+	 * @return array|false Field data array or false if not found.
+	 */
+	public function get_field_info( string $column, $value, string $post_type, bool $stripslashes = true ) {
+		return $this->repository->get_field_by( $column, $value, $post_type, $stripslashes );
+	}
+
+	/**
 	 * Render all custom fields for a specific location/context.
 	 * * Replaces: geodir_get_custom_fields_html()
 	 *
