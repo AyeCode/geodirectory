@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.143 - 2025-11-TBD =
 * Archive Item template don't render when setup with Oxygen builder - FIXED
+* Hook added to filter GD Loop preview post type - ADDED
 
 = GeoDirectory v2.8.142 - 2025-11-20 =
 * GhostPool Core plugin compatibility changes - ADDED

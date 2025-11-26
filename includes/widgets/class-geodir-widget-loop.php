@@ -329,15 +329,22 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 
 			$gd_layout_class = geodir_convert_listing_view_class( $widget_args['layout'] );
 
-			// for preview just get the main posts
+			// For preview just get the main posts
 			if ( $is_preview ) {
-				$wp_query = new WP_Query( array('post_type' => 'gd_place','posts_per_page' => 6 ) );
+				/**
+				 * Filter the default post type for preview loop content.
+				 *
+				 * @since 2.8.143
+				 */
+				$preview_post_type = apply_filters( 'geodir_widget_loop_preview_post_type', 'gd_place', $widget_args );
 
-				// preview message
-				if($is_preview && $design_style){
+				$wp_query = new WP_Query( array( 'post_type' => $preview_post_type, 'posts_per_page' => 6 ) );
+
+				// Preview message
+				if ( $is_preview && $design_style ) {
 					echo aui()->alert(array(
 							'type'=> 'info',
-							'content'=> __("This preview shows all content items to give an idea of layout. Dummy data is used in places.","geodirectory")
+							'content'=> __( "This preview shows all content items to give an idea of layout. Dummy data is used in places.", "geodirectory" )
 						)
 					);
 				}
