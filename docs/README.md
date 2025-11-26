@@ -10,6 +10,7 @@ Core architectural patterns, design principles, and project structure for GeoDir
 **Topics covered:**
 - Hybrid DI + Action Loader architecture
 - PSR-4 file structure and organization
+- **Asset build system with Vite** (`/resources` → `/assets`)
 - Service Container and Dependency Injection
 - Services vs Utils distinction
 - Bootstrapping and initialization flow
@@ -65,12 +66,26 @@ Detailed guide on CPT table column management and the custom field system.
 
 ### For LLMs and AI Assistants
 
-When working on GeoDirectory v3 code:
-- **All new code must go in `/src` or `/inc`** - Legacy files elsewhere should NOT be modified
-- Main plugin file: `geodirectory.php` in root
-- Services are accessed via `geodirectory()->service_name`
-- Follow PSR-4 autoloading and namespace structure
-- Use dependency injection for services, static calls for Utils
+**CRITICAL RULES when working on GeoDirectory v3:**
+
+1. **Code Location:**
+   - All new PHP code: `/src` (classes) or `/inc` (procedural)
+   - All new JS/CSS: `/resources` (compiled to `/assets` via Vite)
+   - Main plugin file: `geodirectory.php` in root
+   - **NEVER modify legacy files** outside these locations
+
+2. **Adding/Modifying Services:**
+   - **ALWAYS read** [adding-services.md](adding-services.md) **FIRST**
+   - Services MUST be registered in `geodirectory.php` (DI container)
+   - Services MUST be added to `/src/GeoDirectory.php` (facade)
+   - **ALL public methods MUST be documented** in `/docs/services.md`
+   - Use the checklist in adding-services.md - don't skip steps
+
+3. **Architecture:**
+   - Services = instance-based, DI-managed, accessed via `geodirectory()->service_name`
+   - Utils = static classes, accessed via full class name
+   - Follow PSR-4 autoloading and namespace structure
+   - Use dependency injection for services
 
 ### Common Patterns
 
@@ -94,9 +109,11 @@ $fields = geodirectory()->fields->get_field_info( 'htmlvar_name', 'business_hour
 
 ### Code Location Rules
 
-- ✅ **New code:** `/src` (classes) or `/inc` (procedural)
+- ✅ **New PHP code:** `/src` (classes) or `/inc` (procedural)
+- ✅ **New JS/CSS code:** `/resources` (compiled to `/assets` via Vite)
 - ✅ **Main plugin file:** `geodirectory.php`
 - ❌ **Legacy code:** All other locations (read-only, do not modify)
+- ⚠️ **Never edit `/assets` directly** - always edit `/resources` and run `npm run build`
 
 ### Architecture Principles
 
@@ -128,6 +145,8 @@ Addons can:
 │   ├── Frontend/       # Frontend features
 │   └── GeoDirectory.php # Main facade class
 ├── inc/                # Procedural helper functions
+├── resources/          # Source files for Vite (JS/SCSS)
+├── assets/             # Compiled assets (output from Vite)
 ├── geodirectory.php    # Main plugin bootstrap
 └── vendor/             # Composer dependencies
 ```
@@ -155,5 +174,5 @@ When contributing code to GeoDirectory v3:
 
 ---
 
-**Last Updated:** 2025-01-25
+
 **Version:** 3.0.0

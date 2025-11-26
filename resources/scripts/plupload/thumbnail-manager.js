@@ -18,6 +18,7 @@ export function registerThumbnailComponent() {
 	Alpine.data('gdThumbnails', (inputId) => ({
 		images: [],
 		inputId: inputId,
+		skipNextLoad: false, // Flag to prevent reload after sort
 
 		// Helper method to check if image is an actual image file
 		isImageFile(image) {
@@ -38,6 +39,11 @@ export function registerThumbnailComponent() {
 			const input = document.getElementById(this.inputId);
 			if (input) {
 				input.addEventListener('change', () => {
+					// Skip reload if we just did a sort (to prevent re-render jump)
+					if (this.skipNextLoad) {
+						this.skipNextLoad = false;
+						return;
+					}
 					this.loadImages();
 				});
 			}
@@ -64,7 +70,40 @@ export function registerThumbnailComponent() {
 
 		handleSort() {
 			// Called by Alpine Sort when drag-drop reorder completes
-			this.saveImages();
+			// Alpine Sort reorders DOM but not the reactive array
+			// Read from DOM and manually serialize to avoid any reactivity issues
+			const container = document.getElementById(this.inputId + 'plupload-thumbs');
+			if (container) {
+				const domElements = Array.from(container.querySelectorAll('.col.px-2.mb-2'));
+
+				// Manually build the serialized string from DOM order
+				const serializedParts = [];
+				domElements.forEach((el) => {
+					const img = el.querySelector('img');
+					const url = img?.src || '';
+
+					// Find the matching image object to get id, title, caption
+					const matchingImage = this.images.find(image => image.url === url);
+					if (matchingImage) {
+						// Manually serialize this image: url|id|title|caption
+						const part = `${matchingImage.url}|${matchingImage.id}|${matchingImage.title || ''}|${matchingImage.caption || ''}`;
+						serializedParts.push(part);
+					}
+				});
+
+				// Join with :: separator
+				const newValue = serializedParts.join('::');
+
+				// Update input directly
+				const input = document.getElementById(this.inputId);
+				if (input) {
+					// Set flag to prevent reload when change event fires
+					this.skipNextLoad = true;
+
+					input.value = newValue;
+					input.dispatchEvent(new Event('change', { bubbles: true }));
+				}
+			}
 		},
 
 		removeImage(index) {

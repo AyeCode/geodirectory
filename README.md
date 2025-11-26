@@ -43,6 +43,23 @@ If you find an issue, let us know [here](https://github.com/AyeCode/geodirectory
 ## Support ##
 This is a developer's portal for GeoDirectory and should _not_ be used for support. Please visit the [support forums](https://wpgeodirectory.com/support/).
 
+## Developer Documentation ##
+
+**📚 For developers and LLMs:** Comprehensive developer documentation is available in the `/docs` folder:
+
+- **[Documentation Index](docs/README.md)** - Start here
+- **[Architecture Guide](docs/architecture.md)** - Core design patterns, DI container, services vs utils
+- **[Services API Reference](docs/services.md)** - Complete method reference for all `geodirectory()` services
+- **[Schema Management](docs/schema-management.md)** - CPT table columns and custom field system
+- **[Adding Services](docs/adding-services.md)** - ⚠️ REQUIRED when adding/modifying services
+
+**Important Code Locations:**
+- **PHP code:** `/src` (classes) or `/inc` (procedural functions)
+- **JS/CSS source:** `/resources` (compiled to `/assets` via Vite - run `npm run build`)
+- **Main plugin file:** `geodirectory.php` in root
+- **Legacy code:** Other locations (read-only, do not modify)
+- **Never edit `/assets` directly** - always edit `/resources` and rebuild
+
 ## Contributions ##
 Anyone is welcome to contribute to GeoDirectory. Please read the [guidelines for contributing](https://github.com/AyeCode/geodirectory/blob/master/CONTRIBUTING.md) to this repository.
 

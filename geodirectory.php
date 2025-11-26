@@ -25,6 +25,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Developer Documentation
+ *
+ * For developers and LLMs: Comprehensive documentation is available in the /docs folder.
+ * - Architecture Guide: /docs/architecture.md
+ * - Services API Reference: /docs/services.md
+ * - Schema Management: /docs/schema-management.md
+ * - Adding Services: /docs/adding-services.md (REQUIRED when adding services)
+ *
+ * IMPORTANT:
+ * - All new code must be in /src (classes) or /inc (procedural functions)
+ * - Legacy code in other locations should NOT be modified
+ * - When adding services: Register in geodirectory.php AND /src/GeoDirectory.php
+ * - Always document all public methods in /docs/services.md
+ */
+
 // 1. Load the Composer autoloader for classes and the main helper function.
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/functions.php';

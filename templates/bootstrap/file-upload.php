@@ -60,11 +60,18 @@ if ( $multiple ) {
 			class="plupload-thumbs mt-3 <?php if ( $multiple ) { echo "plupload-thumbs-multiple"; } ?> row row-cols-3 mx-auto px-1"
 			id="<?php echo esc_attr( $id ); ?>plupload-thumbs"
 			x-data="gdThumbnails('<?php echo esc_attr( $id ); ?>')"
-			x-sort="handleSort">
+			x-sort="() => handleSort()">
 			<template x-for="(image, index) in images" :key="index">
 				<div class="col px-2 mb-2">
 					<div class="thumb ratio ratio-16x9 embed-responsive embed-responsive-16by9 bg-white border c-move"
 						 :class="{ 'file-thumb': !isImageFile(image) }">
+
+						<!-- Featured Image Badge (only for first image in post_images) -->
+						<span x-show="index === 0 && '<?php echo esc_js($id); ?>' === 'post_images'"
+							  class="gd-featured-badge badge badge-primary ab-top-right text-white fw-bold"
+							  style="z-index: 2;">
+							<?php _e('Featured Image', 'geodirectory'); ?>
+						</span>
 
 						<!-- Image Title Preview -->
 						<span x-show="image.title && String(image.title).trim()"

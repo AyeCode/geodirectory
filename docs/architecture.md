@@ -19,9 +19,10 @@ We use a **PSR-4** autoloading structure. The full plugin structure is as follow
 
 ```
 /geodirectory
-├── assets/
-│   ├── css/
-│   └── js/
+├── assets/                # Built/compiled assets (output from Vite)
+│   ├── css/                   # Compiled CSS
+│   ├── js/                    # Compiled JavaScript
+│   └── manifest.json          # Asset manifest for cache busting
 ├── docs/                  # Developer documentation
 │   ├── README.md              # Documentation index
 │   ├── architecture.md        # This file - core architecture guide
@@ -125,13 +126,91 @@ We use a **PSR-4** autoloading structure. The full plugin structure is as follow
 │   ├── GeoDirectory.php       # The main public "facade" class
 │   ├── Loader.php             # Bootstrapper for the AJAX Action/Pane system
 │   └── functions.php          # Global helper functions (e.g., geodirectory())
+├── resources/             # Source files for Vite (NOT loaded directly)
+│   ├── css/                   # Compiled CSS (dev builds)
+│   ├── scripts/               # Source JavaScript files
+│   │   ├── add-listing/           # Add listing components
+│   │   ├── plupload/              # File upload components
+│   │   ├── frontend.js            # Frontend entry point
+│   │   ├── admin.js               # Admin entry point
+│   │   ├── map-handler.js         # Map handling
+│   │   ├── add-listing.js         # Add listing entry
+│   │   └── plupload.js            # Plupload entry
+│   └── styles/                # Source SCSS files
+│       ├── frontend.scss          # Frontend styles
+│       └── admin.scss             # Admin styles
 ├── templates/
 │   └── reviews.php            # Example theme-overridable view file
 ├── vendor/
 │   └── autoload.php
 ├── composer.json
+├── package.json               # Node dependencies for Vite
+├── vite.config.js             # Vite build configuration
 └── geodirectory.php           # Main plugin bootstrap file
 ```
+
+## Asset Build System (Vite)
+
+GeoDirectory v3 uses **Vite** for modern JavaScript and CSS compilation. This provides fast builds, hot module replacement during development, and optimized production assets.
+
+### Directory Structure
+
+- **`/resources`** - Source files (JavaScript, SCSS)
+  - Edit files here during development
+  - **Never loaded directly** by WordPress
+
+- **`/assets`** - Compiled/built files (output from Vite)
+  - JavaScript bundles in `/assets/js/`
+  - Compiled CSS in `/assets/css/`
+  - WordPress loads assets from here
+
+### Build Commands
+
+```bash
+# Development build (with source maps)
+npm run dev
+
+# Production build (minified)
+npm run build
+
+# Watch mode (auto-rebuild on changes)
+npm run watch
+```
+
+### Entry Points
+
+The build system has the following entry points (defined in `vite.config.js`):
+
+**JavaScript:**
+- `resources/scripts/frontend.js` → `assets/js/geodir-frontend.js`
+- `resources/scripts/admin.js` → `assets/js/geodir-admin.js`
+- `resources/scripts/map-handler.js` → `assets/js/geodir-map-handler.js`
+- `resources/scripts/add-listing.js` → `assets/js/geodir-add-listing.js`
+- `resources/scripts/plupload.js` → `assets/js/geodir-plupload.js`
+
+**Styles (SCSS):**
+- `resources/styles/frontend.scss` → `assets/css/geodir-frontend-styles.css`
+- `resources/styles/admin.scss` → `assets/css/geodir-admin-styles.css`
+
+### External Dependencies
+
+Vite is configured to treat these as external (not bundled):
+- `jquery` (mapped to global `jQuery`)
+- `bootstrap` (mapped to global `bootstrap`)
+- `alpinejs` (mapped to global `Alpine`)
+
+### Asset Registration
+
+Assets are registered in PHP using the `Assets` service (`src/Common/Assets.php`), which loads the compiled files from `/assets`.
+
+### Important Notes
+
+1. **Edit source files in `/resources`, not `/assets`**
+2. **Run build before committing** to ensure `/assets` is up-to-date
+3. **IIFE wrapping** - Most scripts are wrapped in IIFE to prevent global pollution (except plupload which needs immediate execution for Alpine components)
+4. **Source maps** are generated for debugging
+
+---
 
 ## Bootstrapping & Initialization
 

@@ -510,6 +510,72 @@ geodirectory()->images->is_fa_icon( 'fas fa-home' );
  * @return array Dimensions array with 'w' and 'h'.
  */
 geodirectory()->images->get_image_dimension( 'https://example.com/image.jpg', [] );
+
+/**
+ * Get field screenshot (for website fields).
+ * @param array $field Field data array.
+ * @param array $sizes Image sizes.
+ * @param array $the_post Post data.
+ * @return string Screenshot HTML.
+ */
+geodirectory()->images->get_field_screenshot( $field, [], [] );
+
+/**
+ * Get images for a post with fallbacks.
+ * @param int $post_id Post ID (0 for current post).
+ * @param string $limit Limit number of images.
+ * @param bool $logo Whether to get logo image.
+ * @param string $revision_id Revision ID.
+ * @param array $types Image types to get.
+ * @param array $fallback_types Fallback image types.
+ * @param string $status Image status filter.
+ * @return array Array of image objects.
+ */
+geodirectory()->images->get_images( $post_id, '', false, '', [], [], '' );
+
+/**
+ * Get post images from attachments table.
+ * @param int $post_id Post ID.
+ * @param string $limit Limit number of images.
+ * @param string $revision_id Revision ID.
+ * @param string $status Image status filter.
+ * @return array Array of image objects.
+ */
+geodirectory()->images->get_post_images( $post_id, '', '', '' );
+
+/**
+ * Check if string is an icon URL (SVG or icon font).
+ * @param string $icon Icon string/URL.
+ * @return bool True if icon URL.
+ */
+geodirectory()->images->is_icon_url( 'https://example.com/icon.svg' );
+
+/**
+ * Check if post has specific image types.
+ * @param array $types Image types to check.
+ * @param int $post_id Post ID (0 for current post).
+ * @param int $revision_id Revision ID.
+ * @return array Matched image types.
+ */
+geodirectory()->images->post_has_image_types( [], $post_id, 0 );
+
+/**
+ * Get image size information (wrapper for getimagesize).
+ * @param string $image_path Image file path.
+ * @return array|false Image size array or false on failure.
+ */
+geodirectory()->images->getimagesize( '/path/to/image.jpg' );
+
+/**
+ * Set external image srcset for responsive images.
+ * @param array $sources Srcset sources.
+ * @param array $size_array Size array.
+ * @param string $image_src Image source URL.
+ * @param array $image_meta Image metadata.
+ * @param int $attachment_id Attachment ID.
+ * @return array Modified sources.
+ */
+geodirectory()->images->set_external_srcset( $sources, $size_array, $image_src, $image_meta, $attachment_id );
 ```
 
 ---
@@ -693,6 +759,14 @@ geodirectory()->business_hours->offset_to_timezone_string( -5.0, 'US' );
  * @return array Timezone countries mapping.
  */
 geodirectory()->business_hours->timezone_countries();
+
+/**
+ * Get parsed business hours array from schema string.
+ * @param string $value Business hours schema string.
+ * @param string $country Country code.
+ * @return array Parsed business hours array.
+ */
+geodirectory()->business_hours->get_business_hours( 'Mo 09:00-17:00', '' );
 ```
 
 ---
@@ -1265,32 +1339,73 @@ geodirectory()->utils->api_hash( $data_string );
 ---
 
 ## `geodirectory()->media`
-**Class:** `AyeCode\GeoDirectory\Core\Media`
+**Class:** `AyeCode\GeoDirectory\Core\Services\Media`
 
 This service handles business logic for media attachments, particularly for the custom attachments table.
 
 ```php
 /**
+ * Get post type fields that are for file uploads and return allowed file types.
+ * @param string $post_type The post type slug.
+ * @return array Array of [ 'htmlvar_name' => [ 'allowed', 'types' ] ].
+ */
+geodirectory()->media->get_file_fields( 'gd_place' );
+
+/**
  * Sideloads a file from a URL, adds it to the WP media library, and saves it to the custom attachments table.
  * @param int $post_id The post ID to attach to.
  * @param string $type The type of attachment (e.g., 'post_images').
- * @param string $image_url The URL of the file to sideload.
+ * @param string $url The URL of the file to sideload.
  * @return array|\WP_Error The new attachment data array, or a WP_Error on failure.
  */
 geodirectory()->media->insert_from_url( $post_id, 'post_images', $image_url );
 
 /**
+ * Get the edit string for files per field (formatted for the JS uploader).
+ * @param int $post_id Post ID.
+ * @param string $field Field htmlvar_name.
+ * @param string $revision_id Optional revision ID.
+ * @param string $other_id Optional temp ID.
+ * @param bool $is_export Whether this is for export.
+ * @return string Formatted file string for JS uploader.
+ */
+geodirectory()->media->get_field_edit_string( $post_id, 'post_images', '', '', false );
+
+/**
+ * Get attachments for a specific post and field.
+ * @param int $post_id Post ID.
+ * @param string $mime_type Attachment type (e.g. 'post_images', 'post_video').
+ * @param int $limit Limit number of results (0 for all).
+ * @param string $revision_id Optional revision ID for previews/autosaves.
+ * @param string $other_id Optional temp ID.
+ * @param string $status Status filter (1=approved).
+ * @return array Array of attachment objects.
+ */
+geodirectory()->media->get_attachments_by_type( $post_id, 'post_images', 0, '', '', '' );
+
+/**
  * Deletes an attachment from the custom table and its physical file.
- * @param int $custom_attachment_id The ID of the attachment in our custom table.
+ * @param int $attachment_id The ID of the attachment in our custom table.
  * @return bool True on success, false on failure.
  */
-geodirectory()->media->delete( $custom_attachment_id );
+geodirectory()->media->delete( $attachment_id );
 
 /**
  * Counts all image attachments in the custom attachments table.
- * @return int
+ * @return int Total count of image attachments.
  */
 geodirectory()->media->count_image_attachments();
+
+/**
+ * Save post files during post save operation.
+ * Handles file uploads, featured images, validation, and attachment management.
+ * @param int $post_id The post ID.
+ * @param array $gd_post The post data array from $_POST.
+ * @param string $post_type The post type slug.
+ * @param bool $is_dummy Whether this is a dummy/sample post.
+ * @return string|false The featured image path or false.
+ */
+geodirectory()->media->save_post_files( $post_id, $gd_post, 'gd_place', false );
 ```
 
 ---
@@ -1332,6 +1447,28 @@ geodirectory()->statuses->get_publishable();
  * @return array An array of status keys.
  */
 geodirectory()->statuses->get_pending();
+
+/**
+ * Get status list for a specific context.
+ * @param string $context Context ('edit', 'view', etc.).
+ * @param array $args Additional arguments.
+ * @return array Array of statuses for the context.
+ */
+geodirectory()->statuses->get_stati_for_context( 'edit', [] );
+
+/**
+ * Get the display name for a post status.
+ * @param string $status Post status key.
+ * @return string Status display name.
+ */
+geodirectory()->statuses->get_status_name( 'gd-closed' );
+
+/**
+ * Check if a post is closed.
+ * @param \WP_Post|int $post Post object or ID.
+ * @return bool True if post is closed.
+ */
+geodirectory()->statuses->is_post_closed( $post );
 ```
 
 ---
@@ -1468,5 +1605,17 @@ geodirectory()->maps->google_geocode_api_key( $query );
  * @return string The map load type ('auto', 'click', or '').
  */
 geodirectory()->maps->lazy_load_map();
+
+/**
+ * Get the footer script for map initialization.
+ * @return string JavaScript for map footer.
+ */
+geodirectory()->maps->footer_script();
+
+/**
+ * Get the Google Maps callback function name.
+ * @return string Callback function name.
+ */
+geodirectory()->maps->google_map_callback();
 ```
             
