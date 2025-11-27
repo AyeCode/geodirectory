@@ -372,6 +372,13 @@ optgroup-close', 'geodirectory' ),
 				'description' => __( 'This will show/hide the longitude fields in the address section add listing form.', 'geodirectory' ),
 				'show_if'     => '[%type%] == "address"',
 			] ),
+			// this is needed so it can be filtered by location maanger.
+			'extra_fields.show_map'                     => FormFields::hidden( [
+				'id'          => 'show_map',
+				'name'        => 'show_map',
+				'label'       => __( 'Show map', 'geodirectory' ),
+				'default'   => 1,
+			] ),
 
 			// Tags stuff
 			'extra_fields.disable_new_tags'                     => FormFields::toggle( [
@@ -487,6 +494,7 @@ optgroup-close', 'geodirectory' ),
 				'extra_fields.show_mapview',
 				'extra_fields.mapview_lable',
 				'extra_fields.show_latlng',
+				'extra_fields.show_map',
 			],
 			'behavior'          => [
 				'is_active',

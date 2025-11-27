@@ -98,6 +98,7 @@ final class FieldSettingsHandler implements PersistenceHandlerInterface {
 			'extra_fields.show_mapzoom'              => [ 'show_mapzoom', 'absint', 'absint' ],
 			'extra_fields.show_latlng'               => [ 'show_latlng', 'absint', 'absint' ],
 			'extra_fields.zip_required'              => [ 'zip_required', 'absint', 'absint' ],
+			'extra_fields.show_map'                  => [ 'show_map', 'absint', 'absint' ],
 
 			// Tags
 			'extra_fields.disable_new_tags'          => [ 'disable_new_tags', 'absint', 'absint' ],
