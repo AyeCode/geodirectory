@@ -39,7 +39,7 @@ if ( $multiple ) {
 	$file_limit_message = '';
 }
 ?>
-<div class="geodir-add-files w-100 m-0 mb-3 p-0 bg-light text-center container overflow-hidden" style="border:4px dashed #ccc">
+<div class="geodir-add-files w-100 m-0 mb-3 p-0 bg-light text-center container bg-body-tertiary rounded border border-3 border-dashed" >
 	<div class="geodir_form_row clearfix geodir-files-dropbox position-relative p-3" id="<?php echo esc_attr( $id ); ?>dropbox" >
 		<input type="<?php echo ( ! empty( $is_required ) ? 'text' : "hidden" ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $files ); ?>" class="<?php if ( $is_required ) { echo 'gd_image_required_field'; } ?>" <?php echo ( ! empty( $extra_attributes ) ? $extra_attributes : "" ); ?>/>
 		<input type="hidden" name="<?php echo esc_attr( $id ); ?>image_limit" id="<?php echo esc_attr( $id ); ?>image_limit" value="<?php echo esc_attr( $image_limit ); ?>"/>
@@ -60,24 +60,32 @@ if ( $multiple ) {
 			class="plupload-thumbs mt-3 <?php if ( $multiple ) { echo "plupload-thumbs-multiple"; } ?> row row-cols-3 mx-auto px-1"
 			id="<?php echo esc_attr( $id ); ?>plupload-thumbs"
 			x-data="gdThumbnails('<?php echo esc_attr( $id ); ?>')"
-			x-sort="() => handleSort()">
-			<template x-for="(image, index) in images" :key="index">
-				<div class="col px-2 mb-2">
-					<div class="thumb ratio ratio-16x9 embed-responsive embed-responsive-16by9 bg-white border c-move"
+			x-sort="(item, position) => handleSort(item, position)">
+			<template x-for="(image, index) in images" :key="image.url + '-' + sortIteration">
+				<div class="col px-2 mb-2"
+					 :data-url="image.url"
+					 x-sort:item="image.url">
+					<div class="thumb ratio ratio-16x9 embed-responsive embed-responsive-16by9 bg-white border c-move rounded overflow-hidden"
 						 :class="{ 'file-thumb': !isImageFile(image) }">
 
-						<!-- Featured Image Badge (only for first image in post_images) -->
-						<span x-show="index === 0 && '<?php echo esc_js($id); ?>' === 'post_images'"
-							  class="gd-featured-badge badge badge-primary ab-top-right text-white fw-bold"
-							  style="z-index: 2;">
-							<?php _e('Featured Image', 'geodirectory'); ?>
-						</span>
+						<div class="d-flex flex-column gap-2 align-items-start position-absolute top-0 start-0 z-1 pt-1 pt-sm-0 ps-1 ps-sm-0 mt-2 mt-sm-3 ms-2 ms-sm-3 h-auto w-auto">
+							<!-- Featured Image Badge (only for first image in post_images) -->
+							<span x-show="index === 0 && '<?php echo esc_js($id); ?>' === 'post_images'"
+								  class="gd-featured-badge badge text-bg-warning fw-bold"
+								  style="z-index: 2;">
+								<?php _e('Featured Image', 'geodirectory'); ?>
+							</span>
 
-						<!-- Image Title Preview -->
-						<span x-show="image.title && String(image.title).trim()"
-							  class="gd-title-preview badge badge-light ab-top-left text-truncate mw-100 h-auto text-dark w-auto"
-							  style="background: #ffffffc7"
-							  x-text="image.title"></span>
+							<!-- Image Title Preview -->
+							<span x-show="image.title && String(image.title).trim()"
+								  class="gd-title-preview badge text-bg-light bg-opacity-75"
+								  x-text="image.title"></span>
+
+							<!-- Image Caption Preview -->
+							<span x-show="image.caption && String(image.caption).trim()"
+								  class="gd-caption-preview badge text-bg-light bg-opacity-75"
+								  x-text="image.caption"></span>
+						</div>
 
 						<!-- Image/File Display -->
 						<template x-if="isImageFile(image)">
@@ -91,11 +99,7 @@ if ( $multiple ) {
 							   aria-hidden="true"></i>
 						</template>
 
-						<!-- Image Caption Preview -->
-						<span x-show="image.caption && String(image.caption).trim()"
-							  class="gd-caption-preview badge badge-light ab-top-left mt-4 text-truncate mw-100 h-auto text-dark w-auto"
-							  style="background: #ffffffc7"
-							  x-text="image.caption"></span>
+
 
 						<!-- Action Buttons -->
 						<div class="gd-thumb-actions position-absolute text-white w-100 d-flex justify-content-around"
@@ -121,7 +125,7 @@ if ( $multiple ) {
 			</template>
 		</div>
 		<?php if ( $multiple ) { ?>
-		<span id="upload-msg" class="text-muted"><?php _e( 'Please drag &amp; drop the files to rearrange the order', 'geodirectory' ); ?></span>
+			<span id="upload-msg" class="text-muted"><?php _e( 'Please drag &amp; drop the files to rearrange the order', 'geodirectory' ); ?></span>
 		<?php } ?>
 		<span id="<?php echo esc_attr( $id ); ?>upload-error" class="d-none alert alert-danger" role="alert"></span>
 		<div class="modal bsui fade" id="gd_image_meta_<?php echo esc_attr( $id ); ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -131,8 +135,8 @@ if ( $multiple ) {
 						<h5 class="modal-title mt-0"><?php _e('Set Image Texts','geodirectory'); ?></h5>
 						<?php
 						if ( $aui_bs5 ) {
-						?>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							?>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						<?php }else{ ?>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>

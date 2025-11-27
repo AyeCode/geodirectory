@@ -19,15 +19,20 @@ export function registerThumbnailComponent() {
 		images: [],
 		inputId: inputId,
 		skipNextLoad: false, // Flag to prevent reload after sort
+		sortIteration: 0, // Force re-render key
 
 		// Helper method to check if image is an actual image file
 		isImageFile(image) {
+			if (!image || typeof image.url !== 'string') {
+				return false;
+			}
 			const ext = getFileExtension(image.url);
 			return isImageFile(ext);
 		},
 
 		// Get file icon class
 		getFileIcon(image) {
+			if (!image || !image.url) return 'fa-file';
 			const ext = getFileExtension(image.url);
 			return getFileTypeIcon(ext);
 		},
@@ -68,42 +73,54 @@ export function registerThumbnailComponent() {
 			input.dispatchEvent(new Event('change', { bubbles: true }));
 		},
 
-		handleSort() {
-			// Called by Alpine Sort when drag-drop reorder completes
-			// Alpine Sort reorders DOM but not the reactive array
-			// Read from DOM and manually serialize to avoid any reactivity issues
-			const container = document.getElementById(this.inputId + 'plupload-thumbs');
-			if (container) {
-				const domElements = Array.from(container.querySelectorAll('.col.px-2.mb-2'));
+		/**
+		 * Handle Sort Event from Alpine Sort
+		 * @param {string|HTMLElement} item - The value passed from x-sort:item (URL string) OR DOM element
+		 * @param {number} position - The new index position
+		 */
+		handleSort(item, position) {
+			console.log('GD Sort:', item, position);
 
-				// Manually build the serialized string from DOM order
-				const serializedParts = [];
-				domElements.forEach((el) => {
-					const img = el.querySelector('img');
-					const url = img?.src || '';
+			// Get the unique identifier from the dragged item
+			let url = item;
 
-					// Find the matching image object to get id, title, caption
-					const matchingImage = this.images.find(image => image.url === url);
-					if (matchingImage) {
-						// Manually serialize this image: url|id|title|caption
-						const part = `${matchingImage.url}|${matchingImage.id}|${matchingImage.title || ''}|${matchingImage.caption || ''}`;
-						serializedParts.push(part);
-					}
-				});
-
-				// Join with :: separator
-				const newValue = serializedParts.join('::');
-
-				// Update input directly
-				const input = document.getElementById(this.inputId);
-				if (input) {
-					// Set flag to prevent reload when change event fires
-					this.skipNextLoad = true;
-
-					input.value = newValue;
-					input.dispatchEvent(new Event('change', { bubbles: true }));
-				}
+			// Fallback: If item is a DOM element (legacy/missing x-sort:item), get attribute
+			if (typeof item === 'object' && item !== null && typeof item.getAttribute === 'function') {
+				url = item.getAttribute('data-url');
 			}
+
+			if (!url) {
+				console.warn('GD Sort: Item identifier missing');
+				return;
+			}
+
+			// Find current index of this item in the data using raw array to avoid proxy noise
+			const rawImages = Alpine.raw(this.images);
+			const oldIndex = rawImages.findIndex(img => img.url === url);
+
+			if (oldIndex === -1) {
+				console.warn('GD Sort: Item not found in data');
+				return;
+			}
+
+			if (oldIndex === position) {
+				return; // No effective change
+			}
+
+			// Set flag to prevent reload when change event fires
+			this.skipNextLoad = true;
+
+			// Perform array manipulation
+			// Remove from old position and insert at new position
+			const movedImage = this.images[oldIndex];
+			this.images.splice(oldIndex, 1);
+			this.images.splice(position, 0, movedImage);
+
+			// FORCE RE-RENDER: Increment iteration key to resync DOM with Data
+			this.sortIteration++;
+
+			// Save to input
+			this.saveImages();
 		},
 
 		removeImage(index) {
@@ -165,7 +182,7 @@ export function registerThumbnailComponent() {
 			const title = modal.querySelector('.modal-title');
 			const body = modal.querySelector('.modal-body');
 			const ext = getFileExtension(image.url);
-			const isImage = isImageFile(ext);
+			const isImage = this.isImageFile(image); // Use internal helper
 
 			title.textContent = image.title || getFileName(image.url);
 
@@ -183,67 +200,6 @@ export function registerThumbnailComponent() {
 
 			// Show modal
 			new bootstrap.Modal(modal).show();
-		},
-
-		getThumbHTML(image, index) {
-			const ext = getFileExtension(image.url);
-			const fileName = getFileName(image.url);
-			const isImage = isImageFile(ext);
-
-			let fileDisplay = '';
-			let fileDisplayClass = '';
-			let imageTitleHTML = '';
-			let imageCaptionHTML = '';
-
-			const safeTitle = escapeEntities(image.title);
-			const safeCaption = escapeEntities(image.caption);
-
-			if (isImage) {
-				fileDisplay = `<img class="gd-file-info embed-responsive-item embed-item-cover-xy"
-					src="${image.url}"
-					alt="${safeTitle}"
-					data-index="${index}" />`;
-
-				if (image.title && String(image.title).trim()) {
-					imageTitleHTML = `<span class="gd-title-preview badge badge-light ab-top-left text-truncate mw-100 h-auto text-dark w-auto" style="background: #ffffffc7">${safeTitle}</span>`;
-				}
-
-				if (image.caption && String(image.caption).trim()) {
-					imageCaptionHTML = `<span class="gd-caption-preview badge badge-light ab-top-left mt-4 text-truncate mw-100 h-auto text-dark w-auto" style="background: #ffffffc7">${safeCaption}</span>`;
-				}
-			} else {
-				const iconClass = getFileTypeIcon(ext);
-				fileDisplayClass = 'file-thumb';
-				fileDisplay = `<i title="${fileName}"
-					class="fas ${iconClass} gd-file-info embed-responsive-item embed-item-cover-xy display-1"
-					data-index="${index}"
-					aria-hidden="true"></i>`;
-			}
-
-			const txtPreview = window.geodir_params?.txt_preview || 'Preview';
-			const txtEdit = window.geodir_params?.txt_edit || 'Edit';
-			const txtDelete = window.geodir_params?.txt_delete || 'Delete';
-
-			return `
-				<div class="col px-2 mb-2">
-					<div class="thumb ${fileDisplayClass} ratio ratio-16x9 embed-responsive embed-responsive-16by9 bg-white border c-move">
-						${imageTitleHTML}
-						${fileDisplay}
-						${imageCaptionHTML}
-						<div class="gd-thumb-actions position-absolute text-white w-100 d-flex justify-content-around" style="bottom: 0; background: #00000063; top: auto; height: 20px;">
-							<a class="thumbpreviewlink text-white" title="${escapeEntities(txtPreview)}" href="${image.url}" target="_blank">
-								<i class="far fa-eye" aria-hidden="true"></i>
-							</a>
-							<span class="thumbeditlink c-pointer" title="${escapeEntities(txtEdit)}" @click="editImage(${index})">
-								<i class="far fa-edit" aria-hidden="true"></i>
-							</span>
-							<span class="thumbremovelink c-pointer" title="${escapeEntities(txtDelete)}" @click="removeImage(${index})">
-								<i class="fas fa-trash-alt" aria-hidden="true"></i>
-							</span>
-						</div>
-					</div>
-				</div>
-			`;
 		},
 
 		checkImageLimit() {
@@ -276,9 +232,6 @@ export function showThumbs(imgId) {
 	if (input) {
 		input.dispatchEvent(new Event('change', { bubbles: true }));
 	}
-
-	// If Alpine component exists, it will handle the display
-	// Otherwise, we could implement a vanilla JS fallback here if needed
 }
 
 /**
