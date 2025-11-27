@@ -23,6 +23,12 @@
     "src": "resources/scripts/map-handler.js",
     "isEntry": true
   },
+  "resources/scripts/maps/index.js": {
+    "file": "js/geodir-maps.js",
+    "name": "geodir-maps",
+    "src": "resources/scripts/maps/index.js",
+    "isEntry": true
+  },
   "resources/scripts/plupload.js": {
     "file": "js/geodir-plupload.js",
     "name": "geodir-plupload",

@@ -2907,7 +2907,7 @@ function geodir_is_classicpress() {
  * @return string Map lazy load type.
  */
 function geodir_lazy_load_map() {
-	return GeoDir_Maps::lazy_load_map();
+	return geodirectory()->maps->lazy_load_map();
 }
 
 /**

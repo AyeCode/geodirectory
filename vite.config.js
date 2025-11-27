@@ -4,6 +4,7 @@ import path from 'path';
 /**
  * Plugin to wrap output in IIFE to prevent global namespace pollution
  * Excludes plupload script which needs immediate execution to register Alpine components
+ * geodir-maps uses UMD format instead of IIFE to properly expose globals
  */
 function wrapIIFE() {
 	return {
@@ -11,6 +12,25 @@ function wrapIIFE() {
 		generateBundle(options, bundle) {
 			for (const fileName in bundle) {
 				const file = bundle[fileName];
+
+				// Special handling for geodir-maps - wrap in UMD pattern
+				if (file.type === 'chunk' && file.fileName.includes('geodir-maps')) {
+					// UMD wrapper that properly exposes window.GeoDir.Maps
+					file.code = `(function(root, factory) {
+	if (typeof define === 'function' && define.amd) {
+		define([], factory);
+	} else if (typeof module === 'object' && module.exports) {
+		module.exports = factory();
+	} else {
+		${file.code}
+	}
+}(typeof self !== 'undefined' ? self : this, function() {
+	// Module code will execute and set window.GeoDir.Maps
+	return window.GeoDir && window.GeoDir.Maps;
+}));`;
+					continue;
+				}
+
 				// Skip plupload - it needs immediate execution for Alpine component registration
 				if (file.type === 'chunk' && file.fileName.endsWith('.js') && !file.fileName.includes('geodir-plupload')) {
 					// Wrap the code in an IIFE
@@ -61,6 +81,7 @@ export default defineConfig({
 				'geodir-frontend': path.resolve(__dirname, 'resources/scripts/frontend.js'),
 				'geodir-admin': path.resolve(__dirname, 'resources/scripts/admin.js'),
 				'geodir-map-handler': path.resolve(__dirname, 'resources/scripts/map-handler.js'),
+				'geodir-maps': path.resolve(__dirname, 'resources/scripts/maps/index.js'),
 				'geodir-add-listing': path.resolve(__dirname, 'resources/scripts/add-listing.js'),
 				'geodir-plupload': path.resolve(__dirname, 'resources/scripts/plupload.js'),
 

@@ -372,4 +372,73 @@ final class Maps {
 		 */
 		return apply_filters( 'geodir_google_map_callback_script', $script );
 	}
+
+	/**
+	 * Render add listing map.
+	 *
+	 * This method renders the map interface for adding/editing listings.
+	 * It replaces the inline JavaScript with modern modular code.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param array $args Map arguments.
+	 * @return string Rendered map HTML.
+	 */
+	public function render_add_listing_map( array $args = [] ): string {
+		// Extract arguments with defaults
+		$lat = $args['lat'] ?? '';
+		$lng = $args['lng'] ?? '';
+		$prefix = $args['prefix'] ?? 'address_';
+		$map_title = $args['map_title'] ?? __( 'Set Address on Map', 'geodirectory' );
+
+		// Get default location
+		$default_location = geodirectory()->locations->get_default();
+
+		// Get map settings
+		$mapzoom = (int) geodir_get_option( 'map_default_zoom', 12 );
+		$is_map_restrict = apply_filters( 'geodir_add_listing_map_restrict', true );
+		$auto_change_map_fields = apply_filters( 'geodir_auto_change_map_fields', true );
+		$auto_change_address_fields_pin_move = apply_filters( 'geodir_auto_change_address_fields_pin_move', true );
+
+		// Get marker icon and size
+		$marker_icon = $this->default_marker_icon( true );
+		$icon_size = $this->get_marker_size( $marker_icon, [ 'w' => 20, 'h' => 34 ] );
+
+		// Check if manual map
+		$geodir_manual_map = $args['manual_map'] ?? false;
+
+		// Prepare template variables
+		$template_args = [
+			'prefix' => $prefix,
+			'lat' => $lat,
+			'lng' => $lng,
+			'mapzoom' => $mapzoom,
+			'map_title' => $map_title,
+			'default_location' => $default_location,
+			'is_map_restrict' => $is_map_restrict,
+			'auto_change_map_fields' => $auto_change_map_fields,
+			'auto_change_address_fields_pin_move' => $auto_change_address_fields_pin_move,
+			'marker_icon' => $marker_icon,
+			'icon_size' => $icon_size,
+			'geodir_manual_map' => $geodir_manual_map,
+			'design_style' => geodir_design_style()
+		];
+
+		/**
+		 * Filters the add listing map template arguments.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param array $template_args Template arguments.
+		 * @param array $args Original arguments passed to method.
+		 */
+		$template_args = apply_filters( 'geodir_add_listing_map_args', $template_args, $args );
+
+		// Set global for inline script handling
+		global $gd_move_inline_script;
+		$gd_move_inline_script = apply_filters( 'geodir_add_listing_move_inline_script', true );
+
+		// Render the template
+		return geodir_get_template_html( 'bootstrap/map/map-add-listing.php', $template_args );
+	}
 }

@@ -420,4 +420,34 @@ final class Locations implements LocationsInterface { // <-- Renamed to plural a
 		 */
 		return apply_filters( 'geodir_split_uk', $split_uk );
 	}
+
+	/**
+	 * Get ISO2 code for a country.
+	 *
+	 * Converts a country name to its ISO2 code. Handles special case for UK
+	 * constituent countries (England, Scotland, Wales, Northern Ireland).
+	 *
+	 * @since 3.0.0 (Migrated from GeoDir_Locations::get_country_iso2)
+	 *
+	 * @param string $country The country name.
+	 * @return string Country ISO2 code or original country name if not found.
+	 */
+	public function get_country_iso2( string $country ): string {
+		global $wp_country_database;
+
+		// Handle UK constituent countries
+		if ( in_array( strtolower( $country ), [ 'england', 'northern ireland', 'scotland', 'wales' ], true ) ) {
+			$country = 'United Kingdom';
+		}
+
+		// Use the global country database to get ISO2
+		if ( ! empty( $wp_country_database ) && method_exists( $wp_country_database, 'get_country_iso2' ) ) {
+			$result = $wp_country_database->get_country_iso2( $country );
+			if ( $result ) {
+				return $result;
+			}
+		}
+
+		return $country;
+	}
 }

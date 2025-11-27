@@ -102,6 +102,7 @@ class Assets {
 			$this->version,
 			true
 		);
+
 	}
 
 	/**
@@ -143,18 +144,63 @@ class Assets {
 	 * Only loads on add-listing forms and edit screens.
 	 */
 	public function maybe_enqueue_add_listing_scripts() {
+
 		// Check if we should load add-listing assets
 		if ( ! $this->should_load_add_listing_assets() ) {
 			return;
 		}
 
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$geodir_map_name = geodirectory()->maps->active_map();
+
+		// Register map library dependencies based on active map provider
+		$this->register_map_libraries( $geodir_map_name, $suffix );
+
+		// Determine which map libraries are required
+		$map_require = [];
+		if ( in_array( $geodir_map_name, [ 'auto', 'google' ], true ) ) {
+			$map_require = [ 'geodir-google-maps', 'geodir-g-overlappingmarker-script' ];
+		} elseif ( $geodir_map_name === 'osm' ) {
+			$map_require = [ 'geodir-leaflet-script', 'geodir-leaflet-geo-script', 'geodir-o-overlappingmarker-script' ];
+		}
+
+		// Register geodir-goMap (jQuery plugin that wraps both map providers)
+		// Note: goMap is a legacy library kept in assets-legacy
+		if ( ! wp_script_is( 'geodir-goMap', 'registered' ) ) {
+			wp_register_script(
+				'geodir-goMap',
+				GEODIRECTORY_PLUGIN_URL . '/assets-legacy/js/goMap' . $suffix . '.js',
+				$map_require,
+				$this->version,
+				true
+			);
+		}
+
+		// Register geodir-maps (our new ES6 modules) - depends on goMap!
+		if ( ! wp_script_is( 'geodir-maps', 'registered' ) ) {
+			wp_register_script(
+				'geodir-maps',
+				$this->assets_url . 'js/geodir-maps.js',
+				array_merge( [ 'jquery', 'geodir-goMap' ], $map_require ),
+				$this->version,
+				true
+			);
+		}
+
+		// Add inline scripts BEFORE goMap loads
+		$this->add_map_inline_scripts( $geodir_map_name, $map_require );
+
+		// Enqueue goMap and maps
+		wp_enqueue_script( 'geodir-goMap' );
+		wp_enqueue_script( 'geodir-maps' );
+
 		// Enqueue the add-listing script
 		wp_enqueue_script(
 			'geodir-add-listing',
 			$this->assets_url . 'js/geodir-add-listing.js',
-			[], // No jQuery dependency
+			[], // No jQuery dependency for v3
 			$this->version,
-//			true
+			true
 		);
 
 		// Localize script with necessary data
@@ -176,6 +222,121 @@ class Assets {
 				'basic_nonce'           => wp_create_nonce( 'geodir_basic_nonce' ),
 			]
 		);
+	}
+
+	/**
+	 * Register map library scripts based on the active map provider.
+	 *
+	 * Note: All map libraries are legacy third-party code kept in assets-legacy folder.
+	 * They are not processed by Vite.
+	 *
+	 * @param string $geodir_map_name Active map provider ('google', 'osm', or 'auto').
+	 * @param string $suffix Script suffix ('.min' or '').
+	 */
+	private function register_map_libraries( $geodir_map_name, $suffix ) {
+		// Build Google Maps API URL with language and API key
+		$map_lang  = '&language=' . geodirectory()->maps->map_language();
+		$map_key   = geodirectory()->maps->google_api_key( true );
+		$map_extra = apply_filters( 'geodir_googlemap_script_extra', '' );
+
+		$legacy_url = GEODIRECTORY_PLUGIN_URL . '/assets-legacy/';
+
+		// Register Google Maps scripts
+		if ( in_array( $geodir_map_name, [ 'auto', 'google' ], true ) ) {
+			if ( ! wp_script_is( 'geodir-google-maps', 'registered' ) ) {
+				wp_register_script(
+					'geodir-google-maps',
+					'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra,
+					[],
+					$this->version,
+					true
+				);
+			}
+
+			if ( ! wp_script_is( 'geodir-g-overlappingmarker-script', 'registered' ) ) {
+				wp_register_script(
+					'geodir-g-overlappingmarker-script',
+					$legacy_url . 'jawj/oms' . $suffix . '.js',
+					[],
+					$this->version,
+					true
+				);
+			}
+		}
+
+		// Register OSM/Leaflet scripts
+		if ( in_array( $geodir_map_name, [ 'auto', 'osm' ], true ) ) {
+			if ( ! wp_script_is( 'geodir-leaflet-script', 'registered' ) ) {
+				wp_register_script(
+					'geodir-leaflet-script',
+					$legacy_url . 'leaflet/leaflet' . $suffix . '.js',
+					[],
+					$this->version,
+					true
+				);
+			}
+
+			if ( ! wp_script_is( 'geodir-leaflet-geo-script', 'registered' ) ) {
+				wp_register_script(
+					'geodir-leaflet-geo-script',
+					$legacy_url . 'leaflet/osm.geocode' . $suffix . '.js',
+					[ 'geodir-leaflet-script' ],
+					$this->version,
+					true
+				);
+			}
+
+			if ( ! wp_script_is( 'geodir-o-overlappingmarker-script', 'registered' ) ) {
+				wp_register_script(
+					'geodir-o-overlappingmarker-script',
+					$legacy_url . 'jawj/oms-leaflet' . $suffix . '.js',
+					[],
+					$this->version,
+					true
+				);
+			}
+
+			// Register Leaflet CSS
+			if ( ! wp_style_is( 'geodir-leaflet-style', 'registered' ) ) {
+				wp_register_style(
+					'geodir-leaflet-style',
+					$legacy_url . 'leaflet/leaflet.css',
+					[],
+					$this->version
+				);
+			}
+
+			// Enqueue Leaflet CSS if using OSM
+			if ( $geodir_map_name === 'osm' ) {
+				wp_enqueue_style( 'geodir-leaflet-style' );
+			}
+		}
+	}
+
+	/**
+	 * Add inline scripts before goMap loads.
+	 *
+	 * @param string $geodir_map_name Active map provider.
+	 * @param array  $map_require Required map scripts.
+	 */
+	private function add_map_inline_scripts( $geodir_map_name, $map_require ) {
+		// Add Google Maps callback if using Google Maps
+		if ( in_array( 'geodir-google-maps', $map_require, true ) ) {
+			wp_add_inline_script(
+				'geodir-google-maps',
+				geodirectory()->maps->google_map_callback(),
+				'before'
+			);
+		}
+
+		// Add gdSetMap global and OSM fallback script
+		$osm_extra = geodirectory()->maps->footer_script();
+		$inline_script = "window.gdSetMap = window.gdSetMap || '" . esc_js( $geodir_map_name ) . "';";
+		if ( $osm_extra ) {
+			$inline_script .= "\n" . $osm_extra;
+		}
+
+		wp_add_inline_script( 'geodir-goMap', $inline_script, 'before' );
 	}
 
 	/**

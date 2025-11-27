@@ -198,10 +198,10 @@ class AddressField extends AbstractFieldType {
 			<?php
 			// This logic from input-functions-aui.php ~line 1356 calls a template.
 			// In v3, we should call the Maps Service.
-//			echo geodirectory()->maps->render_add_listing_map( [
-//				'lat' => $lat,
-//				'lng' => $lng
-//			] );
+			echo geodirectory()->maps->render_add_listing_map( [
+				'lat' => $lat,
+				'lng' => $lng
+			] );
 			?>
 		</div>
 
