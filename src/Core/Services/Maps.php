@@ -301,7 +301,7 @@ final class Maps {
 
 			ob_start();
 			?>
-			<script type="text/javascript">
+			<script>
 				(function() {
 					// Check if Google Maps failed to load
 					if ( !( window.google && typeof google.maps !== 'undefined' ) ) {
@@ -347,7 +347,7 @@ final class Maps {
 			 */
 			do_action( 'geodir_maps_extra_script' );
 
-			$osm_extra = ob_get_clean();
+			$osm_extra = str_replace(['<script>','</script>'],'', ob_get_clean() );
 		}
 
 		return $osm_extra;

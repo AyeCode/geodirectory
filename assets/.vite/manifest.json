@@ -52,5 +52,35 @@
     "names": [
       "geodir-frontend-styles.css"
     ]
+  },
+  "resources/vendor/maps/goMap.js": {
+    "file": "js/goMap.js",
+    "name": "goMap",
+    "src": "resources/vendor/maps/goMap.js",
+    "isEntry": true
+  },
+  "resources/vendor/maps/leaflet/leaflet.js": {
+    "file": "js/leaflet.js",
+    "name": "leaflet",
+    "src": "resources/vendor/maps/leaflet/leaflet.js",
+    "isEntry": true
+  },
+  "resources/vendor/maps/leaflet/osm.geocode.js": {
+    "file": "js/leaflet-geocode.js",
+    "name": "leaflet-geocode",
+    "src": "resources/vendor/maps/leaflet/osm.geocode.js",
+    "isEntry": true
+  },
+  "resources/vendor/maps/oms-leaflet.js": {
+    "file": "js/oms-leaflet.js",
+    "name": "oms-leaflet",
+    "src": "resources/vendor/maps/oms-leaflet.js",
+    "isEntry": true
+  },
+  "resources/vendor/maps/oms.js": {
+    "file": "js/oms.js",
+    "name": "oms",
+    "src": "resources/vendor/maps/oms.js",
+    "isEntry": true
   }
 }

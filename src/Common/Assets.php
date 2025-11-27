@@ -165,11 +165,11 @@ class Assets {
 		}
 
 		// Register geodir-goMap (jQuery plugin that wraps both map providers)
-		// Note: goMap is a legacy library kept in assets-legacy
+		// Note: goMap is a third-party library processed by Vite from resources/vendor/maps/
 		if ( ! wp_script_is( 'geodir-goMap', 'registered' ) ) {
 			wp_register_script(
 				'geodir-goMap',
-				GEODIRECTORY_PLUGIN_URL . '/assets-legacy/js/goMap' . $suffix . '.js',
+				$this->assets_url . 'js/goMap.js',
 				$map_require,
 				$this->version,
 				true
@@ -227,19 +227,17 @@ class Assets {
 	/**
 	 * Register map library scripts based on the active map provider.
 	 *
-	 * Note: All map libraries are legacy third-party code kept in assets-legacy folder.
-	 * They are not processed by Vite.
+	 * Note: All map libraries are third-party code processed by Vite from resources/vendor/maps/.
+	 * Vite minifies and outputs them to assets/js/.
 	 *
 	 * @param string $geodir_map_name Active map provider ('google', 'osm', or 'auto').
-	 * @param string $suffix Script suffix ('.min' or '').
+	 * @param string $suffix Script suffix (ignored - Vite handles minification).
 	 */
 	private function register_map_libraries( $geodir_map_name, $suffix ) {
 		// Build Google Maps API URL with language and API key
 		$map_lang  = '&language=' . geodirectory()->maps->map_language();
 		$map_key   = geodirectory()->maps->google_api_key( true );
 		$map_extra = apply_filters( 'geodir_googlemap_script_extra', '' );
-
-		$legacy_url = GEODIRECTORY_PLUGIN_URL . '/assets-legacy/';
 
 		// Register Google Maps scripts
 		if ( in_array( $geodir_map_name, [ 'auto', 'google' ], true ) ) {
@@ -256,7 +254,7 @@ class Assets {
 			if ( ! wp_script_is( 'geodir-g-overlappingmarker-script', 'registered' ) ) {
 				wp_register_script(
 					'geodir-g-overlappingmarker-script',
-					$legacy_url . 'jawj/oms' . $suffix . '.js',
+					$this->assets_url . 'js/oms.js',
 					[],
 					$this->version,
 					true
@@ -269,7 +267,7 @@ class Assets {
 			if ( ! wp_script_is( 'geodir-leaflet-script', 'registered' ) ) {
 				wp_register_script(
 					'geodir-leaflet-script',
-					$legacy_url . 'leaflet/leaflet' . $suffix . '.js',
+					$this->assets_url . 'js/leaflet.js',
 					[],
 					$this->version,
 					true
@@ -279,7 +277,7 @@ class Assets {
 			if ( ! wp_script_is( 'geodir-leaflet-geo-script', 'registered' ) ) {
 				wp_register_script(
 					'geodir-leaflet-geo-script',
-					$legacy_url . 'leaflet/osm.geocode' . $suffix . '.js',
+					$this->assets_url . 'js/leaflet-geocode.js',
 					[ 'geodir-leaflet-script' ],
 					$this->version,
 					true
@@ -289,7 +287,7 @@ class Assets {
 			if ( ! wp_script_is( 'geodir-o-overlappingmarker-script', 'registered' ) ) {
 				wp_register_script(
 					'geodir-o-overlappingmarker-script',
-					$legacy_url . 'jawj/oms-leaflet' . $suffix . '.js',
+					$this->assets_url . 'js/oms-leaflet.js',
 					[],
 					$this->version,
 					true
@@ -297,10 +295,13 @@ class Assets {
 			}
 
 			// Register Leaflet CSS
+			// Note: Leaflet CSS needs special handling for image paths
+			// For now, we'll keep it in resources/vendor/maps/leaflet/ and copy it manually
+			// TODO: Configure Vite to handle Leaflet CSS + images properly
 			if ( ! wp_style_is( 'geodir-leaflet-style', 'registered' ) ) {
 				wp_register_style(
 					'geodir-leaflet-style',
-					$legacy_url . 'leaflet/leaflet.css',
+					GEODIRECTORY_PLUGIN_URL . '/resources/vendor/maps/leaflet/leaflet.css',
 					[],
 					$this->version
 				);

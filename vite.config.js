@@ -5,6 +5,7 @@ import path from 'path';
  * Plugin to wrap output in IIFE to prevent global namespace pollution
  * Excludes plupload script which needs immediate execution to register Alpine components
  * geodir-maps uses UMD format instead of IIFE to properly expose globals
+ * Third-party map libraries (goMap, leaflet, oms) are left unwrapped - they manage their own globals
  */
 function wrapIIFE() {
 	return {
@@ -28,6 +29,14 @@ function wrapIIFE() {
 	// Module code will execute and set window.GeoDir.Maps
 	return window.GeoDir && window.GeoDir.Maps;
 }));`;
+					continue;
+				}
+
+				// Skip third-party map libraries - they manage their own globals
+				if (file.type === 'chunk' &&
+					(file.fileName.includes('goMap') ||
+					 file.fileName.includes('oms') ||
+					 file.fileName.includes('leaflet'))) {
 					continue;
 				}
 
@@ -77,13 +86,20 @@ export default defineConfig({
 
 			// 5. Define distinct Entry Points
 			input: {
-				// JavaScript
+				// JavaScript - Our Code
 				'geodir-frontend': path.resolve(__dirname, 'resources/scripts/frontend.js'),
 				'geodir-admin': path.resolve(__dirname, 'resources/scripts/admin.js'),
 				'geodir-map-handler': path.resolve(__dirname, 'resources/scripts/map-handler.js'),
 				'geodir-maps': path.resolve(__dirname, 'resources/scripts/maps/index.js'),
 				'geodir-add-listing': path.resolve(__dirname, 'resources/scripts/add-listing.js'),
 				'geodir-plupload': path.resolve(__dirname, 'resources/scripts/plupload.js'),
+
+				// JavaScript - Third-Party Map Libraries
+				'goMap': path.resolve(__dirname, 'resources/vendor/maps/goMap.js'),
+				'oms': path.resolve(__dirname, 'resources/vendor/maps/oms.js'),
+				'oms-leaflet': path.resolve(__dirname, 'resources/vendor/maps/oms-leaflet.js'),
+				'leaflet': path.resolve(__dirname, 'resources/vendor/maps/leaflet/leaflet.js'),
+				'leaflet-geocode': path.resolve(__dirname, 'resources/vendor/maps/leaflet/osm.geocode.js'),
 
 				// Styles (SCSS) - These will be output as separate .css files
 				'geodir-frontend-styles': path.resolve(__dirname, 'resources/styles/frontend.scss'),
