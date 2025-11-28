@@ -928,7 +928,7 @@ function so_handle_038( $url, $original_url, $_context ) {
  * @return array Modified class array.
  */
 function geodir_body_class_active_map( $classes = array() ) {
-	$classes[] = 'gd-map-' . GeoDir_Maps::active_map();
+	$classes[] = 'gd-map-' . geodirectory()->maps->active_map();
 
 	return $classes;
 }

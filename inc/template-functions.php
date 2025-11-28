@@ -1454,3 +1454,24 @@ function geodir_az_search_value() {
 
 	return $value;
 }
+
+
+if (!function_exists('geodir_check_field_visibility')) {
+	/**
+	 * Check field visibility as per price package.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @global object $wpdb WordPress Database object.
+	 * @global array $geodir_addon_list List of active GeoDirectory extensions.
+	 * @param int|string $package_id The package ID.
+	 * @param string $field_name The field name.
+	 * @param string $post_type Optional. The wordpress post type.
+	 * @return bool Returns true when field visible, otherwise false.
+	 */
+	function geodir_check_field_visibility( $package_id, $field_name, $post_type ) {
+		$show = true;
+
+		return apply_filters( 'geodir_check_field_visibility', $show, $field_name, $package_id, $post_type );
+	}
+}
