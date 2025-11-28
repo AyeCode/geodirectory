@@ -1547,6 +1547,176 @@ geodirectory()->fields->render_fields( $post_id, 'gd_place', 'listing', '' );
 
 ---
 
+## `geodirectory()->taxonomies`
+**Class:** `AyeCode\GeoDirectory\Core\Services\Taxonomies`
+
+This service manages GeoDirectory taxonomies, including retrieval, validation, term operations, and database queries.
+
+```php
+/**
+ * Get all custom taxonomies.
+ * @param string $post_type The post type to filter by.
+ * @param bool $include_tags Whether to include tag taxonomies. Default false.
+ * @return array Array of taxonomy slugs.
+ */
+geodirectory()->taxonomies->get_taxonomies( 'gd_place', false );
+
+/**
+ * Get post type listing slug.
+ * @param string $object_type The post type or taxonomy.
+ * @return string|false Slug on success, false on failure.
+ */
+geodirectory()->taxonomies->get_listing_slug( 'gd_placecategory' );
+
+/**
+ * Get a taxonomy post type.
+ * @param string $taxonomy The WordPress taxonomy string.
+ * @return string|false Post type on success, false on failure.
+ */
+geodirectory()->taxonomies->get_taxonomy_posttype( 'gd_placecategory' );
+
+/**
+ * Check whether a term exists or not.
+ * Returns term data on success, false on failure.
+ * @param int|string $term The term ID or slug.
+ * @param string $taxonomy The taxonomy name.
+ * @param int $parent Parent term ID.
+ * @return array|int|false Term data on success, false on failure.
+ */
+geodirectory()->taxonomies->term_exists( 'restaurant', 'gd_placecategory', 0 );
+
+/**
+ * Get term icon using term ID.
+ * If term ID not passed, returns all icons.
+ * @param int|false $term_id The term ID.
+ * @param bool $rebuild Force rebuild the icons when set to true.
+ * @return mixed|string|void Term icon(s).
+ */
+geodirectory()->taxonomies->get_term_icon( 123, false );
+
+/**
+ * Recount product terms, ignoring hidden products.
+ * @param array $terms Terms array.
+ * @param object $taxonomy Taxonomy object.
+ * @param string $post_type Post type.
+ * @param bool $callback Use standard callback.
+ * @param bool $terms_are_term_taxonomy_ids Whether terms are term taxonomy IDs.
+ * @return void
+ */
+geodirectory()->taxonomies->term_recount( $terms, $taxonomy, 'gd_place', true, true );
+
+/**
+ * Get all child terms.
+ * @param int $child_of Parent term to get child terms.
+ * @param string $taxonomy Taxonomy.
+ * @param array $terms Array of terms. Default Empty.
+ * @return array Array of child terms.
+ */
+geodirectory()->taxonomies->get_term_children( 123, 'gd_placecategory', [] );
+
+/**
+ * Get the term post type.
+ * @param int $term_id The term id.
+ * @return string Post type.
+ */
+geodirectory()->taxonomies->get_term_post_type( 123 );
+
+/**
+ * Check given taxonomy belongs to GD with caching.
+ * @param string $taxonomy The taxonomy.
+ * @return bool True if given taxonomy belongs to GD, otherwise False.
+ */
+geodirectory()->taxonomies->is_gd_taxonomy( 'gd_placecategory' );
+
+/**
+ * Build term link with location parameters.
+ * Returns the term link with parameters.
+ * @param string $termlink The term link.
+ * @param object $term The term object.
+ * @param string $taxonomy The taxonomy name.
+ * @return string The modified term link.
+ */
+geodirectory()->taxonomies->build_term_link( $termlink, $term, 'gd_placecategory' );
+
+/**
+ * Get category select dropdown HTML.
+ * @param string $post_type The post type.
+ * @param string $selected The selected value.
+ * @param bool $is_tag Is this a tag taxonomy?
+ * @param bool $echo Prints the HTML when set to true.
+ * @return string|void Dropdown HTML or void if echoing.
+ */
+geodirectory()->taxonomies->get_category_select( 'gd_place', '', false, true );
+
+/**
+ * Get category icon URL.
+ * @param int $term_id Term ID.
+ * @param bool $full_path Get full path.
+ * @param bool $default Return default if not found.
+ * @return string Category icon URL.
+ */
+geodirectory()->taxonomies->get_cat_icon( 123, false, false );
+
+/**
+ * Get category icon alt text.
+ * @param int $term_id Category ID.
+ * @param string|bool $default Default alt text. Default false.
+ * @return string Icon alt text.
+ */
+geodirectory()->taxonomies->get_cat_icon_alt( 123, false );
+
+/**
+ * Get category default image.
+ * @param int $term_id Term ID.
+ * @param bool $full_path Get full path.
+ * @return string Category image URL.
+ */
+geodirectory()->taxonomies->get_cat_image( 123, false );
+
+/**
+ * Get category top description HTML.
+ * @param int $term_id Term ID.
+ * @return string Top description HTML.
+ */
+geodirectory()->taxonomies->get_cat_top_description( 123 );
+
+/**
+ * Get category description HTML.
+ * @param int $term_id Term ID.
+ * @param string $type Description type ('top', 'bottom', 'main').
+ * @return string Category description HTML.
+ */
+geodirectory()->taxonomies->get_category_description( 123, 'top' );
+
+/**
+ * Get schemas options array.
+ * @return array Schemas array.
+ */
+geodirectory()->taxonomies->get_schemas();
+
+/**
+ * Taxonomy Walker.
+ * Generates the HTML for category lists (Options, Checkboxes, or Radios).
+ * @param string $taxonomy The taxonomy slug.
+ * @param int $parent Parent term ID.
+ * @param int $padding Visual depth/padding level.
+ * @param array $args Configuration arguments:
+ *   - display_type: 'select', 'multiselect', 'radio', 'checkbox'
+ *   - selected: array of selected term IDs
+ *   - exclude: array of term IDs to exclude
+ *   - hide_empty: bool
+ * @return string HTML output.
+ */
+geodirectory()->taxonomies->render_walker( 'gd_placecategory', 0, 0, [
+	'display_type' => 'checkbox',
+	'selected' => [1, 2, 3],
+	'exclude' => [],
+	'hide_empty' => false
+] );
+```
+
+---
+
 ## `geodirectory()->maps`
 **Class:** `AyeCode\GeoDirectory\Core\Utils\Maps`
 
