@@ -62,9 +62,11 @@ require_once __DIR__ . '/inc/post-functions.php';
 require_once __DIR__ . '/inc/field-conditional-functions.php';
 require_once __DIR__ . '/inc/admin-settings-functions.php';
 require_once __DIR__ . '/inc/taxonomy-functions.php';
+require_once __DIR__ . '/inc/admin-functions.php';
 
 // 2. Define essential constants.
 define( 'GEODIRECTORY_VERSION', '3.0.0' );
+define( 'GEODIRECTORY_TEXTDOMAIN', 'geodirectory' );
 define( 'GEODIRECTORY_FILE', __FILE__ );
 define( 'GEODIRECTORY_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GEODIRECTORY_PLUGIN_URL', untrailingslashit( plugins_url( '/', __FILE__ ) )  );

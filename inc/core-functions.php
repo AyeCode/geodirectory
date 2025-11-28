@@ -515,6 +515,7 @@ function geodir_api_hash( $data ) {
  */
 function goedir_register_widgets() {
 
+
 	if ( get_option( 'geodirectory_version' ) ) {
 		global $pagenow;
 
@@ -543,7 +544,7 @@ function goedir_register_widgets() {
 			}
 
 			// Depreciated
-			new GeoDir_Widget_Single_Closed_Text();
+			new \AyeCode\GeoDirectory\Widgets\SingleClosedText();
 
 		}
 	}
@@ -555,60 +556,61 @@ add_action( 'widgets_init', 'goedir_register_widgets' );
  * Get a list of available widgets.
  *
  * @since 2.1.1.0
+ * @since 3.0.0 Updated to use namespaced widget classes.
  * @return mixed|void
  */
 function geodir_get_widgets(){
 
 	$widgets = array(
-		'GeoDir_Widget_AZ_Search',
-		'GeoDir_Widget_Search',
-		'GeoDir_Widget_Best_Of',
-		'GeoDir_Widget_Categories',
-		'GeoDir_Widget_Category_Description',
-		'GeoDir_Widget_Dashboard',
-		'GeoDir_Widget_Recent_Reviews',
-		'GeoDir_Widget_CPT_Meta',
-		'GeoDir_Widget_Post_Badge',
-		'GeoDir_Widget_Post_Meta',
-		'GeoDir_Widget_Post_Images',
-		'GeoDir_Widget_Post_Title',
-		'GeoDir_Widget_Post_Rating',
-		'GeoDir_Widget_Post_Fav',
-		'GeoDir_Widget_Post_Directions',
-		'GeoDir_Widget_Post_Content',
-		'GeoDir_Widget_Post_Address',
-		'GeoDir_Widget_Output_location',
-		'GeoDir_Widget_Author_Actions',
-		'GeoDir_Widget_Listings',
-		'GeoDir_Widget_Map',
-		'GeoDir_Widget_Recently_Viewed',
-		'GeoDir_Widget_Single_Tabs',
-		'GeoDir_Widget_Notifications',
-		'GeoDir_Widget_Add_Listing',
-		'GeoDir_Widget_Dynamic_Content',
-		'GeoDir_Widget_Loop',
-		'GeoDir_Widget_Loop_Paging',
-		'GeoDir_Widget_Loop_Actions',
-		'GeoDir_Widget_Archive_Item_Section',
-		'GeoDir_Widget_Single_Taxonomies',
-		'GeoDir_Widget_Single_Next_Prev',
-		'GeoDir_Widget_Single_Reviews',
-		'GeoDir_Widget_Tags',
-		'GeoDir_Widget_Post_Distance',
-		'GeoDir_Widget_Map_Pinpoint',
-		'GeoDir_Widget_Page_Title',
-		'GeoDir_Widget_Simple_Archive_Item',
-		'GeoDir_Widget_Simple_Archive',
-		'GeoDir_Widget_Post_Features',
+		\AyeCode\GeoDirectory\Widgets\AZSearch::class,
+		\AyeCode\GeoDirectory\Widgets\Search::class,
+		\AyeCode\GeoDirectory\Widgets\BestOf::class,
+		\AyeCode\GeoDirectory\Widgets\Categories::class,
+		\AyeCode\GeoDirectory\Widgets\CategoryDescription::class,
+		\AyeCode\GeoDirectory\Widgets\Dashboard::class,
+		\AyeCode\GeoDirectory\Widgets\RecentReviews::class,
+		\AyeCode\GeoDirectory\Widgets\CPTMeta::class,
+		\AyeCode\GeoDirectory\Widgets\PostBadge::class,
+		\AyeCode\GeoDirectory\Widgets\PostMeta::class,
+		\AyeCode\GeoDirectory\Widgets\PostImages::class,
+		\AyeCode\GeoDirectory\Widgets\PostTitle::class,
+		\AyeCode\GeoDirectory\Widgets\PostRating::class,
+		\AyeCode\GeoDirectory\Widgets\PostFav::class,
+		\AyeCode\GeoDirectory\Widgets\PostDirections::class,
+		\AyeCode\GeoDirectory\Widgets\PostContent::class,
+		\AyeCode\GeoDirectory\Widgets\PostAddress::class,
+		\AyeCode\GeoDirectory\Widgets\OutputLocation::class,
+		\AyeCode\GeoDirectory\Widgets\AuthorActions::class,
+		\AyeCode\GeoDirectory\Widgets\Listings::class,
+		\AyeCode\GeoDirectory\Widgets\Map::class,
+		\AyeCode\GeoDirectory\Widgets\RecentlyViewed::class,
+		\AyeCode\GeoDirectory\Widgets\SingleTabs::class,
+		\AyeCode\GeoDirectory\Widgets\Notifications::class,
+		\AyeCode\GeoDirectory\Widgets\AddListing::class,
+		\AyeCode\GeoDirectory\Widgets\DynamicContent::class,
+		\AyeCode\GeoDirectory\Widgets\Loop::class,
+		\AyeCode\GeoDirectory\Widgets\LoopPaging::class,
+		\AyeCode\GeoDirectory\Widgets\LoopActions::class,
+		\AyeCode\GeoDirectory\Widgets\ArchiveItemSection::class,
+		\AyeCode\GeoDirectory\Widgets\SingleTaxonomies::class,
+		\AyeCode\GeoDirectory\Widgets\SingleNextPrev::class,
+		\AyeCode\GeoDirectory\Widgets\SingleReviews::class,
+		\AyeCode\GeoDirectory\Widgets\Tags::class,
+		\AyeCode\GeoDirectory\Widgets\PostDistance::class,
+		\AyeCode\GeoDirectory\Widgets\MapPinpoint::class,
+		\AyeCode\GeoDirectory\Widgets\PageTitle::class,
+		\AyeCode\GeoDirectory\Widgets\SimpleArchiveItem::class,
+		\AyeCode\GeoDirectory\Widgets\SimpleArchive::class,
+		\AyeCode\GeoDirectory\Widgets\PostFeatures::class,
 	);
 
 	if ( geodir_design_style() ) {
-		$widgets[] = 'GeoDir_Widget_Report_Post';
+		$widgets[] = \AyeCode\GeoDirectory\Widgets\ReportPost::class;
 	}
 
 	// 3rd party widgets
 	if ( class_exists( 'Ninja_Forms' ) && class_exists( 'NF_Abstracts_MergeTags' ) ) {
-		$widgets[] = 'GeoDir_Widget_Ninja_Forms';
+		$widgets[] = \AyeCode\GeoDirectory\Widgets\NinjaForms::class;
 	}
 
 	return apply_filters('geodir_get_widgets', $widgets );

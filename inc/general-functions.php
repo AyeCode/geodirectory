@@ -3087,6 +3087,7 @@ function geodir_load_scripts_on_call() {
  * @return mixed
  */
 function geodir_widget_enqueue_scripts( $args, $widget = array(), $extra = array() ) {
+	return; // @todo we need to implement this.
 	do_action( 'geodir_enqueue_scripts_on_call_before', $args, $widget, $extra );
 
 	if ( ! empty( $widget ) && is_object( $widget ) && ! empty( $widget->id_base ) ) {

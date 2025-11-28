@@ -38,6 +38,102 @@ class FieldsService {
 	}
 
 	/**
+	 * Get custom fields based on criteria.
+	 * * Replaces: geodir_post_custom_fields()
+	 *
+	 * @param int|string $package_id      Optional. The package ID.
+	 * @param string     $default         Optional. 'all', 'default', or 'custom'. Default 'all'.
+	 * @param string     $post_type       Optional. The post type slug. Default 'gd_place'.
+	 * @param string     $fields_location Optional. Location context for show_in filtering. Default 'none'.
+	 *
+	 * @return array Array of custom fields with normalized structure.
+	 */
+	public function get_custom_fields( $package_id = '', $default = 'all', $post_type = 'gd_place', $fields_location = 'none' ) {
+		// Build cache key
+		$cache_stored = $post_type . '_' . $package_id . '_' . $default . '_' . $fields_location;
+		$geodir_post_custom_fields_cache = get_transient( 'geodir_post_custom_fields' );
+
+		if ( ! is_array( $geodir_post_custom_fields_cache ) ) {
+			$geodir_post_custom_fields_cache = array();
+		}
+
+		// Return cached if available
+		if ( ! empty( $geodir_post_custom_fields_cache ) && array_key_exists( $cache_stored, $geodir_post_custom_fields_cache ) ) {
+			$custom_fields = $geodir_post_custom_fields_cache[ $cache_stored ];
+		} else {
+			// Build repository query args
+			$args = [
+				'post_type' => $post_type,
+				'active'    => 1
+			];
+
+			// Handle location filtering
+			if ( $fields_location !== 'none' ) {
+				$args['location'] = $fields_location;
+			}
+
+			// Get fields from repository
+			$fields = $this->repository->get_fields( $args );
+
+			$custom_fields = array();
+
+			if ( $fields ) {
+				foreach ( $fields as $field ) {
+					// Handle default/custom filtering
+					if ( $default === 'default' && empty( $field['is_default'] ) ) {
+						continue;
+					} else if ( $default === 'custom' && ! empty( $field['is_default'] ) ) {
+						continue;
+					}
+
+					// Apply skip filters
+					$skip = apply_filters( 'geodir_post_custom_fields_skip_field', false, $field, $package_id, $default, $fields_location );
+					$skip = apply_filters( 'geodir_post_custom_fields_skip_field_' . $field['htmlvar_name'], $skip, $field, $package_id, $default, $fields_location );
+
+					if ( $skip ) {
+						continue;
+					}
+
+					// Normalize field structure to match v2 format
+					$custom_field = array(
+						"name"      => $field['htmlvar_name'],
+						"label"     => ! empty( $field['clabels'] ) ? $field['clabels'] : $field['frontend_title'],
+						"default"   => $field['default_value'],
+						"type"      => $field['field_type'],
+						"desc"      => ! empty( $field['frontend_desc'] ) ? $field['frontend_desc'] : '',
+						"post_type" => $field['post_type'],
+					);
+
+					// Add options if field has option values
+					if ( ! empty( $field['option_values'] ) ) {
+						$options = explode( ',', $field['option_values'] );
+						$custom_field["options"] = $options;
+					}
+
+					// Merge all field data into custom_field
+					foreach ( $field as $field_key => $val ) {
+						$custom_field[ $field_key ] = $val;
+					}
+
+					// Use same array key format as v2: {sort_order}{post_type}{htmlvar_name}
+					$custom_fields[ $field['sort_order'] . $field['post_type'] . $field['htmlvar_name'] ] = $custom_field;
+				}
+			}
+
+			// Cache the results
+			$geodir_post_custom_fields_cache[ $cache_stored ] = $custom_fields;
+			set_transient( 'geodir_post_custom_fields', $geodir_post_custom_fields_cache, DAY_IN_SECONDS );
+		}
+
+		// Apply legacy filter
+		if ( has_filter( 'geodir_filter_geodir_post_custom_fields' ) ) {
+			$custom_fields = apply_filters( 'geodir_filter_geodir_post_custom_fields', $custom_fields, $package_id, $post_type, $fields_location );
+		}
+
+		return $custom_fields;
+	}
+
+	/**
 	 * Render all custom fields for a specific location/context.
 	 * * Replaces: geodir_get_custom_fields_html()
 	 *

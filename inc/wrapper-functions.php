@@ -44,3 +44,20 @@ function geodir_get_posttypes( $output = 'names' ) {
 function geodir_get_field_infoby( $key = '', $value = '', $post_type = '', $stripslashes = true ) {
 	return geodirectory()->fields->get_field_info( $key, $value, $post_type, $stripslashes );
 }
+
+
+/**
+ * Returns custom fields based on page type. (detail page, listing page).
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @param int|string $package_id The package ID.
+ * @param string $default Optional. When set to "default" it will display only default fields.
+ * @param string $post_type Optional. The wordpress post type.
+ * @param string $fields_location Optional. Where exactly are you going to place this custom fields?.
+ * @return array|mixed|void Returns custom fields.
+ */
+function geodir_post_custom_fields( $package_id = '', $default = 'all', $post_type = 'gd_place', $fields_location = 'none' ) {
+	return geodirectory()->fields->get_custom_fields( $package_id, $default, $post_type, $fields_location );
+}

@@ -1535,6 +1535,17 @@ This service provides high-level API for working with custom fields, delegating 
 geodirectory()->fields->get_field_info( 'htmlvar_name', 'business_hours', 'gd_place', true );
 
 /**
+ * Get custom fields based on criteria.
+ * * Replaces: geodir_post_custom_fields()
+ * @param int|string $package_id Optional. The package ID.
+ * @param string $default Optional. 'all', 'default', or 'custom'. Default 'all'.
+ * @param string $post_type Optional. The post type slug. Default 'gd_place'.
+ * @param string $fields_location Optional. Location context for show_in filtering. Default 'none'.
+ * @return array Array of custom fields with normalized structure.
+ */
+geodirectory()->fields->get_custom_fields( '', 'all', 'gd_place', 'none' );
+
+/**
  * Render all custom fields for a specific location/context.
  * @param int $post_id The ID of the post (if editing) or 0.
  * @param string $post_type The CPT slug (gd_place, etc).
