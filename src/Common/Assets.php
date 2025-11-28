@@ -98,7 +98,7 @@ class Assets {
 		wp_enqueue_script(
 			'geodir-admin',
 			$this->assets_url . 'js/geodir-admin.js',
-			[ 'jquery' ], // Admin interfaces often still rely on WP Core jQuery
+			[ ], // NO jQuery
 			$this->version,
 			true
 		);
@@ -164,34 +164,21 @@ class Assets {
 			$map_require = [ 'geodir-leaflet-script', 'geodir-leaflet-geo-script', 'geodir-o-overlappingmarker-script' ];
 		}
 
-		// Register geodir-goMap (jQuery plugin that wraps both map providers)
-		// Note: goMap is a third-party library processed by Vite from resources/vendor/maps/
-		if ( ! wp_script_is( 'geodir-goMap', 'registered' ) ) {
-			wp_register_script(
-				'geodir-goMap',
-				$this->assets_url . 'js/goMap.js',
-				$map_require,
-				$this->version,
-				true
-			);
-		}
-
-		// Register geodir-maps (our new ES6 modules) - depends on goMap!
+		// Register geodir-maps (our new ES6 modules) - NO jQuery dependency!
 		if ( ! wp_script_is( 'geodir-maps', 'registered' ) ) {
 			wp_register_script(
 				'geodir-maps',
 				$this->assets_url . 'js/geodir-maps.js',
-				array_merge( [ 'jquery', 'geodir-goMap' ], $map_require ),
+				$map_require, // Only depends on the actual map libraries
 				$this->version,
 				true
 			);
 		}
 
-		// Add inline scripts BEFORE goMap loads
+		// Add inline scripts BEFORE maps load
 		$this->add_map_inline_scripts( $geodir_map_name, $map_require );
 
-		// Enqueue goMap and maps
-		wp_enqueue_script( 'geodir-goMap' );
+		// Enqueue maps
 		wp_enqueue_script( 'geodir-maps' );
 
 		// Enqueue the add-listing script
@@ -315,7 +302,7 @@ class Assets {
 	}
 
 	/**
-	 * Add inline scripts before goMap loads.
+	 * Add inline scripts before maps load.
 	 *
 	 * @param string $geodir_map_name Active map provider.
 	 * @param array  $map_require Required map scripts.
@@ -337,7 +324,7 @@ class Assets {
 			$inline_script .= "\n" . $osm_extra;
 		}
 
-		wp_add_inline_script( 'geodir-goMap', $inline_script, 'before' );
+		wp_add_inline_script( 'geodir-maps', $inline_script, 'before' );
 	}
 
 	/**

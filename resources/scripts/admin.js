@@ -1,16 +1,12 @@
 /**
  * GeoDirectory Admin Script
- * * Handles admin dashboard interactions.
- * Assumes jQuery is available as global $ or jQuery.
+ * Handles admin dashboard interactions.
  */
 
-(function($) {
+document.addEventListener('DOMContentLoaded', () => {
 	'use strict';
 
-	$(function() {
-		console.log('GeoDirectory: Admin loaded');
+	console.log('GeoDirectory: Admin loaded');
 
-		// Admin specific logic here
-	});
-
-})(jQuery);
+	// Admin specific logic here
+});

@@ -1,3 +1,3 @@
-(function(){(function(o){o(function(){console.log("GeoDirectory: Admin loaded")})})(jQuery);
+(function(){document.addEventListener("DOMContentLoaded",()=>{console.log("GeoDirectory: Admin loaded")});
 //# sourceMappingURL=geodir-admin.js.map
 })();

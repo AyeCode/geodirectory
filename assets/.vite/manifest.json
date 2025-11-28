@@ -53,12 +53,6 @@
       "geodir-frontend-styles.css"
     ]
   },
-  "resources/vendor/maps/goMap.js": {
-    "file": "js/goMap.js",
-    "name": "goMap",
-    "src": "resources/vendor/maps/goMap.js",
-    "isEntry": true
-  },
   "resources/vendor/maps/leaflet/leaflet.js": {
     "file": "js/leaflet.js",
     "name": "leaflet",

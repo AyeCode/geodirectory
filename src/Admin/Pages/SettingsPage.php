@@ -198,9 +198,23 @@ final class SettingsPage extends Settings_Framework {
 			$required_scripts[] = 'geodir-o-overlappingmarker-script';
 		}
 
+		// Add inline script for map configuration
 		$osm_extra = geodirectory()->maps->footer_script();
-		wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '" . geodirectory()->maps->active_map() . "';" . $osm_extra, 'before' );
-		$required_scripts[] = 'geodir-goMap';
+		$inline_script = "window.gdSetMap = window.gdSetMap || '" . geodirectory()->maps->active_map() . "';" . $osm_extra;
+
+		// Register geodir-maps if not already registered (may be needed for setup wizard)
+		if ( ! wp_script_is( 'geodir-maps', 'registered' ) ) {
+			wp_register_script(
+				'geodir-maps',
+				\GEODIRECTORY_PLUGIN_URL . '/assets/js/geodir-maps.js',
+				$required_scripts,
+				GEODIRECTORY_VERSION,
+				true
+			);
+		}
+
+		wp_add_inline_script( 'geodir-maps', $inline_script, 'before' );
+		$required_scripts[] = 'geodir-maps';
 
 		wp_register_script( 'geodir-setup', \GEODIRECTORY_PLUGIN_URL . '/assets/js/setup-wizard' . $suffix . '.js', $required_scripts, GEODIRECTORY_VERSION );
 		wp_enqueue_script( 'geodir-setup' );

@@ -2,7 +2,6 @@
  * GoogleMapProvider - Google Maps implementation
  *
  * Wraps Google Maps API in the MapProvider interface.
- * Uses jQuery.goMap for backwards compatibility with existing code.
  */
 import { MapProvider } from './MapProvider.js';
 
@@ -31,35 +30,39 @@ export class GoogleMapProvider extends MapProvider {
 		this.geocoder = new google.maps.Geocoder();
 		console.log('[GoogleMapProvider] Geocoder initialized');
 
-		// Use goMap jQuery plugin for compatibility
-		const $map = jQuery(`#${this.elementId}`);
-		console.log('[GoogleMapProvider] Map element jQuery object:', $map);
-		console.log('[GoogleMapProvider] Map element exists?', $map.length > 0);
+		// Get map element
+		const mapElement = document.getElementById(this.elementId);
+		console.log('[GoogleMapProvider] Map element:', mapElement);
 
-		if (!$map.length) {
+		if (!mapElement) {
 			console.error(`[GoogleMapProvider] Map element #${this.elementId} not found`);
 			return false;
 		}
 
-		console.log('[GoogleMapProvider] Calling goMap with options:', {
-			latitude: this.options.latitude || 0,
-			longitude: this.options.longitude || 0,
+		// Map type conversion
+		const mapTypeId = this.options.maptype ?
+			google.maps.MapTypeId[this.options.maptype] || google.maps.MapTypeId.ROADMAP :
+			google.maps.MapTypeId.ROADMAP;
+
+		console.log('[GoogleMapProvider] Creating map with options:', {
+			center: { lat: this.options.latitude || 0, lng: this.options.longitude || 0 },
 			zoom: this.options.zoom || 12,
-			maptype: this.options.maptype || 'ROADMAP'
+			mapTypeId: mapTypeId
 		});
 
-		$map.goMap({
-			latitude: this.options.latitude || 0,
-			longitude: this.options.longitude || 0,
-			zoom: this.options.zoom || 12,
-			maptype: this.options.maptype || 'ROADMAP',
+		// Create map directly with Google Maps API
+		this.map = new google.maps.Map(mapElement, {
+			center: {
+				lat: parseFloat(this.options.latitude) || 0,
+				lng: parseFloat(this.options.longitude) || 0
+			},
+			zoom: parseInt(this.options.zoom) || 12,
+			mapTypeId: mapTypeId,
 			streetViewControl: this.options.streetViewControl !== false,
 			scrollwheel: this.options.scrollwheel !== false,
-			...this.options.goMapOptions
+			...this.options.mapOptions
 		});
 
-		// Store reference to the map
-		this.map = jQuery.goMap.map;
 		console.log('[GoogleMapProvider] Map initialized:', this.map ? 'SUCCESS' : 'FAILED');
 
 		return true;
@@ -69,16 +72,38 @@ export class GoogleMapProvider extends MapProvider {
 	 * Create a marker
 	 */
 	createMarker(options) {
-		const marker = jQuery.goMap.createMarker({
-			latitude: options.lat || options.latitude,
-			longitude: options.lng || options.longitude,
-			id: options.id || `marker_${Date.now()}`,
-			icon: options.icon,
+		const lat = parseFloat(options.lat || options.latitude) || 0;
+		const lng = parseFloat(options.lng || options.longitude) || 0;
+
+		const markerOptions = {
+			position: { lat, lng },
+			map: this.map,
 			draggable: options.draggable !== false,
-			title: options.title || '',
-			w: options.w,
-			h: options.h
-		});
+			title: options.title || ''
+		};
+
+		// Add custom icon if provided
+		if (options.icon) {
+			const iconOptions = {
+				url: options.icon
+			};
+
+			// Add size if provided
+			if (options.w && options.h) {
+				iconOptions.scaledSize = new google.maps.Size(
+					parseInt(options.w),
+					parseInt(options.h)
+				);
+				iconOptions.anchor = new google.maps.Point(
+					parseInt(options.w) / 2,
+					parseInt(options.h)
+				);
+			}
+
+			markerOptions.icon = iconOptions;
+		}
+
+		const marker = new google.maps.Marker(markerOptions);
 
 		this.markers.push(marker);
 		return marker;

@@ -95,7 +95,7 @@ export default defineConfig({
 				'geodir-plupload': path.resolve(__dirname, 'resources/scripts/plupload.js'),
 
 				// JavaScript - Third-Party Map Libraries
-				'goMap': path.resolve(__dirname, 'resources/vendor/maps/goMap.js'),
+				// 'goMap': path.resolve(__dirname, 'resources/vendor/maps/goMap.js'),
 				'oms': path.resolve(__dirname, 'resources/vendor/maps/oms.js'),
 				'oms-leaflet': path.resolve(__dirname, 'resources/vendor/maps/oms-leaflet.js'),
 				'leaflet': path.resolve(__dirname, 'resources/vendor/maps/leaflet/leaflet.js'),

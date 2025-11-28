@@ -347,14 +347,17 @@ export class AddressField {
 		if (!field || !value) return;
 
 		// For select2 fields
-		if (jQuery(field).hasClass('select2-hidden-accessible')) {
-			jQuery(field).val(value).trigger('change.select2');
+		if (field.classList.contains('select2-hidden-accessible')) {
+			field.value = value;
+			// Trigger change event for Select2
+			field.dispatchEvent(new Event('change', { bubbles: true }));
+			field.dispatchEvent(new CustomEvent('change.select2', { bubbles: true }));
 		} else {
 			field.value = value;
 		}
 
 		// Trigger blur for validation
-		jQuery(field).trigger('blur');
+		field.dispatchEvent(new Event('blur', { bubbles: true }));
 	}
 
 	/**
@@ -374,8 +377,8 @@ export class AddressField {
 
 		if (option) {
 			field.value = option.value;
-			if (jQuery(field).hasClass('select2-hidden-accessible')) {
-				jQuery(field).trigger('change.select2');
+			if (field.classList.contains('select2-hidden-accessible')) {
+				field.dispatchEvent(new CustomEvent('change.select2', { bubbles: true }));
 			}
 		}
 	}
@@ -389,12 +392,12 @@ export class AddressField {
 
 		if (latField) {
 			latField.value = this.getMarkerLat();
-			jQuery(latField).trigger('change');
+			latField.dispatchEvent(new Event('change', { bubbles: true }));
 		}
 
 		if (lngField) {
 			lngField.value = this.getMarkerLng();
-			jQuery(lngField).trigger('change');
+			lngField.dispatchEvent(new Event('change', { bubbles: true }));
 		}
 	}
 

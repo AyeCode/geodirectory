@@ -2,7 +2,6 @@
  * OSMMapProvider - OpenStreetMap/Leaflet implementation
  *
  * Wraps Leaflet (OSM) in the MapProvider interface.
- * Uses jQuery.goMap for backwards compatibility.
  */
 import { MapProvider } from './MapProvider.js';
 
@@ -21,25 +20,29 @@ export class OSMMapProvider extends MapProvider {
 			return false;
 		}
 
-		// Use goMap jQuery plugin for compatibility
-		const $map = jQuery(`#${this.elementId}`);
-		if (!$map.length) {
+		// Get map element
+		const mapElement = document.getElementById(this.elementId);
+		if (!mapElement) {
 			console.error(`Map element #${this.elementId} not found`);
 			return false;
 		}
 
-		$map.goMap({
-			latitude: this.options.latitude || 0,
-			longitude: this.options.longitude || 0,
-			zoom: this.options.zoom || 12,
-			maptype: this.options.maptype || 'ROADMAP',
-			streetViewControl: this.options.streetViewControl !== false,
-			scrollwheel: this.options.scrollwheel !== false,
-			...this.options.goMapOptions
+		// Create map directly with Leaflet API
+		this.map = L.map(this.elementId, {
+			center: [
+				parseFloat(this.options.latitude) || 0,
+				parseFloat(this.options.longitude) || 0
+			],
+			zoom: parseInt(this.options.zoom) || 12,
+			scrollWheelZoom: this.options.scrollwheel !== false,
+			...this.options.mapOptions
 		});
 
-		// Store reference to the map
-		this.map = jQuery.goMap.map;
+		// Add OpenStreetMap tile layer
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+			maxZoom: 19
+		}).addTo(this.map);
 
 		return true;
 	}
@@ -48,17 +51,34 @@ export class OSMMapProvider extends MapProvider {
 	 * Create a marker
 	 */
 	createMarker(options) {
-		const marker = jQuery.goMap.createMarker({
-			latitude: options.lat || options.latitude,
-			longitude: options.lng || options.longitude,
-			id: options.id || `marker_${Date.now()}`,
-			icon: options.icon,
+		const lat = parseFloat(options.lat || options.latitude) || 0;
+		const lng = parseFloat(options.lng || options.longitude) || 0;
+
+		const markerOptions = {
 			draggable: options.draggable !== false,
-			title: options.title || '',
-			addToMap: true,
-			w: options.w,
-			h: options.h
-		});
+			title: options.title || ''
+		};
+
+		// Add custom icon if provided
+		if (options.icon) {
+			const iconOptions = {
+				iconUrl: options.icon
+			};
+
+			// Add size if provided
+			if (options.w && options.h) {
+				iconOptions.iconSize = [parseInt(options.w), parseInt(options.h)];
+				iconOptions.iconAnchor = [
+					parseInt(options.w) / 2,
+					parseInt(options.h)
+				];
+				iconOptions.popupAnchor = [0, -parseInt(options.h)];
+			}
+
+			markerOptions.icon = L.icon(iconOptions);
+		}
+
+		const marker = L.marker([lat, lng], markerOptions).addTo(this.map);
 
 		this.markers.push(marker);
 		return marker;
