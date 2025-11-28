@@ -872,7 +872,7 @@ function geodir_reorder_post_types() {
  * @return string The post type slug.
  */
 function geodir_cpt_permalink_rewrite_slug( $post_type, $post_type_obj = NULL ) {
-	$slug = GeoDir_Post_types::get_rewrite_slug( $post_type, $post_type_obj );
+	$slug = \AyeCode\GeoDirectory\Core\Utils\PostTypes::get_rewrite_slug( $post_type, $post_type_obj );
 
 	return apply_filters( 'geodir_cpt_permalink_rewrite_slug', $slug, $post_type, $post_type_obj );
 }

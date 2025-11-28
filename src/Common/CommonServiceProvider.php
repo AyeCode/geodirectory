@@ -34,6 +34,14 @@ final class CommonServiceProvider {
 		$post_save_hooks = $container->get( \AyeCode\GeoDirectory\Core\PostSaveHooks::class );
 		$post_save_hooks->hook();
 
+		// Register permalink rewrite rules and URL filters.
+		$permalinks = $container->get( PermalinkRewriteManager::class );
+		$permalinks->hook();
+
+		// Register 404 handler.
+		$handler_404 = $container->get( Permalink404Handler::class );
+		$handler_404->hook();
+
 		// Other common hooks from your old class.
 		add_action( 'geodir_flush_rewrite_rules', [ $this, 'flush_rewrite_rules' ] );
 		add_filter( 'use_block_editor_for_post_type', [ $this, 'disable_gutenberg' ], 10, 2 );

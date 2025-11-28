@@ -35,5 +35,9 @@ final class AdminServiceProvider {
 		// @todo Create the Setup.php class.
 		$setup = new Setup();
 		$setup->register_hooks();
+
+		// Register permalink settings page integration.
+		$permalink_settings = geodirectory()->container()->get( \AyeCode\GeoDirectory\Admin\Settings\PermalinkSettings::class );
+		add_action( 'admin_init', [ $permalink_settings, 'settings_init' ] );
 	}
 }

@@ -78,9 +78,49 @@ final class Locations implements LocationsInterface { // <-- Renamed to plural a
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Get location data for a specific post.
+	 *
+	 * Accepts either a post ID or a post object with location data already loaded.
+	 * If multi-city is enabled, extracts location from the post data.
+	 * Otherwise returns the default location.
+	 *
+	 * @param int|object $post_or_id Post ID or post object with location data.
+	 * @return LocationData Location data object.
 	 */
-	public function get_for_post( int $post_id ): LocationData {
+	public function get_for_post( $post_or_id ): LocationData {
+		// If multi-city is enabled, extract location from post data
+		if ( $this->core_multi_city() ) {
+			// Handle post object with location data already loaded
+			if ( is_object( $post_or_id ) ) {
+				$gd_post = $post_or_id;
+			} else {
+				// If just an ID, get the post info
+				$gd_post = geodir_get_post_info( (int) $post_or_id );
+			}
+
+			if ( empty( $gd_post ) ) {
+				return $this->get_default();
+			}
+
+			$location = new LocationData();
+
+			// Names
+			$location->city = ! empty( $gd_post->city ) ? stripslashes( $gd_post->city ) : '';
+			$location->region = ! empty( $gd_post->region ) ? stripslashes( $gd_post->region ) : '';
+			$location->country = ! empty( $gd_post->country ) ? stripslashes( $gd_post->country ) : '';
+
+			// Slugs
+			$location->city_slug = $location->city ? sanitize_title( $location->city ) : '';
+			$location->region_slug = $location->region ? sanitize_title( $location->region ) : '';
+			$location->country_slug = $location->country ? sanitize_title( $location->country ) : '';
+
+			// GPS
+			$location->latitude = ! empty( $gd_post->latitude ) ? (float) $gd_post->latitude : 0.0;
+			$location->longitude = ! empty( $gd_post->longitude ) ? (float) $gd_post->longitude : 0.0;
+
+			return $location;
+		}
+
 		return $this->get_default();
 	}
 

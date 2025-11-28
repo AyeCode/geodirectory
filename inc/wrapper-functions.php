@@ -28,11 +28,6 @@ function geodir_get_posttypes( $output = 'names' ) {
 }
 
 
-function geodir_get_option($key = '', $default = false ){
-	return geodirectory()->settings->get($key, $default);
-}
-
-
 /**
  * Get custom field using key and value.
  *

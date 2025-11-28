@@ -60,6 +60,7 @@ require_once __DIR__ . '/inc/formatting-functions.php';
 require_once __DIR__ . '/inc/post-types-functions.php';
 require_once __DIR__ . '/inc/post-functions.php';
 require_once __DIR__ . '/inc/field-conditional-functions.php';
+require_once __DIR__ . '/inc/admin-settings-functions.php';
 
 // 2. Define essential constants.
 define( 'GEODIRECTORY_VERSION', '3.0.0' );
@@ -133,6 +134,11 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Common\TaxonomiesRegistrar::class );
 	$container->bind( \AyeCode\GeoDirectory\Common\PostStatusesRegistrar::class );
 	$container->bind( \AyeCode\GeoDirectory\Common\Assets::class );
+	$container->bind( \AyeCode\GeoDirectory\Common\PermalinkRewriteManager::class );
+	$container->bind( \AyeCode\GeoDirectory\Common\Permalink404Handler::class );
+
+	// Admin Services
+	$container->bind( \AyeCode\GeoDirectory\Admin\Settings\PermalinkSettings::class );
 
 	// Frontend Services (Rendering & Hooks)
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewForm::class );
