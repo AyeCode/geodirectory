@@ -3,8 +3,8 @@ Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 5.0
-Tested up to: 6.8
-Stable tag: 2.8.143
+Tested up to: 6.9
+Stable tag: 2.8.144
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -318,6 +318,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 == Changelog ==
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
+
+= GeoDirectory v2.8.144 - 2025-12-04 =
+* WordPress 6.9 compatibility check - COMPATIBILITY
 
 = GeoDirectory v2.8.143 - 2025-11-27 =
 * Archive Item template don't render when setup with Oxygen builder - FIXED
