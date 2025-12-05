@@ -254,7 +254,7 @@ function geodir_array_to_schema( $schema_input ) {
 	if ( empty( $schema_input ) || ! is_array( $schema_input ) ) {
 		return $schema_input;
 	}
-	
+
 	$schema_hours = ! empty( $schema_input['hours'] ) ? $schema_input['hours'] : NULL;
 	if ( empty( $schema_hours ) || ! is_array( $schema_hours ) ) {
 		return $schema_input;
@@ -291,7 +291,7 @@ function geodir_array_to_schema( $schema_input ) {
 	$property[] = '["UTC":"' . $offset . '","Timezone":"' . $timezone_string . '"]';
 
 	$schema = implode( ",", $property );
-	
+
 	return $schema;
 }
 
@@ -335,7 +335,7 @@ function geodir_schema_to_array( $schema, $country = '' ) {
 									$period = $property[ $day_name ];
 								}
 								$period = array_map("unserialize", array_unique(array_map("serialize", $period)));
-								
+
 								$properties[ $day_name ] = $period;
 							}
 						}
@@ -343,7 +343,7 @@ function geodir_schema_to_array( $schema, $country = '' ) {
 				}
 			}
 		}
-		
+
 		if ( ! empty( $properties ) ) {
 			$return['hours'] = $properties;
 		}
@@ -415,10 +415,10 @@ function geodir_parse_property( $str ) {
 
 	if ( ! empty( $arr[0] ) && ! empty( $arr[1] ) ) {
 		$days = geodir_parse_days( $arr[0] );
-		
+
 		if ( ! empty( $days ) ) {
 			$hours = geodir_parse_hours( $arr[1] );
-			
+
 			if ( ! empty( $hours ) ) {
 				foreach ( $days as $day ) {
 					$property[$day] = $hours;
@@ -426,7 +426,7 @@ function geodir_parse_property( $str ) {
 			}
 		}
 	}
-	
+
 	return $property;
 }
 
@@ -442,7 +442,7 @@ function geodir_parse_days( $days_str ) {
 	$days_names = array_values( geodir_day_short_names() );
 	$days_str = trim( $days_str );
 	$days_arr = explode( ',', $days_str );
-	
+
 	$return = array();
 	if ( ! empty( $days_arr ) ) {
 		foreach ( $days_arr as $day ) {
@@ -458,7 +458,7 @@ function geodir_parse_days( $days_str ) {
 				}
 			}
 		}
-		
+
 		if ( ! empty( $return ) ) {
 			$return = array_unique( $return );
 		}
@@ -478,7 +478,7 @@ function geodir_parse_days_range( $days_str ) {
 	$days_names = geodir_day_short_names();
 	$day_nos = array_flip( $days_names );
 	$days_arr = explode( '-', $days_str );
-	
+
 	$start = 0;
 	$end = 0;
 	if ( ! empty( $days_arr[0] ) && isset( $day_nos[trim( $days_arr[0] )] ) ) {
@@ -487,12 +487,12 @@ function geodir_parse_days_range( $days_str ) {
 	if ( ! empty( $days_arr[1] ) && isset( $day_nos[trim( $days_arr[1] )] ) ) {
 		$end = (int)$day_nos[trim( $days_arr[1] )];
 	}
-	
+
 	$return = array();
 	if ( ! empty( $start ) && ! empty( $end ) ) {
 		$start_no = min($start, $end);
 		$end_no = max($start, $end);
-		
+
 		for ( $i = $start_no; $i <= $end_no; $i++ ) {
 			if ( isset( $days_names[ $i ] ) ) {
 				$return[] = $days_names[ $i ];
@@ -514,13 +514,13 @@ function geodir_parse_days_range( $days_str ) {
 function geodir_parse_hours( $hours_str ) {
 	$hours_str = trim( $hours_str );
 	$hours_arr = explode( ',', $hours_str );
-	
+
 	$return = array();
 	if ( ! empty( $hours_arr ) ) {
 		foreach ( $hours_arr as $hour ) {
 			$hour = trim( $hour );
 			$range = geodir_parse_hours_range( $hour );
-			
+
 			if ( ! empty( $range[0] ) && ! empty( $range[1] ) ) {
 				$return[] = array( 'opens' => $range[0], 'closes' => $range[1] );
 			}
@@ -539,7 +539,7 @@ function geodir_parse_hours( $hours_str ) {
  */
 function geodir_parse_hours_range( $hours_str ) {
 	$hours_arr = explode( '-', $hours_str );
-	
+
 	$return = array();
 	if ( ! empty( $hours_arr[0] ) ) {
 		$opens = trim( $hours_arr[0] );
@@ -565,7 +565,7 @@ function geodir_get_business_hours( $value = '', $country = '' ) {
 	if ( empty( $value ) ) {
 		return NULL;
 	}
-	
+
 	if ( ! is_array( $value ) ) {
 		$data = geodir_schema_to_array( stripslashes_deep( $value ), $country );
 	} else {
@@ -637,7 +637,7 @@ function geodir_get_business_hours( $value = '', $country = '' ) {
 
 					$minutes = array( geodir_hhmm_to_bh_minutes( $opens, $day_no ), geodir_hhmm_to_bh_minutes( $closes, $day_no ) );
 
-					$_range = array( 
+					$_range = array(
 						'slot' => $opens . '-' . $closes,
 						'range' => $range,
 						'open' => $is_open,
@@ -663,13 +663,13 @@ function geodir_get_business_hours( $value = '', $country = '' ) {
 							} elseif ( $_open_utc >= $max ) {
 								$open_utc = $_open_utc - $max;
 							}
-							
+
 							$close_utc = $open_utc + $diff;
 						} else {
 							$open_utc = $minutes[0];
 							$close_utc = $minutes[1];
 						}
-						
+
 						$_range['utc_minutes'] = array( $open_utc, $close_utc );
 
 						// UTC + DST
@@ -707,7 +707,7 @@ function geodir_get_business_hours( $value = '', $country = '' ) {
 				}
 				$closed = 1;
 				$range = $closed_label;
-				$ranges[] = array( 
+				$ranges[] = array(
 					'slot' => NULL,
 					'range' => $closed_label,
 					'open' => 0,
@@ -715,7 +715,7 @@ function geodir_get_business_hours( $value = '', $country = '' ) {
 					'minutes' => array()
 				);
 			}
-			
+
 			$values['today'] = $is_today;
 			$values['closed'] = $closed;
 			$values['open'] = $is_open;
@@ -723,10 +723,10 @@ function geodir_get_business_hours( $value = '', $country = '' ) {
 			$values['day_short'] = $day_short;
 			$values['day_no'] = $day_nos[$day];
 			$values['slots'] = $ranges;
-			
+
 			$day_slots[$day] = $values;
 		}
-		
+
 		$date = date_i18n( 'Y-m-d', $timestamp );
 		$date_format = date_i18n( $date_format, $timestamp );
 		$time_format = date_i18n( $time_format, $timestamp );
@@ -855,7 +855,7 @@ function geodir_sanitize_business_hours_value( $value, $gd_post, $custom_field, 
 
 			if ( ! empty( $gd_post['country'] ) ) {
 				$country = $gd_post['country'];
-			} elseif ( GeoDir_Post_types::supports( $post->post_type, 'location' ) ) {
+			} elseif ( geodirectory()->post_types->supports( $post->post_type, 'location' ) ) {
 				$country = geodir_get_post_meta( $post_id, 'country', true );
 			} else {
 				$country = geodir_get_option( 'default_location_country' );
@@ -1291,7 +1291,7 @@ function geodir_offset_to_timezone_string( $offset, $country = '' ) {
 }
 
 function geodir_timezone_countries() {
-	return apply_filters( 'geodir_timezone_countries', 
+	return apply_filters( 'geodir_timezone_countries',
 	array(
 		'-12:00' => array(
 			array( 'c' => 'United States', 'z' => 'Pacific/Midway' )

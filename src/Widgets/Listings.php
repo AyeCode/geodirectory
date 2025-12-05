@@ -1195,7 +1195,7 @@ class Listings extends \WP_Super_Duper {
 			$title .= ' ' . __( geodir_get_post_type_plural_label( $post_type ), 'geodirectory' );
 		}
 
-		$location_allowed = GeoDir_Post_types::supports( $post_type, 'location' );
+		$location_allowed = geodirectory()->post_types->supports( $post_type, 'location' ) ;
 		$nearby_gps       = false;
 
 		if ( $location_allowed && $add_location_filter && ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) && geodir_is_page( 'location' ) ) {

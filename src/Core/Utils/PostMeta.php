@@ -179,7 +179,7 @@ final class PostMeta {
 
 		if ( empty( $post_type ) ) {
 			$post_type = 'gd_place';
-		} elseif ( class_exists( 'GeoDir_Post_types' ) && ! \GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+		} elseif ( class_exists( 'GeoDir_Post_types' ) && ! \geodirectory()->post_types->supports( $post_type, 'location' )  ) {
 			return [];
 		}
 

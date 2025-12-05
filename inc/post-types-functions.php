@@ -687,48 +687,7 @@ function geodir_get_current_posttype() {
  * @return bool|null|string Returns default sort results, when the post type is valid. Otherwise returns false.
  */
 function geodir_get_posts_default_sort( $post_type ) {
-	global $wpdb;
-
-	// Check cache.
-	$cache = wp_cache_get( "geodir_get_posts_default_sort_{$post_type}" );
-	if ( $cache !== false ) {
-		return $cache;
-	}
-
-	$default_sort = '';
-
-	if ( $post_type != '' ) {
-		$all_postypes = geodir_get_posttypes();
-
-		if ( ! in_array( $post_type, $all_postypes ) ) {
-			return false;
-		}
-
-		$field = $wpdb->get_row( $wpdb->prepare( "SELECT field_type, htmlvar_name, sort FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND is_active = %d AND is_default = %d", array( $post_type, 1, 1 ) ) );
-
-		if ( ! empty( $field ) ) {
-			if ( $field->field_type == 'random' ) {
-				$default_sort = 'random';
-			} else {
-				$default_sort = $field->htmlvar_name . '_' . $field->sort;
-			}
-		}
-
-		/**
-		 * Filter post default sort options.
-		 *
-		 * @since 2.2.4
-		 *
-		 * @param string $default_sort Default sort.
-		 * @param string $post_type The post type.
-		 * @param object $field Field object.
-		 */
-		$default_sort = apply_filters( 'geodir_get_posts_default_sort_by', $default_sort, $post_type, $field );
-	}
-
-	wp_cache_set("geodir_get_posts_default_sort_{$post_type}", $default_sort );
-
-	return $default_sort;
+	return geodirectory()->post_types->get_default_sort( $post_type );
 }
 
 /**
@@ -743,40 +702,7 @@ function geodir_get_posts_default_sort( $post_type ) {
  * @return bool|mixed|void Returns sort results, when the post type is valid. Otherwise returns false.
  */
 function geodir_get_sort_options( $post_type ) {
-    global $wpdb;
-
-    // check cache
-    $cache = wp_cache_get("geodir_get_sort_options_{$post_type}");
-    if($cache !== false){
-        return $cache;
-    }
-
-    if ( $post_type != '' ) {
-        $all_postypes = geodir_get_posttypes();
-
-        if ( ! in_array( $post_type, $all_postypes ) ) {
-            return false;
-        }
-
-        $sort_field_info = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type=%s AND is_active=%d AND field_type != 'address' AND tab_parent = '0' ORDER BY sort_order ASC", array(
-            $post_type,
-            1
-        ) ) );
-
-        /**
-         * Filter post sort options.
-         *
-         * @since 1.0.0
-         *
-         * @param array $sort_field_info Unfiltered sort field array.
-         * @param string $post_type      Post type.
-         */
-        $sort_field_info = apply_filters( 'geodir_get_sort_options', $sort_field_info, $post_type );
-
-        wp_cache_set("geodir_get_sort_options_{$post_type}", $sort_field_info );
-
-        return $sort_field_info;
-    }
+   return geodirectory()->post_types->get_sort_options( $post_type );
 }
 
 /**

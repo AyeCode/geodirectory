@@ -38,6 +38,11 @@ final class FrontendServiceProvider {
 		$post_hooks = $container->get( PostHooks::class );
 		$post_hooks->register_hooks();
 
+		// --- Query System ---
+		// Get the Query class from the container and register its hooks.
+		$query = $container->get( Query::class );
+		$query->register_hooks();
+
 //		// --- Review System ---
 //		// Register all the classes for our new review system.
 //		// The container is smart enough to figure out the dependencies.

@@ -120,6 +120,7 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Taxonomies::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostSaveService::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\PostSaveHooks::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\QueryVars::class );
 
 	// Fields Service
 	$container->bind( \AyeCode\GeoDirectory\Fields\FieldsService::class );
@@ -130,6 +131,16 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\CustomFieldRepository::class );
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\AttachmentRepository::class );
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\PostRepository::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Repository\SortRepository::class );
+
+	// Query Builders
+	$container->bind( \AyeCode\GeoDirectory\Database\Query\Builders\FieldsBuilder::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Query\Builders\JoinBuilder::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Query\Builders\WhereBuilder::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Query\Builders\GroupByBuilder::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Query\Builders\OrderByBuilder::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Query\Builders\HavingBuilder::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Query\QueryBuilder::class );
 
 	// Common Services (CPTs, Taxonomies, etc.)
 	$container->bind( \AyeCode\GeoDirectory\Common\CptConfig::class );
@@ -148,6 +159,7 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\PostHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\Ajax\FileUploadAction::class );
+	$container->bind( \AyeCode\GeoDirectory\Frontend\Query::class );
 
 	// Service Providers (Orchestrators)
 	$container->bind( \AyeCode\GeoDirectory\Common\CommonServiceProvider::class );

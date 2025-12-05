@@ -262,7 +262,7 @@ class PostRating extends \WP_Super_Duper {
 		global $aui_bs5, $post, $gd_post;
 
 		// Check comments are disabled.
-		if ( ! geodir_is_block_demo() && ! ( ! empty( $gd_post ) && ! empty( $gd_post->post_type ) && GeoDir_Post_types::supports( $gd_post->post_type, 'comments' ) ) ) {
+		if ( ! geodir_is_block_demo() && ! ( ! empty( $gd_post ) && ! empty( $gd_post->post_type ) && geodirectory()->post_types->supports( $gd_post->post_type, 'comments' ) ) ) {
 			return;
 		}
 

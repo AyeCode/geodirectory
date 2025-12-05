@@ -248,7 +248,7 @@ class PostDistance extends \WP_Super_Duper {
 								'longitude'  => $gd_post->longitude,
 							);
 
-							if ( $main_post && GeoDir_Post_types::supports( get_post_type( $main_post ), 'location' ) ) {
+							if ( $main_post && geodirectory()->post_types->supports( get_post_type( $main_post ), 'location' ) ) {
 								$point2 = array(
 									'latitude'  => geodir_get_post_meta( $main_post,'latitude', true ),
 									'longitude'  => geodir_get_post_meta( $main_post,'longitude', true ),

@@ -117,6 +117,75 @@ geodirectory()->locations->split_uk();
 
 ---
 
+## `geodirectory()->query_vars`
+**Class:** `AyeCode\GeoDirectory\Core\Services\QueryVars`
+
+This service handles parsing and sanitizing query variables from WordPress query vars and HTTP requests. It provides centralized access to search, location, and GeoDirectory-specific query parameters.
+
+```php
+/**
+ * Get latitude and longitude from query vars or request.
+ * Checks for lat/lon in WP query var 'latlon' (comma-separated)
+ * or $_REQUEST params 'sgeo_lat' and 'sgeo_lon'.
+ * @return array Array with 'lat' and 'lon' keys, empty strings if not found.
+ */
+geodirectory()->query_vars->get_latlon();
+
+/**
+ * Retrieve a query variable from WP query vars or $_REQUEST.
+ * Checks WP query vars first, then falls back to $_REQUEST.
+ * @param string $var The variable key to retrieve.
+ * @param mixed $default Optional. Value to return if not found. Default empty string.
+ * @return mixed The query variable value, sanitized if from $_REQUEST.
+ */
+geodirectory()->query_vars->get( 'snear', '' );
+
+/**
+ * Get search distance from request or settings.
+ * @return float Search radius distance.
+ */
+geodirectory()->query_vars->get_search_distance();
+
+/**
+ * Get search near location value.
+ * @return string Near location search term.
+ */
+geodirectory()->query_vars->get_search_near();
+
+/**
+ * Get search keyword.
+ * @return string Search keyword.
+ */
+geodirectory()->query_vars->get_search_term();
+
+/**
+ * Check if search is an exact match search (wrapped in quotes).
+ * @param string $search_term The search term to check.
+ * @return bool True if exact search.
+ */
+geodirectory()->query_vars->is_exact_search( 'pizza' );
+
+/**
+ * Get post categories from search request.
+ * @return array Array of category IDs.
+ */
+geodirectory()->query_vars->get_search_categories();
+
+/**
+ * Get post type from search request.
+ * @return string Post type slug.
+ */
+geodirectory()->query_vars->get_search_post_type();
+
+/**
+ * Get sort by parameter.
+ * @return string Sort by parameter.
+ */
+geodirectory()->query_vars->get_sort_by();
+```
+
+---
+
 ## `geodirectory()->geolocation`
 **Class:** `AyeCode\GeoDirectory\Core\Geolocation`
 

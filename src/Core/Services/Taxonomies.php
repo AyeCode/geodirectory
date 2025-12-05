@@ -289,7 +289,7 @@ final class Taxonomies {
 			if ( isset( $terms_icons[ $term_id ] ) ) {
 				return $terms_icons[ $term_id ];
 			} else {
-				return \GeoDir_Maps::default_marker_icon( true );
+				return geodirectory()->maps->default_marker_icon( true );
 			}
 		}
 
@@ -647,7 +647,7 @@ final class Taxonomies {
 		$cat_icon = is_array( $term_meta ) && ! empty( $term_meta['src'] ) ? $term_meta['src'] : '';
 
 		if ( ! $cat_icon && $default ) {
-			$cat_icon = \GeoDir_Maps::default_marker_icon( $full_path );
+			$cat_icon = geodirectory()->maps->default_marker_icon( $full_path );
 		}
 
 		if ( $cat_icon && $full_path ) {

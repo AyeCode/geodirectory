@@ -45,6 +45,85 @@ final class SortRepository {
 	}
 
 	/**
+	 * Gets active sort options for a given post type.
+	 *
+	 * Returns sort fields that are active, not address type, and not child fields.
+	 *
+	 * @param string $post_type The post type slug.
+	 * @return array Array of sort field objects.
+	 */
+	public function get_active_sort_options( string $post_type ): array {
+		$results = $this->db->get_results(
+			$this->db->prepare(
+				"SELECT * FROM {$this->table_name} WHERE post_type = %s AND is_active = %d AND field_type != 'address' AND tab_parent = '0' ORDER BY sort_order ASC",
+				$post_type,
+				1
+			),
+			OBJECT
+		);
+		return $results ? $results : [];
+	}
+
+	/**
+	 * Gets the default sort field for a given post type.
+	 *
+	 * @param string $post_type The post type slug.
+	 * @return object|null The default sort field object or null if not found.
+	 */
+	public function get_default_sort_field( string $post_type ): ?object {
+		$result = $this->db->get_row(
+			$this->db->prepare(
+				"SELECT field_type, htmlvar_name, sort FROM {$this->table_name} WHERE post_type = %s AND is_active = %d AND is_default = %d",
+				$post_type,
+				1,
+				1
+			)
+		);
+		return $result ? $result : null;
+	}
+
+	/**
+	 * Gets the parent sort field ID by htmlvar_name, sort order, post type, and parent ID.
+	 *
+	 * @param string $htmlvar_name The HTML variable name.
+	 * @param string $order        The sort order ('asc' or 'desc').
+	 * @param string $post_type    The post type slug.
+	 * @param int    $parent       The parent ID. Default 0.
+	 * @return int|null The parent sort field ID or null if not found.
+	 */
+	public function get_parent_id_by_htmlvar( string $htmlvar_name, string $order, string $post_type, int $parent = 0 ): ?int {
+		$result = $this->db->get_var(
+			$this->db->prepare(
+				"SELECT id FROM {$this->table_name} WHERE htmlvar_name = %s AND sort = %s AND post_type = %s AND tab_parent = %d",
+				$htmlvar_name,
+				$order,
+				$post_type,
+				$parent
+			)
+		);
+		return $result ? (int) $result : null;
+	}
+
+	/**
+	 * Gets child sort fields for a given post type and parent ID.
+	 *
+	 * @param string $post_type The post type slug.
+	 * @param int    $parent_id The parent sort field ID.
+	 * @return array Array of child sort field objects.
+	 */
+	public function get_children_by_parent( string $post_type, int $parent_id ): array {
+		$results = $this->db->get_results(
+			$this->db->prepare(
+				"SELECT * FROM {$this->table_name} WHERE post_type = %s AND tab_parent = %d ORDER BY sort_order ASC",
+				$post_type,
+				$parent_id
+			),
+			OBJECT
+		);
+		return $results ? $results : [];
+	}
+
+	/**
 	 * Synchronizes the tabs in the database with the provided data array.
 	 *
 	 * This method intelligently handles updates for existing tabs, inserts for new tabs,

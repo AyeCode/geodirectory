@@ -100,7 +100,7 @@ class DummyDataService
 		}
 
 		$post_info = $data['dummy_posts'][$post_index];
-		if (\GeoDir_Post_types::supports($post_type, 'location')) {
+		if (\geodirectory()->post_types->supports($post_type, 'location')) {
 			$post_info = $this->generate_dummy_address($post_info, $location_data);
 		}
 		$post_info['post_status'] = 'publish';

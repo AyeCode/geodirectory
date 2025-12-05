@@ -669,7 +669,7 @@ class Map extends \WP_Super_Duper {
 		$latitude = ! empty( $current_location->latitude ) ? $current_location->latitude : '';
 		$longitude = ! empty( $current_location->longitude ) ? $current_location->longitude : '';
 
-		if ( ! ( ! empty( $latitude ) && ! empty( $longitude ) ) && geodir_is_page( 'search' ) && ( $near_lat = GeoDir_Query::get_query_var( 'sgeo_lat' ) ) && ( $near_lon = GeoDir_Query::get_query_var( 'sgeo_lon' ) ) ) {
+		if ( ! ( ! empty( $latitude ) && ! empty( $longitude ) ) && geodir_is_page( 'search' ) && ( $near_lat = geodirectory()->query_vars->get( 'sgeo_lat' ) ) && ( $near_lon = geodirectory()->query_vars->get( 'sgeo_lon' ) ) ) {
 			$latitude = geodir_sanitize_float( $near_lat );
 			$longitude = geodir_sanitize_float( $near_lon );
 		}
@@ -678,7 +678,7 @@ class Map extends \WP_Super_Duper {
 			$map_args['lat'] = $latitude;
 			$map_args['lon'] = $longitude;
 
-			if ( ( GeoDir_Query::get_query_var( 'snear' ) || GeoDir_Query::get_query_var( 'near' ) ) && ( $distance = geodir_sanitize_float( GeoDir_Query::get_query_var( 'dist' ) ) ) ) {
+			if ( ( geodirectory()->query_vars->get( 'snear' ) || geodirectory()->query_vars->get( 'near' ) ) && ( $distance = geodir_sanitize_float( geodirectory()->query_vars->get( 'dist' ) ) ) ) {
 				$map_args['dist'] = $distance;
 			}
 		} elseif ( geodir_core_multi_city() ) { /* Core multi city */
@@ -805,7 +805,7 @@ class Map extends \WP_Super_Duper {
 					continue;
 				}
 
-				if ( ! GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+				if ( ! geodirectory()->post_types->supports( $post_type, 'location' )  ) {
 					continue;
 				}
 
@@ -1115,7 +1115,7 @@ jQuery(function ($) {
 		} elseif ( ! empty( $geodirectory->location ) && ! empty( $geodirectory->location->latitude ) && ! empty( $geodirectory->location->longitude ) ) {
 			$nomap_lat = $geodirectory->location->latitude;
 			$nomap_lng = $geodirectory->location->longitude;
-		} elseif ( ( $_nomap_lat = GeoDir_Query::get_query_var( 'sgeo_lat' ) ) && ( $_nomap_lng = GeoDir_Query::get_query_var( 'sgeo_lon' ) ) ) {
+		} elseif ( ( $_nomap_lat = geodirectory()->query_vars->get( 'sgeo_lat' ) ) && ( $_nomap_lng = geodirectory()->query_vars->get( 'sgeo_lon' ) ) ) {
 			$nomap_lat = $_nomap_lat;
 			$nomap_lng = $_nomap_lng;
 		} else {

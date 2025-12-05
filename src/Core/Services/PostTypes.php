@@ -13,6 +13,7 @@ declare( strict_types = 1 );
 namespace AyeCode\GeoDirectory\Core\Services;
 
 use AyeCode\GeoDirectory\Core\Services\Settings;
+use AyeCode\GeoDirectory\Database\Repository\SortRepository;
 
 /**
  * Post Types service class.
@@ -49,12 +50,21 @@ final class PostTypes {
 	private Settings $settings;
 
 	/**
+	 * Sort repository.
+	 *
+	 * @var SortRepository
+	 */
+	private SortRepository $sort_repository;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Settings $settings The settings service.
+	 * @param SortRepository $sort_repository The sort repository.
 	 */
-	public function __construct( Settings $settings ) {
+	public function __construct( Settings $settings, SortRepository $sort_repository ) {
 		$this->settings = $settings;
+		$this->sort_repository = $sort_repository;
 	}
 
 	/**
@@ -290,14 +300,12 @@ final class PostTypes {
 	 * Returns default sorting order of a post type.
 	 *
 	 * @since 1.0.0
-	 * @since 3.0.0 Moved to PostTypes service.
+	 * @since 3.0.0 Moved to PostTypes service. Refactored to use SortRepository.
 	 *
 	 * @param string $post_type The post type.
 	 * @return bool|null|string Returns default sort results, when the post type is valid. Otherwise returns false.
 	 */
 	public function get_default_sort( string $post_type ) {
-		global $wpdb;
-
 		// Check cache.
 		$cache = wp_cache_get( "geodir_get_posts_default_sort_{$post_type}" );
 		if ( $cache !== false ) {
@@ -313,7 +321,7 @@ final class PostTypes {
 				return false;
 			}
 
-			$field = $wpdb->get_row( $wpdb->prepare( "SELECT field_type, htmlvar_name, sort FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND is_active = %d AND is_default = %d", array( $post_type, 1, 1 ) ) );
+			$field = $this->sort_repository->get_default_sort_field( $post_type );
 
 			if ( ! empty( $field ) ) {
 				if ( $field->field_type == 'random' ) {
@@ -344,15 +352,13 @@ final class PostTypes {
 	 * Returns sort options of a post type.
 	 *
 	 * @since 1.0.0
-	 * @since 3.0.0 Moved to PostTypes service.
+	 * @since 3.0.0 Moved to PostTypes service. Refactored to use SortRepository.
 	 *
 	 * @param string $post_type The post type.
-	 * @return bool|mixed|void Returns sort results, when the post type is valid. Otherwise returns false.
+	 * @return bool|array Returns sort results, when the post type is valid. Otherwise returns false.
 	 */
 	public function get_sort_options( string $post_type ) {
-		global $wpdb;
-
-		// check cache
+		// Check cache.
 		$cache = wp_cache_get( "geodir_get_sort_options_{$post_type}" );
 		if ( $cache !== false ) {
 			return $cache;
@@ -365,10 +371,7 @@ final class PostTypes {
 				return false;
 			}
 
-			$sort_field_info = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type=%s AND is_active=%d AND field_type != 'address' AND tab_parent = '0' ORDER BY sort_order ASC", array(
-				$post_type,
-				1
-			) ) );
+			$sort_field_info = $this->sort_repository->get_active_sort_options( $post_type );
 
 			/**
 			 * Filter post sort options.
@@ -384,6 +387,8 @@ final class PostTypes {
 
 			return $sort_field_info;
 		}
+
+		return false;
 	}
 
 	/**
@@ -535,5 +540,17 @@ final class PostTypes {
 		}
 
 		geodir_update_option( 'post_types', $save_post_types );
+	}
+
+	/**
+	 * Check a post type's support for a given feature.
+	 *
+	 * @param string $post_type The post type being checked.
+	 * @param string $feature   The feature being checked.
+	 * @param bool $default     Default value.
+	 * @return bool Whether the post type supports the given feature.
+	 */
+	public function supports( $post_type, $feature, $default = true ) {
+		return apply_filters( 'geodir_post_type_supports', $default, $post_type, $feature );
 	}
 }

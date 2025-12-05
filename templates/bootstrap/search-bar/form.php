@@ -71,7 +71,7 @@ global $geodirectory, $aui_bs5;
 		 */
 		do_action( 'geodir_after_search_form', $instance );
 
-		$latlon = $geodirectory->location->get_latlon();
+		$latlon = geodirectory()->query_vars->get_latlon();// $geodirectory->location->get_latlon();
 		$slat = ! empty( $latlon['lat'] ) ? $latlon['lat'] : '';
 		$slon = ! empty( $latlon['lon'] ) ? $latlon['lon'] : '';
 		?>

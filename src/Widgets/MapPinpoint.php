@@ -271,7 +271,7 @@ class MapPinpoint extends \WP_Super_Duper {
 				}
 
 				// Location-less
-				if ( ! GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) || geodir_is_page( 'detail' ) ) {
+				if ( ! geodirectory()->post_types->supports( $gd_post->post_type, 'location' ) || geodir_is_page( 'detail' ) ) {
 					return;
 				}
 			}

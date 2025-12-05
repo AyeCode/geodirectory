@@ -571,7 +571,7 @@ class RecentReviews extends \WP_Super_Duper {
 			$where .= $wpdb->prepare( ' AND p.ID = %s', $post_id );
 		}
 
-		if ( GeoDir_Post_types::supports( $post_type, 'location' ) && $add_location_filter && defined( 'GEODIRLOCATION_VERSION' ) ) {
+		if ( geodirectory()->post_types->supports( $post_type, 'location' )  && $add_location_filter && defined( 'GEODIRLOCATION_VERSION' ) ) {
 			$source         = geodir_is_page( 'search' ) ? 'session' : 'query_vars';
 			$location_terms = \geodir_get_current_location_terms( $source );
 			$country        = ! empty( $location_terms['country'] ) ? get_actual_location_name( 'country', $location_terms['country'] ) : '';

@@ -179,7 +179,7 @@ final class Reviews {
 		}
 
 		// @todo Refactor GeoDir_Post_types::supports into a new service.
-		if ( \GeoDir_Post_types::supports( get_post_type( $post_id ), 'single_review' ) ) {
+		if ( \geodirectory()->post_types->supports( get_post_type( $post_id ), 'single_review' ) ) {
 			$user_id      = get_current_user_id();
 			$author_email = '';
 

@@ -543,7 +543,7 @@ class BestOf extends \WP_Super_Duper {
 		}
 
 		// Set location
-		if ( $is_ajax && $add_location_filter && GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+		if ( $is_ajax && $add_location_filter && geodirectory()->post_types->supports( $post_type, 'location' )  ) {
 			foreach ( $instance as $_key => $_value ) {
 				if ( strpos( $_key, '_gd_set_loc_' ) === 0 && ( $_key = substr( sanitize_text_field( $_key ), 12 ) ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
 					$geodirectory->location->{$_key} = sanitize_text_field( stripslashes( $_value ) );
@@ -722,7 +722,7 @@ class BestOf extends \WP_Super_Duper {
 			<input type="hidden" id="bestof_widget_post_limit" name="bestof_widget_post_limit" value="<?php echo esc_attr( $post_limit ); ?>">
 			<input type="hidden" id="bestof_widget_taxonomy" name="bestof_widget_taxonomy" value="<?php echo esc_attr( $category_taxonomy ); ?>">
 			<input type="hidden" id="bestof_widget_location_filter" name="bestof_widget_location_filter" value="<?php echo (int) $add_location_filter; ?>">
-			<?php if ( $add_location_filter && GeoDir_Post_types::supports( $post_type, 'location' ) && ! empty( $geodirectory->location ) ) { foreach ( $geodirectory->location as $key => $value ) { if ( is_scalar( $value ) || ( ! is_object( $value ) && ! is_array( $value ) ) ) { ?>
+			<?php if ( $add_location_filter && geodirectory()->post_types->supports( $post_type, 'location' )  && ! empty( $geodirectory->location ) ) { foreach ( $geodirectory->location as $key => $value ) { if ( is_scalar( $value ) || ( ! is_object( $value ) && ! is_array( $value ) ) ) { ?>
 			<input type="hidden" data-set-param="1" name="_gd_set_loc_<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>">
 			<?php } } } ?>
 			<input type="hidden" id="bestof_widget_char_count" name="bestof_widget_char_count" value="<?php echo esc_attr( $character_count ); ?>">

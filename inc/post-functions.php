@@ -2065,7 +2065,7 @@ function geodir_post_meta_address_fields( $post_type = 'gd_place' ) {
 
 	if ( empty( $post_type ) ) {
 		$post_type = 'gd_place';
-	} else if ( ! GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+	} else if ( ! geodirectory()->post_types->supports( $post_type, 'location' ) ) {
 		return array();
 	}
 

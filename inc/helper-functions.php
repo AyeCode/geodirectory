@@ -1729,7 +1729,7 @@ function geodir_sort_by_options( $post_type = 'gd_place' ) {
 		"random" => __('Random', 'geodirectory'),
 	);
 
-	if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+	if ( geodirectory()->post_types->supports( $post_type, 'location' ) ) {
 		$options['distance_asc'] = __('Distance to current post (details page only)', 'geodirectory');
 	}
 

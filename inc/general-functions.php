@@ -964,8 +964,9 @@ function geodir_widget_listings_get_order( $deprecated = '') {
 
 	$sort_by = ! empty( $query_args['order_by'] ) ? $query_args['order_by'] : '';
 
-	$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
-	$orderby = GeoDir_Query::sort_by_children( $orderby, $sort_by, $post_type );
+	$orderby_builder = geodirectory()->container()->get( \AyeCode\GeoDirectory\Database\Query\Builders\OrderByBuilder::class );
+	$orderby = $orderby_builder->sort_by_sql( $sort_by, $post_type );
+	$orderby = $orderby_builder->sort_by_children( $orderby, $sort_by, $post_type, null );
 
 	// Add secondary sort for nearest filter.
 	if ( ! empty( $query_args['nearby_gps'] ) && strpos( $orderby, 'distance ' ) === false ) {
@@ -1002,9 +1003,9 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$table     = geodir_db_cpt_table( $post_type );
 
 	// check if this is a GPS filtered query
-	$query_args['supports_location'] = $post_type  && GeoDir_Post_types::supports( $post_type , 'location' );
+	$query_args['supports_location'] = $post_type  && geodirectory()->post_types->supports( $post_type, 'location' );
 
-	if ( ! empty( $query_args['supports_location'] ) && ( $latlon = $geodirectory->location->get_latlon() ) && ! empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' )  ) {
+	if ( ! empty( $query_args['supports_location'] ) && ( $latlon = geodirectory()->query_vars->get_latlon() ) && ! empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' )  ) {
 		$query_args['is_gps_query'] = true;
 		$query_args['order_by'] = 'distance_asc';
 	}
@@ -1152,7 +1153,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 					$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
 				}
 
-				if ( GeoDir_Post_types::supports( $post_type, 'service_distance' ) ) {
+				if ( geodirectory()->post_types->supports( $post_type, 'service_distance' ) ) {
 					$having = $wpdb->prepare( " HAVING ( ( `{$table}`.`service_distance` > 0 AND distance <= `{$table}`.`service_distance` ) OR ( ( `{$table}`.`service_distance` <= 0 OR `{$table}`.`service_distance` IS NULL ) AND distance <= %f ) )", $dist );
 				} else {
 					$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
@@ -1265,7 +1266,7 @@ function geodir_function_widget_listings_fields( $fields, $table, $post_type ) {
 	if ( ! empty( $query_args['distance_to_post'] ) && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
 		$latitude = $gd_post->latitude;
 		$longitude = $gd_post->longitude;
-	} else if ( ! empty( $query_args['supports_location'] ) && ( ! empty( $query_args['is_gps_query'] ) || empty( $query_args['nearby_gps'] ) ) && ( $latlon = $geodirectory->location->get_latlon() ) ) {
+	} else if ( ! empty( $query_args['supports_location'] ) && ( ! empty( $query_args['is_gps_query'] ) || empty( $query_args['nearby_gps'] ) ) && ( $latlon = geodirectory()->query_vars->get_latlon() ) ) {
 		$latitude = $latlon['lat'];
 		$longitude = $latlon['lon'];
 	} else if ( ! empty( $query_args['nearby_gps'] ) && ! empty( $query_args['nearby_gps']['latitude'] ) && ! empty( $query_args['nearby_gps']['longitude'] ) ) {
@@ -1383,9 +1384,9 @@ function geodir_function_widget_listings_where( $where ) {
 			$where = geodir_default_location_where( $where, $table );
 		}
 
-		if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+		if ( geodirectory()->post_types->supports( $post_type, 'location' )  ) {
 			// Private address filter
-			if ( $geodirectory->location->get_latlon() && GeoDir_Post_types::supports( $post_type, 'private_address' ) ) {
+			if ( geodirectory()->query_vars->get_latlon() && geodirectory()->post_types->supports( $post_type, 'private_address' ) ) {
 				$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
 			}
 
@@ -1412,7 +1413,7 @@ function geodir_function_widget_listings_where( $where ) {
 						$dist = geodir_sanitize_float( $wp->query_vars['dist'] );
 					}
 
-					if ( GeoDir_Post_types::supports( $post_type, 'service_distance' ) ) {
+					if ( geodirectory()->post_types->supports( $post_type, 'service_distance' ) ) {
 						$where .= $wpdb->prepare( " AND ( ( `service_distance` > 0 AND " . $query_part . " <= `service_distance` ) OR ( ( `service_distance` <= 0 OR `service_distance` IS NULL ) AND " . $query_part . " <= %f ) )", $dist );
 					} else {
 						$where .= $wpdb->prepare( " AND " . $query_part . " <= %f", $dist );
@@ -1425,12 +1426,12 @@ function geodir_function_widget_listings_where( $where ) {
 			$where .= " AND " . $wpdb->posts . ".post_author = " . (int) $query_args['post_author'];
 		}
 
-		if ( ! empty( $query_args['show_featured_only'] ) && GeoDir_Post_types::supports( $post_type, 'featured' ) ) {
+		if ( ! empty( $query_args['show_featured_only'] ) && geodirectory()->post_types->supports( $post_type, 'featured' ) ) {
 			$where .= " AND " . $table . ".featured = '1'";
 		}
 
 		// Special offers
-		if ( ! empty( $query_args['show_special_only'] ) && GeoDir_Post_types::supports( $post_type, 'special_offers' ) ) {
+		if ( ! empty( $query_args['show_special_only'] ) && geodirectory()->post_types->supports( $post_type, 'special_offers' ) ) {
 			$where .= " AND ( " . $table . ".special_offers != '' AND " . $table . ".special_offers IS NOT NULL AND " . $table . ".special_offers !='0' )";
 		}
 

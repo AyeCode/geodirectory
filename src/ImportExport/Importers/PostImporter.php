@@ -175,7 +175,7 @@ class PostImporter implements ImporterInterface
 			unset($post_info['post_tags']);
 		}
 
-		if (\GeoDir_Post_types::supports($post_type, 'location') && geodir_cpt_requires_address($post_type)) {
+		if (\geodirectory()->post_types->supports($post_type, 'location') && geodir_cpt_requires_address($post_type)) {
 			if (empty($post_info['latitude']) || empty($post_info['longitude'])) {
 				$geocoded_info = $this->geocodeAddress($post_info);
 				if (is_wp_error($geocoded_info)) {
