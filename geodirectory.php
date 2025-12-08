@@ -161,6 +161,17 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Frontend\Ajax\FileUploadAction::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\Query::class );
 
+	// Frontend Template System - Block Theme / FSE
+	$container->bind( \AyeCode\GeoDirectory\Frontend\BlockTheme\BlockTemplateRegistry::class );
+	$container->bind( \AyeCode\GeoDirectory\Frontend\BlockTheme\BlockContentRenderer::class );
+	$container->bind( \AyeCode\GeoDirectory\Frontend\BlockTheme\BlockThemeHooks::class );
+
+	// Frontend Template System - Classic Themes
+	$container->bind( \AyeCode\GeoDirectory\Frontend\Templates\TemplateResolver::class );
+	$container->bind( \AyeCode\GeoDirectory\Frontend\Templates\ContentInjector::class );
+	$container->bind( \AyeCode\GeoDirectory\Frontend\Templates\TemplateRestrictions::class );
+	$container->bind( \AyeCode\GeoDirectory\Frontend\Templates\TemplateLoaderHooks::class );
+
 	// Service Providers (Orchestrators)
 	$container->bind( \AyeCode\GeoDirectory\Common\CommonServiceProvider::class );
 	$container->bind( \AyeCode\GeoDirectory\Admin\AdminServiceProvider::class );

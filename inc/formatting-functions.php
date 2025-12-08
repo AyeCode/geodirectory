@@ -17,6 +17,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Stripslashes custom field data.
+ *
+ * @since 2.3.110
+ *
+ * @param array|object $data Field data.
+ * @return array|object Field after stripslashes.
+ */
+function geodir_stripslashes_field( $data ) {
+	if ( empty( $data ) ) {
+		return $data;
+	}
+
+	$_data = $data;
+
+	$data = stripslashes_deep( $data );
+
+	// Don't apply stripslashes to extra_fields.
+	if ( is_array( $_data ) ) {
+		if ( ! empty( $_data['extra_fields'] ) && is_serialized( $_data['extra_fields'] ) ) {
+			$data['extra_fields'] = $_data['extra_fields'];
+		}
+	} else if ( is_object( $_data ) ) {
+		if ( ! empty( $_data->extra_fields ) && is_serialized( $_data->extra_fields ) ) {
+			$data->extra_fields = $_data->extra_fields;
+		}
+	}
+
+	return $data;
+}
+
+/**
  * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
  * Non-scalar values are ignored.
  *
