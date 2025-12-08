@@ -64,6 +64,7 @@ require_once __DIR__ . '/inc/admin-settings-functions.php';
 require_once __DIR__ . '/inc/taxonomy-functions.php';
 require_once __DIR__ . '/inc/admin-functions.php';
 require_once __DIR__ . '/inc/user-functions.php';
+require_once __DIR__ . '/inc/comments-functions.php';
 
 // 2. Define essential constants.
 define( 'GEODIRECTORY_VERSION', '3.0.0' );

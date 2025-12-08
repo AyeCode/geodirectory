@@ -590,7 +590,7 @@ function geodir_get_widgets(){
 		\AyeCode\GeoDirectory\Widgets\PostFeatures::class,
 		\AyeCode\GeoDirectory\Widgets\PostImages::class,
 		\AyeCode\GeoDirectory\Widgets\PostMeta::class,
-//		\AyeCode\GeoDirectory\Widgets\PostRating::class,
+		\AyeCode\GeoDirectory\Widgets\PostRating::class,
 		\AyeCode\GeoDirectory\Widgets\PostTitle::class,
 		\AyeCode\GeoDirectory\Widgets\RecentlyViewed::class,
 		\AyeCode\GeoDirectory\Widgets\RecentReviews::class,

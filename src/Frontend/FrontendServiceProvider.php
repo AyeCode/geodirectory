@@ -47,19 +47,13 @@ final class FrontendServiceProvider {
 		// Register template hooks based on theme type (FSE/Block vs Classic).
 		$this->register_template_hooks( $container );
 
-//		// --- Review System ---
-//		// Register all the classes for our new review system.
-//		// The container is smart enough to figure out the dependencies.
-//		$container->bind( ReviewRepository::class );
-//		$container->bind( Reviews::class );
-//		$container->bind( ReviewForm::class );
-//		$container->bind( ReviewHooks::class );
-//
-//		// Get the main ReviewHooks class from the container.
-//		$review_hooks = $container->get( ReviewHooks::class );
-//
-//		// Tell it to register all the actions and filters for the review system.
-//		$review_hooks->register();
+		// --- Review System ---
+		// Get the main ReviewHooks class from the container.
+		// The container is smart enough to figure out the dependencies.
+		$review_hooks = $container->get( ReviewHooks::class );
+
+		// Tell it to register all the actions and filters for the review system.
+		$review_hooks->register();
 //
 //
 //		// --- SEO System ---
