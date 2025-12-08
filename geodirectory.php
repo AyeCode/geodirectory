@@ -63,6 +63,7 @@ require_once __DIR__ . '/inc/field-conditional-functions.php';
 require_once __DIR__ . '/inc/admin-settings-functions.php';
 require_once __DIR__ . '/inc/taxonomy-functions.php';
 require_once __DIR__ . '/inc/admin-functions.php';
+require_once __DIR__ . '/inc/user-functions.php';
 
 // 2. Define essential constants.
 define( 'GEODIRECTORY_VERSION', '3.0.0' );
@@ -121,6 +122,7 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostSaveService::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\PostSaveHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\QueryVars::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Users::class );
 
 	// Fields Service
 	$container->bind( \AyeCode\GeoDirectory\Fields\FieldsService::class );

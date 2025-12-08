@@ -1868,4 +1868,66 @@ geodirectory()->maps->footer_script();
  */
 geodirectory()->maps->google_map_callback();
 ```
-            
+
+---
+
+## `geodirectory()->users`
+**Class:** `AyeCode\GeoDirectory\Core\Services\Users`
+
+This service handles user-related operations including favorites, listings, and permissions.
+
+```php
+/**
+ * Add a post to the user's favorites list.
+ * @param int $post_id The post ID to add.
+ * @param int $user_id Optional. The user ID. Defaults to current user.
+ * @return bool True on success, false on failure.
+ */
+geodirectory()->users->add_favorite( 123, 0 );
+
+/**
+ * Remove a post from the user's favorites list.
+ * @param int $post_id The post ID to remove.
+ * @param int $user_id Optional. The user ID. Defaults to current user.
+ * @return bool True on success, false on failure.
+ */
+geodirectory()->users->remove_favorite( 123, 0 );
+
+/**
+ * Get the user's favorite posts.
+ * @param int $user_id Optional. The user ID. Defaults to current user.
+ * @return array Array of post IDs that are favorited.
+ */
+geodirectory()->users->get_favorites( 0 );
+
+/**
+ * Get the favorite counts per post type for a user.
+ * @param int $user_id Optional. The user ID. Defaults to current user.
+ * @return array Array of post types with their favorite counts.
+ */
+geodirectory()->users->get_favorite_counts( 0 );
+
+/**
+ * Get the user's post listing counts.
+ * @param int  $user_id     Optional. The user ID. Defaults to current user.
+ * @param bool $unpublished Optional. Include unpublished posts. Default false.
+ * @return array Array of post types with their listing counts.
+ */
+geodirectory()->users->get_listing_counts( 0, false );
+
+/**
+ * Delete a user's post.
+ * @param int $post_id The post ID to delete.
+ * @return bool|\WP_Error True on success, WP_Error on failure.
+ */
+geodirectory()->users->delete_post( 123 );
+
+/**
+ * Check if the current user has a specific capability.
+ * @param string $capability Capability name.
+ * @param array  $args       Optional. Further parameters. Default empty array.
+ * @return bool Whether the current user has the given capability.
+ */
+geodirectory()->users->user_can( 'see_private_address', [ 'post' => 123 ] );
+```
+
