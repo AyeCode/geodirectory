@@ -7,9 +7,11 @@ use AyeCode\GeoDirectory\Fields\Abstracts\AbstractFieldType;
  * Class SelectField
  *
  * Handles Single Select dropdowns.
- * Replaces geodir_cfi_select.
+ * Replaces geodir_cfi_select() and geodir_cf_select().
  */
 class SelectField extends AbstractFieldType {
+
+	use RadioSelectOutputTrait;
 
 	public function render_input() {
 		$args = $this->get_aui_args();

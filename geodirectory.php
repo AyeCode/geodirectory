@@ -60,6 +60,7 @@ require_once __DIR__ . '/inc/formatting-functions.php';
 require_once __DIR__ . '/inc/post-types-functions.php';
 require_once __DIR__ . '/inc/post-functions.php';
 require_once __DIR__ . '/inc/field-conditional-functions.php';
+require_once __DIR__ . '/inc/field-output-functions.php';
 require_once __DIR__ . '/inc/admin-settings-functions.php';
 require_once __DIR__ . '/inc/taxonomy-functions.php';
 require_once __DIR__ . '/inc/admin-functions.php';
@@ -135,6 +136,7 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\AttachmentRepository::class );
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\PostRepository::class );
 	$container->bind( \AyeCode\GeoDirectory\Database\Repository\SortRepository::class );
+	$container->bind( \AyeCode\GeoDirectory\Database\Repository\TabRepository::class );
 
 	// Query Builders
 	$container->bind( \AyeCode\GeoDirectory\Database\Query\Builders\FieldsBuilder::class );
@@ -158,6 +160,7 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Admin\Settings\PermalinkSettings::class );
 
 	// Frontend Services (Rendering & Hooks)
+	$container->bind( \AyeCode\GeoDirectory\Frontend\Renderers\RatingRenderer::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewForm::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\PostHooks::class );

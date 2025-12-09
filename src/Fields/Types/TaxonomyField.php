@@ -7,10 +7,12 @@ use AyeCode_UI_Component_Helper;
 /**
  * Class TaxonomyField
  *
- * Handles Category and Custom Taxonomy inputs.
- * Replaces geodir_cfi_categories and geodir_cfi_taxonomy.
+ * Handles Category and Custom Taxonomy inputs and outputs.
+ * Replaces geodir_cfi_categories(), geodir_cfi_taxonomy(), geodir_cf_taxonomy().
  */
 class TaxonomyField extends AbstractFieldType {
+
+	use TaxonomyFieldOutputTrait;
 
 	public function render_input() {
 		// Admin: Post Tags are handled by WP normally, skip if specifically 'post_tags'

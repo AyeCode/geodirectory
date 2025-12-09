@@ -26,6 +26,7 @@ final class Users {
 	private PostRepository $post_repository;
 	private Settings $settings;
 	private PostTypes $post_types;
+	private Posts $posts;
 
 	/**
 	 * Constructor.
@@ -35,15 +36,18 @@ final class Users {
 	 * @param PostRepository $post_repository The post repository for database access.
 	 * @param Settings       $settings        The settings service.
 	 * @param PostTypes      $post_types      The post types service.
+	 * @param Posts          $posts           The posts service.
 	 */
 	public function __construct(
 		PostRepository $post_repository,
 		Settings $settings,
-		PostTypes $post_types
+		PostTypes $post_types,
+		Posts $posts
 	) {
 		$this->post_repository = $post_repository;
 		$this->settings        = $settings;
 		$this->post_types      = $post_types;
+		$this->posts           = $posts;
 	}
 
 	/**
@@ -299,7 +303,7 @@ final class Users {
 
 				$_args = wp_parse_args( $args, $defaults );
 
-				if ( \GeoDir_Post_Data::has_private_address( $_args['post'] ) ) {
+				if ( $this->posts->has_private_address( $_args['post'] ) ) {
 					if ( ! empty( $_args['author'] ) ) {
 						if ( is_scalar( $_args['post'] ) ) {
 							$post_ID = absint( $_args['post'] );

@@ -2,15 +2,18 @@
 namespace AyeCode\GeoDirectory\Fields\Types;
 
 use AyeCode\GeoDirectory\Fields\Abstracts\AbstractFieldType;
+use AyeCode\GeoDirectory\Fields\Abstracts\AbstractFieldOutput;
 
 /**
  * Class TextField
  *
- * Handles Text, Email, Phone, and URL inputs.
+ * Handles Text, Email, Phone, and URL inputs and outputs.
  *
  * @package AyeCode\GeoDirectory\Fields\Types
  */
 class TextField extends AbstractFieldType {
+
+	use TextFieldOutputTrait;
 
 	public function render_input() {
 		// Don't show title in admin (WP handles it natively)

@@ -10,6 +10,8 @@ use AyeCode\GeoDirectory\Fields\Abstracts\AbstractFieldType;
  */
 class AddressField extends AbstractFieldType {
 
+	use AddressFieldOutputTrait;
+
 	public function render_input() {
 		global $geodir_label_type;
 

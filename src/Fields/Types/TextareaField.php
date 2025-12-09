@@ -7,9 +7,11 @@ use AyeCode\GeoDirectory\Fields\Abstracts\AbstractFieldType;
  * Class TextareaField
  *
  * Handles Textarea and HTML fields.
- * Replaces geodir_cfi_textarea and geodir_cfi_html.
+ * Replaces geodir_cfi_textarea(), geodir_cfi_html(), geodir_cf_textarea(), geodir_cf_html().
  */
 class TextareaField extends AbstractFieldType {
+
+	use TextareaFieldOutputTrait;
 
 	public function render_input() {
 		// WP handles post_content in admin

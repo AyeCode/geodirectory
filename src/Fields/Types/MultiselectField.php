@@ -9,9 +9,11 @@ use AUI_Component_Helper;
  *
  * Handles fields where multiple options can be selected.
  * Supports: Select2 (Multiple), Checkbox List, and Radio List (Radiox).
- * Replaces geodir_cfi_multiselect.
+ * Replaces geodir_cfi_multiselect() and geodir_cf_multiselect().
  */
 class MultiselectField extends AbstractFieldType {
+
+	use MultiselectFieldOutputTrait;
 
 	public function render_input() {
 		$args         = $this->get_aui_args();

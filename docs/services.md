@@ -1256,7 +1256,7 @@ geodirectory()->seo->get_active_integration();
 
 ---
 
-## `geodirectory()->reviewRepository`
+## `geodirectory()->review_epository`
 **Class:** `AyeCode\GeoDirectory\Database\Repository\ReviewRepository`
 
 This service handles direct database operations for the `geodir_post_review` table.
@@ -1267,28 +1267,28 @@ This service handles direct database operations for the `geodir_post_review` tab
  * @param int $comment_id The WordPress comment ID.
  * @return object|null The review data row, or null if not found.
  */
-geodirectory()->reviewRepository->find( $comment_id );
+geodirectory()->review_epository->find( $comment_id );
 
 /**
  * Gets just the rating value (float) for a specific comment, with caching.
  * @param int $comment_id The WordPress comment ID.
  * @return float|null The rating value, or null if not found.
  */
-geodirectory()->reviewRepository->get_rating( $comment_id );
+geodirectory()->review_epository->get_rating( $comment_id );
 
 /**
  * Deletes a review from the custom table.
  * @param int $comment_id The WordPress comment ID.
  * @return void
  */
-geodirectory()->reviewRepository->delete( $comment_id );
+geodirectory()->review_epository->delete( $comment_id );
 
 /**
  * Creates a new review record in the custom table.
  * @param array $data_array The data to insert. Keys should be column names.
  * @return int|false The number of rows inserted, or false on error.
  */
-geodirectory()->reviewRepository->create( $data_array );
+geodirectory()->review_epository->create( $data_array );
 
 /**
  * Updates an existing review record in the custom table.
@@ -1296,21 +1296,21 @@ geodirectory()->reviewRepository->create( $data_array );
  * @param array $data_array The data to update. Keys should be column names.
  * @return int|false The number of rows updated, or false on error.
  */
-geodirectory()->reviewRepository->update( $comment_id, $data_array );
+geodirectory()->review_epository->update( $comment_id, $data_array );
 
 /**
  * Calculates the average rating for a given post from approved comments.
  * @param int $post_id The post ID.
  * @return float The average rating.
  */
-geodirectory()->reviewRepository->get_average_rating_for_post( $post_id );
+geodirectory()->review_epository->get_average_rating_for_post( $post_id );
 
 /**
  * Gets the total number of approved reviews for a post, with caching.
  * @param int $post_id The post ID.
  * @return int The total number of reviews.
  */
-geodirectory()->reviewRepository->get_count_for_post( $post_id );
+geodirectory()->review_epository->get_count_for_post( $post_id );
 
 /**
  * Counts reviews for a specific post by a specific user (by ID or email).
@@ -1319,7 +1319,7 @@ geodirectory()->reviewRepository->get_count_for_post( $post_id );
  * @param string $author_email The author's email address.
  * @return int The number of reviews found.
  */
-geodirectory()->reviewRepository->count_user_reviews_for_post( $post_id, $user_id, $author_email );
+geodirectory()->review_epository->count_user_reviews_for_post( $post_id, $user_id, $author_email );
 ```
 
 ---

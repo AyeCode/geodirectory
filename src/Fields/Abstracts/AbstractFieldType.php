@@ -10,7 +10,7 @@ use AyeCode\GeoDirectory\Fields\Interfaces\FieldTypeInterface;
  *
  * @package AyeCode\GeoDirectory\Fields\Abstracts
  */
-abstract class AbstractFieldType implements FieldTypeInterface {
+abstract class AbstractFieldType extends AbstractFieldOutput implements FieldTypeInterface {
 
 	/**
 	 * The raw field data from the database.
@@ -43,15 +43,33 @@ abstract class AbstractFieldType implements FieldTypeInterface {
 	/**
 	 * AbstractFieldType constructor.
 	 *
-	 * @param array  $field_data Row from geodir_custom_fields table.
-	 * @param int    $post_id    Current Post ID.
-	 * @param string $context    Context of usage.
+	 * @param array        $field_data Row from geodir_custom_fields table.
+	 * @param int|object   $post       Post ID, or GeoDirectory post object with custom fields.
+	 * @param string       $context    Context of usage.
 	 */
-	public function __construct( $field_data, $post_id = 0, $context = 'frontend' ) {
+	public function __construct( $field_data, $post = 0, $context = 'frontend' ) {
 		$this->field_data = $field_data;
-		$this->post_id    = $post_id;
-		$this->context    = $context;
-		$this->value      = $this->get_value();
+
+		// Handle different post formats
+		if ( is_numeric( $post ) ) {
+			// Just a post ID
+			$this->post_id = absint( $post );
+			$this->post    = $post;
+		} elseif ( is_object( $post ) && isset( $post->ID ) ) {
+			// Full $gd_post object with custom fields already loaded
+			$this->post_id = $post->ID;
+			$this->post    = $post;
+		} elseif ( is_array( $post ) && isset( $post['ID'] ) ) {
+			// Post data as array
+			$this->post_id = $post['ID'];
+			$this->post    = (object) $post;
+		} else {
+			$this->post_id = 0;
+			$this->post    = null;
+		}
+
+		$this->context = $context;
+		$this->value   = $this->get_value();
 	}
 
 	/**
@@ -184,6 +202,24 @@ abstract class AbstractFieldType implements FieldTypeInterface {
 			return new \WP_Error( 'required', __( 'This field is required.', 'geodirectory' ) );
 		}
 		return true;
+	}
+
+	/**
+	 * Default render_output implementation.
+	 *
+	 * Child classes should override this with their specific output logic.
+	 * For now, returns empty string to prevent fatal errors.
+	 *
+	 * @param object|array $gd_post GeoDirectory post object with custom fields already loaded.
+	 * @param array        $args    Output arguments:
+	 *                              - 'show' (string|array): What to display.
+	 *                              - 'location' (string): Output location.
+	 * @return string
+	 */
+	public function render_output( $gd_post, $args = [] ) {
+		// Default implementation - override in child classes
+		// This prevents fatal errors for field types not yet migrated
+		return '';
 	}
 
 	/**

@@ -515,7 +515,6 @@ function geodir_api_hash( $data ) {
  */
 function goedir_register_widgets() {
 
-
 	if ( get_option( 'geodirectory_version' ) ) {
 		global $pagenow;
 
@@ -544,7 +543,7 @@ function goedir_register_widgets() {
 			}
 
 			// Depreciated
-			new \AyeCode\GeoDirectory\Widgets\SingleClosedText();
+			new \AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Single_Closed_Text();
 
 		}
 	}
@@ -562,55 +561,55 @@ add_action( 'widgets_init', 'goedir_register_widgets' );
 function geodir_get_widgets(){
 
 	$widgets = array(
-//		\AyeCode\GeoDirectory\Widgets\AddListing::class,
-		\AyeCode\GeoDirectory\Widgets\ArchiveItemSection::class,
-		\AyeCode\GeoDirectory\Widgets\AuthorActions::class,
-		\AyeCode\GeoDirectory\Widgets\AZSearch::class,
-		\AyeCode\GeoDirectory\Widgets\BestOf::class,
-		\AyeCode\GeoDirectory\Widgets\Categories::class,
-		\AyeCode\GeoDirectory\Widgets\CategoryDescription::class,
-		\AyeCode\GeoDirectory\Widgets\CPTMeta::class,
-		\AyeCode\GeoDirectory\Widgets\Dashboard::class,
-		\AyeCode\GeoDirectory\Widgets\DynamicContent::class,
-//		\AyeCode\GeoDirectory\Widgets\Listings::class,
-		\AyeCode\GeoDirectory\Widgets\Loop::class,
-		\AyeCode\GeoDirectory\Widgets\LoopActions::class,
-		\AyeCode\GeoDirectory\Widgets\LoopPaging::class,
-		\AyeCode\GeoDirectory\Widgets\Map::class,
-		\AyeCode\GeoDirectory\Widgets\MapPinpoint::class,
-		\AyeCode\GeoDirectory\Widgets\Notifications::class,
-		\AyeCode\GeoDirectory\Widgets\OutputLocation::class,
-		\AyeCode\GeoDirectory\Widgets\PageTitle::class,
-		\AyeCode\GeoDirectory\Widgets\PostAddress::class,
-		\AyeCode\GeoDirectory\Widgets\PostBadge::class,
-		\AyeCode\GeoDirectory\Widgets\PostContent::class,
-		\AyeCode\GeoDirectory\Widgets\PostDirections::class,
-		\AyeCode\GeoDirectory\Widgets\PostDistance::class,
-		\AyeCode\GeoDirectory\Widgets\PostFav::class,
-		\AyeCode\GeoDirectory\Widgets\PostFeatures::class,
-		\AyeCode\GeoDirectory\Widgets\PostImages::class,
-		\AyeCode\GeoDirectory\Widgets\PostMeta::class,
-		\AyeCode\GeoDirectory\Widgets\PostRating::class,
-		\AyeCode\GeoDirectory\Widgets\PostTitle::class,
-		\AyeCode\GeoDirectory\Widgets\RecentlyViewed::class,
-		\AyeCode\GeoDirectory\Widgets\RecentReviews::class,
-		\AyeCode\GeoDirectory\Widgets\Search::class,
-		\AyeCode\GeoDirectory\Widgets\SimpleArchive::class,
-		\AyeCode\GeoDirectory\Widgets\SimpleArchiveItem::class,
-		\AyeCode\GeoDirectory\Widgets\SingleNextPrev::class,
-//		\AyeCode\GeoDirectory\Widgets\SingleReviews::class,
-//		\AyeCode\GeoDirectory\Widgets\SingleTabs::class,
-		\AyeCode\GeoDirectory\Widgets\SingleTaxonomies::class,
-		\AyeCode\GeoDirectory\Widgets\Tags::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Add_Listing::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Archive_Item_Section::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Author_Actions::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_AZ_Search::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Best_Of::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Categories::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Category_Description::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_CPT_Meta::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Dashboard::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Dynamic_Content::class,
+//		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Listings::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Loop::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Loop_Actions::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Loop_Paging::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Map::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Map_Pinpoint::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Notifications::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Output_Location::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Page_Title::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Address::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Badge::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Content::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Directions::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Distance::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Fav::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Features::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Images::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Meta::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Rating::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Post_Title::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Recently_Viewed::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Recent_Reviews::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Search::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Simple_Archive::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Simple_Archive_Item::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Single_Next_Prev::class,
+//		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Single_Reviews::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Single_Tabs::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Single_Taxonomies::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Tags::class,
 	);
 
 	if ( geodir_design_style() ) {
-		$widgets[] = \AyeCode\GeoDirectory\Widgets\ReportPost::class;
+		$widgets[] = \AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Report_Post::class;
 	}
 
 	// 3rd party widgets
 	if ( class_exists( 'Ninja_Forms' ) && class_exists( 'NF_Abstracts_MergeTags' ) ) {
-		$widgets[] = \AyeCode\GeoDirectory\Widgets\NinjaForms::class;
+		$widgets[] = \AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Ninja_Forms::class;
 	}
 
 	return apply_filters('geodir_get_widgets', $widgets );

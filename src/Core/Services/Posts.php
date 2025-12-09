@@ -25,24 +25,28 @@ final class Posts {
 	private PostRepository $repository;
 	private Settings $settings;
 	private Statuses $statuses;
+	private PostTypes $post_types;
 
 	/**
 	 * Constructor.
 	 *
 	 * All dependencies are injected here via the DI container.
 	 *
-	 * @param PostRepository $repository The repository for database access.
-	 * @param Settings       $settings   The settings utility.
-	 * @param Statuses       $statuses   The statuses service.
+	 * @param PostRepository $repository  The repository for database access.
+	 * @param Settings       $settings    The settings utility.
+	 * @param Statuses       $statuses    The statuses service.
+	 * @param PostTypes      $post_types  The post types service.
 	 */
 	public function __construct(
 		PostRepository $repository,
 		Settings $settings,
-		Statuses $statuses
+		Statuses $statuses,
+		PostTypes $post_types
 	) {
 		$this->statuses   = $statuses;
 		$this->settings   = $settings;
 		$this->repository = $repository;
+		$this->post_types = $post_types;
 	}
 
 	/**
@@ -476,6 +480,70 @@ final class Posts {
 		$package = $this->get_package( $post, $post_type );
 
 		return ! empty( $package->id ) ? (int) $package->id : 0;
+	}
+
+	/**
+	 * Check if a post has a private address.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param int|object|array $post The post ID, post object, or post array.
+	 * @return bool True if the post has a private address, false otherwise.
+	 */
+	public function has_private_address( $post ): bool {
+		global $geodir_private_address;
+
+		if ( empty( $post ) ) {
+			return false;
+		}
+
+		// Normalize post to object
+		if ( is_array( $post ) ) {
+			$gd_post = (object) $post;
+		} elseif ( is_scalar( $post ) ) {
+			$gd_post = $this->get_info( absint( $post ) );
+		} else {
+			$gd_post = $post;
+		}
+
+		// Check for a valid post
+		if ( ! ( is_object( $gd_post ) && ! empty( $gd_post->ID ) && ! empty( $gd_post->post_type ) ) ) {
+			return false;
+		}
+
+		$is_private = false;
+
+		// Cache the value
+		if ( empty( $geodir_private_address ) || ! is_array( $geodir_private_address ) ) {
+			$geodir_private_address = array();
+		}
+
+		if ( isset( $geodir_private_address[ $gd_post->ID ] ) ) {
+			$is_private = $geodir_private_address[ $gd_post->ID ];
+		} else {
+			// Check private address enabled or not
+			if ( $this->post_types->supports( $gd_post->post_type, 'private_address' ) ) {
+				if ( empty( $gd_post->post_id ) ) {
+					$gd_post = $this->get_info( $gd_post->ID );
+				}
+
+				if ( ! empty( $gd_post->private_address ) ) {
+					$is_private = true;
+				}
+			}
+
+			$geodir_private_address[ $gd_post->ID ] = $is_private;
+		}
+
+		/**
+		 * Filters whether post have private address.
+		 *
+		 * @since 2.1.1.9
+		 *
+		 * @param bool   $is_private True when post has private address, otherwise false.
+		 * @param object $gd_post The post.
+		 */
+		return apply_filters( 'geodir_post_has_private_address', $is_private, $gd_post );
 	}
 
 	/**

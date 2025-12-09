@@ -5,6 +5,8 @@ use AyeCode\GeoDirectory\Fields\Abstracts\AbstractFieldType;
 
 class TagsField extends AbstractFieldType {
 
+	use TaxonomyFieldOutputTrait;
+
 	public function render_input() {
 //		// Admin: Post Tags are handled by WP native metaboxes
 //		if ( is_admin() ) {

@@ -197,4 +197,76 @@ class FieldsService {
 			}
 		}
 	}
+
+	/**
+	 * Render field output for displaying on frontend.
+	 *
+	 * @param array|string $field Field data array or htmlvar_name.
+	 * @param mixed        $post  Post ID or post object.
+	 * @param array        $args  Output arguments:
+	 *                            - 'location' (string): Output location (detail, listing, etc). Default ''.
+	 *                            - 'show' (string|array): What to display (icon, label, value, raw, strip, etc). Default ''.
+	 *
+	 * @return string HTML output.
+	 */
+	public function render_field_output( $field, $post, $args = [] ) {
+		// Parse args with defaults
+		$args = wp_parse_args( $args, [
+			'location' => '',
+			'show'     => '',
+		] );
+
+
+
+		// this is the default but is not set in widget args
+//		if(empty($args['show'])) $args['show'] = 'icon-label-value';
+//		print_r($args);
+		// Get field data if htmlvar_name provided
+		if ( is_string( $field ) ) {
+			$post_type = is_object( $post ) && isset( $post->post_type )
+				? $post->post_type
+				: get_post_type( $post );
+
+			$field_data = $this->get_field_info( 'htmlvar_name', $field, $post_type );
+
+			if ( ! $field_data ) {
+				return '';
+			}
+		} else {
+			$field_data = $field;
+		}
+
+		// Get post ID
+		$post_id = is_object( $post ) && isset( $post->ID ) ? $post->ID : absint( $post );
+
+		if ( empty( $post_id ) ) {
+			return '';
+		}
+
+		// Try to use global $gd_post if it matches this post (avoids DB call)
+		global $gd_post;
+		if ( ! empty( $gd_post ) && isset( $gd_post->ID ) && $gd_post->ID == $post_id ) {
+			// Use the global $gd_post - already has all custom fields loaded!
+			$gd_post_data = $gd_post;
+		} else {
+			// Need to load it (fallback for cases outside the loop)
+			$gd_post_data = geodir_get_post_info( $post_id );
+			if ( ! $gd_post_data ) {
+				return '';
+			}
+		}
+
+		// Get field type class
+		$field_class = $this->registry->get( $field_data['field_type'] );
+
+		if ( ! $field_class || ! class_exists( $field_class ) ) {
+			return '';
+		}
+
+		// Instantiate field type with $gd_post (has custom fields)
+		$field_instance = new $field_class( $field_data, $gd_post_data );
+
+		// Render output - pass $gd_post and args
+		return $field_instance->render_output( $gd_post_data, $args );
+	}
 }

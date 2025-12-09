@@ -6,10 +6,12 @@ use AyeCode\GeoDirectory\Fields\Abstracts\AbstractFieldType;
 /**
  * Class DatepickerField
  *
- * Handles Datepicker inputs using AUI (Flatpickr).
- * Replaces geodir_cfi_datepicker.
+ * Handles Datepicker inputs and outputs using AUI (Flatpickr).
+ * Replaces geodir_cfi_datepicker() and geodir_cf_datepicker().
  */
 class DatepickerField extends AbstractFieldType {
+
+	use TextFieldOutputTrait;
 
 	public function render_input() {
 		$args         = $this->get_aui_args();

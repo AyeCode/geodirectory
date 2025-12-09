@@ -6,10 +6,12 @@ use AyeCode\GeoDirectory\Fields\Abstracts\AbstractFieldType;
 /**
  * Class CheckboxField
  *
- * Handles single checkbox inputs.
- * Replaces geodir_cfi_checkbox.
+ * Handles single checkbox inputs and outputs.
+ * Replaces geodir_cfi_checkbox() and geodir_cf_checkbox().
  */
 class CheckboxField extends AbstractFieldType {
+
+	use CheckboxFieldOutputTrait;
 
 	public function render_input() {
 		// Admin check for terms (Legacy)

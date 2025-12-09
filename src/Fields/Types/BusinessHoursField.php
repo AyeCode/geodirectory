@@ -12,6 +12,8 @@ use AyeCode_UI_Settings;
  */
 class BusinessHoursField extends AbstractFieldType {
 
+	use BusinessHoursFieldOutputTrait;
+
 	public function render_input() {
 		// Enqueue required scripts (Flatpickr via AUI)
 		$aui_settings = AyeCode_UI_Settings::instance();

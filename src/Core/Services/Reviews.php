@@ -195,4 +195,52 @@ final class Reviews {
 
 		return true;
 	}
+
+	/**
+	 * Gets the average rating for a post.
+	 *
+	 * @param int $post_id The post ID.
+	 * @param bool $force_query Whether to bypass cache.
+	 * @return float The average rating.
+	 */
+	public function get_post_rating( int $post_id, bool $force_query = false ): float {
+		if ( ! $force_query ) {
+			$gd_post = geodir_get_post_info( $post_id );
+			if ( isset( $gd_post->ID ) && $gd_post->ID == $post_id ) {
+				if ( isset( $gd_post->rating_count ) && $gd_post->rating_count > 0 && isset( $gd_post->overall_rating ) && $gd_post->overall_rating > 0 ) {
+					return (float) $gd_post->overall_rating;
+				}
+				return 0.0;
+			}
+		}
+
+		return $this->repository->get_average_rating_for_post( $post_id );
+	}
+
+	/**
+	 * Gets the review count for a post.
+	 *
+	 * @param int $post_id The post ID.
+	 * @param bool $force_query Whether to bypass cache.
+	 * @return int The review count.
+	 */
+	public function get_review_count( int $post_id, bool $force_query = false ): int {
+		global $gd_post;
+
+		if ( ! $force_query && isset( $gd_post->ID ) && $gd_post->ID == $post_id && isset( $gd_post->rating_count ) ) {
+			return (int) $gd_post->rating_count;
+		}
+
+		return $this->repository->get_count_for_post( $post_id );
+	}
+
+	/**
+	 * Gets the rating for a specific comment.
+	 *
+	 * @param int $comment_id The comment ID.
+	 * @return float|null The rating value, or null if not found.
+	 */
+	public function get_comment_rating( int $comment_id ): ?float {
+		return $this->repository->get_rating( $comment_id );
+	}
 }

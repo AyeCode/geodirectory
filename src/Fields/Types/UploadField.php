@@ -7,6 +7,8 @@ use GeoDir_Media;
 
 class UploadField extends AbstractFieldType {
 
+	use FileFieldOutputTrait;
+
 	public function render_input() {
 		// Admin check: WP uses standard metaboxes for images usually, but GD uses custom logic.
 		if ( is_admin() && $this->field_data['htmlvar_name'] == 'post_images' ) {

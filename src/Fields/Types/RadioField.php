@@ -7,9 +7,11 @@ use AyeCode\GeoDirectory\Fields\Abstracts\AbstractFieldType;
  * Class RadioField
  *
  * Handles radio button groups.
- * Replaces geodir_cfi_radio.
+ * Replaces geodir_cfi_radio() and geodir_cf_radio().
  */
 class RadioField extends AbstractFieldType {
+
+	use RadioSelectOutputTrait;
 
 	public function render_input() {
 		$args = $this->get_aui_args();

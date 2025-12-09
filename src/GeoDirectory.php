@@ -39,6 +39,7 @@ use AyeCode\GeoDirectory\Core\Services\PostSaveService;
 use AyeCode\GeoDirectory\Core\Services\QueryVars;
 use AyeCode\GeoDirectory\Core\Services\Users;
 use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
+use AyeCode\GeoDirectory\Database\Repository\TabRepository;
 use AyeCode\GeoDirectory\Fields\FieldsService;
 
 
@@ -61,7 +62,9 @@ use AyeCode\GeoDirectory\Fields\FieldsService;
  * @property-read \AyeCode\GeoDirectory\Core\Utils\Helpers $helpers The Helpers service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Reviews $reviews The Reviews service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Seo $seo The SEO service.
- * @property-read \AyeCode\GeoDirectory\Database\Repository\ReviewRepository $reviewRepository The Review Repository.
+ * @property-read \AyeCode\GeoDirectory\Database\Repository\ReviewRepository $review_repository The Review Repository.
+ * @property-read \AyeCode\GeoDirectory\Database\Repository\TabRepository $tab_repository The Review Repository.
+ * @property-read \AyeCode\GeoDirectory\Frontend\Renderers\RatingRenderer $rating_renderer The Rating Renderer.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Tables $tables The Tables service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Settings $settings The Settings service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Maps $maps The Maps service.
@@ -165,8 +168,14 @@ final class GeoDirectory {
 			case 'seo':
 				$service_id = Seo::class;
 				break;
-			case 'reviewRepository':
+			case 'review_repository':
 				$service_id = ReviewRepository::class;
+				break;
+			case 'tab_repository':
+				$service_id = TabRepository::class;
+				break;
+			case 'rating_renderer':
+				$service_id = \AyeCode\GeoDirectory\Frontend\Renderers\RatingRenderer::class;
 				break;
 			case 'maps':
 				$service_id = Maps::class;

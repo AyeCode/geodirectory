@@ -12,6 +12,7 @@ declare( strict_types = 1 );
 
 namespace AyeCode\GeoDirectory\Core\Services;
 
+use AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface;
 use AyeCode\GeoDirectory\Core\Services\PostTypes;
 
 /**
@@ -22,16 +23,16 @@ final class LocationFormatter {
 	/**
 	 * Locations instance.
 	 *
-	 * @var Locations
+	 * @var LocationsInterface
 	 */
-	private Locations $locations;
+	private LocationsInterface $locations;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param Locations $locations Locations service.
+	 * @param LocationsInterface $locations Locations service.
 	 */
-	public function __construct( Locations $locations ) {
+	public function __construct( LocationsInterface $locations ) {
 		$this->locations = $locations;
 	}
 

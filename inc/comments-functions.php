@@ -88,8 +88,7 @@ function geodir_get_rating_stars( $rating = '', $post_id = 0, $label = '' ) {
 		$args['rating_label'] = $label;
 	}
 
-	$review_form = geodirectory()->container()->get( \AyeCode\GeoDirectory\Frontend\ReviewForm::class );
-	$r_html = $review_form->render_rating_html( (float) $rating, 'output', $args );
+	$r_html = geodirectory()->rating_renderer->render_stars( (float) $rating, 'output', $args );
 
 	return apply_filters( 'geodir_get_rating_stars_html', $r_html, $rating, 5 );
 }
@@ -110,24 +109,7 @@ function geodir_get_rating_stars( $rating = '', $post_id = 0, $label = '' ) {
  * @return array|bool|int|mixed|null|string
  */
 function geodir_get_post_rating( $post_id = 0, $force_query = 0 ) {
-	global $wpdb, $gd_post;
-
-	// If no force query and we can use cached post data
-	if ( ! $force_query ) {
-		$gd_post_info = geodir_get_post_info( $post_id );
-		if ( isset( $gd_post_info->ID ) && $gd_post_info->ID == $post_id ) {
-			if ( isset( $gd_post_info->rating_count ) && $gd_post_info->rating_count > 0 && isset( $gd_post_info->overall_rating ) && $gd_post_info->overall_rating > 0 ) {
-				return $gd_post_info->overall_rating;
-			} else {
-				return 0;
-			}
-		}
-	}
-
-	// Force query from database
-	$repository = geodirectory()->container()->get( \AyeCode\GeoDirectory\Database\Repository\ReviewRepository::class );
-	$rating = $repository->get_average_rating_for_post( (int) $post_id );
-
+	$rating = geodirectory()->reviews->get_post_rating( (int) $post_id, (bool) $force_query );
 	return $rating > 0 ? $rating : false;
 }
 
@@ -145,16 +127,7 @@ function geodir_get_post_rating( $post_id = 0, $force_query = 0 ) {
  * @return bool|null|string
  */
 function geodir_get_review_count_total( $post_id = 0, $force_query = 0 ) {
-	global $gd_post;
-
-	// If no force query and we can use cached post data
-	if ( ! $force_query && isset( $gd_post->ID ) && $gd_post->ID == $post_id && isset( $gd_post->rating_count ) ) {
-		return $gd_post->rating_count;
-	}
-
-	$repository = geodirectory()->container()->get( \AyeCode\GeoDirectory\Database\Repository\ReviewRepository::class );
-	$count = $repository->get_count_for_post( (int) $post_id );
-
+	$count = geodirectory()->reviews->get_review_count( (int) $post_id, (bool) $force_query );
 	return $count > 0 ? $count : false;
 }
 
