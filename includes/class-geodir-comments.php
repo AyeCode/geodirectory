@@ -1308,34 +1308,66 @@ class GeoDir_Comments {
 	 * @return false|string
 	 */
 	public static function get_post_rating_counts_html( $post_id ) {
+		$args = array(
+			'rating_icon' => geodir_get_option( 'rating_icon', 'fas fa-star' ),
+			'rating_icon_fw' => geodir_get_option( 'rating_icon_fw' ),
+			'rating_color' => geodir_get_option( 'rating_color' ),
+			'rating_color_off' => geodir_get_option( 'rating_color_off' )
+		);
+
+		if ( ! empty( $args['rating_icon'] ) ) {
+			$args['rating_icon'] = geodir_sanitize_html_class( $args['rating_icon'] );
+		}
+
+		if ( empty( $args['rating_icon'] ) ) {
+			$args['rating_icon'] = 'fas fa-star';
+		}
+
+		if ( ! empty( $args['rating_icon_fw'] ) ) {
+			$args['rating_icon'] .= ' fa-fw';
+		}
+
+		if ( ! empty( $args['rating_color'] ) ) {
+			$args['rating_color'] = sanitize_hex_color( $args['rating_color'] );
+		}
+
+		// Don't change existing color.
+		if ( empty( $args['rating_color'] ) || $args['rating_color'] == '#ff9900' ) {
+			$args['rating_color'] = '#ffc107';
+		}
+
+		if ( ! empty( $args['rating_color_off'] ) ) {
+			$args['rating_color_off'] = sanitize_hex_color( $args['rating_color_off'] );
+		}
+
+		// Don't change existing color.
+		if ( empty( $args['rating_color_off'] ) || $args['rating_color_off'] == '#afafaf' ) {
+			$args['rating_color_off'] = '#efecf3';
+		}
+
+		$args = apply_filters( 'geodir_post_rating_star_count_output_args', $args, $post_id );
 
 		$rating_titles = self::rating_texts();
 		$post_rating   = geodir_get_post_rating( $post_id );
 		$review_total  = geodir_get_review_count_total( $post_id );
-		$stars         = geodir_get_rating_stars( $post_rating, $post_id );
 		$rating_counts = self::get_post_review_rating_counts( $post_id, 1 );
 		$rating_count  = self::rating_input_count();
+		$row_class     = $rating_count > 5 ? 'row-cols-2' : 'row-cols-1';
 
-		$row_class = $rating_count > 5 ? 'row-cols-2' : 'row-cols-1';
 		ob_start();
 		?>
-
-		<div class="row <?php echo esc_attr($row_class ); ?> gy-3">
+		<div class="row <?php echo esc_attr( $row_class ); ?> gy-3" data-total="<?php echo absint( $review_total ); ?>">
 			<?php
 			while ( $rating_count > 0 ) {
-
-//					$title   = $rating_titles[ $rating_count ];
 				$ratings = isset( $rating_counts[ $rating_count ] ) ? absint( $rating_counts[ $rating_count ] ) : 0;
 				$percent = $ratings ? round( ( $ratings / $review_total ) * 100 ) : 0;
-
 				?>
 				<div class="col">
 					<div class="d-flex align-items-center">
-						<div class="pe-2 text-nowrap text-center fs-sm" style="min-width: 50px" ><?php echo absint($rating_count); ?> <i class="fas fa-star text-gray" aria-hidden="true"></i></div>
-						<div class="progress w-100" style="height: 14px;">
-							<div class="progress-bar bg-warning" role="progressbar" style="width: <?php echo absint( $percent ); ?>%" aria-valuenow="<?php echo absint( $percent ); ?>" aria-valuemin="0" aria-valuemax="100"></div>
+						<div class="pe-2 text-nowrap text-center fs-sm" style="min-width:50px"><?php echo absint( $rating_count ); ?> <i class="<?php echo esc_attr( $args['rating_icon'] ); ?> text-gray" style="color:<?php echo esc_attr( $args['rating_color'] ); ?>!important" aria-hidden="true"></i></div>
+						<div class="progress w-100" style="height:14px;background-color:<?php echo esc_attr( $args['rating_color_off'] ); ?>!important" data-count="<?php echo absint( $ratings ); ?>">
+							<div class="progress-bar" role="progressbar" style="width:<?php echo absint( $percent ); ?>%;background-color:<?php echo esc_attr( $args['rating_color'] ); ?>!important" aria-valuenow="<?php echo absint( $percent ); ?>" aria-valuemin="0" aria-valuemax="100"></div>
 						</div>
-
 					</div>
 				</div>
 				<?php
@@ -1344,7 +1376,9 @@ class GeoDir_Comments {
 			?>
 		</div>
 		<?php
-		return apply_filters( 'geodir_comments_post_rating_counts_html', ob_get_clean(), $post_id );
+		$output = ob_get_clean();
+
+		return apply_filters( 'geodir_comments_post_rating_counts_html', $output, $post_id, $args );
 	}
 
 	/**

@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.146 - 2025-12-TBD =
 * GD > Listings added more options to customize pagination - CHANGED
+* Rating stars count should respect default rating settings - CHANGED
 
 = GeoDirectory v2.8.145 - 2025-12-05 =
 * WordPress 6.9 compatibility check - COMPATIBILITY
