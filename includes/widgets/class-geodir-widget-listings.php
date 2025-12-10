@@ -394,6 +394,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				''       => __( 'Never display', 'geodirectory' ),
 				'before' => __( 'Before pagination', 'geodirectory' ),
 				'after'  => __( 'After pagination', 'geodirectory' ),
+				'inline_before' => __( 'Inline Before', 'geodirectory' ),
+				'inline_after'  => __( 'Inline After', 'geodirectory' ),
+				'only'          => __( 'Only (hide paging)', 'geodirectory' )
 			),
 			'default'         => '',
 			'desc_tip'        => false,
@@ -401,6 +404,113 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			'element_require' => '[%with_pagination%]=="1"',
 			'group'           => __( 'Design', 'geodirectory' ),
 		);
+
+		if ( $design_style ) {
+			// paging style
+			$arguments['paging_style'] = array(
+				'title'    => __( 'Paging Style', 'geodirectory' ),
+				'type'     => 'select',
+				'options'  => array(
+					'' => __( 'Default', 'geodirectory' ),
+					'rounded' => __( 'Rounded', 'geodirectory' )
+				),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => true,
+				'element_require' => '[%with_pagination%]=="1"',
+				'group' => __( 'Design', 'geodirectory' )
+			);
+
+			// pagination mid_size
+			$arguments['paging_mid_size'] = array(
+				'type'     => 'select',
+				'title'    => __( 'Middle Pages Numbers:', 'geodirectory' ),
+				'desc'     => __( 'How many numbers to either side of the current pages. Default 0.', 'geodirectory' ),
+				'options'  => array(
+					''   => __( 'Default (0)', 'geodirectory' ),
+					'0'  => '0',
+					'1'  => '1',
+					'2'  => '2',
+					'3'  => '3',
+					'4'  => '4',
+					'5'  => '5',
+					'6'  => '6',
+					'7'  => '7',
+					'8'  => '8',
+					'9'  => '9',
+					'10' => '10',
+					'15' => '15',
+					'20' => '20',
+					'25' => '25'
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => true,
+				'element_require' => '[%with_pagination%]=="1"',
+				'group'    => __( 'Design', 'geodirectory' )
+			);
+
+			// pagination mid_size_sm
+			$arguments['paging_mid_size_sm'] = array(
+				'type'     => 'select',
+				'title'    => __( 'Middle Pages Numbers (mobile):', 'geodirectory' ),
+				'desc'     => __( 'How many numbers to either side of the current pages on small screen like on mobile. Default 0.', 'geodirectory' ),
+				'options'  => array(
+					''   => __( 'Default (0)', 'geodirectory' ),
+					'0'  => '0',
+					'1'  => '1',
+					'2'  => '2',
+					'3'  => '3',
+					'4'  => '4',
+					'5'  => '5',
+					'6'  => '6',
+					'7'  => '7',
+					'8'  => '8',
+					'9'  => '9',
+					'10' => '10',
+					'15' => '15',
+					'20' => '20',
+					'25' => '25'
+				),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => true,
+				'element_require' => '[%with_pagination%]=="1"',
+				'group' => __( 'Design', 'geodirectory' )
+			);
+
+			// button size
+			$arguments['paging_size'] = array(
+				'title'    => __( 'Paging Size', 'geodirectory' ),
+				'type'     => 'select',
+				'options'  => array(
+					''      => __( 'Default', 'geodirectory' ),
+					'small' => __( 'Small', 'geodirectory' ),
+					'large' => __( 'Large', 'geodirectory' ),
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => true,
+				'element_require' => '([%with_pagination%]=="1" && [%paging_style%]=="")',
+				'group' => __( 'Design', 'geodirectory' )
+			);
+
+			$arguments['paging_size_sm'] = array(
+				'title'    => __( 'Paging Size (mobile)', 'geodirectory' ),
+				'desc'     => __( 'Pagination size to show on mobile.', 'geodirectory' ),
+				'type'     => 'select',
+				'options'  => array(
+					''      => __( 'Default', 'geodirectory' ),
+					'small' => __( 'Small', 'geodirectory' ),
+					'large' => __( 'Large', 'geodirectory' )
+				),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => true,
+				'element_require' => '([%with_pagination%]=="1" && [%paging_style%]=="")',
+				'group' => __( 'Design', 'geodirectory' )
+			);
+		}
 
 		$arguments['template_type'] = array(
 			'title'    => __( 'Archive Item Template Type:', 'geodirectory' ),
@@ -1631,7 +1741,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$geodir_is_widget_listing = true;
 
 			if ( ! empty( $widget_listings ) && $top_pagination ) {
-				self::get_pagination( 'top', $post_count, $post_number, $pageno, $pagination_info );
+				self::get_pagination( 'top', $post_count, $post_number, $pageno, $pagination_info, $instance );
 			}
 
 			if ( $skin_active ) {
@@ -1675,7 +1785,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				}
 
 				if ( $bottom_pagination ) {
-					self::get_pagination( 'bottom', $post_count, $post_number, $pageno, $pagination_info );
+					self::get_pagination( 'bottom', $post_count, $post_number, $pageno, $pagination_info, $instance );
 				}
 			}
 
@@ -1823,8 +1933,18 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		remove_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 2 );
 	}
 
-	public static function get_pagination( $position, $post_count, $post_number, $pageno = 1, $show_advanced = '' ) {
+	public static function get_pagination( $position, $post_count, $post_number, $pageno = 1, $show_advanced = '', $args = array() ) {
 		global $wp_query;
+
+		$defaults = array(
+			'paging_style' => '',
+			'paging_mid_size' => '',
+			'paging_mid_size_sm' => '',
+			'paging_size' => '',
+			'paging_size_sm' => ''
+		);
+
+		$args = wp_parse_args( $args, $defaults );
 
 		$backup_wp_query = $wp_query;
 		if ( isset( $wp_query->paged ) ) {
@@ -1848,13 +1968,50 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 		add_filter( 'geodir_pagination_args', array( __CLASS__, 'filter_pagination_args' ), 999999, 1 );
 
-		$shortcode = '[gd_loop_paging mid_size=0 show_advanced="' . $show_advanced . '"]';
+		if ( wp_is_mobile() && $show_advanced ) {
+			$show_advanced = str_replace( 'inline_', '', $show_advanced );
+		}
 
-		$shortcode = apply_filters( 'geodir_widget_listings_pagination_shortcode', $shortcode, $wp_query, $position, $post_number, $show_advanced );
+		$paging_attrs = 'show_advanced="' . esc_attr( $show_advanced ) . '"';
+
+		if ( $args['paging_style'] == 'rounded' ) {
+			$paging_attrs .= ' paging_style="rounded"';
+		}
+
+		// Mobile devices
+		if ( $args['paging_size_sm'] == '' && wp_is_mobile() ) {
+			$args['paging_size'] = 'small';
+			$args['paging_size_sm'] = 'small';
+		}
+		if ( wp_is_mobile() ) {
+			if ( $args['paging_size_sm'] == '' ) {
+				$args['paging_size'] = 'small';
+				$args['paging_size_sm'] = 'small';
+			}
+		}
+
+		$paging_attrs .= ' mid_size=' . absint( $args['paging_mid_size'] );
+		$paging_attrs .= ' mid_size_sm=' . absint( $args['paging_mid_size_sm'] );
+
+		if ( $args['paging_size'] ) {
+			$paging_attrs .= ' size="' . sanitize_key( $args['paging_size'] ) . '"';
+		}
+
+		if ( $args['paging_size_sm'] ) {
+			$paging_attrs .= ' size_sm="' . sanitize_key( $args['paging_size_sm'] ) . '"';
+		}
+
+		if ( $args['paging_size'] == 'small' ) {
+			$paging_attrs .= ' ap_font_size="fs-sm"';
+		}
+
+		$shortcode = '[gd_loop_paging ' . $paging_attrs . ']';
+
+		$shortcode = apply_filters( 'geodir_widget_listings_pagination_shortcode', $shortcode, $wp_query, $position, $post_number, $show_advanced, $args );
 
 		ob_start();
 
-		echo do_shortcode( $shortcode );
+		echo do_shortcode( $shortcode ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		$pagination = ob_get_clean();
 
