@@ -144,7 +144,7 @@ trait BusinessHoursFieldOutputTrait {
 			$html .= '<a class="text-reset ' . $dropdown_toggle_class . ' text-truncate" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
 		}
 
-		$html .= '<span class="geodir-i-business_hours geodir-i-biz-hours ' . $preview_class . '" style="' . esc_attr( $field_icon_style ) . '">' . $field_icon_html . '<font></font>' . ': </span>';
+		$html .= '<span class="geodir-i-business_hours pe-1 geodir-i-biz-hours ' . $preview_class . '" style="' . esc_attr( $field_icon_style ) . '">' . $field_icon_html . '<font></font>' . ': </span>';
 		$html .= '<span class="gd-bh-expand-range ' . $preview_class . '" data-offset="' . esc_attr( $utc_offset ) . '" data-offsetsec="' . esc_attr( $offset ) . '" title="' . esc_attr__( 'Expand opening hours', 'geodirectory' ) . '"><span class="gd-bh-today-range gv-secondary">' . $show_value . '</span>';
 
 		if ( ! $design_style ) {
@@ -179,7 +179,7 @@ trait BusinessHoursFieldOutputTrait {
 				$class .= 'gd-bh-days-closed ';
 			}
 
-			$html .= '<div data-day="' . esc_attr( $slots['day_no'] ) . '" data-closed="' . esc_attr( $slots['closed'] ) . '" class="' . $dropdown_item_class . ' gd-bh-days-list ' . trim( $class ) . '">';
+			$html .= '<div data-day="' . esc_attr( $slots['day_no'] ) . '" data-closed="' . esc_attr( $slots['closed'] ) . '" class="' . $dropdown_item_class . ' gd-bh-days-list d-flex justify-content-between ' . trim( $class ) . '">';
 			$html .= '<div class="gd-bh-days-d ' . $dropdown_item_inline_class . $dropdown_item_mr_class . '">' . esc_html( $day_name ) . '</div>';
 			$html .= '<div class="gd-bh-slots ' . $dropdown_item_inline_class . $dropdown_item_float_class . '">';
 
