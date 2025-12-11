@@ -7,9 +7,9 @@ This document outlines the core architectural plan for the GeoDirectory v3 refac
 The plugin is built around a hybrid model to combine modern best practices with practical organization for a large-scale application.
 
 1.  **Dependency Injection (DI) Core:** The main application logic is built around a **DI** pattern.
-  - A central **Service Container** (`Container.php`) acts as a "factory" for all core services.
-  - It automatically resolves and injects dependencies using PHP's Reflection API.
-  - **Service Providers** are used to register "blueprints" (bindings) with the container and orchestrate the loading of major features.
+- A central **Service Container** (`Container.php`) acts as a "factory" for all core services.
+- It automatically resolves and injects dependencies using PHP's Reflection API.
+- **Service Providers** are used to register "blueprints" (bindings) with the container and orchestrate the loading of major features.
 
 2.  **Action Loader for AJAX:** A dedicated **`Loader.php`** class is used to bootstrap and register self-contained AJAX actions (Tools, Panes, etc.). This keeps procedural AJAX endpoint logic separate from the main object-oriented services.
 
@@ -210,6 +210,27 @@ Assets are registered in PHP using the `Assets` service (`src/Common/Assets.php`
 3. **IIFE wrapping** - Most scripts are wrapped in IIFE to prevent global pollution (except plupload which needs immediate execution for Alpine components)
 4. **Source maps** are generated for debugging
 
+### Frontend Coding Rules & Architecture
+
+1. **Module Loading (No Lazy Loading)**
+  - **Strictly No Dynamic Imports:** Do NOT use `await import(...)`.
+  - **Single Bundle Goal:** All logic for a specific entry point (e.g., `frontend.js`) must be bundled into that single file.
+  - **Code Splitting:** Prohibited. We do not want `chunk-xxxxx.js` files.
+
+2. **Naming Conventions**
+  - **JS Namespace:** Use a single `GeoDir` global object.
+  - **Global Prefixes:** If a variable *must* be global, use `geodir` (camelCase) prefix (e.g., `geodirInitMap`).
+  - **DOM Elements:** All HTML IDs/Classes MUST be prefixed with `geodir-`.
+
+3. **Writing Code in `/resources`**
+  - **No Manual IIFEs:** The build script automatically wraps code. Do not do it manually.
+  - **Exposing Globals:** Code is private by default. To make public, attach to `window`: `window.GeoDir.myFunc = ...`.
+  - **AlpineJS:** Loaded externally. Register via `document.addEventListener('alpine:init', ...)`.
+
+4. **Styling (Bootstrap 5)**
+  - **Use Utility Classes:** Bootstrap 5.3.2 is loaded externally. Use it for all layout and styling.
+  - **Avoid Custom CSS:** Do not write custom CSS unless absolutely necessary.
+
 ---
 
 ## Bootstrapping & Initialization
@@ -217,11 +238,11 @@ Assets are registered in PHP using the `Assets` service (`src/Common/Assets.php`
 1.  **`geodirectory.php`**: The main plugin file is a simple **bootstrapper**. It loads Composer, defines constants, and calls a boot function on `plugins_loaded`.
 
 2.  **`geodirectory_boot()`**: This is the single entry point. It is responsible for:
-  - Initializing the `Loader` class (which sets up the AJAX system).
-  - Creating the `Container` instance.
-  - `bind()`-ing all services to the container.
-  - Initializing the main `geodirectory()` global helper with the container.
-  - Running the main `*ServiceProvider` classes.
+- Initializing the `Loader` class (which sets up the AJAX system).
+- Creating the `Container` instance.
+- `bind()`-ing all services to the container.
+- Initializing the main `geodirectory()` global helper with the container.
+- Running the main `*ServiceProvider` classes.
 
 3.  **`*ServiceProvider.php`**: These classes are orchestrators for major features. They get services from the container and run dedicated `*Hooks.php` classes or register hooks themselves.
 

@@ -163,6 +163,7 @@ When contributing code to GeoDirectory v3:
 4. Write security-first code (sanitize input, escape output, use nonces)
 5. Document with developer-persona comments
 6. Add to these docs if introducing new patterns
+7. For HTML use Bootstrap 5.3.2 classes, avoid custom CSS. (bootstrap is always loaded where needed, you do not have to load it yourself)
 
 ---
 

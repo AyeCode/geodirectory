@@ -333,13 +333,12 @@ final class BusinessHours {
 	 */
 	public function default_values(): array {
 		$values = array(
-			'Mo' => array( 'opens' => '09:00', 'closes' => '17:00' ),
-			'Tu' => array( 'opens' => '09:00', 'closes' => '17:00' ),
-			'We' => array( 'opens' => '09:00', 'closes' => '17:00' ),
-			'Th' => array( 'opens' => '09:00', 'closes' => '17:00' ),
-			'Fr' => array( 'opens' => '09:00', 'closes' => '17:00' ),
-			'Sa' => array( 'opens' => '', 'closes' => '' ),
-			'Su' => array( 'opens' => '', 'closes' => '' ),
+			'Mo' => array( array( 'opens' => '09:00', 'closes' => '17:00' ) ),
+			'Tu' => array( array( 'opens' => '09:00', 'closes' => '17:00' ) ),
+			'We' => array( array( 'opens' => '09:00', 'closes' => '17:00' ) ),
+			'Th' => array( array( 'opens' => '09:00', 'closes' => '17:00' ) ),
+			'Fr' => array( array( 'opens' => '09:00', 'closes' => '17:00' ) ),
+			// Sa and Su are not included - they should be closed by default
 		);
 
 		/**
@@ -347,7 +346,7 @@ final class BusinessHours {
 		 *
 		 * @since 2.0.0
 		 *
-		 * @param array $values Default business hours array.
+		 * @param array $values Default business hours array. Format: array('Mo' => array(array('opens' => '09:00', 'closes' => '17:00')))
 		 */
 		return apply_filters( 'geodir_bh_default_values', $values );
 	}
@@ -389,22 +388,84 @@ final class BusinessHours {
 	 * @return array Business hours array.
 	 */
 	public function schema_to_array( string $schema, string $country = '' ): array {
-		$schema_array = array();
+		$return = array();
 
-		if ( ! empty( $schema ) ) {
-			$properties = explode( ' ', trim( $schema ) );
+		if ( empty( $schema ) ) {
+			return $return;
+		}
 
-			foreach ( $properties as $property ) {
-				$days = $this->parse_property( $property );
-				if ( ! empty( $days ) ) {
-					foreach ( $days as $day => $hours ) {
-						if ( isset( $schema_array[ $day ] ) ) {
-							$schema_array[ $day ][] = $hours;
-						} else {
-							$schema_array[ $day ] = array( $hours );
+		// Split schema into periods and timezone parts
+		// Format: ["Mo 09:00-17:00","Tu 09:00-17:00"],["UTC":"+0","Timezone":"UTC"]
+		$schema_parts = explode( '],[', $schema );
+
+		// Parse periods (business hours)
+		if ( ! empty( $schema_parts[0] ) ) {
+			$periods_str = $schema_parts[0];
+			// Remove leading bracket
+			if ( count( $schema_parts ) > 1 ) {
+				$periods_str .= ']';
+			}
+			// Decode JSON array
+			$periods_arr = json_decode( $periods_str );
+
+			if ( ! empty( $periods_arr ) && is_array( $periods_arr ) ) {
+				$properties = array();
+				foreach ( $periods_arr as $period_str ) {
+					$period_str = trim( $period_str );
+					if ( ! empty( $period_str ) ) {
+						$property = $this->parse_property( $period_str );
+						if ( ! empty( $property ) ) {
+							foreach ( $property as $day => $hours ) {
+								if ( ! empty( $properties[ $day ] ) ) {
+									$properties[ $day ] = array_merge( $properties[ $day ], $hours );
+								} else {
+									$properties[ $day ] = $hours;
+								}
+							}
 						}
 					}
 				}
+
+				// Remove duplicates
+				if ( ! empty( $properties ) ) {
+					foreach ( $properties as $day => $hours ) {
+						$properties[ $day ] = array_map( 'unserialize', array_unique( array_map( 'serialize', $hours ) ) );
+					}
+				}
+
+				if ( ! empty( $properties ) ) {
+					$return['hours'] = $properties;
+				}
+			}
+		}
+
+		// Parse timezone info
+		if ( ! empty( $schema_parts[1] ) ) {
+			$tz_str = str_replace( array( '"', '[', ']', "'" ), '', trim( $schema_parts[1] ) );
+			$tz_parts = explode( ',', $tz_str, 2 );
+
+			$timezone_string = '';
+			$utc_offset = '';
+
+			if ( ! empty( $tz_parts[0] ) ) {
+				list( $key, $value ) = array_pad( explode( ':', $tz_parts[0], 2 ), 2, '' );
+				if ( trim( $key ) == 'UTC' ) {
+					$utc_offset = trim( $value );
+				}
+			}
+
+			if ( ! empty( $tz_parts[1] ) ) {
+				list( $key, $value ) = array_pad( explode( ':', $tz_parts[1], 2 ), 2, '' );
+				if ( trim( $key ) == 'Timezone' ) {
+					$timezone_string = trim( $value );
+				}
+			}
+
+			if ( ! empty( $timezone_string ) ) {
+				$return['timezone_string'] = $timezone_string;
+			}
+			if ( ! empty( $utc_offset ) ) {
+				$return['offset'] = $utc_offset;
 			}
 		}
 
@@ -417,7 +478,7 @@ final class BusinessHours {
 		 * @param string $schema Schema string.
 		 * @param string $country Country code.
 		 */
-		return apply_filters( 'geodir_schema_to_array', $schema_array, $schema, $country );
+		return apply_filters( 'geodir_schema_to_array', $return, $schema, $country );
 	}
 
 	/**
@@ -678,29 +739,52 @@ final class BusinessHours {
 	}
 
 	/**
-	 * Get timezone data.
+	 * Get timezone data with DST awareness.
+	 *
+	 * Returns timezone data in the legacy format for backwards compatibility.
+	 * Includes DST (Daylight Saving Time) calculations.
 	 *
 	 * @since 3.0.0
 	 *
 	 * @param string $tzstring Timezone string.
 	 * @param int|null $time Timestamp.
-	 * @return array Timezone data.
+	 * @return array Timezone data with keys: offset, utc_offset, offset_dst, utc_offset_dst, has_dst, is_dst
 	 */
 	public function timezone_data( string $tzstring = 'UTC', ?int $time = null ): array {
-		if ( $time === null ) {
-			$time = time();
+		$data = array(
+			'offset' => 0,
+			'utc_offset' => '',
+			'offset_dst' => 0,
+			'utc_offset_dst' => '',
+			'has_dst' => 0,
+			'is_dst' => 0
+		);
+
+		if ( in_array( $tzstring, timezone_identifiers_list() ) ) {
+			if ( empty( $time ) ) {
+				$time = time();
+			}
+
+			$transitions = timezone_transitions_get( timezone_open( $tzstring ), $time );
+
+			if ( ! empty( $transitions[0]['isdst'] ) || ! empty( $transitions[1]['isdst'] ) ) {
+				$data['offset'] = empty( $transitions[0]['isdst'] ) ? (int) $transitions[0]['offset'] : (int) $transitions[1]['offset'];
+				$data['offset_dst'] = ! empty( $transitions[0]['isdst'] ) ? (int) $transitions[0]['offset'] : (int) $transitions[1]['offset'];
+
+				$data['has_dst'] = 1;
+				if ( ! empty( $transitions[0]['isdst'] ) ) {
+					$data['is_dst'] = 1;
+				}
+			} else {
+				$data['offset'] = (int) $transitions[0]['offset'];
+				$data['offset_dst'] = (int) $transitions[0]['offset'];
+			}
+
+			$data['utc_offset'] = $this->seconds_to_hhmm( $data['offset'], true );
+			$data['utc_offset_dst'] = $this->seconds_to_hhmm( $data['offset_dst'], true );
 		}
 
-		$tz = new \DateTimeZone( $tzstring );
-		$dt = new \DateTime( 'now', $tz );
-		$offset = $tz->getOffset( $dt );
-
-		return array(
-			'timezone' => $tzstring,
-			'offset' => $offset,
-			'offset_hours' => $offset / 3600,
-			'abbr' => $dt->format( 'T' )
-		);
+		return $data;
 	}
 
 	/**
