@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.145\n"
+"Project-Id-Version: GeoDirectory 2.8.146\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-05 09:55+0530\n"
-"PO-Revision-Date: 2025-12-05 09:55+0530\n"
+"POT-Creation-Date: 2025-12-11 17:56+0530\n"
+"PO-Revision-Date: 2025-12-11 17:56+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -455,8 +455,8 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-categories.php:472
 #: includes/widgets/class-geodir-widget-cpt-meta.php:96
 #: includes/widgets/class-geodir-widget-cpt-meta.php:110
-#: includes/widgets/class-geodir-widget-listings.php:524
-#: includes/widgets/class-geodir-widget-listings.php:538
+#: includes/widgets/class-geodir-widget-listings.php:634
+#: includes/widgets/class-geodir-widget-listings.php:648
 #: includes/widgets/class-geodir-widget-loop.php:89
 #: includes/widgets/class-geodir-widget-loop.php:102
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:60
@@ -665,9 +665,12 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:263
 #: includes/widgets/class-geodir-widget-best-of.php:281
 #: includes/widgets/class-geodir-widget-best-of.php:299
+#: includes/widgets/class-geodir-widget-listings.php:414
 #: includes/widgets/class-geodir-widget-listings.php:487
-#: includes/widgets/class-geodir-widget-listings.php:505
-#: includes/widgets/class-geodir-widget-listings.php:523
+#: includes/widgets/class-geodir-widget-listings.php:503
+#: includes/widgets/class-geodir-widget-listings.php:597
+#: includes/widgets/class-geodir-widget-listings.php:615
+#: includes/widgets/class-geodir-widget-listings.php:633
 #: includes/widgets/class-geodir-widget-loop-paging.php:156
 #: includes/widgets/class-geodir-widget-loop-paging.php:170
 #: includes/widgets/class-geodir-widget-loop-paging.php:186
@@ -734,7 +737,9 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-az-search.php:145
 #: includes/widgets/class-geodir-widget-az-search.php:160
 #: includes/widgets/class-geodir-widget-best-of.php:314
-#: includes/widgets/class-geodir-widget-listings.php:539
+#: includes/widgets/class-geodir-widget-listings.php:488
+#: includes/widgets/class-geodir-widget-listings.php:504
+#: includes/widgets/class-geodir-widget-listings.php:649
 #: includes/widgets/class-geodir-widget-loop-paging.php:171
 #: includes/widgets/class-geodir-widget-loop-paging.php:187
 #: includes/widgets/class-geodir-widget-loop.php:103
@@ -756,7 +761,9 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-az-search.php:161
 #: includes/widgets/class-geodir-widget-best-of.php:316
 #: includes/widgets/class-geodir-widget-categories.php:326
-#: includes/widgets/class-geodir-widget-listings.php:541
+#: includes/widgets/class-geodir-widget-listings.php:489
+#: includes/widgets/class-geodir-widget-listings.php:505
+#: includes/widgets/class-geodir-widget-listings.php:651
 #: includes/widgets/class-geodir-widget-loop-actions.php:103
 #: includes/widgets/class-geodir-widget-loop-paging.php:172
 #: includes/widgets/class-geodir-widget-loop-paging.php:188
@@ -1432,7 +1439,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dashboard.php:168
 #: includes/widgets/class-geodir-widget-best-of.php:785
-#: includes/widgets/class-geodir-widget-listings.php:1670
+#: includes/widgets/class-geodir-widget-listings.php:1780
 #: includes/widgets/class-geodir-widget-recently-viewed.php:453
 #: templates/bootstrap/map/map.php:55
 msgid "Loading..."
@@ -6012,7 +6019,12 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-listings.php:367
 #: includes/widgets/class-geodir-widget-listings.php:377
 #: includes/widgets/class-geodir-widget-listings.php:387
-#: includes/widgets/class-geodir-widget-listings.php:402
+#: includes/widgets/class-geodir-widget-listings.php:405
+#: includes/widgets/class-geodir-widget-listings.php:421
+#: includes/widgets/class-geodir-widget-listings.php:450
+#: includes/widgets/class-geodir-widget-listings.php:479
+#: includes/widgets/class-geodir-widget-listings.php:495
+#: includes/widgets/class-geodir-widget-listings.php:511
 #: includes/widgets/class-geodir-widget-loop.php:145
 #: includes/widgets/class-geodir-widget-loop.php:157
 #: includes/widgets/class-geodir-widget-loop.php:170
@@ -6390,7 +6402,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-add-listing.php:102
 #: includes/widgets/class-geodir-widget-add-listing.php:284
 #: includes/widgets/class-geodir-widget-categories.php:649
-#: includes/widgets/class-geodir-widget-listings.php:624
+#: includes/widgets/class-geodir-widget-listings.php:734
 #: includes/widgets/class-geodir-widget-map.php:119
 #: includes/widgets/class-geodir-widget-map.php:387
 #: includes/widgets/class-geodir-widget-map.php:929
@@ -9677,10 +9689,10 @@ msgstr ""
 #: includes/custom-fields/input-functions-aui.php:2291
 #: includes/custom-fields/input-functions.php:1810
 #: includes/custom-fields/output-functions.php:86
-#: includes/widgets/class-geodir-widget-listings.php:557
-#: includes/widgets/class-geodir-widget-listings.php:571
-#: includes/widgets/class-geodir-widget-listings.php:597
-#: includes/widgets/class-geodir-widget-listings.php:639
+#: includes/widgets/class-geodir-widget-listings.php:667
+#: includes/widgets/class-geodir-widget-listings.php:681
+#: includes/widgets/class-geodir-widget-listings.php:707
+#: includes/widgets/class-geodir-widget-listings.php:749
 #: includes/widgets/class-geodir-widget-page-title.php:73
 #: includes/widgets/class-geodir-widget-post-features.php:141
 #: includes/widgets/class-geodir-widget-post-features.php:509
@@ -9696,10 +9708,10 @@ msgstr ""
 #: includes/custom-fields/input-functions-aui.php:2292
 #: includes/custom-fields/input-functions.php:1811
 #: includes/custom-fields/output-functions.php:88
-#: includes/widgets/class-geodir-widget-listings.php:556
-#: includes/widgets/class-geodir-widget-listings.php:570
-#: includes/widgets/class-geodir-widget-listings.php:596
-#: includes/widgets/class-geodir-widget-listings.php:638
+#: includes/widgets/class-geodir-widget-listings.php:666
+#: includes/widgets/class-geodir-widget-listings.php:680
+#: includes/widgets/class-geodir-widget-listings.php:706
+#: includes/widgets/class-geodir-widget-listings.php:748
 #: includes/widgets/class-geodir-widget-page-title.php:72
 #: includes/widgets/class-geodir-widget-post-features.php:140
 #: includes/widgets/class-geodir-widget-post-features.php:333
@@ -11515,7 +11527,7 @@ msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:119
 #: includes/core-functions.php:293
-#: includes/widgets/class-geodir-widget-listings.php:1207
+#: includes/widgets/class-geodir-widget-listings.php:1317
 msgid "Near:"
 msgstr ""
 
@@ -15468,7 +15480,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-author-actions.php:97
 #: includes/widgets/class-geodir-widget-best-of.php:315
 #: includes/widgets/class-geodir-widget-categories.php:325
-#: includes/widgets/class-geodir-widget-listings.php:540
+#: includes/widgets/class-geodir-widget-listings.php:650
 #: includes/widgets/class-geodir-widget-loop.php:104
 #: includes/widgets/class-geodir-widget-post-features.php:373
 #: includes/widgets/class-geodir-widget-recently-viewed.php:245
@@ -15745,6 +15757,7 @@ msgid "Style"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-az-search.php:131
+#: includes/widgets/class-geodir-widget-listings.php:415
 #: includes/widgets/class-geodir-widget-loop-paging.php:157
 msgid "Rounded"
 msgstr ""
@@ -15760,6 +15773,7 @@ msgid "Size (mobile)"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-az-search.php:156
+#: includes/widgets/class-geodir-widget-listings.php:500
 #: includes/widgets/class-geodir-widget-loop-paging.php:183
 msgid "Pagination size to show on mobile."
 msgstr ""
@@ -15843,35 +15857,35 @@ msgid "Use current viewing post type?"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:158
-#: includes/widgets/class-geodir-widget-listings.php:406
+#: includes/widgets/class-geodir-widget-listings.php:516
 #: includes/widgets/class-geodir-widget-loop.php:138
 #: includes/widgets/class-geodir-widget-recently-viewed.php:112
 msgid "Archive Item Template Type:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:169
-#: includes/widgets/class-geodir-widget-listings.php:417
+#: includes/widgets/class-geodir-widget-listings.php:527
 #: includes/widgets/class-geodir-widget-loop.php:149
 #: includes/widgets/class-geodir-widget-recently-viewed.php:123
 msgid "Archive Item Template Page:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:182
-#: includes/widgets/class-geodir-widget-listings.php:430
+#: includes/widgets/class-geodir-widget-listings.php:540
 #: includes/widgets/class-geodir-widget-loop.php:162
 #: includes/widgets/class-geodir-widget-recently-viewed.php:136
 msgid "Archive Item Template Part:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:199
-#: includes/widgets/class-geodir-widget-listings.php:447
+#: includes/widgets/class-geodir-widget-listings.php:557
 #: includes/widgets/class-geodir-widget-loop.php:179
 #: includes/widgets/class-geodir-widget-recently-viewed.php:153
 msgid "Archive Item Elementor Skin:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:211
-#: includes/widgets/class-geodir-widget-listings.php:459
+#: includes/widgets/class-geodir-widget-listings.php:569
 #: includes/widgets/class-geodir-widget-loop.php:191
 #: includes/widgets/class-geodir-widget-recently-viewed.php:165
 #: includes/widgets/class-geodir-widget-simple-archive.php:221
@@ -15879,7 +15893,7 @@ msgid "Skin column gap"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:212
-#: includes/widgets/class-geodir-widget-listings.php:460
+#: includes/widgets/class-geodir-widget-listings.php:570
 #: includes/widgets/class-geodir-widget-loop.php:192
 #: includes/widgets/class-geodir-widget-recently-viewed.php:166
 #: includes/widgets/class-geodir-widget-simple-archive.php:222
@@ -15887,7 +15901,7 @@ msgid "The px value for the column gap."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:222
-#: includes/widgets/class-geodir-widget-listings.php:470
+#: includes/widgets/class-geodir-widget-listings.php:580
 #: includes/widgets/class-geodir-widget-loop.php:202
 #: includes/widgets/class-geodir-widget-recently-viewed.php:176
 #: includes/widgets/class-geodir-widget-simple-archive.php:231
@@ -15895,7 +15909,7 @@ msgid "Skin row gap"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:223
-#: includes/widgets/class-geodir-widget-listings.php:471
+#: includes/widgets/class-geodir-widget-listings.php:581
 #: includes/widgets/class-geodir-widget-loop.php:203
 #: includes/widgets/class-geodir-widget-recently-viewed.php:177
 #: includes/widgets/class-geodir-widget-simple-archive.php:232
@@ -15903,7 +15917,7 @@ msgid "The px value for the row gap."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:259
-#: includes/widgets/class-geodir-widget-listings.php:483
+#: includes/widgets/class-geodir-widget-listings.php:593
 #: includes/widgets/class-geodir-widget-loop.php:48
 #: includes/widgets/class-geodir-widget-recently-viewed.php:189
 #: includes/widgets/class-geodir-widget-simple-archive.php:139
@@ -15911,7 +15925,7 @@ msgid "Card row gap"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:260
-#: includes/widgets/class-geodir-widget-listings.php:484
+#: includes/widgets/class-geodir-widget-listings.php:594
 #: includes/widgets/class-geodir-widget-loop.php:49
 #: includes/widgets/class-geodir-widget-recently-viewed.php:190
 #: includes/widgets/class-geodir-widget-simple-archive.php:140
@@ -15931,16 +15945,16 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-categories.php:316
 #: includes/widgets/class-geodir-widget-categories.php:332
 #: includes/widgets/class-geodir-widget-listings.php:65
-#: includes/widgets/class-geodir-widget-listings.php:413
-#: includes/widgets/class-geodir-widget-listings.php:425
-#: includes/widgets/class-geodir-widget-listings.php:438
-#: includes/widgets/class-geodir-widget-listings.php:455
-#: includes/widgets/class-geodir-widget-listings.php:466
-#: includes/widgets/class-geodir-widget-listings.php:477
-#: includes/widgets/class-geodir-widget-listings.php:497
-#: includes/widgets/class-geodir-widget-listings.php:515
-#: includes/widgets/class-geodir-widget-listings.php:529
-#: includes/widgets/class-geodir-widget-listings.php:546
+#: includes/widgets/class-geodir-widget-listings.php:523
+#: includes/widgets/class-geodir-widget-listings.php:535
+#: includes/widgets/class-geodir-widget-listings.php:548
+#: includes/widgets/class-geodir-widget-listings.php:565
+#: includes/widgets/class-geodir-widget-listings.php:576
+#: includes/widgets/class-geodir-widget-listings.php:587
+#: includes/widgets/class-geodir-widget-listings.php:607
+#: includes/widgets/class-geodir-widget-listings.php:625
+#: includes/widgets/class-geodir-widget-listings.php:639
+#: includes/widgets/class-geodir-widget-listings.php:656
 #: includes/widgets/class-geodir-widget-loop.php:62
 #: includes/widgets/class-geodir-widget-loop.php:80
 #: includes/widgets/class-geodir-widget-loop.php:94
@@ -15970,7 +15984,7 @@ msgid "Card Design"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:277
-#: includes/widgets/class-geodir-widget-listings.php:501
+#: includes/widgets/class-geodir-widget-listings.php:611
 #: includes/widgets/class-geodir-widget-loop.php:66
 #: includes/widgets/class-geodir-widget-recently-viewed.php:207
 #: includes/widgets/class-geodir-widget-simple-archive.php:157
@@ -15978,7 +15992,7 @@ msgid "Card column gap"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:278
-#: includes/widgets/class-geodir-widget-listings.php:502
+#: includes/widgets/class-geodir-widget-listings.php:612
 #: includes/widgets/class-geodir-widget-loop.php:67
 #: includes/widgets/class-geodir-widget-recently-viewed.php:208
 #: includes/widgets/class-geodir-widget-simple-archive.php:158
@@ -15986,7 +16000,7 @@ msgid "This adjusts the spacing between the cards vertically."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:295
-#: includes/widgets/class-geodir-widget-listings.php:519
+#: includes/widgets/class-geodir-widget-listings.php:629
 #: includes/widgets/class-geodir-widget-loop.php:84
 #: includes/widgets/class-geodir-widget-recently-viewed.php:225
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:108
@@ -15995,7 +16009,7 @@ msgid "Card border"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:296
-#: includes/widgets/class-geodir-widget-listings.php:520
+#: includes/widgets/class-geodir-widget-listings.php:630
 #: includes/widgets/class-geodir-widget-loop.php:85
 #: includes/widgets/class-geodir-widget-recently-viewed.php:226
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:109
@@ -16005,7 +16019,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:309
 #: includes/widgets/class-geodir-widget-categories.php:320
-#: includes/widgets/class-geodir-widget-listings.php:534
+#: includes/widgets/class-geodir-widget-listings.php:644
 #: includes/widgets/class-geodir-widget-loop.php:98
 #: includes/widgets/class-geodir-widget-recently-viewed.php:239
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:123
@@ -16016,7 +16030,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:310
 #: includes/widgets/class-geodir-widget-categories.php:321
-#: includes/widgets/class-geodir-widget-listings.php:535
+#: includes/widgets/class-geodir-widget-listings.php:645
 #: includes/widgets/class-geodir-widget-loop.php:99
 #: includes/widgets/class-geodir-widget-recently-viewed.php:240
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:124
@@ -16034,7 +16048,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:748
 #: includes/widgets/class-geodir-widget-best-of.php:777
-#: includes/widgets/class-geodir-widget-listings.php:1698
+#: includes/widgets/class-geodir-widget-listings.php:1808
 msgid "View all"
 msgstr ""
 
@@ -16818,13 +16832,13 @@ msgid "SEO"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-listings.php:66
-#: includes/widgets/class-geodir-widget-listings.php:562
-#: includes/widgets/class-geodir-widget-listings.php:577
-#: includes/widgets/class-geodir-widget-listings.php:586
-#: includes/widgets/class-geodir-widget-listings.php:603
-#: includes/widgets/class-geodir-widget-listings.php:614
-#: includes/widgets/class-geodir-widget-listings.php:630
-#: includes/widgets/class-geodir-widget-listings.php:645
+#: includes/widgets/class-geodir-widget-listings.php:672
+#: includes/widgets/class-geodir-widget-listings.php:687
+#: includes/widgets/class-geodir-widget-listings.php:696
+#: includes/widgets/class-geodir-widget-listings.php:713
+#: includes/widgets/class-geodir-widget-listings.php:724
+#: includes/widgets/class-geodir-widget-listings.php:740
+#: includes/widgets/class-geodir-widget-listings.php:755
 #: includes/widgets/class-geodir-widget-recent-reviews.php:213
 msgid "Carousel"
 msgstr ""
@@ -16999,80 +17013,134 @@ msgstr ""
 msgid "After pagination"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:553
+#: includes/widgets/class-geodir-widget-listings.php:397
+#: includes/widgets/class-geodir-widget-loop-paging.php:89
+msgid "Inline Before"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:398
+#: includes/widgets/class-geodir-widget-loop-paging.php:90
+msgid "Inline After"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:399
+#: includes/widgets/class-geodir-widget-loop-paging.php:91
+msgid "Only (hide paging)"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:411
+msgid "Paging Style"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:427
+#: includes/widgets/class-geodir-widget-loop-paging.php:104
+msgid "Middle Pages Numbers:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:428
+msgid "How many numbers to either side of the current pages. Default 0."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:430
+#: includes/widgets/class-geodir-widget-listings.php:459
+#: includes/widgets/class-geodir-widget-loop-paging.php:132
+msgid "Default (0)"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:456
+#: includes/widgets/class-geodir-widget-loop-paging.php:129
+msgid "Middle Pages Numbers (mobile):"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:457
+#: includes/widgets/class-geodir-widget-loop-paging.php:130
+msgid ""
+"How many numbers to either side of the current pages on small screen like on "
+"mobile. Default 0."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:484
+msgid "Paging Size"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:499
+msgid "Paging Size (mobile)"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:663
 msgid "With Carousel:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:554
+#: includes/widgets/class-geodir-widget-listings.php:664
 msgid "Enable carousel to show listings slideshow."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:567
+#: includes/widgets/class-geodir-widget-listings.php:677
 msgid "With Indicators:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:568
+#: includes/widgets/class-geodir-widget-listings.php:678
 msgid "Show the previous/next navigation indicators to the carousel."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:585
+#: includes/widgets/class-geodir-widget-listings.php:695
 msgid "Indicator Margin Bottom"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:593
+#: includes/widgets/class-geodir-widget-listings.php:703
 msgid "With Controls:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:594
+#: includes/widgets/class-geodir-widget-listings.php:704
 msgid "Show the paging control of each slide to the carousel."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:608
+#: includes/widgets/class-geodir-widget-listings.php:718
 msgid "Interval:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:609
+#: includes/widgets/class-geodir-widget-listings.php:719
 msgid ""
 "The amount of time in seconds to delay between automatically cycling an "
 "listing item. If 0, carousel will not automatically cycle."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:619
+#: includes/widgets/class-geodir-widget-listings.php:729
 msgid "Autoplay:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:620
+#: includes/widgets/class-geodir-widget-listings.php:730
 msgid ""
 "Autoplays the carousel after the user manually cycles the first slide. If "
 "\"carousel\", autoplays the carousel on page load automatically."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:622
+#: includes/widgets/class-geodir-widget-listings.php:732
 msgid "Default (Auto)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:623
+#: includes/widgets/class-geodir-widget-listings.php:733
 msgid "On Click"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:635
+#: includes/widgets/class-geodir-widget-listings.php:745
 msgid "Center Slides:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:636
+#: includes/widgets/class-geodir-widget-listings.php:746
 msgid "Show center slide and left/right slide with half preview."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1207
+#: includes/widgets/class-geodir-widget-listings.php:1317
 msgid "Me"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1392
+#: includes/widgets/class-geodir-widget-listings.php:1502
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1600
+#: includes/widgets/class-geodir-widget-listings.php:1710
 #: includes/widgets/class-geodir-widget-loop.php:347
 msgid ""
 "This preview shows all content items to give an idea of layout. Dummy data "
@@ -17212,42 +17280,12 @@ msgstr ""
 msgid "After"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-loop-paging.php:89
-msgid "Inline Before"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:90
-msgid "Inline After"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:91
-msgid "Only (hide paging)"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:104
-msgid "Middle Pages Numbers:"
-msgstr ""
-
 #: includes/widgets/class-geodir-widget-loop-paging.php:105
 msgid "How many numbers to either side of the current pages. Default 2."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-loop-paging.php:107
 msgid "Default (2)"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:129
-msgid "Middle Pages Numbers (mobile):"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:130
-msgid ""
-"How many numbers to either side of the current pages on small screen like on "
-"mobile. Default 0."
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-loop-paging.php:132
-msgid "Default (0)"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-loop.php:26
