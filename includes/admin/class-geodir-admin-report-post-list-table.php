@@ -835,7 +835,7 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 	public function column_reports( $item ) {
 		$post = get_post( (int) $item->post_id );
 
-		$value = __( esc_html( $item->reason ), 'geodirectory' );
+		$value = esc_html( $item->reason );
 		if ( ! empty( $item->message ) ) {
 			$value .= '<br><a href="javascipt:void(0)" class="geodir-report-view">' . __( 'View Message', 'geodirectory' ) . '</a><div style="display:none"><div class="lity-show" id="geodir-view-report-post-' . $item->id . '" style="white-space:pre-wrap;"><strong class="gd-settings-title ">' . __( 'Message:', 'geodirectory' ) . '</strong><br><hr>' . esc_html( $item->message ) . '</div></div>';
 		}
