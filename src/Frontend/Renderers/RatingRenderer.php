@@ -47,47 +47,100 @@ final class RatingRenderer {
 	 */
 	public function render_stars( float $rating, string $type = 'output', array $overrides = [] ): string {
 		$args = wp_parse_args( $overrides, [
-			'rating_icon'        => (string) $this->settings->get( 'rating_icon', 'fas fa-star' ),
-			'rating_color'       => (string) $this->settings->get( 'rating_color', '#ffb200' ),
-			'rating_color_off'   => (string) $this->settings->get( 'rating_color_off', '#ccc' ),
+			'rating_icon'        => esc_attr( (string) $this->settings->get( 'rating_icon', 'fas fa-star' ) ),
+			'rating_icon_fw'     => esc_attr( (string) $this->settings->get( 'rating_icon_fw', '' ) ),
+			'rating_color'       => esc_attr( (string) $this->settings->get( 'rating_color', '#ffb200' ) ),
+			'rating_color_off'   => esc_attr( (string) $this->settings->get( 'rating_color_off', '#ccc' ) ),
 			'rating_texts'       => $this->get_rating_texts(),
+			'rating_image'       => $this->settings->get( 'rating_image' ),
+			'rating_type'        => esc_attr( (string) $this->settings->get( 'rating_type', 'font-icon' ) ),
 			'rating_input_count' => 5,
 			'id'                 => 'geodir_overallrating',
 			'rating_label'       => $overrides['rating_label'] ?? '',
 		] );
 
-		$rating_percent = ( $type === 'output' && $rating > 0 ) ? 'width:' . ( $rating / $args['rating_input_count'] * 100 ) . '%;' : '';
+		// Handle rating label filter for input type
+		$rating_label = $args['rating_label'];
+		if ( ! $rating_label && $type === 'input' ) {
+			/**
+			 * Filter the label for main rating.
+			 *
+			 * This is not shown everywhere but is used by reviews manager.
+			 */
+			$rating_label = apply_filters( 'geodir_overall_rating_label', '' );
+		}
 
-		$foreground_style = "style='{$rating_percent} color:{$args['rating_color']};'";
+		// Build rating icon with optional fa-fw
+		$rating_icon = $args['rating_icon'];
+		if ( $args['rating_icon_fw'] ) {
+			$rating_icon .= ' fa-fw';
+		}
+
+		// Prepare rating HTML (stars or images)
+		$rating_html = '';
+		$rating_type = $args['rating_type'];
+		$rating_input_count = $args['rating_input_count'];
+
+		if ( $rating_type === 'image' && ! empty( $args['rating_image'] ) ) {
+			$rating_image = wp_get_attachment_url( $args['rating_image'] );
+			for ( $i = 1; $i <= $rating_input_count; $i++ ) {
+				$rating_title = $type === 'input' ? "title='{$args['rating_texts'][$i]}'" : '';
+				$rating_html .= '<img alt="rating icon" src="' . esc_url( $rating_image ) . '" ' . $rating_title . ' />';
+			}
+			// For images, color is used as background
+			$rating_color = $args['rating_color'] ? "background:{$args['rating_color']};" : '';
+		} else {
+			// Font icon mode
+			for ( $i = 1; $i <= $rating_input_count; $i++ ) {
+				$rating_title = $type === 'input' ? "title='{$args['rating_texts'][$i]}'" : '';
+				$rating_html .= "<i class='{$rating_icon}' aria-hidden='true' {$rating_title}></i>";
+			}
+			$rating_color = $args['rating_color'] ? " color:{$args['rating_color']}; " : '';
+		}
+
+		// Calculate rating percentage width
+		$rating_percent = '';
+		if ( $type === 'output' ) {
+			$rating_percent = 'width:' . ( $rating / $rating_input_count * 100 ) . '%;';
+		} elseif ( $type === 'input' && ! $rating ) {
+			// Default to 50% width for input with no rating
+			$rating_percent = 'width:50%;';
+		}
+
+		// Build styles
+		$foreground_style = ( $rating_percent || $rating_color ) ? "style='{$rating_percent}{$rating_color}'" : '';
 		$background_style = "style='color:{$args['rating_color_off']};'";
 
+		// Build rating wrap title
 		$rating_wrap_title = '';
 		if ( $type === 'output' ) {
-			$rating_wrap_title = $rating > 0 ? sprintf( esc_attr__( '%s star rating', 'geodirectory' ), $rating ) : esc_attr__( 'No rating yet!', 'geodirectory' );
+			if ( $rating > 0 ) {
+				$rating_wrap_title = wp_sprintf( __( '%d star rating', 'geodirectory' ), $rating );
+			} else {
+				$rating_wrap_title = __( 'No rating yet!', 'geodirectory' );
+			}
+			$rating_wrap_title = apply_filters( 'geodir_output_rating_title', $rating_wrap_title, $rating, $args );
 		}
+		$rating_wrap_title = $rating_wrap_title ? 'title="' . esc_attr( $rating_wrap_title ) . '"' : '';
 
-		$stars_html = '';
-		for ( $i = 1; $i <= $args['rating_input_count']; $i++ ) {
-			$star_title = $type === 'input' ? "title='{$args['rating_texts'][$i]}'" : '';
-			$stars_html .= "<i class='{$args['rating_icon']}' aria-hidden='true' {$star_title}></i>";
-		}
+		$wrap_class = $type === 'input' ? 'c-pointer' : '';
 
 		ob_start();
 		?>
-		<div class="gd-rating-outer-wrap gd-rating-<?php echo esc_attr( $type ); ?>-wrap">
-			<?php if ( ! empty( $args['rating_label'] ) ) : ?>
-				<span class="gd-rating-label"><?php echo esc_html( $args['rating_label'] ); ?>: </span>
-			<?php endif; ?>
-			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?>">
-				<span class="gd-rating-wrap" <?php if ($rating_wrap_title) { echo 'title="' . $rating_wrap_title . '"'; } ?>>
-					<span class="gd-rating-foreground" <?php echo $foreground_style; ?>><?php echo $stars_html; ?></span>
-					<span class="gd-rating-background" <?php echo $background_style; ?>><?php echo $stars_html; ?></span>
+		<div class="gd-rating-outer-wrap gd-rating-<?php echo esc_attr( $type ); ?>-wrap d-flex justify-content-between flex-nowrap w-100">
+			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo esc_attr( $rating_type ); ?>">
+				<span class="gd-rating-wrap d-inline-flex text-nowrap position-relative <?php echo esc_attr( $wrap_class ); ?>" <?php echo $rating_wrap_title; ?>>
+					<span class="gd-rating-foreground position-absolute text-nowrap overflow-hidden" <?php echo $foreground_style; ?>><?php echo $rating_html; ?></span>
+					<span class="gd-rating-background" <?php echo $background_style; ?>><?php echo $rating_html; ?></span>
 				</span>
 				<?php if ( $type === 'input' ) : ?>
-					<span class="gd-rating-text" data-title="<?php esc_attr_e( 'Select a rating', 'geodirectory' ); ?>"><?php esc_html_e( 'Select a rating', 'geodirectory' ); ?></span>
+					<span class="gd-rating-text badge text-body-emphasis bg-secondary-subtle border" data-title="<?php esc_attr_e( 'Select a rating', 'geodirectory' ); ?>"><?php esc_html_e( 'Select a rating', 'geodirectory' ); ?></span>
 					<input type="hidden" id="<?php echo esc_attr( $args['id'] ); ?>" name="<?php echo esc_attr( $args['id'] ); ?>" value="<?php echo esc_attr( $rating ); ?>"/>
 				<?php endif; ?>
 			</div>
+			<?php if ( ! empty( $rating_label ) ) : ?>
+				<span class="gd-rating-label fw-bold p-0 m-0 text-nowrap"><?php echo esc_html( $rating_label ); ?></span>
+			<?php endif; ?>
 		</div>
 		<?php
 		return ob_get_clean();

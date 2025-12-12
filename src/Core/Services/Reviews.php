@@ -30,7 +30,7 @@ final class Reviews {
 	 * @param LocationsInterface $locations  The locations service.
 	 */
 	public function __construct(
-		private ReviewRepository $repository,
+		public ReviewRepository $repository,
 		private Settings $settings,
 		private LocationsInterface $locations
 	) {

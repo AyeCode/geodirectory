@@ -5,6 +5,7 @@
  */
 
 import { initBusinessHoursDisplay } from './frontend/business-hours.js';
+import { initRatingInput } from './shared/rating-input.js';
 
 // Initialize GeoDir namespace
 window.GeoDir = window.GeoDir || {};
@@ -27,4 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		window.GeoDir.businessHoursDisplay = bhDisplay;
 		console.log('GeoDirectory: Business hours display initialized');
 	}
+
+	// Initialize rating input
+	initRatingInput();
+	window.GeoDir.initRatingInput = initRatingInput;
+	console.log('GeoDirectory: Rating input initialized');
 });

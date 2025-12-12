@@ -18,6 +18,9 @@ use AyeCode\GeoDirectory\Support\Hookable;
 final class ReviewHooks {
 	use Hookable;
 
+	private Reviews $reviews_service;
+	private ReviewForm $review_form;
+
 	/**
 	 * Constructor.
 	 *
@@ -25,9 +28,12 @@ final class ReviewHooks {
 	 * @param ReviewForm $review_form  The review form renderer.
 	 */
 	public function __construct(
-		private Reviews $reviews_service,
-		private ReviewForm $review_form
-	) {}
+		Reviews $reviews_service,
+		ReviewForm $review_form
+	) {
+		$this->review_form     = $review_form;
+		$this->reviews_service = $reviews_service;
+	}
 
 	/**
 	 * Registers all the hooks related to reviews and comments.
@@ -79,10 +85,16 @@ final class ReviewHooks {
 	 * @return int The filtered review count.
 	 */
 	public function filter_review_count( int $count, int $post_id ): int {
-		if ( ! is_admin() && geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
-			return $this->reviews_service->repository->get_count_for_post( $post_id );
+		if ( is_admin() ) {
+			return $count;
 		}
-		return $count;
+
+		$post_type = get_post_type( $post_id );
+		if ( ! $post_type || ! geodir_is_gd_post_type( $post_type ) ) {
+			return $count;
+		}
+
+		return $this->reviews_service->repository->get_count_for_post( $post_id );
 	}
 
 	/**
@@ -93,10 +105,16 @@ final class ReviewHooks {
 	 * @return bool True if open for reviews, false otherwise.
 	 */
 	public function filter_comments_open( bool $is_open, int $post_id ): bool {
-		if ( $is_open && geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
-			return $this->reviews_service->can_user_submit_review( $post_id );
+		if ( ! $is_open ) {
+			return $is_open;
 		}
-		return $is_open;
+
+		$post_type = get_post_type( $post_id );
+		if ( ! $post_type || ! geodir_is_gd_post_type( $post_type ) ) {
+			return $is_open;
+		}
+
+		return $this->reviews_service->can_user_submit_review( $post_id );
 	}
 
 	/**
@@ -107,9 +125,11 @@ final class ReviewHooks {
 	 * @return string The modified link.
 	 */
 	public function filter_comments_link_hash( string $comments_link, int $post_id ): string {
-		if ( geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
-			return str_replace( '#comments', '#reviews', $comments_link );
+		$post_type = get_post_type( $post_id );
+		if ( ! $post_type || ! geodir_is_gd_post_type( $post_type ) ) {
+			return $comments_link;
 		}
-		return $comments_link;
+
+		return str_replace( '#comments', '#reviews', $comments_link );
 	}
 }

@@ -37,8 +37,10 @@ final class ReviewForm {
 	 * @return array The modified arguments.
 	 */
 	public function modify_form_defaults( array $defaults ): array {
+		global $post;
+
 		// @todo Refactor the global aui() helper into an injectable service.
-		if ( ! function_exists( 'aui' ) || ! geodir_is_page( 'single' ) ) {
+		if ( ! function_exists( 'aui' ) || ! $post || ! geodir_is_gd_post_type( $post->post_type ) ) {
 			return $defaults;
 		}
 
@@ -98,14 +100,11 @@ final class ReviewForm {
 	public function render_rating_input(): void {
 		global $post;
 
-		if ( ! $post || geodir_cpt_has_rating_disabled( $post->post_type ) ) {
+		if ( ! $post || ! geodir_is_gd_post_type( $post->post_type ) || geodir_cpt_has_rating_disabled( $post->post_type ) ) {
 			return;
 		}
 
-		// @todo Refactor the global aui() helper into an injectable service.
-		$aui_bs5 = function_exists( 'aui' ) ? aui()->is_bs5() : false;
-
-		echo '<div class="' . ( $aui_bs5 ? 'mb-3' : 'form-group' ) . ' form-control h-auto rounded px-3 pt-3 pb-3 gd-rating-input-group">';
+		echo '<div class="mb-3 form-control h-auto rounded px-3 pt-3 pb-3 gd-rating-input-group">';
 		echo $this->rating_renderer->render_input();
 		echo '</div>';
 	}

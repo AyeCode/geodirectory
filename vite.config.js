@@ -1,5 +1,49 @@
 import { defineConfig } from 'vite';
 import path from 'path';
+import fs from 'fs';
+
+/**
+ * Vite plugin to force duplication of shared modules into each entry bundle.
+ * Prevents automatic code splitting by making each import appear unique to Rollup.
+ */
+function duplicateSharedModule(modulePath) {
+	const normalizedPath = path.normalize(modulePath);
+
+	return {
+		name: 'duplicate-shared-module',
+		enforce: 'pre', // Run before Vite's default resolution
+
+		resolveId(source, importer) {
+			if (!importer) return null;
+
+			// Check if source matches our target (could be relative path)
+			if (source.includes('rating-input.js')) {
+				// Resolve the full path
+				const resolved = path.resolve(path.dirname(importer), source);
+				const normalizedResolved = path.normalize(resolved);
+
+				if (normalizedResolved === normalizedPath) {
+					// Create unique virtual ID per importer to prevent deduplication
+					// Use importer path as distinguisher so Rollup treats them as separate modules
+					return `${normalizedPath}?inline-for=${encodeURIComponent(importer)}`;
+				}
+			}
+
+			return null;
+		},
+
+		load(id) {
+			// Check if this is one of our virtual IDs
+			if (id.startsWith(normalizedPath + '?inline-for=')) {
+				// Return the actual file content
+				// Each "virtual" module gets the same content but Rollup treats them as distinct
+				return fs.readFileSync(normalizedPath, 'utf-8');
+			}
+
+			return null;
+		}
+	};
+}
 
 /**
  * Plugin to wrap output in IIFE to prevent global namespace pollution
@@ -51,15 +95,24 @@ function wrapIIFE() {
 }
 
 export default defineConfig({
-	plugins: [wrapIIFE()],
+	plugins: [
+		duplicateSharedModule(
+			path.resolve(__dirname, 'resources/scripts/shared/rating-input.js')
+		),
+		wrapIIFE()
+	],
 	build: {
 		outDir: 'assets',
 		emptyOutDir: true,
 		manifest: true, // Keep this true so PHP can read it if we ever need cache-busting hashes later
 
+		// Disable code splitting completely - inline everything
 		rollupOptions: {
 			// 1. Tell Vite these exist globally, do not bundle them.
 			external: ['jquery', 'bootstrap', 'alpinejs'],
+
+			// Force inline all dependencies - no code splitting
+			preserveEntrySignatures: 'strict',
 
 			output: {
 				// 2. Map external imports to global window variables
@@ -68,6 +121,9 @@ export default defineConfig({
 					bootstrap: 'bootstrap',
 					alpinejs: 'Alpine'
 				},
+
+				// CRITICAL: Disable all code splitting
+				manualChunks: {},
 
 				// 4. Output JS to assets/js/name.js
 				entryFileNames: `js/[name].js`,
