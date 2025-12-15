@@ -30,14 +30,14 @@ global $gd_post,$geodir_item_tmpl;
 $card_wrap = !empty($geodir_item_tmpl['type']) && 'template_part' === $geodir_item_tmpl['type'] ? false : true;
 ?>
 
-<div <?php GeoDir_Post_Data::post_class("col ".$row_gap_class." ".$column_gap_class); ?> data-post-id="<?php echo esc_attr( $gd_post->ID ); ?>">
+<div <?php geodirectory()->templates->post_class("col ".$row_gap_class." ".$column_gap_class); ?> data-post-id="<?php echo esc_attr( $gd_post->ID ); ?>">
 	<?php if($card_wrap){ ?>
 	<div class="card h-100 p-0 m-0 mw-100 <?php echo sanitize_html_class($card_border_class); echo " ".sanitize_html_class($card_shadow_class);?>">
 	<?php
 	}
 
 		// get content from GD Archive Item page template
-		echo GeoDir_Template_Loader::archive_item_template_content( $gd_post->post_type );
+		echo geodirectory()->templates->archive_item_template_content( $gd_post->post_type );
 
 	if($card_wrap){
 	?>

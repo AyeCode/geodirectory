@@ -941,6 +941,33 @@ geodirectory()->templates->az_search_options( 'gd_place' );
 geodirectory()->templates->az_search_value();
 
 /**
+ * Output post CSS classes as HTML class attribute.
+ * Simplified version of WordPress's post_class() for GeoDirectory posts.
+ * @param string|array $class One or more classes to add.
+ * @param int|\WP_Post|null $post_id Optional. Post ID or post object. Defaults to global $gd_post.
+ * @return void Outputs HTML class attribute.
+ */
+geodirectory()->templates->post_class( 'col-md-6', $post_id );
+
+/**
+ * Get array of CSS classes for a GeoDirectory post.
+ * Simplified version of WordPress's get_post_class().
+ * @param string|array $class One or more classes to add.
+ * @param int|\WP_Post|null $post_id Optional. Post ID or post object. Defaults to global $gd_post.
+ * @return array Array of CSS class names.
+ */
+geodirectory()->templates->get_post_class( 'my-custom-class', $post_id );
+
+/**
+ * Get archive item template content.
+ * Retrieves and processes content for archive item templates (used in listing loops).
+ * @param string $post_type Post type. Default empty.
+ * @param int $page_id Page ID. Default 0.
+ * @return string The processed template content.
+ */
+geodirectory()->templates->archive_item_template_content( 'gd_place', 123 );
+
+/**
  * Make embeds responsive.
  * @param string $html Embed HTML.
  * @param string $url Embed URL.

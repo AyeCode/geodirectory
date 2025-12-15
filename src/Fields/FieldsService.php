@@ -257,6 +257,7 @@ class FieldsService {
 		}
 
 		// Get field type class
+//		print_r( $field_data );
 		$field_class = $this->registry->get( $field_data['field_type'] );
 
 		if ( ! $field_class || ! class_exists( $field_class ) ) {

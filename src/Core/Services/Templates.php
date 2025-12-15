@@ -422,4 +422,161 @@ final class Templates {
 		 */
 		return apply_filters( 'geodir_responsive_embeds', $html, $url, $attr, $post_ID );
 	}
+
+	/**
+	 * Output post CSS classes as HTML class attribute.
+	 *
+	 * Simplified version of WordPress's post_class() function for GeoDirectory posts.
+	 * Outputs the class attribute with post-specific classes.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string|array $class One or more classes to add to the class list.
+	 * @param int|\WP_Post|null $post_id Optional. Post ID or post object. Defaults to global $gd_post.
+	 * @return void
+	 */
+	public function post_class( $class = '', $post_id = null ): void {
+		// Separates classes with a single space, collates classes for post DIV
+		echo 'class="' . join( ' ', $this->get_post_class( $class, $post_id ) ) . '"';
+	}
+
+	/**
+	 * Get array of CSS classes for a GeoDirectory post.
+	 *
+	 * Simplified version of WordPress's get_post_class() function.
+	 * Returns an array of classes for the post element.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string|array $class One or more classes to add to the class list.
+	 * @param int|\WP_Post|null $post_id Optional. Post ID or post object. Defaults to global $gd_post.
+	 * @return array Array of CSS class names.
+	 */
+	public function get_post_class( $class = '', $post_id = null ): array {
+		global $gd_post;
+		$post = $gd_post;
+
+		$classes = array();
+
+		if ( $class ) {
+			if ( ! is_array( $class ) ) {
+				$class = preg_split( '#\s+#', $class );
+			}
+			$classes = array_map( 'esc_attr', $class );
+		} else {
+			// Ensure that we always coerce class to being an array.
+			$class = array();
+		}
+
+		if ( ! $post ) {
+			return $classes;
+		}
+
+		$classes[] = 'geodir-post';
+		$classes[] = 'post-' . $post->ID;
+		if ( ! is_admin() || wp_doing_ajax() ) {
+			$classes[] = $post->post_type;
+		}
+		$classes[] = 'type-' . $post->post_type;
+		$classes[] = 'status-' . $post->post_status;
+
+		if ( ! empty( $post->post_password ) ) {
+			$classes[] = 'post-password-protected';
+		}
+
+		// Post thumbnails.
+		if ( ! empty( $gd_post->featured_image ) ) {
+			$classes[] = 'has-post-thumbnail';
+		}
+
+		// sticky for Sticky Posts
+		if ( is_sticky( $post->ID ) ) {
+			if ( is_home() && ! is_paged() ) {
+				$classes[] = 'sticky';
+			} elseif ( is_admin() && ! wp_doing_ajax() ) {
+				$classes[] = 'status-sticky';
+			}
+		}
+
+		$classes = array_map( 'esc_attr', $classes );
+
+		/**
+		 * Filters the list of CSS class names for the current post.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param string[] $classes An array of post class names.
+		 * @param string[] $class An array of additional class names added to the post.
+		 * @param int $post_id The post ID.
+		 */
+		$classes = apply_filters( 'post_class', $classes, $class, $post->ID );
+
+		return array_unique( $classes );
+	}
+
+	/**
+	 * Get archive item template content.
+	 *
+	 * Retrieves and processes the content for an archive item template.
+	 * This is used to display individual listing items within archive loops.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $post_type Post type. Default empty.
+	 * @param int    $page_id   Page ID. Default 0.
+	 * @return string The processed template content.
+	 */
+	public function archive_item_template_content( string $post_type = '', int $page_id = 0 ): string {
+		global $geodir_item_tmpl;
+
+		$content = '';
+		$type    = 'page_id';
+
+		// Get the archive template page content.
+		if ( $page_id > 0 ) {
+			$archive_page_id = $page_id;
+		} elseif ( ! empty( $geodir_item_tmpl['type'] ) && $geodir_item_tmpl['type'] === 'page' && ! empty( $geodir_item_tmpl['id'] ) ) {
+			$archive_page_id = (int) $geodir_item_tmpl['id'];
+		} elseif ( ! empty( $geodir_item_tmpl['type'] ) && $geodir_item_tmpl['type'] === 'template_part' && ! empty( $geodir_item_tmpl['content'] ) && $this->is_block_theme() ) {
+			$content         = $geodir_item_tmpl['content'];
+			$archive_page_id = esc_attr( $geodir_item_tmpl['id'] );
+			$type            = 'template_part';
+		} else {
+			$archive_page_id = function_exists( 'geodir_archive_item_page_id' ) ? (int) geodir_archive_item_page_id( $post_type ) : 0;
+		}
+
+		if ( ! $content && $archive_page_id ) {
+			$content = get_post_field( 'post_content', $archive_page_id );
+		}
+
+		/**
+		 * Filters whether to bypass archive item template content retrieval.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string     $bypass_content  Bypass content. Return non-empty to bypass.
+		 * @param string     $content         The template content.
+		 * @param int|string $archive_page_id Archive page ID.
+		 * @param string     $type            Template type ('page_id' or 'template_part').
+		 */
+		$bypass_content = apply_filters( 'geodir_bypass_archive_item_template_content', '', $content, $archive_page_id, $type );
+		if ( $bypass_content ) {
+			return $bypass_content;
+		}
+
+		// If the content is blank then we grab the page defaults.
+		if ( $content === '' && class_exists( 'GeoDir_Defaults' ) ) {
+			$content = \GeoDir_Defaults::page_archive_item_content();
+		}
+
+		// Run block content if available.
+		if ( function_exists( 'do_blocks' ) ) {
+			$content = do_blocks( $content );
+		}
+
+		// Run the shortcodes on the content.
+		$content = do_shortcode( $content );
+
+		return $content;
+	}
 }

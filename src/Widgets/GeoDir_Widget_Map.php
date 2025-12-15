@@ -660,7 +660,7 @@ class GeoDir_Widget_Map extends \WP_Super_Duper {
 		}
 
 		// location
-		$current_location          = GeoDir()->location;
+		$current_location          = geodirectory()->locations->get_current();// GeoDir()->location;
 		$map_args['country']       = ! empty( $current_location->country_slug ) ? $current_location->country_slug : $map_args['country'];
 		$map_args['region']        = ! empty( $current_location->region_slug ) ? $current_location->region_slug : $map_args['region'];
 		$map_args['city']          = ! empty( $current_location->city_slug ) ? $current_location->city_slug : $map_args['city'];
@@ -1102,7 +1102,7 @@ jQuery(function ($) {
 		}
 		// default latitude, longitude
 		if ( empty( $params['default_lat'] ) || empty( $params['default_lng'] ) ) {
-			$default_location = $geodirectory->location->get_default_location();
+			$default_location = geodirectory()->locations->get_default();// //$geodirectory->location->get_default_location();
 
 			$params['default_lat'] = $default_location->latitude;
 			$params['default_lng'] = $default_location->longitude;
