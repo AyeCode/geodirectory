@@ -170,7 +170,6 @@ function geodir_get_template( $template_name, $args = array(), $template_path = 
 
 	if ( ! file_exists( $located ) ) {
 		geodir_doing_it_wrong( __FUNCTION__, sprintf( __( '%s does not exist.', 'geodirectory' ), '<code>' . $located . '</code>' ), '2.1' );
-
 		return;
 	}
 
@@ -180,7 +179,6 @@ function geodir_get_template( $template_name, $args = array(), $template_path = 
 	do_action( 'geodir_before_template_part', $template_name, $template_path, $located, $args );
 
 	include $located;
-
 	do_action( 'geodir_after_template_part', $template_name, $template_path, $located, $args );
 }
 

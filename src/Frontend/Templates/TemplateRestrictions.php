@@ -13,12 +13,30 @@ declare( strict_types=1 );
 
 namespace AyeCode\GeoDirectory\Frontend\Templates;
 
+use AyeCode\GeoDirectory\Core\Services\PageDefaults;
+
 /**
  * Manages template page restrictions and special behaviors.
  *
  * @since 3.0.0
  */
 final class TemplateRestrictions {
+
+	/**
+	 * Page defaults service instance.
+	 *
+	 * @var PageDefaults
+	 */
+	private PageDefaults $page_defaults;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param PageDefaults $page_defaults Page defaults service.
+	 */
+	public function __construct( PageDefaults $page_defaults ) {
+		$this->page_defaults = $page_defaults;
+	}
 
 	/**
 	 * Disable GeoDirectory page templates from direct frontend viewing.
@@ -208,8 +226,8 @@ final class TemplateRestrictions {
 		}
 
 		// Use defaults if content is blank
-		if ( $content === '' && class_exists( 'GeoDir_Defaults' ) ) {
-			$content = \GeoDir_Defaults::page_archive_item_content();
+		if ( $content === '' ) {
+			$content = $this->page_defaults->get_content( 'archive_item' );
 		}
 
 		// Process blocks

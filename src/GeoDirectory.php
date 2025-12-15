@@ -39,6 +39,9 @@ use AyeCode\GeoDirectory\Core\Services\PostSaveService;
 use AyeCode\GeoDirectory\Core\Services\QueryVars;
 use AyeCode\GeoDirectory\Core\Services\Users;
 use AyeCode\GeoDirectory\Core\Services\Email;
+use AyeCode\GeoDirectory\Core\Services\EmailDefaults;
+use AyeCode\GeoDirectory\Core\Services\SeoDefaults;
+use AyeCode\GeoDirectory\Core\Services\PageDefaults;
 use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
 use AyeCode\GeoDirectory\Database\Repository\TabRepository;
 use AyeCode\GeoDirectory\Fields\FieldsService;
@@ -81,6 +84,9 @@ use AyeCode\GeoDirectory\Frontend\Renderers\ReviewRenderer;
  * @property-read \AyeCode\GeoDirectory\Core\Services\QueryVars $query_vars The Query Variables service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Users $users The Users service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Email $email The Email service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\EmailDefaults $email_defaults The Email Defaults service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\SeoDefaults $seo_defaults The SEO Defaults service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\PageDefaults $page_defaults The Page Defaults service.
  * @property-read \AyeCode\GeoDirectory\Fields\FieldsService $fields The Fields Service.
  */
 final class GeoDirectory {
@@ -207,6 +213,15 @@ final class GeoDirectory {
 				break;
 			case 'email':
 				$service_id = Email::class;
+				break;
+			case 'email_defaults':
+				$service_id = EmailDefaults::class;
+				break;
+			case 'seo_defaults':
+				$service_id = SeoDefaults::class;
+				break;
+			case 'page_defaults':
+				$service_id = PageDefaults::class;
 				break;
 			default:
 				throw new \InvalidArgumentException( "Error: The service '{$name}' is not registered in the main GeoDirectory class." );

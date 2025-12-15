@@ -13,6 +13,7 @@ declare( strict_types = 1 );
 namespace AyeCode\GeoDirectory\Core\Seo;
 
 use AyeCode\GeoDirectory\Core\Services\Settings;
+use AyeCode\GeoDirectory\Core\Services\SeoDefaults;
 
 /**
  * Handles SEO meta information for GeoDirectory pages.
@@ -58,10 +59,12 @@ final class MetaManager {
 	 *
 	 * @param Settings $settings The settings service.
 	 * @param VariableReplacer $replacer The variable replacer service.
+	 * @param SeoDefaults $defaults The SEO defaults service.
 	 */
 	public function __construct(
 		private Settings $settings,
-		private VariableReplacer $replacer
+		private VariableReplacer $replacer,
+		private SeoDefaults $defaults
 	) {}
 
 	/**
@@ -124,19 +127,19 @@ final class MetaManager {
 		if ( isset( $post_type_info->seo['title'] ) && ! empty( $post_type_info->seo['title'] ) ) {
 			$this->title = __( $post_type_info->seo['title'], 'geodirectory' );
 		} else {
-			$this->title = $this->settings->get( 'seo_cpt_title', GeoDir_Defaults::seo_cpt_title() );
+			$this->title = $this->settings->get( 'seo_cpt_title', $this->defaults->get_title( 'cpt' ) );
 		}
 
 		if ( isset( $post_type_info->seo['meta_title'] ) && ! empty( $post_type_info->seo['meta_title'] ) ) {
 			$this->meta_title = __( $post_type_info->seo['meta_title'], 'geodirectory' );
 		} else {
-			$this->meta_title = $this->settings->get( 'seo_cpt_meta_title', GeoDir_Defaults::seo_cpt_meta_title() );
+			$this->meta_title = $this->settings->get( 'seo_cpt_meta_title', $this->defaults->get_meta_title( 'cpt' ) );
 		}
 
 		if ( isset( $post_type_info->seo['meta_description'] ) && ! empty( $post_type_info->seo['meta_description'] ) ) {
 			$this->meta_description = __( $post_type_info->seo['meta_description'], 'geodirectory' );
 		} else {
-			$this->meta_description = $this->settings->get( 'seo_cpt_meta_description', GeoDir_Defaults::seo_cpt_meta_description() );
+			$this->meta_description = $this->settings->get( 'seo_cpt_meta_description', $this->defaults->get_meta_description( 'cpt' ) );
 		}
 	}
 
@@ -150,15 +153,15 @@ final class MetaManager {
 
 		// Category archives
 		if ( isset( $queried_object->taxonomy ) && geodir_taxonomy_type( $queried_object->taxonomy ) === 'category' && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
-			$this->title = $this->settings->get( 'seo_cat_archive_title', GeoDir_Defaults::seo_cat_archive_title() );
-			$this->meta_title = $this->settings->get( 'seo_cat_archive_meta_title', GeoDir_Defaults::seo_cat_archive_meta_title() );
-			$this->meta_description = $this->settings->get( 'seo_cat_archive_meta_description', GeoDir_Defaults::seo_cat_archive_meta_description() );
+			$this->title = $this->settings->get( 'seo_cat_archive_title', $this->defaults->get_title( 'cat_archive' ) );
+			$this->meta_title = $this->settings->get( 'seo_cat_archive_meta_title', $this->defaults->get_meta_title( 'cat_archive' ) );
+			$this->meta_description = $this->settings->get( 'seo_cat_archive_meta_description', $this->defaults->get_meta_description( 'cat_archive' ) );
 		}
 		// Tag archives
 		elseif ( isset( $queried_object->taxonomy ) && geodir_taxonomy_type( $queried_object->taxonomy ) === 'tag' && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
-			$this->title = $this->settings->get( 'seo_tag_archive_title', GeoDir_Defaults::seo_tag_archive_title() );
-			$this->meta_title = $this->settings->get( 'seo_tag_archive_meta_title', GeoDir_Defaults::seo_tag_archive_meta_title() );
-			$this->meta_description = $this->settings->get( 'seo_tag_archive_meta_description', GeoDir_Defaults::seo_tag_archive_meta_description() );
+			$this->title = $this->settings->get( 'seo_tag_archive_title', $this->defaults->get_title( 'tag_archive' ) );
+			$this->meta_title = $this->settings->get( 'seo_tag_archive_meta_title', $this->defaults->get_meta_title( 'tag_archive' ) );
+			$this->meta_description = $this->settings->get( 'seo_tag_archive_meta_description', $this->defaults->get_meta_description( 'tag_archive' ) );
 		}
 	}
 
@@ -168,9 +171,9 @@ final class MetaManager {
 	 * @return void
 	 */
 	private function set_single_meta(): void {
-		$this->title = $this->settings->get( 'seo_single_title', GeoDir_Defaults::seo_single_title() );
-		$this->meta_title = $this->settings->get( 'seo_single_meta_title', GeoDir_Defaults::seo_single_meta_title() );
-		$this->meta_description = $this->settings->get( 'seo_single_meta_description', GeoDir_Defaults::seo_single_meta_description() );
+		$this->title = $this->settings->get( 'seo_single_title', $this->defaults->get_title( 'single' ) );
+		$this->meta_title = $this->settings->get( 'seo_single_meta_title', $this->defaults->get_meta_title( 'single' ) );
+		$this->meta_description = $this->settings->get( 'seo_single_meta_description', $this->defaults->get_meta_description( 'single' ) );
 	}
 
 	/**
@@ -179,9 +182,9 @@ final class MetaManager {
 	 * @return void
 	 */
 	private function set_location_meta(): void {
-		$this->title = $this->settings->get( 'seo_location_title', GeoDir_Defaults::seo_location_title() );
-		$this->meta_title = $this->settings->get( 'seo_location_meta_title', GeoDir_Defaults::seo_location_meta_title() );
-		$this->meta_description = $this->settings->get( 'seo_location_meta_description', GeoDir_Defaults::seo_location_meta_description() );
+		$this->title = $this->settings->get( 'seo_location_title', $this->defaults->get_title( 'location' ) );
+		$this->meta_title = $this->settings->get( 'seo_location_meta_title', $this->defaults->get_meta_title( 'location' ) );
+		$this->meta_description = $this->settings->get( 'seo_location_meta_description', $this->defaults->get_meta_description( 'location' ) );
 	}
 
 	/**
@@ -190,9 +193,9 @@ final class MetaManager {
 	 * @return void
 	 */
 	private function set_search_meta(): void {
-		$this->title = $this->settings->get( 'seo_search_title', GeoDir_Defaults::seo_search_title() );
-		$this->meta_title = $this->settings->get( 'seo_search_meta_title', GeoDir_Defaults::seo_search_meta_title() );
-		$this->meta_description = $this->settings->get( 'seo_search_meta_description', GeoDir_Defaults::seo_search_meta_description() );
+		$this->title = $this->settings->get( 'seo_search_title', $this->defaults->get_title( 'search' ) );
+		$this->meta_title = $this->settings->get( 'seo_search_meta_title', $this->defaults->get_meta_title( 'search' ) );
+		$this->meta_description = $this->settings->get( 'seo_search_meta_description', $this->defaults->get_meta_description( 'search' ) );
 	}
 
 	/**
@@ -203,13 +206,13 @@ final class MetaManager {
 	private function set_add_listing_meta(): void {
 		// Different title for edit vs add
 		if ( ! empty( $_REQUEST['pid'] ) ) {
-			$this->title = $this->settings->get( 'seo_add_listing_title_edit', GeoDir_Defaults::seo_add_listing_title_edit() );
+			$this->title = $this->settings->get( 'seo_add_listing_title_edit', $this->defaults->get_title( 'add_listing_edit' ) );
 		} else {
-			$this->title = $this->settings->get( 'seo_add_listing_title', GeoDir_Defaults::seo_add_listing_title() );
+			$this->title = $this->settings->get( 'seo_add_listing_title', $this->defaults->get_title( 'add_listing' ) );
 		}
 
-		$this->meta_title = $this->settings->get( 'seo_add_listing_meta_title', GeoDir_Defaults::seo_add_listing_meta_title() );
-		$this->meta_description = $this->settings->get( 'seo_add_listing_meta_description', GeoDir_Defaults::seo_add_listing_meta_description() );
+		$this->meta_title = $this->settings->get( 'seo_add_listing_meta_title', $this->defaults->get_meta_title( 'add_listing' ) );
+		$this->meta_description = $this->settings->get( 'seo_add_listing_meta_description', $this->defaults->get_meta_description( 'add_listing' ) );
 	}
 
 	/**

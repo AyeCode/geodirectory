@@ -2136,3 +2136,115 @@ geodirectory()->email->send_user_publish_post_email( $post, [] );
 - `[#review_rating_star#]` - Review rating (1-5)
 - And many more...
 
+---
+
+## `geodirectory()->email_defaults`
+**Class:** `AyeCode\GeoDirectory\Core\Services\EmailDefaults`
+
+This service provides default values for email templates including subjects, bodies, sender name, and sender email address. It replaces the legacy `GeoDir_Defaults` class for email functionality.
+
+```php
+/**
+ * Get email subject default for a specific email type.
+ * @param string $email_name Email type identifier (e.g., 'user_publish_post').
+ * @return string Default subject or empty string if not found.
+ */
+geodirectory()->email_defaults->get_subject( 'user_publish_post' );
+
+/**
+ * Get email body default for a specific email type.
+ * @param string $email_name Email type identifier (e.g., 'user_publish_post').
+ * @return string Default body or empty string if not found.
+ */
+geodirectory()->email_defaults->get_body( 'user_publish_post' );
+
+/**
+ * Get default email sender name.
+ * @return string Default sender name (site name).
+ */
+geodirectory()->email_defaults->get_from_name();
+
+/**
+ * Get default email sender address.
+ * @return string Default sender email (admin email).
+ */
+geodirectory()->email_defaults->get_from_email();
+```
+
+**Note:** This service is primarily used internally by the Email service as a fallback when custom email templates are not configured.
+
+---
+
+## `geodirectory()->seo_defaults`
+**Class:** `AyeCode\GeoDirectory\Core\Services\SeoDefaults`
+
+This service provides default values for SEO titles, meta titles, and meta descriptions for all GeoDirectory page types. It replaces the legacy `GeoDir_Defaults` class for SEO functionality.
+
+```php
+/**
+ * Get page title default for a specific page type.
+ * @param string $page_type Page type identifier (e.g., 'cpt', 'single', 'search').
+ * @return string Default page title or empty string if not found.
+ */
+geodirectory()->seo_defaults->get_title( 'cpt' );
+
+/**
+ * Get meta title default for a specific page type.
+ * @param string $page_type Page type identifier (e.g., 'cpt', 'single', 'search').
+ * @return string Default meta title or empty string if not found.
+ */
+geodirectory()->seo_defaults->get_meta_title( 'single' );
+
+/**
+ * Get meta description default for a specific page type.
+ * @param string $page_type Page type identifier (e.g., 'cpt', 'single', 'search').
+ * @return string Default meta description or empty string if not found.
+ */
+geodirectory()->seo_defaults->get_meta_description( 'location' );
+```
+
+**Supported Page Types:**
+- `cpt` - Custom post type archive
+- `cat_archive` - Category archive
+- `tag_archive` - Tag archive
+- `single` - Single listing
+- `location` - Location page
+- `search` - Search results
+- `add_listing` - Add listing form
+- `add_listing_edit` - Edit listing form
+
+**Note:** This service is primarily used internally by the MetaManager as a fallback when custom SEO settings are not configured.
+
+---
+
+## `geodirectory()->page_defaults`
+**Class:** `AyeCode\GeoDirectory\Core\Services\PageDefaults`
+
+This service provides default page content for GeoDirectory pages in both shortcode and Gutenberg block formats. It replaces the legacy `GeoDir_Defaults` class for page content functionality.
+
+```php
+/**
+ * Get page content default for a specific page type.
+ * @param string $page_type Page type identifier (e.g., 'add', 'search', 'location').
+ * @param bool   $blocks    Whether to return block format (true) or shortcode format (false).
+ * @return string Default page content.
+ */
+geodirectory()->page_defaults->get_content( 'search', false );
+
+// Get Gutenberg blocks format
+geodirectory()->page_defaults->get_content( 'archive', true );
+
+// Get shortcode format (default)
+geodirectory()->page_defaults->get_content( 'add' );
+```
+
+**Supported Page Types:**
+- `add` - Add listing page
+- `search` - Search page
+- `location` - Location page
+- `archive` - Archive listing page
+- `archive_item` - Individual archive item template
+- `details` - Details/single listing page
+
+**Note:** This service is primarily used internally by template classes (ContentInjector, TemplateRestrictions, InstallPagesAction) as a fallback when custom page content is not configured.
+

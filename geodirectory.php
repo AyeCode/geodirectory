@@ -129,6 +129,11 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\EmailHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\CommentEmailHooks::class );
 
+	// Default Values Services
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\EmailDefaults::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\SeoDefaults::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\PageDefaults::class );
+
 	// Fields Service
 	$container->bind( \AyeCode\GeoDirectory\Fields\FieldsService::class );
 	$container->bind( \AyeCode\GeoDirectory\Fields\FieldRegistry::class );

@@ -53,16 +53,25 @@ final class Email {
 	private Debug $debug;
 
 	/**
+	 * Email defaults service instance.
+	 *
+	 * @var EmailDefaults
+	 */
+	private EmailDefaults $defaults;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param Templates $templates Templates service.
-	 * @param Settings  $settings  Settings service.
-	 * @param Debug     $debug     Debug service.
+	 * @param Templates     $templates Templates service.
+	 * @param Settings      $settings  Settings service.
+	 * @param Debug         $debug     Debug service.
+	 * @param EmailDefaults $defaults  Email defaults service.
 	 */
-	public function __construct( Templates $templates, Settings $settings, Debug $debug ) {
+	public function __construct( Templates $templates, Settings $settings, Debug $debug, EmailDefaults $defaults ) {
 		$this->templates = $templates;
 		$this->settings  = $settings;
 		$this->debug     = $debug;
+		$this->defaults  = $defaults;
 	}
 
 	/**
@@ -304,11 +313,8 @@ final class Email {
 		$subject = $this->settings->get( 'email_' . $email_name . '_subject' );
 
 		// Get default if empty
-		if ( ! $subject && class_exists( 'GeoDir_Defaults' ) ) {
-			$method = 'email_' . $email_name . '_subject';
-			if ( method_exists( 'GeoDir_Defaults', $method ) ) {
-				$subject = \GeoDir_Defaults::$method();
-			}
+		if ( ! $subject ) {
+			$subject = $this->defaults->get_subject( $email_name );
 		}
 
 		if ( $subject ) {
@@ -340,11 +346,8 @@ final class Email {
 		$content = $this->settings->get( 'email_' . $email_name . '_body' );
 
 		// Get default if empty
-		if ( ! $content && class_exists( 'GeoDir_Defaults' ) ) {
-			$method = 'email_' . $email_name . '_body';
-			if ( method_exists( 'GeoDir_Defaults', $method ) ) {
-				$content = \GeoDir_Defaults::$method();
-			}
+		if ( ! $content ) {
+			$content = $this->defaults->get_body( $email_name );
 		}
 
 		if ( $content ) {
@@ -521,8 +524,8 @@ final class Email {
 	public function get_from_name(): string {
 		$from_name = $this->settings->get( 'email_name' );
 
-		if ( ! $from_name && class_exists( 'GeoDir_Defaults' ) ) {
-			$from_name = \GeoDir_Defaults::email_name();
+		if ( ! $from_name ) {
+			$from_name = $this->defaults->get_from_name();
 		}
 
 		/**
@@ -545,8 +548,8 @@ final class Email {
 	public function get_from(): string {
 		$from = $this->settings->get( 'email_address' );
 
-		if ( ! $from && class_exists( 'GeoDir_Defaults' ) ) {
-			$from = \GeoDir_Defaults::email_address();
+		if ( ! $from ) {
+			$from = $this->defaults->get_from_email();
 		}
 
 		/**
@@ -886,7 +889,20 @@ final class Email {
 		$attachments  = $this->get_attachments( $email_name, $email_vars );
 
 		$plain_text = $this->get_email_type() !== 'html';
-		$template   = $plain_text ? 'emails/plain/geodir-email-' . $email_name . '.php' : 'emails/geodir-email-' . $email_name . '.php';
+
+		// Try to locate specific email template, fallback to default.php
+		$template_dir = $plain_text ? 'emails/plain/' : 'emails/';
+		$specific_template = $template_dir . 'geodir-email-' . $email_name . '.php';
+
+		// Check if specific template exists (in theme or plugin)
+		$located = geodir_locate_template( $specific_template );
+
+		// Fallback to default.php if specific template not found
+		if ( ! $located || ! file_exists( $located ) ) {
+			$template = $template_dir . 'default.php';
+		} else {
+			$template = $specific_template;
+		}
 
 		$content = geodir_get_template_html( $template, [
 			'email_name'    => $email_name,
@@ -1019,7 +1035,22 @@ final class Email {
 		$attachments  = $this->get_attachments( $email_name, $email_vars );
 
 		$plain_text = $this->get_email_type() !== 'html';
-		$template   = $plain_text ? 'emails/plain/geodir-email-' . $email_name . '.php' : 'emails/geodir-email-' . $email_name . '.php';
+
+		// Try to locate specific email template, fallback to default.php
+		$template_dir = $plain_text ? 'emails/plain/' : 'emails/';
+		$specific_template = $template_dir . 'geodir-email-' . $email_name . '.php';
+
+		// Check if specific template exists (in theme or plugin)
+		$located = geodir_locate_template( $specific_template );
+
+		// Fallback to default.php if specific template not found
+		if ( ! $located || ! file_exists( $located ) ) {
+			$template = $template_dir . 'default.php';
+		} else {
+			$template = $specific_template;
+		}
+
+
 
 		$content = geodir_get_template_html( $template, [
 			'email_name'    => $email_name,
@@ -1029,7 +1060,10 @@ final class Email {
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
 		] );
-
+//		echo '$message_body:'.$message_body."<br><br>";
+//		echo '$recipient:'.$recipient."<br><br>";
+//		echo '$subject:'.$subject."<br><br>";
+//		echo $content.'###'.$template.'###';exit;
 		$sent = $this->send( $recipient, $subject, $content, $headers, $attachments, $email_name, $email_vars );
 
 		if ( $this->is_admin_bcc_active( $email_name ) ) {
@@ -1118,7 +1152,20 @@ final class Email {
 		$attachments  = $this->get_attachments( $email_name, $email_vars );
 
 		$plain_text = $this->get_email_type() !== 'html';
-		$template   = $plain_text ? 'emails/plain/geodir-email-' . $email_name . '.php' : 'emails/geodir-email-' . $email_name . '.php';
+
+		// Try to locate specific email template, fallback to default.php
+		$template_dir = $plain_text ? 'emails/plain/' : 'emails/';
+		$specific_template = $template_dir . 'geodir-email-' . $email_name . '.php';
+
+		// Check if specific template exists (in theme or plugin)
+		$located = geodir_locate_template( $specific_template );
+
+		// Fallback to default.php if specific template not found
+		if ( ! $located || ! file_exists( $located ) ) {
+			$template = $template_dir . 'default.php';
+		} else {
+			$template = $specific_template;
+		}
 
 		$content = geodir_get_template_html( $template, [
 			'email_name'    => $email_name,
@@ -1213,7 +1260,20 @@ final class Email {
 		$attachments  = $this->get_attachments( $email_name, $email_vars );
 
 		$plain_text = $this->get_email_type() !== 'html';
-		$template   = $plain_text ? 'emails/plain/geodir-email-' . $email_name . '.php' : 'emails/geodir-email-' . $email_name . '.php';
+
+		// Try to locate specific email template, fallback to default.php
+		$template_dir = $plain_text ? 'emails/plain/' : 'emails/';
+		$specific_template = $template_dir . 'geodir-email-' . $email_name . '.php';
+
+		// Check if specific template exists (in theme or plugin)
+		$located = geodir_locate_template( $specific_template );
+
+		// Fallback to default.php if specific template not found
+		if ( ! $located || ! file_exists( $located ) ) {
+			$template = $template_dir . 'default.php';
+		} else {
+			$template = $specific_template;
+		}
 
 		$content = geodir_get_template_html( $template, [
 			'email_name'    => $email_name,
