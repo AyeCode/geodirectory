@@ -216,7 +216,7 @@ class FieldsService {
 			'show'     => '',
 		] );
 
-
+//		echo '###'.$post;
 
 		// this is the default but is not set in widget args
 //		if(empty($args['show'])) $args['show'] = 'icon-label-value';
@@ -254,6 +254,12 @@ class FieldsService {
 			if ( ! $gd_post_data ) {
 				return '';
 			}
+		}
+
+		// check for custom
+		if ( empty( $field_data['field_type'] ) && !empty($field['type']) ) {
+//			echo print_r( $field ).'###' . print_r( $field_data );
+			$field_data['field_type'] = esc_attr( $field['type'] );
 		}
 
 		// Get field type class

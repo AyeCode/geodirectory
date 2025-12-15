@@ -98,6 +98,13 @@ abstract class AbstractFieldOutput {
 		$html_var = $this->field_data['htmlvar_name'];
 		$field_type_key = isset( $this->field_data['field_type_key'] ) ? $this->field_data['field_type_key'] : '';
 
+		// Base field type filter (v2 compatibility)
+		// This is the primary filter that allows custom fields without dedicated classes
+		// to be rendered via filters (e.g., twitter_feed, distanceto, map_directions)
+		if ( has_filter( "geodir_custom_field_output_{$field_type}" ) ) {
+			$html = apply_filters( "geodir_custom_field_output_{$field_type}", $html, $location, $this->field_data, $output );
+		}
+
 		// Location-specific filter
 		if ( has_filter( "geodir_custom_field_output_{$field_type}_loc_{$location}" ) ) {
 			$html = apply_filters( "geodir_custom_field_output_{$field_type}_loc_{$location}", $html, $this->field_data, $output );

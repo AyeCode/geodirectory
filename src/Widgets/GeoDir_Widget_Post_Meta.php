@@ -357,6 +357,8 @@ class GeoDir_Widget_Post_Meta extends \WP_Super_Duper {
 			)
 		);
 
+//		print_r( $gd_post );
+
 		if ( empty( $args['id'] ) ) {
 			$args['id'] = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
 

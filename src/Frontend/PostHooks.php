@@ -29,6 +29,10 @@ final class PostHooks {
 	 * @return void
 	 */
 	public function register_hooks(): void {
+		// Set up global $gd_post.
+		$this->on( 'wp', [ $this, 'init_gd_post' ], 10 );
+		$this->on( 'the_post', [ $this, 'the_gd_post' ], 10, 2 );
+
 		// Previous/next post navigation filters.
 		$this->filter( 'get_previous_post_join', [ $this, 'previous_next_post_join' ], 10, 5 );
 		$this->filter( 'get_next_post_join', [ $this, 'previous_next_post_join' ], 10, 5 );
@@ -410,5 +414,49 @@ final class PostHooks {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Initialize global $gd_post on the 'wp' hook.
+	 *
+	 * Sets up the global $gd_post object for single GD post pages.
+	 * This runs early on the 'wp' hook to ensure the data is available
+	 * for all subsequent operations.
+	 *
+	 * @global \WP_Post $post    WordPress post object.
+	 * @global object   $gd_post GeoDirectory post object with custom fields.
+	 * @return void
+	 */
+	public function init_gd_post(): void {
+		global $post, $gd_post;
+
+		if ( isset( $post->post_type ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
+			$gd_post = geodir_get_post_info( $post->ID );
+		}
+	}
+
+	/**
+	 * Set or update global $gd_post on the 'the_post' hook.
+	 *
+	 * Updates the global $gd_post object whenever WordPress loops through posts.
+	 * This ensures $gd_post stays in sync with the current post in loops.
+	 *
+	 * @global object $gd_post GeoDirectory post object with custom fields.
+	 *
+	 * @param \WP_Post        $post     WordPress post object.
+	 * @param \WP_Query|array $wp_query WordPress query object.
+	 * @return \WP_Post Unmodified post object.
+	 */
+	public function the_gd_post( \WP_Post $post, $wp_query = [] ): \WP_Post {
+		global $gd_post;
+
+		if ( ! empty( $post->post_type ) && function_exists( 'geodir_get_posttypes' ) && in_array( $post->post_type, geodir_get_posttypes(), true ) ) {
+			// Only fetch if $gd_post is not already set for this post.
+			if ( ! ( ! empty( $gd_post ) && is_object( $gd_post ) && $gd_post->ID === $post->ID && isset( $post->post_category ) ) ) {
+				$GLOBALS['gd_post'] = function_exists( 'geodir_get_post_info' ) ? geodir_get_post_info( $post->ID ) : null;
+			}
+		}
+
+		return $post;
 	}
 }

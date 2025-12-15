@@ -20,73 +20,7 @@
  * @return object|bool Returns full post details as an object. If no details returns false.
  */
 function geodir_get_post_info( $post_id = '', $cached = true ) {
-	// Check for cache
-	$cache = wp_cache_get( "gd_post_" . $post_id, 'gd_post' );
-
-	if ( $cache && $cached ) {
-		return $cache;
-	}
-
-	global $wpdb, $post, $post_info, $preview;
-
-	if ( $post_id == '' && ! empty( $post ) ) {
-		$post_id = $post->ID;
-	}
-
-	$post_type = get_post_type( $post_id );
-
-	if ( $post_type == 'revision' ) {
-		$post_type = get_post_type( wp_get_post_parent_id( $post_id ) );
-	}
-
-	// Check if preview
-	if ( $preview && $post->ID == $post_id ) {
-		$post_id = GeoDir_Post_Data::get_post_preview_id( $post_id );
-	}
-
-	if ( ! geodir_is_gd_post_type( $post_type ) ) {
-		return new stdClass();
-	}
-
-	$table = geodir_db_cpt_table( $post_type );
-
-	/**
-	 * Apply Filter to change Post info
-	 *
-	 * You can use this filter to change Post info.
-	 *
-	 * @since 1.0.0
-	 * @package GeoDirectory
-	 */
-	$query = apply_filters( 'geodir_post_info_query', $wpdb->prepare( "SELECT p.*,pd.* FROM " . $wpdb->posts . " p," . $table . " pd WHERE p.ID = pd.post_id AND pd.post_id = %d", $post_id ) );
-
-	$post_detail = $wpdb->get_row( $query );
-
-	// Check for distance setting
-	if ( ! empty( $post_detail ) && ! empty( $post->distance ) ) {
-		$post_detail->distance = $post->distance;
-	}
-
-	if ( ! empty( $post_detail ) ) {
-		/**
-		 * Filter GeoDirectory post info object.
-		 *
-		 * @since 2.1.0.4
-		 *
-		 * @param object $post_detail The GeoDirectory post object.
-		 * @param int    $post_id The post ID.
-		 */
-		$post_detail = apply_filters( 'geodir_get_post_info', $post_detail, $post_id );
-	}
-
-	$return = ! empty( $post_detail ) ? $post_info = $post_detail : $post_info = false;
-
-	// Set cache
-	if ( ! empty( $post_detail ) && $cached ) {
-		wp_cache_set( "gd_post_" . $post_id, $post_detail, 'gd_post' );
-	}
-
-	return $return;
+	return geodirectory()->posts->get_info( $post_id, $cached );
 }
 
 /**

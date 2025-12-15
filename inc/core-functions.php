@@ -571,7 +571,7 @@ function geodir_get_widgets(){
 		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_CPT_Meta::class,
 		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Dashboard::class,
 		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Dynamic_Content::class,
-//		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Listings::class,
+		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Listings::class,
 		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Loop::class,
 		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Loop_Actions::class,
 		\AyeCode\GeoDirectory\Widgets\GeoDir_Widget_Loop_Paging::class,

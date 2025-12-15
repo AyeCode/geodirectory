@@ -61,6 +61,7 @@ require_once __DIR__ . '/inc/post-types-functions.php';
 require_once __DIR__ . '/inc/post-functions.php';
 require_once __DIR__ . '/inc/field-conditional-functions.php';
 require_once __DIR__ . '/inc/field-output-functions.php';
+require_once __DIR__ . '/inc/field-output-filter-functions.php'; // Filter hooks for custom field output
 require_once __DIR__ . '/inc/admin-settings-functions.php';
 require_once __DIR__ . '/inc/taxonomy-functions.php';
 require_once __DIR__ . '/inc/admin-functions.php';

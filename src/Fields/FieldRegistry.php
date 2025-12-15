@@ -41,6 +41,9 @@ class FieldRegistry {
 		// Tags
 		$this->register( 'tags', Types\TagsField::class );
 
+		// Custom field type (filter-driven fields like distanceto, map_directions, etc.)
+		$this->register( 'custom', Types\CustomField::class );
+
 		// Allow addons to register their own fields
 		do_action( 'geodirectory/fields/register', $this );
 	}
