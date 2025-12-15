@@ -125,6 +125,9 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\PostSaveHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\QueryVars::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Users::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Email::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\EmailHooks::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\CommentEmailHooks::class );
 
 	// Fields Service
 	$container->bind( \AyeCode\GeoDirectory\Fields\FieldsService::class );
@@ -161,6 +164,7 @@ function geodirectory_boot() {
 
 	// Frontend Services (Rendering & Hooks)
 	$container->bind( \AyeCode\GeoDirectory\Frontend\Renderers\RatingRenderer::class );
+	$container->bind( \AyeCode\GeoDirectory\Frontend\Renderers\ReviewRenderer::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewForm::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\PostHooks::class );
@@ -192,6 +196,8 @@ function geodirectory_boot() {
 	// --- Run the Service Providers ---
 	// Now that everything is registered, we tell the providers to add their hooks.
 	$container->get( \AyeCode\GeoDirectory\Common\CommonServiceProvider::class )->register_hooks();
+	$container->get( \AyeCode\GeoDirectory\Core\EmailHooks::class )->register();
+	$container->get( \AyeCode\GeoDirectory\Core\CommentEmailHooks::class )->register();
 
 	if ( is_admin() ) {
 		$container->get( \AyeCode\GeoDirectory\Admin\AdminServiceProvider::class )->register_hooks();

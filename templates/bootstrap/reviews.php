@@ -55,7 +55,7 @@ if (post_password_required() || $preview)
          */
         $overall_label = apply_filters('geodir_overall_rating_label_main','');
         $post_rating = geodir_get_post_rating( $post->ID );
-        echo $aui_bs5 ? GeoDir_Comments::get_overall_box_html( $post->ID ) :  "<div class='gd-main-overall-rating d-flex align-items-center h4'>" . geodir_get_rating_stars( $post_rating, $post->ID, $overall_label ) . "<span class='gd-overall-rating-text badge " . ( $aui_bs5 ? 'bg-secondary ms-2' : 'badge-secondary ml-2' ) . "'>".__("Overall rating","geodirectory")."</span></div>";
+        echo $aui_bs5 ? geodirectory()->review_renderer->get_overall_box_html( $post->ID ) : "<div class='gd-main-overall-rating d-flex align-items-center h4'>" . geodir_get_rating_stars( $post_rating, $post->ID, $overall_label ) . "<span class='gd-overall-rating-text badge badge-secondary ml-2'>".__("Overall rating","geodirectory")."</span></div>";
         /**
          * Called after displaying review listing title.
          *
@@ -65,7 +65,7 @@ if (post_password_required() || $preview)
 
         <ul class="commentlist list-unstyled">
             <?php $reverse_top_level = null;// @todo we need to do this more efficient than "is_plugin_active" // is_plugin_active('geodir_review_rating_manager/geodir_review_rating_manager.php') ? false : null; ?>
-			<?php wp_list_comments(array('callback' => array('GeoDir_Comments','list_comments_callback'), 'reverse_top_level' => $reverse_top_level, 'style' => 'ol'));
+			<?php wp_list_comments(array('callback' => geodirectory()->review_renderer->get_callback(), 'reverse_top_level' => $reverse_top_level, 'style' => 'ol'));
             ?>
         </ul><!-- .commentlist -->
 

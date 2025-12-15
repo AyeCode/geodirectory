@@ -231,6 +231,105 @@ return array(
 						),
 					)
 				),
+				// Group 3: Listing Owner Comment Submitted
+				array(
+					'type'        => 'group',
+					'label'       => __( 'New Comment on Your Listing', 'geodirectory' ),
+					'description' => __( 'Sent to the listing owner when a new comment or review is submitted on their listing.', 'geodirectory' ),
+					'fields'      => array(
+						array(
+							'id'      => 'email_owner_comment_submit',
+							'type'    => 'toggle',
+							'label'   => __( 'Enable this notification', 'geodirectory' ),
+							'default' => false,
+						),
+						array(
+							'id'      => 'email_owner_comment_submit_subject',
+							'type'    => 'text',
+							'label'   => __( 'Subject', 'geodirectory' ),
+							'placeholder' => 'New comment on your listing "[#listing_title#]"',
+							'active_placeholder' => true,
+							'show_if'   => '[%email_owner_comment_submit%]',
+						),
+						array(
+							'id'      => 'email_owner_comment_submit_body',
+							'type'    => 'textarea',
+							'label'   => __( 'Body', 'geodirectory' ),
+							'description' => __( 'The content of the email. @todo: Add an interactive tag selector.', 'geodirectory' ),
+							'rows'    => 8,
+							'placeholder' => 'Hi [#client_name#], [#comment_author#] has left a new comment on your listing "[#listing_title#]": [#comment_content#]',
+							'active_placeholder' => true,
+							'custom_desc'   => $this->get_email_tags_html( 'owner_comment_submit' ),
+							'show_if'   => '[%email_owner_comment_submit%]',
+						),
+					)
+				),
+				// Group 4: Listing Owner Comment Approved
+				array(
+					'type'        => 'group',
+					'label'       => __( 'Comment Approved on Your Listing', 'geodirectory' ),
+					'description' => __( 'Sent to the listing owner when a pending comment or review is approved.', 'geodirectory' ),
+					'fields'      => array(
+						array(
+							'id'      => 'email_owner_comment_approved',
+							'type'    => 'toggle',
+							'label'   => __( 'Enable this notification', 'geodirectory' ),
+							'default' => true,
+						),
+						array(
+							'id'      => 'email_owner_comment_approved_subject',
+							'type'    => 'text',
+							'label'   => __( 'Subject', 'geodirectory' ),
+							'placeholder' => 'A comment on "[#listing_title#]" has been approved',
+							'active_placeholder' => true,
+							'show_if'   => '[%email_owner_comment_approved%]',
+						),
+						array(
+							'id'      => 'email_owner_comment_approved_body',
+							'type'    => 'textarea',
+							'label'   => __( 'Body', 'geodirectory' ),
+							'description' => __( 'The content of the email. @todo: Add an interactive tag selector.', 'geodirectory' ),
+							'rows'    => 8,
+							'placeholder' => 'Hi [#client_name#], a comment by [#comment_author#] on your listing "[#listing_title#]" has been approved.',
+							'active_placeholder' => true,
+							'custom_desc'   => $this->get_email_tags_html( 'owner_comment_approved' ),
+							'show_if'   => '[%email_owner_comment_approved%]',
+						),
+					)
+				),
+				// Group 5: Comment Author Comment Approved
+				array(
+					'type'        => 'group',
+					'label'       => __( 'Your Comment Approved', 'geodirectory' ),
+					'description' => __( 'Sent to the person who wrote a comment when their comment is approved.', 'geodirectory' ),
+					'fields'      => array(
+						array(
+							'id'      => 'email_author_comment_approved',
+							'type'    => 'toggle',
+							'label'   => __( 'Enable this notification', 'geodirectory' ),
+							'default' => true,
+						),
+						array(
+							'id'      => 'email_author_comment_approved_subject',
+							'type'    => 'text',
+							'label'   => __( 'Subject', 'geodirectory' ),
+							'placeholder' => 'Your comment on "[#comment_post_title#]" has been approved',
+							'active_placeholder' => true,
+							'show_if'   => '[%email_author_comment_approved%]',
+						),
+						array(
+							'id'      => 'email_author_comment_approved_body',
+							'type'    => 'textarea',
+							'label'   => __( 'Body', 'geodirectory' ),
+							'description' => __( 'The content of the email. @todo: Add an interactive tag selector.', 'geodirectory' ),
+							'rows'    => 8,
+							'placeholder' => 'Hi [#comment_author#], your comment on [#comment_post_link#] has been approved and is now visible.',
+							'active_placeholder' => true,
+							'custom_desc'   => $this->get_email_tags_html( 'author_comment_approved' ),
+							'show_if'   => '[%email_author_comment_approved%]',
+						),
+					)
+				),
 			)
 		),
 

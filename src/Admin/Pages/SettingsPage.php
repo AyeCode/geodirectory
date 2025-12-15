@@ -405,6 +405,98 @@ final class SettingsPage extends Settings_Framework {
 					'[#review_longitude#]'
 				] );
 				break;
+			case 'owner_comment_submit':
+				$tags = array_merge( $global_tags, [
+					'[#post_id#]',
+					'[#post_status#]',
+					'[#post_date#]',
+					'[#post_author_ID#]',
+					'[#post_author_name#]',
+					'[#client_name#]',
+					'[#listing_title#]',
+					'[#listing_url#]',
+					'[#listing_link#]',
+					'[#comment_ID#]',
+					'[#comment_author#]',
+					'[#comment_author_IP#]',
+					'[#comment_author_email#]',
+					'[#comment_date#]',
+					'[#comment_content#]',
+					'[#comment_post_ID#]',
+					'[#comment_post_title#]',
+					'[#comment_post_url#]',
+					'[#comment_approve_link#]',
+					'[#comment_trash_link#]',
+					'[#comment_spam_link#]',
+					'[#review_rating_star#]',
+					'[#review_rating_title#]',
+					'[#review_city#]',
+					'[#review_region#]',
+					'[#review_country#]',
+					'[#review_latitude#]',
+					'[#review_longitude#]'
+				] );
+				break;
+			case 'owner_comment_approved':
+				$tags = array_merge( $global_tags, [
+					'[#post_id#]',
+					'[#post_status#]',
+					'[#post_date#]',
+					'[#post_author_ID#]',
+					'[#post_author_name#]',
+					'[#client_name#]',
+					'[#listing_title#]',
+					'[#listing_url#]',
+					'[#listing_link#]',
+					'[#comment_ID#]',
+					'[#comment_author#]',
+					'[#comment_author_IP#]',
+					'[#comment_author_email#]',
+					'[#comment_date#]',
+					'[#comment_content#]',
+					'[#comment_post_ID#]',
+					'[#comment_post_title#]',
+					'[#comment_post_url#]',
+					'[#review_rating_star#]',
+					'[#review_rating_title#]',
+					'[#review_city#]',
+					'[#review_region#]',
+					'[#review_country#]',
+					'[#review_latitude#]',
+					'[#review_longitude#]'
+				] );
+				break;
+			case 'author_comment_approved':
+				$tags = array_merge( $global_tags, [
+					'[#post_id#]',
+					'[#post_status#]',
+					'[#post_date#]',
+					'[#post_author_ID#]',
+					'[#post_author_name#]',
+					'[#client_name#]',
+					'[#listing_title#]',
+					'[#listing_url#]',
+					'[#listing_link#]',
+					'[#comment_ID#]',
+					'[#comment_author#]',
+					'[#comment_author_IP#]',
+					'[#comment_author_email#]',
+					'[#comment_date#]',
+					'[#comment_content#]',
+					'[#comment_url#]',
+					'[#comment_post_ID#]',
+					'[#comment_post_title#]',
+					'[#comment_post_url#]',
+					'[#comment_post_link#]',
+					'[#review_rating_star#]',
+					'[#review_rating_title#]',
+					'[#review_city#]',
+					'[#review_region#]',
+					'[#review_country#]',
+					'[#review_latitude#]',
+					'[#review_longitude#]'
+				] );
+				break;
 		}
 
 		$tags = apply_filters( 'geodir_email_tags', $tags, $type );

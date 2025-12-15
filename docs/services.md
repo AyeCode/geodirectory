@@ -1931,3 +1931,208 @@ geodirectory()->users->delete_post( 123 );
 geodirectory()->users->user_can( 'see_private_address', [ 'post' => 123 ] );
 ```
 
+---
+
+## `geodirectory()->email`
+**Class:** `AyeCode\GeoDirectory\Core\Services\Email`
+
+This service handles all email-related functionality including sending emails, template rendering, variable replacement, and email configuration. It manages transactional emails for listing submissions, publications, reviews, and more.
+
+```php
+/**
+ * Get the email logo attachment HTML.
+ * @param string $size Image size. Default 'full'.
+ * @return string Logo HTML markup or empty string.
+ */
+geodirectory()->email->get_logo( 'full' );
+
+/**
+ * Get the email header text or logo.
+ * @return string Header text or logo HTML.
+ */
+geodirectory()->email->get_header_text();
+
+/**
+ * Get the email footer text.
+ * @return string Footer text.
+ */
+geodirectory()->email->get_footer_text();
+
+/**
+ * Render the email header.
+ * @param string $email_heading Email heading text.
+ * @param string $email_name    Email type identifier.
+ * @param array  $email_vars    Email template variables.
+ * @param bool   $plain_text    Whether this is plain text email.
+ * @param bool   $sent_to_admin Whether this is sent to admin.
+ * @return void
+ */
+geodirectory()->email->render_header( 'Welcome!', 'user_publish_post', [], false, false );
+
+/**
+ * Render the email footer.
+ * @param string $email_name    Email type identifier.
+ * @param array  $email_vars    Email template variables.
+ * @param bool   $plain_text    Whether this is plain text email.
+ * @param bool   $sent_to_admin Whether this is sent to admin.
+ * @return void
+ */
+geodirectory()->email->render_footer( 'user_publish_post', [], false, false );
+
+/**
+ * Wrap email message with header and footer.
+ * @param string $message       Email message body.
+ * @param string $email_name    Email type identifier.
+ * @param array  $email_vars    Email template variables.
+ * @param string $email_heading Email heading text.
+ * @param bool   $plain_text    Whether this is plain text email.
+ * @param bool   $sent_to_admin Whether this is sent to admin.
+ * @return string Wrapped email message.
+ */
+geodirectory()->email->wrap_message( 'Your listing is live!', 'user_publish_post', [], 'Congratulations', false, false );
+
+/**
+ * Check if an email type is enabled.
+ * @param string $email_name Email type identifier.
+ * @param mixed  $default    Default value if setting not found.
+ * @return bool Whether email is enabled.
+ */
+geodirectory()->email->is_enabled( 'user_publish_post', true );
+
+/**
+ * Get email subject for a specific email type.
+ * @param string $email_name Email type identifier.
+ * @param array  $email_vars Email template variables.
+ * @return string Email subject with variables replaced.
+ */
+geodirectory()->email->get_subject( 'user_publish_post', [ 'post' => $post ] );
+
+/**
+ * Get email content body for a specific email type.
+ * @param string $email_name Email type identifier.
+ * @param array  $email_vars Email template variables.
+ * @return string Email body with variables replaced.
+ */
+geodirectory()->email->get_content( 'user_publish_post', [ 'post' => $post ] );
+
+/**
+ * Replace variables in email content.
+ * Supports: [#blogname#], [#site_url#], [#listing_title#], [#listing_url#], [#client_name#], etc.
+ * @param string $content    Content with variables.
+ * @param string $email_name Email type identifier.
+ * @param array  $email_vars Email template variables.
+ * @return string Content with variables replaced.
+ */
+geodirectory()->email->replace_variables( 'Hi [#client_name#], your listing [#listing_title#] is live!', 'user_publish_post', [ 'post' => $post ] );
+
+/**
+ * Get the from name for outgoing emails.
+ * @return string From name.
+ */
+geodirectory()->email->get_from_name();
+
+/**
+ * Get the from address for outgoing emails.
+ * @return string From email address.
+ */
+geodirectory()->email->get_from();
+
+/**
+ * Get the site admin email address.
+ * @return string Admin email address.
+ */
+geodirectory()->email->get_admin_email();
+
+/**
+ * Get email headers.
+ * @param string $email_name  Email type identifier.
+ * @param array  $email_vars  Email template variables.
+ * @param string $from_email  Optional. From email override.
+ * @param string $from_name   Optional. From name override.
+ * @return string Email headers.
+ */
+geodirectory()->email->get_headers( 'user_publish_post', [ 'post' => $post ], '', '' );
+
+/**
+ * Get email content type.
+ * @param string $content_type Optional. Default content type.
+ * @param string $email_type   Optional. Email type override.
+ * @return string Content type (text/html, text/plain, multipart/alternative).
+ */
+geodirectory()->email->get_content_type( 'text/html', '' );
+
+/**
+ * Get the email type from settings.
+ * @return string Email type (html, plain, multipart).
+ */
+geodirectory()->email->get_email_type();
+
+/**
+ * Get email attachments for a specific email type.
+ * @param string $email_name Email type identifier.
+ * @param array  $email_vars Email template variables.
+ * @return array Attachments array.
+ */
+geodirectory()->email->get_attachments( 'user_publish_post', [ 'post' => $post ] );
+
+/**
+ * Send an email.
+ * @param string|array $to          Recipient email address(es).
+ * @param string       $subject     Email subject.
+ * @param string       $message     Email message body.
+ * @param string       $headers     Email headers.
+ * @param array        $attachments Email attachments.
+ * @param string       $email_name  Email type identifier.
+ * @param array        $email_vars  Email template variables.
+ * @return bool Whether email was sent successfully.
+ */
+geodirectory()->email->send( 'user@example.com', 'Subject', 'Message', '', [], 'user_publish_post', [] );
+
+/**
+ * Style email body with inline CSS.
+ * @param string $content    Email content.
+ * @param string $email_name Email type identifier.
+ * @param array  $email_vars Email template variables.
+ * @return string Styled email content.
+ */
+geodirectory()->email->style_body( '<p>Content</p>', 'user_publish_post', [] );
+
+/**
+ * Check if admin BCC is active for an email type.
+ * @param string $email_name Email type identifier.
+ * @return bool Whether admin BCC is active.
+ */
+geodirectory()->email->is_admin_bcc_active( 'user_publish_post' );
+
+/**
+ * Send user publish post email.
+ * @param object $post Post object.
+ * @param array  $data Additional data.
+ * @return bool Whether email was sent.
+ */
+geodirectory()->email->send_user_publish_post_email( $post, [] );
+```
+
+**Available Email Types:**
+- `user_publish_post` - Sent when a listing is published
+- `user_pending_post` - Sent when a listing is pending review
+- `admin_pending_post` - Admin notification for pending listings
+- `admin_post_edit` - Admin notification when listing is edited
+- `owner_comment_submit` - Listing owner notification for new comment
+- `owner_comment_approved` - Listing owner notification for approved comment
+- `author_comment_approved` - Comment author notification for approval
+
+**Email Template Variables:**
+- `[#blogname#]` - Site name
+- `[#site_url#]` - Site URL
+- `[#site_link#]` - Site link HTML
+- `[#listing_title#]` - Listing title
+- `[#listing_url#]` - Listing URL
+- `[#listing_link#]` - Listing link HTML
+- `[#client_name#]` - User display name
+- `[#post_id#]` - Post ID
+- `[#comment_author#]` - Comment author name
+- `[#comment_content#]` - Comment content
+- `[#review_rating_star#]` - Review rating (1-5)
+- And many more...
+

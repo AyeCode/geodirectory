@@ -606,4 +606,33 @@ final class PostRepository {
 
 //		print_r($data);exit;
 	}
+
+	/**
+	 * Update rating data for a post.
+	 *
+	 * Updates the overall_rating and rating_count fields in the post's detail table.
+	 *
+	 * @param int    $post_id   The post ID.
+	 * @param float  $rating    The new overall rating.
+	 * @param int    $count     The new rating count.
+	 * @param string $post_type The post type (e.g., 'gd_place').
+	 * @return bool True on success, false on failure.
+	 */
+	public function update_rating( int $post_id, float $rating, int $count, string $post_type ): bool {
+		$table_name = $this->get_table_name( $post_type );
+
+		if ( ! $table_name ) {
+			return false;
+		}
+
+		$result = $this->db->update(
+			$table_name,
+			[ 'overall_rating' => $rating, 'rating_count' => $count ],
+			[ 'post_id' => $post_id ],
+			[ '%f', '%d' ],
+			[ '%d' ]
+		);
+
+		return $result !== false;
+	}
 }

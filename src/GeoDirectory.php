@@ -38,9 +38,11 @@ use AyeCode\GeoDirectory\Core\Services\Taxonomies;
 use AyeCode\GeoDirectory\Core\Services\PostSaveService;
 use AyeCode\GeoDirectory\Core\Services\QueryVars;
 use AyeCode\GeoDirectory\Core\Services\Users;
+use AyeCode\GeoDirectory\Core\Services\Email;
 use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
 use AyeCode\GeoDirectory\Database\Repository\TabRepository;
 use AyeCode\GeoDirectory\Fields\FieldsService;
+use AyeCode\GeoDirectory\Frontend\Renderers\ReviewRenderer;
 
 
 
@@ -65,6 +67,7 @@ use AyeCode\GeoDirectory\Fields\FieldsService;
  * @property-read \AyeCode\GeoDirectory\Database\Repository\ReviewRepository $review_repository The Review Repository.
  * @property-read \AyeCode\GeoDirectory\Database\Repository\TabRepository $tab_repository The Review Repository.
  * @property-read \AyeCode\GeoDirectory\Frontend\Renderers\RatingRenderer $rating_renderer The Rating Renderer.
+ * @property-read \AyeCode\GeoDirectory\Frontend\Renderers\ReviewRenderer $review_renderer The Review Renderer.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Tables $tables The Tables service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Settings $settings The Settings service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Maps $maps The Maps service.
@@ -77,6 +80,7 @@ use AyeCode\GeoDirectory\Fields\FieldsService;
  * @property-read \AyeCode\GeoDirectory\Core\Services\PostSaveService $postSaveService The Post Save service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\QueryVars $query_vars The Query Variables service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Users $users The Users service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Email $email The Email service.
  * @property-read \AyeCode\GeoDirectory\Fields\FieldsService $fields The Fields Service.
  */
 final class GeoDirectory {
@@ -177,6 +181,9 @@ final class GeoDirectory {
 			case 'rating_renderer':
 				$service_id = \AyeCode\GeoDirectory\Frontend\Renderers\RatingRenderer::class;
 				break;
+			case 'review_renderer':
+				$service_id = ReviewRenderer::class;
+				break;
 			case 'maps':
 				$service_id = Maps::class;
 				break;
@@ -197,6 +204,9 @@ final class GeoDirectory {
 				break;
 			case 'users':
 				$service_id = Users::class;
+				break;
+			case 'email':
+				$service_id = Email::class;
 				break;
 			default:
 				throw new \InvalidArgumentException( "Error: The service '{$name}' is not registered in the main GeoDirectory class." );

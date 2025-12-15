@@ -51,7 +51,7 @@ global $post, $aui_bs5;
 					echo get_comment_author($comment->comment_ID);
 					if(!empty($comment->user_id)){ echo "</a>"; } else { echo '</span>'; }
 					if ( ! empty( $comment->user_id ) && ! empty( $comment->comment_post_ID ) && ( (int) $comment->user_id == (int) get_post_field( 'post_author', (int) $comment->comment_post_ID ) ) ) {
-						echo ' <span class="ml-2 ms-2 h6 m-0 fs-sm"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">'. GeoDir_Comments::get_listing_owner_label( get_post_type( (int) $comment->comment_post_ID ) ) . '</span></span>';
+						echo ' <span class="ml-2 ms-2 h6 m-0 fs-sm"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">'. geodir_get_review_listing_owner_label( get_post_type( (int) $comment->comment_post_ID ) ) . '</span></span>';
 					}
 					?>
 				</span>

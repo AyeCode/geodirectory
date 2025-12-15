@@ -64,14 +64,22 @@ final class ReviewHooks {
 	 * @return string The path to the GeoDirectory reviews.php template.
 	 */
 	public function override_comments_template( string $template_path ): string {
-		global $post;
+		global $post,$gd_is_comment_template_set;
 
 		if ( is_singular() && geodir_is_gd_post_type( $post->post_type ?? '' ) && ! geodir_cpt_has_rating_disabled( $post->post_type ) ) {
-			// @todo This should use a modern template loader service.
-			$gd_template = geodir_get_template_part( 'reviews' );
-			if ( $gd_template ) {
-				return $gd_template;
+
+			// if we already loaded the template don't load it again
+			if ( $gd_is_comment_template_set ) { /// @todo this is not working
+				return geodir_plugin_path() . '/index.php'; // a blank template to remove default if called more than once.
 			}
+			// Bootstrap is the only design style in v3.
+			$template_path ='bootstrap/geodirectory/bootstrap/reviews.php';
+			$template      = locate_template( array( $template_path ) ); // Use theme template if available
+			if ( ! $template ) {
+				$template = untrailingslashit( geodir_get_templates_dir() ) . '/bootstrap/reviews.php';
+			}
+			$gd_is_comment_template_set = true;
+			return $template;
 		}
 
 		return $template_path;

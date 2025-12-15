@@ -149,6 +149,27 @@ function geodir_get_comment_rating( $comment_id = 0 ) {
 	return $repository->get_rating( (int) $comment_id );
 }
 
+/**
+ * Get the listing owner label for reviews.
+ *
+ * @since 3.0.0
+ * @param string $post_type The post type.
+ * @return string The listing owner label.
+ */
+function geodir_get_review_listing_owner_label( $post_type = '' ) {
+	$label = geodir_listing_owner_label( $post_type );
+
+	/**
+	 * Filter the listing owner label for the review.
+	 *
+	 * @since 2.3.7
+	 *
+	 * @param string $label Listing owner label.
+	 * @param string $post_type The post type.
+	 */
+	return apply_filters( 'geodir_review_listing_owner_label', $label, $post_type );
+}
+
 /*######################################################
 Email functions
 ######################################################*/
@@ -168,7 +189,7 @@ function geodir_check_notify_moderator( $maybe_notify, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
 	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-		$maybe_notify = '0' == $comment->comment_approved && (bool) GeoDir_Email::is_email_enabled( 'admin_moderate_comment' );
+		$maybe_notify = '0' == $comment->comment_approved && (bool) geodirectory()->email->is_enabled( 'admin_moderate_comment' );
 	}
 
 	return $maybe_notify;
@@ -188,8 +209,8 @@ add_filter( 'notify_moderator', 'geodir_check_notify_moderator', 99999, 2 );
 function geodir_comment_moderation_recipients( $emails, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
-	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
-		$emails = array( GeoDir_Email::get_admin_email() );
+	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodirectory()->email->is_enabled( 'admin_moderate_comment' ) ) {
+		$emails = array( geodirectory()->email->get_admin_email() );
 	}
 
 	return $emails;
@@ -209,7 +230,7 @@ add_filter( 'comment_moderation_recipients', 'geodir_comment_moderation_recipien
 function geodir_comment_moderation_subject( $subject, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
-	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
+	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodirectory()->email->is_enabled( 'admin_moderate_comment' ) ) {
 		$gd_post = geodir_get_post_info( $comment->comment_post_ID );
 
 		$email_vars = array(
@@ -218,7 +239,7 @@ function geodir_comment_moderation_subject( $subject, $comment_id ) {
 			'post'       => $gd_post
 		);
 
-		$subject = GeoDir_Email::get_subject( 'admin_moderate_comment', $email_vars );
+		$subject = geodirectory()->email->get_subject( 'admin_moderate_comment', $email_vars );
 	}
 
 	return $subject;
@@ -238,7 +259,7 @@ add_filter( 'comment_moderation_subject', 'geodir_comment_moderation_subject', 1
 function geodir_comment_moderation_text( $message, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
-	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
+	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodirectory()->email->is_enabled( 'admin_moderate_comment' ) ) {
 		$gd_post       = geodir_get_post_info( $comment->comment_post_ID );
 		$email_name = 'admin_moderate_comment';
 
@@ -247,9 +268,9 @@ function geodir_comment_moderation_text( $message, $comment_id ) {
 			'post'    => $gd_post
 		);
 
-		$message_body  = GeoDir_Email::get_content( $email_name, $email_vars );
+		$message_body  = geodirectory()->email->get_content( $email_name, $email_vars );
 
-		$plain_text = GeoDir_Email::get_email_type() != 'html' ? true : false;
+		$plain_text = geodirectory()->email->get_email_type() != 'html' ? true : false;
 		$template   = $plain_text ? 'emails/plain/geodir-email-' . $email_name . '.php' : 'emails/geodir-email-' . $email_name . '.php';
 
 		$message = geodir_get_template_html( $template, array(
@@ -260,7 +281,7 @@ function geodir_comment_moderation_text( $message, $comment_id ) {
 			'plain_text'    => $plain_text,
 			'message_body'  => $message_body,
 		) );
-		$message = GeoDir_Email::style_body( $message, $email_name, $email_vars );
+		$message = geodirectory()->email->style_body( $message, $email_name, $email_vars );
 		$message = apply_filters( 'geodir_mail_content', $message, $email_name, $email_vars );
 		if ( $plain_text ) {
 			$message = wp_strip_all_tags( $message );
@@ -284,7 +305,7 @@ add_filter( 'comment_moderation_text', 'geodir_comment_moderation_text', 10, 2 )
 function geodir_comment_moderation_headers( $headers, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
-	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && GeoDir_Email::is_email_enabled( 'admin_moderate_comment' ) ) {
+	if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) && geodirectory()->email->is_enabled( 'admin_moderate_comment' ) ) {
 		$gd_post = geodir_get_post_info( $comment->comment_post_ID );
 
 		$email_vars = array(
@@ -293,7 +314,7 @@ function geodir_comment_moderation_headers( $headers, $comment_id ) {
 			'post'       => $gd_post
 		);
 
-		$headers = GeoDir_Email::get_headers( 'admin_moderate_comment', $email_vars );
+		$headers = geodirectory()->email->get_headers( 'admin_moderate_comment', $email_vars );
 	}
 
 	return $headers;
@@ -337,7 +358,7 @@ function geodir_should_notify_comment_author( $comment ) {
 		$comment_id = $comment;
 	}
 
-	$notify      = GeoDir_Email::is_email_enabled( 'author_comment_approved' );
+	$notify      = geodirectory()->email->is_enabled( 'author_comment_approved' );
 	$notify_sent = get_comment_meta( $comment_id, 'gd_comment_author_notified', true );
 
 	if ( ! empty( $notify ) && empty( $notify_sent ) ) {
@@ -364,7 +385,7 @@ function geodir_should_notify_listing_author( $comment ) {
 		$comment_id = $comment;
 	}
 
-	$notify      = GeoDir_Email::is_email_enabled( 'owner_comment_approved' );
+	$notify      = geodirectory()->email->is_enabled( 'owner_comment_approved' );
 	$notify_sent = get_comment_meta( $comment_id, 'gd_listing_author_notified', true );
 
 	if ( ! empty( $notify ) && empty( $notify_sent ) ) {
@@ -400,62 +421,63 @@ function geodir_notify_on_comment_approved( $comment ) {
 	if ( $notify_comment_author ) {
 		update_comment_meta( $comment->comment_ID, 'gd_comment_author_notified', current_time( 'timestamp', 1 ) );
 
-		GeoDir_Email::send_owner_comment_approved_email( $comment );
+		geodirectory()->email->send_owner_comment_approved_email( $comment );
 	}
 
 	// Notify to listing author
 	if ( $notify_listing_author ) {
 		update_comment_meta( $comment->comment_ID, 'gd_listing_author_notified', current_time( 'timestamp', 1 ) );
 
-		GeoDir_Email::send_author_comment_approved_email( $comment );
+		geodirectory()->email->send_author_comment_approved_email( $comment );
 	}
 }
 
 add_action( 'comment_unapproved_to_approved', 'geodir_notify_on_comment_approved', 10, 2 );
 
-/**
- * Send a notification of a new comment to the post author.
- *
- * @since 2.0.0
- *
- *
- * @param int $comment_ID Comment ID.
- *
- * @return bool True on success, false on failure.
- */
-function geodir_new_comment_notify_postauthor( $comment_ID ) {
-	$comment = get_comment( $comment_ID );
-
-	$maybe_notify = get_option( 'comments_notify' );
-
-	if ( $maybe_notify && ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
-		$maybe_notify = (bool) GeoDir_Email::is_email_enabled( 'owner_comment_submit' );
-	}
-
-	// Only send notifications for approved or pending comments.
-	if ( $maybe_notify && ! ( in_array( 'comment_approved', array_keys( (array) $comment ) ) && ( $comment->comment_approved == '0' || $comment->comment_approved === 'hold' || $comment->comment_approved == '1' || $comment->comment_approved === 'approve' ) ) ) {
-		$maybe_notify = false;
-	}
-
-	/**
-	 * Filters whether to send the post author new comment notification emails,
-	 * overriding the site setting.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @param bool $maybe_notify Whether to notify the post author about the new comment.
-	 * @param int $comment_ID The ID of the comment for the notification.
-	 */
-	$maybe_notify = apply_filters( 'geodir_comment_notify_post_author', $maybe_notify, $comment_ID );
-
-	if ( ! $maybe_notify ) {
-		return false;
-	}
-
-	return GeoDir_Email::send_owner_comment_submit_email( $comment );
-}
-
-add_action( 'comment_post', 'geodir_new_comment_notify_postauthor', 99999, 1 );
+///**
+// * Send a notification of a new comment to the post author.
+// *
+// * @since 2.0.0
+// *
+// *
+// * @param int $comment_ID Comment ID.
+// *
+// * @return bool True on success, false on failure.
+// */
+//function geodir_new_comment_notify_postauthor( $comment_ID ) {
+//	$comment = get_comment( $comment_ID );
+//
+//	$maybe_notify = get_option( 'comments_notify' );
+//
+//	if ( $maybe_notify && ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+//		$maybe_notify = (bool) geodirectory()->email->is_enabled( 'owner_comment_submit' );
+//	}
+//	echo '@@@@';print_r($comment);echo '@@@@'.$maybe_notify;exit;
+//	// Only send notifications for approved or pending comments.
+//	if ( $maybe_notify && ! ( in_array( 'comment_approved', array_keys( (array) $comment ) ) && ( $comment->comment_approved == '0' || $comment->comment_approved === 'hold' || $comment->comment_approved == '1' || $comment->comment_approved === 'approve' ) ) ) {
+//		$maybe_notify = false;
+//	}
+//
+//	/**
+//	 * Filters whether to send the post author new comment notification emails,
+//	 * overriding the site setting.
+//	 *
+//	 * @since 2.0.0
+//	 *
+//	 * @param bool $maybe_notify Whether to notify the post author about the new comment.
+//	 * @param int $comment_ID The ID of the comment for the notification.
+//	 */
+//	$maybe_notify = apply_filters( 'geodir_comment_notify_post_author', $maybe_notify, $comment_ID );
+//
+//	if ( ! $maybe_notify ) {
+//		return false;
+//	}
+//
+//
+//	return geodirectory()->email->send_owner_comment_submit_email( $comment );
+//}
+//
+//add_action( 'comment_post', 'geodir_new_comment_notify_postauthor', 99999, 1 );
 
 /**
  * Function for template redirect when comment is approve.

@@ -64,7 +64,7 @@ global $post, $aui_bs5;
 							echo '</a>';
 						}
 						if ( ! empty( $comment->user_id ) && ! empty( $comment->comment_post_ID ) && ( (int) $comment->user_id == (int) get_post_field( 'post_author', (int) $comment->comment_post_ID ) ) ) {
-							echo ' <span class="ml-2 ms-2 h6 m-0 fs-xs"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">' . GeoDir_Comments::get_listing_owner_label( get_post_type( $comment->comment_post_ID ) ) . '</span></span>';
+							echo ' <span class="ml-2 ms-2 h6 m-0 fs-xs"><span class="badge ' . ( $aui_bs5 ? 'bg-primary' : 'badge-primary' ) . '">' . geodir_get_review_listing_owner_label( get_post_type( $comment->comment_post_ID ) ) . '</span></span>';
 						}
 						?>
 					</h6>

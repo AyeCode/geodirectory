@@ -16,26 +16,25 @@ namespace AyeCode\GeoDirectory\Core\Services;
 use AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface;
 use AyeCode\GeoDirectory\Core\Services\Settings;
 use AyeCode\GeoDirectory\Database\Repository\ReviewRepository;
+use AyeCode\GeoDirectory\Database\Repository\PostRepository;
 
 final class Reviews {
-	private \wpdb $db;
-
 	/**
 	 * Constructor.
 	 *
 	 * All dependencies are "injected" here, so the class has the tools it needs.
 	 *
-	 * @param ReviewRepository   $repository The repository for database access.
-	 * @param Settings           $settings   The settings utility.
-	 * @param LocationsInterface $locations  The locations service.
+	 * @param ReviewRepository   $repository      The review repository for database access.
+	 * @param PostRepository     $post_repository The post repository for database access.
+	 * @param Settings           $settings        The settings utility.
+	 * @param LocationsInterface $locations       The locations service.
 	 */
 	public function __construct(
 		public ReviewRepository $repository,
+		private PostRepository $post_repository,
 		private Settings $settings,
 		private LocationsInterface $locations
 	) {
-		global $wpdb;
-		$this->db = $wpdb;
 	}
 
 	/**
@@ -149,17 +148,11 @@ final class Reviews {
 		$new_rating = $this->repository->get_average_rating_for_post( $post_id );
 		$new_count  = $this->repository->get_count_for_post( $post_id );
 
-		// @todo This should be moved to a `PostRepository` in the future.
-		$details_table = $this->db->prefix . 'geodir_' . str_replace( 'gd_', '', $post_type ) . '_details';
-		$this->db->update(
-			$details_table,
-			[ 'overall_rating' => $new_rating, 'rating_count' => $new_count ],
-			[ 'post_id' => $post_id ],
-			[ '%f', '%d' ],
-			[ '%d' ]
-		);
+		// Update the post detail table via repository.
+		$this->post_repository->update_rating( $post_id, $new_rating, $new_count, $post_type );
 
 		// Clear related caches and transients.
+		$details_table = $this->post_repository->get_table_name( $post_type );
 		wp_cache_delete( 'gd_post_' . $post_id, 'gd_post' );
 		delete_transient( 'gd_avg_num_votes_' . $details_table );
 		delete_transient( 'gd_avg_rating_' . $details_table );
