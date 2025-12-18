@@ -69,28 +69,42 @@ class GeoDir_Media {
 	 * @package GeoDirectory
 	 */
 	public static function post_attachment_upload() {
-		$field_id = isset( $_POST['imgid'] ) ? sanitize_text_field( $_POST['imgid'] ) : '';
-		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : '';
-		$error = '';
+		$field_id   = isset( $_POST['imgid'] ) ? sanitize_text_field( $_POST['imgid'] ) : '';
+		$post_id    = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : '';
+		$parent_id  = 0;
+		$can_upload = true;
+		$error      = '';
 
 		if ( $post_id ) {
 			if ( ! current_user_can( 'manage_options' ) ) {
 				// Check if user has privileges to edit the post
 				$maybe_parent = wp_get_post_parent_id( $post_id  );
-				$parent_id = $maybe_parent ? absint( $maybe_parent ) : '';
+				$parent_id    = $maybe_parent ? absint( $maybe_parent ) : '';
 
-				if ( ! GeoDir_Post_Data::can_edit( $post_id, (int) get_current_user_id(), $parent_id ) ) {
-					$error = __( 'You are not allowed to perform this action.', 'geodirectory' );
-				}
+				$can_upload = GeoDir_Post_Data::can_edit( $post_id, (int) get_current_user_id(), $parent_id );
 			}
 		} else {
 			if ( ! current_user_can( 'manage_options' ) ) {
-				$error = __( 'You are not allowed to perform this action.', 'geodirectory' );
+				$can_upload = false;
 			}
 		}
 
-		// Return error.
-		if ( $error ) {
+		/*
+		 * Check if allowed to upload post attachment.
+		 *
+		 * @since 2.8.147
+		 *
+		 * @param bool   $allowed   True if allowed to upload, false if not.
+		 * @param string $field_id  The attachment field ID.
+		 * @param int    $post_id   The pos ID. Default 0.
+		 * @param int    $parent_id The post parent ID. Default 0.
+		 */
+		$can_upload = apply_filters( 'geodir_allow_post_attachment_upload', $can_upload, $field_id, $post_id, $parent_id );
+
+		if ( ! $can_upload ) {
+			$error = __( 'You are not allowed to perform this action.', 'geodirectory' );
+
+			// Return error.
 			wp_send_json_error( array( 'message' => $error ) );
 		}
 
