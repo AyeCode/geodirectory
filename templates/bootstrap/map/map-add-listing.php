@@ -1,6 +1,6 @@
 <?php
 /**
- * Display Add Listing Map
+ * Display Add Listing Map - jQuery-free version
  *
  * This template can be overridden by copying it to yourtheme/geodirectory/bootstrap/map/map-add-listing.php.
  *
@@ -83,20 +83,20 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 <?php } ?>
 (function() {
 	console.log('[Template] Inline script starting...');
-	console.log('[Template] jQuery available?', typeof jQuery !== 'undefined');
 	console.log('[Template] window.GeoDir?', !!window.GeoDir);
 	console.log('[Template] window.GeoDir.Maps?', !!(window.GeoDir && window.GeoDir.Maps));
 
-	// Wait for jQuery and map provider to be available
-	if (typeof jQuery === 'undefined' || !window.GeoDir || !window.GeoDir.Maps) {
+	// Wait for map provider to be available
+	if (!window.GeoDir || !window.GeoDir.Maps) {
 		console.error('[Template] Required dependencies not loaded - exiting early');
 		return;
 	}
 
-	console.log('[Template] Dependencies OK, waiting for jQuery ready...');
+	console.log('[Template] Dependencies OK, waiting for DOM ready...');
 
-	jQuery(function($) {
-		console.log('[Template] jQuery ready fired');
+	// Use DOMContentLoaded instead of jQuery ready
+	function initMap() {
+		console.log('[Template] DOM ready fired');
 
 		// Detect which map provider is available
 		console.log('[Template] window.gdSetMap:', window.gdSetMap);
@@ -117,98 +117,96 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 
 		if (!window.gdMaps) {
 			console.error('[Template] No map provider detected!');
-			$('#<?php echo $prefix; ?>map_nofound').hide();
-			$('#<?php echo $prefix; ?>map_notloaded').show();
+			var mapNotFound = document.getElementById('<?php echo $prefix; ?>map_nofound');
+			var mapNotLoaded = document.getElementById('<?php echo $prefix; ?>map_notloaded');
+			if (mapNotFound) mapNotFound.style.display = 'none';
+			if (mapNotLoaded) mapNotLoaded.style.display = 'block';
 			return;
 		}
 
-		<?php if ( geodir_lazy_load_map() ) { ?>
-		console.log('[Template] Lazy load map enabled');
-		// Lazy load the map
-		$("#<?php echo $prefix; ?>map").geodirLoadMap({
-			loadJS: true,
-			forceLoad: <?php echo ( isset( $geodir_manual_map ) && $geodir_manual_map ? 'true' : 'false' ); ?>,
-			callback: function() {
-				console.log('[Template] Lazy load callback fired');
-		<?php } else { ?>
-		console.log('[Template] Lazy load disabled, creating map immediately');
-		<?php } ?>
-				// Create map provider instance
-				console.log('[Template] About to create MapFactory...');
-				var provider = GeoDir.Maps.MapFactory.create('<?php echo $prefix; ?>map', {
-					latitude: <?php echo geodir_sanitize_float( $lat ); ?>,
-					longitude: <?php echo geodir_sanitize_float( $lng ); ?>,
-					zoom: <?php echo absint( $mapzoom ); ?>,
-					maptype: 'ROADMAP',
-					streetViewControl: true,
-					scrollwheel: <?php echo geodir_get_option( 'geodir_add_listing_mouse_scroll' ) ? 'false' : 'true'; ?>,
-					preferredProvider: mapProvider
-				});
+		console.log('[Template] Creating map immediately');
 
-				console.log('[Template] Provider created:', provider);
-
-				if (!provider || !provider.init()) {
-					console.error('[Template] Provider initialization failed!');
-					$('#<?php echo $prefix; ?>map_notloaded').show();
-					return;
-				}
-
-				console.log('[Template] Provider initialized successfully');
-
-				// Create AddressField instance with options
-				console.log('[Template] Creating AddressField...');
-				var addressField = new GeoDir.Maps.AddressField('<?php echo $prefix; ?>', provider, {
-					lat: <?php echo $lat_lng_blank ? 'null' : geodir_sanitize_float( $lat ); ?>,
-					lng: <?php echo $lat_lng_blank ? 'null' : geodir_sanitize_float( $lng ); ?>,
-					mapZoom: <?php echo absint( $mapzoom ); ?>,
-					defaultLocation: {
-						latitude: <?php echo geodir_sanitize_float( $default_lat ); ?>,
-						longitude: <?php echo geodir_sanitize_float( $default_lng ); ?>,
-						city: '<?php echo addslashes_gpc( $defaultcity ); ?>',
-						region: '<?php echo addslashes_gpc( $defaultregion ); ?>',
-						country: '<?php echo addslashes_gpc( $defaultcountry ); ?>'
-					},
-					isRestrict: <?php echo $is_map_restrict ? 'true' : 'false'; ?>,
-					autoChangeFields: <?php echo $auto_change_map_fields ? 'true' : 'false'; ?>,
-					autoChangePinMove: <?php echo $auto_change_address_fields_pin_move ? 'true' : 'false'; ?>,
-					minZoomLevel: <?php echo $is_map_restrict ? 5 : 0; ?>,
-					markerIcon: '<?php echo $marker_icon; ?>',
-					markerSize: {
-						w: <?php echo $icon_size['w']; ?>,
-						h: <?php echo $icon_size['h']; ?>
-					},
-					mapLang: '<?php echo esc_js( $mapLang ); ?>',
-					countryISO: '<?php echo esc_js( $country_iso2 ); ?>',
-					txt_geocode_error: '<?php echo esc_js( __( 'Geocode was not successful for the following reason:', 'geodirectory' ) ); ?>',
-					txt_city_restrict: '<?php echo esc_js( wp_sprintf( __( 'Please choose any address of the (%s) city only.', 'geodirectory' ), $defaultcity ) ); ?>'
-				});
-
-				<?php
-				/**
-				 * Fires to add custom JavaScript for the add listing map.
-				 *
-				 * @since 3.0.0
-				 * @param string $map_type 'google' or 'osm'
-				 * @param string $map_name The active map name
-				 * @param bool $geodir_manual_map Whether this is a manual map
-				 * @param bool $gd_move_inline_script Whether to move inline scripts
-				 */
-				do_action( 'geodir_add_listing_map_inline_js', 'window.gdMaps', geodirectory()->maps->active_map(), $geodir_manual_map, $gd_move_inline_script );
-				?>
-
-				<?php
-				/**
-				 * Fires after the add listing map is initialized.
-				 *
-				 * @since 3.0.0
-				 */
-				do_action( 'geodir_add_listing_map_initialized' );
-				?>
-		<?php if ( geodir_lazy_load_map() ) { ?>
-			}
+		// Create map provider instance
+		console.log('[Template] About to create MapFactory...');
+		var provider = GeoDir.Maps.MapFactory.create('<?php echo $prefix; ?>map', {
+			latitude: <?php echo geodir_sanitize_float( $lat ); ?>,
+			longitude: <?php echo geodir_sanitize_float( $lng ); ?>,
+			zoom: <?php echo absint( $mapzoom ); ?>,
+			maptype: 'ROADMAP',
+			streetViewControl: true,
+			scrollwheel: <?php echo geodir_get_option( 'geodir_add_listing_mouse_scroll' ) ? 'false' : 'true'; ?>,
+			preferredProvider: mapProvider
 		});
-		<?php } ?>
-	});
+
+		console.log('[Template] Provider created:', provider);
+
+		if (!provider || !provider.init()) {
+			console.error('[Template] Provider initialization failed!');
+			var mapNotLoaded = document.getElementById('<?php echo $prefix; ?>map_notloaded');
+			if (mapNotLoaded) mapNotLoaded.style.display = 'block';
+			return;
+		}
+
+		console.log('[Template] Provider initialized successfully');
+
+		// Create AddressField instance with options
+		console.log('[Template] Creating AddressField...');
+		var addressField = new GeoDir.Maps.AddressField('<?php echo $prefix; ?>', provider, {
+			lat: <?php echo $lat_lng_blank ? 'null' : geodir_sanitize_float( $lat ); ?>,
+			lng: <?php echo $lat_lng_blank ? 'null' : geodir_sanitize_float( $lng ); ?>,
+			mapZoom: <?php echo absint( $mapzoom ); ?>,
+			defaultLocation: {
+				latitude: <?php echo geodir_sanitize_float( $default_lat ); ?>,
+				longitude: <?php echo geodir_sanitize_float( $default_lng ); ?>,
+				city: '<?php echo addslashes_gpc( $defaultcity ); ?>',
+				region: '<?php echo addslashes_gpc( $defaultregion ); ?>',
+				country: '<?php echo addslashes_gpc( $defaultcountry ); ?>'
+			},
+			isRestrict: <?php echo $is_map_restrict ? 'true' : 'false'; ?>,
+			autoChangeFields: <?php echo $auto_change_map_fields ? 'true' : 'false'; ?>,
+			autoChangePinMove: <?php echo $auto_change_address_fields_pin_move ? 'true' : 'false'; ?>,
+			minZoomLevel: <?php echo $is_map_restrict ? 5 : 0; ?>,
+			markerIcon: '<?php echo $marker_icon; ?>',
+			markerSize: {
+				w: <?php echo $icon_size['w']; ?>,
+				h: <?php echo $icon_size['h']; ?>
+			},
+			mapLang: '<?php echo esc_js( $mapLang ); ?>',
+			countryISO: '<?php echo esc_js( $country_iso2 ); ?>',
+			txt_geocode_error: '<?php echo esc_js( __( 'Geocode was not successful for the following reason:', 'geodirectory' ) ); ?>',
+			txt_city_restrict: '<?php echo esc_js( wp_sprintf( __( 'Please choose any address of the (%s) city only.', 'geodirectory' ), $defaultcity ) ); ?>'
+		});
+
+		<?php
+		/**
+		 * Fires to add custom JavaScript for the add listing map.
+		 *
+		 * @since 3.0.0
+		 * @param string $map_type 'google' or 'osm'
+		 * @param string $map_name The active map name
+		 * @param bool $geodir_manual_map Whether this is a manual map
+		 * @param bool $gd_move_inline_script Whether to move inline scripts
+		 */
+		do_action( 'geodir_add_listing_map_inline_js', 'window.gdMaps', geodirectory()->maps->active_map(), $geodir_manual_map, $gd_move_inline_script );
+		?>
+
+		<?php
+		/**
+		 * Fires after the add listing map is initialized.
+		 *
+		 * @since 3.0.0
+		 */
+		do_action( 'geodir_add_listing_map_initialized' );
+		?>
+	}
+
+	// Run when DOM is ready
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initMap);
+	} else {
+		// DOM already loaded, run immediately
+		initMap();
+	}
 
 	// Set global variables for country-specific parsing
 	window.geodir_split_uk = <?php echo geodir_split_uk() ? 'true' : 'false'; ?>;
@@ -218,7 +216,10 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
 if ( ! empty( $gd_move_inline_script ) ) {
 	$inline_script = ob_get_clean();
 	$inline_script = apply_filters( 'geodir_add_listing_map_inline_script', trim( $inline_script ), geodirectory()->maps->active_map(), $geodir_manual_map );
-	wp_add_inline_script( 'geodir-maps', $inline_script );
+
+	// Use the Maps service to defer inline script output
+	// This avoids timing issues where scripts might not be registered yet
+	geodirectory()->maps->add_inline_map_script( $inline_script );
 } else {
 	?>
 /* ]]> */

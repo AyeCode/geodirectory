@@ -38,6 +38,7 @@ use AyeCode\GeoDirectory\Core\Services\Taxonomies;
 use AyeCode\GeoDirectory\Core\Services\PostSaveService;
 use AyeCode\GeoDirectory\Core\Services\QueryVars;
 use AyeCode\GeoDirectory\Core\Services\Users;
+use AyeCode\GeoDirectory\Core\Services\Favorites;
 use AyeCode\GeoDirectory\Core\Services\Email;
 use AyeCode\GeoDirectory\Core\Services\EmailDefaults;
 use AyeCode\GeoDirectory\Core\Services\SeoDefaults;
@@ -83,6 +84,7 @@ use AyeCode\GeoDirectory\Frontend\Renderers\ReviewRenderer;
  * @property-read \AyeCode\GeoDirectory\Core\Services\PostSaveService $postSaveService The Post Save service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\QueryVars $query_vars The Query Variables service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Users $users The Users service.
+ * @property-read \AyeCode\GeoDirectory\Core\Services\Favorites $favorites The Favorites service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\Email $email The Email service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\EmailDefaults $email_defaults The Email Defaults service.
  * @property-read \AyeCode\GeoDirectory\Core\Services\SeoDefaults $seo_defaults The SEO Defaults service.
@@ -210,6 +212,9 @@ final class GeoDirectory {
 				break;
 			case 'users':
 				$service_id = Users::class;
+				break;
+			case 'favorites':
+				$service_id = Favorites::class;
 				break;
 			case 'email':
 				$service_id = Email::class;

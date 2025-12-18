@@ -1553,7 +1553,7 @@ function geodir_get_post_package( $post = '', $post_type = '' ) {
 function geodir_get_no_replace_fields(){
 	return array(
 		'post_password',
-		'submit_ip'
+		'submit_ip',
 	);
 }
 

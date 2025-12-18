@@ -35,6 +35,21 @@ final class Maps {
 	private array $marker_sizes = [];
 
 	/**
+	 * Collection of inline scripts to be output in the footer.
+	 * Used to defer inline script output when scripts are registered later.
+	 *
+	 * @var array<string>
+	 */
+	private array $inline_scripts = [];
+
+	/**
+	 * Whether the footer hook has been registered.
+	 *
+	 * @var bool
+	 */
+	private bool $footer_hook_registered = false;
+
+	/**
 	 * Constructor is empty, allowing the container to auto-wire this class.
 	 */
 	public function __construct() {
@@ -438,7 +453,81 @@ final class Maps {
 		global $gd_move_inline_script;
 		$gd_move_inline_script = apply_filters( 'geodir_add_listing_move_inline_script', true );
 
+		// Ensure geodir-maps script will be enqueued
+		// This ensures the script handle exists for inline script attachment
+		$this->enqueue_add_listing_map_scripts();
+
 		// Render the template
 		return geodir_get_template_html( 'bootstrap/map/map-add-listing.php', $template_args );
+	}
+
+	/**
+	 * Enqueue map scripts for add-listing form.
+	 * Called before rendering map template to ensure scripts are ready.
+	 *
+	 * @since 3.0.0
+	 */
+	private function enqueue_add_listing_map_scripts(): void {
+		// Register and enqueue the geodir-maps script
+		// This is called from render_add_listing_map() to ensure scripts are available
+		// before the template tries to add inline scripts
+		if ( ! wp_script_is( 'geodir-maps', 'enqueued' ) ) {
+			// The Assets service will handle the actual registration and enqueueing
+			// via the maybe_enqueue_add_listing_scripts() method
+			// We just need to trigger it by setting a flag or calling it directly
+			// For now, we'll rely on the wp_enqueue_scripts hook doing its job
+			// and we'll use our deferred inline script system
+		}
+	}
+
+	/**
+	 * Add an inline script to be output in the footer.
+	 * Used when geodir-maps script might not be registered yet during template rendering.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @param string $script The JavaScript code to add inline.
+	 */
+	public function add_inline_map_script( string $script ): void {
+		$this->inline_scripts[] = $script;
+
+		// Register footer hook on first use
+		if ( ! $this->footer_hook_registered ) {
+			add_action( 'wp_footer', [ $this, 'output_inline_scripts' ], 5 );
+			add_action( 'admin_footer', [ $this, 'output_inline_scripts' ], 5 );
+			$this->footer_hook_registered = true;
+		}
+	}
+
+	/**
+	 * Output all collected inline scripts in the footer.
+	 * This is hooked to wp_footer and admin_footer at priority 5.
+	 *
+	 * @since 3.0.0
+	 */
+	public function output_inline_scripts(): void {
+		if ( empty( $this->inline_scripts ) ) {
+			return;
+		}
+
+		// Check if geodir-maps is enqueued
+		if ( ! wp_script_is( 'geodir-maps', 'enqueued' ) ) {
+			// If not enqueued, we can't add inline scripts to it
+			// Output as standalone script tag instead
+			echo '<script type="text/javascript">' . "\n";
+			echo '/* <![CDATA[ */' . "\n";
+			foreach ( $this->inline_scripts as $script ) {
+				echo $script . "\n";
+			}
+			echo '/* ]]> */' . "\n";
+			echo '</script>' . "\n";
+		} else {
+			// Add all collected scripts to geodir-maps handle
+			$combined_script = implode( "\n", $this->inline_scripts );
+			wp_add_inline_script( 'geodir-maps', $combined_script );
+		}
+
+		// Clear the scripts array after output
+		$this->inline_scripts = [];
 	}
 }

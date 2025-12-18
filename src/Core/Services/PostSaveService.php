@@ -101,6 +101,8 @@ final class PostSaveService {
 	 * @return array Modified post data.
 	 */
 	public function filter_insert_post_data( array $data, array $postarr ): array {
+//		print_r($data);print_r($postarr);
+//		echo 'LLL';exit;
 		// Non GD post.
 		if ( ! empty( $data['post_type'] ) && $data['post_type'] !== 'revision' && ! geodir_is_gd_post_type( $data['post_type'] ) ) {
 			return $data;
@@ -331,7 +333,8 @@ final class PostSaveService {
 			}
 
 			// Apply field-type-specific filter.
-			$gd_post_value = apply_filters( "geodir_custom_field_value_{$cf['field_type']}", $gd_post_value, $gd_post, $cf, $post_id, $post, $update );
+			// Convert arrays to objects for backward compatibility with v2 hooks.
+			$gd_post_value = apply_filters( "geodir_custom_field_value_{$cf['field_type']}", $gd_post_value, (object) $gd_post, (object) $cf, $post_id, $post, $update );
 
 			// Handle arrays.
 			if ( is_array( $gd_post_value ) ) {
@@ -360,6 +363,7 @@ final class PostSaveService {
 	 */
 	protected function process_categories( int $post_id, array $gd_post, string $post_type, bool $is_dummy ): array {
 		$postarr = array();
+
 
 		// Check for dummy data categories.
 		if ( $is_dummy && isset( $gd_post['post_category'] ) ) {
@@ -391,6 +395,9 @@ final class PostSaveService {
 			$postarr['default_category'] = absint( $gd_post['default_category'] );
 		}
 
+//		echo $post_categories.$post_type.'@@@';
+//		print_r($post_categories);
+//		print_r($gd_post);exit;
 		if ( isset( $post_categories ) ) {
 			$post_categories = ! is_array( $post_categories ) ? array_filter( explode( ',', $post_categories ) ) : $post_categories;
 			$categories      = array_map( 'absint', $post_categories );
@@ -525,10 +532,11 @@ final class PostSaveService {
 			$postarr['zip'] = sanitize_text_field( stripslashes( $gd_post['zip'] ) );
 		}
 		if ( isset( $gd_post['latitude'] ) ) {
-			$postarr['latitude'] = sanitize_text_field( stripslashes( $gd_post['latitude'] ) );
+//			print_r($gd_post);
+			$postarr['latitude'] = sanitize_text_field( $gd_post['latitude'] );
 		}
 		if ( isset( $gd_post['longitude'] ) ) {
-			$postarr['longitude'] = sanitize_text_field( stripslashes( $gd_post['longitude'] ) );
+			$postarr['longitude'] = sanitize_text_field( $gd_post['longitude']  );
 		}
 		if ( isset( $gd_post['mapview'] ) ) {
 			$postarr['mapview'] = sanitize_text_field( $gd_post['mapview'] );

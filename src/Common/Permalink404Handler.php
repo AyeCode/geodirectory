@@ -14,15 +14,18 @@ declare( strict_types = 1 );
 namespace AyeCode\GeoDirectory\Common;
 
 use AyeCode\GeoDirectory\Core\Interfaces\LocationsInterface;
+use AyeCode\GeoDirectory\Core\Services\PostPermissions;
 use AyeCode\GeoDirectory\Support\Hookable;
 
 final class Permalink404Handler {
 	use Hookable;
 
 	private LocationsInterface $locations;
+	private PostPermissions $permissions;
 
-	public function __construct( LocationsInterface $locations ) {
-		$this->locations = $locations;
+	public function __construct( LocationsInterface $locations, PostPermissions $permissions ) {
+		$this->locations   = $locations;
+		$this->permissions = $permissions;
 	}
 
 	/**
@@ -114,7 +117,7 @@ final class Permalink404Handler {
 			return;
 		}
 
-		if ( ! \GeoDir_Post_Data::owner_check( $post_id, $user_id ) ) {
+		if ( ! $this->permissions->is_owner( $post_id, $user_id ) ) {
 			return;
 		}
 

@@ -47,8 +47,8 @@ function duplicateSharedModule(modulePath) {
 
 /**
  * Plugin to wrap output in IIFE to prevent global namespace pollution
+ * Converts ES module format to IIFE by removing export statements
  * Excludes plupload script which needs immediate execution to register Alpine components
- * geodir-maps uses UMD format instead of IIFE to properly expose globals
  * Third-party map libraries (goMap, leaflet, oms) are left unwrapped - they manage their own globals
  */
 function wrapIIFE() {
@@ -58,37 +58,33 @@ function wrapIIFE() {
 			for (const fileName in bundle) {
 				const file = bundle[fileName];
 
-				// Special handling for geodir-maps - wrap in UMD pattern
-				if (file.type === 'chunk' && file.fileName.includes('geodir-maps')) {
-					// UMD wrapper that properly exposes window.GeoDir.Maps
-					file.code = `(function(root, factory) {
-	if (typeof define === 'function' && define.amd) {
-		define([], factory);
-	} else if (typeof module === 'object' && module.exports) {
-		module.exports = factory();
-	} else {
-		${file.code}
-	}
-}(typeof self !== 'undefined' ? self : this, function() {
-	// Module code will execute and set window.GeoDir.Maps
-	return window.GeoDir && window.GeoDir.Maps;
-}));`;
+				// Skip non-JS files
+				if (file.type !== 'chunk' || !file.fileName.endsWith('.js')) {
 					continue;
 				}
 
 				// Skip third-party map libraries - they manage their own globals
-				if (file.type === 'chunk' &&
-					(file.fileName.includes('goMap') ||
-					 file.fileName.includes('oms') ||
-					 file.fileName.includes('leaflet'))) {
+				if (file.fileName.includes('goMap') ||
+					file.fileName.includes('oms') ||
+					file.fileName.includes('leaflet')) {
 					continue;
 				}
 
 				// Skip plupload - it needs immediate execution for Alpine component registration
-				if (file.type === 'chunk' && file.fileName.endsWith('.js') && !file.fileName.includes('geodir-plupload')) {
-					// Wrap the code in an IIFE
-					file.code = `(function(){${file.code}})();`;
+				if (file.fileName.includes('geodir-plupload')) {
+					continue;
 				}
+
+				// Remove any ES module export statements since we're converting to IIFE
+				let code = file.code;
+
+				// Remove export statements (export { ... }, export default ..., etc)
+				code = code.replace(/^export\s+\{[^}]*\}\s*;?\s*$/gm, '');
+				code = code.replace(/^export\s+default\s+/gm, '');
+				code = code.replace(/^export\s+/gm, '');
+
+				// Wrap the code in an IIFE
+				file.code = `(function(){${code}})();`;
 			}
 		}
 	};
@@ -111,19 +107,16 @@ export default defineConfig({
 			// 1. Tell Vite these exist globally, do not bundle them.
 			external: ['jquery', 'bootstrap', 'alpinejs'],
 
-			// Force inline all dependencies - no code splitting
-			preserveEntrySignatures: 'strict',
-
 			output: {
+				// Use ES format first, then let wrapIIFE convert it
+				format: 'es',
+
 				// 2. Map external imports to global window variables
 				globals: {
 					jquery: 'jQuery',
 					bootstrap: 'bootstrap',
 					alpinejs: 'Alpine'
 				},
-
-				// CRITICAL: Disable all code splitting
-				manualChunks: {},
 
 				// 4. Output JS to assets/js/name.js
 				entryFileNames: `js/[name].js`,

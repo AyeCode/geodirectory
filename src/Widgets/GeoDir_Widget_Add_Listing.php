@@ -385,7 +385,10 @@ class GeoDir_Widget_Add_Listing extends \WP_Super_Duper {
 			// Enqueue widget scripts on call.
 			geodir_widget_enqueue_scripts( $params, $this );
 
-			GeoDir_Post_Data::add_listing_form($params);
+			// Get the AddListingForm service from the container and render the form.
+			$container = geodirectory()->container();
+			$form      = $container->get( \AyeCode\GeoDirectory\Frontend\AddListingForm::class );
+			$form->render( $params );
 		}
 
 		// Reset the label type.

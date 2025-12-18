@@ -82,9 +82,14 @@ final class Posts {
 			$post_type = get_post_type( wp_get_post_parent_id( $post_id ) );
 		}
 
-		// Check if preview mode.
+		// Check if preview mode - get the revision ID if exists.
 		if ( $preview && ! empty( $post ) && $post->ID === $post_id ) {
-			$post_id = class_exists( 'GeoDir_Post_Data' ) ? \GeoDir_Post_Data::get_post_preview_id( $post_id ) : $post_id;
+			// Get preview ID from container service.
+			$drafts_service = geodirectory()->container()->get( \AyeCode\GeoDirectory\Core\Services\PostDrafts::class );
+			$preview_id     = $drafts_service->get_preview_id( $post_id );
+			if ( $preview_id !== $post_id ) {
+				$post_id = $preview_id;
+			}
 		}
 
 		if ( ! function_exists( 'geodir_is_gd_post_type' ) || ! geodir_is_gd_post_type( $post_type ) ) {
@@ -142,9 +147,13 @@ final class Posts {
 			$post_type = get_post_type( wp_get_post_parent_id( $post_id ) );
 		}
 
-		// Check if preview mode.
+		// Check if preview mode - get the revision ID if exists.
 		if ( $preview ) {
-			$post_id = class_exists( 'GeoDir_Post_Data' ) ? \GeoDir_Post_Data::get_post_preview_id( $post_id ) : $post_id;
+			$drafts_service = geodirectory()->container()->get( \AyeCode\GeoDirectory\Core\Services\PostDrafts::class );
+			$preview_id     = $drafts_service->get_preview_id( $post_id );
+			if ( $preview_id !== $post_id ) {
+				$post_id = $preview_id;
+			}
 		}
 
 		$all_post_types = function_exists( 'geodir_get_posttypes' ) ? geodir_get_posttypes() : [];
@@ -552,6 +561,15 @@ final class Posts {
 	 * @return string The default post status.
 	 */
 	public function get_default_status(): string {
-		return class_exists( 'GeoDir_Post_Data' ) ? \GeoDir_Post_Data::get_post_default_status() : 'draft';
+		$status = $this->settings->get( 'default_status', 'publish' );
+
+		/**
+		 * Filter default post status for new posts.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param string $status The default post status.
+		 */
+		return apply_filters( 'geodir_post_default_status', $status );
 	}
 }

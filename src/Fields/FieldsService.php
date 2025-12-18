@@ -139,7 +139,8 @@ class FieldsService {
 	 *
 	 * @param int    $post_id    The ID of the post (if editing) or 0.
 	 * @param string $post_type  The CPT slug (gd_place, etc).
-	 * @param string $location   Where are we? (listing_form, admin, search).
+	 * @param string $location   Where are we? (listing_form, detail, listing, search, etc).
+	 *                           Use 'listing_form' for add/edit listing forms to get all fields.
 	 * @param string $package_id Current package ID (for visibility checks).
 	 *
 	 * @return void (Echoes HTML)
@@ -152,23 +153,41 @@ class FieldsService {
 			'active'    => 1
 		];
 
-		// If specific location is requested (e.g. 'sidebar'), add it to query.
-		// If 'admin', we generally want ALL fields so we can edit them.
-		if ( $location !== 'admin' && $location !== 'all' ) {
+		// For listing forms, fetch ALL fields (no show_in filtering).
+		// The for_admin_use check below will hide admin-only fields from non-admins.
+		// For other locations (detail, listing, sidebar, etc), filter by show_in.
+		if ( $location !== 'listing_form' && $location !== 'all' ) {
 			$args['location'] = $location;
 		}
 
 		$fields_data = $this->repository->get_fields( $args );
 
-//		print_r($fields_data);
-
 		// 2. Loop and Render
 		foreach ( $fields_data as $field_data ) {
+
+			// Check for admin-only fields (applies to form contexts)
+			$for_admin_use = isset( $field_data['for_admin_use'] ) && (int) $field_data['for_admin_use'] === 1;
+			$is_hidden = ( $for_admin_use && ! current_user_can( 'manage_options' ) );
+
+			/**
+			 * Add listing form filter to hide post custom field.
+			 *
+			 * @since 2.1.0.11
+			 *
+			 * @param bool   $is_hidden  True to hide field.
+			 * @param array  $field_data Custom field array.
+			 * @param string $package_id The package ID.
+			 * @param string $default    'all' for all fields.
+			 */
+			$is_hidden = apply_filters( 'geodir_add_listing_custom_field_is_hidden', $is_hidden, $field_data, $package_id, 'all' );
+
+			if ( $is_hidden ) {
+				continue;
+			}
 
 			// Skip logic (Hooks from old functions.php)
 			$skip = apply_filters( 'geodir_post_custom_fields_skip_field', false, $field_data, $package_id, 'all', $location );
 			if ( $skip ) {
-//				echo $field_data['htmlvar_name'].'skip###<br>'."\n\n";
 				continue;
 			}
 
@@ -184,16 +203,10 @@ class FieldsService {
 				do_action( 'geodir_before_custom_form_field_' . $field_data['htmlvar_name'], $post_type, $package_id, $field_data );
 
 				// RENDER
-				// We might want to capture this to a variable if we want to wrap it,
-				// but for now we echo to match old behavior.
-//				echo $field_data['htmlvar_name'].'###<br>'."\n\n";
-
 				echo $field->render_input();
 
 				// Legacy Hook: After
 				do_action( 'geodir_after_custom_form_field_' . $field_data['htmlvar_name'], $post_type, $package_id, $field_data );
-			}else{
-				echo $field_data['htmlvar_name'].' NO CLASS###'.$field_data['field_type'].'<br>'."\n\n";
 			}
 		}
 	}

@@ -118,7 +118,7 @@ export function stopAutoSave() {
 }
 
 /**
- * Perform auto-save via AJAX
+ * Perform auto-save via REST API
  * @param {HTMLFormElement} form
  */
 async function performAutoSave(form) {
@@ -129,24 +129,73 @@ async function performAutoSave(form) {
 	// Save user data to localStorage
 	saveUserDataToStorage(form);
 
-	const formData = getFormData(form);
-	const params = formData + '&action=geodir_auto_save_post&target=auto';
+	// Get post ID
+	const postIdField = form.querySelector('input[name="ID"]');
+	if (!postIdField || !postIdField.value) {
+		console.log('No post ID found, skipping autosave');
+		return;
+	}
+
+	const postId = postIdField.value;
+	const postType = form.querySelector('input[name="post_type"]')?.value || 'gd_place';
+
+	// Convert FormData to JSON object, handling multiple values and nested arrays
+	const formData = new FormData(form);
+	const data = {};
+
+	for (let [key, value] of formData.entries()) {
+		// Skip non-relevant fields
+		if (key === 'action' || key === 'target') continue;
+
+		// Parse PHP-style array notation: tax_input[category][] or tax_input[category]
+		const matches = key.match(/^([^\[]+)(?:\[([^\]]*)\])?(?:\[\])?$/);
+
+		if (matches && matches[2] !== undefined) {
+			// Has nested structure like tax_input[category][]
+			const baseKey = matches[1];
+			const subKey = matches[2];
+			const isArray = key.endsWith('[]');
+
+			if (!data[baseKey]) {
+				data[baseKey] = {};
+			}
+
+			if (isArray) {
+				// Array notation: tax_input[category][]
+				if (!data[baseKey][subKey]) {
+					data[baseKey][subKey] = [];
+				}
+				if (value !== '') { // Skip empty values
+					data[baseKey][subKey].push(value);
+				}
+			} else {
+				// Single value: tax_input[category]
+				data[baseKey][subKey] = value;
+			}
+		} else {
+			// Regular field or top-level array
+			if (data.hasOwnProperty(key)) {
+				// Already exists - make it an array if not already
+				if (!Array.isArray(data[key])) {
+					data[key] = [data[key]];
+				}
+				data[key].push(value);
+			} else {
+				// First occurrence of this key
+				data[key] = value;
+			}
+		}
+	}
 
 	try {
-		const response = await fetch(window.geodir_params.ajax_url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: params
-		});
+		const result = await window.GeoDir.api.post(`${postType}/${postId}/autosave`, data);
 
-		const data = await response.json();
-
-		if (data.success) {
-			console.log('Auto-saved successfully');
-		} else {
-			console.log('Auto-save failed');
+		if (result.success) {
+			if (result.autosaved) {
+				console.log('Auto-saved successfully');
+			} else {
+				console.log('No changes to save');
+			}
 		}
 	} catch (error) {
 		console.error('Auto-save error:', error);

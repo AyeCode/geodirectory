@@ -26,11 +26,10 @@ export async function handleFormSubmit(e, form) {
 }
 
 /**
- * Submit form via AJAX
+ * Submit form via REST API
  * @param {HTMLFormElement} form
  */
 async function submitForm(form) {
-	const formData = getFormData(form) + '&target=submit';
 	console.log('Submitting form...');
 
 	const submitButton = form.querySelector('#geodir-add-listing-submit button');
@@ -47,66 +46,95 @@ async function submitForm(form) {
 		// Clear user data from localStorage
 		clearUserDataFromStorage();
 
-		const response = await fetch(window.geodir_params.ajax_url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: formData
-		});
+		// Get post ID and type
+		const postIdField = form.querySelector('input[name="ID"]');
+		const postId = postIdField ? postIdField.value : null;
+		const postType = form.querySelector('input[name="post_type"]')?.value || 'gd_place';
 
-		const data = await response.json();
+		// Convert form to JSON, handling multiple values for same key
+		const formData = new FormData(form);
+		const data = {};
 
-		if (data.success) {
+		function parseKey(rawKey) {
+			const forceArray = /\[\]$/.test(rawKey);              // ends with []
+			const keyNoArray = rawKey.replace(/\[\]$/, "");       // remove only trailing []
+			const parts = [...keyNoArray.matchAll(/([^[\]]+)/g)].map(m => m[1]); // tokens inside brackets
+			return { parts, forceArray };
+		}
+
+		function setDeep(obj, parts, value, forceArray) {
+			let cur = obj;
+
+			for (let i = 0; i < parts.length; i++) {
+				const k = parts[i];
+				const last = i === parts.length - 1;
+
+				if (!last) {
+					if (cur[k] == null || typeof cur[k] !== "object" || Array.isArray(cur[k])) {
+						cur[k] = {};
+					}
+					cur = cur[k];
+					continue;
+				}
+
+				if (forceArray) {
+					if (!Array.isArray(cur[k])) cur[k] = [];
+					cur[k].push(value);
+				} else {
+					// plain duplicates: keep LAST value only (checkboxes fix)
+					cur[k] = value; // last value wins
+				}
+			}
+		}
+
+		for (const [rawKey, value] of formData.entries()) {
+			if (rawKey === "action" || rawKey === "target") continue;
+
+			const { parts, forceArray } = parseKey(rawKey);
+			setDeep(data, parts, value, forceArray);
+		}
+
+		// console.log('Submitting form data:', data);
+		// return;
+
+		// Submit via REST API
+		let result;
+		if (postId) {
+			// Update existing post
+			result = await window.GeoDir.api.put(`${postType}/${postId}`, data);
+		} else {
+			// Create new post
+			result = await window.GeoDir.api.post(postType, data);
+		}
+
+		if (result.success) {
 			console.log('Form submitted successfully');
-			console.log(data.data);
+			console.log(result);
 
 			// Reset changes flag
 			resetChangesFlag();
 
-			// Remove current notifications
-			document.querySelectorAll('.gd-notification').forEach(notif => notif.remove());
+			// Show success message
+			showSuccessMessage(result);
 
-			// Get container to replace
-			const replaceContainerInput = document.querySelector('#gd-add-listing-replace-container');
-			const containerSelector = replaceContainerInput ? replaceContainerInput.value : '#geodirectory-add-post';
-			const containerToReplace = document.querySelector(containerSelector);
+			// Handle payment URL if provided
+			if (result.payment_url) {
+				window.location.href = result.payment_url;
+				return true;
+			}
 
-			if (containerToReplace && data.data) {
-				// Replace container with response (success message or redirect)
-				containerToReplace.outerHTML = data.data;
-
-				// Scroll to notification
-				const notification = document.querySelector('.gd-notification');
-				if (notification) {
-					const notificationTop = notification.getBoundingClientRect().top + window.pageYOffset - 100;
-					window.scrollTo({
-						top: notificationTop,
-						behavior: 'smooth'
-					});
-				}
+			// Redirect to permalink or preview
+			if (result.permalink) {
+				setTimeout(() => {
+					window.location.href = result.permalink;
+				}, 2000);
+			} else if (result.preview_link) {
+				setTimeout(() => {
+					window.location.href = result.preview_link;
+				}, 2000);
 			}
 
 			return true;
-		} else {
-			console.log('Form submission failed');
-
-			// Restore button state
-			if (submitButton) {
-				submitButton.innerHTML = originalButtonText;
-				submitButton.classList.remove('gd-disabled');
-				submitButton.disabled = false;
-			}
-
-			// Show error message
-			if (data.data) {
-				alert(data.data);
-			}
-
-			// Dispatch event to reset captcha
-			document.dispatchEvent(new Event('ayecode_reset_captcha'));
-
-			return false;
 		}
 	} catch (error) {
 		console.error('Form submission error:', error);
@@ -119,8 +147,7 @@ async function submitForm(form) {
 		}
 
 		// Show error message
-		const errorMsg = window.geodir_params?.rating_error_msg || 'An error occurred. Please try again.';
-		alert(errorMsg);
+		alert(error.message || 'An error occurred. Please try again.');
 
 		// Dispatch event to reset captcha
 		document.dispatchEvent(new Event('ayecode_reset_captcha'));
@@ -130,37 +157,61 @@ async function submitForm(form) {
 }
 
 /**
- * Delete revision via AJAX
+ * Show success message
+ * @param {object} result - API response
+ */
+function showSuccessMessage(result) {
+	// Remove existing notifications
+	document.querySelectorAll('.gd-notification').forEach(notif => notif.remove());
+
+	// Create success notification
+	const notification = document.createElement('div');
+	notification.className = 'gd-notification alert alert-success';
+	notification.innerHTML = result.message || 'Listing saved successfully!';
+
+	// Insert at top of form
+	const form = document.querySelector('#geodirectory-add-post');
+	if (form) {
+		form.insertAdjacentElement('beforebegin', notification);
+
+		// Scroll to notification
+		const notificationTop = notification.getBoundingClientRect().top + window.pageYOffset - 100;
+		window.scrollTo({
+			top: notificationTop,
+			behavior: 'smooth'
+		});
+	}
+}
+
+/**
+ * Delete revision via REST API
  * @param {HTMLFormElement} form
  */
 export async function deleteRevision(form) {
-	const formData = getFormData(form);
-	const params = formData + '&action=geodir_delete_revision&target=revision';
+	const postIdField = form.querySelector('input[name="ID"]');
+	const postId = postIdField ? postIdField.value : null;
+	const postType = form.querySelector('input[name="post_type"]')?.value || 'gd_place';
+
+	if (!postId) {
+		console.error('No post ID found for revision deletion');
+		return false;
+	}
+
+	if (!confirm('Are you sure you want to delete this draft/revision and start fresh?')) {
+		return false;
+	}
 
 	try {
-		const response = await fetch(window.geodir_params.ajax_url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: params
-		});
+		const result = await window.GeoDir.api.delete(`${postType}/${postId}?force=true`);
 
-		const data = await response.json();
-
-		if (data.success) {
+		if (result.success) {
 			console.log('Revision deleted successfully');
 			location.reload();
 			return true;
-		} else {
-			console.log('Revision deletion failed');
-			if (data.data) {
-				alert(data.data);
-			}
-			return false;
 		}
 	} catch (error) {
 		console.error('Revision deletion error:', error);
+		alert(error.message || 'Failed to delete revision. Please try again.');
 		return false;
 	}
 }

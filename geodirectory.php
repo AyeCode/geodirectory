@@ -121,11 +121,14 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Statuses::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostTypes::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Posts::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostPermissions::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostDrafts::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Taxonomies::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\PostSaveService::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\PostSaveHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\QueryVars::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Users::class );
+	$container->bind( \AyeCode\GeoDirectory\Core\Services\Favorites::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\Services\Email::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\EmailHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Core\CommentEmailHooks::class );
@@ -174,6 +177,7 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewForm::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\ReviewHooks::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\PostHooks::class );
+	$container->bind( \AyeCode\GeoDirectory\Frontend\AddListingForm::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\Ajax\FileUploadAction::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\Query::class );
 
@@ -192,6 +196,7 @@ function geodirectory_boot() {
 	$container->bind( \AyeCode\GeoDirectory\Common\CommonServiceProvider::class );
 	$container->bind( \AyeCode\GeoDirectory\Admin\AdminServiceProvider::class );
 	$container->bind( \AyeCode\GeoDirectory\Frontend\FrontendServiceProvider::class );
+	$container->bind( \AyeCode\GeoDirectory\Api\ApiServiceProvider::class );
 
 
 	// --- Initialize the main plugin object ---
@@ -204,6 +209,7 @@ function geodirectory_boot() {
 	$container->get( \AyeCode\GeoDirectory\Common\CommonServiceProvider::class )->register_hooks();
 	$container->get( \AyeCode\GeoDirectory\Core\EmailHooks::class )->register();
 	$container->get( \AyeCode\GeoDirectory\Core\CommentEmailHooks::class )->register();
+	$container->get( \AyeCode\GeoDirectory\Api\ApiServiceProvider::class )->register( $container );
 
 	if ( is_admin() ) {
 		$container->get( \AyeCode\GeoDirectory\Admin\AdminServiceProvider::class )->register_hooks();

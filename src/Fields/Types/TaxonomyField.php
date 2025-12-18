@@ -50,11 +50,12 @@ class TaxonomyField extends AbstractFieldType {
 
 		// Get Current Selected Terms
 		$selected_terms = [];
-		if ( $this->post_id ) {
-			$terms = wp_get_object_terms( $this->post_id, $taxonomy, [ 'fields' => 'ids' ] );
-			if ( ! is_wp_error( $terms ) ) {
-				$selected_terms = $terms;
-			}
+		if ( $this->post_id && !empty($this->value)) {
+			$selected_terms =  array_filter( explode(',', $this->value) );
+//			$terms = wp_get_object_terms( $this->post_id, $taxonomy, [ 'fields' => 'ids' ] );
+//			if ( ! is_wp_error( $terms ) ) {
+//				$selected_terms = $terms;
+//			}
 		}
 
 		// Get Default Category (Primary Category)
@@ -67,6 +68,10 @@ class TaxonomyField extends AbstractFieldType {
 			'exclude'      => [], // You can pass global $exclude_cats here if needed
 			'hide_empty'   => false,
 		];
+
+//		print_r($this->value);
+//		echo $this->post_id.'###'.$taxonomy;
+//		print_r( $walker_args );exit;
 
 		ob_start();
 		?>

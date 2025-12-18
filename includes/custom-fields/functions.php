@@ -888,31 +888,7 @@ function geodir_string_values_to_options( $option_values = '', $translated = fal
 	return geodir_string_to_options( $option_values, $translated );
 }
 
-/**
- * Check option values are old format.
- *
- * @since 2.3.19.
- *
- * @param string $string The option values.
- * @return bool True if options are in old format.
- */
-function geodir_is_old_option_values( $string ) {
-	if ( empty( $string ) ) {
-		return false;
-	}
 
-	if ( is_scalar( $string ) ) {
-		if ( strpos( $string, "\n" ) !== false || strpos( $string, PHP_EOL ) !== false ) {
-			return false;
-		}
-
-		if ( strpos( $string, " : " ) !== false && strpos( $string, "," ) === false ) {
-			return false;
-		}
-	}
-
-	return true;
-}
 
 /**
  * Converts old string to options array.

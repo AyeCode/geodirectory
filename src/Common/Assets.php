@@ -66,6 +66,16 @@ class Assets {
 			true // Load in footer
 		);
 
+		// Localize REST API params for frontend script
+		wp_localize_script(
+			'geodir-frontend',
+			'geodir_params',
+			array(
+				'rest_url'   => esc_url_raw( rest_url( 'geodir/v3' ) ),
+				'rest_nonce' => wp_create_nonce( 'wp_rest' ),
+			)
+		);
+
 		// 3. Map Handler (Registered only, not enqueued globaly)
 		// Use Assets::enqueue_map_assets() to load this when needed.
 		wp_register_script(
@@ -197,6 +207,8 @@ class Assets {
 			[
 				'ajax_url'              => admin_url( 'admin-ajax.php' ),
 				'gd_ajax_url'           => admin_url( 'admin-ajax.php' ),
+				'rest_url'              => esc_url_raw( rest_url( 'geodir/v3' ) ),
+				'rest_nonce'            => wp_create_nonce( 'wp_rest' ),
 				'autosave'              => 10000, // 10 seconds autosave interval
 				'txt_lose_changes'      => __( 'You have unsaved changes. Are you sure you want to leave?', 'geodirectory' ),
 				'txt_closed'            => __( 'Closed', 'geodirectory' ),
@@ -368,6 +380,7 @@ class Assets {
 	 * Only loads on pages with file upload widgets (add-listing forms).
 	 */
 	public function maybe_enqueue_plupload_scripts() {
+
 		// Check if we should load plupload assets (same condition as add-listing)
 		if ( ! $this->should_load_add_listing_assets() ) {
 			return;
@@ -377,7 +390,7 @@ class Assets {
 		wp_enqueue_script(
 			'geodir-plupload',
 			$this->assets_url . 'js/geodir-plupload.js',
-			[], // No dependencies
+			['plupload'], // No dependencies
 			$this->version,
 			false // Load in head (before body scripts)
 		);
@@ -385,11 +398,45 @@ class Assets {
 		// Localize plupload params
 		$this->localize_plupload_params();
 
+		// Ensure Alpine scripts are registered (if vendor package hasn't registered them)
+		$this->register_alpine_scripts();
+
 		// Enqueue Alpine Sort plugin
 		wp_enqueue_script( 'alpine-js-sort' );
 
 		// Enqueue Alpine.js core (this should load after our plupload script)
 		wp_enqueue_script( 'alpine-js' );
+	}
+
+	/**
+	 * Register Alpine.js scripts if not already registered by vendor package.
+	 * The vendor package (wp-ayecode-settings-framework) only registers these on backend,
+	 * but we need them on frontend for plupload file uploads.
+	 */
+	private function register_alpine_scripts() {
+		// Register Alpine.js core if not already registered
+		if ( ! wp_script_is( 'alpine-js', 'registered' ) ) {
+			wp_register_script(
+				'alpine-js',
+//			@todo undo this 	GEODIRECTORY_PLUGIN_URL . '/vendor/wp-ayecode-settings-framework/assets/js/alpine.min.js',
+				 'http://localhost/wp-content/plugins/wp-ayecode-settings-framework/assets/js/alpine.min.js',
+				[],
+				$this->version,
+				true
+			);
+		}
+
+		// Register Alpine Sort plugin if not already registered
+		if ( ! wp_script_is( 'alpine-js-sort', 'registered' ) ) {
+			wp_register_script(
+				'alpine-js-sort',
+//			@todo undo this 		GEODIRECTORY_PLUGIN_URL . '/vendor/wp-ayecode-settings-framework/assets/js/alpine.sort.min.js',
+				'http://localhost/wp-content/plugins/wp-ayecode-settings-framework/assets/js/alpine.sort.min.js',
+				[ 'alpine-js' ], // Depends on alpine-js
+				$this->version,
+				true
+			);
+		}
 	}
 
 	/**
