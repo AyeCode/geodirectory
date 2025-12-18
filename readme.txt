@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.147 - 2025-12-TBD =
+* Hook added to check comment images upload - ADDED
+
 = GeoDirectory v2.8.146 - 2025-12-11 =
 * GD > Listings added more options to customize pagination - CHANGED
 * Rating stars count should respect default rating settings - CHANGED
