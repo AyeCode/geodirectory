@@ -61,7 +61,7 @@ if ( $multiple ) {
 		<span id="upload-msg" class="text-muted"><?php _e( 'Please drag &amp; drop the files to rearrange the order', 'geodirectory' ); ?></span>
 		<?php } ?>
 		<span id="<?php echo esc_attr( $id ); ?>upload-error" class="d-none alert alert-danger" role="alert"></span>
-		<div class="modal bsui fade" id="gd_image_meta_<?php echo esc_attr( $id ); ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal bsui fade" id="gd_image_meta_<?php echo esc_attr( $id ); ?>" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">

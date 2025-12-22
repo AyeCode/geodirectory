@@ -39,10 +39,13 @@ global $post, $aui_bs5;
 			 * @package GeoDirectory
 			 */
 			$avatar_size = apply_filters( 'geodir_comment_avatar_size', 44 );
+
+			/* translators: %s: Author name. */
+			$alt = wp_sprintf( __( '%s Avatar', 'geodirectory' ), $comment->comment_author );
 			?>
 				<?php if ( $avatar_size != 0  ): ?>
 					<?php if(!empty($comment->user_id)){ ?><a href="<?php echo get_author_posts_url($comment->user_id); ?>" class="media-object <?php echo ( $aui_bs5 ? 'float-start' : 'float-left' ); ?>" style="min-width:<?php echo (int) $avatar_size; ?>px"><?php }?>
-						<?php echo get_avatar( $comment, $avatar_size,'mm','', array('class'=>"comment_avatar rounded-circle position-relative") ); ?>
+						<?php echo get_avatar( $comment, $avatar_size, 'mm', $alt, array( 'class' => "comment_avatar rounded-circle position-relative" ) ); ?>
 					<?php if(!empty($comment->user_id)){ ?></a><?php }?>
 				<?php endif; ?>
 				<span class="media-heading pl-2 ps-2 mr-auto me-auto h4 m-0 align-items-center d-flex flex-wrap justify-content-center h5">
