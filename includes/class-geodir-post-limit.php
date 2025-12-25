@@ -241,7 +241,7 @@ class GeoDir_Post_Limit {
 	}
 
 	public static function check_rest_api_post( $prepared_post, $request ) {
-		if ( empty( $prepared_post->ID ) ) {
+		if ( ! is_wp_error( $prepared_post ) && ! empty( $prepared_post->post_type ) && empty( $prepared_post->ID ) ) {
 			$args = array( 
 				'post_type' => $prepared_post->post_type,
 				'post_author' => ! empty( $prepared_post->post_author ) ? absint( $prepared_post->post_author ) : null,
