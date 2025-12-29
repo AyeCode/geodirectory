@@ -2546,6 +2546,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'id',
 				'post_id',
 				'_search_title',
+				'content',
 				'post_status',
 				'default_category',
 				'featured_image',
