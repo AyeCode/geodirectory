@@ -1101,7 +1101,10 @@ function geodir_search_form_post_type_input() {
 				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class' " . $attrs . ">";
 			}
 
-			$select_class = $design_style ? " form-control " . ( $aui_bs5 ? 'form-select' : 'custom-select' ) : '';
+			$select_class = $design_style ? " form-control " . ($aui_bs5 ? 'form-select' : 'custom-select') : '';
+			if ($design_style && !empty($geodir_search_widget_params['input_size'])) {
+				$select_class .= $aui_bs5 ? ' form-select-' . $geodir_search_widget_params['input_size'] : ' custom-select-' . $geodir_search_widget_params['input_size'] . ' form-control-' . $geodir_search_widget_params['input_size'];
+			}
 
 			echo $design_style ? '<div class="' . ( $aui_bs5 ? '' : 'form-group' ) . '">' : '';
 			echo $design_style ? '<label class="sr-only visually-hidden">'.__("Select search type","geodirectory").'</label>' : '';
