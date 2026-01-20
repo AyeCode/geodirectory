@@ -3,7 +3,7 @@
         'name' => 'ayecode/geodirectory',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'e01d6bb4a83d742699780c6b6b94049c9f8579f9',
+        'reference' => 'fc1608a0dcecb85bc02b82cd34472f8c09da8aca',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'ayecode/ayecode-connect-helper' => array(
-            'pretty_version' => '1.0.4',
-            'version' => '1.0.4.0',
-            'reference' => 'd9d9ba849b808a38bb23532e7585c4186bc086cd',
+            'pretty_version' => '1.0.5',
+            'version' => '1.0.5.0',
+            'reference' => 'e778b5e3a3b8e7550ef8e82ed45550b593af683d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ayecode/ayecode-connect-helper',
             'aliases' => array(),
@@ -22,7 +22,7 @@
         'ayecode/geodirectory' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'e01d6bb4a83d742699780c6b6b94049c9f8579f9',
+            'reference' => 'fc1608a0dcecb85bc02b82cd34472f8c09da8aca',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
