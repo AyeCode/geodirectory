@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.149\n"
+"Project-Id-Version: GeoDirectory 2.8.150\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-01 18:04+0530\n"
-"PO-Revision-Date: 2026-01-01 18:04+0530\n"
+"POT-Creation-Date: 2026-01-22 19:47+0530\n"
+"PO-Revision-Date: 2026-01-22 19:47+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1439,7 +1439,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dashboard.php:168
 #: includes/widgets/class-geodir-widget-best-of.php:785
-#: includes/widgets/class-geodir-widget-listings.php:1780
+#: includes/widgets/class-geodir-widget-listings.php:1803
 #: includes/widgets/class-geodir-widget-recently-viewed.php:453
 #: templates/bootstrap/map/map.php:55
 msgid "Loading..."
@@ -3628,7 +3628,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-categories.php:211
 #: includes/admin/views/html-admin-settings-import-export-listings.php:197
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:193
-#: includes/core-functions.php:1110 includes/post-functions.php:2011
+#: includes/core-functions.php:1113 includes/post-functions.php:2011
 #: includes/widgets/class-geodir-widget-dynamic-content.php:510
 #: language.php:174 templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
@@ -11527,7 +11527,7 @@ msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:119
 #: includes/core-functions.php:293
-#: includes/widgets/class-geodir-widget-listings.php:1317
+#: includes/widgets/class-geodir-widget-listings.php:1340
 msgid "Near:"
 msgstr ""
 
@@ -13341,61 +13341,61 @@ msgstr ""
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1107
+#: includes/core-functions.php:1110
 msgid "Select search type"
 msgstr ""
 
-#: includes/core-functions.php:1303 includes/core-functions.php:1317
+#: includes/core-functions.php:1306 includes/core-functions.php:1320
 #: templates/bootstrap/search-bar/input-near.php:39
 #: templates/bootstrap/search-bar/input-search.php:38
 msgid "Clear field"
 msgstr ""
 
-#: includes/core-functions.php:1645
+#: includes/core-functions.php:1648
 msgid "Filesystem ERROR during mu-plugin file copy: "
 msgstr ""
 
-#: includes/core-functions.php:1647
+#: includes/core-functions.php:1650
 msgid ""
 "There was a problem accessing the filesystem during copy Fast AJAX mu-plugin "
 "file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1655
+#: includes/core-functions.php:1658
 #, php-format
 msgid ""
 "Unable to create directory %s. Make sure its parent directory writable by "
 "the server."
 msgstr ""
 
-#: includes/core-functions.php:1659
+#: includes/core-functions.php:1662
 #, php-format
 msgid "Must-plugin directory %s is not writable by the server."
 msgstr ""
 
-#: includes/core-functions.php:1667
+#: includes/core-functions.php:1670
 msgid ""
 "There was a problem in copy Fast AJAX mu-plugin file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1707
+#: includes/core-functions.php:1710
 msgctxt "rating filter"
 msgid "Any"
 msgstr ""
 
-#: includes/core-functions.php:1710
+#: includes/core-functions.php:1713
 msgid "5-star"
 msgstr ""
 
-#: includes/core-functions.php:1711
+#: includes/core-functions.php:1714
 msgid "4-star & up"
 msgstr ""
 
-#: includes/core-functions.php:1712
+#: includes/core-functions.php:1715
 msgid "3-star & up"
 msgstr ""
 
-#: includes/core-functions.php:1713
+#: includes/core-functions.php:1716
 msgid "2-star & up"
 msgstr ""
 
@@ -16048,7 +16048,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:748
 #: includes/widgets/class-geodir-widget-best-of.php:777
-#: includes/widgets/class-geodir-widget-listings.php:1808
+#: includes/widgets/class-geodir-widget-listings.php:1831
 msgid "View all"
 msgstr ""
 
@@ -17131,16 +17131,16 @@ msgstr ""
 msgid "Show center slide and left/right slide with half preview."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1317
+#: includes/widgets/class-geodir-widget-listings.php:1340
 msgid "Me"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1502
+#: includes/widgets/class-geodir-widget-listings.php:1525
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1710
+#: includes/widgets/class-geodir-widget-listings.php:1733
 #: includes/widgets/class-geodir-widget-loop.php:347
 msgid ""
 "This preview shows all content items to give an idea of layout. Dummy data "
