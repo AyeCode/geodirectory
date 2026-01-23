@@ -1574,8 +1574,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			}
 
 			$validation_pattern = isset( $field->validation_pattern ) ? $field->validation_pattern : '';
+			$validation_msg     = isset( $field->validation_msg ) ? $field->validation_msg : '';
+
 			$field = wp_unslash( $field ); // Strip slashes from labels.
-			$field->validation_pattern = str_replace( '\\\\', '\\', $validation_pattern ); // We need the validation pattern without slashes stripped.
+
+			// Added to remove slash before quotes.
+			$validation_pattern = str_replace( array( "\'", '\"' ), array( "'", '"' ), $validation_pattern );
+			$validation_msg     = str_replace( array( "\'", '\"' ), array( "'", '"' ), $validation_msg );
+
+			// We need the validation pattern without slashes stripped.
+			$field->validation_pattern = str_replace( '\\\\', '\\', $validation_pattern );
+			$field->validation_msg     = str_replace( '\\\\', '\\', $validation_msg );
 
 			if ( isset( $field->extra_fields ) ) {
 				$field->extra_fields = $extra_fields;
