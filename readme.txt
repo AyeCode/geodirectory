@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.151 - 2026-01-TBD =
+* Validation patten shows slash when pattern contains quote - FIXED 
+
 = GeoDirectory v2.8.150 - 2026-01-22 =
 * GD > Listings view all link should redirect to search page when country/region/city is set - CHANGED
 * Merge AUI 0.2.43, SD 1.2.31 & AyeCode Connect Helper 1.0.5 - CHANGED

@@ -1043,7 +1043,7 @@ optgroup-close', 'geodirectory' );
 					'label'              => __('Validation Message','geodirectory') . geodir_help_tip( __( 'Enter a extra validation message to show to the user if validation fails.', 'geodirectory' )),
 					'type'              => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
-					'value' => $value,
+					'value' => addslashes_gpc( $value ),
 				)
 			);
 
