@@ -1208,7 +1208,7 @@ class GeoDir_Query {
 	public static function  custom_sort( $orderby, $sort_by, $table, $post_type = '', $wp_query = array() ) {
 		global $wpdb;
 
-		if ( $sort_by != '' && ( ! is_search() || ( isset( $_REQUEST['s'] ) && isset( $_REQUEST['snear'] ) && $_REQUEST['snear'] == '' && ( $_REQUEST['s'] == '' ||  $_REQUEST['s'] == ' ') ) ) ) {
+		if ( $sort_by != '' && ( ! is_search() || ( isset( $_REQUEST['s'] ) && empty( $_REQUEST['snear'] ) && ( $_REQUEST['s'] == '' ||  $_REQUEST['s'] == ' ' ) ) ) ) {
 			if ( substr( strtolower( $sort_by ) , -5 ) == '_desc' ) {
 				$order = 'desc';
 				$sort_key = substr( $sort_by , 0, strlen( $sort_by ) - 5 );
