@@ -292,7 +292,7 @@ class GeoDir_SEO {
 	 * @return string $title.
 	 */
 	public static function output_title( $title = '', $id = 0 ) {
-		global $wp_query, $gdecs_render_loop, $geodir_query_object_id;
+		global $wp_query, $gdecs_render_loop, $geodir_query_object_id, $gd_in_gd_loop;
 
 		$ajax_search = ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'geodir_ajax_search' && ! empty( $_REQUEST['geodir_search'] ) && wp_doing_ajax() ? true : false;
 
@@ -316,7 +316,15 @@ class GeoDir_SEO {
 			$title = self::$title;
 		} else if ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu && ( ! $gdecs_render_loop || ( $ajax_search && get_post_type( $id ) == 'page' ) ) ) {
 			$normalize = true;
-			$title = self::$title;
+
+			if ( ! empty( $wp_query ) && ! empty( $wp_query->queried_object ) && ! empty( $wp_query->queried_object->term_id ) && $wp_query->queried_object->term_id == $id ) {
+				if ( ! $gd_in_gd_loop ) {
+					$title = self::$title;
+				}
+			} else {
+				$title = self::$title;
+			}
+
 			/**
 			 * Filter page title to replace variables.
 			 *
