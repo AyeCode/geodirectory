@@ -317,6 +317,7 @@ class GeoDir_SEO {
 		} else if ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu && ( ! $gdecs_render_loop || ( $ajax_search && get_post_type( $id ) == 'page' ) ) ) {
 			$normalize = true;
 
+			// Fix title when term id and post id are equal on term archive page.
 			if ( ! empty( $wp_query ) && ! empty( $wp_query->queried_object ) && ! empty( $wp_query->queried_object->term_id ) && $wp_query->queried_object->term_id == $id ) {
 				if ( ! $gd_in_gd_loop ) {
 					$title = self::$title;
