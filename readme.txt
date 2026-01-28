@@ -323,6 +323,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Validation patten shows slash when pattern contains quote - FIXED
 * Default sorting is not applied on empty search when near parameter is not set in url - FIXED
 * Post title rendered incorrect on term archive page when term id and post id are same - FIXED
+* CPT > Tabs requires to reload page to add another shortcode tab - FIXED
 
 = GeoDirectory v2.8.150 - 2026-01-22 =
 * GD > Listings view all link should redirect to search page when country/region/city is set - CHANGED

@@ -597,6 +597,8 @@ function gd_tabs_add_tab($this) {
                 alert("something went wrong");
             }
         }
+    }).done(function(data, textStatus, jqXHR) {
+        jQuery($this).removeClass("disabled");
     });
 }
 
