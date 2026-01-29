@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.150\n"
+"Project-Id-Version: GeoDirectory 2.8.151\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 19:47+0530\n"
-"PO-Revision-Date: 2026-01-22 19:47+0530\n"
+"POT-Creation-Date: 2026-01-29 20:11+0530\n"
+"PO-Revision-Date: 2026-01-29 20:12+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -5414,13 +5414,13 @@ msgstr ""
 msgid "No tab items have been added yet."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1950
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2060
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1959
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2069
 msgid "Invalid field."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2095
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2098
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2104
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2107
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:804
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:807
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:730
@@ -5428,37 +5428,37 @@ msgstr ""
 msgid "Failed to sort tab items."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2163
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2172
 msgid ""
 "Field key name MUST NOT match a standard WordPress field, please use another "
 "key and re-save."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2173
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2182
 #, php-format
 msgid "%s field already exists, it can not be used twice."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2175
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2184
 msgid ""
 "Field key name MUST be unique, duplicate field detected, please fix and re-"
 "save."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2235
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2244
 msgid "Column change failed, you may have too many columns."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2401
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2410
 msgid "Field update failed.x"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2413
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2422
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:698
 msgid "Field create failed."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2431
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2440
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "does not match with field data type."
@@ -11532,7 +11532,7 @@ msgid "Near:"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:119
-#: includes/class-geodir-seo.php:694 includes/core-functions.php:292
+#: includes/class-geodir-seo.php:703 includes/core-functions.php:292
 #: includes/core-functions.php:293 includes/core-functions.php:302
 msgid "My Location"
 msgstr ""
@@ -12592,169 +12592,169 @@ msgstr ""
 msgid "Could not save report post."
 msgstr ""
 
-#: includes/class-geodir-seo.php:624 includes/general-functions.php:2030
+#: includes/class-geodir-seo.php:633 includes/general-functions.php:2030
 #, php-format
 msgctxt "in category"
 msgid "in %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:684 includes/general-functions.php:2121
+#: includes/class-geodir-seo.php:693 includes/general-functions.php:2121
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:700 includes/general-functions.php:2134
+#: includes/class-geodir-seo.php:709 includes/general-functions.php:2134
 #, php-format
 msgid "near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:788
+#: includes/class-geodir-seo.php:797
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:789
+#: includes/class-geodir-seo.php:798
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:790
+#: includes/class-geodir-seo.php:799
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:791
+#: includes/class-geodir-seo.php:800
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:795
+#: includes/class-geodir-seo.php:804
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:796
+#: includes/class-geodir-seo.php:805
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:797
+#: includes/class-geodir-seo.php:806
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:798
+#: includes/class-geodir-seo.php:807
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:799
+#: includes/class-geodir-seo.php:808
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:800
+#: includes/class-geodir-seo.php:809
 msgid "The current category name prefixed with `in` eg: in Attractions"
 msgstr ""
 
-#: includes/class-geodir-seo.php:805
+#: includes/class-geodir-seo.php:814
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:806
+#: includes/class-geodir-seo.php:815
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:807
+#: includes/class-geodir-seo.php:816
 msgid "Total post found eg: 10"
 msgstr ""
 
-#: includes/class-geodir-seo.php:808
+#: includes/class-geodir-seo.php:817
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:813
+#: includes/class-geodir-seo.php:822
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:814
+#: includes/class-geodir-seo.php:823
 msgid "The currently used search for term with `for`. Ex: for dinner."
 msgstr ""
 
-#: includes/class-geodir-seo.php:815
+#: includes/class-geodir-seo.php:824
 msgid "The currently used search near term with `near`. Ex: near Philadelphia."
 msgstr ""
 
-#: includes/class-geodir-seo.php:816
+#: includes/class-geodir-seo.php:825
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:821
+#: includes/class-geodir-seo.php:830
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:822
+#: includes/class-geodir-seo.php:831
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:823
+#: includes/class-geodir-seo.php:832
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:824
+#: includes/class-geodir-seo.php:833
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: in "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:825
+#: includes/class-geodir-seo.php:834
 msgid ""
 "The full current location prefixed with `near` eg: near United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:826
+#: includes/class-geodir-seo.php:835
 msgid ""
 "The current viewing location type single name prefixed with `near` eg: near "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:827
+#: includes/class-geodir-seo.php:836
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:828
+#: includes/class-geodir-seo.php:837
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:829
+#: includes/class-geodir-seo.php:838
 msgid "The current viewing country prefixed with `near` eg: near United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:830
+#: includes/class-geodir-seo.php:839
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:831
+#: includes/class-geodir-seo.php:840
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:832
+#: includes/class-geodir-seo.php:841
 msgid "The current viewing region prefixed with `near` eg: near Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:833
+#: includes/class-geodir-seo.php:842
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:834
+#: includes/class-geodir-seo.php:843
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:835
+#: includes/class-geodir-seo.php:844
 msgid "The current viewing city prefixed with `near` eg: near Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:840
+#: includes/class-geodir-seo.php:849
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore. "
 "Ex: _phone."
 msgstr ""
 
-#: includes/class-geodir-seo.php:861
+#: includes/class-geodir-seo.php:870
 msgid "Click to copy"
 msgstr ""
 
