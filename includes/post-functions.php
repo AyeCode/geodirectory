@@ -462,10 +462,15 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		$text = $favourite_text;
 	}
 
-	if($design_style){
+	if ( $design_style ) {
 		// type
-		if($args['type'] == 'badge'){$link_class .= ' badge';}
-		if($args['type'] == 'pill'){$link_class .= ' badge ' . ( $aui_bs5 ? 'rounded-pill' : 'badge-pill' );}
+		if ( isset( $args['type'] ) && $args['type'] == 'badge' ) {
+			$link_class .= ' badge';
+		}
+
+		if ( isset( $args['type'] ) && $args['type'] == 'pill' ) {
+			$link_class .= ' badge ' . ( $aui_bs5 ? 'rounded-pill' : 'badge-pill' );
+		}
 
 		// shadow
 		if(!empty($args['shadow'])){
