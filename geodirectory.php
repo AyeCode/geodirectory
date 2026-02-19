@@ -11,7 +11,7 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory - Business Directory Plugin for WordPress.
- * Version: 2.8.151
+ * Version: 2.8.152
  * Author: AyeCode - WP Business Directory Plugins
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
@@ -34,7 +34,7 @@ if ( ! class_exists( 'GeoDirectory' ) ) :
 		 *
 		 * @var string
 		 */
-		public $version = '2.8.151';
+		public $version = '2.8.152';
 
 		/**
 		 * GeoDirectory instance.

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.151\n"
+"Project-Id-Version: GeoDirectory 2.8.152\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-29 20:11+0530\n"
-"PO-Revision-Date: 2026-01-29 20:12+0530\n"
+"POT-Creation-Date: 2026-02-19 19:09+0530\n"
+"PO-Revision-Date: 2026-02-19 19:10+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -193,7 +193,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:845
 #: includes/api/class-geodir-rest-posts-controller.php:2178
 #: includes/class-geodir-location.php:365
-#: includes/class-geodir-location.php:419 includes/post-functions.php:2196
+#: includes/class-geodir-location.php:419 includes/post-functions.php:2201
 msgid "Country"
 msgstr ""
 
@@ -208,7 +208,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:835
 #: includes/api/class-geodir-rest-posts-controller.php:2192
 #: includes/class-geodir-location.php:384
-#: includes/class-geodir-location.php:431 includes/post-functions.php:2185
+#: includes/class-geodir-location.php:431 includes/post-functions.php:2190
 msgid "Region"
 msgstr ""
 
@@ -223,7 +223,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:825
 #: includes/api/class-geodir-rest-posts-controller.php:2206
 #: includes/class-geodir-location.php:404
-#: includes/class-geodir-location.php:440 includes/post-functions.php:2174
+#: includes/class-geodir-location.php:440 includes/post-functions.php:2179
 msgid "City"
 msgstr ""
 
@@ -245,7 +245,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1227
 #: includes/api/class-geodir-rest-posts-controller.php:2220
 #: includes/api/class-geodir-rest-posts-controller.php:2221
-#: includes/custom-fields/functions.php:687 includes/post-functions.php:2207
+#: includes/custom-fields/functions.php:687 includes/post-functions.php:2212
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -1380,7 +1380,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-conditional-fields.php:258
 #: includes/class-geodir-privacy-exporters.php:344
 #: includes/custom-fields/input-functions-aui.php:1992
-#: includes/post-functions.php:1189 includes/post-functions.php:1978
+#: includes/post-functions.php:1194 includes/post-functions.php:1983
 #: includes/widgets/class-geodir-widget-dynamic-content.php:418
 #: includes/widgets/class-geodir-widget-dynamic-content.php:481
 #: includes/widgets/class-geodir-widget-dynamic-content.php:506
@@ -1707,7 +1707,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1212
 #: includes/admin/class-geodir-admin-dummy-data.php:1222
 #: includes/class-geodir-post-data.php:1678
-#: includes/custom-fields/functions.php:677 includes/post-functions.php:2152
+#: includes/custom-fields/functions.php:677 includes/post-functions.php:2157
 msgid "Address"
 msgstr ""
 
@@ -2208,7 +2208,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:147
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:300
-#: includes/post-functions.php:2077
+#: includes/post-functions.php:2082
 msgid "Status"
 msgstr ""
 
@@ -2645,7 +2645,7 @@ msgid "Unpublished"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-report-post-list-table.php:773
-#: includes/post-functions.php:2021 includes/post-functions.php:2032
+#: includes/post-functions.php:2026 includes/post-functions.php:2037
 #: includes/widgets/class-geodir-widget-author-actions.php:364
 msgid "Published"
 msgstr ""
@@ -3628,7 +3628,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-categories.php:211
 #: includes/admin/views/html-admin-settings-import-export-listings.php:197
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:193
-#: includes/core-functions.php:1113 includes/post-functions.php:2011
+#: includes/core-functions.php:1113 includes/post-functions.php:2016
 #: includes/widgets/class-geodir-widget-dynamic-content.php:510
 #: language.php:174 templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
@@ -11520,7 +11520,7 @@ msgstr ""
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1165 includes/post-functions.php:2065
+#: includes/class-geodir-email.php:1165 includes/post-functions.php:2070
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:279
 msgid "Author"
 msgstr ""
@@ -14989,67 +14989,67 @@ msgid ""
 "Could not retrieve GPS info from OpenStreetMap server for the address %s"
 msgstr ""
 
-#: includes/post-functions.php:691 includes/post-functions.php:720
+#: includes/post-functions.php:696 includes/post-functions.php:725
 msgctxt "Listing status"
 msgid "Closed down"
 msgstr ""
 
-#: includes/post-functions.php:725
+#: includes/post-functions.php:730
 #, php-format
 msgid "Closed down <span class=\"count\">(%s)</span>"
 msgid_plural "Closed down <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/post-functions.php:1257
+#: includes/post-functions.php:1262
 #: includes/widgets/class-geodir-widget-dynamic-content.php:432
 msgid "NEW"
 msgstr ""
 
-#: includes/post-functions.php:1259
+#: includes/post-functions.php:1264
 #: includes/widgets/class-geodir-widget-dynamic-content.php:434
 msgid "UPDATED"
 msgstr ""
 
-#: includes/post-functions.php:1459
+#: includes/post-functions.php:1464
 msgid "Watch Video"
 msgstr ""
 
-#: includes/post-functions.php:1989
+#: includes/post-functions.php:1994
 #: includes/widgets/class-geodir-widget-dynamic-content.php:507
 msgid "Overall Rating"
 msgstr ""
 
-#: includes/post-functions.php:2000
+#: includes/post-functions.php:2005
 #: includes/widgets/class-geodir-widget-dynamic-content.php:508
 msgid "Rating Count"
 msgstr ""
 
-#: includes/post-functions.php:2043 includes/post-functions.php:2054
+#: includes/post-functions.php:2048 includes/post-functions.php:2059
 msgid "Modified"
 msgstr ""
 
-#: includes/post-functions.php:2088
+#: includes/post-functions.php:2093
 msgid "ID"
 msgstr ""
 
-#: includes/post-functions.php:2099
+#: includes/post-functions.php:2104
 msgid "Post Link"
 msgstr ""
 
-#: includes/post-functions.php:2163
+#: includes/post-functions.php:2168
 msgid "Address line 2"
 msgstr ""
 
-#: includes/post-functions.php:2218
+#: includes/post-functions.php:2223
 msgid "Latitude"
 msgstr ""
 
-#: includes/post-functions.php:2229
+#: includes/post-functions.php:2234
 msgid "Longitude"
 msgstr ""
 
-#: includes/post-functions.php:2240
+#: includes/post-functions.php:2245
 msgid "Map Directions"
 msgstr ""
 
