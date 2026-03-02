@@ -283,11 +283,14 @@ class GeoDir_Query {
 
 			if ( $s !== '' && strstr( $s, ',' ) ) {
 				$s_AA = str_replace( " ", "", $s );
-				$s_A = explode( ",", $s_AA );
-				$s_A = implode( '","', $s_A );
-				$s_A = '"' . $s_A . '"';
+				// Escape each item and wrap in DOUBLE quotes
+				$s_A = array_map( function( $qs ) {
+					// esc_sql() neutralizes the malicious quote and "or" logic
+					return esc_sql( wp_specialchars_decode( $qs, ENT_QUOTES ) );
+				}, explode( ",", $s_AA ) );
+				$s_A = '"' . implode( '","', $s_A ) . '"';
 			} else {
-				$s_A = '"' . $s . '"';
+				$s_A = '"' . esc_sql( wp_specialchars_decode( $s, ENT_QUOTES ) ) . '"';
 			}
 
 			if ( $s !== '' && strstr( $s, ' ' ) ) {
@@ -419,7 +422,7 @@ class GeoDir_Query {
 									$keyword = wp_specialchars_decode( $keyword, ENT_QUOTES );
 									$count ++;
 
-									$gd_titlematch_part .= $wpdb->prepare( "( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) ", array( $keyword . '%', '% ' . $keyword . '%' ) );
+									$gd_titlematch_part .= $wpdb->prepare( "( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) ", array( $wpdb->esc_like( $keyword ) . '%', '% ' . $wpdb->esc_like( $keyword ) . '%' ) );
 
 									if ( $count < count( $keywords ) ) {
 										$gd_titlematch_part .= $key . " ";
@@ -437,16 +440,16 @@ class GeoDir_Query {
 						$fields .= $wpdb->prepare( ", CASE WHEN " . $table . ".featured=%d THEN 1 ELSE 0 END AS gd_featured ", 1 );
 					}
 					$fields .= $wpdb->prepare( ", CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_exacttitle, GD_TITLEMATCH_PART CASE WHEN ( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN ( " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s ) THEN 1 ELSE 0 END AS gd_content", array(
-						$s,
-						$s,
-						$s . '%',
-						'% ' . $s . '%',
-						$s,
-						$s . ' %',
-						'% ' . $s . ' %',
-						'%>' . $s . '%',
-						'% ' . $s,
-						'% ' . $s .','
+						$wpdb->esc_like( $s ),
+						$wpdb->esc_like( $s ),
+						$wpdb->esc_like( $s ) . '%',
+						'% ' . $wpdb->esc_like( $s ) . '%',
+						$wpdb->esc_like( $s ),
+						$wpdb->esc_like( $s ) . ' %',
+						'% ' . $wpdb->esc_like( $s ) . ' %',
+						'%>' . $wpdb->esc_like( $s ) . '%',
+						'% ' . $wpdb->esc_like( $s ),
+						'% ' . $wpdb->esc_like( $s ) .','
 					) );
 					$fields = str_replace( "gd_exacttitle, GD_TITLEMATCH_PART", "gd_exacttitle, {$gd_titlematch_part}", $fields );
 				}
@@ -560,7 +563,7 @@ class GeoDir_Query {
 							$keyword = trim( $keyword );
 							$keyword = stripslashes( wp_specialchars_decode( $keyword, ENT_QUOTES ) );
 							if ( $keyword != '' ) {
-								$better_search_term = $wpdb->prepare( " OR {$wpdb->posts}.post_title LIKE %s OR {$wpdb->posts}.post_title LIKE %s ", array( $keyword . '%', '% ' . $keyword . '%' ) );
+								$better_search_term = $wpdb->prepare( " OR {$wpdb->posts}.post_title LIKE %s OR {$wpdb->posts}.post_title LIKE %s ", array( $wpdb->esc_like( $keyword ) . '%', '% ' . $wpdb->esc_like( $keyword ) . '%' ) );
 
 								/**
 								 * Filter the search query keywords SQL.
@@ -649,7 +652,7 @@ class GeoDir_Query {
 
 				$content_where = $terms_where = '';
 				if ( $s != '' ) {
-					$content_where = $wpdb->prepare( " OR ($wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s) ", array( $s . '%', '% ' . $s . '%', '%>' . $s . '%', '%\n' . $s . '%' ) );
+					$content_where = $wpdb->prepare( " OR ($wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s) ", array( $wpdb->esc_like( $s ) . '%', '% ' . $wpdb->esc_like( $s ) . '%', '%>' . $wpdb->esc_like( $s ) . '%', '%\n' . $wpdb->esc_like( $s ) . '%' ) );
 					$content_where = str_replace( "\\n", "\n", $content_where ); // $wpdb->prepare() adds slash that unable to match in search.
 
 					/**
@@ -663,9 +666,9 @@ class GeoDir_Query {
 					$content_where = apply_filters( "geodir_search_content_where", $content_where );
 
 					if ( $gd_exact_search ) {
-						$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s ) ", array( $s ) );
+						$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s ) ", array( $wpdb->esc_like( $s ) ) );
 					} else {
-						$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s OR $wpdb->terms.name LIKE %s OR $wpdb->terms.name IN ($s_A)) ", array( $s . '%', '% '. $s . '%' ) );
+						$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s OR $wpdb->terms.name LIKE %s OR $wpdb->terms.name IN ($s_A)) ", array( $wpdb->esc_like( $s ) . '%', '% '. $wpdb->esc_like( $s ) . '%' ) );
 					}
 
 					/**
@@ -750,7 +753,7 @@ class GeoDir_Query {
 					$lat = $latlon['lat'];
 					$lon = $latlon['lon'];
 					$between          = geodir_get_between_latlon( $lat, $lon, $dist );
-					$post_title_where = $s != "" ? $wpdb->prepare( "{$wpdb->posts}.post_title LIKE %s", array( $s ) ) : "1=1";
+					$post_title_where = $s != "" ? $wpdb->prepare( "{$wpdb->posts}.post_title LIKE %s", array( $wpdb->esc_like( $s ) ) ) : "1=1";
 					$where .= " AND ( ( $post_title_where $better_search_terms ) $content_where $terms_sql ) AND $wpdb->posts.post_type = '{$post_types}' {$status_where}";
 
 					if ( ! empty( $between ) && ! ( GeoDir_Post_types::supports( $post_types, 'service_distance' ) && $geodirectory->location->get_latlon() ) ) {
@@ -767,7 +770,7 @@ class GeoDir_Query {
 						$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
 					}
 				} else {
-					$post_title_where = $s != "" ? $wpdb->prepare( "{$wpdb->posts}.post_title LIKE %s", array( $s ) ) : "1=1";
+					$post_title_where = $s != "" ? $wpdb->prepare( "{$wpdb->posts}.post_title LIKE %s", array( $wpdb->esc_like( $s ) ) ) : "1=1";
 					$where .= " AND ( ( $post_title_where $better_search_terms ) $content_where $terms_sql ) AND $wpdb->posts.post_type = '{$post_types}' {$status_where}";
 				}
 
