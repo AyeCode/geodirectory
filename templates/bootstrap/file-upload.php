@@ -12,7 +12,7 @@
  *
  * @see        https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.19
+ * @version    2.8.153
  *
  * @var string $id The input id string.
  * @var bool $is_required If the item is required or not.
@@ -42,15 +42,15 @@ if ( $multiple ) {
 <div class="geodir-add-files w-100 m-0 mb-3 p-0 bg-light text-center container overflow-hidden" style="border:4px dashed #ccc">
 	<div class="geodir_form_row clearfix geodir-files-dropbox position-relative p-3" id="<?php echo esc_attr( $id ); ?>dropbox" >
 		<input type="<?php echo ( ! empty( $is_required ) ? 'text' : "hidden" ); ?>" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $files ); ?>" class="<?php if ( $is_required ) { echo 'gd_image_required_field'; } ?>" <?php echo ( ! empty( $extra_attributes ) ? $extra_attributes : "" ); ?>/>
-		<input type="hidden" name="<?php echo esc_attr( $id ); ?>image_limit" id="<?php echo esc_attr( $id ); ?>image_limit" value="<?php echo esc_attr( $image_limit ); ?>"/>
-		<input type="hidden" name="<?php echo esc_attr( $id ); ?>totImg" id="<?php echo esc_attr( $id ); ?>totImg" value="<?php echo esc_attr( $total_files ); ?>"/>
+		<input type="hidden" name="<?php echo esc_attr( $id ); ?>image_limit" id="<?php echo esc_attr( $id ); ?>image_limit" value="<?php echo esc_attr( $image_limit ); ?>" data-ignore-rule/>
+		<input type="hidden" name="<?php echo esc_attr( $id ); ?>totImg" id="<?php echo esc_attr( $id ); ?>totImg" value="<?php echo esc_attr( $total_files ); ?>" data-ignore-rule/>
 		<?php if ( $allowed_file_types != '' ) { ?>
-			<input type="hidden" name="<?php echo esc_attr( $id ); ?>_allowed_types" id="<?php echo esc_attr( $id ); ?>_allowed_types" value="<?php echo esc_attr( $allowed_file_types ); ?>" data-exts="<?php echo esc_attr( $display_file_types ); ?>"/>
+			<input type="hidden" name="<?php echo esc_attr( $id ); ?>_allowed_types" id="<?php echo esc_attr( $id ); ?>_allowed_types" value="<?php echo esc_attr( $allowed_file_types ); ?>" data-exts="<?php echo esc_attr( $display_file_types ); ?>" data-ignore-rule/>
 		<?php } ?>
 		<div class="plupload-upload-uic hide-if-no-js <?php if ( $multiple ) { echo "plupload-upload-uic-multiple"; } ?>" id="<?php echo esc_attr( $id ); ?>plupload-upload-ui">
 			<div class="geodir-dropbox-title text-muted h3 m-0"><?php echo $drop_file_label; ?></div>
 			<p class="text-muted mb-2"><?php _e( 'OR', 'geodirectory' ); ?></p>
-			<input id="<?php echo esc_attr( $id ); ?>plupload-browse-button" type="button" value="<?php echo esc_attr( $drop_file_button ); ?>" class="btn btn-primary mb-2 "/>
+			<input id="<?php echo esc_attr( $id ); ?>plupload-browse-button" type="button" value="<?php echo esc_attr( $drop_file_button ); ?>" class="btn btn-primary mb-2" data-ignore-rule/>
 			<div class="geodir-dropbox-file-types text-muted"><?php echo( $display_file_types != '' ? __( 'Allowed file types:', 'geodirectory' ) . ' ' . $display_file_types : '' ); ?></div>
 			<div class="geodir-dropbox-file-limit text-muted geodir-msg-file-limit-<?php echo esc_attr( $image_limit ); ?>"><?php echo $file_limit_message;?></div>
 			<span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce( $id . 'pluploadan' ); ?>"></span>
@@ -88,7 +88,4 @@ if ( $multiple ) {
 		</div>
 	</div>
 </div>
-<style>
-	.geodir-add-files .geodir-files-dropbox.dragover .gd-drop-overlay{display: block !important;}
-	.geodir-add-files .geodir-files-dropbox.dragover *{pointer-events:none !important}
-</style>
+<style>.geodir-add-files .geodir-files-dropbox.dragover .gd-drop-overlay{display:block!important}.geodir-add-files .geodir-files-dropbox.dragover *{pointer-events:none!important}</style>

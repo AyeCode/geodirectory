@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.153 - 2026-03-TBD =
 * Improved search query sanitization by extra escaping - FIXED/SECURITY
+* Conditional fields don't work properly with file upload field - FIXED
 
 = GeoDirectory v2.8.152 - 2026-02-19 =
 * PHP notice in add to favorites button rendering - FIXED
