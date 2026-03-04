@@ -2507,7 +2507,8 @@ function geodir_cfi_files( $html, $cf ) {
 
             // admin only
             $admin_only = geodir_cfi_admin_only($cf);
-            $conditional_attrs = geodir_conditional_field_attrs( $cf, $cf['name'], 'hidden' );
+            $is_required = ! empty( $cf['is_required'] );
+            $conditional_attrs = geodir_conditional_field_attrs( $cf, $cf['name'], $is_required ? 'text' : 'hidden' );
             ?>
             <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> <?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?> row"<?php echo $conditional_attrs; ?>>
                 <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
@@ -2521,9 +2522,6 @@ function geodir_cfi_files( $html, $cf ) {
                 if($horizontal){echo "<div class='col-sm-10'>";}
                 echo class_exists("AUI_Component_Helper") ? AUI_Component_Helper::help_text(__( $cf['desc'], 'geodirectory' )) : '';
                 if($horizontal){echo "</div>";}
-
-                // params for file upload
-                $is_required = $cf['is_required'];
 
                 if($horizontal){echo $aui_bs5 ? "<div class='w-100'>" : "<div class='mx-3 w-100'>";}
                 // the file upload template
