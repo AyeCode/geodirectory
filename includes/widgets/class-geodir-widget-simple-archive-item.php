@@ -911,7 +911,7 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		$content   .= "[gd_output_location location='listing' list_style='$list_style' item_py='$list_py'  $args_out]";
 
 		// Author Actions
-		$content .= "[gd_author_actions author_page_only='1']";
+		$content .= "[gd_author_actions author_page_only='0']";
 
 		// Close Body
 		$content .= $is_preview ? '</div>' : "[gd_archive_item_section type='close' position='right']";
