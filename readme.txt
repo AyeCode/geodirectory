@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.154 - 2026-03-TBD =
+* GD > Simple Archive Item allow to customize author actions - CHANGED
+
 = GeoDirectory v2.8.153 - 2026-03-05 =
 * Improved search query sanitization by extra escaping - FIXED/SECURITY
 * Conditional fields don't work properly with file upload field - FIXED
