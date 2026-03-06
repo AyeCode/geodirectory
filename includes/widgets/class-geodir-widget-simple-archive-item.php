@@ -400,6 +400,37 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 					),
 				)
 			),
+			'author_actions' => array(
+				'type'     => 'select',
+				'title'    => __( 'Show Author Actions', 'geodirectory' ),
+				'desc'     => __( 'Select how to show the author actions.', 'geodirectory' ),
+				'options'  => array(
+					''     => __( 'Show on author page only', 'geodirectory' ),
+					'all'  => __( 'Show on all pages', 'geodirectory' ),
+					'hide' => __( 'Hide author actions', 'geodirectory' ),
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'group'    => __( 'Author Actions', 'geodirectory' )
+			),
+			'hide_edit'  => array(
+				'type'     => 'checkbox',
+				'title'    => __( 'Hide edit', 'geodirectory' ),
+				'desc'     => __( 'Hide the edit action.', 'geodirectory' ),
+				'value'    => '1',
+				'default'  => '0',
+				'desc_tip' => true,
+				'group'    => __( 'Author Actions', 'geodirectory' )
+			),
+			'hide_delete'  => array(
+				'type'     => 'checkbox',
+				'title'    => __( 'Hide delete', 'geodirectory' ),
+				'desc'     => __( 'Hide the delete action.', 'geodirectory' ),
+				'value'    => '1',
+				'default'  => '0',
+				'desc_tip' => true,
+				'group'    => __( 'Author Actions', 'geodirectory' )
+			),
 
 			// Output location
 			'list_style'         => array(
@@ -706,6 +737,9 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			(array) $instance,
 			array(
 				'title' => '',
+				'author_actions' => '',
+				'hide_edit'      => '',
+				'hide_delete'    => ''
 			)
 		);
 
@@ -774,16 +808,16 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			$content .= $is_preview ? '<div class="card-img-top overflow-hidden position-relative " >' : "[gd_archive_item_section type='open' position='left']";
 
 			// top left badge
-			$content .= $instance['top_left_badge_preset'] == 'custom' ? $this->get_custom_badge( 'top_left', $instance ) : self::get_badge_type( $instance['top_left_badge_preset'], array( 'position' => 'top-left' ) );
+			$content .= $instance['top_left_badge_preset'] == 'custom' ? $this->get_custom_badge( 'top_left', $instance ) : self::get_badge_type( $instance['top_left_badge_preset'], array( 'position' => 'top-left' ), array(), $instance );
 
 			// top right badge
-			$content .= $instance['top_right_badge_preset'] == 'custom' ? $this->get_custom_badge( 'top_right', $instance ) : self::get_badge_type( $instance['top_right_badge_preset'], array( 'position' => 'top-right' ) );
+			$content .= $instance['top_right_badge_preset'] == 'custom' ? $this->get_custom_badge( 'top_right', $instance ) : self::get_badge_type( $instance['top_right_badge_preset'], array( 'position' => 'top-right' ), array(), $instance );
 
 			// bottom left badge
-			$content .= $instance['bottom_left_badge_preset'] == 'custom' ? $this->get_custom_badge( 'bottom_left', $instance ) : self::get_badge_type( $instance['bottom_left_badge_preset'], array( 'position' => 'bottom-left' ) );
+			$content .= $instance['bottom_left_badge_preset'] == 'custom' ? $this->get_custom_badge( 'bottom_left', $instance ) : self::get_badge_type( $instance['bottom_left_badge_preset'], array( 'position' => 'bottom-left' ), array(), $instance );
 
 			// bottom right badge
-			$content .= $instance['bottom_right_badge_preset'] == 'custom' ? $this->get_custom_badge( 'bottom_right', $instance ) : self::get_badge_type( $instance['bottom_right_badge_preset'], array( 'position' => 'bottom-right' ) );
+			$content .= $instance['bottom_right_badge_preset'] == 'custom' ? $this->get_custom_badge( 'bottom_right', $instance ) : self::get_badge_type( $instance['bottom_right_badge_preset'], array( 'position' => 'bottom-right' ), array(), $instance );
 
 
 			// image
@@ -911,7 +945,9 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		$content   .= "[gd_output_location location='listing' list_style='$list_style' item_py='$list_py'  $args_out]";
 
 		// Author Actions
-		$content .= "[gd_author_actions author_page_only='1']";
+		if ( $instance['author_actions'] != "hide" ) {
+			$content .= "[gd_author_actions author_page_only='" . ( $instance['author_actions'] == 'all' ? 0 : 1 ) . "'" . ( ! empty( $instance['hide_edit'] ) ? " hide_edit='1'" : '' ) . ( ! empty( $instance['hide_delete'] ) ? " hide_delete='1'" : '' ) . "]";
+		}
 
 		// Close Body
 		$content .= $is_preview ? '</div>' : "[gd_archive_item_section type='close' position='right']";
@@ -919,11 +955,11 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 		// Open Footer
 		$footer_items = absint( $instance['footer_items'] );
 
-		$footer_item_1 = $footer_items > 0 ? self::get_badge_type( $instance['footer_item_1'], array( 'show' => $instance['footer_item_1_show'] ) ) : '';
-		$footer_item_2 = $footer_items > 1 ? self::get_badge_type( $instance['footer_item_2'], array( 'show' => $instance['footer_item_2_show'] ) ) : '';
-		$footer_item_3 = $footer_items > 2 ? self::get_badge_type( $instance['footer_item_3'], array( 'show' => $instance['footer_item_3_show'] ) ) : '';
-		$footer_item_4 = $footer_items > 3 ? self::get_badge_type( $instance['footer_item_4'], array( 'show' => $instance['footer_item_4_show'] ) ) : '';
-		$footer_item_5 = $footer_items > 4 ? self::get_badge_type( $instance['footer_item_5'], array( 'show' => $instance['footer_item_5_show'] ) ) : '';
+		$footer_item_1 = $footer_items > 0 ? self::get_badge_type( $instance['footer_item_1'], array( 'show' => $instance['footer_item_1_show'] ), array(), $instance ) : '';
+		$footer_item_2 = $footer_items > 1 ? self::get_badge_type( $instance['footer_item_2'], array( 'show' => $instance['footer_item_2_show'] ), array(), $instance ) : '';
+		$footer_item_3 = $footer_items > 2 ? self::get_badge_type( $instance['footer_item_3'], array( 'show' => $instance['footer_item_3_show'] ), array(), $instance ) : '';
+		$footer_item_4 = $footer_items > 3 ? self::get_badge_type( $instance['footer_item_4'], array( 'show' => $instance['footer_item_4_show'] ), array(), $instance ) : '';
+		$footer_item_5 = $footer_items > 4 ? self::get_badge_type( $instance['footer_item_5'], array( 'show' => $instance['footer_item_5_show'] ), array(), $instance ) : '';
 
 		if ( $footer_items ) {
 
@@ -1042,11 +1078,11 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 
 		$a = array( 'position' => str_replace( '_', '-', $position ) );
 
-		return $this->get_badge_type( 'custom_badge', $a, $args );
+		return $this->get_badge_type( 'custom_badge', $a, $args, $instance );
 
 	}
 
-	public function get_badge_type( $type, $args = array(), $badge_args = array() ) {
+	public function get_badge_type( $type, $args = array(), $badge_args = array(), $instance = array() ) {
 		global $aui_bs5;
 
 		$type = esc_attr( $type );
@@ -1095,9 +1131,9 @@ class GeoDir_Widget_Simple_Archive_Item extends WP_Super_Duper {
 			$lhs    = $this->is_preview() ? '1' : '2';
 			$output = "[gd_post_meta title=''  id=''  key='business_hours'  show=''  no_wrap='false'  $alignment text_alignment=''  list_hide=''  list_hide_secondary='$lhs'  location=''  css_class='' ]";
 		} else if ( $type == 'author_actions_dropdown' ) {
-			$output = "[gd_author_actions hide_edit='false'  hide_delete='false'  author_page_only='true'  display='dropdown'  size='small'  alignment=''  color='primary'  text_color='white'  btn_mt='1'  btn_mr=''  btn_mb='1'  btn_ml=''  bg='' $position_args  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]";
+			$output = "[gd_author_actions author_page_only='" . ( ! empty( $instance['author_actions'] ) && $instance['author_actions'] == 'all' ? 0 : 1 ) . "'" . ( ! empty( $instance['hide_edit'] ) ? "  hide_edit='1'" : '' ) . ( ! empty( $instance['hide_delete'] ) ? "  hide_delete='1'" : '' ) . "  display='dropdown'  size='small'  alignment=''  color='primary'  text_color='white'  btn_mt='1'  btn_mr=''  btn_mb='1'  btn_ml=''  bg='' $position_args  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]";
 		} else if ( $type == 'author_actions_dropdown_dots' ) {
-			$output = "[gd_author_actions hide_edit='false'  hide_delete='false'  author_page_only='true'  display='dropdown-dots'  size='medium'  alignment=''  color='dark'  text_color='white'  btn_mt='1'  btn_mr=''  btn_mb='1'  btn_ml=''  bg='' $position_args  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]";
+			$output = "[gd_author_actions author_page_only='" . ( ! empty( $instance['author_actions'] ) && $instance['author_actions'] == 'all' ? 0 : 1 ) . "'" . ( ! empty( $instance['hide_edit'] ) ? "  hide_edit='1'" : '' ) . ( ! empty( $instance['hide_delete'] ) ? "  hide_delete='1'" : '' ) . "  display='dropdown-dots'  size='medium'  alignment=''  color='dark'  text_color='white'  btn_mt='1'  btn_mr=''  btn_mb='1'  btn_ml=''  bg='' $position_args  pt=''  pr=''  pb=''  pl=''  border=''  rounded=''  rounded_size=''  shadow='' ]";
 		} else if ( $type == 'distance_to_post' ) {
 			$output = "[gd_post_distance type='' shadow=''  color=''  bg_color='" . ( $position_class ? 'rgba(0,115,170,0.5)' : '#0073aa' ) . "'  txt_color='#ffffff'  size=''  $alignment  list_hide=''  list_hide_secondary=''  css_class='" . esc_attr( $position_class ) . "' ]";
 		} elseif ( $type == 'custom_badge' ) {
