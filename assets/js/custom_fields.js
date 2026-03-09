@@ -511,6 +511,9 @@ function gd_tabs_item_settings($this) {
     // $settings = jQuery($this).parent().find('.dd-setting').first().clone();
     $settings = jQuery($this).parent().find('.dd-setting').first().html();
     $settings = jQuery('<div class="dd-setting">' + $settings + '</div>');
+    if (jQuery($this).parent().data('htmlvar_name')) {
+        jQuery($settings).attr('data-field', jQuery($this).parent().data('htmlvar_name'));
+    }
     $settings.removeClass('d-none');
     $id = $settings.find('[name="id"]').val();
     $type = $settings.find('[name="tab_type"]').val();
