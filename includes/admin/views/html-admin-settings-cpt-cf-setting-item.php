@@ -45,7 +45,7 @@ $tab_class .= ( isset( $field->field_type ) && $field->field_type == 'fieldset' 
 			<i class="fas fa-grip-vertical text-muted ml-2 ms-2" style="cursor: move" aria-hidden="true" ></i>
 		</div>
 		<?php // store the form as a template. This saves a load of memory on page load. ?>
-		<script type="text/template" class="dd-setting <?php echo 'dd-type-'.esc_attr($field->field_type_name);?>">
+		<script type="text/template" class="dd-setting <?php echo 'dd-type-'.esc_attr($field->field_type_name);?>" data-htmlvar_name="<?php echo ( isset( $field->htmlvar_name ) ? esc_attr( $field->htmlvar_name ) : '' );?>">
 			<input type="hidden" name="security" value="<?php echo esc_attr( $nonce ); ?>"/>
 			<input type="hidden" name="post_type" id="post_type"  value="<?php echo esc_attr( $field->post_type ); ?>"/>
 			<input type="hidden" name="field_type" id="field_type"
@@ -199,19 +199,21 @@ $tab_class .= ( isset( $field->field_type ) && $field->field_type == 'fieldset' 
 				$extra_attributes['maxlength'] = 50;
 				$extra_attributes['pattern'] = "[a-zA-Z0-9]+";
 
-				echo aui()->input(
-					array(
-						'id'                => 'htmlvar_name',
-						'name'              => 'htmlvar_name',
-						'title'             => __( 'Must not contain spaces or special characters', 'geodirectory' ),
-						'label_type'        => 'top',
-						'label'             => __('Key','geodirectory') . geodir_help_tip( __( 'This is a unique identifier used in the database and HTML, it MUST NOT contain spaces or special characters.', 'geodirectory' )),
-						'type'              =>   'text',
-						'wrap_class'        => geodir_advanced_toggle_class(),
-						'value' => $value ? preg_replace( '/geodir_/', '', $value, 1 ) : '',
-						'extra_attributes' => $extra_attributes
-					)
+				$input_args = array(
+					'id'                => 'htmlvar_name',
+					'name'              => 'htmlvar_name',
+					'title'             => __( 'Must not contain spaces or special characters', 'geodirectory' ),
+					'label_type'        => 'top',
+					'label'             => __('Key','geodirectory') . geodir_help_tip( __( 'This is a unique identifier used in the database and HTML, it MUST NOT contain spaces or special characters.', 'geodirectory' )),
+					'type'              =>   'text',
+					'wrap_class'        => geodir_advanced_toggle_class(),
+					'value' => $value ? preg_replace( '/geodir_/', '', $value, 1 ) : '',
+					'extra_attributes' => $extra_attributes
 				);
+
+				$input_args = apply_filters( 'geodir_cfa_input_args_htmlvar_name', $input_args, $cf, $field );
+
+				aui()->input( $input_args, true );
 			}
 
 
@@ -238,22 +240,24 @@ $tab_class .= ( isset( $field->field_type ) && $field->field_type == 'fieldset' 
 					$wrap_class = '';
 				}
 
-				echo aui()->input(
-					array(
-						'id' => 'is_active',
-						'name' => 'is_active',
-						'type' => 'checkbox',
-						'label_type' => 'horizontal',
-						'label_col' => '4',
-						'label' => __( 'Is active', 'geodirectory' ) ,
-						'checked' => $value,
-						'value' => '1',
-						'switch' => 'md',
-						'label_force_left' => true,
-						'help_text' => geodir_help_tip( __( 'If no is selected then the field will not be displayed anywhere.', 'geodirectory' ) ),
-						'wrap_class' => $wrap_class
-					)
+				$input_args = array(
+					'id' => 'is_active',
+					'name' => 'is_active',
+					'type' => 'checkbox',
+					'label_type' => 'horizontal',
+					'label_col' => '4',
+					'label' => __( 'Is active', 'geodirectory' ) ,
+					'checked' => $value,
+					'value' => '1',
+					'switch' => 'md',
+					'label_force_left' => true,
+					'help_text' => geodir_help_tip( __( 'If no is selected then the field will not be displayed anywhere.', 'geodirectory' ) ),
+					'wrap_class' => $wrap_class
 				);
+
+				$input_args = apply_filters( 'geodir_cfa_input_args_is_active', $input_args, $cf, $field );
+
+				aui()->input( $input_args, true );
 			}
 
 			// for_admin_use only
@@ -277,22 +281,24 @@ $tab_class .= ( isset( $field->field_type ) && $field->field_type == 'fieldset' 
 					$wrap_class = '';
 				}
 
-				echo aui()->input(
-					array(
-						'id' => 'for_admin_use',
-						'name' => 'for_admin_use',
-						'type' => 'checkbox',
-						'label_type' => 'horizontal',
-						'label_col' => '4',
-						'label' => __( 'Admin edit only','geodirectory' ) ,
-						'checked' => $value,
-						'value' => '1',
-						'switch' => 'md',
-						'label_force_left' => true,
-						'help_text' => geodir_help_tip( __( 'If yes is selected then only site admin can see and edit this field on the add listing page.', 'geodirectory' ) ),
-						'wrap_class' => $wrap_class
-					)
+				$input_args = array(
+					'id' => 'for_admin_use',
+					'name' => 'for_admin_use',
+					'type' => 'checkbox',
+					'label_type' => 'horizontal',
+					'label_col' => '4',
+					'label' => __( 'Admin edit only','geodirectory' ) ,
+					'checked' => $value,
+					'value' => '1',
+					'switch' => 'md',
+					'label_force_left' => true,
+					'help_text' => geodir_help_tip( __( 'If yes is selected then only site admin can see and edit this field on the add listing page.', 'geodirectory' ) ),
+					'wrap_class' => $wrap_class
 				);
+
+				$input_args = apply_filters( 'geodir_cfa_input_args_for_admin_use', $input_args, $cf, $field );
+
+				aui()->input( $input_args, true );
 			}
 
 			// default_value
