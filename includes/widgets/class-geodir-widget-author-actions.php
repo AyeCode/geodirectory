@@ -122,7 +122,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 				'desc' => __( 'Select the button/dropdown color.', 'geodirectory' ),
 				'type' => 'select',
 				'options' =>  array(
-					"" => __( 'Custom colors', 'geodirectory' ),
+					"" => __( 'Default', 'geodirectory' ),
 				) + geodir_aui_colors( true ),
 				'default' => 'primary',
 				'desc_tip' => true,
@@ -135,7 +135,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 				'desc' => __( 'Select the button/dropdown text color.', 'geodirectory' ),
 				'type' => 'select',
 				'options' =>  array(
-					"" => __( 'Custom colors', 'geodirectory' ),
+					"" => __( 'Default', 'geodirectory' ),
 				) + geodir_aui_colors( true ),
 				'default' => 'white',
 				'desc_tip' => true,
