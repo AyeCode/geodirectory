@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.154\n"
+"Project-Id-Version: GeoDirectory 2.8.155\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-10 20:04+0530\n"
-"PO-Revision-Date: 2026-03-10 20:04+0530\n"
+"POT-Creation-Date: 2026-03-26 17:50+0530\n"
+"PO-Revision-Date: 2026-03-26 17:50+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -659,6 +659,8 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-archive-item-section.php:75
 #: includes/widgets/class-geodir-widget-archive-item-section.php:89
 #: includes/widgets/class-geodir-widget-archive-item-section.php:104
+#: includes/widgets/class-geodir-widget-author-actions.php:125
+#: includes/widgets/class-geodir-widget-author-actions.php:138
 #: includes/widgets/class-geodir-widget-az-search.php:130
 #: includes/widgets/class-geodir-widget-az-search.php:144
 #: includes/widgets/class-geodir-widget-az-search.php:159
@@ -15538,20 +15540,6 @@ msgstr ""
 msgid "Select the button/dropdown color."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-author-actions.php:125
-#: includes/widgets/class-geodir-widget-author-actions.php:138
-#: includes/widgets/class-geodir-widget-map-pinpoint.php:130
-#: includes/widgets/class-geodir-widget-ninja-forms.php:164
-#: includes/widgets/class-geodir-widget-post-badge.php:214
-#: includes/widgets/class-geodir-widget-post-directions.php:92
-#: includes/widgets/class-geodir-widget-post-distance.php:72
-#: includes/widgets/class-geodir-widget-post-fav.php:173
-#: includes/widgets/class-geodir-widget-report-post.php:124
-#: includes/widgets/class-geodir-widget-simple-archive-item.php:1309
-#: includes/widgets/class-geodir-widget-simple-archive.php:689
-msgid "Custom colors"
-msgstr ""
-
 #: includes/widgets/class-geodir-widget-author-actions.php:134
 msgid "Text Color"
 msgstr ""
@@ -17438,6 +17426,18 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1306
 #: includes/widgets/class-geodir-widget-simple-archive.php:686
 msgid "Select the the badge color."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-map-pinpoint.php:130
+#: includes/widgets/class-geodir-widget-ninja-forms.php:164
+#: includes/widgets/class-geodir-widget-post-badge.php:214
+#: includes/widgets/class-geodir-widget-post-directions.php:92
+#: includes/widgets/class-geodir-widget-post-distance.php:72
+#: includes/widgets/class-geodir-widget-post-fav.php:173
+#: includes/widgets/class-geodir-widget-report-post.php:124
+#: includes/widgets/class-geodir-widget-simple-archive-item.php:1309
+#: includes/widgets/class-geodir-widget-simple-archive.php:689
+msgid "Custom colors"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:139
