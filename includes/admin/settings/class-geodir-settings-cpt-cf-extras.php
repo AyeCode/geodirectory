@@ -1024,7 +1024,7 @@ optgroup-close', 'geodirectory' );
 					'label'      => __('Validation Pattern','geodirectory') . geodir_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'geodirectory' )),
 					'type'       => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
-					'value'      => addslashes_gpc( $value ), // Keep slashes
+					'value'      => wp_slash( $value ), // Keep slashes
 				)
 			);
 
@@ -1043,7 +1043,7 @@ optgroup-close', 'geodirectory' );
 					'label'              => __('Validation Message','geodirectory') . geodir_help_tip( __( 'Enter a extra validation message to show to the user if validation fails.', 'geodirectory' )),
 					'type'              => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
-					'value' => addslashes_gpc( $value ),
+					'value' => wp_slash( $value ),
 				)
 			);
 
