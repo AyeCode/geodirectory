@@ -787,7 +787,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 		'option_values' 		=> '',
 		'is_required'			=> true,
 		'required_msg'          => __('Please enter your hourly rate', 'geodirectory'),
-		'validation_pattern'	=> addslashes_gpc( '\d+(\.\d{2})?' ), // add slashes required
+		'validation_pattern'	=> wp_slash( '\d+(\.\d{2})?' ), // add slashes required
 		'validation_msg'		=> 'Please enter number and decimal only ie: 100.50',
 		'field_icon'			=> 'fas fa-dollar-sign',
 		'css_class'				=> '',

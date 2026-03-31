@@ -528,7 +528,7 @@ function geodir_extra_custom_fields_property_sale( $fields, $post_type, $package
 		'option_values' 		=> '',
 		'show_in'				=> '[detail],[listing]',
 		'is_required'			=> false,
-		'validation_pattern'	=> addslashes_gpc( '\d+(\.\d{2})?' ), // add slashes required
+		'validation_pattern'	=> wp_slash( '\d+(\.\d{2})?' ), // add slashes required
 		'validation_msg'		=> 'Please enter number and decimal only ie: 100.50',
 		'required_msg'			=> '',
 		'field_icon'			=> 'fas fa-dollar-sign',
@@ -692,7 +692,7 @@ function geodir_extra_custom_fields_property_sale( $fields, $post_type, $package
 		'default_value'       => '',
 		'show_in' 	          => '[detail],[listing]',
 		'is_required'         => false,
-		'validation_pattern'  => addslashes_gpc('\d+(\.\d{2})?'), // add slashes required
+		'validation_pattern'  => wp_slash('\d+(\.\d{2})?'), // add slashes required
 		'validation_msg'      => 'Please enter the property area in numbers only: 1500',
 		'required_msg'        => '',
 		'field_icon'          => 'fas fa-chart-area',

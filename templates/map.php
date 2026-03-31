@@ -470,8 +470,8 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
             do_action('geodir_add_listing_geocode_js_vars');
             ?>
             <?php if ($is_map_restrict) { ?>
-            if (getCity.toLowerCase() != '<?php echo geodir_strtolower(addslashes_gpc($city));?>') {
-                alert('<?php echo addslashes_gpc(wp_sprintf(__('Please choose any address of the (%s) city only.','geodirectory'), $city));?>');
+            if (getCity.toLowerCase() != '<?php echo geodir_strtolower(wp_slash($city));?>') {
+                alert('<?php echo wp_slash(wp_sprintf(__('Please choose any address of the (%s) city only.','geodirectory'), $city));?>');
                 jQuery("#<?php echo $prefix.'map';?>").goMap();
                 jQuery.goMap.map.setCenter(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
                 baseMarker.setPosition(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
@@ -490,7 +490,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
              */
             do_action( 'geodir_add_listing_geocode_response_fail' );
             ?>
-			updateMarkerAddress('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
+			updateMarkerAddress('<?php echo wp_slash(__('Cannot determine address at this location.','geodirectory'));?>');
         }
     }
     function centerMap(latlng) {
@@ -524,7 +524,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
         jQuery('#<?php echo $prefix.'longitude';?>').val(markerlatLng.lng).trigger('change');
     }
     function updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2, baseCountry) {
-        var set_map_val_in_fields = '<?php echo addslashes_gpc($auto_change_map_fields);?>';
+        var set_map_val_in_fields = '<?php echo wp_slash($auto_change_map_fields);?>';
         <?php ob_start();?>
         var old_country = jQuery("#<?php echo $prefix.'country';?>").val();
         var old_region = jQuery("#<?php echo $prefix.'region';?>").val();
@@ -617,13 +617,13 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
             zip = '';
         }
         if (typeof city == "undefined") {
-            city = '<?php echo addslashes_gpc($city);?>';
+            city = '<?php echo wp_slash($city);?>';
         }
         if (typeof region == "undefined") {
-            region = '<?php echo addslashes_gpc($region);?>';
+            region = '<?php echo wp_slash($region);?>';
         }
         if (typeof country == "undefined") {
-            country = '<?php echo addslashes_gpc($country);?>';
+            country = '<?php echo wp_slash($country);?>';
         }
         var is_restrict = '<?php echo $is_map_restrict; ?>';
         <?php ob_start();
@@ -721,7 +721,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                         geocodePosition(baseMarker.getPosition(), {'address': address, 'country': ISO2});
                         //}
                     } else {
-                        alert('<?php echo addslashes_gpc(__('Geocode was not successful for the following reason:','geodirectory'));?> ' + status);
+                        alert('<?php echo wp_slash(__('Geocode was not successful for the following reason:','geodirectory'));?> ' + status);
                     }
                 });
         }
@@ -795,8 +795,8 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
             do_action('geodir_add_listing_geocode_js_vars');
             ?>
             <?php if ($is_map_restrict) { ?>
-            if (getCity.toLowerCase() != '<?php echo geodir_strtolower(addslashes_gpc($city));?>') {
-                alert('<?php echo addslashes_gpc(wp_sprintf(__('Please choose any address of the (%s) city only.','geodirectory'), $city));?>');
+            if (getCity.toLowerCase() != '<?php echo geodir_strtolower(wp_slash($city));?>') {
+                alert('<?php echo wp_slash(wp_sprintf(__('Please choose any address of the (%s) city only.','geodirectory'), $city));?>');
                 jQuery("#<?php echo $prefix.'map';?>").goMap();
                 centerMap(new L.latLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
                 baseMarker.setLatLng(new L.latLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
@@ -814,7 +814,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
              */
             do_action( 'geodir_add_listing_geocode_response_fail' );
             ?>
-			alert('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
+			alert('<?php echo wp_slash(__('Cannot determine address at this location.','geodirectory'));?>');
         }
     }
 
@@ -889,7 +889,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
             maxMap.addEventListener('click', gdMaxMap);
 
             <?php if ($is_map_restrict) { ?>
-            var CITY_ADDRESS = '<?php echo addslashes_gpc($city).','.addslashes_gpc($region).','.addslashes_gpc($country);?>';
+            var CITY_ADDRESS = '<?php echo wp_slash($city).','.wp_slash($region).','.wp_slash($country);?>';
             geocoder.geocode({'address': CITY_ADDRESS},
                 function (results, status) {
                     $("#<?php echo $prefix.'map';?>").goMap();
@@ -942,7 +942,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
             L.DomEvent.addListener($('<?php echo $prefix;?>triggermap'), 'click', gdMaxMap);
 
             <?php if ($is_map_restrict) { ?>
-            var CITY_ADDRESS = '<?php echo addslashes_gpc($city).', '.addslashes_gpc($region).', '.addslashes_gpc($country);?>';
+            var CITY_ADDRESS = '<?php echo wp_slash($city).', '.wp_slash($region).', '.wp_slash($country);?>';
             <?php } ?>
             // Limit the zoom level
             $.goMap.map.on('zoom', function(e) {

@@ -660,7 +660,7 @@ function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_i
 		'option_values'      => '',
 		'show_in'            => '[detail]',
 		'is_required'        => false,
-		'validation_pattern' => addslashes_gpc( '\d+(\.\d{2})?' ), // add slashes required
+		'validation_pattern' => wp_slash( '\d+(\.\d{2})?' ), // add slashes required
 		'validation_msg'     => 'Please enter number and decimal only e.g: 100.50',
 		'required_msg'       => '',
 		'field_icon'         => 'fas fa-dollar-sign',
