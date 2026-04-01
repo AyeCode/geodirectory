@@ -250,6 +250,20 @@ Add/Edit post
     margin: 0;
 }
 
+.columns-2 {
+  #postbox-container-1 {
+    .postbox {
+      .inside {
+        .plupload-thumbs {
+          .thumb {
+            width: 105px;
+          }
+        }
+      }
+    }
+  }
+}
+
 /********************************************************
 Settings inputs
 ********************************************************/
