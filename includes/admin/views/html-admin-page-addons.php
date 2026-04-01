@@ -132,7 +132,7 @@ as v2 evolves. It's a pretty awesome WordPress directory plugin.","geodirectory"
 								<div class="gd-product-title">
 									<h3><?php
 										if ( ! empty( $addon->info->excerpt) ){
-											echo geodir_help_tip( $addon->info->excerpt );
+											echo geodir_help_tip( $addon->info->excerpt ) . ' ';
 										}
 										echo esc_html( $addon->info->title ); ?></h3>
 								</div>

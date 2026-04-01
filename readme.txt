@@ -2,8 +2,8 @@
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
-Requires at least: 5.0
-Tested up to: 6.9
+Requires at least: 6.0
+Tested up to: 7.0
 Stable tag: 2.8.155
 Requires PHP: 5.6
 License: GPLv3
@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.156 - 2026-04-TBD =
 * Replaced deprecated addslashes_gpc() with wp_slash() - CHANGED/COMPATIBILITY
+* WordPress 7.0 compatibility - CHANGED/COMPATIBILITY
 
 = GeoDirectory v2.8.155 - 2026-03-26 =
 * GD > Author Actions change default option label to "Default" to prevent confusion - CHANGED
