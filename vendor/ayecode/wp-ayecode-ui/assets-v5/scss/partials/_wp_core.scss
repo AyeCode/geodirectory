@@ -128,7 +128,8 @@ body.modal-open .modal{
     min-width: 1rem;
     min-height: 1rem;
 
-    &[type="radio"] {
+    &[type="radio"],
+    &[type="checkbox"] {
       &:checked::before {
         content: none;
       }
