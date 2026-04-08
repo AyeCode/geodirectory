@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.157 - 2026-04-TBD =
 * Modifying the sorting order duplicates the field in CPT sort settings - FIXED
+* Clear sorting options cache on save sorting field setting - FIXED
 
 = GeoDirectory v2.8.156 - 2026-04-02 =
 * Replaced deprecated addslashes_gpc() with wp_slash() - COMPATIBILITY

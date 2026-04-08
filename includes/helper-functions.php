@@ -1715,52 +1715,53 @@ function geodir_random_float($min = 0, $max = 1)
  * @return array
  */
 function geodir_sort_by_options( $post_type = 'gd_place' ) {
-	// check for cache
-	$cache = wp_cache_get( "gd_sort_by_options_" . $post_type, 'gd_sort_by_options' );
+	// Check for cache
+	$cache = geodir_cache_get( 'gd_sort_by_options_' . $post_type, 'gd_sort_by_options' );
+
 	if ( $cache ) {
 		return $cache;
 	}
 
 	$options = array(
-		"az" => __('A-Z', 'geodirectory'),
-		"latest" => __('Latest', 'geodirectory'),
-		"high_review" => __('Most reviews', 'geodirectory'),
-		"high_rating" => __('Highest rating', 'geodirectory'),
-		"post_modified_desc" => __( 'Recently Updated', 'geodirectory' ),
-		"post_modified_asc" => __( 'Least Recently Updated', 'geodirectory' ),
-		"random" => __('Random', 'geodirectory'),
+		'az' => __( 'A-Z', 'geodirectory' ),
+		'latest' => __( 'Latest', 'geodirectory' ),
+		'high_review' => __( 'Most reviews', 'geodirectory' ),
+		'high_rating' => __( 'Highest rating', 'geodirectory' ),
+		'post_modified_desc' => __( 'Recently Updated', 'geodirectory' ),
+		'post_modified_asc' => __( 'Least Recently Updated', 'geodirectory' ),
+		'random' => __( 'Random', 'geodirectory' ),
 	);
 
 	if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
-		$options['distance_asc'] = __('Distance to current post (details page only)', 'geodirectory');
+		$options['distance_asc'] = __( 'Distance to current post (details page only)', 'geodirectory' );
 	}
 
 	if  ( $sort_options = geodir_get_sort_options( $post_type ) ) {
 		foreach( $sort_options as $sort_option ) {
 			$sort_option = stripslashes_deep( $sort_option );
 
-            $label = __( $sort_option->frontend_title, 'geodirectory' );
+			$label = __( $sort_option->frontend_title, 'geodirectory' );
 
-            if ( $sort_option->htmlvar_name == 'comment_count' ) {
-                $sort_option->htmlvar_name = 'rating_count';
-            }
+			if ( $sort_option->htmlvar_name == 'comment_count' ) {
+				$sort_option->htmlvar_name = 'rating_count';
+			}
 
-            if ( $sort_option->field_type == 'random' ) {
-                $options[ 'random' ] = $label;
-            } else {
-                if ( $sort_option->sort == 'asc' ) {
-                    $options[ $sort_option->htmlvar_name . '_asc' ] = $label;
-                } else if ( $sort_option->sort == 'desc' ) {
-                    $options[ $sort_option->htmlvar_name . '_desc' ] = $label;
-                }
-            }
+			if ( $sort_option->field_type == 'random' ) {
+				$options[ 'random' ] = $label;
+			} else {
+				if ( $sort_option->sort == 'asc' ) {
+					$options[ $sort_option->htmlvar_name . '_asc' ] = $label;
+				} else if ( $sort_option->sort == 'desc' ) {
+					$options[ $sort_option->htmlvar_name . '_desc' ] = $label;
+				}
+			}
 		}
 	}
 
 	$options = apply_filters( 'geodir_sort_by_options', $options, $post_type );
 
-	// set cache
-	wp_cache_set( "gd_sort_by_options_" . $post_type, $options, 'gd_sort_by_options' );
+	// Set cache
+	geodir_cache_set( 'gd_sort_by_options_' . $post_type, $options, 'gd_sort_by_options' );
 
 	return $options;
 }
