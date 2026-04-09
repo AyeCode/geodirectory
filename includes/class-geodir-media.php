@@ -313,16 +313,18 @@ class GeoDir_Media {
 	 *
 	 * @return array|WP_Error
 	 */
-	public static function insert_attachment( $post_id, $type = 'file', $url = '', $title = '', $caption = '', $order = '', $is_approved = 1, $is_placeholder = false, $other_id = '',$raw_metadata = array() ) {
+	public static function insert_attachment( $post_id, $type = 'file', $url = '', $title = '', $caption = '', $order = '', $is_approved = 1, $is_placeholder = false, $other_id = '', $raw_metadata = array() ) {
 		global $wpdb;
 
 		// Load media functions
 		if ( ! function_exists( 'wp_handle_upload' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 		}
+
 		if ( ! function_exists( 'media_sideload_image' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/media.php';
 		}
+
 		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/image.php';
 		}
@@ -333,7 +335,7 @@ class GeoDir_Media {
 		}
 
 		$attachment_id = 0;
-		$metadata = !empty($raw_metadata) ? $raw_metadata : '';
+		$metadata = ! empty( $raw_metadata ) ? $raw_metadata : '';
 
 		if ( $is_placeholder ) { // If a placeholder image, such as a image name that will be uploaded manually to the upload dir
 			$upload_dir = wp_upload_dir();
@@ -443,7 +445,7 @@ class GeoDir_Media {
 
 		// Throws exception if file is null.
 		if ( is_null( $file ) ) {
-			return new WP_Error( 'file_insert', __( "Failed to insert file info to DB.", "geodirectory" ) );
+			return new WP_Error( 'file_insert', __( 'Failed to process uploaded attachment file.', 'geodirectory' ) );
 		}
 
 		$file_info = array(
@@ -485,7 +487,7 @@ class GeoDir_Media {
 
 		// If DB save failed then return error object
 		if ( $result === false ) {
-			return new WP_Error( 'file_insert', __( "Failed to insert file info to DB.", "geodirectory" ) );
+			return new WP_Error( 'file_insert', __( 'Failed to save attachment data.', 'geodirectory' ) );
 		}
 
 		// Clear the post attachment cache
