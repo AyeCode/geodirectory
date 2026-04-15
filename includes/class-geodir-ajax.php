@@ -1651,7 +1651,7 @@ class GeoDir_AJAX {
 	 * @return mixed
 	 */
 	public static function new_wp_template() {
-		if ( ! class_exists( 'GeoDir_Block_Theme' ) ) {
+		if ( ! class_exists( 'GeoDir_Block_Theme' ) || ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
 
