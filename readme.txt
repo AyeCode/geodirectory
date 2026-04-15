@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.158 - 2026-04-TBD =
+* Restrict FSE new template creation to admins only to prevent unauthorized access - FIXED/SECURITY
+
 = GeoDirectory v2.8.157 - 2026-04-09 =
 * Modifying the sorting order duplicates the field in CPT sort settings - FIXED
 * Clear sorting options cache on save sorting field setting - FIXED
