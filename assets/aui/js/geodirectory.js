@@ -31,15 +31,17 @@ jQuery(document).ready(function($) {
 
 	// fix tabs url hash on click and load
 	jQuery(function(){
-		var hash = window.location.hash;
-		hash && jQuery('ul.nav a[href="' + hash + '"]').tab('show');
+		const urlHash = geodirGetUrlHash();
+		urlHash && jQuery('ul.nav a[href="' + urlHash + '"]').tab('show');
 
 		/* Scroll to tab content */
-		if (hash && jQuery('#gd-single-tabs-content > ' + hash).length && !(hash.substring(0, 9) == '#comment-' || hash.substring(0, 8) == '#reviews')) {
+		if (urlHash && jQuery('#gd-single-tabs-content').length) {
 			setTimeout(function() {
-				jQuery('html,body').animate({
-					scrollTop: jQuery('#gd-single-tabs-content > ' + hash).offset().top - 120
-				}, 'slow');
+				if (urlHash && jQuery('#gd-single-tabs-content').find(urlHash).length && !(urlHash.substring(0, 9) == '#comment-' || urlHash.substring(0, 8) == '#reviews')) {
+					jQuery('html,body').animate({
+						scrollTop: jQuery('#gd-single-tabs-content').find(urlHash).offset().top - 120
+					}, 'slow');
+				}
 			}, 150);
 		}
 
@@ -2412,4 +2414,32 @@ function bs_carousel_handle_events() {
             }
         }
     });
+}
+
+/**
+ * Retrieves and sanitizes the current window location hash.
+ *
+ * @since 2.8.158
+ *
+ * @return {string} The sanitized URL hash.
+ */
+function geodirGetUrlHash() {
+	return geodirSanitizeUrlHash( window.location.hash );
+}
+
+/**
+ * Sanitizes a URL hash by removing potentially unsafe characters.
+ *
+ * @since 2.8.158
+ *
+ * @param {string} urlHash The raw URL hash to be sanitized.
+ * @return {string} The sanitized URL hash.
+ */
+function geodirSanitizeUrlHash( urlHash ) {
+	if ( ! urlHash ) {
+		return '';
+	}
+
+	// Remove characters that could be used for XSS or path traversal.
+	return urlHash.replace( /[<>()\{\}/\\="'`%]/g, '' );
 }

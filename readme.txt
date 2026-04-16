@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.158 - 2026-04-TBD =
 * Restrict FSE new template creation to admins only to prevent unauthorized access - FIXED/SECURITY
+* Validate url hash to prevent JS error on detail page tabs - FIXED
 
 = GeoDirectory v2.8.157 - 2026-04-09 =
 * Modifying the sorting order duplicates the field in CPT sort settings - FIXED
