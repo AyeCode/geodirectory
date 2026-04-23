@@ -434,6 +434,13 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
 		}
 	}
 
+	// Get neighbourhood on details page.
+	if ( ! empty( $location_array['city'] ) && empty( $location_array['neighbourhood'] ) && class_exists( 'GeoDir_Location_Neighbourhood' ) && GeoDir_Location_Neighbourhood::is_active() && ! empty( $gd_post ) && ( $gd_page == 'single' || geodir_is_page( 'single' ) ) ) {
+		if ( ! empty( $gd_post->country ) && ! empty( $gd_post->region ) && ! empty( $gd_post->city ) && ! empty( $gd_post->neighbourhood ) ) {
+			$location_array['neighbourhood'] = $gd_post->neighbourhood;
+		}
+	}
+
 	$location_terms = array();
 	$location_terms['gd_neighbourhood'] = ! empty( $wp->query_vars['neighbourhood'] ) && is_scalar( $wp->query_vars['neighbourhood'] ) ? $wp->query_vars['neighbourhood'] : '';
 	$location_terms['gd_city'] = ! empty( $wp->query_vars['city'] ) && is_scalar( $wp->query_vars['city'] ) ? $wp->query_vars['city'] : '';

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.158\n"
+"Project-Id-Version: GeoDirectory 2.8.159\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-16 21:18+0530\n"
-"PO-Revision-Date: 2026-04-16 21:18+0530\n"
+"POT-Creation-Date: 2026-04-23 21:18+0530\n"
+"PO-Revision-Date: 2026-04-23 21:18+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1961,7 +1961,7 @@ msgid "Address city, region or country missing"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:547
-#: includes/location-functions.php:826
+#: includes/location-functions.php:833
 msgid "Failed to retrieve GPS data from a address using API."
 msgstr ""
 
@@ -1971,12 +1971,12 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:594
 #: includes/admin/class-geodir-admin-import-export.php:612
-#: includes/location-functions.php:935 includes/location-functions.php:960
+#: includes/location-functions.php:942 includes/location-functions.php:967
 msgid "Failed to reach Google geocode server."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:609
-#: includes/location-functions.php:958
+#: includes/location-functions.php:965
 #, php-format
 msgid "Google geocode failed: %s"
 msgstr ""
@@ -2058,7 +2058,7 @@ msgid "Reviews"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-install.php:444
-#: includes/class-geodir-compatibility.php:288
+#: includes/class-geodir-compatibility.php:290
 msgid "Once Monthly"
 msgstr ""
 
@@ -5366,7 +5366,7 @@ msgid "Adds a input to set service area in distance."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1331
-#: includes/location-functions.php:1156
+#: includes/location-functions.php:1163
 msgid "Private Address"
 msgstr ""
 
@@ -11027,104 +11027,104 @@ msgid_plural "%d reviews"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-geodir-compatibility.php:308
+#: includes/class-geodir-compatibility.php:310
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:310
+#: includes/class-geodir-compatibility.php:312
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:315
+#: includes/class-geodir-compatibility.php:317
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:316
+#: includes/class-geodir-compatibility.php:318
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:331
+#: includes/class-geodir-compatibility.php:333
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:333
+#: includes/class-geodir-compatibility.php:335
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:338
+#: includes/class-geodir-compatibility.php:340
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:339
+#: includes/class-geodir-compatibility.php:341
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:356
+#: includes/class-geodir-compatibility.php:358
 msgid "All in One SEO Detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:357
+#: includes/class-geodir-compatibility.php:359
 msgid ""
 "The All in One SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:362
+#: includes/class-geodir-compatibility.php:364
 msgid "Disable All in One SEO"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:363
+#: includes/class-geodir-compatibility.php:365
 msgid "Disable overwrite by All in One SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:381
+#: includes/class-geodir-compatibility.php:383
 msgid "SEOPress SEO Detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:382
+#: includes/class-geodir-compatibility.php:384
 msgid ""
 "The SEOPress SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:387
+#: includes/class-geodir-compatibility.php:389
 msgid "Disable SEOPress"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:388
+#: includes/class-geodir-compatibility.php:390
 msgid "Disable overwrite by SEOPress titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:418
+#: includes/class-geodir-compatibility.php:420
 #, php-format
 msgid ""
 "Kleo theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:432
+#: includes/class-geodir-compatibility.php:434
 #, php-format
 msgid ""
 "Listimia theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:751
+#: includes/class-geodir-compatibility.php:753
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:906
+#: includes/class-geodir-compatibility.php:908
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -11132,82 +11132,82 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3262
+#: includes/class-geodir-compatibility.php:3264
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3273
+#: includes/class-geodir-compatibility.php:3275
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3280
+#: includes/class-geodir-compatibility.php:3282
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3281
+#: includes/class-geodir-compatibility.php:3283
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4081
+#: includes/class-geodir-compatibility.php:4083
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4308
+#: includes/class-geodir-compatibility.php:4310
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4309
+#: includes/class-geodir-compatibility.php:4311
 msgid "Enable Borlabs Cookie integration for GeoDirectory maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4318
+#: includes/class-geodir-compatibility.php:4320
 msgid ""
 "NOTE: Go to Borlabs Cookie > Library > Search \"GeoDirectory\" & install "
 "package."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4459
+#: includes/class-geodir-compatibility.php:4461
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
 "with Divi Builder."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4672
+#: includes/class-geodir-compatibility.php:4674
 msgid "GD: All Pages"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4673
+#: includes/class-geodir-compatibility.php:4675
 msgid "GD: Post Type Archives"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4674
+#: includes/class-geodir-compatibility.php:4676
 msgid "GD: All Taxonomies"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4675
+#: includes/class-geodir-compatibility.php:4677
 msgid "GD: Search Results Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4676
+#: includes/class-geodir-compatibility.php:4678
 msgid "GD: Author Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4677
+#: includes/class-geodir-compatibility.php:4679
 msgid "GD: Add Listing Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4678
+#: includes/class-geodir-compatibility.php:4680
 msgid "GD: Listing Detail Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4679
+#: includes/class-geodir-compatibility.php:4681
 msgid "GD: Location Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4685
+#: includes/class-geodir-compatibility.php:4687
 msgctxt "ghostpool core conditions"
 msgid "GeoDirectory"
 msgstr ""
@@ -14931,65 +14931,65 @@ msgstr ""
 msgid "Select Country"
 msgstr ""
 
-#: includes/location-functions.php:544 includes/location-functions.php:554
+#: includes/location-functions.php:551 includes/location-functions.php:561
 #, php-format
 msgctxt "in location"
 msgid "in %s"
 msgstr ""
 
-#: includes/location-functions.php:545
+#: includes/location-functions.php:552
 #, php-format
 msgctxt "near location"
 msgid "near %s"
 msgstr ""
 
-#: includes/location-functions.php:547
+#: includes/location-functions.php:554
 #, php-format
 msgctxt "in location single"
 msgid "in %s"
 msgstr ""
 
-#: includes/location-functions.php:548
+#: includes/location-functions.php:555
 #, php-format
 msgctxt "near location single"
 msgid "near %s"
 msgstr ""
 
-#: includes/location-functions.php:555
+#: includes/location-functions.php:562
 #, php-format
 msgctxt "near location city"
 msgid "near %s"
 msgstr ""
 
-#: includes/location-functions.php:787
+#: includes/location-functions.php:794
 msgid "There is an error in timezone data request."
 msgstr ""
 
-#: includes/location-functions.php:790
+#: includes/location-functions.php:797
 #, php-format
 msgid "Google Timezone API: %s"
 msgstr ""
 
-#: includes/location-functions.php:850 includes/location-functions.php:987
+#: includes/location-functions.php:857 includes/location-functions.php:994
 msgid "Address must be non-empty."
 msgstr ""
 
-#: includes/location-functions.php:885 includes/location-functions.php:895
-#: includes/location-functions.php:1024 includes/location-functions.php:1039
+#: includes/location-functions.php:892 includes/location-functions.php:902
+#: includes/location-functions.php:1031 includes/location-functions.php:1046
 msgid "Not enough location info for address."
 msgstr ""
 
-#: includes/location-functions.php:951
+#: includes/location-functions.php:958
 #, php-format
 msgid ""
 "Could not retrieve GPS info from Google geocode server for the address %s"
 msgstr ""
 
-#: includes/location-functions.php:1071
+#: includes/location-functions.php:1078
 msgid "Failed to reach OpenStreetMap Nominatim server."
 msgstr ""
 
-#: includes/location-functions.php:1089 includes/location-functions.php:1102
+#: includes/location-functions.php:1096 includes/location-functions.php:1109
 #, php-format
 msgid ""
 "Could not retrieve GPS info from OpenStreetMap server for the address %s"
