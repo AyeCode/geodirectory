@@ -1372,6 +1372,7 @@ function gd_delete_post($post_id){
 				if(data.success){
 					aui_modal("",'<div class="gd-notification gd-success"><i class="fas fa-check-circle"></i> '+ data.data.message +'</div>','',true);
 					jQuery('.post-' + $post_id + '[data-post-id="' + $post_id + '"]').fadeOut();
+					jQuery('.gd-post-row-' + $post_id).fadeOut();
 					if (data.data.redirect_to && jQuery('body').hasClass('single') && jQuery('body').hasClass('postid-' + $post_id)) {
 						setTimeout(function() {
 							window.location = data.data.redirect_to;
