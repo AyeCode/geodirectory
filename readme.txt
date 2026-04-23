@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.159 - 2026-04-TBD =
+* GD Archive template is not working with SiteOrigin 2.34.0 - FIXED
+
 = GeoDirectory v2.8.158 - 2026-04-16 =
 * Restrict FSE new template creation to admins only to prevent unauthorized access - FIXED/SECURITY
 * Validate url hash to prevent JS error on detail page tabs - FIXED

@@ -92,6 +92,8 @@ class GeoDir_Compatibility {
 		add_filter( 'geodir_bypass_setup_archive_loop_as_page', array( __CLASS__, 'elementor_loop_bypass' ) );
 		add_filter( 'geodir_bypass_setup_singular_page', array( __CLASS__, 'elementor_loop_bypass' ) );
 
+		add_filter( 'geodir_bypass_setup_archive_page_content', array( __CLASS__, 'bypass_setup_archive_page_content' ), 20, 2 );
+
 		/*######################################################
 		Genesis (theme) :: Fix archive pages excerpt.
 		######################################################*/
@@ -4757,5 +4759,24 @@ jQuery(function($){
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Bypass archive page template setup for the builder page.
+	 *
+	 * @since 2.8.159
+	 *
+	 * @param bool|string $bypass True to bypass content.
+	 * @param string      $content Archive page template content.
+	 * @return bool|string Bypass archive content.
+	 */
+	public static function bypass_setup_archive_page_content( $bypass, $content ) {
+		if ( $bypass !== false && defined( 'SITEORIGIN_PANELS_VERSION' ) && version_compare( SITEORIGIN_PANELS_VERSION, '2.34.0', '>=' ) ) {
+			if ( strpos( $content, 'panel-layout' ) !== false && strpos( $content, 'id="pl-' ) !== false ) {
+				$bypass = false;
+			}
+		}
+
+		return $bypass;
 	}
 }
