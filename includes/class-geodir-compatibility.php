@@ -4771,9 +4771,9 @@ jQuery(function($){
 	 * @return bool|string Bypass archive content.
 	 */
 	public static function bypass_setup_archive_page_content( $bypass, $content ) {
-		if ( $bypass !== false && defined( 'SITEORIGIN_PANELS_VERSION' ) && version_compare( SITEORIGIN_PANELS_VERSION, '2.34.0', '>=' ) ) {
+		if ( $bypass === true && defined( 'SITEORIGIN_PANELS_VERSION' ) && version_compare( SITEORIGIN_PANELS_VERSION, '2.34.0', '>=' ) ) {
 			if ( strpos( $content, 'panel-layout' ) !== false && strpos( $content, 'id="pl-' ) !== false ) {
-				$bypass = false;
+				$bypass = $content;
 			}
 		}
 
