@@ -325,7 +325,7 @@ class GeoDir_Admin_Install {
 			'tab_name'      => __('Map','geodirectory'),
 			'tab_icon'      => 'fas fa-globe-americas',
 			'tab_key'       => 'post_map',
-			'tab_content'   => '[gd_map width="100%" height="325px" maptype="ROADMAP" zoom="0" map_type="post" map_directions="1"]',
+			'tab_content'   => '[gd_map width="100%" height="325px" maptype="ROADMAP" zoom="0" map_type="post" post_settings="1" map_directions="1"]',
 			'sort_order'    => '3',
 			'tab_level'     => '0'
 		);
