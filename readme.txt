@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.161 - 2026-05-TBD =
+* OpenStreetMap routing now supports distance units from settings - CHANGED
+
 = GeoDirectory v2.8.160 - 2026-04-30 =
 * Single post map default tab don't respects post level map type settings - FIXED
 

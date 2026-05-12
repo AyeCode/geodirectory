@@ -366,6 +366,7 @@ function geodir_params() {
 		'google_api_key'                               => GeoDir_Maps::google_api_key(),
 		'mapLanguage'                                  => GeoDir_Maps::map_language(),
 		'osmRouteLanguage'                             => GeoDir_Maps::osm_routing_language(),
+		'osmRouteUnits'                                => geodir_get_option( 'search_distance_long' ) == 'km' ? 'metric' : 'imperial',
 		'markerAnimation'                              => apply_filters( 'geodir_map_marker_animation', 'bounce' ), // bounce, drop or none
 		'confirm_set_location'                         => addslashes( __( 'Would you like to manually set your location?', 'geodirectory' ) ),
 		'confirm_lbl_error'                            => addslashes( __( 'ERROR:', 'geodirectory' ) ),
