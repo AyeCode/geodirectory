@@ -1049,6 +1049,7 @@ function geodirFindRoute(map_canvas) {
                 routeWhileDragging: true,
                 geocoder: L.Control.Geocoder.nominatim(),
                 language: geodir_params.osmRouteLanguage,
+                units: geodir_params.osmRouteUnits,
                 waypointNameFallback: function(latLng) {
                     function zeroPad(n) {
                         n = Math.round(n);
