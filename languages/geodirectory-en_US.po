@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.160\n"
+"Project-Id-Version: GeoDirectory 2.8.161\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-30 20:48+0530\n"
-"PO-Revision-Date: 2026-04-30 20:48+0530\n"
+"POT-Creation-Date: 2026-05-14 17:57+0530\n"
+"PO-Revision-Date: 2026-05-14 17:57+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -432,7 +432,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-blocks.php:231
 #: includes/admin/class-geodir-admin-menus.php:109
 #: includes/class-geodir-elementor.php:157 includes/class-geodir-privacy.php:39
-#: includes/core-functions.php:936
+#: includes/core-functions.php:937
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
 #: includes/integrations/bricks/class-geodir-bricks.php:528
 msgid "GeoDirectory"
@@ -938,7 +938,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:514
 #: includes/admin/settings/class-geodir-settings-general.php:557
 #: includes/admin/settings/class-geodir-settings-general.php:599
-#: includes/class-geodir-post-data.php:1675 includes/core-functions.php:372
+#: includes/class-geodir-post-data.php:1675 includes/core-functions.php:373
 #: includes/widgets/class-geodir-widget-add-listing.php:315
 #: includes/widgets/class-geodir-widget-az-search.php:45
 #: includes/widgets/class-geodir-widget-az-search.php:94
@@ -2235,7 +2235,7 @@ msgid "CPT Add Listing"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:242
-#: includes/core-functions.php:677
+#: includes/core-functions.php:678
 msgid "GD Pages"
 msgstr ""
 
@@ -3630,7 +3630,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-categories.php:211
 #: includes/admin/views/html-admin-settings-import-export-listings.php:197
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:193
-#: includes/core-functions.php:1113 includes/post-functions.php:2016
+#: includes/core-functions.php:1114 includes/post-functions.php:2016
 #: includes/widgets/class-geodir-widget-dynamic-content.php:510
 #: language.php:174 templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
@@ -3712,38 +3712,38 @@ msgid "The pages that should be included/excluded."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:115
-#: includes/core-functions.php:679
+#: includes/core-functions.php:680
 msgid "Add Listing Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:116
-#: includes/core-functions.php:680
+#: includes/core-functions.php:681
 msgid "Author Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:117
-#: includes/core-functions.php:681
+#: includes/core-functions.php:682
 msgid "Listing Detail Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:118
-#: includes/core-functions.php:684
+#: includes/core-functions.php:685
 msgid "Location Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:119
-#: includes/core-functions.php:686
+#: includes/core-functions.php:687
 msgid "Post Type Archive"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:120
 #: includes/admin/settings/class-geodir-settings-general.php:310
-#: includes/core-functions.php:687
+#: includes/core-functions.php:688
 msgid "Search Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:121
-#: includes/core-functions.php:688
+#: includes/core-functions.php:689
 msgid "Taxonomies Page"
 msgstr ""
 
@@ -8922,7 +8922,7 @@ msgstr ""
 
 #: includes/admin/views/html-notice-beta.php:14
 #: includes/admin/views/html-notice-updated.php:14
-#: includes/core-functions.php:476
+#: includes/core-functions.php:477
 msgid "Dismiss"
 msgstr ""
 
@@ -13233,175 +13233,175 @@ msgstr ""
 msgid "Are you sure want to create a new template to customize?"
 msgstr ""
 
-#: includes/core-functions.php:370
+#: includes/core-functions.php:371
 msgid "Would you like to manually set your location?"
 msgstr ""
 
-#: includes/core-functions.php:371
+#: includes/core-functions.php:372
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:762
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:794
 msgid "ERROR:"
 msgstr ""
 
-#: includes/core-functions.php:373
+#: includes/core-functions.php:374
 #: includes/integrations/bricks/element-image-gallery.php:216
 msgid "Caption"
 msgstr ""
 
-#: includes/core-functions.php:374
+#: includes/core-functions.php:375
 msgid "Set"
 msgstr ""
 
-#: includes/core-functions.php:380
+#: includes/core-functions.php:381
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2521
 msgctxt "time ago"
 msgid "ago"
 msgstr ""
 
-#: includes/core-functions.php:381
+#: includes/core-functions.php:382
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2522
 msgctxt "time ago"
 msgid "after"
 msgstr ""
 
-#: includes/core-functions.php:383
+#: includes/core-functions.php:384
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2524
 msgctxt "time ago"
 msgid "less than a minute"
 msgstr ""
 
-#: includes/core-functions.php:384
+#: includes/core-functions.php:385
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2525
 msgctxt "time ago"
 msgid "about a minute"
 msgstr ""
 
-#: includes/core-functions.php:385
+#: includes/core-functions.php:386
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2526
 #, php-format
 msgctxt "time ago"
 msgid "%d minutes"
 msgstr ""
 
-#: includes/core-functions.php:386
+#: includes/core-functions.php:387
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2527
 msgctxt "time ago"
 msgid "about an hour"
 msgstr ""
 
-#: includes/core-functions.php:387
+#: includes/core-functions.php:388
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2528
 #, php-format
 msgctxt "time ago"
 msgid "about %d hours"
 msgstr ""
 
-#: includes/core-functions.php:388
+#: includes/core-functions.php:389
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2529
 msgctxt "time ago"
 msgid "a day"
 msgstr ""
 
-#: includes/core-functions.php:389
+#: includes/core-functions.php:390
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2530
 #, php-format
 msgctxt "time ago"
 msgid "%d days"
 msgstr ""
 
-#: includes/core-functions.php:390
+#: includes/core-functions.php:391
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2531
 msgctxt "time ago"
 msgid "about a month"
 msgstr ""
 
-#: includes/core-functions.php:391
+#: includes/core-functions.php:392
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2532
 #, php-format
 msgctxt "time ago"
 msgid "%d months"
 msgstr ""
 
-#: includes/core-functions.php:392
+#: includes/core-functions.php:393
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2533
 msgctxt "time ago"
 msgid "about a year"
 msgstr ""
 
-#: includes/core-functions.php:393
+#: includes/core-functions.php:394
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2534
 #, php-format
 msgctxt "time ago"
 msgid "%d years"
 msgstr ""
 
-#: includes/core-functions.php:682
+#: includes/core-functions.php:683
 msgid "Listing Preview Page"
 msgstr ""
 
-#: includes/core-functions.php:683
+#: includes/core-functions.php:684
 msgid "Listing Success Page"
 msgstr ""
 
-#: includes/core-functions.php:685
+#: includes/core-functions.php:686
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1110
+#: includes/core-functions.php:1111
 msgid "Select search type"
 msgstr ""
 
-#: includes/core-functions.php:1306 includes/core-functions.php:1320
+#: includes/core-functions.php:1307 includes/core-functions.php:1321
 #: templates/bootstrap/search-bar/input-near.php:39
 #: templates/bootstrap/search-bar/input-search.php:38
 msgid "Clear field"
 msgstr ""
 
-#: includes/core-functions.php:1648
+#: includes/core-functions.php:1649
 msgid "Filesystem ERROR during mu-plugin file copy: "
 msgstr ""
 
-#: includes/core-functions.php:1650
+#: includes/core-functions.php:1651
 msgid ""
 "There was a problem accessing the filesystem during copy Fast AJAX mu-plugin "
 "file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1658
+#: includes/core-functions.php:1659
 #, php-format
 msgid ""
 "Unable to create directory %s. Make sure its parent directory writable by "
 "the server."
 msgstr ""
 
-#: includes/core-functions.php:1662
+#: includes/core-functions.php:1663
 #, php-format
 msgid "Must-plugin directory %s is not writable by the server."
 msgstr ""
 
-#: includes/core-functions.php:1670
+#: includes/core-functions.php:1671
 msgid ""
 "There was a problem in copy Fast AJAX mu-plugin file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1710
+#: includes/core-functions.php:1711
 msgctxt "rating filter"
 msgid "Any"
 msgstr ""
 
-#: includes/core-functions.php:1713
+#: includes/core-functions.php:1714
 msgid "5-star"
 msgstr ""
 
-#: includes/core-functions.php:1714
+#: includes/core-functions.php:1715
 msgid "4-star & up"
 msgstr ""
 
-#: includes/core-functions.php:1715
+#: includes/core-functions.php:1716
 msgid "3-star & up"
 msgstr ""
 
-#: includes/core-functions.php:1716
+#: includes/core-functions.php:1717
 msgid "2-star & up"
 msgstr ""
 
