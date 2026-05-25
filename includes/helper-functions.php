@@ -2167,3 +2167,80 @@ function geodir_format_csv_data( $data ) {
 
 	return geodir_escape_csv_data( $data );
 }
+
+/**
+ * Validates whether a URL host is safe to request.
+ *
+ * @since 2.8.162
+ *
+ * @param string $url The URL to validate.
+ * @return bool True if the host is safe, false otherwise.
+ */
+function geodir_is_safe_host( $url ) {
+	// Check if the destination URL points to a local network address.
+	$url_parts = wp_parse_url( $url );
+
+	if ( ! empty( $url_parts ) && ! empty( $url_parts['host'] ) ) {
+		$is_safe_url = true;
+		$target_host = strtolower( $url_parts['host'] );
+
+		// Hard-blocked internal system hostnames.
+		$forbidden_hosts = array( 'localhost', 'localhost.localdomain', 'host.docker.internal' );
+		
+		// Resolve the target domain name to its actual IP address.
+		$target_ip    = gethostbyname( $target_host );
+		$is_public_ip = true;
+
+		if ( filter_var( $target_ip, FILTER_VALIDATE_IP ) ) {
+			$is_public_ip = filter_var(
+				$target_ip,
+				FILTER_VALIDATE_IP,
+				FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+			);
+		}
+
+		// If the URL points to an internal resource.
+		if ( in_array( $target_host, $forbidden_hosts, true ) || ! $is_public_ip || strpos( $target_ip, '127.' ) === 0 || $target_ip === '0.0.0.0' ) {
+			$is_safe_url = false;
+		}
+	} else {
+		$is_safe_url = false  ;
+	}
+
+	return  $is_safe_url;
+}
+
+/**
+ * Checks if the current request is running on a localhost.
+ *
+ * @since 2.8.162
+ *
+ * @return bool True if the current host is a local environment, false otherwise.
+ */
+function geodir_is_localhost() {
+	if ( ! isset( $_SERVER['HTTP_HOST'] ) ) {
+		return false;
+	}
+
+	// Convert to lowercase and strip out port numbers (e.g. "localhost:8080").
+	$host = strtolower( strtok( $_SERVER['HTTP_HOST'], ':' ) );
+
+	$localhost_domains = array(
+		'localhost',
+		'localhost.localdomain',
+		'127.0.0.1',
+		'::1'
+	);
+
+	// Direct match.
+	if ( in_array( $host, $localhost_domains, true ) ) {
+		return true;
+	}
+
+	// Catch custom WAMP local domains ending in .local, .test, or .localhost.
+	if ( preg_match( '/\.(local|test|localhost)$/', $host ) ) {
+		return true;
+	}
+
+	return false;
+}
