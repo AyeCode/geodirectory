@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.161\n"
+"Project-Id-Version: GeoDirectory 2.8.162\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-14 17:57+0530\n"
-"PO-Revision-Date: 2026-05-14 17:57+0530\n"
+"POT-Creation-Date: 2026-06-04 13:51+0530\n"
+"PO-Revision-Date: 2026-06-04 13:51+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -10651,7 +10651,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1288
+#: includes/class-geodir-auth.php:377 includes/class-geodir-media.php:1296
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -11815,44 +11815,49 @@ msgid "Invalid URL Provided."
 msgstr ""
 
 #: includes/class-geodir-media.php:802
+msgid ""
+"Outbound requests to internal or private loopback addresses are restricted."
+msgstr ""
+
+#: includes/class-geodir-media.php:810
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:1276
+#: includes/class-geodir-media.php:1284
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1288 includes/class-geodir-media.php:1290
+#: includes/class-geodir-media.php:1296 includes/class-geodir-media.php:1298
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1311
+#: includes/class-geodir-media.php:1319
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:1329
+#: includes/class-geodir-media.php:1337
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-media.php:1446 includes/class-geodir-media.php:1488
+#: includes/class-geodir-media.php:1454 includes/class-geodir-media.php:1496
 msgid "Generate attachment metadata"
 msgstr ""
 
-#: includes/class-geodir-media.php:1473
+#: includes/class-geodir-media.php:1481
 msgid "Invalid post id!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1514
+#: includes/class-geodir-media.php:1522
 msgid "Invalid attachment!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1519
+#: includes/class-geodir-media.php:1527
 msgid "Attachment metadata not generated for external image!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1537
+#: includes/class-geodir-media.php:1545
 #, php-format
 msgid "%s not exists!"
 msgstr ""
