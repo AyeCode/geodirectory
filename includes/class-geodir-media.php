@@ -790,10 +790,18 @@ class GeoDir_Media {
 	 *
 	 * @return array|bool|string|WP_Error
 	 */
-	public static function download_url($url, $timeout = 300){
+	public static function download_url( $url, $timeout = 300 ) {
 		//WARNING: The file is not automatically deleted, The script must unlink() the file.
 		if ( ! $url )
 			return new WP_Error('http_no_url', __('Invalid URL Provided.'));
+
+		// Prevent SSRF by blocking internal/private requests, unless running in a local.
+		if ( ! geodir_is_localhost() && ! geodir_is_safe_host( $url ) ) {
+			return new WP_Error( 
+				'geodir_ssrf_blocked', 
+				__( 'Outbound requests to internal or private loopback addresses are restricted.', 'geodirectory' ) 
+			);
+		}
 
 		$url_filename = basename( parse_url( $url, PHP_URL_PATH ) );
 
