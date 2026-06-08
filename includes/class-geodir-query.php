@@ -519,7 +519,7 @@ class GeoDir_Query {
 
 				$s   = trim( $s );
 				$s   = wp_specialchars_decode( $s, ENT_QUOTES );
-				$s_A = wp_specialchars_decode( $s_A, ENT_QUOTES );
+				//$s_A = wp_specialchars_decode( $s_A, ENT_QUOTES ); // Already applied esc_sql() wp_specialchars_decode();
 
 				// Exact search with quotes
 				$gd_exact_search = false;
@@ -666,9 +666,20 @@ class GeoDir_Query {
 					$content_where = apply_filters( "geodir_search_content_where", $content_where );
 
 					if ( $gd_exact_search ) {
-						$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s ) ", array( $wpdb->esc_like( $s ) ) );
+						if ( strpos( $s, '&' ) === false ) {
+							$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s ) ", array( $wpdb->esc_like( $s ) ) );
+						} else {
+							$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s OR $wpdb->terms.name LIKE %s ) ", array( $wpdb->esc_like( $s ), $wpdb->esc_like( str_replace( "&", "&amp;", $s ) ) ) );
+						}
 					} else {
-						$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s OR $wpdb->terms.name LIKE %s OR $wpdb->terms.name IN ($s_A)) ", array( $wpdb->esc_like( $s ) . '%', '% '. $wpdb->esc_like( $s ) . '%' ) );
+						if ( strpos( $s, '&' ) === false ) {
+							$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s OR $wpdb->terms.name LIKE %s OR $wpdb->terms.name IN ($s_A)) ", array( $wpdb->esc_like( $s ) . '%', '% '. $wpdb->esc_like( $s ) . '%' ) );
+						} else {
+							// WordPress stores term names by converting & to &amp; in database.
+							$esc_s_A = str_replace( "&", "&amp;", $s_A );
+
+							$terms_where = $wpdb->prepare( " AND ($wpdb->terms.name LIKE %s OR $wpdb->terms.name LIKE %s OR $wpdb->terms.name IN ($s_A) OR $wpdb->terms.name LIKE %s OR $wpdb->terms.name LIKE %s OR $wpdb->terms.name IN ($esc_s_A)) ", array( $wpdb->esc_like( $s ) . '%', '% '. $wpdb->esc_like( $s ) . '%', $wpdb->esc_like( str_replace( "&", "&amp;", $s ) ) . '%', '% '. $wpdb->esc_like( str_replace( "&", "&amp;", $s ) ) . '%' ) );
+						}
 					}
 
 					/**
