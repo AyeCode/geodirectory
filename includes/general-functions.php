@@ -663,7 +663,7 @@ function geodir_get_image_size( $image_size ) {
  */
 function createRandomString() {
 	$chars = "abcdefghijkmlnopqrstuvwxyz1023456789";
-	srand( (double) microtime() * 1000000 );
+	srand( (float) microtime() * 1000000 );
 	$i       = 0;
 	$rstring = '';
 	while ( $i <= 25 ) {
