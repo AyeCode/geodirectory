@@ -214,12 +214,21 @@ function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin', $formatted = false
 	$original_timezone = date_default_timezone_get();
 	// Set UTC as default time zone.
 	date_default_timezone_set( 'UTC' ); // @codingStandardsIgnoreEnd
+
 	$utc = new DateTime();
+
 	if ( empty( $time_zone ) ) {
 		$time_zone = 'UTC';
 	}
+
 	// Calculate offset.
-	$current   = timezone_open( $time_zone );
+	$current   = @timezone_open( $time_zone );
+
+	if ( empty( $current ) ) {
+		// Fallback to UTC to prevent a error.
+		$current = @timezone_open( 'UTC' );
+	}
+
 	$offset_s  = timezone_offset_get( $current, $utc ); // seconds
 
 	if ( $formatted ) {
@@ -274,34 +283,45 @@ function geodir_wp_gmt_offset( $formatted = true ) {
  * @return string Formatted offset.
  */
 function geodir_timezone_default_utc_offset( $timezone = '' ) {
-
 	$timezone = get_option('timezone_string');
 	$manual_offset = get_option( 'gmt_offset' );
 	$manual = false;
+
 	if ( ! $timezone && $manual_offset) {
 		$manual = true;
-	}elseif(! $timezone){
+	} else if ( ! $timezone ) {
 		$timezone = 'Europe/Berlin';
 	}
 
 	if( $manual ){
 		$offset_h = $manual_offset;
-	}else{
+	} else {
 		$original_timezone = date_default_timezone_get();
+
 		// Set UTC as default time zone.
 		date_default_timezone_set( 'UTC' ); // @codingStandardsIgnoreEnd
-		$utc = new DateTime();
+
+		$utc          = new DateTime();
+
 		// Calculate offset.
-		$gmt_offset_s = timezone_offset_get( new DateTimeZone("Europe/London"), $utc ); // seconds
-		$current   = timezone_open( $timezone );
-		$offset_s  = timezone_offset_get( $current, $utc ); // seconds
-		$offset_s = $offset_s - $gmt_offset_s; // remove DST
-		$offset_h  = $offset_s / ( 60 * 60 ); // hours
+		$gmt_offset_s = timezone_offset_get( new DateTimeZone( "Europe/London" ), $utc ); // Seconds
+		$current      = @timezone_open( $timezone );
+
+		if ( empty( $current ) ) {
+			// Fallback to UTC to prevent a error.
+			$current = @timezone_open( 'UTC' );
+		}
+
+		$offset_s    = timezone_offset_get( $current, $utc ); // seconds
+		$offset_s    = $offset_s - $gmt_offset_s; // remove DST
+		$offset_h    = $offset_s / ( 60 * 60 ); // hours
+
 		date_default_timezone_set( $original_timezone ); // @codingStandardsIgnoreEnd
 	}
 
 	// Prepend “+” when positive
 	$offset_h  = (string) $offset_h;
+
 	if ( strpos( $offset_h, '-' ) === FALSE ) {
 		$offset_h = '+' . $offset_h; // prepend +
 	}
@@ -1293,12 +1313,19 @@ function geodir_timezone_data( $tzstring = 'UTC', $time = null ) {
 		'is_dst' => 0
 	);
 
-	if ( in_array( $tzstring, timezone_identifiers_list() ) ) {
+	if ( in_array( $tzstring, timezone_identifiers_list( DateTimeZone::ALL_WITH_BC ) ) ) {
 		if ( empty( $time ) ) {
 			$time = time();
 		}
 
-		$transitions = timezone_transitions_get( timezone_open( $tzstring ), $time );
+		$tz_object = @timezone_open( $tzstring );
+
+		if ( empty( $tz_object ) ) {
+			// Fallback to UTC to prevent a error.
+			$tz_object = @timezone_open( 'UTC' );
+		}
+
+		$transitions = @timezone_transitions_get( $tz_object, $time );
 
 		if ( ! empty( $transitions[0]['isdst'] ) || ! empty( $transitions[1]['isdst'] ) ) {
 			$data['offset'] = empty( $transitions[0]['isdst'] ) ? (int) $transitions[0]['offset'] : (int) $transitions[1]['offset'];
