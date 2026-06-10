@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.163\n"
+"Project-Id-Version: GeoDirectory 2.8.164\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 18:59+0530\n"
-"PO-Revision-Date: 2026-06-08 18:59+0530\n"
+"POT-Creation-Date: 2026-06-10 21:12+0530\n"
+"PO-Revision-Date: 2026-06-10 21:12+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -5384,7 +5384,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1361
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1366
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1367
-#: includes/business-hours-functions.php:869
+#: includes/business-hours-functions.php:889
 msgid "Temporarily Closed"
 msgstr ""
 
@@ -10409,80 +10409,80 @@ msgid "Sunday"
 msgstr ""
 
 #: includes/business-hours-functions.php:62
-#: includes/business-hours-functions.php:2057 includes/helper-functions.php:676
+#: includes/business-hours-functions.php:2084 includes/helper-functions.php:676
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2349
 msgid "Mon"
 msgstr ""
 
 #: includes/business-hours-functions.php:63
-#: includes/business-hours-functions.php:2058 includes/helper-functions.php:677
+#: includes/business-hours-functions.php:2085 includes/helper-functions.php:677
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2350
 msgid "Tue"
 msgstr ""
 
 #: includes/business-hours-functions.php:64
-#: includes/business-hours-functions.php:2059 includes/helper-functions.php:678
+#: includes/business-hours-functions.php:2086 includes/helper-functions.php:678
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2351
 msgid "Wed"
 msgstr ""
 
 #: includes/business-hours-functions.php:65
-#: includes/business-hours-functions.php:2060 includes/helper-functions.php:679
+#: includes/business-hours-functions.php:2087 includes/helper-functions.php:679
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2352
 msgid "Thu"
 msgstr ""
 
 #: includes/business-hours-functions.php:66
-#: includes/business-hours-functions.php:2061 includes/helper-functions.php:680
+#: includes/business-hours-functions.php:2088 includes/helper-functions.php:680
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2353
 msgid "Fri"
 msgstr ""
 
 #: includes/business-hours-functions.php:67
-#: includes/business-hours-functions.php:2062 includes/helper-functions.php:681
+#: includes/business-hours-functions.php:2089 includes/helper-functions.php:681
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2354
 msgid "Sat"
 msgstr ""
 
 #: includes/business-hours-functions.php:68
-#: includes/business-hours-functions.php:2063 includes/helper-functions.php:675
+#: includes/business-hours-functions.php:2090 includes/helper-functions.php:675
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2348
 msgid "Sun"
 msgstr ""
 
-#: includes/business-hours-functions.php:677 includes/core-functions.php:333
+#: includes/business-hours-functions.php:697 includes/core-functions.php:333
 #: includes/custom-fields/input-functions-aui.php:2355
 #: includes/custom-fields/input-functions.php:1852
 msgid "Closed"
 msgstr ""
 
-#: includes/business-hours-functions.php:678 includes/core-functions.php:330
+#: includes/business-hours-functions.php:698 includes/core-functions.php:330
 #: includes/custom-fields/output-functions.php:2714
 msgid "Open now"
 msgstr ""
 
-#: includes/business-hours-functions.php:679 includes/core-functions.php:331
+#: includes/business-hours-functions.php:699 includes/core-functions.php:331
 msgid "Closed now"
 msgstr ""
 
-#: includes/business-hours-functions.php:680
+#: includes/business-hours-functions.php:700
 #: includes/custom-fields/input-functions-aui.php:2304
 #: includes/custom-fields/input-functions.php:1815
 msgid "Open 24 hours"
 msgstr ""
 
-#: includes/business-hours-functions.php:1121
-#: includes/business-hours-functions.php:1123
-#: includes/business-hours-functions.php:1129
-#: includes/business-hours-functions.php:1134
+#: includes/business-hours-functions.php:1141
+#: includes/business-hours-functions.php:1143
+#: includes/business-hours-functions.php:1149
+#: includes/business-hours-functions.php:1154
 msgid "UTC"
 msgstr ""
 
-#: includes/business-hours-functions.php:1192
+#: includes/business-hours-functions.php:1212
 msgid "Manual Offsets"
 msgstr ""
 
-#: includes/business-hours-functions.php:2056
+#: includes/business-hours-functions.php:2083
 msgid "Today"
 msgstr ""
 
