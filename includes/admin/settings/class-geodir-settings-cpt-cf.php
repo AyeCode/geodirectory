@@ -693,7 +693,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fab fa-twitter',
+					'field_icon'         => 'fab fa-x-twitter',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false
