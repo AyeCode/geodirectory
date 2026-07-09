@@ -830,6 +830,7 @@ class GeoDir_Compatibility {
 		// Astra + Spectra
 		if ( class_exists( 'UAGB_Post_Assets' ) ) {
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'spectra_uagb_post_assets_enqueue_scripts' ), 99 );
+			add_action( 'wp_head', array( __CLASS__, 'spectra_print_stylesheet' ), 80 );
 		}
 
 		// Blocksy Theme
@@ -2629,12 +2630,17 @@ class GeoDir_Compatibility {
 			$post_type = geodir_get_current_posttype();
 		}
 
-		if ( empty( $post_type ) ) {
-			if ( ! empty( $gd_post ) && ! empty( $gd_post->post_type ) ) {
-				$post_type = $gd_post->post_type;
+		if ( empty( $post_type ) && ! empty( $gd_post ) && ! empty( $gd_post->post_type ) ) {
+			if ( $gd_post->post_type == 'revision' ) {
+				$post_type = get_post_type( wp_get_post_parent_id( $gd_post->ID ) );
 			} else {
-				$post_type = geodir_get_current_posttype();
+				$post_type = $gd_post->post_type;
 			}
+		}
+
+		// Get current post type.
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
+			$post_type = geodir_get_current_posttype();
 		}
 
 		if ( geodir_is_page( 'detail' ) ) {
@@ -4577,6 +4583,32 @@ jQuery(function($){
 
 				$current_post_assets = new UAGB_Post_Assets( $archive_item_page_id );
 				$current_post_assets->enqueue_scripts();
+			}
+		}
+	}
+
+	/**
+	 * Renders and prints the dynamic inline CSS stylesheet for Spectra elements.
+	 *
+	 * @since 2.8.167
+	 * 
+	 * @return void Echoes HTML output directly.
+	 */
+	public static function spectra_print_stylesheet() {
+		if ( ! empty( $_REQUEST['preview'] ) && geodir_is_page( 'single' ) && ( $page_id = (int) self::gd_page_id() ) ) {
+			$uag_page_assets = get_metadata( 'post', $page_id, '_uag_page_assets', true );
+
+			if ( ! empty( $uag_page_assets ) && is_array( $uag_page_assets ) && ! empty( $uag_page_assets['css'] ) ) {
+				/**
+				 * Filters the generated CSS assets for a specific page.
+				 *
+				 * @since 2.0.0
+				 *
+				 * @param string $stylesheet The compiled CSS styles generated for the page.
+				 */
+				$stylesheet = apply_filters( 'uag_page_assets_css', $uag_page_assets['css'] );
+
+				echo '<style id="uagb-style-frontend-' . (int) $page_id . '">' . $stylesheet . '</style>'; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
 	}
