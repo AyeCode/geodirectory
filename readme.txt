@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.167 - 2026-07-TBD =
 * Spectra block styles failed to load on listing preview page - FIXED
+* Added hyperlink to the email logo - ADDED
 
 = GeoDirectory v2.8.166 - 2026-07-01 =
 * Merge AUI 0.2.51 - CHANGED
