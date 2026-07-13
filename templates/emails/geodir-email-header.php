@@ -16,31 +16,29 @@ if ( !isset( $email_heading ) ) {
         <meta http-equiv="Content-Type" content="text/html; charset=<?php bloginfo( 'charset' ); ?>" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noindex,nofollow">
-        <title><?php echo geodir_get_blogname(); ?></title>
+        <title><?php echo esc_html( geodir_get_blogname() ); ?></title>
     </head>
     <body <?php echo is_rtl() ? 'rightmargin' : 'leftmargin'; ?>="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
         <div id="wrapper" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'?>">
             <table border="0" cellpadding="0" cellspacing="0" height="100%" class="wrapper-table">
                 <?php if ( ! empty( $header_text ) ) { ?>
-				<tr>
+                <tr>
                     <td align="center" valign="middle" id="template_header">
-                        <div id="template_header_logo">
-                        <p style="margin-top:0;"><?php echo $header_text; ?></p>
-                        </div>
-					</td>
-				</tr>
-				<?php } ?>
-				<tr>
-					<td align="center" valign="middle" id="template_body">
+                        <div id="template_header_logo"><p style="margin-top:0;"><a href="<?php echo esc_url( home_url() ); ?>"><?php echo trim( $header_text ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a></p></div>
+                    </td>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td align="center" valign="middle" id="template_body">
                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <?php if ( !empty( $email_heading ) ) { ?>
+                            <?php if ( ! empty( $email_heading ) ) { ?>
                             <tr>
                                 <td align="center" valign="top">
                                     <!-- Header -->
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_heading">
                                         <tr>
                                             <td id="header_wrapper">
-                                                <h1><?php echo $email_heading; ?></h1>
+                                                <h1><?php echo $email_heading; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h1>
                                             </td>
                                         </tr>
                                     </table>
