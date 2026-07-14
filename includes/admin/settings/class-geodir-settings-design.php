@@ -301,6 +301,34 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 						'desc_tip' => true,
 					),
 					array(
+						'type'     => 'number',
+						'id'       => 'email_logo_width',
+						'name'     => __( 'Logo Width', 'geodirectory'),
+						'desc'     => __( 'Adjust the email header logo width (px).', 'geodirectory' ),
+						'placeholder'       => __( 'Auto', 'geodirectory' ),
+						'custom_attributes' => array(
+							'min'  => '10',
+							'step' => '1',
+							'lang' => 'EN'
+						),
+						'desc_tip' => true,
+						'advanced' => true
+					),
+					array(
+						'type'     => 'number',
+						'id'       => 'email_logo_height',
+						'name'     => __( 'Logo Height', 'geodirectory'),
+						'desc'     => __( 'Adjust the email header logo height (px).', 'geodirectory' ),
+						'placeholder'       => __( 'Auto', 'geodirectory' ),
+						'custom_attributes' => array(
+							'min'  => '10',
+							'step' => '1',
+							'lang' => 'EN'
+						),
+						'desc_tip' => true,
+						'advanced' => true
+					),
+					array(
 						'name' => __('Footer Text', 'geodirectory'),
 						'desc' => __('The text to appear in the footer of all GeoDirectory emails.', 'geodirectory'),
 						'id' => 'email_footer_text',

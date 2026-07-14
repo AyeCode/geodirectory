@@ -42,15 +42,38 @@ class GeoDir_Email {
 	 *
 	 * @return string Logo url.
 	 */
-	public static function get_email_logo( $size = 'full' ) {
+	public static function get_email_logo( $size = null, $icon = false, $attrs = array() ) {
+		$email_logo    = '';
 		$attachment_id = geodir_get_option( 'email_logo' );
 
-		$email_logo = '';
 		if ( ! empty( $attachment_id ) ) {
-			$email_logo = wp_get_attachment_image( $attachment_id, $size );
+			$default_attr = array(
+				'style'    => 'display:block;max-width:100%;border:0;outline:none;text-decoration:none;',
+				'alt'      => trim( strip_tags( wp_sprintf( _x( '%s Logo', 'email logo alt text', 'geodirectory' ), geodir_get_blogname() ) ) ),
+				'decoding' => false, // Disbale decoding attribute
+				'loading'  => false  // Disable lazy loading
+			);
+
+			$width  = (int) geodir_get_option( 'email_logo_width' );
+			$height = (int) geodir_get_option( 'email_logo_height' );
+
+			if ( $width > 1 && $height > 1 && empty( $size ) ) {
+				$size = array( $width, $height );
+
+				$default_attr['width']  = $width;
+				$default_attr['height'] = $height;
+			}
+
+			if ( empty( $size ) ) {
+				$size = 'full';
+			}
+
+			$attrs = wp_parse_args( $attrs, $default_attr );
+
+			$email_logo = wp_get_attachment_image( $attachment_id, $size, $icon, $attrs );
 		}
 
-		return apply_filters( 'geodir_get_email_logo', $email_logo, $attachment_id, $size );
+		return apply_filters( 'geodir_get_email_logo', $email_logo, $attachment_id, $size, $icon, $attrs );
 	}
 
 	/**
@@ -59,7 +82,7 @@ class GeoDir_Email {
 	 * @since 2.0.0
 	 * @return string
 	 */
-	public static function email_header_text(){
+	public static function email_header_text() {
 		$header_text = self::get_email_logo();
 
 		if ( empty( $header_text ) ) {
@@ -83,7 +106,7 @@ class GeoDir_Email {
 	public static function email_header( $email_heading = '', $email_name = '', $email_vars = array(), $plain_text = false, $sent_to_admin = false ) {
 		if ( ! $plain_text ) {
 			$header_text = self::email_header_text();
-			$header_text = $header_text ? wpautop( wp_kses_post( wptexturize( $header_text ) ) ) : '';
+			$header_text = $header_text ? wp_kses_post( wptexturize( $header_text ) ) : '';
 
 			geodir_get_template( 'emails/geodir-email-header.php', array(
 				'email_heading' => $email_heading,

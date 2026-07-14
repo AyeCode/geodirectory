@@ -1,30 +1,49 @@
 <?php
-// don't load directly
-if ( !defined('ABSPATH') )
-    die('-1');
+/**
+ * Email Header Template
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/emails/geodir-email-header.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see     https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
+ * @author  AyeCode
+ * @package GeoDirectory/Templates
+ * @version 2.8.167
+ */
 
-if ( !isset( $email_vars ) ) {
-    global $email_vars;
+// Don't load directly.
+if ( ! defined('ABSPATH') ) {
+	die( '-1' );
 }
-if ( !isset( $email_heading ) ) {
-    global $email_heading;
+
+if ( ! isset( $email_vars ) ) {
+	global $email_vars;
+}
+
+if ( ! isset( $email_heading ) ) {
+	global $email_heading;
 }
 ?>
 <!DOCTYPE html>
-<html dir="<?php echo is_rtl() ? 'rtl' : 'ltr'?>">
+<html dir="<?php echo ( is_rtl() ? 'rtl' : 'ltr' ); ?>">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php bloginfo( 'charset' ); ?>" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noindex,nofollow">
         <title><?php echo esc_html( geodir_get_blogname() ); ?></title>
     </head>
-    <body <?php echo is_rtl() ? 'rightmargin' : 'leftmargin'; ?>="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
-        <div id="wrapper" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'?>">
+    <body <?php echo ( is_rtl() ? 'rightmargin' : 'leftmargin' ); ?>="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
+        <div id="wrapper" dir="<?php echo ( is_rtl() ? 'rtl' : 'ltr' ); ?>">
             <table border="0" cellpadding="0" cellspacing="0" height="100%" class="wrapper-table">
                 <?php if ( ! empty( $header_text ) ) { ?>
                 <tr>
                     <td align="center" valign="middle" id="template_header">
-                        <div id="template_header_logo"><p style="margin-top:0;"><a href="<?php echo esc_url( home_url() ); ?>"><?php echo trim( $header_text ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a></p></div>
+                        <div id="template_header_logo"><p><a href="<?php echo esc_url( home_url() ); ?>" target="_blank"><?php echo trim( $header_text ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a></p></div>
                     </td>
                 </tr>
                 <?php } ?>
