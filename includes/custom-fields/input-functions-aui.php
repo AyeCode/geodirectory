@@ -2092,6 +2092,7 @@ function geodir_cfi_tags( $html, $cf ) {
 			// Disable new tags
 			if ( ! empty( $extra_fields['disable_new_tags'] ) ) {
 				$extra_attributes['data-tags'] = 'false';
+				$extra_attributes['data-token-separators'] = "";
 			}
 
 			// Enable spell check
