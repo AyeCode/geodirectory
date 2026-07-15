@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.166\n"
+"Project-Id-Version: GeoDirectory 2.8.167\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-01 20:23+0530\n"
-"PO-Revision-Date: 2026-07-01 20:23+0530\n"
+"POT-Creation-Date: 2026-07-15 19:52+0530\n"
+"PO-Revision-Date: 2026-07-15 19:55+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1765,7 +1765,7 @@ msgid "GD Dashboard"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1374
-#: includes/class-geodir-email.php:256 includes/class-geodir-user.php:546
+#: includes/class-geodir-email.php:279 includes/class-geodir-user.php:546
 #: includes/widgets/class-geodir-widget-add-listing.php:78
 #: includes/widgets/class-geodir-widget-add-listing.php:87 language.php:30
 #: templates/auth/form-login.php:45
@@ -5102,7 +5102,7 @@ msgid "Adds a url input"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:446
-#: includes/admin/settings/class-geodir-settings-design.php:456
+#: includes/admin/settings/class-geodir-settings-design.php:484
 #: includes/elementor/class-geodir-elementor-form-contact.php:422
 msgid "HTML"
 msgstr ""
@@ -6242,7 +6242,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-design.php:240
-#: includes/admin/settings/class-geodir-settings-design.php:397
+#: includes/admin/settings/class-geodir-settings-design.php:425
 msgid "Page template file override"
 msgstr ""
 
@@ -6292,115 +6292,17 @@ msgid ""
 "emails only."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-design.php:304
-msgid "Footer Text"
+#: includes/admin/settings/class-geodir-settings-design.php:306
+msgid "Logo Width"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-design.php:305
-msgid "The text to appear in the footer of all GeoDirectory emails."
+#: includes/admin/settings/class-geodir-settings-design.php:307
+msgid "Adjust the email header logo width (px)."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-design.php:314
-msgid "Base Color"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:315
-msgid ""
-"The base color for invoice email template. Default <code>#557da2</code>."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:323
-#: vendor/ayecode/wp-super-duper/sd-functions.php:430
-msgid "Background Color"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:324
-msgid "The background color of email template. Default <code>#f5f5f5</code>."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:332
-msgid "Body Background Color"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:333
-msgid ""
-"The main body background color of email template. Default <code>#fdfdfd</"
-"code>."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:341
-msgid "Body Text Color"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:342
-msgid "The main body text color. Default <code>#505050</code>."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:350
-msgid "Header Background Color"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:351
-msgid ""
-"The header background color of email template. Default <code>#555555</code>."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:359
-msgid "Header Text Color"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:360
-msgid "The footer text color. Default <code>#ffffff</code>."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:368
-msgid "Footer Background Color"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:369
-msgid ""
-"The footer background color of email template. Default <code>#666666</code>."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:377
-msgid "Footer Text Color"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:378
-msgid "The footer text color. Default <code>#dddddd</code>."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:392
-msgid "Image Settings"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:398
-msgid ""
-"Select the page template to use for the archive page output, usually this is "
-"set in the page template settings but you can override it here if needed."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:407
-msgid "Listing default image"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:408
-msgid ""
-"This will be used for listings that have no images uploaded. This can be "
-"made more specific by adding a default category image. "
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:443
-#: includes/class-geodir-email.php:109
-#, php-format
-msgid "%s - Powered by GeoDirectory"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:458
-msgid "Plain text"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-design.php:471
+#: includes/admin/settings/class-geodir-settings-design.php:308
+#: includes/admin/settings/class-geodir-settings-design.php:322
+#: includes/admin/settings/class-geodir-settings-design.php:499
 #: includes/widgets/class-geodir-widget-add-listing.php:102
 #: includes/widgets/class-geodir-widget-add-listing.php:284
 #: includes/widgets/class-geodir-widget-categories.php:649
@@ -6414,6 +6316,122 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-tags.php:154
 #: vendor/ayecode/wp-super-duper/sd-functions.php:2034
 msgid "Auto"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:320
+msgid "Logo Height"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:321
+msgid "Adjust the email header logo height (px)."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:332
+msgid "Footer Text"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:333
+msgid "The text to appear in the footer of all GeoDirectory emails."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:342
+msgid "Base Color"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:343
+msgid ""
+"The base color for invoice email template. Default <code>#557da2</code>."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:351
+#: vendor/ayecode/wp-super-duper/sd-functions.php:430
+msgid "Background Color"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:352
+msgid "The background color of email template. Default <code>#f5f5f5</code>."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:360
+msgid "Body Background Color"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:361
+msgid ""
+"The main body background color of email template. Default <code>#fdfdfd</"
+"code>."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:369
+msgid "Body Text Color"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:370
+msgid "The main body text color. Default <code>#505050</code>."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:378
+msgid "Header Background Color"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:379
+msgid ""
+"The header background color of email template. Default <code>#555555</code>."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:387
+msgid "Header Text Color"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:388
+msgid "The footer text color. Default <code>#ffffff</code>."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:396
+msgid "Footer Background Color"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:397
+msgid ""
+"The footer background color of email template. Default <code>#666666</code>."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:405
+msgid "Footer Text Color"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:406
+msgid "The footer text color. Default <code>#dddddd</code>."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:420
+msgid "Image Settings"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:426
+msgid ""
+"Select the page template to use for the archive page output, usually this is "
+"set in the page template settings but you can override it here if needed."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:435
+msgid "Listing default image"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:436
+msgid ""
+"This will be used for listings that have no images uploaded. This can be "
+"made more specific by adding a default category image. "
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:471
+#: includes/class-geodir-email.php:132
+#, php-format
+msgid "%s - Powered by GeoDirectory"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-design.php:486
+msgid "Plain text"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-emails.php:28
@@ -8516,8 +8534,8 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-cpt-cf-setting-item.php:764
 #: includes/admin/views/html-admin-settings-cpt-sorting-setting-item.php:116
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:76
-#: includes/custom-fields/input-functions-aui.php:2312
-#: includes/custom-fields/input-functions-aui.php:2349
+#: includes/custom-fields/input-functions-aui.php:2313
+#: includes/custom-fields/input-functions-aui.php:2350
 #: includes/custom-fields/input-functions.php:1818
 #: includes/custom-fields/input-functions.php:1848
 #: includes/widgets/class-geodir-widget-archive-item-section.php:43
@@ -9688,7 +9706,7 @@ msgstr ""
 #: includes/class-geodir-privacy-exporters.php:238
 #: includes/class-geodir-privacy-exporters.php:303
 #: includes/core-functions.php:350
-#: includes/custom-fields/input-functions-aui.php:2291
+#: includes/custom-fields/input-functions-aui.php:2292
 #: includes/custom-fields/input-functions.php:1810
 #: includes/custom-fields/output-functions.php:86
 #: includes/widgets/class-geodir-widget-listings.php:667
@@ -9707,7 +9725,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2785
 #: includes/api/class-geodir-rest-posts-controller.php:2844
 #: includes/class-geodir-privacy-exporters.php:301
-#: includes/custom-fields/input-functions-aui.php:2292
+#: includes/custom-fields/input-functions-aui.php:2293
 #: includes/custom-fields/input-functions.php:1811
 #: includes/custom-fields/output-functions.php:88
 #: includes/widgets/class-geodir-widget-listings.php:666
@@ -10451,7 +10469,7 @@ msgid "Sun"
 msgstr ""
 
 #: includes/business-hours-functions.php:697 includes/core-functions.php:333
-#: includes/custom-fields/input-functions-aui.php:2355
+#: includes/custom-fields/input-functions-aui.php:2356
 #: includes/custom-fields/input-functions.php:1852
 msgid "Closed"
 msgstr ""
@@ -10466,7 +10484,7 @@ msgid "Closed now"
 msgstr ""
 
 #: includes/business-hours-functions.php:700
-#: includes/custom-fields/input-functions-aui.php:2304
+#: includes/custom-fields/input-functions-aui.php:2305
 #: includes/custom-fields/input-functions.php:1815
 msgid "Open 24 hours"
 msgstr ""
@@ -11124,7 +11142,7 @@ msgid ""
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:908
+#: includes/class-geodir-compatibility.php:909
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -11132,82 +11150,82 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3264
+#: includes/class-geodir-compatibility.php:3270
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3275
+#: includes/class-geodir-compatibility.php:3281
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3282
+#: includes/class-geodir-compatibility.php:3288
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3283
+#: includes/class-geodir-compatibility.php:3289
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4083
+#: includes/class-geodir-compatibility.php:4089
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4310
+#: includes/class-geodir-compatibility.php:4316
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4311
+#: includes/class-geodir-compatibility.php:4317
 msgid "Enable Borlabs Cookie integration for GeoDirectory maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4320
+#: includes/class-geodir-compatibility.php:4326
 msgid ""
 "NOTE: Go to Borlabs Cookie > Library > Search \"GeoDirectory\" & install "
 "package."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4461
+#: includes/class-geodir-compatibility.php:4467
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
 "with Divi Builder."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4674
+#: includes/class-geodir-compatibility.php:4706
 msgid "GD: All Pages"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4675
+#: includes/class-geodir-compatibility.php:4707
 msgid "GD: Post Type Archives"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4676
+#: includes/class-geodir-compatibility.php:4708
 msgid "GD: All Taxonomies"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4677
+#: includes/class-geodir-compatibility.php:4709
 msgid "GD: Search Results Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4678
+#: includes/class-geodir-compatibility.php:4710
 msgid "GD: Author Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4679
+#: includes/class-geodir-compatibility.php:4711
 msgid "GD: Add Listing Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4680
+#: includes/class-geodir-compatibility.php:4712
 msgid "GD: Listing Detail Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4681
+#: includes/class-geodir-compatibility.php:4713
 msgid "GD: Location Page"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:4687
+#: includes/class-geodir-compatibility.php:4719
 msgctxt "ghostpool core conditions"
 msgid "GeoDirectory"
 msgstr ""
@@ -11509,7 +11527,13 @@ msgstr ""
 msgid "Could not retrieve template."
 msgstr ""
 
-#: includes/class-geodir-email.php:536
+#: includes/class-geodir-email.php:52
+#, php-format
+msgctxt "email logo alt text"
+msgid "%s Logo"
+msgstr ""
+
+#: includes/class-geodir-email.php:559
 #, php-format
 msgid ""
 "\n"
@@ -11518,11 +11542,11 @@ msgid ""
 "Subject: %s\n"
 msgstr ""
 
-#: includes/class-geodir-email.php:537
+#: includes/class-geodir-email.php:560
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1165 includes/post-functions.php:2070
+#: includes/class-geodir-email.php:1188 includes/post-functions.php:2070
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:279
 msgid "Author"
 msgstr ""
@@ -13626,58 +13650,58 @@ msgstr ""
 msgid "Enter tags separated by a comma ,"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2140
+#: includes/custom-fields/input-functions-aui.php:2141
 #: includes/custom-fields/input-functions.php:1714
 msgid "Popular tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2154
+#: includes/custom-fields/input-functions-aui.php:2155
 #: includes/custom-fields/input-functions.php:1729
 msgid "Your tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2304
+#: includes/custom-fields/input-functions-aui.php:2305
 #: includes/custom-fields/input-functions.php:1815
 msgid "Day"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2304
+#: includes/custom-fields/input-functions-aui.php:2305
 #: includes/custom-fields/input-functions.php:1815
 msgid "Opening Hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2304
+#: includes/custom-fields/input-functions-aui.php:2305
 #: includes/custom-fields/input-functions.php:1815
 msgid "Add"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2311
-#: includes/custom-fields/input-functions-aui.php:2348
+#: includes/custom-fields/input-functions-aui.php:2312
+#: includes/custom-fields/input-functions-aui.php:2349
 #: includes/custom-fields/input-functions.php:1818
 #: includes/custom-fields/input-functions.php:1848
 #: includes/widgets/class-geodir-widget-archive-item-section.php:42
 msgid "Open"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2314
-#: includes/custom-fields/input-functions-aui.php:2351
+#: includes/custom-fields/input-functions-aui.php:2315
+#: includes/custom-fields/input-functions-aui.php:2352
 msgid "Remove hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2358
+#: includes/custom-fields/input-functions-aui.php:2359
 msgid "Add new set of hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2362
+#: includes/custom-fields/input-functions-aui.php:2363
 msgid "Timezone:"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2362
+#: includes/custom-fields/input-functions-aui.php:2363
 #: includes/custom-fields/input-functions.php:1860
 msgid "Select a city/timezone&hellip;"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2497
+#: includes/custom-fields/input-functions-aui.php:2498
 #, php-format
 msgid "%s is a required field."
 msgstr ""
