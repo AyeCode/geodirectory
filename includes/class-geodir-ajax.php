@@ -1386,13 +1386,22 @@ class GeoDir_AJAX {
 					continue;
 				}
 
-				/* translators: 1: user display name 2: user ID 3: user email */
-				$found_users[ $user_id ] = wp_sprintf(
-					esc_html__( '%1$s (#%2$s &ndash; %3$s)', 'geodirectory' ),
-					$user->display_name,
-					absint( $user->ID ),
-					$user->user_email
-				);
+				if ( current_user_can( 'list_users' ) ) {
+					/* translators: 1: user display name 2: user ID 3: user email */
+					$found_users[ $user_id ] = wp_sprintf(
+						esc_html__( '%1$s (#%2$s &ndash; %3$s)', 'geodirectory' ),
+						$user->display_name,
+						absint( $user->ID ),
+						$user->user_email
+					);
+				} else {
+					/* translators: 1: user display name 2: user ID */
+					$found_users[ $user_id ] = wp_sprintf(
+						esc_html( _x( '%1$s (#%2$s)', 'Display Name (#ID)', 'geodirectory' ) ),
+						$user->display_name,
+						absint( $user->ID )
+					);
+				}
 			}
 		}
 
