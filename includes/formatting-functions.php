@@ -840,3 +840,41 @@ function geodir_minify_js( $script ) {
 
 	return $script;
 }
+
+/**
+ * Strips JavaScript event handlers from HTML.
+ *
+ * @since 2.8.168
+ *
+ * @param string $content Input string containing HTML.
+ * @return string Filtered HTML.
+ */
+function geodir_esc_js_attrs( $content ) {
+	if ( empty( $content ) || empty( trim( $content ) ) ) {
+		return $content;
+	}
+
+	// Remove raw: <script...>...</script>
+	$content = preg_replace( '/<script\b[^>]*>(.*?)<\/script>/is', '', $content );
+
+	// Remove encoded: &lt;script...&gt;...&lt;/script&gt;
+	$content = preg_replace( '/&lt;script\b[^&]*&gt;(.*?)&lt;\/script&gt;/is', '', $content );
+
+	// Target Raw HTML tags
+	$content = preg_replace_callback( '/<[a-z1-6]+\s+[^>]*>/i', function( $matches ) {
+		$tag = $matches[0];
+		$tag = preg_replace( '/\s+on[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $tag );
+		$tag = preg_replace( '/\s+[a-z\-]+\s*=\s*("javascript:[^"]*"|\'javascript:[^\']*\'|javascript:[^\s>]+)/i', '', $tag );
+		return $tag;
+	}, $content );
+
+	// Target Encoded HTML tags
+	$content = preg_replace_callback( '/&lt;[a-z1-6]+\s+[^&]*(?:&gt;)?/i', function( $matches ) {
+		$tag = $matches[0];
+		$tag = preg_replace( '/\s+on[a-z]+\s*=\s*("&quot;[^&]*&quot;|&#039;[^&]*&#039;|[^\s&>]+)/i', '', $tag );
+		$tag = preg_replace( '/\s+[a-z\-]+\s*=\s*("&quot;javascript:[^&]*&quot;|&#039;javascript:[^&]*&#039;|javascript:[^\s&>]+)/i', '', $tag );
+		return $tag;
+	}, $content );
+
+	return $content;
+}
