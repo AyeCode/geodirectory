@@ -239,22 +239,22 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		$join = apply_filters( 'geodir_rest_markers_query_join', $join, $request );
 
 		if ( ! empty( $request['post'] ) && is_array( $request['post'] ) && count( $request['post'] ) == 1 ) {
-			$where = $wpdb->prepare( "pd.post_id IS NOT NULL AND ( p.post_type = %s OR p.post_type = %s )", array( $request['post_type'],'revision' ) );
-
+			$where    = $wpdb->prepare( "pd.post_id IS NOT NULL AND ( p.post_type = %s OR p.post_type = %s )", array( $request['post_type'],'revision' ) );
 			$statuses = geodir_get_post_stati( 'single-map', $request );
 
-			if ( ! empty( $statuses ) ) {
-				$where .= " AND p.post_status IN( '" . implode( "', '", $statuses ) . "' )";
+			if ( count( $statuses ) > 1 ) {
+				$where .= $wpdb->prepare( " AND p.post_status IN( " . implode( ', ', array_fill( 0, count( $statuses ), '%s' ) ) . " )", $statuses );
+			} else {
+				$where .= $wpdb->prepare( " AND p.post_status = %s", $statuses[0] );
 			}
 		} else {
-			$where = $wpdb->prepare( "pd.post_id IS NOT NULL AND p.post_type = %s", array( $request['post_type'] ) );
-
+			$where  = $wpdb->prepare( "pd.post_id IS NOT NULL AND p.post_type = %s", array( $request['post_type'] ) );
 			$status = geodir_get_post_stati( 'map', $request );
 
 			if ( count( $status ) > 1 ) {
-				$where .= " AND p.post_status IN( '" . implode( "', '", $status ) . "' )";
+				$where .= $wpdb->prepare( " AND p.post_status IN( " . implode( ', ', array_fill( 0, count( $status ), '%s' ) ) . " )", $status );
 			} else {
-				$where .= " AND p.post_status = '{$status[0]}'";
+				$where .= $wpdb->prepare( " AND p.post_status = %s", $status[0] );
 			}
 		}
 		$where = apply_filters( 'geodir_rest_markers_query_where', $where, $request );

@@ -43,7 +43,7 @@ if ( ! isset( $email_heading ) ) {
                 <?php if ( ! empty( $header_text ) ) { ?>
                 <tr>
                     <td align="center" valign="middle" id="template_header">
-                        <div id="template_header_logo"><p><a href="<?php echo esc_url( home_url() ); ?>" target="_blank"><?php echo trim( $header_text ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a></p></div>
+                        <div id="template_header_logo"><p><a href="<?php echo esc_url( home_url() ); ?>" target="_blank"><?php echo wp_kses_post( trim( $header_text ) ); ?></a></p></div>
                     </td>
                 </tr>
                 <?php } ?>
@@ -57,7 +57,7 @@ if ( ! isset( $email_heading ) ) {
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_heading">
                                         <tr>
                                             <td id="header_wrapper">
-                                                <h1><?php echo $email_heading; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h1>
+                                                <h1><?php echo wp_kses_post( $email_heading ); ?></h1>
                                             </td>
                                         </tr>
                                     </table>
