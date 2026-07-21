@@ -1487,11 +1487,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$pop_link = true;
 
 						if ( ! empty( $args['popover_title'] ) ) {
-							$btn_args['title'] = ! empty( $args['link'] ) && $args['link'] != '#'  ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . $args['popover_title'] . "</a>" : $args['popover_title'];
+							$btn_args['title'] = ! empty( $args['link'] ) && $args['link'] != '#'  ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . esc_html( $args['popover_title'] ) . "</a>" : esc_html( $args['popover_title'] );
 						}
 
 						if ( ! empty( $args['popover_text'] ) ) {
-							$btn_args['data-' . $bs_prefix . 'content'] = ! empty( $args['link'] ) && $args['link'] != '#' ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . $args['popover_text'] . "</a>" : $args['popover_text'];
+							$btn_args['data-' . $bs_prefix . 'content'] = ! empty( $args['link'] ) && $args['link'] != '#' ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . geodir_esc_js_attrs( $args['popover_text'] ) . "</a>" : geodir_esc_js_attrs( $args['popover_text'] );
 						}
 					} else if ( ! empty( $args['tooltip_text'] ) ) {
 						$btn_args['data-' . $bs_prefix . 'toggle'] = "tooltip";

@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.168 - 2026-07-TBD =
+* Sanitized badge popover content for extra security - FIXED
+
 = GeoDirectory v2.8.167 - 2026-07-15 =
 * Spectra block styles failed to load on listing preview page - FIXED
 * Added hyperlink to the email logo - ADDED
