@@ -2244,3 +2244,19 @@ function geodir_is_localhost() {
 
 	return false;
 }
+
+/**
+ * Get the range separator. Ex: date range.
+ *
+ * @since 2.8.168
+ *
+ * @param bool $translated Optional. Whether to return the translated separator. Default true.
+ * @return string The range separator.
+ */
+function geodir_range_separator( $translated = true ) {
+	if ( $translated ) {
+		return __( ' to ', 'geodirectory' );
+	} else {
+		return ' to ';
+	}
+}
