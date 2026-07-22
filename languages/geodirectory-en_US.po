@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.167\n"
+"Project-Id-Version: GeoDirectory 2.8.168\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-15 19:52+0530\n"
-"PO-Revision-Date: 2026-07-15 19:55+0530\n"
+"POT-Creation-Date: 2026-07-22 10:58+0530\n"
+"PO-Revision-Date: 2026-07-22 10:58+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -2468,7 +2468,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:310
 #: includes/admin/views/html-keys-edit.php:12
-#: includes/class-geodir-ajax.php:1391 includes/user-functions.php:213
+#: includes/class-geodir-ajax.php:1392 includes/user-functions.php:213
 #, php-format
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
@@ -10598,19 +10598,25 @@ msgid ""
 "secret key will be hidden once you leave this page."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1555 includes/class-geodir-ajax.php:1559
-#: includes/class-geodir-ajax.php:1600
+#: includes/class-geodir-ajax.php:1400
+#, php-format
+msgctxt "Display Name (#ID)"
+msgid "%1$s (#%2$s)"
+msgstr ""
+
+#: includes/class-geodir-ajax.php:1564 includes/class-geodir-ajax.php:1568
+#: includes/class-geodir-ajax.php:1609
 #: includes/class-geodir-report-post.php:425
 msgid "Invalid post."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1593
+#: includes/class-geodir-ajax.php:1602
 #: includes/widgets/class-geodir-widget-report-post.php:52
 #: includes/widgets/class-geodir-widget-report-post.php:258
 msgid "Report Post"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1609
+#: includes/class-geodir-ajax.php:1618
 #: includes/class-geodir-report-post.php:429
 msgid "You can' report this post."
 msgstr ""
@@ -14769,6 +14775,11 @@ msgstr ""
 msgid ""
 "%s requires a newer version of GeoDirectory and will not run until the "
 "GeoDirectory plugin is updated."
+msgstr ""
+
+#: includes/helper-functions.php:2258
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2370
+msgid " to "
 msgstr ""
 
 #: includes/image-functions.php:344 includes/image-functions.php:365
@@ -22224,10 +22235,6 @@ msgstr ""
 msgid "Wk"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2370
-msgid " to "
-msgstr ""
-
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2371
 msgid "Scroll to increment"
 msgstr ""
@@ -23180,11 +23187,11 @@ msgid "Select shortcode"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:328
-msgid "Insert shortcode"
+msgid "Insert Shortcode"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:330
-msgid "Copy shortcode"
+msgid "Copy Shortcode"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:544
