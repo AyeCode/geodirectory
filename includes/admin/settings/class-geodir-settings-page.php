@@ -129,15 +129,16 @@ abstract class GeoDir_Settings_Page {
 	public function show_advanced() {
 		global $current_section, $geodir_render_advanced;
 
-		$post_type = isset( $_REQUEST['post_type'] ) ? sanitize_title( $_REQUEST['post_type'] ) : '';
+		$page      = ! empty( $_REQUEST['page'] ) && is_scalar( $_REQUEST['page'] ) ? sanitize_key( $_REQUEST['page'] ) : '';
+		$post_type = ! empty( $_REQUEST['post_type'] ) && is_scalar( $_REQUEST['post_type'] ) ? sanitize_key( $_REQUEST['post_type'] ) : '';
 
-		if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == $post_type . '-settings' ) {
+		if ( ! empty( $post_type ) && $page === $post_type . '-settings' ) {
 			return true; // If on CPT settings then show.
 		}
 
 		$geodir_render_advanced = true;
-		$show = false;
-		$settings = $this->get_settings( $current_section );
+		$show                   = false;
+		$settings               = $this->get_settings( $current_section );
 
 		if ( ! empty( $settings ) ) {
 			foreach ( $settings as $setting ) {

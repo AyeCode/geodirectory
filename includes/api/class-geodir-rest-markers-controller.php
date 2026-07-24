@@ -238,23 +238,47 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		$join = "LEFT JOIN {$table} AS pd ON pd.post_id = p.ID";
 		$join = apply_filters( 'geodir_rest_markers_query_join', $join, $request );
 
-		if ( ! empty( $request['post'] ) && is_array( $request['post'] ) && count( $request['post'] ) == 1 ) {
-			$where    = $wpdb->prepare( "pd.post_id IS NOT NULL AND ( p.post_type = %s OR p.post_type = %s )", array( $request['post_type'],'revision' ) );
-			$statuses = geodir_get_post_stati( 'single-map', $request );
+		if ( ! empty( $request['_mp'] ) && $request['_mp'] == 'po' && ! empty( $request['post'] ) && is_array( $request['post'] ) && count( $request['post'] ) == 1 ) {
+			$post_id     = (int) $request['post'][0];
+			$post_status = get_post_status( $post_id );
+			$statuses    = geodir_get_post_stati( 'single-map-public', $request );
+			$is_author   = false;
+
+			if ( in_array( $post_status, $statuses ) ) {
+				$statuses = array( $post_status );
+			} else {
+				if ( geodir_listing_belong_to_current_user( $post_id ) ) {
+					$is_author = true;
+					$statuses  = array( $post_status );
+				} else {
+					$maybe_parent = (int) wp_get_post_parent_id( $post_id );
+
+					if ( $maybe_parent > 0 && geodir_listing_belong_to_current_user( $maybe_parent ) ) {
+						$is_author = true;
+						$statuses  = array( $post_status );
+					}
+				}
+			}
+
+			if ( $is_author ) {
+				$where = $wpdb->prepare( "( p.post_type = %s OR p.post_type = %s )", array( $request['post_type'], 'revision' ) );
+			} else {
+				$where = $wpdb->prepare( "p.post_type = %s", array( $request['post_type'] ) );
+			}
 
 			if ( count( $statuses ) > 1 ) {
 				$where .= $wpdb->prepare( " AND p.post_status IN( " . implode( ', ', array_fill( 0, count( $statuses ), '%s' ) ) . " )", $statuses );
 			} else {
-				$where .= $wpdb->prepare( " AND p.post_status = %s", $statuses[0] );
+				$where .= $wpdb->prepare( " AND p.post_status = %s", ( ! empty( $statuses[0] ) ? $statuses[0] : 'publish' ) );
 			}
 		} else {
-			$where  = $wpdb->prepare( "pd.post_id IS NOT NULL AND p.post_type = %s", array( $request['post_type'] ) );
-			$status = geodir_get_post_stati( 'map', $request );
+			$where    = $wpdb->prepare( "pd.post_id IS NOT NULL AND p.post_type = %s", array( $request['post_type'] ) );
+			$statuses = geodir_get_post_stati( 'map', $request );
 
-			if ( count( $status ) > 1 ) {
-				$where .= $wpdb->prepare( " AND p.post_status IN( " . implode( ', ', array_fill( 0, count( $status ), '%s' ) ) . " )", $status );
+			if ( count( $statuses ) > 1 ) {
+				$where .= $wpdb->prepare( " AND p.post_status IN( " . implode( ', ', array_fill( 0, count( $statuses ), '%s' ) ) . " )", $statuses );
 			} else {
-				$where .= $wpdb->prepare( " AND p.post_status = %s", $status[0] );
+				$where .= $wpdb->prepare( " AND p.post_status = %s", ( ! empty( $statuses[0] ) ? $statuses[0] : 'publish' ) );
 			}
 		}
 		$where = apply_filters( 'geodir_rest_markers_query_where', $where, $request );
@@ -466,7 +490,11 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		}
 
 		if ( ! empty( $request['post'] ) && is_array( $request['post'] ) ) {
-			$where .= " AND p.ID IN( '" . implode( "','", $request['post'] ) . "' )";
+			if ( count( $request['post'] ) > 1 ) {
+				$where .= " AND p.ID IN( '" . implode( "','", $request['post'] ) . "' )";
+			} else {
+				$where .= " AND p.ID = " . (int) $request['post'][0];
+			}
 		}
 
 		if ( ! empty( $request['term'] ) && is_array( $request['term'] ) ) {

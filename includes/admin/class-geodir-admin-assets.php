@@ -118,13 +118,13 @@ class GeoDir_Admin_Assets {
 		$screen_id    = $screen ? $screen->id : '';
 		$gd_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
 		$suffix       = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$post_type   = isset($_REQUEST['post_type']) && $_REQUEST['post_type'] ? sanitize_text_field($_REQUEST['post_type']) : '';
-		$page 		  = ! empty( $_GET['page'] ) ? $_GET['page'] : '';
+		$page         = ! empty( $_REQUEST['page'] ) && is_scalar( $_REQUEST['page'] ) ? sanitize_key( $_REQUEST['page'] ) : '';
+		$post_type    = ! empty( $_REQUEST['post_type'] ) && is_scalar( $_REQUEST['post_type'] ) ? sanitize_key( $_REQUEST['post_type'] ) : '';
 		$geodir_map_name = GeoDir_Maps::active_map();
-		$aui = geodir_design_style() ? '/aui' : '';
-		// map arguments
-		$map_lang = "&language=" . GeoDir_Maps::map_language();
-		$map_key = GeoDir_Maps::google_api_key(true);
+		$aui          = geodir_design_style() ? '/aui' : '';
+		$map_lang     = "&language=" . GeoDir_Maps::map_language(); // Map language
+		$map_key      = GeoDir_Maps::google_api_key(true);
+
 		/**
 		 * Filter the variables that are added to the end of the google maps script call.
 		 *

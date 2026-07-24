@@ -46,22 +46,23 @@ class GeoDir_Admin_Settings {
 		if ( empty( self::$settings ) ) {
 			$settings = array();
 
-			include_once( dirname( __FILE__ ) . '/settings/class-geodir-settings-page.php' );
+			include_once( __DIR__ . '/settings/class-geodir-settings-page.php' );
 
-			$post_type = isset($_REQUEST['post_type']) ? sanitize_title($_REQUEST['post_type']) : '';
+			$page      = ! empty( $_REQUEST['page'] ) && is_scalar( $_REQUEST['page'] ) ? sanitize_key( $_REQUEST['page'] ) : '';
+			$post_type = ! empty( $_REQUEST['post_type'] ) && is_scalar( $_REQUEST['post_type'] ) ? sanitize_key( $_REQUEST['post_type'] ) : '';
+
 			// CPT Settings
-			if(isset($_REQUEST['page']) && $_REQUEST['page']==$post_type.'-settings'){
-				$settings[] = include( 'settings/class-geodir-settings-cpt-cf.php' );
-				$settings[] = include( 'settings/class-geodir-settings-cpt-sorting.php' );
-				$settings[] = include( 'settings/class-geodir-settings-cpt-tabs.php' );
-				$settings[] = include( 'settings/class-geodir-settings-cpt.php' );
-
+			if ( ! empty( $post_type ) && $page === $post_type . '-settings' ) {
+				$settings[] = include( __DIR__ . '/settings/class-geodir-settings-cpt-cf.php' );
+				$settings[] = include( __DIR__ . '/settings/class-geodir-settings-cpt-sorting.php' );
+				$settings[] = include( __DIR__ . '/settings/class-geodir-settings-cpt-tabs.php' );
+				$settings[] = include( __DIR__ . '/settings/class-geodir-settings-cpt.php' );
 			} else {
-				$settings[] = include( 'settings/class-geodir-settings-general.php' );
-				$settings[] = include( 'settings/class-geodir-settings-emails.php' );
-				$settings[] = include( 'settings/class-geodir-settings-design.php' );
-				$settings[] = include( 'settings/class-geodir-settings-import-export.php' );
-				$settings[] = include( 'settings/class-geodir-settings-api.php' );
+				$settings[] = include( __DIR__ . '/settings/class-geodir-settings-general.php' );
+				$settings[] = include( __DIR__ . '/settings/class-geodir-settings-emails.php' );
+				$settings[] = include( __DIR__ . '/settings/class-geodir-settings-design.php' );
+				$settings[] = include( __DIR__ . '/settings/class-geodir-settings-import-export.php' );
+				$settings[] = include( __DIR__ . '/settings/class-geodir-settings-api.php' );
 			}
 
 			self::$settings = apply_filters( 'geodir_get_settings_pages', $settings );
