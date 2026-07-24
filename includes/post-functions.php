@@ -782,8 +782,11 @@ function geodir_get_post_stati( $context, $args = array() ) {
 			$statuses = $publish_statuses;
 			break;
 		case 'single-map':
-			$statuses = array_merge( $publish_statuses, array( 'pending', 'draft', 'inherit', 'auto-draft' ) );
-
+		case 'single-map-public':
+			$statuses = array_merge( $publish_statuses, array( 'gd-closed', 'gd-expired' ) );
+			break;
+		case 'single-map-author':
+			$statuses            = array_merge( $publish_statuses, array( 'pending', 'draft', 'inherit', 'auto-draft', 'private', 'future' ) );
 			$non_public_statuses = geodir_get_post_stati( 'non-public', $args );
 
 			if ( ! empty( $non_public_statuses ) && is_array( $non_public_statuses ) ) {
