@@ -928,7 +928,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				'layout'                => '2',
 				'listing_width'         => '',
 				'add_location_filter'   => '1',
-				'nearby_gps' > '',
+				'nearby_gps'            => '0',
 				'character_count'       => '20',
 				'show_featured_only'    => '',
 				'show_special_only'     => '',
