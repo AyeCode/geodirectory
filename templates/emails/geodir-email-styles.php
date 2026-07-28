@@ -16,6 +16,12 @@ $base_lighter_20 = geodir_hex_lighter( $base, 20 );
 $base_lighter_40 = geodir_hex_lighter( $base, 40 );
 $text_lighter_20 = geodir_hex_lighter( $text, 20 );
 
+// Inner padding
+$inner_padding_h   = geodir_get_option( 'email_body_inner_padding_h' );
+$inner_padding_h   = $inner_padding_h && (float) $inner_padding_h > 0 ? (float) $inner_padding_h : '';
+$inner_padding_v   = geodir_get_option( 'email_body_inner_padding_v' );
+$inner_padding_v   = $inner_padding_v && (float) $inner_padding_v > 0 ? (float) $inner_padding_v : '';
+
 $header_bg       		= geodir_get_option( 'email_header_background_color', '#e46c1d' );
 $header_color 			= geodir_get_option( 'email_header_text_color', '#ffffff' );
 $header_bg_darker_10 	= geodir_hex_darker( $header_bg, 10 );
@@ -116,6 +122,18 @@ if ( empty( $footer_bg_darker_10 ) ) { $footer_bg_darker_10 = 'transparent'; }
 #body_content table td {
     padding: 27px;
 }
+<?php if ( $inner_padding_h || $inner_padding_v ) { ?>
+#body_content table td.body_padding {
+<?php if ( $inner_padding_h ) { ?>
+    padding-left: <?php echo (float) $inner_padding_h; ?>px;
+    padding-right: <?php echo (float) $inner_padding_h; ?>px;
+<?php } ?>
+<?php if ( $inner_padding_v ) { ?>
+    padding-top: <?php echo (float) $inner_padding_v; ?>px;
+    padding-bottom: <?php echo (float) $inner_padding_v; ?>px;
+<?php } ?>
+}
+<?php } ?>
 #body_content table td td {
     padding: 10px;
 }

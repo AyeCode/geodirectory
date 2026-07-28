@@ -408,7 +408,39 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
                         'type' => 'color',
 						'desc_tip' => true,
 						'advanced' => true,
-                    ),
+					),
+					'email_body_inner_padding_h' => array(
+						'id'          => 'email_body_inner_padding_h',
+						'name'        => __( 'Body Inner Horizontal Padding (px)', 'geodirectory' ),
+						'desc'        => __( 'The main body inner horizontal padding. Default: 27px.', 'geodirectory' ),
+						'default'     => '',
+						'type'        => 'number',
+						'placeholder' => '27',
+						'custom_attributes' => array(
+							'min'  => '0',
+							'max'  => '100',
+							'step' => '1',
+							'lang' => 'EN'
+						),
+						'desc_tip' => true,
+						'advanced' => true
+					),
+					'email_body_inner_padding_v' => array(
+						'id'          => 'email_body_inner_padding_v',
+						'name'        => __( 'Body Inner Vertical Padding (px)', 'geodirectory' ),
+						'desc'        => __( 'The main body inner vertical padding. Default: 27px.', 'geodirectory' ),
+						'default'     => '',
+						'type'        => 'number',
+						'placeholder' => '27',
+						'custom_attributes' => array(
+							'min'  => '0',
+							'max'  => '100',
+							'step' => '1',
+							'lang' => 'EN'
+						),
+						'desc_tip' => true,
+						'advanced' => true
+					),
 
 					array('type' => 'sectionend', 'id' => 'email_template_settings'),
 
