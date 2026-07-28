@@ -322,6 +322,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.169 - 2026-07-TBD =
 * Fix backend settings conflict with Search & Filter Pro plugin - FIXED
 * Fix showing unpublished listing map markers to public users on single maps - FIXED
+* Added option to customize email content vertical and horizontal padding - ADDED
 
 = GeoDirectory v2.8.168 - 2026-07-22 =
 * Sanitized badge popover content for extra security - FIXED

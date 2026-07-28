@@ -74,5 +74,5 @@ if ( ! isset( $email_heading ) ) {
                                                 <!-- Content -->
                                                 <table border="0" cellpadding="20" cellspacing="0" width="100%">
                                                     <tr>
-                                                        <td valign="top">
+                                                        <td valign="top" class="body_padding">
                                                             <div id="body_content_inner">
