@@ -422,12 +422,20 @@ class GeoDir_Post_Data {
 	 * }
 	 */
 	public static function save_auto_draft( $post_info ) {
-
-		// check if we already have an auto draft
+		// Check if we already have an auto draft
 		if ( isset( $post_info['ID'] ) && $post_info['ID'] ) {
-
 		}
-		$result = wp_insert_post( $post_info, true ); // we hook into the save_post hook
+
+		// Validate pos type
+		if ( ! empty( $post_info['post_type'] ) ) {
+			$_post_type = sanitize_key( $post_info['post_type'] );
+
+			if ( $_post_type != 'revision' && ! geodir_is_gd_post_type( $_post_type ) ) {
+				return new WP_Error( 'save_post', __( "Invalid post!", "geodirectory" ) );
+			}
+		}
+
+		$result = wp_insert_post( $post_info, true ); // We hook into the save_post hook
 	}
 
 	/**
@@ -770,6 +778,10 @@ class GeoDir_Post_Data {
 	public static function wp_insert_post_data( $data, $postarr ) {
 		// Non GD post
 		if ( ! empty( $data['post_type'] ) && $data['post_type'] != 'revision' && ! geodir_is_gd_post_type( $data['post_type'] ) ) {
+			return $data;
+		}
+
+		if ( ! empty( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] != 'revision' && ! geodir_is_gd_post_type( $_REQUEST['post_type'] ) ) {
 			return $data;
 		}
 
@@ -1323,7 +1335,22 @@ class GeoDir_Post_Data {
 			return new WP_Error( 'gd-not-owner', __( "You do not own this post", "geodirectory" ) );
 		}
 
+		$post_type = get_post_type( (int) $post_data['ID'] );
+
+		if ( ! ( $post_type == 'revision' && geodir_is_gd_post_type( $post_type ) ) ) {
+			return new WP_Error( 'gd-invalid-post', __( "Invalid post!", "geodirectory" ) );
+		}
+
+		if ( ! empty( $post_data['post_parent'] ) ) {
+			$post_type = get_post_type( (int) $post_data['post_parent'] );
+
+			if ( ! ( $post_type == 'revision' && geodir_is_gd_post_type( $post_type ) ) ) {
+				return new WP_Error( 'gd-invalid-post', __( "Invalid post!", "geodirectory" ) );
+			}
+		}
+
 		$result = wp_delete_post( $post_data['ID'], true );
+
 		if ( ! empty( $post_data['post_parent'] ) ) {
 			delete_post_meta( (int) $post_data['post_parent'], "__" . (int) $post_data['ID'] ); // Delete any temp stored media values from auto saves.
 		}
@@ -1413,15 +1440,14 @@ class GeoDir_Post_Data {
 	 * @return int|WP_Error
 	 */
 	public static function auto_save_post( $post_data, $doing_autosave = true ) {
-
-		// check if user has privileges to edit the post
+		// Check if user has privileges to edit the post
 		$post_id   = isset( $post_data['ID'] ) ? absint( $post_data['ID'] ) : '';
 		$parent_id = isset( $post_data['post_parent'] ) ? absint( $post_data['post_parent'] ) : '';
 		if ( ! self::can_edit( $post_id, get_current_user_id(), $parent_id ) ) {
 			return new WP_Error( 'save_post', __( "You do not have the privileges to perform this action.", "geodirectory" ) );
 		}
 
-		// set that we are doing an auto save
+		// Set that we are doing an auto save
 		if ( ! defined( 'DOING_AUTOSAVE' ) ) {
 			if ( $doing_autosave ) {
 				define( 'DOING_AUTOSAVE', true );
@@ -1430,20 +1456,20 @@ class GeoDir_Post_Data {
 			}
 		}
 
-		// its a post revision
+		// Its a post revision
 		if ( isset( $post_data['post_parent'] ) && $post_data['post_parent'] ) {
 			$post_data['post_type'] = 'revision'; //  post type is not sent but we know if it has a parent then its a revision.
 			$post_data['post_name'] = $post_data['post_parent'] . "-autosave-v1";
 
-
-			// save file temp info
+			// Save file temp info
 			$file_meta = array();
-			// set post images
+
+			// Set post images
 			if ( isset( $post_data['post_images'] ) ) {
 				$file_meta['post_images'] = $post_data['post_images'];
 			}
 
-//			// process attachments
+			// Process attachments
 			$post_type   = get_post_type( $post_data['post_parent'] );
 			$file_fields = GeoDir_Media::get_file_fields( $post_type );
 
@@ -1458,7 +1484,6 @@ class GeoDir_Post_Data {
 			if ( ! empty( $file_meta ) ) {
 				update_post_meta( $post_data['post_parent'], '__' . $post_data['ID'], $file_meta );
 			}
-
 		} // its a new auto draft
 		else {
 			/*
@@ -1477,10 +1502,28 @@ class GeoDir_Post_Data {
 			return $validate;
 		}
 
+		// Validate pos type
+		if ( ! empty( $post_data['post_type'] ) ) {
+			$_post_type = sanitize_key( $post_data['post_type'] );
+
+			if ( $_post_type != 'revision' && ! geodir_is_gd_post_type( $_post_type ) ) {
+				return new WP_Error( 'save_post', __( "Invalid post!", "geodirectory" ) );
+			}
+		}
+
+		// Strip reserved fields.
+		if ( isset( $post_data['meta_input'] ) ) {
+			unset( $post_data['meta_input'] );
+		}
+
+		if ( isset( $post_data['guid'] ) ) {
+			unset( $post_data['guid'] );
+		}
+
 		// Save the post.
 		$result = wp_update_post( $post_data, true );
 
-		// get the message response.
+		// Get the message response.
 		if ( ! is_wp_error( $result ) ) {
 			do_action( 'geodir_ajax_post_auto_saved', $post_data, ! empty( $post_data['post_parent'] ) );
 		}
@@ -1533,6 +1576,8 @@ class GeoDir_Post_Data {
 
 		// if a post_type is being posted check that matches
 		if ( ! empty( $_POST['post_type'] ) && $post_type != $_POST['post_type'] ) {
+			return false;
+		} elseif ( ! empty( $_REQUEST['post_type'] ) && $post_type != $_REQUEST['post_type'] ) {
 			return false;
 		}
 
@@ -1656,28 +1701,29 @@ class GeoDir_Post_Data {
 	 * @return int|WP_Error $result
 	 */
 	public static function ajax_save_post( $post_data ) {
-
 		// Check if user has privileges to edit the post
 		$post_id   = isset( $post_data['ID'] ) ? absint( $post_data['ID'] ) : '';
 		$parent_id = isset( $post_data['post_parent'] ) ? absint( $post_data['post_parent'] ) : '';
+
 		if ( ! self::can_edit( $post_id, get_current_user_id(), $parent_id ) ) {
 			return new WP_Error( 'save_post', __( "You do not have the privileges to perform this action.", "geodirectory" ) );
 		}
 
 		// Check if address is required
-		$post_type = isset( $post_data['post_type'] ) ? esc_attr( $post_data['post_type'] ) : '';
+		$post_type        = isset( $post_data['post_type'] ) ? esc_attr( $post_data['post_type'] ) : '';
 		$address_required = geodir_cpt_requires_address( $post_type );
 
 		// Pre validation
 		$has_error = false;
+
 		if ( isset( $post_data['post_title'] ) && sanitize_text_field( $post_data['post_title'] ) == '' ) {
-			$has_error = true;
+			$has_error   = true;
 			$field_title = __( 'Title', 'geodirectory' );
 		} elseif ( $address_required && isset( $post_data['street'] ) && sanitize_text_field( $post_data['street'] ) == '' && isset( $post_data['post_type'] ) && GeoDir_Post_types::supports( sanitize_text_field( $post_data['post_type'] ), 'location' ) ) {
-			$has_error = true;
+			$has_error   = true;
 			$field_title = __( 'Address', 'geodirectory' );
 		} elseif ( isset( $post_data['cat_limit'] ) && isset( $post_data['post_type'] ) && isset( $post_data['tax_input'] ) && empty( $post_data['tax_input'][ $post_data['post_type'] . 'category' ][0] ) ) {
-			$has_error = true;
+			$has_error   = true;
 			$field_title = __( 'Category', 'geodirectory' );
 		}
 
@@ -1732,6 +1778,24 @@ class GeoDir_Post_Data {
 		 * @since 2.1.1.5
 		 */
 		$post_data = apply_filters( 'geodir_ajax_update_post_data', $post_data, ! empty( $post_data['post_parent'] ) );
+
+		// Validate pos type.
+		if ( ! empty( $post_data['post_type'] ) ) {
+			$_post_type = sanitize_key( $post_data['post_type'] );
+
+			if ( $_post_type != 'revision' && ! geodir_is_gd_post_type( $_post_type ) ) {
+				return new WP_Error( 'save_post', __( "Invalid post!", "geodirectory" ) );
+			}
+		}
+
+		// Strip reserved fields.
+		if ( isset( $post_data['meta_input'] ) ) {
+			unset( $post_data['meta_input'] );
+		}
+
+		if ( isset( $post_data['guid'] ) ) {
+			unset( $post_data['guid'] );
+		}
 
 		// Save the post.
 		$result = wp_update_post( $post_data, true );
