@@ -578,20 +578,48 @@ class GeoDir_API {
 	 *
 	 */
 	public static function rest_cookie_check_errors( $errors ) {
-		if ( is_wp_error( $errors ) && ! empty( $_REQUEST['_wpnonce'] ) &&  ! empty( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], '/wp-json/geodir/' ) !== false && strpos( $_SERVER['REQUEST_URI'], '/markers/' ) !== false && is_wp_error( $errors ) && $errors->get_error_code() == 'rest_cookie_invalid_nonce' ) {
-			if ( is_user_logged_in() ) { // Logged in user
-				return true;
-			} elseif ( geodir_create_nonce( 'wp_rest' ) == sanitize_text_field( $_REQUEST['_wpnonce'] ) ) {
-				return true;
-			} else {
-				$parse_referer = wp_parse_url( wp_get_referer() ); // Http referer
-				$parse_home = wp_parse_url( home_url( '/' ) ); // Home url
+		// Check basic validation.
+		if ( empty( $_REQUEST['_wpnonce'] ) || empty( $_SERVER['REQUEST_URI'] ) || strpos( $_SERVER['REQUEST_URI'], '/markers/' ) === false || strpos( $_SERVER['REQUEST_URI'], '/geodir/' ) === false || ! is_wp_error( $errors ) ) {
+			return $errors;
+		}
 
-				if ( ! empty( $parse_referer['host'] ) && ! empty( $parse_home['host'] ) && strtolower( $parse_referer['host'] ) == strtolower( $parse_home['host'] ) ) {
-					return true;
-				}
+		// Only check for rest_cookie_invalid_nonce error.
+		if ( $errors->get_error_code() !== 'rest_cookie_invalid_nonce' ) {
+			return $errors;
+		}
+
+		// Match against the PATH only, never the raw REQUEST_URI.
+		$request_path = wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
+
+		if ( empty( $request_path ) ) {
+			return $errors;
+		}
+
+		$rest_prefix      = trailingslashit( rest_get_url_prefix() ); // Usually 'wp-json/'.
+		$namespace        = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION; // Usually 'geodir/v2'.
+		$is_markers_route = (bool) preg_match( '#/' . preg_quote( $rest_prefix, '#' ) . $namespace. '/markers/#', $request_path );
+
+		// Return if not a markers route.
+		if ( ! $is_markers_route ) {
+			return $errors;
+		}
+
+		if ( is_user_logged_in() ) {
+			// Logged in user.
+			return true;
+		} elseif ( geodir_create_nonce( 'wp_rest' ) == sanitize_text_field( $_REQUEST['_wpnonce'] ) ) {
+			// Nonce validated.
+			return true;
+		} else {
+			$parse_referer = wp_parse_url( wp_get_referer() ); // Http referer
+			$parse_home    = wp_parse_url( home_url( '/' ) ); // Home url
+
+			// Check request from same host.
+			if ( ! empty( $parse_referer['host'] ) && ! empty( $parse_home['host'] ) && strtolower( $parse_referer['host'] ) == strtolower( $parse_home['host'] ) ) {
+				return true;
 			}
 		}
+
 		return $errors;
 	}
 }
