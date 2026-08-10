@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.170\n"
+"Project-Id-Version: GeoDirectory 2.8.171\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-07 20:22+0530\n"
-"PO-Revision-Date: 2026-08-07 20:22+0530\n"
+"POT-Creation-Date: 2026-08-10 11:06+0530\n"
+"PO-Revision-Date: 2026-08-10 11:06+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -11934,8 +11934,6 @@ msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
 #: includes/class-geodir-post-data.php:434
-#: includes/class-geodir-post-data.php:1341
-#: includes/class-geodir-post-data.php:1348
 #: includes/class-geodir-post-data.php:1510
 #: includes/class-geodir-post-data.php:1787
 msgid "Invalid post!"
@@ -12004,11 +12002,19 @@ msgid "Preview Listing"
 msgstr ""
 
 #: includes/class-geodir-post-data.php:1335
-msgid "You do not own this post"
+msgid "You do not have permission to delete this post revision."
+msgstr ""
+
+#: includes/class-geodir-post-data.php:1341
+msgid "The requested item is not a valid post revision."
+msgstr ""
+
+#: includes/class-geodir-post-data.php:1348
+msgid "The requested post is not a valid post type."
 msgstr ""
 
 #: includes/class-geodir-post-data.php:1359
-msgid "Delete revision failed."
+msgid "Could not delete the post revision."
 msgstr ""
 
 #: includes/class-geodir-post-data.php:1447

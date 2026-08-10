@@ -1331,32 +1331,32 @@ class GeoDir_Post_Data {
 	 * @return bool|WP_Error
 	 */
 	public static function delete_revision( $post_data ) {
-		if ( ! self::owner_check( $post_data['ID'], get_current_user_id() ) ) {
-			return new WP_Error( 'gd-not-owner', __( "You do not own this post", "geodirectory" ) );
+		if ( ! self::owner_check( (int) $post_data['ID'], (int) get_current_user_id() ) ) {
+			return new WP_Error( 'gd-not-owner', __( 'You do not have permission to delete this post revision.', 'geodirectory' ) );
 		}
 
 		$post_type = get_post_type( (int) $post_data['ID'] );
 
-		if ( ! ( $post_type == 'revision' && geodir_is_gd_post_type( $post_type ) ) ) {
-			return new WP_Error( 'gd-invalid-post', __( "Invalid post!", "geodirectory" ) );
+		if ( $post_type !== 'revision' && ! geodir_is_gd_post_type( $post_type ) ) {
+			return new WP_Error( 'gd-invalid-post-type', __( 'The requested item is not a valid post revision.', 'geodirectory' ) );
 		}
 
 		if ( ! empty( $post_data['post_parent'] ) ) {
 			$post_type = get_post_type( (int) $post_data['post_parent'] );
 
-			if ( ! ( $post_type == 'revision' && geodir_is_gd_post_type( $post_type ) ) ) {
-				return new WP_Error( 'gd-invalid-post', __( "Invalid post!", "geodirectory" ) );
+			if ( $post_type !== 'revision' && ! geodir_is_gd_post_type( $post_type ) ) {
+				return new WP_Error( 'gd-invalid-post-type', __( 'The requested post is not a valid post type.', 'geodirectory' ) );
 			}
 		}
 
-		$result = wp_delete_post( $post_data['ID'], true );
+		$result = wp_delete_post( (int) $post_data['ID'], true );
 
 		if ( ! empty( $post_data['post_parent'] ) ) {
 			delete_post_meta( (int) $post_data['post_parent'], "__" . (int) $post_data['ID'] ); // Delete any temp stored media values from auto saves.
 		}
 
 		if ( $result == false ) {
-			return new WP_Error( 'gd-delete-failed', __( "Delete revision failed.", "geodirectory" ) );
+			return new WP_Error( 'gd-delete-failed', __( 'Could not delete the post revision.', 'geodirectory' ) );
 		} else {
 			return true;
 		}
