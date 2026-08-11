@@ -949,22 +949,23 @@ class GeoDir_Frontend_Scripts {
 						'post_id' => 0 // will be added per uploader
 					)
 				);
+	
 				$thumb_img_arr = array();
 
-				if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
-					$thumb_img_arr = geodir_get_images($_REQUEST['pid']);
+				if ( ! empty( $_REQUEST['pid'] ) ) {
+					$post_id   = absint( $_REQUEST['pid'] );
+					$post_type = get_post_type( $post_id );
 
-				$totImg = '';
-				$image_limit = '';
-				if (!empty($thumb_img_arr)) {
-					$totImg = count($thumb_img_arr);
+					if ( geodir_is_gd_post_type( $post_type ) ) {
+						$thumb_img_arr = geodir_get_images( $post_id );
+					}
 				}
-				$base_plupload_config = json_encode($plupload_init);
 
-				return array('base_plupload_config' => $base_plupload_config,
-				             'totalImg' => $totImg,
-				             'image_limit' => $image_limit,
-				             'upload_img_size' => geodir_max_upload_size()
+				return array(
+					'base_plupload_config' => json_encode( $plupload_init ),
+					'totalImg'             => ! empty( $thumb_img_arr ) ? count( $thumb_img_arr ) : '',
+					'image_limit'          => '',
+					'upload_img_size'      => geodir_max_upload_size()
 				);
 				break;
 			case 'geodir-map' :

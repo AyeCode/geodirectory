@@ -164,7 +164,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
 	 *
 	 * @return mixed|string|void
 	 */
-	public function output($args = array(), $widget_args = array(),$content = ''){
+	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $geodir_label_type;
 
 		// Some theme renders add listing shortcode in search page results.
@@ -172,12 +172,12 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
 		 * @since 2.0.0.68
 		 */
 		$output = apply_filters( 'geodir_pre_add_listing_shortcode_output', NULL, $args, $widget_args, $content );
+
 		if ( $output !== NULL ) {
 			return $output;
 		}
 
-		$design_style = geodir_design_style();
-
+		$design_style      = geodir_design_style();
 		$default_post_type = geodir_add_listing_default_post_type();
 
 		$defaults = array(
@@ -188,29 +188,29 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
 			'container'     => '',
 			'mapzoom'       => '0',
 			'label_type'    => 'horizontal',
-			'bg'    => '',
-			'mt'    => '',
-			'mb'    => '3',
-			'mr'    => '',
-			'ml'    => '',
-			'pt'    => '',
-			'pb'    => '',
-			'pr'    => '',
-			'pl'    => '',
-			'border'    => '',
-			'rounded'    => '',
-			'rounded_size'    => '',
-			'shadow'    => '',
+			'bg'            => '',
+			'mt'            => '',
+			'mb'            => '3',
+			'mr'            => '',
+			'ml'            => '',
+			'pt'            => '',
+			'pb'            => '',
+			'pr'            => '',
+			'pl'            => '',
+			'border'        => '',
+			'rounded'       => '',
+			'rounded_size'  => '',
+			'shadow'        => ''
 		);
 
-		$params = wp_parse_args( $args,$defaults);
+		$params = wp_parse_args( $args, $defaults );
 
 		if ( empty( $params['label_type'] ) ) {
 			$params['label_type'] = $defaults['label_type'];
 		}
 
 		// Set the label type.
-		$geodir_label_type = esc_attr( $params['label_type'] );
+		$geodir_label_type = sanitize_key( $params['label_type'] );
 
 		if ( isset( $args['post_type'] ) && ! empty( $args['post_type'] ) ) {
 			$params['listing_type'] = $args['post_type'];
@@ -220,16 +220,29 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
 			$params['login_msg'] = $defaults['login_msg'];
 		}
 
-		if ( ! empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
-			$params['pid'] = absint( $_REQUEST['pid'] );
-			$params['listing_type'] = $post_type;
-		} else if ( isset( $_REQUEST['listing_type'] ) ) {
+		if ( ! empty( $_REQUEST['pid'] ) ) {
+			$params['pid']          = absint( $_REQUEST['pid'] );
+			$params['listing_type'] = get_post_type( $params['pid'] );
+
+			if ( ! empty( $params['post_type'] ) ) {
+				$params['post_type'] = $params['listing_type'];
+			}
+		} elseif ( isset( $_REQUEST['listing_type'] ) ) {
 			$params['listing_type'] = sanitize_text_field( $_REQUEST['listing_type'] );
 		}
 
 		// Check if CPT is disabled add listing.
 		if ( ! geodir_add_listing_check_post_type( $params['listing_type'] ) ) {
-			$message = __( 'Adding listings is disabled for this post type.', 'geodirectory' );
+			if ( ! geodir_is_gd_post_type( $params['listing_type'] ) ) {
+				if ( ! empty( $params['pid'] ) ) {
+					$message = __( 'The requested listing is invalid or does not exist.', 'geodirectory' );
+				} else {
+					$message = __( 'The listing type is invalid or does not exist.', 'geodirectory' );
+				}
+			} else {
+				$message = __( 'Adding listings is disabled for this post type.', 'geodirectory' );
+			}
+
 			/**
 			 * Filter the message for post type add listing disabled.
 			 *
@@ -251,16 +264,17 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
 			$_REQUEST[ $key ] = $value;
 		}
 
-		$user_id = get_current_user_id();
+		$user_id = (int) get_current_user_id();
 
 		ob_start();
 		if ( ! $user_id && !geodir_get_option( 'post_logged_out' ) ) {
 			echo geodir_notification( array( 'info' => $params['login_msg'] ) );
+
 			if ( $params['show_login'] ) {
 				echo "<br />";
 				echo GeoDir_User::login_link();
 			}
-		} else if ( ! $user_id && ! get_option( 'users_can_register' ) ) {
+		} elseif ( ! $user_id && ! get_option( 'users_can_register' ) ) {
 			echo geodir_notification( array( 'error' => __( 'User registration is disabled, please login to continue.', 'geodirectory' ) ) );
 		} else {
 			// Enqueue widget scripts on call.
