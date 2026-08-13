@@ -12,7 +12,7 @@
  *
  * @see        https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
  * @package    GeoDirectory
- * @version    2.2.19
+ * @version    2.8.72
  *
  * @global object $geodirectory GeoDirectory object.
  *
@@ -81,7 +81,7 @@ global $geodirectory, $aui_bs5;
 		do_action( 'geodir_search_hidden_fields', $instance );
 
 		if ( isset( $keep_args ) && ! empty( $keep_args ) ) {
-			echo '<div class="geodir-keep-args" style="display:none!important">' . wp_json_encode( $keep_args ) . '</div>';
+			echo '<div class="geodir-keep-args" style="display:none!important">' . wp_json_encode( $keep_args, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . '</div>';
 		}
 		?>
 	</form>

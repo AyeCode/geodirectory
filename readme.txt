@@ -321,6 +321,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.172 - 2026-08-TBD =
 * Enhance validation message when edited post type does not match the default post type - CHANGED
+* Enhance validation and output encoding for AJAX search parameters – FIXED/SECURITY
 
 = GeoDirectory v2.8.171 - 2026-08-10 =
 * Delete post revision is not working after update - FIXED
