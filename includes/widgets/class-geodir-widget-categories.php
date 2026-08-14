@@ -204,18 +204,22 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			'advanced' => false,
 			'group'    => __( 'Filters', 'geodirectory' ),
 		);
-		$arguments['sort_by']         = array(
+
+		$arguments['sort_by'] = array(
 			'title'    => __( 'Sort by:', 'geodirectory' ),
 			'desc'     => __( 'Sort categories by.', 'geodirectory' ),
 			'type'     => 'select',
 			'options'  => array(
-				'count' => __( 'Count', 'geodirectory' ),
-				'az'    => __( 'A-Z', 'geodirectory' ),
+				'count'      => __( 'Count', 'geodirectory' ),
+				'az'         => __( 'A-Z', 'geodirectory' ),
+				'include'    => __( 'As Entered', 'geodirectory' ),
+				'parent'     => __( 'Parent', 'geodirectory' ),
+				'term_order' => __( 'Term Order', 'geodirectory' )
 			),
 			'default'  => 'count',
 			'desc_tip' => true,
 			'advanced' => false,
-			'group'    => __( 'Sorting', 'geodirectory' ),
+			'group'    => __( 'Sorting', 'geodirectory' )
 		);
 
 		if ( $design_style ) {
@@ -777,7 +781,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		$args['title_tag'] = in_array( $args['title_tag'], array( 'h2', 'h3', 'h4', 'h5', 'h6', 'span' ), true ) ? esc_attr( $args['title_tag'] ) : 'h4';
 
 
-		$sort_by    = isset( $args['sort_by'] ) && in_array( $args['sort_by'], array( 'az', 'count' ) ) ? sanitize_text_field( $args['sort_by'] ) : 'count';
+		$sort_by    = isset( $args['sort_by'] ) && in_array( $args['sort_by'], array( 'az', 'count', 'include', 'parent', 'term_order' ) ) ? sanitize_text_field( $args['sort_by'] ) : 'count';
 		$cpt_filter = empty( $args['no_cpt_filter'] ) ? true : false;
 		$cat_filter = empty( $args['no_cat_filter'] ) ? true : false;
 		$cpt_ajax   = ! empty( $args['cpt_ajax'] ) ? true : false;
@@ -894,8 +898,12 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 		$orderby = 'count';
 		$order   = 'DESC';
+
 		if ( $sort_by == 'az' ) {
 			$orderby = 'name';
+			$order   = 'ASC';
+		} elseif ( in_array( $sort_by, array( 'include', 'parent', 'term_order' ) ) ) {
+			$orderby = $sort_by;
 			$order   = 'ASC';
 		}
 
@@ -1005,6 +1013,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				if ( $hide_empty ) {
 					$categories = geodir_filter_empty_terms( $categories );
 				}
+
 				if ( $sort_by == 'count' ) {
 					$categories = geodir_sort_terms( $categories, 'count' );
 				}
@@ -1330,6 +1339,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		$order   = 'DESC';
 		if ( $sort_by == 'az' ) {
 			$orderby = 'name';
+			$order   = 'ASC';
+		} elseif ( in_array( $sort_by, array( 'include', 'parent', 'term_order' ) ) ) {
+			$orderby = $sort_by;
 			$order   = 'ASC';
 		}
 
