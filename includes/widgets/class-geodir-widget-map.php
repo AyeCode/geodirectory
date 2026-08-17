@@ -23,6 +23,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
+		global $wp_version;
 
 		$aui_settings = is_admin() ? get_option( 'ayecode-ui-settings', array() ) : array();
 		$aui_settings = apply_filters( 'ayecode-ui-settings', $aui_settings, array(), array() );
@@ -36,7 +37,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'block-supports'   => array(
 				'customClassName' => false,
 			),
-			'block-api-version' => 1, // this is needed to make the block selectable in the editor if not using innerBlockProps https://wordpress.stackexchange.com/questions/384004/cant-select-my-block-by-clicking-on-it
+			'block-api-version' => 1, // This is needed to make the block selectable in the editor if not using innerBlockProps https://wordpress.stackexchange.com/questions/384004/cant-select-my-block-by-clicking-on-it
 			'class_name'       => __CLASS__,
 			'base_id'          => 'gd_map',                                            // this us used as the widget id and the shortcode id.
 			'name'             => __( 'GD > Map', 'geodirectory' ),                    // the name of the widget.
@@ -87,6 +88,11 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				),
 			),
 		);
+
+		if ( version_compare( $wp_version, '6.9', '>=' ) && isset( $options['block-api-version'] ) ) {
+			// Unset block version to use default block api version for iframe compatibility since WordPress 6.9.
+			unset( $options['block-api-version'] );
+		}
 
 		parent::__construct( $options );
 	}

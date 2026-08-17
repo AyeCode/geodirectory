@@ -319,6 +319,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.173 - 2026-08-TBD =
+* Load GD > Map default block version for iframe compatibility - COMPATIBILITY
+
 = GeoDirectory v2.8.172 - 2026-08-14 =
 * Enhance validation message when edited post type does not match the default post type - CHANGED
 * Enhance validation and output encoding for AJAX search parameters – FIXED/SECURITY
