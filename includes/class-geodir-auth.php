@@ -122,13 +122,16 @@ class GeoDir_Auth {
 	protected function build_url( $data, $endpoint ) {
 		$url = geodir_get_endpoint_url( 'geodir-auth/v' . self::VERSION, $endpoint, home_url( '/' ) );
 
-		return add_query_arg( array(
-			'app_name'            => geodir_clean( $data['app_name'] ),
-			'user_id'             => geodir_clean( $data['user_id'] ),
-			'return_url'          => rawurlencode( $this->get_formatted_url( $data['return_url'] ) ),
-			'callback_url'        => rawurlencode( $this->get_formatted_url( $data['callback_url'] ) ),
-			'scope'               => geodir_clean( $data['scope'] ),
-		), $url );
+		return add_query_arg(
+			array(
+				'app_name'     => geodir_clean( $data['app_name'] ),
+				'user_id'      => geodir_clean( $data['user_id'] ),
+				'return_url'   => rawurlencode( $this->get_formatted_url( $data['return_url'] ) ),
+				'callback_url' => rawurlencode( $this->get_formatted_url( $data['callback_url'] ) ),
+				'scope'        => geodir_clean( $data['scope'] ),
+			),
+			$url
+		);
 	}
 
 	/**
@@ -152,6 +155,7 @@ class GeoDir_Auth {
 	 * @since  2.0.0
 	 */
 	protected function make_validation() {
+		$data   = array();
 		$params = array(
 			'app_name',
 			'user_id',
@@ -165,15 +169,17 @@ class GeoDir_Auth {
 				/* translators: %s: parameter */
 				throw new Exception( sprintf( __( 'Missing parameter %s', 'geodirectory' ), $param ) );
 			}
+
+			$data[ $param ] = wp_unslash( $_REQUEST[ $param ] );
 		}
 
-		if ( ! in_array( $_REQUEST['scope'], array( 'read', 'write', 'read_write' ) ) ) {
+		if ( ! in_array( $data['scope'], array( 'read', 'write', 'read_write' ), true ) ) {
 			/* translators: %s: scope */
-			throw new Exception( sprintf( __( 'Invalid scope %s', 'geodirectory' ), geodir_clean( $_REQUEST['scope'] ) ) );
+			throw new Exception( sprintf( __( 'Invalid scope %s', 'geodirectory' ), geodir_clean( $data['scope'] ) ) );
 		}
 
 		foreach ( array( 'return_url', 'callback_url' ) as $param ) {
-			$param = $this->get_formatted_url( $_REQUEST[ $param ] );
+			$param = $this->get_formatted_url( $data[ $param ] );
 
 			if ( false === filter_var( $param, FILTER_VALIDATE_URL ) ) {
 				/* translators: %s: url */
@@ -181,7 +187,7 @@ class GeoDir_Auth {
 			}
 		}
 
-		$callback_url = $this->get_formatted_url( $_REQUEST['callback_url'] );
+		$callback_url = $this->get_formatted_url( $data['callback_url'] );
 
 		if ( 0 !== stripos( $callback_url, 'https://' ) ) {
 			throw new Exception( __( 'The callback_url needs to be over SSL', 'geodirectory' ) );
@@ -213,7 +219,7 @@ class GeoDir_Auth {
 		$user = wp_get_current_user();
 
 		// Created API keys.
-		$permissions     = ( in_array( $scope, array( 'read', 'write', 'read_write' ) ) ) ? sanitize_text_field( $scope ) : 'read';
+		$permissions     = ( in_array( $scope, array( 'read', 'write', 'read_write' ), true ) ) ? sanitize_text_field( $scope ) : 'read';
 		$consumer_key    = 'ck_' . geodir_rand_hash();
 		$consumer_secret = 'cs_' . geodir_rand_hash();
 
@@ -259,9 +265,9 @@ class GeoDir_Auth {
 	 */
 	protected function post_consumer_data( $consumer_data, $url ) {
 		$params = array(
-			'body'      => json_encode( $consumer_data ),
-			'timeout'   => 60,
-			'headers'   => array(
+			'body'    => wp_json_encode( $consumer_data ),
+			'timeout' => 60,
+			'headers' => array(
 				'Content-Type' => 'application/json;charset=' . get_bloginfo( 'charset' ),
 			),
 		);
@@ -270,7 +276,7 @@ class GeoDir_Auth {
 
 		if ( is_wp_error( $response ) ) {
 			throw new Exception( $response->get_error_message() );
-		} elseif ( 200 != $response['response']['code'] ) {
+		} elseif ( 200 !== intval( $response['response']['code'] ) ) {
 			throw new Exception( __( 'An error occurred in the request and at the time were unable to send the consumer data', 'geodirectory' ) );
 		}
 
@@ -286,11 +292,11 @@ class GeoDir_Auth {
 		global $wp;
 
 		if ( ! empty( $_GET['geodir-auth-version'] ) ) {
-			$wp->query_vars['geodir-auth-version'] = $_GET['geodir-auth-version'];
+			$wp->query_vars['geodir-auth-version'] = geodir_clean( wp_unslash( $_GET['geodir-auth-version'] ) );
 		}
 
 		if ( ! empty( $_GET['geodir-auth-route'] ) ) {
-			$wp->query_vars['geodir-auth-route'] = $_GET['geodir-auth-route'];
+			$wp->query_vars['geodir-auth-route'] = geodir_clean( wp_unslash( $_GET['geodir-auth-route'] ) );
 		}
 
 		// geodir-auth endpoint requests
@@ -323,11 +329,20 @@ class GeoDir_Auth {
 
 			// Login endpoint
 			if ( 'login' == $route && ! is_user_logged_in() ) {
-				geodir_get_template( 'auth/form-login.php', array(
-					'app_name'     => geodir_clean( $data['app_name'] ),
-					'return_url'   => add_query_arg( array( 'success' => 0, 'user_id' => geodir_clean( $data['user_id'] ) ), $this->get_formatted_url( $data['return_url'] ) ),
-					'redirect_url' => $this->build_url( $data, 'authorize' ),
-				) );
+				geodir_get_template(
+					'auth/form-login.php',
+					array(
+						'app_name'     => geodir_clean( $data['app_name'] ),
+						'return_url'   => add_query_arg(
+							array(
+								'success' => 0,
+								'user_id' => geodir_clean( $data['user_id'] )
+							),
+							$this->get_formatted_url( $data['return_url'] )
+						),
+						'redirect_url' => $this->build_url( $data, 'authorize' ),
+					)
+				);
 
 				exit;
 
@@ -343,20 +358,30 @@ class GeoDir_Auth {
 
 			// Authorize endpoint
 			} elseif ( 'authorize' == $route && current_user_can( 'manage_options' ) ) { // @todo manage_options
-				geodir_get_template( 'auth/form-grant-access.php', array(
-					'app_name'    => geodir_clean( $data['app_name'] ),
-					'return_url'  => add_query_arg( array( 'success' => 0, 'user_id' => geodir_clean( $data['user_id'] ) ), $this->get_formatted_url( $data['return_url'] ) ),
-					'scope'       => $this->get_i18n_scope( geodir_clean( $data['scope'] ) ),
-					'permissions' => $this->get_permissions_in_scope( geodir_clean( $data['scope'] ) ),
-					'granted_url' => wp_nonce_url( $this->build_url( $data, 'access_granted' ), 'geodir_auth_grant_access', 'geodir_auth_nonce' ),
-					'logout_url'  => wp_logout_url( $this->build_url( $data, 'login' ) ),
-					'user'        => wp_get_current_user(),
-				) );
+				geodir_get_template(
+					'auth/form-grant-access.php',
+					array(
+						'app_name'     => geodir_clean( $data['app_name'] ),
+						'callback_url' => $this->get_formatted_url( $data['callback_url'] ),
+						'return_url'   => add_query_arg(
+							array(
+								'success' => 0,
+								'user_id' => geodir_clean( $data['user_id'] )
+							),
+							$this->get_formatted_url( $data['return_url'] )
+						),
+						'scope'        => $this->get_i18n_scope( geodir_clean( $data['scope'] ) ),
+						'permissions'  => $this->get_permissions_in_scope( geodir_clean( $data['scope'] ) ),
+						'granted_url'  => wp_nonce_url( $this->build_url( $data, 'access_granted' ), 'geodir_auth_grant_access', 'geodir_auth_nonce' ),
+						'logout_url'   => wp_logout_url( $this->build_url( $data, 'login' ) ),
+						'user'         => wp_get_current_user(),
+					)
+				);
 				exit;
 
 			// Granted access endpoint
 			} elseif ( 'access_granted' == $route && current_user_can( 'manage_options' ) ) { // @todo manage_options
-				if ( ! isset( $_GET['geodir_auth_nonce'] ) || ! wp_verify_nonce( $_GET['geodir_auth_nonce'], 'geodir_auth_grant_access' ) ) {
+				if ( ! isset( $_GET['geodir_auth_nonce'] ) || ! wp_verify_nonce( geodir_clean( wp_unslash( $_GET['geodir_auth_nonce'] ) ), 'geodir_auth_grant_access' ) ) {
 					throw new Exception( __( 'Invalid nonce verification', 'geodirectory' ) );
 				}
 
@@ -374,7 +399,7 @@ class GeoDir_Auth {
 			$this->maybe_delete_key( $consumer_data );
 
 			/* translators: %s: error message */
-			wp_die( sprintf( __( 'Error: %s.', 'geodirectory' ), $e->getMessage() ), __( 'Access denied', 'geodirectory' ), array( 'response' => 401 ) );
+			wp_die( sprintf( esc_html__( 'Error: %s.', 'geodirectory' ), esc_html( $e->getMessage() ) ), esc_html__( 'Access denied', 'geodirectory' ), array( 'response' => 401 ) );
 		}
 	}
 
@@ -400,20 +425,20 @@ class GeoDir_Auth {
 	 */
 	public static function process_login() {
 		// The global form-login.php template used `_wpnonce` in template versions < 3.3.0.
-		$nonce_value = isset( $_POST['_wpnonce'] ) ? $_POST['_wpnonce'] : '';
-		$nonce_value = isset( $_POST['geodir-auth-login-nonce'] ) ? $_POST['geodir-auth-login-nonce'] : $nonce_value;
+		$nonce_value = isset( $_POST['_wpnonce'] ) ? geodir_clean( wp_unslash( $_POST['_wpnonce'] ) ) : '';
+		$nonce_value = isset( $_POST['geodir-auth-login-nonce'] ) ? geodir_clean( wp_unslash( $_POST['geodir-auth-login-nonce'] ) ) : $nonce_value;
 
 		if ( ! empty( $_POST['login'] ) && wp_verify_nonce( $nonce_value, 'geodir-auth-login' ) ) {
 
 			try {
 				$creds = array(
-					'user_login'    => trim( $_POST['username'] ),
-					'user_password' => $_POST['password'],
+					'user_login'    => geodir_clean( wp_unslash( trim( $_POST['username'] ) ) ),
+					'user_password' => geodir_clean( wp_unslash( $_POST['password'] ) ),
 					'remember'      => isset( $_POST['rememberme'] ),
 				);
 
 				$validation_error = new WP_Error();
-				$validation_error = apply_filters( 'geodir_process_login_errors', $validation_error, $_POST['username'], $_POST['password'] );
+				$validation_error = apply_filters( 'geodir_process_login_errors', $validation_error, $creds['user_login'], $creds['user_password'] );
 
 				if ( $validation_error->get_error_code() ) {
 					throw new Exception( '<strong>' . __( 'Error:', 'geodirectory' ) . '</strong> ' . $validation_error->get_error_message() );
@@ -442,7 +467,7 @@ class GeoDir_Auth {
 				} else {
 
 					if ( ! empty( $_POST['redirect'] ) ) {
-						$redirect = $_POST['redirect'];
+						$redirect = wp_unslash( $_POST['redirect'] );
 					} elseif ( wp_get_raw_referer() ) {
 						$redirect = wp_get_raw_referer();
 					} else {
