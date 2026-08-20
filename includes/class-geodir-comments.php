@@ -1227,36 +1227,42 @@ class GeoDir_Comments {
 
 				if ( empty( $user_id ) ) {
 					$commenter = wp_get_current_commenter();
+
 					if ( ! empty( $commenter ) && is_array( $commenter ) && ! empty( $commenter['comment_author_email'] ) ) {
-						$author_email = $commenter['comment_author_email'];
+						$author_email = sanitize_email( $commenter['comment_author_email'] );
 					} else {
-						$author_email = ( ! empty( $_POST['email'] ) ) ? sanitize_email( $_POST['email'] ) : '';
+						$author_email = ! empty( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 					}
 				}
 			}
 		}
 
 		if ( empty( $user_id ) && empty( $author_email ) ) {
-			return $count = 0;
+			return $count;
 		}
 
-		$where = "AND cmt.comment_approved = '1'";
+		$args   = array();
+
+		$where  = "r.post_id = %d AND cmt.comment_approved = '1'";
+		$args[] = $post_id;
 
 		if ( ! geodir_cpt_has_rating_disabled( get_post_type( $post_id ) ) ) {
-			$where .= ' AND r.rating > 0';
+			$where .= " AND r.rating > 0";
 		}
 
 		if ( ! empty( $user_id ) ) {
-			$where .= ' AND cmt.user_id = ' . (int) $user_id;
+			$where .= " AND cmt.user_id = %d";
+			$args[] = $user_id;
 		}
 
 		if ( ! empty( $author_email ) ) {
-			$where .= " AND cmt.comment_author_email = '" . $author_email . "'";
+			$where .= " AND cmt.comment_author_email = %s";
+			$args[] = $author_email;
 		}
 
-		$sql = $wpdb->prepare( 'SELECT COUNT(*) FROM ' . GEODIR_REVIEW_TABLE . " AS r JOIN {$wpdb->comments} AS cmt ON cmt.comment_ID = r.comment_id WHERE r.post_id = %d {$where}", array( $post_id ) );
+		$sql   = $wpdb->prepare( "SELECT COUNT(*) FROM `" . GEODIR_REVIEW_TABLE . "` AS r JOIN `{$wpdb->comments}` AS cmt ON cmt.comment_ID = r.comment_id WHERE {$where}", $args );
 
-		$sql = apply_filters( 'geodir_count_user_post_reviews_sql', $sql, $post_id, $user_id, $author_email );
+		$sql   = apply_filters( 'geodir_count_user_post_reviews_sql', $sql, $post_id, $user_id, $author_email );
 
 		$count = (int) $wpdb->get_var( $sql );
 
