@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.174\n"
+"Project-Id-Version: GeoDirectory 2.8.175\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-18 21:18+0530\n"
-"PO-Revision-Date: 2026-08-18 21:18+0530\n"
+"POT-Creation-Date: 2026-08-20 14:32+0530\n"
+"PO-Revision-Date: 2026-08-20 14:32+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -11060,7 +11060,7 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-comments.php:1291
+#: includes/class-geodir-comments.php:1297
 #, php-format
 msgid "%d review"
 msgid_plural "%d reviews"
