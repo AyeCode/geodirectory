@@ -231,7 +231,7 @@ See these tutorials to see how you can build:
 The same templates are available for the Kadence Theme with Gutenberg and the Kadence Block Plugin. 
 
 == Security Reporting ==
-If you discover a vulnerability or any other security-related issue in GeoDirectory, please report it privately to info@wpgeodirectory.com or contact@wpgeodirectory.com so it reaches the appropriate team members.
+If you discover a vulnerability or any other security-related issue in GeoDirectory, please report it privately to info[at]wpgeodirectory.com or contact[at]wpgeodirectory.com so it reaches the appropriate team members.
 
 == Installation ==
 
@@ -310,7 +310,7 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 = How do I report a security vulnerability? =
 
-If you discover a vulnerability or other security-related issue in GeoDirectory, please email info@wpgeodirectory.com or contact@wpgeodirectory.com. This ensures your report reaches the appropriate team members as quickly as possible.
+If you discover a vulnerability or other security-related issue in GeoDirectory, please email info[at]wpgeodirectory.com or contact[at]wpgeodirectory.com. This ensures your report reaches the appropriate team members as quickly as possible.
 
 Please include as much relevant information as possible and avoid publicly disclosing the issue until our team has had a reasonable opportunity to investigate and fix it.
 
