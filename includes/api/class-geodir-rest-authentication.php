@@ -51,17 +51,22 @@ class GeoDir_REST_Authentication {
 	 * @return bool
 	 */
 	protected function is_request_to_rest_api() {
-		if ( empty( $_SERVER['REQUEST_URI'] ) ) {
+		/*
+		 * Match against the requested route, never the raw REQUEST_URI. REQUEST_URI
+		 * contains the query string, so matching it would let an API key holder
+		 * authenticate against any REST route by appending an ignored parameter.
+		 */
+		$route = geodir_get_rest_route();
+
+		if ( $route === '' ) {
 			return false;
 		}
 
-		$rest_prefix = trailingslashit( rest_get_url_prefix() );
-
 		// Check if our endpoint.
-		$gd = ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix . 'geodir/' ) );
+		$gd = ( strpos( $route, '/' . GEODIR_REST_SLUG . '/' ) === 0 );
 
 		// Allow third party plugins use our authentication methods.
-		$third_party = ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix . 'geodir-' ) );
+		$third_party = ( strpos( $route, '/' . GEODIR_REST_SLUG . '-' ) === 0 );
 
 		return apply_filters( 'geodir_rest_is_request_to_rest_api', $gd || $third_party );
 	}

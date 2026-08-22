@@ -134,7 +134,7 @@ class GeoDir_API {
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-authentication.php' );
 
 		// Don't load on markers request to speedup.
-		if ( ! geodir_has_request_uri( '/wp-json/geodir/v2/markers' ) ) {
+		if ( ! geodir_is_rest_markers_request() ) {
 			// Abstract controllers.
 			include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-controller.php' );
 			include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-terms-controller.php' );
@@ -156,7 +156,7 @@ class GeoDir_API {
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-markers-controller.php' );
 
 		// Load show/hide widget on block widgets page.
-		if ( ! empty( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], '/widget-types/' ) !== false ) {
+		if ( geodir_is_rest_route( '/wp/v2/widget-types' ) ) {
 			GeoDir_Admin_Widgets::init();
 		}
 	}
@@ -268,7 +268,7 @@ class GeoDir_API {
 					// Use the GD controller if its a GD API cal @todo test if this breaks anything
 					// maybe force enable block editor for a CPT
 					$force_block_editor = apply_filters('geodir_force_block_editor', false, $post_type );
-					if ( !$force_block_editor || strpos( $_SERVER['REQUEST_URI'], '/geodir/' ) !== false ) {
+					if ( ! $force_block_editor || geodir_is_rest_route( '/' . GEODIR_REST_SLUG ) ) {
 						$wp_post_types[ $post_type ]->rest_controller_class = 'GeoDir_REST_Posts_Controller';
 					}
 
@@ -579,7 +579,7 @@ class GeoDir_API {
 	 */
 	public static function rest_cookie_check_errors( $errors ) {
 		// Check basic validation.
-		if ( empty( $_REQUEST['_wpnonce'] ) || empty( $_SERVER['REQUEST_URI'] ) || strpos( $_SERVER['REQUEST_URI'], '/markers/' ) === false || strpos( $_SERVER['REQUEST_URI'], '/geodir/' ) === false || ! is_wp_error( $errors ) ) {
+		if ( empty( $_REQUEST['_wpnonce'] ) || ! is_wp_error( $errors ) ) {
 			return $errors;
 		}
 
@@ -588,26 +588,31 @@ class GeoDir_API {
 			return $errors;
 		}
 
-		// Match against the PATH only, never the raw REQUEST_URI.
-		$request_path = wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
-
-		if ( empty( $request_path ) ) {
+		/*
+		 * Match against the route WordPress will dispatch, never the raw REQUEST_URI.
+		 * REQUEST_URI contains the query string, so matching it allows the check to be
+		 * spoofed by appending ignored parameters to an unrelated REST route.
+		 */
+		if ( ! geodir_is_rest_markers_request() ) {
 			return $errors;
 		}
 
-		$rest_prefix      = trailingslashit( rest_get_url_prefix() ); // Usually 'wp-json/'.
-		$namespace        = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION; // Usually 'geodir/v2'.
-		$is_markers_route = (bool) preg_match( '#/' . preg_quote( $rest_prefix, '#' ) . $namespace. '/markers/#', $request_path );
-
-		// Return if not a markers route.
-		if ( ! $is_markers_route ) {
+		// The markers routes are read only, never let a write request through.
+		if ( ! in_array( geodir_get_rest_request_method(), array( 'GET', 'HEAD' ), true ) ) {
 			return $errors;
 		}
 
+		/*
+		 * Never bypass the nonce check for a logged in user. Doing so authenticates the
+		 * whole request from the login cookie alone, which removes CSRF protection.
+		 * The markers nonce only needs relaxing for cached pages served to logged out
+		 * visitors, where the nonce can't be generated per user.
+		 */
 		if ( is_user_logged_in() ) {
-			// Logged in user.
-			return true;
-		} elseif ( geodir_create_nonce( 'wp_rest' ) == sanitize_text_field( $_REQUEST['_wpnonce'] ) ) {
+			return $errors;
+		}
+
+		if ( hash_equals( (string) geodir_create_nonce( 'wp_rest' ), (string) sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ) ) ) {
 			// Nonce validated.
 			return true;
 		} else {

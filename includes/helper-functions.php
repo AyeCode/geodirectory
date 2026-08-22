@@ -2014,6 +2014,147 @@ function geodir_has_request_uri( $match ) {
 }
 
 /**
+ * Get the REST API route requested by the current request.
+ *
+ * Never matches against the raw request URI. REQUEST_URI includes the query string,
+ * which is fully attacker controlled, so any substring test against it can be spoofed
+ * by appending an ignored query parameter to an unrelated route.
+ *
+ * Mirrors rest_api_loaded() so the value returned is the route WordPress will actually
+ * dispatch. Falls back to parsing the request path when called before parse_request().
+ *
+ * @since 2.8.177
+ *
+ * @return string Route with a leading slash and no trailing slash, or empty string when
+ *                the request is not a REST API request.
+ */
+function geodir_get_rest_route() {
+	global $wp;
+
+	// Set by parse_request(): the route WordPress will actually dispatch.
+	if ( ! empty( $wp ) && isset( $wp->query_vars['rest_route'] ) && is_string( $wp->query_vars['rest_route'] ) ) {
+		return geodir_normalize_rest_route( $wp->query_vars['rest_route'] );
+	}
+
+	// Called before parse_request(). A REST request never runs through the admin.
+	if ( is_admin() ) {
+		return '';
+	}
+
+	$route = '';
+
+	// Pretty permalinks: read the route from the URI path, never from the query string.
+	if ( ! empty( $_SERVER['REQUEST_URI'] ) ) {
+		$path   = (string) wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH );
+		$prefix = '/' . trim( rest_get_url_prefix(), '/' ) . '/';
+
+		// Anchor on the install path. Read the home option direct, home_url() is filtered.
+		$home_path = (string) wp_parse_url( (string) get_option( 'home' ), PHP_URL_PATH );
+		$position  = strpos( $path, untrailingslashit( $home_path ) . $prefix );
+
+		if ( $position !== 0 ) {
+			// Fall back to the first prefix segment for installs the home option doesn't cover.
+			$position  = strpos( $path, $prefix );
+			$home_path = '';
+		}
+
+		if ( $position !== false ) {
+			// Keep the prefix trailing slash as the route leading slash.
+			$route = substr( $path, $position + strlen( untrailingslashit( $home_path ) . $prefix ) - 1 );
+		}
+	}
+
+	// Plain permalinks: index.php?rest_route=/namespace/route
+	if ( $route === '' ) {
+		if ( isset( $_POST['rest_route'] ) && is_string( $_POST['rest_route'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$route = wp_unslash( $_POST['rest_route'] ); // phpcs:ignore WordPress.Security.NonceVerification
+		} elseif ( isset( $_GET['rest_route'] ) && is_string( $_GET['rest_route'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$route = wp_unslash( $_GET['rest_route'] ); // phpcs:ignore WordPress.Security.NonceVerification
+		}
+	}
+
+	return geodir_normalize_rest_route( $route );
+}
+
+/**
+ * Normalize a REST API route for comparison.
+ *
+ * @since 2.8.177
+ *
+ * @param string $route Route to normalize.
+ * @return string Route with a leading slash and no trailing slash, or empty string.
+ */
+function geodir_normalize_rest_route( $route ) {
+	if ( ! is_string( $route ) || $route === '' ) {
+		return '';
+	}
+
+	return '/' . ltrim( untrailingslashit( $route ), '/' );
+}
+
+/**
+ * Check the current request is for the given REST API route.
+ *
+ * @since 2.8.177
+ *
+ * @param string $route Route to match, ex: /geodir/v2/markers
+ * @param bool   $exact Optional. True to require an exact match, false to also match sub routes. Default false.
+ * @return bool True when the current request matches else false.
+ */
+function geodir_is_rest_route( $route, $exact = false ) {
+	if ( empty( $route ) || ! is_string( $route ) ) {
+		return false;
+	}
+
+	$current = geodir_get_rest_route();
+
+	if ( $current === '' ) {
+		return false;
+	}
+
+	$route = geodir_normalize_rest_route( $route );
+
+	if ( $current === $route ) {
+		return true;
+	}
+
+	return ! $exact && strpos( $current, $route . '/' ) === 0;
+}
+
+/**
+ * Check the current request is for the map markers REST API route.
+ *
+ * @since 2.8.177
+ *
+ * @return bool True when a markers request else false.
+ */
+function geodir_is_rest_markers_request() {
+	return geodir_is_rest_route( '/' . GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION . '/markers' );
+}
+
+/**
+ * Get the HTTP method the REST API server will use for the current request.
+ *
+ * Takes the $_GET['_method'] and X-HTTP-Method-Override overrides honoured by
+ * WP_REST_Server::serve_request() into account.
+ *
+ * @since 2.8.177
+ *
+ * @return string Uppercase HTTP method.
+ */
+function geodir_get_rest_request_method() {
+	if ( ! empty( $_GET['_method'] ) && is_string( $_GET['_method'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		$method = wp_unslash( $_GET['_method'] ); // phpcs:ignore WordPress.Security.NonceVerification
+	} elseif ( ! empty( $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] ) && is_string( $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] ) ) {
+		$method = wp_unslash( $_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] );
+	} else {
+		$method = ! empty( $_SERVER['REQUEST_METHOD'] ) && is_string( $_SERVER['REQUEST_METHOD'] ) ? wp_unslash( $_SERVER['REQUEST_METHOD'] ) : 'GET';
+	}
+
+	return strtoupper( preg_replace( '/[^a-zA-Z]/', '', $method ) );
+}
+
+/**
  * Parse the video data like id & provider from url.
  *
  * @since 2.2.13
@@ -2186,7 +2327,7 @@ function geodir_is_safe_host( $url ) {
 
 		// Hard-blocked internal system hostnames.
 		$forbidden_hosts = array( 'localhost', 'localhost.localdomain', 'host.docker.internal' );
-		
+
 		// Resolve the target domain name to its actual IP address.
 		$target_ip    = gethostbyname( $target_host );
 		$is_public_ip = true;
