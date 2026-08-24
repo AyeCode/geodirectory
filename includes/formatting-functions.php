@@ -842,39 +842,82 @@ function geodir_minify_js( $script ) {
 }
 
 /**
- * Strips JavaScript event handlers from HTML.
+ * Sanitizes the HTML using an allow list to render in data attributes.
  *
  * @since 2.8.168
  *
- * @param string $content Input string containing HTML.
- * @return string Filtered HTML.
+ * @param string $content Raw HTML string.
+ * @param array  $args Optional arguements.
+ * @return string Sanitized HTML, still with raw quotes — esc_attr() it next.
  */
-function geodir_esc_js_attrs( $content ) {
+function geodir_esc_js_attrs( $content, $args = array() ) {
 	if ( empty( $content ) || empty( trim( $content ) ) ) {
 		return $content;
 	}
 
-	// Remove raw: <script...>...</script>
-	$content = preg_replace( '/<script\b[^>]*>(.*?)<\/script>/is', '', $content );
+	$orig_content = $content;
 
-	// Remove encoded: &lt;script...&gt;...&lt;/script&gt;
-	$content = preg_replace( '/&lt;script\b[^&]*&gt;(.*?)&lt;\/script&gt;/is', '', $content );
+	// Safely unmask encoded angle brackets.
+	if ( strpos( $content, "&" ) !== false ) {
+		$content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
+	}
 
-	// Target Raw HTML tags
-	$content = preg_replace_callback( '/<[a-z1-6]+\s+[^>]*>/i', function( $matches ) {
-		$tag = $matches[0];
-		$tag = preg_replace( '/\s+on[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $tag );
-		$tag = preg_replace( '/\s+[a-z\-]+\s*=\s*("javascript:[^"]*"|\'javascript:[^\']*\'|javascript:[^\s>]+)/i', '', $tag );
-		return $tag;
-	}, $content );
+	$allowed_html = array(
+		'div' => array(
+			'class'             => true,
+			'style'             => true,
+			'role'              => true,
+			'id'                => true,
+			'data-bs-container' => true,
+			'data-argument'     => true
+		),
+		'span' => array(
+			'class' => true,
+			'style' => true,
+			'id'    => true
+		),
+		'label' => array(
+			'class' => true,
+			'for'   => true,
+			'title' => true,
+			'style' => true
+		),
+		'input' => array(
+			'class'        => true,
+			'type'         => true,
+			'name'         => true,
+			'id'           => true,
+			'value'        => true,
+			'checked'      => true,
+			'autocomplete' => true,
+			'min'          => true,
+			'max'          => true,
+			'step'         => true,
+			'lang'         => true,
+			'disabled'     => true,
+			'readonly'     => true,
+			'placeholder'  => true
+		),
+		'b'      => array(),
+		'strong' => array(),
+		'i'      => array(),
+		'em'     => array(),
+		'br'     => array(),
+		'a'      => array( 'href' => true, 'title' => true, 'target' => true, 'rel' => true ),
+		'img'    => array( 'src' => true, 'alt' => true, 'width' => true, 'height' => true )
+	);
 
-	// Target Encoded HTML tags
-	$content = preg_replace_callback( '/&lt;[a-z1-6]+\s+[^&]*(?:&gt;)?/i', function( $matches ) {
-		$tag = $matches[0];
-		$tag = preg_replace( '/\s+on[a-z]+\s*=\s*("&quot;[^&]*&quot;|&#039;[^&]*&#039;|[^\s&>]+)/i', '', $tag );
-		$tag = preg_replace( '/\s+[a-z\-]+\s*=\s*("&quot;javascript:[^&]*&quot;|&#039;javascript:[^&]*&#039;|javascript:[^\s&>]+)/i', '', $tag );
-		return $tag;
-	}, $content );
+	/**
+	 * Filter the allowed HTML for geodir_esc_js_attrs().
+	 *
+	 * @since 2.8.178
+	 *
+	 * @param string $content Raw HTML string.
+	 * @param string $orig_content HTML string after decode.
+	 * @param array  $args Optional arguements.
+	 * @param array $allowed_html Allowed attributes in wp_kses().
+	 */
+	$allowed_html = apply_filters( 'geodir_esc_js_attrs_allowed_html', $allowed_html, $content, $orig_content, $args );
 
-	return $content;
+	return wp_kses( $content, $allowed_html );
 }
