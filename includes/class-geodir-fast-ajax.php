@@ -233,13 +233,10 @@ class GeoDir_Fast_AJAX {
 	}
 
 	public static function is_rest_request() {
-		if ( empty( $_SERVER['REQUEST_URI'] ) ) {
-			return false;
-		}
+		// Match the requested route, never the raw REQUEST_URI which includes the query string.
+		$route = geodir_get_rest_route();
 
-		$rest_prefix = trailingslashit( rest_get_url_prefix() );
-
-		return ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix . 'geodir/v' ) );
+		return ( $route !== '' && strpos( $route, '/' . GEODIR_REST_SLUG . '/v' ) === 0 );
 	}
 }
 
