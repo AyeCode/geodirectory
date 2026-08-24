@@ -219,6 +219,10 @@ class GeoDir_API {
 		}
 
 		foreach ( $controllers as $controller ) {
+			if ( ! class_exists( $controller, false ) ) {
+				continue;
+			}
+
 			$obj_controller = new $controller();
 			$obj_controller->register_routes();
 
