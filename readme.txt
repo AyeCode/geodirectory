@@ -230,8 +230,8 @@ See these tutorials to see how you can build:
 
 The same templates are available for the Kadence Theme with Gutenberg and the Kadence Block Plugin. 
 
-== Security Reporting ==
-If you discover a vulnerability or any other security-related issue in GeoDirectory, please report it privately to info[at]wpgeodirectory.com or contact[at]wpgeodirectory.com so it reaches the appropriate team members.
+== Security ==
+To report a security vulnerability, please review our [vulnerability disclosure policy](https://ayecode.com/vulnerability-disclosure-policy/)
 
 == Installation ==
 
