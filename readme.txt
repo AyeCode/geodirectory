@@ -231,7 +231,7 @@ See these tutorials to see how you can build:
 The same templates are available for the Kadence Theme with Gutenberg and the Kadence Block Plugin. 
 
 == Security ==
-To report a security vulnerability, please review our [vulnerability disclosure policy](https://ayecode.com/vulnerability-disclosure-policy/)
+To report a security vulnerability, please review our [vulnerability disclosure policy](https://ayecode.io/vulnerability-disclosure-policy/)
 
 == Installation ==
 
