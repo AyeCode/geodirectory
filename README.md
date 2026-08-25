@@ -44,7 +44,7 @@ If you find an issue, let us know [here](https://github.com/AyeCode/geodirectory
 This is a developer's portal for GeoDirectory and should _not_ be used for support. Please visit the [support forums](https://wpgeodirectory.com/support/).
 
 ## Security ##
-To report a security vulnerability, please review our [vulnerability disclosure policy](https://ayecode.com/vulnerability-disclosure-policy/)
+To report a security vulnerability, please review our [vulnerability disclosure policy](https://ayecode.io/vulnerability-disclosure-policy/)
 
 ## Contributions ##
 Anyone is welcome to contribute to GeoDirectory. Please read the [guidelines for contributing](https://github.com/AyeCode/geodirectory/blob/master/CONTRIBUTING.md) to this repository.
