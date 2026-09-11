@@ -702,7 +702,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		return self::render_map( $map_args, $this );
 	}
 
-
 	/**
 	 * Custom Content html.
 	 *
@@ -728,14 +727,15 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		if ( ! empty( $map_options['map_directions'] ) ) {
 			$distance_unit = geodir_get_option( 'search_distance_long' );
 
-			// template output
+			// Template output
 			$template = $design_style ? $design_style . '/map/directions.php' : 'legacy/map/directions.php';
 			$args     = array(
 				'map_options'   => $map_options,
 				'map_canvas'    => $map_canvas,
 				'distance_unit' => $distance_unit,
 			);
-			echo geodir_get_template_html( $template, $args );
+
+			echo geodir_get_template_html( $template, $args ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		if ( ! empty( $map_options['post_type_filter'] ) ) {
@@ -749,7 +749,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				$cat_filter_class = $cpts_on_map > 1 ? ' gd-map-cat-ptypes' : ' gd-map-cat-floor';
 			}
 
-			// template output
+			// Template output
 			$template = $design_style ? $design_style . '/map/filter-tax.php' : 'legacy/map/filter-tax.php';
 			$args     = array(
 				'map_options'      => $map_options,
@@ -757,22 +757,22 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'cat_filter_class' => $cat_filter_class,
 				'map_post_types'   => $map_post_types,
 			);
-			echo geodir_get_template_html( $template, $args );
+
+			echo geodir_get_template_html( $template, $args ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		// old design shows on bottom
 		if ( ! empty( $map_options['post_type_filter'] ) && empty( $design_style ) ) {
 			if ( ! empty( $map_post_types ) && count( array_keys( $map_post_types ) ) > 1 ) {
-
-				// template output
+				// Template output
 				$template = 'legacy/map/filter-cpt.php';
 				$args     = array(
 					'map_options'    => $map_options,
 					'map_canvas'     => $map_canvas,
 					'map_post_types' => $map_post_types,
 				);
-				echo geodir_get_template_html( $template, $args );
 
+				echo geodir_get_template_html( $template, $args ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
 	}
@@ -831,8 +831,11 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 * }
 	 */
 	public static function custom_script( $map_options ) {
-		$map_canvas = $map_options['map_canvas'];
-		$load_terms = ! empty( $map_options['cat_filter'] ) && geodir_lazy_load_map() ? 'true' : 'false';
+		global $geodir_add_inline_script;
+
+		$lazy_load_map  = geodir_lazy_load_map();
+		$map_canvas     = $map_options['map_canvas'];
+		$load_terms     = ! empty( $map_options['cat_filter'] ) && $lazy_load_map ? 'true' : 'false';
 
 		// Base map latitude/longitude/zoom.
 		$base_latitude  = '';
@@ -847,8 +850,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				$base_latitude  = $map_options['lat'];
 				$base_longitude = $map_options['lon'];
 			} elseif ( ! empty( $_REQUEST['sgeo_lat'] ) && ! empty( $_REQUEST['sgeo_lon'] ) ) {
-				$base_latitude  = sanitize_text_field( $_REQUEST['sgeo_lat'] );
-				$base_longitude = sanitize_text_field( $_REQUEST['sgeo_lon'] );
+				$base_latitude  = sanitize_text_field( wp_unslash( $_REQUEST['sgeo_lat'] ) );
+				$base_longitude = sanitize_text_field( wp_unslash( $_REQUEST['sgeo_lon'] ) );
 			} elseif ( ! empty( $map_options['default_lat'] ) && ! empty( $map_options['default_lng'] ) ) {
 				$base_latitude  = $map_options['default_lat'];
 				$base_longitude = $map_options['default_lng'];
@@ -866,12 +869,15 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		}
 		?>
 <style>.geodir_map_container .poi-info-window .full-width{width:180px;position:relative;margin-left:inherit;left:inherit;}.geodir-map-canvas .gm-style img{max-width:none;box-shadow:none!important}.geodir-map-canvas .leaflet-tile-container img{box-shadow:none!important}</style>
+		<?php
+		ob_start();
+		?>
 <script type="text/javascript">
 window.gdBaseLat = <?php echo geodir_sanitize_float( $base_latitude ); ?>;
 window.gdBaseLng = <?php echo geodir_sanitize_float( $base_longitude ); ?>;
 window.gdBaseZoom = <?php echo absint( $base_zoom ); ?>;
-jQuery(function ($) {
-		<?php if ( geodir_lazy_load_map() ) { ?>
+jQuery(function($){
+<?php if ( $lazy_load_map ) { ?>
 	jQuery('#<?php echo $map_canvas; ?>').geodirLoadMap({
 		map_canvas: '<?php echo $map_canvas; ?>',
 		callback: function() {<?php } ?>
@@ -885,42 +891,55 @@ jQuery(function ($) {
 			?>
 			<?php if ( ! empty( $map_options['sticky'] ) ) { ?>
 			geodir_map_sticky(gdMapCanvas);
-			<?php } ?>
-			<?php if ( ! empty( $map_options['map_directions'] ) ) { ?>
+			<?php } if ( ! empty( $map_options['map_directions'] ) ) { ?>
 			geodir_map_directions_init(gdMapCanvas);
-			<?php } ?>
-			<?php
+			<?php }
 			if ( strpos( $map_options['height'], 'vh' ) !== false ) {
 				$height = str_replace( 'vh', '', $map_options['height'] );
-				?>
+			?>
 			var screenH, heightVH, ptypeH = 0;
 			screenH = $(window).height();
-			heightVH = parseFloat('<?php echo $height; ?>');
-			if ($("#" + gdMapCanvas + "_posttype_menu").length) {
-				ptypeH = $("#" + gdMapCanvas + "_posttype_menu").outerHeight();
-			}
+			heightVH = parseFloat('<?php echo (float) $height; ?>');
+			if($("#" + gdMapCanvas + "_posttype_menu").length){ptypeH = $("#" + gdMapCanvas + "_posttype_menu").outerHeight();}
 			$("#sticky_map_" + gdMapCanvas).css("min-height", screenH * (heightVH / 100) + 'px');
 			$("#" + gdMapCanvas + "_wrapper").height(screenH * (heightVH / 100) + 'px');
 			$("#" + gdMapCanvas).height(screenH * (heightVH / 100) + 'px');
 			$("#" + gdMapCanvas + "_loading_div").height(screenH * (heightVH / 100) + 'px');
 			$("#" + gdMapCanvas + "_cat").css("max-height", (screenH * (heightVH / 100)) - ptypeH + 'px');
-				<?php
+			<?php
 			} elseif ( strpos( $map_options['height'], 'px' ) !== false ) {
 				$height = str_replace( 'px', '', $map_options['height'] );
-				?>
+			?>
 			var screenH, heightVH, ptypeH = 0;
 			screenH = $(window).height();
-			heightVH = parseFloat('<?php echo $height; ?>');
-			if ($("#" + gdMapCanvas + "_posttype_menu").length) {
-				ptypeH = $("#" + gdMapCanvas + "_posttype_menu").outerHeight();
-			}
+			heightVH = parseFloat('<?php echo (float) $height; ?>');
+			if($("#" + gdMapCanvas + "_posttype_menu").length){ptypeH = $("#" + gdMapCanvas + "_posttype_menu").outerHeight();}
 			$("#" + gdMapCanvas + "_cat").css("max-height", heightVH - ptypeH + 'px');
-			<?php } ?><?php if ( geodir_lazy_load_map() ) { ?>
+			<?php } if ( $lazy_load_map ) { ?>
 		}
 	});<?php } ?>
 });
 </script>
 		<?php
+		$inline_script = ob_get_clean();
+
+		/**
+		 * Filters the custom inline map script.
+		 *
+		 * @since 2.8.181
+		 *
+		 * @param string $inline_script The inline JavaScript.
+		 * @param array  $map_options   Array of map options.
+		 * @return string The filtered inline script string.
+		 */
+		$inline_script = apply_filters( 'geodir_map_widget_custom_inline_script', geodir_minify_js( $inline_script ), $map_options );
+
+		if ( $geodir_add_inline_script ) {
+			$inline_script = str_replace( array( '<script type="text/javascript">', '</script>' ), '', $inline_script );
+			wp_add_inline_script( $lazy_load_map ? 'geodir-map' : 'geodir-goMap', $inline_script );
+		} else {
+			echo $inline_script; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 	}
 
 	/**
@@ -968,42 +987,43 @@ jQuery(function ($) {
 	 * @return string $output.
 	 */
 	public function post_map( $post, $echo = true ) {
-		if ( is_int( $post ) ) {
-			$post = geodir_get_post_info( $post );
+		if ( is_int( $post ) || is_numeric( $post ) ) {
+			$post = geodir_get_post_info( absint( $post ) );
 		}
+
 		if ( empty( $post->ID ) ) {
 			return false;
 		}
 
 		$args = array(
-			'map_canvas'     => 'gd_post_map_canvas_' . $post->ID,
+			'map_canvas'     => 'gd_post_map_canvas_' . absint( $post->ID ),
 			'map_type'       => 'post',
 			'width'          => '100%',
 			'height'         => 300,
-			'zoom'           => ! empty( $post->mapzoom ) ? $post->mapzoom : 7,
-			'post_id'        => $post->ID,
+			'zoom'           => ! empty( $post->mapzoom ) ? absint( $post->mapzoom ) : 7,
+			'post_id'        => absint( $post->ID ),
 			'post_settings'  => '1',
-			'post_type'      => $post->post_type,
-			'terms'          => array(), // can be string or array
+			'post_type'      => sanitize_key( $post->post_type ),
+			'terms'          => array(),
 			'tick_terms'     => '',
-			'tags'           => array(), // can be string or array
+			'tags'           => array(),
 			'posts'          => array(),
 			'marker_cluster' => false,
-			'map_directions' => true,
+			'map_directions' => true
 		);
+
 		if ( ! empty( $post->mapview ) ) {
-			$args['maptype'] = $post->mapview;
+			$args['maptype'] = esc_html( $post->mapview );
 		}
 
 		$output = self::output( $args );
+
 		if ( $echo ) {
-			echo $output;
+			echo $output; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			return $output;
 		}
 	}
-
-
 
 	/**
 	 * Render map.
@@ -1262,8 +1282,8 @@ jQuery(function ($) {
 			'wrap_class'    => $wrap_class,
 			'extra_attribs' => $map_canvas_attribs,
 		);
-		echo geodir_get_template_html( $template, $args );
 
+		echo geodir_get_template_html( $template, $args ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
