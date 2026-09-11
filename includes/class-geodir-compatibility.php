@@ -2274,6 +2274,11 @@ class GeoDir_Compatibility {
 		if ( function_exists( 'znhg_kallyas_theme_config' ) ) {
 			add_filter( 'znb_edit_url', array( __CLASS__, 'znb_edit_url' ), 9, 1 );
 		}
+
+		// Spectra Blocks compatibility
+		if ( class_exists( 'Spectra_Blocks_Loader', false ) ) {
+			add_filter( 'the_content', array( __CLASS__, 'spectra_the_content' ), 3, 1 );
+		}
 	}
 
 	/**
@@ -4611,6 +4616,36 @@ jQuery(function($){
 				echo '<style id="uagb-style-frontend-' . (int) $page_id . '">' . $stylesheet . '</style>'; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
+	}
+
+	/**
+	 * Set a flag when content contains both Spectra and GeoDirectory map blocks.
+	 *
+	 * @since 2.8.181
+	 *
+	 * @param string $content Content of the current post.
+	 * @return string Unmodified content.
+	 */
+	public static function spectra_the_content( $content ) {
+		global $geodir_add_inline_script;
+
+		if ( ! is_string( $content ) || empty( $content ) ) {
+			return $content;
+		}
+
+		// Check for Spectra blocks.
+		$has_spectra = ( strpos( $content, '<!-- wp:spectra/' ) !== false || strpos( $content, '<!-- wp:spectra-pro/' ) !== false );
+		if ( ! $has_spectra ) {
+			return $content;
+		}
+
+		// Check for GeoDirectory map block or shortcode.
+		$has_map = ( strpos( $content, '<!-- wp:geodirectory/geodir-widget-map' ) !== false || strpos( $content, '[gd_map' ) !== false );
+		if ( $has_map ) {
+			$geodir_add_inline_script = true;
+		}
+
+		return $content;
 	}
 
 	/**

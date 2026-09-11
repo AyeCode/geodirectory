@@ -328,6 +328,9 @@ Please include as much relevant information as possible and avoid publicly discl
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.181 - 2026-09-TBD =
+* GD Map widget doesn't load when used inside Spectra Blocks - COMPATIBILITY
+
 = GeoDirectory v2.8.180 - 2026-09-09 =
 * Widget setting added to customize GD > Post Content title - CHANGED
 * Upgrade AUI 0.2.53 - CHANGED
