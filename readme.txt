@@ -330,6 +330,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.181 - 2026-09-TBD =
 * GD Map widget doesn't load when used inside Spectra Blocks - COMPATIBILITY
+* Division by zero fatal error in reviews rating counts when stored post rating count is stale - FIXED
 
 = GeoDirectory v2.8.180 - 2026-09-09 =
 * Widget setting added to customize GD > Post Content title - CHANGED
