@@ -1358,6 +1358,10 @@ class GeoDir_Comments {
 		$review_total  = geodir_get_review_count_total( $post_id );
 		$rating_counts = self::get_post_review_rating_counts( $post_id, 1 );
 		$rating_count  = self::rating_input_count();
+
+		// The stored post rating count can be stale, so never divide by less than the live ratings total.
+		$ratings_total = ! empty( $rating_counts ) && is_array( $rating_counts ) ? array_sum( array_map( 'absint', $rating_counts ) ) : 0;
+		$review_total  = max( absint( $review_total ), $ratings_total );
 		$row_class     = $rating_count > 5 ? 'row-cols-2' : 'row-cols-1';
 
 		ob_start();
