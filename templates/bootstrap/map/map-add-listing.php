@@ -940,7 +940,7 @@ if ( ! empty( $gd_move_inline_script ) ) { ob_start(); } else { ?>
                 updateMapZoom($.goMap.map.zoom);
             });
 <?php if ( ! empty( $geodir_manual_map ) ) { /* iPhone mobile shows map as a grey background */ ?>
-if(GeodirIsiPhone()){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").height())+1;setTimeout(function(){if(mH>5){$("#<?php echo $prefix . 'map'; ?>").css("height",mH);}google.maps.event.trigger($addressMap,'resize');},1500);}
+if((navigator.userAgent.toLowerCase().indexOf("iphone") > -1) || (navigator.userAgent.toLowerCase().indexOf("ipod") > -1) || (navigator.userAgent.toLowerCase().indexOf("ipad") > -1)){var mH=parseFloat($("#<?php echo $prefix . 'map'; ?>").height())+1;setTimeout(function(){if(mH>5){$("#<?php echo $prefix . 'map'; ?>").css("height",mH);}google.maps.event.trigger($addressMap,'resize');},1500);}
 <?php } ?>
             <?php if ($is_map_restrict) { ?>
             var CITY_ADDRESS = '<?php echo wp_slash($city).','.wp_slash($region).','.wp_slash($country);?>';
