@@ -758,24 +758,97 @@ function geodir_unwptexturize( $text ) {
 }
 
 /**
- * Sanitize float value.
+ * Parses a mixed input value into a safe float.
  *
- * @since 2.2.6
+ * @since 2.8.182
  *
- * @param float Number value.
- * @return float Sanitized number.
+ * @param mixed $value The value to parse.
+ * @return float|null Parsed float value on success, or null on failure/non-finite numbers.
  */
-function geodir_sanitize_float( $number ) {
-	$locale = localeconv();
+function geodir_parse_float( $value ) {
+	if ( is_numeric( $value ) ) {
+		$number = (float) $value;
+	} elseif ( is_string( $value ) ) {
+		$locale        = localeconv();
+		$decimal_point = ! empty( $locale['decimal_point'] ) ? $locale['decimal_point'] : '.';
+		$value         = trim( $value );
+		$value         = rtrim( $value, ',.' );
+		$last_comma    = strrpos( $value, ',' );
+		$last_dot      = strrpos( $value, '.' );
 
-	$number = floatval( $number );
+		if ( false !== $last_comma && false !== $last_dot ) {
+			if ( $last_comma > $last_dot ) {
+				// "1.234,56" -> "1234.56"
+				$value = (float) str_replace( array( '.', ',' ), array( '', '.' ), $value );
+			} else {
+				// "1,234.56" -> "1234.56"
+				$value = (float) str_replace( ',', '', $value );
+			}
+		} elseif ( false !== $last_comma ) {
+			// "12,5" -> "12.5"
+			$value = (float) str_replace( $decimal_point, '.', $value );
+		}
 
-	// Replace comma to decimal for some locale with decimal_point as a comma.
-	if ( ! empty( $locale['decimal_point'] ) ) {
-		$number = str_replace( $locale['decimal_point'], ".", $number );
+		if ( '' === $value || ! is_numeric( $value ) ) {
+			if ( (float) $value > 0 || (float) $value < 0 ) {
+				$number = (float) $value;
+			} else {
+				return null;
+			}
+		}
+
+		$number = (float) $value;
+	} else {
+		return null;
 	}
 
-	return $number;
+	return is_finite( $number ) ? $number : null;
+}
+
+/**
+ * Sanitizes a float value.
+ *
+ * @since 2.2.6
+ * @since 2.8.182 Added $type parameter.
+ *
+ * @param mixed  $value The value to sanitize.
+ * @param string $type  Optional The context. Default empty string.
+ * @return float Sanitized float value.
+ */
+function geodir_sanitize_float( $value, $type = '' ) {
+	if ( $type === 'lat' || $type === 'lng' || $type === 'lon' ) {
+		return geodir_sanitize_latlon( $value, $type );
+	}
+
+	$number = geodir_parse_float( $value );
+
+	return null === $number ? 0.0 : $number;
+}
+
+/**
+ * Sanitizes a geographic coordinate (latitude or longitude).
+ *
+ * @since 2.8.182
+ *
+ * @param mixed      $value   The coordinate value to sanitize.
+ * @param string     $type    Coordinate type: 'lat' for latitude, 'lng' or 'lon' for longitude. Default 'lng'.
+ * @param mixed|null $default Fallback value if parsing fails. Can be a numeric default or null. Default 0.
+ * @return float|null Sanitized coordinate float, or the default value on failure.
+ */
+function geodir_sanitize_latlon( $value, $type = 'lng', $default = 0.0 ) {
+	$number = geodir_parse_float( $value );
+
+	if ( null === $number ) {
+		return $default === null ? null : $default;
+	}
+
+	if ( 'lat' === $type ) {
+		// Restrict latitude between -90 and 90.
+		return max( -90.0, min( 90.0, $number ) );
+	} else {
+		// Restrict longitude between -180 and 180.
+		return max( -180.0, min( 180.0, $number ) );
+	}
 }
 
 /**

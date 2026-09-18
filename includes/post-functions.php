@@ -764,27 +764,34 @@ function geodir_get_pending_statuses( $args = array() ) {
  * @return array Post statuses.
  */
 function geodir_get_post_stati( $context, $args = array() ) {
-	$statuses = array();
-	$publish_statuses = geodir_get_publish_statuses( $args );
+	$statuses         = array();
+	$publish_statuses = (array) geodir_get_publish_statuses( $args );
+	$default_statuses = $publish_statuses;
 
-	switch( $context ) {
+	switch ( $context ) {
 		case 'author-archive':
 		case 'widget-listings-author':
 			$custom_statuses = geodir_register_custom_statuses();
 
-			if ( ! empty( $custom_statuses ) ) {
+			if ( ! empty( $custom_statuses ) && is_array( $custom_statuses ) ) {
 				$publish_statuses = array_merge( $publish_statuses, array_keys( $custom_statuses ) );
 			}
 
 			$statuses = array_merge( $publish_statuses, array( 'pending', 'draft', 'private', 'future' ) );
 			break;
+
+		case 'map':
+		case 'posts-count-live':
 		case 'search':
+		case 'widget-listings':
 			$statuses = $publish_statuses;
 			break;
+
 		case 'single-map':
 		case 'single-map-public':
 			$statuses = array_merge( $publish_statuses, array( 'gd-closed', 'gd-expired' ) );
 			break;
+
 		case 'single-map-author':
 			$statuses            = array_merge( $publish_statuses, array( 'pending', 'draft', 'inherit', 'auto-draft', 'private', 'future' ) );
 			$non_public_statuses = geodir_get_post_stati( 'non-public', $args );
@@ -793,38 +800,44 @@ function geodir_get_post_stati( $context, $args = array() ) {
 				$statuses = array_merge( $statuses, $non_public_statuses );
 			}
 			break;
-		case 'map':
-			$statuses = $publish_statuses;
-			break;
-		case 'non-public':
-			$custom_statuses = geodir_register_custom_statuses();
 
-			foreach ( $custom_statuses as $status => $data ) {
-				if ( isset( $data['public'] ) && $data['public'] === false ) {
-					$statuses[] = $status;
+		case 'non-public':
+			$default_statuses = array( 'pending' );
+			$custom_statuses  = geodir_register_custom_statuses();
+
+			if ( ! empty( $custom_statuses ) && is_array( $custom_statuses ) ) {
+				foreach ( $custom_statuses as $status => $data ) {
+					if ( isset( $data['public'] ) && $data['public'] === false ) {
+						$statuses[] = $status;
+					}
 				}
 			}
 			break;
-		case 'widget-listings':
-			$statuses = $publish_statuses;
 
-			if ( current_user_can( 'manage_options' ) ) {
-				//$statuses[] = 'private'; // i don't see how this is useful on the front end, it really slows the query down for admins doing testing (stiofan)
+		case 'import':
+			$post_type     = ! empty( $args['post_type'] ) ? $args['post_type'] : '';
+			$post_statuses = geodir_get_post_statuses( $post_type );
+			
+			if ( ! empty( $post_statuses ) && is_array( $post_statuses ) ) {
+				$statuses = array_keys( $post_statuses );
 			}
 			break;
-		case 'import':
-			$statuses = array_keys( geodir_get_post_statuses( ( ! empty( $args['post_type'] ) ? $args['post_type'] : '' ) ) );
-			break;
-		case 'posts-count-live':
-			$statuses = $publish_statuses;
-			break;
+
 		case 'posts-count-offline':
-			$statuses = geodir_get_post_stati( 'non-public', $args );
-			$statuses = array_merge( $statuses, array( 'pending', 'draft', 'private', 'future' ) );
+			$default_statuses = array( 'pending' );
+			$statuses         = array( 'pending', 'draft', 'private', 'future' );
+			$_statuses        = geodir_get_post_stati( 'non-public', $args );
+
+			if ( ! empty( $_statuses ) && is_array( $_statuses ) ) {
+				$statuses     = array_merge( $_statuses, $statuses );
+			}
 			break;
+
 		case 'unpublished':
-			$statuses = array( 'pending', 'draft', 'auto-draft', 'trash' );
+			$default_statuses = array( 'pending' );
+			$statuses         = array( 'pending', 'draft', 'auto-draft', 'trash' );
 			break;
+
 		default:
 			$statuses = $publish_statuses;
 			break;
@@ -832,9 +845,11 @@ function geodir_get_post_stati( $context, $args = array() ) {
 
 	$statuses = apply_filters( 'geodir_get_post_stati', $statuses, $context, $args );
 
-	if ( ! empty( $statuses ) ) {
-		$statuses = array_unique( $statuses );
+	if ( empty( $statuses ) || ! is_array( $statuses ) ) {
+		$statuses = (array) $default_statuses;
 	}
+
+	$statuses = array_unique( $statuses );
 
 	return $statuses;
 }
