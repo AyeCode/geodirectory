@@ -57,16 +57,22 @@ function geodir_sanitize_text_field( $value ) {
 		$filtered = wp_pre_kses_less_than( $filtered );
 		// This will strip extra whitespace for us.
 		$filtered = wp_strip_all_tags( $filtered, true );
-	}
-	else {
+	} else {
 		$filtered = trim( preg_replace( '`[\r\n\t ]+`', ' ', $filtered ) );
 	}
 
+	// Escape JS attributes.
+	if ( strpos( $filtered, '&' ) !== false ) {
+		$filtered = geodir_esc_js_attrs( $filtered );
+	}
+
 	$found = false;
+
 	while ( preg_match( '`[^%](%[a-f0-9]{2})`i', $filtered, $match ) ) {
 		$filtered = str_replace( $match[1], '', $filtered );
 		$found    = true;
 	}
+
 	unset( $match );
 
 	if ( $found ) {
@@ -632,6 +638,8 @@ function geodir_keyword_replacements() {
 		","       => ' ',
 		"^"       => ' ',
 		"="       => ' ',
+		"/*"       => ' ',
+		"*/"       => ' ',
 		//'&'       => ' ',
 		//'#'       => ' ',
 		//'$'       => ' ',
@@ -915,82 +923,174 @@ function geodir_minify_js( $script ) {
 }
 
 /**
- * Sanitizes the HTML using an allow list to render in data attributes.
+ * Strip event-handler attributes (onerror, onclick, ...), dangerous URL
+ * schemes in href/src, and a blacklist of dangerous tags from $content,
+ * IN PLACE, without touching anything else in the string.
  *
  * @since 2.8.168
  *
- * @param string $content Raw HTML string.
- * @param array  $args Optional arguements.
- * @return string Sanitized HTML, still with raw quotes — esc_attr() it next.
+ * @param string $content Content to strip.
+ *
+ * @return string Content with dangerous constructs removed.
+ */
+function geodir_esc_js_attrs_strip( $content ) {
+	// An unquoted attribute value / tag body ends at whitespace, a literal
+	// '>', or an entity-encoded '>' (&gt; or its numeric forms) -- matching
+	// only a literal '>' would let content past an entity-encoded '&gt;'
+	// (which has no literal '>' anywhere) get swallowed into the match.
+	$gt = '&gt;|&#0*62;?|&#[xX]0*3[eE];?';
+
+	// Event-handler attributes, quoted or unquoted.
+	$content = preg_replace( '/[\s\/"\']+on[a-z0-9]+\s*=\s*(?:"[^"]*"|\'[^\']*\'|(?:(?!' . $gt . '|>|\s).)*)/i', '', $content );
+
+	// javascript:/data:/vbscript: URLs in href/src, quoted or unquoted.
+	$content = preg_replace( '/\b(href|src)(\s*=\s*)(["\']?)\s*(?:javascript|data|vbscript)\s*:(?:(?!' . $gt . '|>|["\'\s]).)*/i', '$1$2$3', $content );
+
+	// Dangerous tags outright, raw or entity-encoded, opening or closing.
+	// Delimiter is '~' (not '#') because the $gt alternation contains literal '#' characters.
+	$dangerous_tags = array( 'script', 'style', 'iframe', 'object', 'embed', 'svg', 'math', 'link', 'meta', 'base', 'form', 'video', 'audio', 'source', 'template', 'noscript', 'applet', 'frame', 'frameset' );
+	foreach ( $dangerous_tags as $tag ) {
+		$content = preg_replace( '~(?:<|&lt;)\s*/?\s*' . $tag . '\b(?:(?!' . $gt . '|>).)*(?:>|' . $gt . ')~i', '', $content );
+	}
+
+	return $content;
+}
+
+/**
+ * Remove JS-executing attributes/tags from $content while leaving the rest
+ * of the string exactly as given — including its original entity-encoding
+ * (raw "<img>" stays raw, "&lt;img&gt;" stays "&lt;img&gt;"). Only the
+ * dangerous parts (onerror=, javascript: URLs, <script> etc.) are removed.
+ *
+ * @since 2.8.182
+ *
+ * @param string $content The (possibly HTML-entity-encoded) content to sanitize.
+ * @param array  $args    Optional context passed to the allowed_html/protocols filters (fallback path only).
+ *
+ * @return string Sanitized content, same encoding as input unless the fallback path is used.
  */
 function geodir_esc_js_attrs( $content, $args = array() ) {
-	if ( empty( $content ) || empty( trim( $content ) ) ) {
+	$content = is_scalar( $content ) ? (string) $content : '';
+
+	if ( '' === trim( $content ) ) {
+		return $content;
+	}
+
+	// Skip the escaping when not required.
+	if ( strpos( $content, '<' ) === false && strpos( $content, '&' ) === false ) {
 		return $content;
 	}
 
 	$orig_content = $content;
+	$cleaned      = geodir_esc_js_attrs_strip( $content );
 
-	// Safely unmask encoded angle brackets.
-	if ( strpos( $content, "&" ) !== false ) {
-		$content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
+	// Decode the cleaned string to a fixed point and re-check it: if anything
+	// dangerous is still hiding there, it was nested behind extra encoding
+	// layers that the direct pass above couldn't see as plain text.
+	$decoded = $cleaned;
+
+	if ( false !== strpos( $decoded, '&' ) ) {
+		for ( $i = 0; $i < 10; $i++ ) {
+			$next = html_entity_decode( $decoded, ENT_QUOTES, 'UTF-8' );
+			if ( $next === $decoded ) {
+				break;
+			}
+			$decoded = $next;
+		}
 	}
 
-	$allowed_html = array(
-		'div' => array(
-			'class'             => true,
-			'style'             => true,
-			'role'              => true,
-			'id'                => true,
-			'data-bs-container' => true,
-			'data-argument'     => true
-		),
-		'span' => array(
-			'class' => true,
-			'style' => true,
-			'id'    => true
-		),
-		'label' => array(
-			'class' => true,
-			'for'   => true,
-			'title' => true,
-			'style' => true
-		),
-		'input' => array(
-			'class'        => true,
-			'type'         => true,
-			'name'         => true,
-			'id'           => true,
-			'value'        => true,
-			'checked'      => true,
-			'autocomplete' => true,
-			'min'          => true,
-			'max'          => true,
-			'step'         => true,
-			'lang'         => true,
-			'disabled'     => true,
-			'readonly'     => true,
-			'placeholder'  => true
-		),
-		'b'      => array(),
-		'strong' => array(),
-		'i'      => array(),
-		'em'     => array(),
-		'br'     => array(),
-		'a'      => array( 'href' => true, 'title' => true, 'target' => true, 'rel' => true ),
-		'img'    => array( 'src' => true, 'alt' => true, 'width' => true, 'height' => true )
+	if ( geodir_esc_js_attrs_strip( $decoded ) !== $decoded ) {
+		// Nested-encoding evasion detected. Fall back to the strictly safe
+		// default-DENY path: full wp_kses() allowlist, re-encoded for
+		// attribute embedding, instead of the format-preserving result.
+		$allowed_html = array(
+			'div'    => array(
+				'class'             => true,
+				'style'             => true,
+				'role'              => true,
+				'id'                => true,
+				'data-bs-container' => true,
+				'data-argument'     => true,
+			),
+			'span'   => array(
+				'class' => true,
+				'style' => true,
+				'id'    => true,
+			),
+			'label'  => array(
+				'class' => true,
+				'for'   => true,
+				'title' => true,
+				'style' => true,
+			),
+			'input'  => array(
+				'class'        => true,
+				'type'         => true,
+				'name'         => true,
+				'id'           => true,
+				'value'        => true,
+				'checked'      => true,
+				'autocomplete' => true,
+				'min'          => true,
+				'max'          => true,
+				'step'         => true,
+				'lang'         => true,
+				'disabled'     => true,
+				'readonly'     => true,
+				'placeholder'  => true,
+			),
+			'b'      => array(),
+			'strong' => array(),
+			'i'      => array(),
+			'em'     => array(),
+			'br'     => array(),
+			'a'      => array(
+				'href'   => true,
+				'title'  => true,
+				'target' => true,
+				'rel'    => true,
+			),
+			'img'    => array(
+				'src'    => true,
+				'alt'    => true,
+				'width'  => true,
+				'height' => true,
+			),
+		);
+
+		/**
+		 * Filter the allowed HTML for AUI_Component_Helper::esc_js_attrs() fallback path.
+		 *
+		 * @param array  $allowed_html Allowed tags/attributes for wp_kses().
+		 * @param string $decoded      Fully decoded content about to be sanitized.
+		 * @param string $content      Original content before any processing.
+		 * @param array  $args         Optional context.
+		 */
+		$allowed_html = apply_filters( 'geodir_esc_js_attrs_allowed_html', $allowed_html, $decoded, $content, $args, $orig_content );
+
+		$allowed_protocols = apply_filters(
+			'geodir_esc_js_attrs_allowed_protocols',
+			array( 'http', 'https', 'mailto', 'tel' ),
+			$args
+		);
+
+		$safe = wp_kses( geodir_esc_js_attrs_strip( $decoded ), $allowed_html, $allowed_protocols );
+
+		return esc_attr( $safe );
+	}
+
+	// kses-free path cannot ADD attributes, so enforce noopener on
+	// target=_blank links (raw or entity-encoded) to prevent reverse tabnabbing.
+	$cleaned = preg_replace_callback(
+		'#(?:<|&lt;)\s*a\b[^>]*\btarget\s*=\s*(["\'])_blank\1[^>]*(?:>|&gt;)#i',
+		function ( $m ) {
+			if ( false !== stripos( $m[0], 'rel=' ) ) {
+				return $m[0];
+			}
+			return preg_replace( '#(<|&lt;)\s*a\b#i', '$1a rel="noopener noreferrer"', $m[0], 1 );
+		},
+		$cleaned
 	);
 
-	/**
-	 * Filter the allowed HTML for geodir_esc_js_attrs().
-	 *
-	 * @since 2.8.178
-	 *
-	 * @param string $content Raw HTML string.
-	 * @param string $orig_content HTML string after decode.
-	 * @param array  $args Optional arguements.
-	 * @param array $allowed_html Allowed attributes in wp_kses().
-	 */
-	$allowed_html = apply_filters( 'geodir_esc_js_attrs_allowed_html', $allowed_html, $content, $orig_content, $args );
-
-	return wp_kses( $content, $allowed_html );
+	return $cleaned;
 }
