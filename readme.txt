@@ -330,6 +330,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.182 - 2026-09-TBD =
 * Refine geodir_sanitize_float() function - CHANGED
+* Added extra sanitization for text inputs to fix XSS vulnerability - FIXED/SECURITY
 
 = GeoDirectory v2.8.181 - 2026-09-16 =
 * GD Map widget doesn't load when used inside Spectra Blocks - COMPATIBILITY

@@ -1151,16 +1151,22 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$extra_fields = stripslashes_deep( maybe_unserialize( $field['extra_fields'] ) );
 
 					if ( ! empty( $extra_fields ) && isset( $extra_fields['is_price'] ) && $extra_fields['is_price'] ) {
-						if ( ceil( $match_value ) > 0 ) {
+						if ( ceil( (float) $match_value ) > 0 ) {
 							$match_value = geodir_currency_format_number( $match_value, $field );
+						} else {
+							$match_value = '';
 						}
 					} else if ( isset( $field['data_type'] ) && $field['data_type'] == 'INT' ) {
-						if ( ceil( $match_value ) > 0 ) {
+						if ( ceil( (float) $match_value ) > 0 ) {
 							$match_value = geodir_cf_format_number( $match_value, $field );
+						} else {
+							$match_value = '';
 						}
 					} else if ( isset( $field['data_type'] ) && ( $field['data_type'] == 'FLOAT' || $field['data_type'] == 'DECIMAL' ) ) {
-						if ( ceil( $match_value ) > 0 ) {
+						if ( ceil( (float) $match_value ) > 0 ) {
 							$match_value = geodir_cf_format_decimal( $match_value, $field );
+						} else {
+							$match_value = '';
 						}
 					}
 				}
@@ -1212,6 +1218,17 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$badge = __( 'Default Category', 'geodirectory' ); // default_category don't have frontend_title.
 					}
 				}
+
+				/*
+				 * Decode the ADMIN authored badge text here, before any listing value is merged
+				 * into it. Doing it after the merge would also un-escape $match_value, which both
+				 * revives injected markup and stops a listing value that legitimately contains
+				 * "&lt;...&gt;" from rendering as the literal text the author typed.
+				 */
+				if ( ! empty( $badge ) ) {
+					$badge = wp_specialchars_decode( $badge, ENT_QUOTES );
+				}
+
 				if( !empty( $badge ) && $badge = str_replace("%%input%%",$match_value,$badge) ){
 					// will be replace in condition check
 				}
@@ -1359,7 +1376,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
 				}
 
-				$badge = ! empty( $badge ) ? __( wp_specialchars_decode( $badge, ENT_QUOTES ), 'geodirectory' ) : '';
+				$badge = ! empty( $badge ) ? wp_kses_post( __( $badge, 'geodirectory' ) ) : '';
 
 				// title
 				$title = $badge ? $badge : ( ! empty( $field['frontend_title'] ) ? __( $field['frontend_title'], 'geodirectory' ) : '' );
@@ -1505,7 +1522,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$pop_link = true;
 
 						if ( ! empty( $args['popover_title'] ) ) {
-							$btn_args['title'] = ! empty( $args['link'] ) && $args['link'] != '#'  ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . esc_html( $args['popover_title'] ) . "</a>" : esc_html( $args['popover_title'] );
+							$btn_args['title'] = ! empty( $args['link'] ) && $args['link'] != '#'  ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . esc_html( geodir_esc_js_attrs( $args['popover_title'] ) ) . "</a>" : esc_html( geodir_esc_js_attrs( $args['popover_title'] ) );
 						}
 
 						if ( ! empty( $args['popover_text'] ) ) {
@@ -1514,15 +1531,16 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					} else if ( ! empty( $args['tooltip_text'] ) ) {
 						$btn_args['data-' . $bs_prefix . 'toggle'] = "tooltip";
 						$btn_args['data-' . $bs_prefix . 'placement'] = "top";
-						$btn_args['title'] = esc_attr( $args['tooltip_text'] );
+						$btn_args['title'] = esc_attr( geodir_esc_js_attrs( $args['tooltip_text'] ) );
 					}
 
 					// hover content
-					if(!empty($args['hover_content'])){
-						$btn_args['hover_content'] = $args['hover_content'];
+					if ( ! empty( $args['hover_content'] ) ) {
+						$btn_args['hover_content'] = geodir_esc_js_attrs( $args['hover_content'] );
 					}
-					if(!empty($args['hover_icon'])){
-						$btn_args['hover_icon'] = $args['hover_icon'];
+
+					if ( ! empty( $args['hover_icon'] ) ) {
+						$btn_args['hover_icon'] = geodir_esc_js_attrs( $args['hover_icon'] );
 					}
 
 					// style
@@ -1542,7 +1560,6 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$btn_args['new_window'] = true;
 					}
 					if(!empty($args['icon_class'])) { $btn_args['icon'] = $args['icon_class'];}
-
 					$output = '<span class="bsui gd-badge-meta">';
 					if(!empty($args['size'])){$output .= '<span class="'.esc_attr($args['size']).'">';}
 					$output .= aui()->badge( $btn_args );
