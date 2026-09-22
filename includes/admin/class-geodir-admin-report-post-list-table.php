@@ -742,10 +742,10 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 	public function column_post_author( $item ) {
 		$post = get_post( (int) $item->post_id );
 
-		$label = get_the_author_meta( 'display_name', $post->post_author );
+		$label = esc_html( get_the_author_meta( 'display_name', $post->post_author ) );
 
 		if ( current_user_can( 'edit_user', $post->post_author ) ) {
-			$edit_link = get_edit_user_link( $post->post_author );
+			$edit_link = esc_url( get_edit_user_link( $post->post_author ) );
 			$value     = "<strong><a href=\"{$edit_link}\">{$label}</a></strong>";
 		} else {
 			$value = "<strong>{$label}</strong>";
@@ -794,15 +794,15 @@ class GeoDir_Admin_Report_Post_List_Table extends WP_List_Table {
 		$label = esc_html( wp_unslash( $item->user_name ) );
 
 		if ( ! empty( $item->user_id ) && current_user_can( 'edit_user', (int) $item->user_id ) ) {
-			$edit_link = get_edit_user_link( (int) $item->user_id );
+			$edit_link = esc_url( get_edit_user_link( (int) $item->user_id ) );
 			$value     = "<strong><a href=\"{$edit_link}\">{$label}</a></strong><br>";
 		} else {
 			$value = "<strong>{$label}</strong><br>";
 		}
-		$value .= $item->user_email;
+		$value .= esc_html( $item->user_email );
 
 		if ( ! empty( $item->user_email ) ) {
-			$value .= '<br>' . $item->user_ip;
+			$value .= '<br>' . esc_html( $item->user_ip );
 		}
 
 		return $value;

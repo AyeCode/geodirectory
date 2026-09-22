@@ -1502,6 +1502,9 @@ class GeoDir_AJAX {
 	 * @return mixed
 	 */
 	public static function tool_regenerate_thumbnails() {
+		// Security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
@@ -1528,6 +1531,9 @@ class GeoDir_AJAX {
 	 * @return mixed
 	 */
 	public static function regenerate_thumbnails() {
+		// Security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}

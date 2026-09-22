@@ -659,12 +659,12 @@ class GeoDir_Admin_Taxonomies {
     public function save_category_fields( $term_id, $tt_id = '', $taxonomy = '' ) {
         // Category top description.
         if ( isset( $_POST['ct_cat_top_desc'] ) ) {
-            update_term_meta( $term_id, 'ct_cat_top_desc', $_POST['ct_cat_top_desc'] );
+            update_term_meta( $term_id, 'ct_cat_top_desc', self::sanitize_category_description( $_POST['ct_cat_top_desc'] ) );
         }
 
         // Category bottom description.
         if ( isset( $_POST['ct_cat_bottom_desc'] ) ) {
-            update_term_meta( $term_id, 'ct_cat_bottom_desc', $_POST['ct_cat_bottom_desc'] );
+            update_term_meta( $term_id, 'ct_cat_bottom_desc', self::sanitize_category_description( $_POST['ct_cat_bottom_desc'] ) );
         }
 
         // Category listing default image.
@@ -687,7 +687,7 @@ class GeoDir_Admin_Taxonomies {
             if ( !empty( $cat_icon['src'] ) ) {
                 $cat_icon['src'] = geodir_file_relative_url( sanitize_text_field( $cat_icon['src'] ) );
             } elseif(!empty($_POST['ct_cat_font_icon'])) {
-                $cat_icon = $this->generate_cat_icon($_POST['ct_cat_font_icon'],$_POST['ct_cat_color']);
+                $cat_icon = $this->generate_cat_icon( sanitize_text_field( wp_unslash( $_POST['ct_cat_font_icon'] ) ), ( isset( $_POST['ct_cat_color'] ) ? sanitize_hex_color( wp_unslash( $_POST['ct_cat_color'] ) ) : '' ) );
             } else {
                 $cat_icon = array();
             }
@@ -711,6 +711,29 @@ class GeoDir_Admin_Taxonomies {
         }
 
         do_action( 'geodir_term_save_category_fields', $term_id, $tt_id, $taxonomy );
+    }
+
+    /**
+     * Sanitize a category description before it is stored.
+     *
+     * Users without the unfiltered_html capability should not be able to store
+     * arbitrary markup (script/iframe/event handlers) in a category description.
+     *
+     * @since 2.8.183
+     *
+     * @param string $description The raw description.
+     * @return string The sanitized description.
+     */
+    public static function sanitize_category_description( $description ) {
+        if ( ! is_scalar( $description ) ) {
+            return '';
+        }
+
+        if ( current_user_can( 'unfiltered_html' ) ) {
+            return $description;
+        }
+
+        return wp_slash( wp_kses_post( wp_unslash( $description ) ) );
     }
 
     /**

@@ -412,14 +412,28 @@ if (!function_exists('geodir_get_ip')) {
  * @return string The IP address.
  */
 function geodir_get_ip() {
-	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-		//check ip from share internet
-		$ip = $_SERVER['HTTP_CLIENT_IP'];
-	} elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-		//to check ip is pass from proxy
-		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-	} else {
-		$ip = $_SERVER['REMOTE_ADDR'];
+	$ip = ! empty( $_SERVER['REMOTE_ADDR'] ) ? wp_unslash( $_SERVER['REMOTE_ADDR'] ) : '';
+
+	// Proxy headers are client supplied, only use them when they hold a real IP address.
+	$proxy_headers = array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR' );
+
+	foreach ( $proxy_headers as $header ) {
+		if ( empty( $_SERVER[ $header ] ) ) {
+			continue;
+		}
+
+		// A forwarded-for header can hold a comma separated list, the first entry is the client.
+		$forwarded = explode( ',', wp_unslash( $_SERVER[ $header ] ) );
+		$forwarded = trim( $forwarded[0] );
+
+		if ( filter_var( $forwarded, FILTER_VALIDATE_IP ) ) {
+			$ip = $forwarded;
+			break;
+		}
+	}
+
+	if ( ! filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+		$ip = '';
 	}
 
 	/**
@@ -2359,12 +2373,14 @@ function geodir_is_safe_host( $url ) {
  * @return bool True if the current host is a local environment, false otherwise.
  */
 function geodir_is_localhost() {
-	if ( ! isset( $_SERVER['HTTP_HOST'] ) ) {
+	$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+	if ( empty( $site_host ) ) {
 		return false;
 	}
 
 	// Convert to lowercase and strip out port numbers (e.g. "localhost:8080").
-	$host = strtolower( strtok( $_SERVER['HTTP_HOST'], ':' ) );
+	$host = strtolower( strtok( $site_host, ':' ) );
 
 	$localhost_domains = array(
 		'localhost',

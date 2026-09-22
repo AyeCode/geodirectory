@@ -1455,10 +1455,11 @@ function geodir_function_widget_listings_where( $where ) {
 
 			if ( (int) $query_args['favorites_by_user'] > 0 ) {
 				$user_favorites = geodir_get_user_favourites( (int) $query_args['favorites_by_user'] );
-				$user_favorites = ! empty( $user_favorites ) && is_array( $user_favorites ) ? implode( "','", $user_favorites ) : '-1';
+				$user_favorites = ! empty( $user_favorites ) && is_array( $user_favorites ) ? array_filter( array_map( 'absint', $user_favorites ) ) : array();
+				$user_favorites = ! empty( $user_favorites ) ? implode( ",", $user_favorites ) : '-1';
 			}
 
-			$where .= " AND `" . $wpdb->posts . "`.`ID` IN('" . $user_favorites . "')";
+			$where .= " AND `" . $wpdb->posts . "`.`ID` IN(" . $user_favorites . ")";
 		}
 
 		if ( ! empty( $query_args['tax_query'] ) ) {

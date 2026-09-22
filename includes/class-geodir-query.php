@@ -538,10 +538,19 @@ class GeoDir_Query {
 				$where               = '';
 				$better_search_terms = '';
 				$terms_sql           = '';
-				if ( isset( $_REQUEST['stype'] ) ) {
-					$post_types = esc_attr( wp_strip_all_tags( $_REQUEST['stype'] ) );
-				} else {
-					$post_types = 'gd_place';
+				$post_types          = '';
+
+				if ( ! empty( $_REQUEST['stype'] ) ) {
+					$_post_types = sanitize_key( wp_unslash( $_REQUEST['stype'] ) );
+
+					if ( geodir_is_gd_post_type( $_post_types ) ) {
+						$post_types = $_post_types;
+					}
+				}
+
+				if ( empty( $post_types ) ) {
+					$_post_types = geodir_search_default_post_type();
+					$post_types  = geodir_is_gd_post_type( $_post_types ) ? $_post_types : 'gd_place';
 				}
 
 				if ( $s != '' ) {
