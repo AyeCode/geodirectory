@@ -200,6 +200,7 @@ function geodir_bulk_generate_thumbs(total, page, per_page) {
 
     var data = {
         'action': 'geodir_tool_regenerate_thumbnails',
+        'security': geodir_params.basic_nonce,
         'page': page,
         'per_page': per_page
     };
@@ -258,6 +259,7 @@ function geodir_post_generate_thumbs(el) {
 
     var data = {
         'action': 'geodir_regenerate_thumbnails',
+        'security': geodir_params.basic_nonce,
         'post_id': post_id
     };
 

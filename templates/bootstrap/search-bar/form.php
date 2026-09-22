@@ -12,7 +12,7 @@
  *
  * @see        https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
  * @package    GeoDirectory
- * @version    2.8.72
+ * @version    2.8.183
  *
  * @global object $geodirectory GeoDirectory object.
  *
@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
 global $geodirectory, $aui_bs5;
 ?>
 <div class="geodir-search-form-wrapper <?php echo esc_attr( $wrap_class ); ?>">
-	<form class="w-100 d-block <?php echo esc_attr( $form_class ); ?>" data-show="<?php echo esc_attr( $show ); ?>" name="geodir-listing-search" action="<?php echo geodir_search_page_base_url(); ?>" method="get" style="box-sizing:content-box;">
+	<form class="w-100 d-block <?php echo esc_attr( $form_class ); ?>" data-show="<?php echo esc_attr( $show ); ?>" name="geodir-listing-search" action="<?php echo esc_url( geodir_search_page_base_url() ); ?>" method="get" style="box-sizing:content-box;">
 		<input type="hidden" name="geodir_search" value="1" />
 		<?php
 		/**

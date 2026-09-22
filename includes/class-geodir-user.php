@@ -180,7 +180,7 @@ class GeoDir_User {
      *
      * @global object $wpdb WordPress Database object.
 	 *
-	 * @return array $user_listing.
+	 * @return array $cpt_favorites.
 	 */
 	public static function get_post_type_fav_counts( $user_id = 0 ) {
 		global $wpdb;
@@ -188,28 +188,34 @@ class GeoDir_User {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
+
 		if ( ! $user_id ) {
 			return array();
 		}
 
-		$post_types = geodir_fav_allowed_post_types();
-
+		$post_types     = geodir_fav_allowed_post_types();
 		$user_favorites = self::get_user_favs( $user_id );
+		$cpt_favorites  = array();
 
-		$user_listing = array();
 		if ( is_array( $post_types ) && ! empty( $post_types ) && is_array( $user_favorites ) && ! empty( $user_favorites ) ) {
-			$user_favorites = "'" . implode( "','", $user_favorites ) . "'";
+			$user_favorites = array_filter( array_map( 'absint', $user_favorites ) );
 
-			foreach ( $post_types as $ptype ) {
-				$total_posts = $wpdb->get_var( "SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE  post_type='" . $ptype . "' AND post_status = 'publish' AND ID IN (" . $user_favorites . ")" );
+			if ( empty( $user_favorites ) ) {
+				return $cpt_favorites;
+			}
 
-				if ( $total_posts > 0 ) {
-					$user_listing[ $ptype ] = $total_posts;
+			$user_favorites = implode( ",", $user_favorites );
+
+			foreach ( $post_types as $post_type ) {
+				$count = $wpdb->get_var( $wpdb->prepare( "SELECT count( ID ) FROM `" . $wpdb->posts . "` WHERE post_type = %s AND post_status = 'publish' AND ID IN (" . $user_favorites . ")", $post_type ) );
+
+				if ( $count > 0 ) {
+					$cpt_favorites[ $post_type ] = $count;
 				}
 			}
 		}
 
-		return $user_listing;
+		return $cpt_favorites;
 	}
 
 	/**

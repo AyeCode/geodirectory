@@ -2219,6 +2219,11 @@ class GeoDir_Admin_Import_Export {
 		 */
 		$is_custom = apply_filters( 'geodir_media_is_custom_external_image', $is_custom, $url, $post_id, $post_type, $type, $title, $caption );
 
+		// Never fetch a url that resolves to an internal/private address.
+		if ( $is_custom && ! geodir_is_localhost() && ! geodir_is_safe_host( $url ) ) {
+			$is_custom = false;
+		}
+
 		if ( $is_custom ) {
 			$uploads = wp_upload_dir();
 			$temp_file_name = substr( md5( $url ), 0, 12 );

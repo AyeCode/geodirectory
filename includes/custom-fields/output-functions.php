@@ -224,136 +224,149 @@ add_filter( 'geodir_custom_field_output_fieldset','geodir_cf_fieldset', 10, 5 );
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_url($html,$location,$cf,$p='',$output=''){
+function geodir_cf_url( $html, $location, $cf, $p = '', $output = '' ) {
+	// Check we have the post value.
+	if ( is_numeric( $p ) ) {
+		$gd_post = geodir_get_post_info( $p );
+	} else {
+		global $gd_post;
+	}
 
-    // check we have the post value
-    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
-    else{ global $gd_post;}
+	// Block demo content.
+	if ( geodir_is_block_demo() ) {
+		$gd_post->{$cf['htmlvar_name']} = 'https://example.com';
+	}
 
-    // Block demo content
-    if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = 'https://example.com';
-    }
+	if ( ! is_array( $cf ) && $cf != '' ) {
+		$cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
 
-    if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
-        if(!$cf){return NULL;}
-    }
+		if ( ! $cf ) {
+			return null;
+		}
+	}
 
-    $html_var = $cf['htmlvar_name'];
+	$html_var = $cf['htmlvar_name'];
 
-    // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_url_loc_{$location}")){
-        /**
-         * Filter the url html by location.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_output_url_loc_{$location}",$html,$cf,$output);
-    }
+	// Check if there is a location specific filter.
+	if ( has_filter( "geodir_custom_field_output_url_loc_{$location}" ) ) {
+		/**
+		 * Filter the url html by location.
+		 *
+		 * @param string $html   The html to filter.
+		 * @param array  $cf     The custom field array.
+		 * @param string $output The output string that tells us what to output.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_output_url_loc_{$location}", $html, $cf, $output );
+	}
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_url_var_{$html_var}")){
-        /**
-         * Filter the url html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param string $location The location to output the html.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_output_url_var_{$html_var}",$html,$location,$cf,$output);
-    }
+	// Check if there is a custom field specific filter.
+	if ( has_filter( "geodir_custom_field_output_url_var_{$html_var}" ) ) {
+		/**
+		 * Filter the url html by individual custom field.
+		 *
+		 * @param string $html     The html to filter.
+		 * @param string $location The location to output the html.
+		 * @param array  $cf       The custom field array.
+		 * @param string $output   The output string that tells us what to output.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_output_url_var_{$html_var}", $html, $location, $cf, $output );
+	}
 
-    // Check if there is a custom field key specific filter.
-    if(has_filter("geodir_custom_field_output_url_key_{$cf['field_type_key']}")){
-        /**
-         * Filter the url html by field type key.
-         *
-         * @param string $html The html to filter.
-         * @param string $location The location to output the html.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_output_url_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
-    }
+	// Check if there is a custom field key specific filter.
+	if ( has_filter( "geodir_custom_field_output_url_key_{$cf['field_type_key']}" ) ) {
+		/**
+		 * Filter the url html by field type key.
+		 *
+		 * @param string $html     The html to filter.
+		 * @param string $location The location to output the html.
+		 * @param array  $cf       The custom field array.
+		 * @param string $output   The output string that tells us what to output.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_output_url_key_{$cf['field_type_key']}", $html, $location, $cf, $output );
+	}
 
-    // If not html then we run the standard output.
-    if(empty($html)){
+	// If not html then we run the standard output.
+	if ( empty( $html ) ) {
+		if ( $gd_post->{$cf['htmlvar_name']} ) :
+			$design_style = geodir_design_style();
+			$field_icon   = geodir_field_icon_proccess( $cf );
+			$output       = geodir_field_output_process( $output );
 
-        if ($gd_post->{$cf['htmlvar_name']}):
-            $design_style = geodir_design_style();
-            $field_icon = geodir_field_icon_proccess($cf);
-            $output = geodir_field_output_process($output);
-            if (strpos($field_icon, 'http') !== false) {
-                $field_icon_af = '';
-            } elseif ($field_icon == '') {
+			if ( strpos( $field_icon, 'http' ) !== false ) {
+				$field_icon_af = '';
+			} elseif ( $field_icon == '' ) {
+				if ( $cf['name'] == 'facebook' ) {
+					$field_icon_af = $design_style ? '<i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i> ' : '<i class="fab fa-facebook-square" aria-hidden="true"></i>';
+				} elseif ( $cf['name'] == 'twitter' ) {
+					$field_icon_af = $design_style ? '<i class="fab fa-twitter-square fa-fw" aria-hidden="true"></i> ' : '<i class="fab fa-twitter-square" aria-hidden="true"></i>';
+				} else {
+					$field_icon_af = $design_style ? '<i class="fas fa-link fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-link" aria-hidden="true"></i>';
+				}
+			} else {
+				$field_icon_af = $field_icon;
+				$field_icon    = '';
+			}
 
-                if ($cf['name'] == 'facebook') {
-                    $field_icon_af = $design_style ?  '<i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i> ' : '<i class="fab fa-facebook-square" aria-hidden="true"></i>';
-                } elseif ($cf['name'] == 'twitter') {
-                    $field_icon_af = $design_style ? '<i class="fab fa-twitter-square fa-fw" aria-hidden="true"></i> ' : '<i class="fab fa-twitter-square" aria-hidden="true"></i>';
-                } else {
-                    $field_icon_af = $design_style ? '<i class="fas fa-link fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-link" aria-hidden="true"></i>';
-                }
+			$a_url   = geodir_parse_custom_field_url( $gd_post->{$cf['htmlvar_name']} );
+			$website = ! empty( $a_url['url'] ) ? $a_url['url'] : '';
+			$title   = ! empty( $a_url['label'] ) ? $a_url['label'] : $cf['frontend_title'];
 
-            } else {
-                $field_icon_af = $field_icon;
-                $field_icon = '';
-            }
+			if ( ! empty( $cf['default_value'] ) ) {
+				$title = $cf['default_value'];
+			}
 
-            $a_url = geodir_parse_custom_field_url($gd_post->{$cf['htmlvar_name']});
+			$title   = $title != '' ? __( stripslashes( $title ), 'geodirectory' ) : '';
+			$post_id = isset( $gd_post->ID ) ? $gd_post->ID : 0;
 
-            $website = !empty($a_url['url']) ? $a_url['url'] : '';
-            $title = !empty($a_url['label']) ? $a_url['label'] : $cf['frontend_title'];
-            if(!empty($cf['default_value'])){$title = $cf['default_value'];}
-            $title = $title != '' ? __(stripslashes($title), 'geodirectory') : '';
-            $post_id =  isset($gd_post->ID) ? $gd_post->ID : 0;
+			// All search engines that use the nofollow value exclude links that use it from their ranking calculation.
+			$rel = strpos( $website, get_site_url() ) !== false ? '' : 'rel="nofollow"';
 
-            // all search engines that use the nofollow value exclude links that use it from their ranking calculation
-            $rel = strpos($website, get_site_url()) !== false ? '' : 'rel="nofollow"';
+			// The url and its label are user submitted, escape them before they are output.
+			$link_text = apply_filters( 'geodir_custom_field_website_name', esc_html( $title ), $website, $post_id );
+			$value     = '<a href="' . esc_url( $website ) . '" target="_blank" ' . $rel . ' >' . $link_text . '</a>';
 
-            $value = '<a href="' . $website . '" target="_blank" ' . $rel . ' >' . apply_filters( 'geodir_custom_field_website_name', $title, $website, $post_id ) . '</a>';
+			if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+				// Database value.
+				return $gd_post->{$cf['htmlvar_name']};
+			} elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+				// Stripped value.
+				return $website;
+			}
 
-            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                // Database value.
-                return $gd_post->{$cf['htmlvar_name']};
-            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
-                // Stripped value.
-                return $website;
-            }
+			$html = '<div class="geodir_post_meta ' . esc_attr( $cf['css_class'] ) . ' geodir-field-' . esc_attr( $cf['htmlvar_name'] ) . '">';
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+			if ( $output == '' || isset( $output['icon'] ) ) {
+				$html .= '<span class="geodir_post_meta_icon geodir-i-website" style="' . esc_attr( $field_icon ) . '">' . $field_icon_af;
+			}
 
-            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-website" style="' . $field_icon . '">' . $field_icon_af;
-            //if($output=='' || isset($output['label']))$html .= $field_icon_af ? '<span class="geodir_post_meta_title" >'.$field_icon_af . ': '.'</span>' : '';
-            if($output=='' || isset($output['icon']))$html .= '</span>';
-            /**
-             * Filter custom field website name.
-             *
-             * @since 1.0.0
-             *
-             * @param string $title Website Title.
-             * @param string $website Website URL.
-             * @param int $gd_post->ID Post ID.
-             */
-            if($output=='' || isset($output['value']))$html .= $value;
+			if ( $output == '' || isset( $output['icon'] ) ) {
+				$html .= '</span>';
+			}
 
-            $html .= '</div>';
+			/**
+			 * Filter custom field website name.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param string $title   Website Title.
+			 * @param string $website Website URL.
+			 * @param int    $post_id Post ID.
+			 */
+			if ( $output == '' || isset( $output['value'] ) ) {
+				$html .= $value;
+			}
 
-        endif;
+			$html .= '</div>';
 
-    }
+		endif;
+	}
 
-    return $html;
+	return $html;
 }
-add_filter('geodir_custom_field_output_url','geodir_cf_url',10,5);
-
+add_filter( 'geodir_custom_field_output_url', 'geodir_cf_url', 10, 5 );
 
 /**
  * Get the html output for the custom field: phone

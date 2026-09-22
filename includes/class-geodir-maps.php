@@ -288,7 +288,8 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse = false, $terms = '', $hierarchical = false, $tick_terms = '' ) {
 		global $cat_count, $geodir_cat_icons, $aui_bs5;
 
-		$taxonomy = $post_type . 'category';
+		$taxonomy   = $post_type . 'category';
+		$map_canvas = $map_canvas !== '' ? sanitize_key( $map_canvas ) : '';
 
 		$exclude_categories = geodir_get_option( 'exclude_cat_on_map', array() );
 		//$exclude_categories = array(70);
@@ -452,18 +453,18 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 					$term_check = '<input type="checkbox" ' . $checked . ' id="' .$map_canvas.'_tick_cat_'. $cat_term->term_id . '" class="group_selector ' . $main_list_class . '"';
 					$term_check .= ' name="' . $map_canvas . '_cat[]" ';
-					$term_check .= '  title="' . esc_attr(geodir_utf8_ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas . '\',false, this)">';
+					$term_check .= '  title="' . esc_attr( $cat_term->name ) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas . '\',false, this)">';
 					$icon_alt = geodir_get_cat_icon_alt( $cat_term->term_id, geodir_strtolower( $cat_term->name ) . '.' );
 
 					if ( $design_style ) {
-						$term_img = '<img class="w-auto mr-1 ml-n1 me-1 ms-n1 rounded-circle" style="height:22px;" alt="' . esc_attr( $icon_alt ) . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" loading=lazy />';
+						$term_img = '<img class="w-auto mr-1 ml-n1 me-1 ms-n1 rounded-circle" style="height:22px;" alt="' . esc_attr( $icon_alt ) . '" src="' . esc_url( $icon ) . '" title="' . esc_attr( $cat_term->name ) . '" loading=lazy />';
 						$term_html = '<li class="'.$li_class.'">' .aui()->input(
 							array(
 								'id'                => "{$map_canvas}_tick_cat_{$cat_term->term_id}",
 								'name'              => "{$map_canvas}_cat[]",
 								'type'              => "checkbox",
 								'value'             => absint( $cat_term->term_id),
-								'label'             => $term_img . esc_attr(geodir_utf8_ucfirst($cat_term->name)),
+								'label'             => $term_img . esc_attr( $cat_term->name ),
 								'class'             => $aui_bs5 ? 'group_selector ' . $main_list_class : 'group_selector h-100 ' . $main_list_class,
 								'label_class'       => 'text-light mb-0',
 								'checked'           => $checked,
@@ -474,9 +475,9 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 							)
 						);
 					} else {
-						$term_img = '<img height="15" width="15" alt="' . esc_attr( $icon_alt ) . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" loading=lazy />';
+						$term_img = '<img height="15" width="15" alt="' . esc_attr( $icon_alt ) . '" src="' . esc_url( $icon ) . '" title="' . esc_attr( $cat_term->name ) . '" loading=lazy />';
 
-						$term_html = '<li class="'.$li_class.'">' . $term_check . '<label for="' . $map_canvas.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><span class="gd-map-cat-toggle"><i class="fas fa-long-arrow-alt-down" aria-hidden="true" style="display:none"></i></span>';
+						$term_html = '<li class="'.$li_class.'">' . $term_check . '<label for="' . $map_canvas.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . esc_html( $cat_term->name ) . '</label><span class="gd-map-cat-toggle"><i class="fas fa-long-arrow-alt-down" aria-hidden="true" style="display:none"></i></span>';
 					}
 
 					$out .= $term_html;
