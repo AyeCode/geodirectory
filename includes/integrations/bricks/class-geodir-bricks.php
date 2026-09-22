@@ -42,7 +42,6 @@ class GeoDir_Bricks {
 		add_filter( 'bricks/builder/elements', array( __CLASS__, 'setup_elements' ), 10, 1 );
 		add_action( 'init', array( __CLASS__, 'register_elements' ), 11 );
 
-
 		// Filters to make images work
 		add_filter( 'get_post_metadata', array( __CLASS__, '_wp_attachment_metadata'), 10, 5 );
 		add_filter( 'wp_get_attachment_image', array( __CLASS__, '_wp_get_attachment_image' ), 10, 5 );
@@ -52,7 +51,6 @@ class GeoDir_Bricks {
 
 		// Remote templates @todo i dont think this will work till v2
 		//add_filter( 'bricks/remote_templates/sources', array( __CLASS__, 'remote_templates') );
-
 	}
 
 	/**
@@ -63,7 +61,6 @@ class GeoDir_Bricks {
 	 * @return mixed
 	 */
 	public static function remote_templates( $sources ) {
-
 		// Cracks Directory Site
 		$sources[] = [
 			'name' => 'GeoDirectory (Cracka Template)',
@@ -71,6 +68,81 @@ class GeoDir_Bricks {
 		];
 
 		return $sources;
+	}
+
+	/**
+	 * Offset used to mark a GeoDirectory attachment id passed to Bricks.
+	 *
+	 * @since 2.8.183
+	 */
+	const IMAGE_ID_OFFSET = 900000000;
+
+	/**
+	 * Highest encoded id we will produce, keeps the marker inside the 9xxxxxxxx band.
+	 *
+	 * @since 2.8.183
+	 */
+	const IMAGE_ID_MAX = 999999999;
+
+	/**
+	 * Legacy concatenated marker (GeoDir in ASCII digit codes).
+	 *
+	 * @since 2.8.183
+	 */
+	const LEGACY_IMAGE_MARKER = '7110111168105114';
+
+	/**
+	 * Mark a GeoDirectory attachment id so our filters can recognise it later.
+	 *
+	 * @since 2.8.183
+	 *
+	 * @param int $attachment_id The geodir_attachments row id.
+	 * @return int The marked id, or 0 when it cannot be marked.
+	 */
+	public static function encode_image_id( $attachment_id ) {
+		$attachment_id = absint( $attachment_id );
+
+		// Out of range ids cannot be marked without colliding with the marker band.
+		if ( ! $attachment_id || $attachment_id > ( self::IMAGE_ID_MAX - self::IMAGE_ID_OFFSET ) ) {
+			return 0;
+		}
+
+		return self::IMAGE_ID_OFFSET + $attachment_id;
+	}
+
+	/**
+	 * Get the real GeoDirectory attachment id back out of a marked id.
+	 *
+	 * Accepts both the current offset marker and the legacy concatenated marker.
+	 *
+	 * @since 2.8.183
+	 *
+	 * @param int|string $id The possibly marked id.
+	 * @return int The geodir_attachments row id, or 0 when this is not one of ours.
+	 */
+	public static function decode_image_id( $id ) {
+		if ( is_array( $id ) || is_object( $id ) || $id === null || $id === '' ) {
+			return 0;
+		}
+
+		// Current marker: a plain integer inside our reserved band.
+		if ( is_numeric( $id ) ) {
+			$int_id = (int) $id;
+
+			if ( $int_id > self::IMAGE_ID_OFFSET && $int_id <= self::IMAGE_ID_MAX ) {
+				return $int_id - self::IMAGE_ID_OFFSET;
+			}
+		}
+
+		// Legacy marker: only ever survives when it was never passed through absint().
+		$id            = (string) $id;
+		$marker_length = strlen( self::LEGACY_IMAGE_MARKER );
+
+		if ( strlen( $id ) > $marker_length && strpos( $id, self::LEGACY_IMAGE_MARKER ) === 0 ) {
+			return absint( substr( $id, $marker_length ) );
+		}
+
+		return 0;
 	}
 
 	/**
@@ -86,25 +158,21 @@ class GeoDir_Bricks {
 	public static function maybe_gd_image_id($image, $attachment_id, $size, $icon){
 		global $gd_last_attachment_id;
 
-		// a unique GD prefix (GeoDir in ASCII)
-		$geodir_ascii = 7110111168105114;
-		if (strpos($attachment_id, $geodir_ascii) === 0 ) {
+		$gd_attachment_id = self::decode_image_id( $attachment_id );
 
-			$gd_attachment_id_parts = explode( $geodir_ascii, $attachment_id );
-			$gd_attachment_id = end( $gd_attachment_id_parts );
-
+		if ( $gd_attachment_id ) {
 			$gd_attachment = GeoDir_Media::get_attachment_by_id( $gd_attachment_id );
 
 			if ( ! empty( $gd_attachment ) ) {
 				$gd_last_attachment_id = absint( $gd_attachment_id );
-				$meta = isset( $gd_attachment->metadata ) ? maybe_unserialize( $gd_attachment->metadata ) : array();
-				$image_src =  geodir_get_image_src( $gd_attachment,$size );
-				$img_width = isset($meta['sizes'][$size]['width']) ? absint($meta['sizes'][$size]['width']) : (isset($meta['width']) ? absint($meta['width']) : 0);
-				$img_height = isset($meta['sizes'][$size]['height']) ? absint($meta['sizes'][$size]['height']) : (isset($meta['height']) ? absint($meta['height']) : 0);
+				$meta       = isset( $gd_attachment->metadata ) ? maybe_unserialize( $gd_attachment->metadata ) : array();
+				$image_src  = geodir_get_image_src( $gd_attachment, $size );
+				$img_width  = isset( $meta['sizes'][ $size ]['width'] ) ? absint( $meta['sizes'][ $size ]['width'] ) : ( isset( $meta['width'] ) ? absint( $meta['width'] ) : 0 );
+				$img_height = isset( $meta['sizes'][ $size ]['height'] ) ? absint( $meta['sizes'][ $size ]['height'] ) : ( isset( $meta['height'] ) ? absint( $meta['height'] ) : 0 );
 
 				if ( $image_src ) {
 					$image = [
-						$image_src, // image src
+						$image_src,
 						$img_width,
 						$img_height,
 						$icon
@@ -142,18 +210,22 @@ class GeoDir_Bricks {
 	 *
 	 * @return mixed
 	 */
-	public static function _bricks_set_image_attributes($attr, $attachment, $size){
+	public static function _bricks_set_image_attributes( $attr, $attachment, $size ) {
+		if ( ! is_admin() ) {
+			$theme = \Bricks\Theme::instance();
 
-		if ( !is_admin() ) {
+			// The check was inverted, so the Bricks attributes we remove on after_setup_theme
+			// were never added back. Guard the property we actually call through.
+			$can_set = ! empty( $theme ) && isset( $theme->frontend ) && method_exists( $theme->frontend, 'set_image_attributes' );
+
 			if ( is_null( $attachment ) ) {
-				$theme = \Bricks\Theme::instance();
-				if ( empty( $theme ) ) {
+				if ( $can_set ) {
 					$attr = $theme->frontend->set_image_attributes( $attr, $attachment, array( 512, 512 ) );
 				}
+
 				$attr['data-type'] = 'string';
-			}else{
-				$theme = \Bricks\Theme::instance();
-				if ( empty( $theme ) ) {
+			} else {
+				if ( $can_set ) {
 					$attr = $theme->frontend->set_image_attributes($attr, $attachment, $size);
 				}
 			}
@@ -174,25 +246,18 @@ class GeoDir_Bricks {
 	 * @return mixed|string
 	 */
 	public static function _wp_get_attachment_image( $html, $attachment_id, $size, $icon, $attr ) {
+		$gd_attachment_id = self::decode_image_id( $attachment_id );
 
-		// a unique GD prefix (GeoDir in ASCII)
-		$geodir_ascii = 7110111168105114;
-		if ( strpos( $attachment_id, $geodir_ascii ) === 0 ) {
-
-			$gd_attachment_id_parts = explode( $geodir_ascii, $attachment_id );
-			$gd_attachment_id       = end( $gd_attachment_id_parts );
-			$gd_attachment          = GeoDir_Media::get_attachment_by_id( $gd_attachment_id );
-			$class                  = ! empty( $attr['class'] ) ? esc_attr( $attr['class'] ) : '';
-			$html                   = geodir_get_image_tag( $gd_attachment, $size, '', $class );
-
-
-			$meta = isset( $gd_attachment->metadata ) ? maybe_unserialize( $gd_attachment->metadata ) : '';
+		if ( $gd_attachment_id ) {
+			$gd_attachment = GeoDir_Media::get_attachment_by_id( $gd_attachment_id );
+			$class         = ! empty( $attr['class'] ) ? esc_attr( $attr['class'] ) : '';
+			$html          = geodir_get_image_tag( $gd_attachment, $size, '', $class );
+			$meta          = isset( $gd_attachment->metadata ) ? maybe_unserialize( $gd_attachment->metadata ) : '';
 
 			// Only set different sizes if not thumbnail
 			if ( $size != 'thumbnail' && ! empty( $meta ) ) {
 				$html = wp_image_add_srcset_and_sizes( $html, $meta, 0 );
 			}
-
 		}
 
 		return $html;
@@ -210,29 +275,21 @@ class GeoDir_Bricks {
 	 * @return array|array[]|mixed|string|string[]
 	 */
 	public static function _wp_attachment_metadata( $output, $object_id, $meta_key, $single, $meta_type ) {
+		$gd_attachment_id = '_wp_attachment_metadata' === $meta_key ? self::decode_image_id( $object_id ) : 0;
 
-		// a unique GD prefix (GeoDir in ASCII)
-		$geodir_ascii = 7110111168105114;
-		if ( '_wp_attachment_metadata' === $meta_key && strpos( $object_id, $geodir_ascii ) === 0 ) {
+		if ( $gd_attachment_id ) {
+			$gd_attachment = GeoDir_Media::get_attachment_by_id( $gd_attachment_id );
+			$meta          = isset( $gd_attachment->metadata ) ? maybe_unserialize( $gd_attachment->metadata ) : '';
 
-
-			$gd_attachment_id_parts = explode( $geodir_ascii, $object_id );
-			$gd_attachment_id       = end( $gd_attachment_id_parts );
-			$gd_attachment          = GeoDir_Media::get_attachment_by_id( $gd_attachment_id );
-
-			$meta = isset( $gd_attachment->metadata ) ? maybe_unserialize( $gd_attachment->metadata ) : '';
 			if ( ! empty( $meta ) ) {
 				$output = $single ? [ $meta ] : $meta;
 			} elseif ( ! empty( $gd_attachment->file ) ) {
-
 				// if its an external image we still need to return some meta or it will fail the bricks checks
 				$meta   = [
 					'file' => $gd_attachment->file,
 				];
 				$output = $single ? [ $meta ] : $meta;
-
 			}
-
 		}
 
 		return $output;
@@ -495,7 +552,6 @@ class GeoDir_Bricks {
 	}
 
 	public static function register_elements() {
-
 		$element_files = array(
 			GEODIRECTORY_PLUGIN_DIR . 'includes/integrations/bricks/element-image-gallery.php',
 		);
