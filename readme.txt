@@ -328,6 +328,9 @@ Please include as much relevant information as possible and avoid publicly discl
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.183 - 2026-09-TBD =
+* Changes for Bricks v2.4 compatibility - COMPATIBILITY
+
 = GeoDirectory v2.8.182 - 2026-09-21 =
 * Refine geodir_sanitize_float() function - CHANGED
 * Added extra sanitization for text inputs to fix XSS vulnerability - FIXED/SECURITY

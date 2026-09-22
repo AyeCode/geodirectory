@@ -21,7 +21,7 @@ class Provider_Geodir extends Base {
 				'name'     => '{' . $key . '}',
 				'label'    => $tag['label'],
 				'group'    => $tag['group'],
-				'provider' => $this->name,
+				'provider' => $this->name
 			];
 
 			if ( ! empty( $tag['render'] ) ) {
@@ -44,7 +44,7 @@ class Provider_Geodir extends Base {
 		}
 
 		$cat_meta_group = esc_html__( 'GD Category Meta', 'geodirectory' );
-		$cat_meta_keys = $this->get_category_meta_keys();
+		$cat_meta_keys  = $this->get_category_meta_keys();
 
 		foreach( $cat_meta_keys as $key => $label ) {
 			$tags[ 'gd_cat_meta_' . $key ] = array(
@@ -60,9 +60,9 @@ class Provider_Geodir extends Base {
 		global $gd_post;
 
 		if ( strpos( $tag, 'gd_post_meta_' ) === 0 ) {
-			$_tag = explode( 'gd_post_meta_', $tag, 2 );
-			$key = $_tag[1];
-			$show = 'value-raw';
+			$_tag    = explode( 'gd_post_meta_', $tag, 2 );
+			$key     = $_tag[1];
+			$show    = 'value-raw';
 			$post_id = 0;
 
 			if ( ! empty( $args[0] ) ) {
@@ -77,32 +77,66 @@ class Provider_Geodir extends Base {
 				$post_id = (int) $args[1];
 			} elseif ( ! empty( $gd_post->ID ) ) {
 				$post_id = absint( $gd_post->ID );
-			}elseif(bricks_is_builder_call()){
-				$post_id = !empty($_REQUEST['postId']) ? absint($_REQUEST['postId']) : '';
+			} elseif( bricks_is_builder_call() ) {
+				$post_id = ! empty( $_REQUEST['postId'] ) ? absint( $_REQUEST['postId'] ) : '';
 			}
 
 			if ( $key === 'post_images' || $key === 'business_hours'  ) {
 				$show = 'value';
 			}
 
-			$value = do_shortcode( '[gd_post_meta key="' .esc_attr( $key )  . '" show="' .esc_attr( $show )  . '" no_wrap="1"' . ( $post_id ? ' id="' . $post_id . '"' : '') . ']' );
-
-			$geodir_ascii = 7110111168105114;
+			$value = do_shortcode( '[gd_post_meta key="' . esc_attr( $key ) . '" show="' . esc_attr( $show ) . '" no_wrap="1"' . ( $post_id ? ' id="' . $post_id . '"' : '' ) . ']' );
 
 			if ( 'image' === $context ) {
 				$value = [];
 				if('featured_image' === $key){
 					$featured_image_id = get_post_thumbnail_id( $post_id );
+
 					if ( $featured_image_id ) {
 						$value[] = $featured_image_id;
 					}
-				}else{
-//					$images = \GeoDir_Media::get_post_images( $post_id );
+				} else {
 					$images = \GeoDir_Media::get_attachments_by_type( $post_id, $key );
 
 					if ( ! empty( $images ) ) {
+						/**
+						 * How GD images are handed to a Bricks image context.
+						 *
+						 * @since 2.8.183
+						 *
+						 * @param string $mode    Either 'url' or 'id'.
+						 * @param string $key     The custom field key.
+						 * @param int    $post_id The post id.
+						 */
+						$mode = apply_filters( 'geodir_bricks_image_context_mode', 'url', $key, $post_id );
+
+						/**
+						 * Image size used when handing urls to a Bricks image context.
+						 *
+						 * @since 2.8.183
+						 *
+						 * @param string $size    Registered image size name.
+						 * @param string $key     The custom field key.
+						 * @param int    $post_id The post id.
+						 */
+						$size = apply_filters( 'geodir_bricks_image_context_size', 'full', $key, $post_id );
+
 						foreach ( $images as $image ) {
-							$value[] = $geodir_ascii.absint($image->ID);
+							if ( 'id' === $mode ) {
+								// Mark the id so our filters know to resolve it from the GD
+								// table. Must stay a plain integer, Bricks runs absint() on it.
+								$marked_id = \GeoDir_Bricks::encode_image_id( $image->ID );
+
+								if ( $marked_id ) {
+									$value[] = $marked_id;
+								}
+							} else {
+								$image_src = geodir_get_image_src( $image, $size );
+
+								if ( $image_src ) {
+									$value[] = esc_url_raw( $image_src );
+								}
+							}
 						}
 					}
 				}
@@ -110,40 +144,40 @@ class Provider_Geodir extends Base {
 
 			return apply_filters( 'geodir_bricks_get_post_meta_tag_value', $value, $key, $tag, $args, $context, $post, $this, $post_id );
 		} else if ( strpos( $tag, 'gd_cat_meta_' ) === 0 ) {
-			$_tag = explode( 'gd_cat_meta_', $tag, 2 );
-			$key = $_tag[1];
-			$show = ! empty( $args[0] ) ? $args[0] : 'value-raw';
+			$_tag    = explode( 'gd_cat_meta_', $tag, 2 );
+			$key     = $_tag[1];
+			$show    = ! empty( $args[0] ) ? $args[0] : 'value-raw';
 			$term_id = ! empty( $args[1] ) && (int) $args[1] > 0 ? (int) $args[1] : 0;
-			$value = '';
+			$value   = '';
 
-			// check for loop values first
-			if($looping_query_id = \Bricks\Query::is_any_looping()){
+			// Check for loop values first
+			if ( $looping_query_id = \Bricks\Query::is_any_looping() ) {
 				$type = \Bricks\Query::get_loop_object_type( $looping_query_id );
-				if ( ! $term_id && 'term' === $type ) {
 
+				if ( ! $term_id && 'term' === $type ) {
 					$term_id = \Bricks\Query::get_loop_object_id();
 				}
 			}
 
-			// then do other checks
+			// Then do other checks
 			if ( ! $term_id && geodir_is_page( 'archive' ) ) {
 				$current_category = get_queried_object();
-				$term_id = isset( $current_category->term_id ) ?  absint( $current_category->term_id ) : 0;
+				$term_id          = isset( $current_category->term_id ) ?  absint( $current_category->term_id ) : 0;
 			} else if ( ! $term_id && ! empty( $gd_post ) ) {
 				$term_id = ! empty( $gd_post->default_category ) ? absint( $gd_post->default_category ) : 0;
 			} else if ( bricks_is_builder_call() ) {
-				$post_id = ! empty( $_REQUEST['postId'] ) ? absint( $_REQUEST['postId'] ) : '';
+				$post_id  = ! empty( $_REQUEST['postId'] ) ? absint( $_REQUEST['postId'] ) : '';
 				$_gd_post = geodir_get_post_info( $post_id );
-				$term_id = ! empty( $_gd_post->default_category ) ? absint( $_gd_post->default_category ) : 0;
+				$term_id  = ! empty( $_gd_post->default_category ) ? absint( $_gd_post->default_category ) : 0;
 			}
 
 			if ( $term_id ) {
 				if ( $key == 'top_description' ) {
 					$cat_desc = do_shortcode( "[gd_category_description no_wrap=1]" );
-					$value = $cat_desc ? trim( $cat_desc ) : '';
+					$value    = $cat_desc ? trim( $cat_desc ) : '';
 				} else if ( $key == 'bottom_description' ) {
 					$cat_desc = do_shortcode( "[gd_category_description type='bottom' no_wrap=1]" );
-					$value = $cat_desc ? trim( $cat_desc ) : '';
+					$value    = $cat_desc ? trim( $cat_desc ) : '';
 				} else if ( $key == 'icon' ) {
 					$value = get_term_meta( $term_id, 'ct_cat_font_icon', true );
 
@@ -167,24 +201,20 @@ class Provider_Geodir extends Base {
 
 					if ( $show == 'value' ) {
 						$value = "<img src='" . esc_attr( $value ) . "' />";
-					}elseif ('image' === $context && $value) {
+					} elseif ( 'image' === $context && $value ) {
 						$value = [$value];
 					}
 				}
 			}
 
-			if ( $value && ( $show =='value-raw' || $show == 'value-strip' ) && !is_array($value) ) {
+			if ( $value && ( $show =='value-raw' || $show == 'value-strip' ) && ! is_array( $value ) ) {
 				$value = wp_strip_all_tags( $value );
 			}
-
-
 
 			return apply_filters( 'geodir_bricks_get_cat_meta_tag_value', $value, $key, $tag, $args, $context, $post, $this, $term_id );
 		}
 
-
 		return apply_filters( 'geodir_bricks_get_tag_value', $tag, $post, $args, $context );
-
 	}
 
 	public function get_post_meta_keys() {
