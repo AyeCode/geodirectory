@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.54';
+		public $version = '0.2.55';
 
 		/**
 		 * Class textdomain.
@@ -1359,6 +1359,13 @@ $custom_css .= "
 		}
 
 		public static function hex_to_rgb( $hex ) {
+			$hex = trim( (string) $hex );
+
+			// CSS variables can't be resolved to RGB server side.
+			if ( $hex === '' || strpos( $hex, 'var(' ) !== false ) {
+				return '';
+			}
+
 			// Remove '#' if present
 			$hex = str_replace( '#', '', $hex );
 
@@ -1373,8 +1380,13 @@ $custom_css .= "
 				return $rgb;
 			}
 
-			// Convert 3-digit hex to 6-digit hex
-			if ( strlen( $hex ) == 3 ) {
+			// Only 3, 4, 6 or 8 digit hex can be converted, anything else (named colours, hsl() etc.) would give a wrong value.
+			if ( ! preg_match( '/^([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', $hex ) ) {
+				return '';
+			}
+
+			// Convert 3 or 4 digit hex to 6-digit hex (alpha is ignored)
+			if ( strlen( $hex ) <= 4 ) {
 				$hex = str_repeat( substr( $hex, 0, 1 ), 2 ) . str_repeat( substr( $hex, 1, 1 ), 2 ) . str_repeat( substr( $hex, 2, 1 ), 2 );
 			}
 
@@ -1385,6 +1397,32 @@ $custom_css .= "
 
 			// Return RGB values as an array
 			return $r . ',' . $g . ',' . $b;
+		}
+
+		/**
+		 * Replace --bs-{type}-rgb usages when the color has no RGB value (eg a CSS variable).
+		 *
+		 * rgba(var(--bs-{type}-rgb), .5) would be invalid without the -rgb variable, so use color-mix() on the color itself.
+		 *
+		 * @param string $css The generated CSS.
+		 * @param string $type The color slug.
+		 * @param string $color_code The color value.
+		 *
+		 * @return string
+		 */
+		public static function css_rgb_fallback( $css, $type, $color_code ) {
+			$type = preg_quote( $type, '/' );
+
+			// A comma triplet is required here, so leave the value from the stylesheet in place.
+			$css = preg_replace( '/--bs-btn-focus-shadow-rgb:\s*var\(--bs-' . $type . '-rgb\);/', '', $css );
+
+			return preg_replace_callback( '/rgba?\(\s*var\(--bs-' . $type . '-rgb\)\s*(?:,\s*([0-9]*\.?[0-9]+)\s*)?\)/', function( $m ) use ( $color_code ) {
+				if ( ! isset( $m[1] ) || (float) $m[1] >= 1 ) {
+					return $color_code;
+				}
+
+				return 'color-mix(in srgb, ' . $color_code . ' ' . round( (float) $m[1] * 100, 2 ) . '%, transparent)';
+			}, $css );
 		}
 
 		/**
@@ -1506,7 +1544,7 @@ $custom_css .= "
 				$output .= $prefix . ' .text-' . sanitize_key( $type ) . '{color: var(--bs-' . sanitize_key( $type ) . ') !important;}';
 			}
 
-			$output .= $prefix . ' .link-'.esc_attr($type).' {color: var(--bs-'.esc_attr($type).'-rgb) !important;}';
+			$output .= $prefix . ' .link-'.esc_attr($type).' {color: var(--bs-'.esc_attr($type).') !important;}';
 			$output .= $prefix . ' .link-'.esc_attr($type).':hover {color: rgba(var(--bs-'.esc_attr($type).'-rgb), .8) !important;}';
 
 			//  buttons
@@ -1516,7 +1554,7 @@ $custom_css .= "
             --bs-btn-border-color: '.esc_attr($color_code).';
             --bs-btn-hover-bg: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-hover-border-color: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
-            --bs-btn-focus-shadow-rgb: --bs-'.esc_attr($type).'-rgb;
+            --bs-btn-focus-shadow-rgb: var(--bs-'.esc_attr($type).'-rgb);
             --bs-btn-active-bg: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-active-border-color: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-active-shadow: unset;
@@ -1538,7 +1576,7 @@ $custom_css .= "
             --bs-btn-border-color: '.esc_attr($color_code).';
             --bs-btn-hover-bg: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-hover-border-color: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
-            --bs-btn-focus-shadow-rgb: --bs-'.esc_attr($type).'-rgb;
+            --bs-btn-focus-shadow-rgb: var(--bs-'.esc_attr($type).'-rgb);
             --bs-btn-active-bg: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-active-border-color: rgba(var(--bs-'.esc_attr($type).'-rgb), .9);
             --bs-btn-active-shadow: unset;
@@ -1569,14 +1607,13 @@ $custom_css .= "
 
 //				$output .= $is_var ? 'html body {--bs-'.esc_attr($type).'-rgb: '.$color_code.'; }' : 'html body {--bs-'.esc_attr($type).'-rgb: '.self::hex_to_rgb($color_code).'; }';
 				$output .= 'html body {--bs-'.esc_attr($type).': '.esc_attr($color_code).'; }';
-				$output .= 'html body {--bs-'.esc_attr($type).'-rgb: '.$rgb.'; }';
+
+				if ( $rgb !== '' ) {
+					$output .= 'html body {--bs-' . esc_attr( $type ) . '-rgb: ' . $rgb . '; }';
+				}
 			}
 
-
 			if ( $is_custom ) {
-
-//				echo '###'.$type;exit;
-
 				// build rules into each type
 				foreach($selectors as $selector => $types){
 					$selector = $compatibility ? $compatibility . " ".$selector : $selector;
@@ -1677,6 +1714,16 @@ $custom_css .= "
 			if ( $aui_bs5 ) {
 //				$output .= $is_var ? '' : $prefix ." .alert-{$type} {background-color: ".$color_code."20;    border-color: ".$color_code."30;color:$darker_40} ";
 				$output .= $prefix ." .alert-{$type} {--bs-alert-bg: rgba(var(--bs-{$type}-rgb), .1 ) !important;--bs-alert-border-color: rgba(var(--bs-{$type}-rgb), .25 ) !important;--bs-alert-color: rgba(var(--bs-{$type}-rgb), 1 ) !important;} ";
+			}
+
+			if ( $rgb === '' ) {
+				// The stylesheet builds these from --bs-{type}-rgb, which is not set for this color.
+				if ( $aui_bs5 ) {
+					$output .= $prefix . " .bg-{$type}{background-color: color-mix(in srgb, $color_code calc(var(--bs-bg-opacity, 1) * 100%), transparent) !important;} ";
+					$output .= $prefix . " .border-{$type}{border-color: color-mix(in srgb, $color_code calc(var(--bs-border-opacity, 1) * 100%), transparent) !important;} ";
+				}
+
+				$output = self::css_rgb_fallback( $output, $type, $color_code );
 			}
 
 			return $output;
@@ -1797,7 +1844,10 @@ $custom_css .= "
 
 			if ( $aui_bs5 ) {
 //				$output .= $is_var ? 'html body {--bs-'.esc_attr($type).'-rgb: '.$color_code.'; }' : 'html body {--bs-'.esc_attr($type).'-rgb: '.self::hex_to_rgb($color_code).'; }';
-				$output .= 'html body {--bs-'.esc_attr($type).'-rgb: '.$rgb.'; }';
+
+				if ( $rgb !== '' ) {
+					$output .= 'html body {--bs-' . esc_attr( $type ) . '-rgb: ' . $rgb . '; }';
+				}
 			}
 
 			// build rules into each type
@@ -1893,6 +1943,16 @@ $custom_css .= "
 			if ( $aui_bs5 ) {
 //				$output .= $is_var ? '' : $prefix ." .alert-{$type} {background-color: ".$color_code."20;    border-color: ".$color_code."30;color:$darker_40} ";
 				$output .= $prefix ." .alert-{$type} {--bs-alert-bg: rgba(var(--bs-{$type}-rgb), .1 ) !important;--bs-alert-border-color: rgba(var(--bs-{$type}-rgb), .25 ) !important;--bs-alert-color: rgba(var(--bs-{$type}-rgb), 1 ) !important;} ";
+			}
+
+			if ( $rgb === '' ) {
+				// The stylesheet builds these from --bs-{type}-rgb, which is not set for this color.
+				if ( $aui_bs5 ) {
+					$output .= $prefix . " .bg-{$type}{background-color: color-mix(in srgb, $color_code calc(var(--bs-bg-opacity, 1) * 100%), transparent) !important;} ";
+					$output .= $prefix . " .border-{$type}{border-color: color-mix(in srgb, $color_code calc(var(--bs-border-opacity, 1) * 100%), transparent) !important;} ";
+				}
+
+				$output = self::css_rgb_fallback( $output, $type, $color_code );
 			}
 
 			return $output;
