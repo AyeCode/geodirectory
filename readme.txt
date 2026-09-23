@@ -331,6 +331,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.183 - 2026-09-TBD =
 * Changes for Bricks v2.4 compatibility - COMPATIBILITY
 * Added input sanitization and output escaping across search - CHANGED/SECURITY
+* Update AUI 0.2.55 - CHANGED
 
 = GeoDirectory v2.8.182 - 2026-09-21 =
 * Refine geodir_sanitize_float() function - CHANGED
