@@ -104,6 +104,11 @@ class GeoDir_Elementor {
 			add_filter( 'elementor/editor/localize_settings', array( __CLASS__,'alter_widget_config' ), 5, 1  );
 		}
 
+		// Since Elementor v4.3.0 WordPress widgets are hidden from the widget panel & Element Manager.
+		if ( version_compare( ELEMENTOR_VERSION, '4.3.0', '>=' ) ) {
+			add_action( 'elementor/widgets/register', array( __CLASS__, 'register_wp_widgets' ), 20, 1 );
+		}
+
 		add_action( 'geodir_widget_archive_posts_loop_before', array( __CLASS__, 'before_gd_loop_render_posts' ), 10, 2 );
 		add_action( 'geodir_widget_archive_posts_loop_after', array( __CLASS__, 'after_gd_loop_render_posts' ), 10, 2 );
 	}
@@ -130,19 +135,55 @@ class GeoDir_Elementor {
 	 *
 	 * @return mixed
 	 */
-	public static function alter_widget_config( $config ){
-
+	public static function alter_widget_config( $config ) {
 		if ( ! empty( $config['initial_document']['widgets'] ) ) {
-			foreach( $config['initial_document']['widgets'] as $key => $widget){
-				if(substr( $key, 0, 13 ) === "wp-widget-gd_" || substr( $key, 0, 17 ) === "wp-widget-geodir_" ){
-					$config['initial_document']['widgets'][$key]['categories'][] = 'geodirectory';
-					$config['initial_document']['widgets'][$key]['hide_on_search'] = false;
-					$config['initial_document']['widgets'][$key]['icon'] = 'eicon-globe'; //@todo if no icons use on page then font-awesome is not loaded, if we can figure out how to force load we can use icons. <i class="fas fa-globe-americas"></i><i class="fa-solid fa-earth-americas"></i>
+			foreach ( $config['initial_document']['widgets'] as $key => $widget ) {
+				if ( substr( $key, 0, 13 ) === 'wp-widget-gd_' || substr( $key, 0, 17 ) === 'wp-widget-geodir_' ) {
+					$config['initial_document']['widgets'][ $key ]['categories'][]   = 'geodirectory';
+					$config['initial_document']['widgets'][ $key ]['hide_on_search'] = false;
+					$config['initial_document']['widgets'][ $key ]['show_in_panel']  = true; // Since Elementor v4.3.0 WordPress widgets are hidden from the panel.
+					$config['initial_document']['widgets'][ $key ]['keywords']       = array( 'geodir', 'geodirectory', 'gd', 'widget' );
+
+					// @todo If no icons are used on the page then font-awesome is not loaded. If we can force load it we can use icons: <i class="fas fa-globe-americas"></i> <i class="fa-solid fa-earth-americas"></i>
+					$config['initial_document']['widgets'][ $key ]['icon'] = 'eicon-globe';
 				}
 			}
 		}
 
 		return $config;
+	}
+
+	/**
+	 * Re-register GD WordPress widgets with a wrapper that is shown in the widget panel.
+	 *
+	 * Since Elementor v4.3.0 WordPress widgets are hidden from the widget panel & Element Manager.
+	 * Widget names are unchanged, so existing templates keep working.
+	 *
+	 * @since 2.8.185
+	 *
+	 * @param \Elementor\Widgets_Manager $widgets_manager Elementor widgets manager.
+	 */
+	public static function register_wp_widgets( $widgets_manager ) {
+		global $wp_widget_factory;
+
+		if ( empty( $wp_widget_factory->widgets ) || ! class_exists( '\Elementor\Widget_WordPress' ) ) {
+			return;
+		}
+
+		foreach ( $wp_widget_factory->widgets as $widget_class => $widget_obj ) {
+			if ( empty( $widget_obj->id_base ) || ! ( strpos( $widget_obj->id_base, 'gd_' ) === 0 || strpos( $widget_obj->id_base, 'geodir_' ) === 0 ) ) {
+				continue;
+			}
+
+			$registered = $widgets_manager->get_widget_types( 'wp-widget-' . $widget_obj->id_base );
+
+			// Only replace the Elementor default wrapper, respects black list & other overrides.
+			if ( ! ( $registered && get_class( $registered ) === 'Elementor\Widget_WordPress' ) ) {
+				continue;
+			}
+
+			$widgets_manager->register( new GeoDir_Elementor_Widget_WordPress( array(), array( 'widget_name' => $widget_class ) ) );
+		}
 	}
 
 	/**
