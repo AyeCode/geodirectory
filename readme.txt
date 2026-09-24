@@ -328,6 +328,9 @@ Please include as much relevant information as possible and avoid publicly discl
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.185 - 2026-09-TBD =
+* GD widgets missing from Elementor v4.3 widget panel & Element Manager - COMPATIBILITY
+
 = GeoDirectory v2.8.184 - 2026-09-24 =
 * Added extra sanitization for business hours inputs to prevent XSS vulnerability - FIXED/SECURITY
 
