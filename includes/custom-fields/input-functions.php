@@ -1755,8 +1755,6 @@ function geodir_cfi_tags( $html, $cf ) {
 }
 add_filter('geodir_custom_field_input_tags','geodir_cfi_tags',10,2);
 
-
-
 /**
  * Get the html input for the custom field: business_hours
  *
@@ -1770,24 +1768,25 @@ function geodir_cfi_business_hours( $html, $cf ) {
 	global $gd_post;
 
 	if ( empty( $html ) ) {
-		$htmlvar_name = $cf['htmlvar_name'];
-		$name = $cf['name'];
-		$label = __( $cf['frontend_title'], 'geodirectory' );
-		$description = __( $cf['desc'], 'geodirectory' );
-		$value = geodir_get_cf_value( $cf );
+		$htmlvar_name    = $cf['htmlvar_name'];
+		$name            = $cf['name'];
+		$label           = __( $cf['frontend_title'], 'geodirectory' );
+		$description     = __( $cf['desc'], 'geodirectory' );
+		$value           = geodir_get_cf_value( $cf );
 
-		$locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
-		$time_format = geodir_bh_input_time_format();
+		$locale          = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
+		$time_format     = geodir_bh_input_time_format();
 		$timezone_string = geodir_timezone_string();
-		$weekdays = geodir_get_short_weekdays();
+		$weekdays        = geodir_get_short_weekdays();
 
-		$hours = array();
+		$hours   = array();
 		$display = 'none';
 
 		if ( ! empty( $value ) ) {
 			$display = '';
-			$value = stripslashes_deep( $value );
+			$value   = stripslashes_deep( $value );
 			$periods = geodir_schema_to_array( $value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
+
 			if ( ! empty( $periods['hours'] ) ) {
 				$hours = $periods['hours'];
 			}
@@ -1799,28 +1798,28 @@ function geodir_cfi_business_hours( $html, $cf ) {
 			$hours = geodir_bh_default_values(); // Default value
 		}
 
-		$timezone_data = geodir_timezone_data( $timezone_string );
+		$inline_script = geodir_business_hours_inline_script( array( 'name' => $htmlvar_name, 'value' => $value, 'timezone' => $timezone_string ) );
+		wp_add_inline_script( 'geodir-add-listing', $inline_script );
 
 		ob_start();
 		?>
-		<script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
-        <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row">
-            <label for="<?php echo $htmlvar_name; ?>_f_active_1"><?php echo $label; ?></label>
-			<div class="gd-bh-field" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
-				<span class="gd-radios" role="radio"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( ! empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'Yes', 'geodirectory' ); ?>"> <?php _e( 'Yes', 'geodirectory' ); ?></span>
-				<span class="gd-radios" role="radio"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_0" value="0" class="gd-checkbox" field_type="radio" type="radio" <?php checked( empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'No', 'geodirectory' ); ?>"> <?php _e( 'No', 'geodirectory' ); ?></span>
-				<div class="gd-bh-items" style="display:<?php echo $display; ?>" data-12am="<?php echo esc_attr( date_i18n( $time_format, strtotime( '00:00' ) ) ); ?>">
+		<div id="<?php echo esc_attr( $name ); ?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row">
+			<label for="<?php echo esc_attr( $htmlvar_name ); ?>_f_active_1"><?php echo esc_html( $label ); ?></label>
+			<div class="gd-bh-field" data-field-name="<?php echo esc_attr( $htmlvar_name ); ?>" role="radiogroup">
+				<span class="gd-radios" role="radio"><input name="<?php echo esc_attr( $htmlvar_name ); ?>_f[active]" id="<?php echo esc_attr( $htmlvar_name ); ?>_f_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( ! empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'Yes', 'geodirectory' ); ?>"> <?php esc_html_e( 'Yes', 'geodirectory' ); ?></span>
+				<span class="gd-radios" role="radio"><input name="<?php echo esc_attr( $htmlvar_name ); ?>_f[active]" id="<?php echo esc_attr( $htmlvar_name ); ?>_f_active_0" value="0" class="gd-checkbox" field_type="radio" type="radio" <?php checked( empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'No', 'geodirectory' ); ?>"> <?php esc_html_e( 'No', 'geodirectory' ); ?></span>
+				<div class="gd-bh-items" style="display:<?php echo esc_attr( $display ); ?>" data-12am="<?php echo esc_attr( date_i18n( $time_format, strtotime( '00:00' ) ) ); ?>">
 					<table class="form-table widefat fixed">
 						<thead>
-							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours"><?php _e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only visually-hidden"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
+							<tr><th class="gd-bh-day"><?php esc_html_e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours"><?php esc_html_e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php esc_html_e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only visually-hidden"><?php esc_html_e( 'Add', 'geodirectory' ); ?></span></th></tr>
 						</thead>
 						<tbody>
 							<tr style="display:none!important"><td colspan="4" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" readonly> - <input type="text" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" readonly><input id="GD_UNIQUE_ID_oa" type="hidden" data-field="open"><input type="hidden" id="GD_UNIQUE_ID_ca" data-field="close"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span></div></td></tr>
 							<?php foreach ( $weekdays as $day_no => $day ) { ?>
 							<tr class="gd-bh-item<?php echo ( empty( $hours[ $day_no ] ) ? ' gd-bh-item-closed' : '' ); ?>">
-								<td class="gd-bh-day"><?php echo $day; ?></td>
+								<td class="gd-bh-day"><?php echo esc_html( $day ); ?></td>
 								<td class="gd-bh-24hours"><input type="checkbox" value="1"></td>
-								<td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>]">
+								<td class="gd-bh-time" data-day="<?php echo esc_attr( $day_no ); ?>" data-field="<?php echo esc_attr( $htmlvar_name ); ?>_f[hours][<?php echo esc_attr( $day_no ); ?>]">
 									<?php
 										if ( ! empty( $hours[ $day_no ] ) ) {
 											$slots = $hours[ $day_no ];
@@ -1845,37 +1844,35 @@ function geodir_cfi_business_hours( $html, $cf ) {
 												}
 										?>
 										<div class="gd-bh-hours<?php echo ( ( $open == '00:00' && $open == $close ) ? ' gd-bh-has24' : '' ); ?>">
-											<input type="text" id="<?php echo $unique_id; ?>_o" data-field-alt="open" data-bh="time" value="<?php echo esc_attr( $open_display ); ?>" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" data-time="<?php echo $open_His; ?>" readonly> - <input type="text" id="<?php echo $unique_id; ?>_c" data-field-alt="close" data-bh="time" value="<?php echo esc_attr( $close_display ); ?>" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" data-time="<?php echo $close_His; ?>" readonly><input type="hidden" id="<?php echo $unique_id; ?>_oa" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]" data-field="open" value="<?php echo esc_attr( $open ); ?>"><input type="hidden" id="<?php echo $unique_id; ?>_ca" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]" data-field="close" value="<?php echo esc_attr( $close ); ?>"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span>
+											<input type="text" id="<?php echo esc_attr( $unique_id ); ?>_o" data-field-alt="open" data-bh="time" value="<?php echo esc_attr( $open_display ); ?>" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" data-time="<?php echo esc_attr( $open_His ); ?>" readonly> - <input type="text" id="<?php echo esc_attr( $unique_id ); ?>_c" data-field-alt="close" data-bh="time" value="<?php echo esc_attr( $close_display ); ?>" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" data-time="<?php echo esc_attr( $close_His ); ?>" readonly><input type="hidden" id="<?php echo esc_attr( $unique_id ); ?>_oa" name="<?php echo esc_attr( $htmlvar_name ); ?>_f[hours][<?php echo esc_attr( $day_no ); ?>][open][]" data-field="open" value="<?php echo esc_attr( $open ); ?>"><input type="hidden" id="<?php echo esc_attr( $unique_id ); ?>_ca" name="<?php echo esc_attr( $htmlvar_name ); ?>_f[hours][<?php echo esc_attr( $day_no ); ?>][close][]" data-field="close" value="<?php echo esc_attr( $close ); ?>"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span>
 										</div>
 										<?php } ?>
 									<?php } else { ?>
-									<div class="gd-bh-closed"><?php _e( 'Closed', 'geodirectory' ); ?></div>
+									<div class="gd-bh-closed"><?php esc_html_e( 'Closed', 'geodirectory' ); ?></div>
 									<?php } ?>
 								</td>
 								<td class="gd-bh-act"><span class="gd-bh-add"><i class="fas fa-plus-circle" aria-hidden="true"></i></span></td>
 							</tr>
 							<?php } ?>
 							<tr class="gd-tz-item">
-								<td colspan="4"><label for="<?php echo $htmlvar_name; ?>_f_timezone_string"><?php _e( 'Timezone', 'geodirectory' ); ?></label>
-									<select data-field="timezone_string" id="<?php echo $htmlvar_name; ?>_f_timezone_string" class="geodir_textfield textfield_x geodir-select" data-placeholder="<?php esc_attr_e( 'Select a city/timezone&hellip;', 'geodirectory' ); ?>" data-allow_clear="true"><?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?></select>
-                                </td>
-                            </tr>
+								<td colspan="4"><label for="<?php echo esc_attr( $htmlvar_name ); ?>_f_timezone_string"><?php esc_html_e( 'Timezone', 'geodirectory' ); ?></label>
+									<select data-field="timezone_string" id="<?php echo esc_attr( $htmlvar_name ); ?>_f_timezone_string" class="geodir_textfield textfield_x geodir-select" data-placeholder="<?php esc_attr_e( 'Select a city/timezone&hellip;', 'geodirectory' ); ?>" data-allow_clear="true"><?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?></select>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
-				<input type="hidden" name="<?php echo $htmlvar_name; ?>" value="<?php echo esc_attr( $value ); ?>">
+				<input type="hidden" name="<?php echo esc_attr( $htmlvar_name ); ?>" value="<?php echo esc_attr( $value ); ?>">
 			</div>
-            <span class="geodir_message_note"><?php echo $description; ?></span>
-        </div>
-        <?php
-        $html = ob_get_clean();
-    }
+			<span class="geodir_message_note"><?php echo wp_kses_post( $description ); ?></span>
+		</div>
+		<?php
+		$html = ob_get_clean();
+	}
 
 	return $html;
 }
 add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hours', 10, 2 );
-
-
 
 /**
  * Get the html input for the custom field: images

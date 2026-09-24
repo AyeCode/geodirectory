@@ -961,10 +961,9 @@ function geodir_hhmm_to_bh_minutes( $hm, $day_no = 0 ) {
 function geodir_sanitize_business_hours_value( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
 	if ( ! empty( $value ) && ! is_array( $value ) ) {
 		$value = stripslashes_deep( $value );
+		$country = '';
 
 		if ( strpos( $value, '"UTC"' ) === false || strpos( $value, '"Timezone"' ) === false ) {
-			$schema = explode( '],[', $value, 2 );
-
 			if ( ! empty( $gd_post['country'] ) ) {
 				$country = $gd_post['country'];
 			} elseif ( GeoDir_Post_types::supports( $post->post_type, 'location' ) ) {
@@ -972,21 +971,10 @@ function geodir_sanitize_business_hours_value( $value, $gd_post, $custom_field, 
 			} else {
 				$country = geodir_get_option( 'default_location_country' );
 			}
-
-			$_value = geodir_schema_to_array( $value, $country );
-
-			if ( ! empty( $_value['hours'] ) || ! empty( $_value['timezone_string'] ) ) {
-				if ( ! empty( $_value['hours'] ) ) {
-					$value = $schema[0];
-					if ( count( $schema ) > 1 ) {
-						$value .= ']';
-					}
-					$value .= ',';
-				}
-
-				$value .= '["UTC":"' . $_value['utc_offset'] . '","Timezone":"' . $_value['timezone_string'] . '"]';
-			}
 		}
+
+		// Always rebuild the schema from validated parts to prevent malicious input.
+		$value = geodir_business_hours_sanitize_schema( $value, $country );
 	}
 	return $value;
 }
@@ -1004,25 +992,109 @@ add_filter( 'geodir_custom_field_value_business_hours', 'geodir_sanitize_busines
 function geodir_sanitize_business_hours( $value, $country = '' ) {
 	$value = stripslashes_deep( $value );
 
-	if ( ! empty( $value ) && is_scalar( $value ) && ( strpos( $value, '"UTC"' ) === false || strpos( $value, '"Timezone"' ) === false ) ) {
-		$schema = explode( '],[', $value, 2 );
-
-		$_value = geodir_schema_to_array( $value, $country );
-
-		if ( ! empty( $_value['hours'] ) || ! empty( $_value['timezone_string'] ) ) {
-			if ( ! empty( $_value['hours'] ) ) {
-				$value = trim( $schema[0] );
-				if ( count( $schema ) > 1 ) {
-					$value .= ']';
-				}
-				$value .= ',';
-			}
-
-			$value .= '["UTC":"' . $_value['utc_offset'] . '","Timezone":"' . $_value['timezone_string'] . '"]';
-		}
+	if ( ! empty( $value ) && is_scalar( $value ) ) {
+		// Always rebuild the schema from validated parts to prevent malicious input.
+		$value = geodir_business_hours_sanitize_schema( $value, $country );
 	}
 
 	return $value;
+}
+
+/**
+ * Parse the business hours schema and rebuild it from validated parts.
+ *
+ * Only whitelisted day names, HH:MM(:SS) times, valid timezone identifiers
+ * and numeric UTC offsets are kept. Anything else is discarded.
+ *
+ * @since 2.8.184
+ *
+ * @param string $value Business hours schema.
+ * @param string $country Country.
+ * @return string Business hours schema.
+ */
+function geodir_business_hours_sanitize_schema( $value, $country = '' ) {
+	if ( empty( $value ) || ! is_scalar( $value ) ) {
+		return '';
+	}
+
+	$value = trim( (string) $value );
+
+	// Timezone only value.
+	if ( strpos( $value, '],[' ) === false && preg_match( '/^\[\s*"(UTC|GMT|Timezone)"/i', $value ) ) {
+		$value = '[],' . $value;
+	}
+
+	$data = geodir_schema_to_array( $value, $country );
+
+	if ( empty( $data['hours'] ) && empty( $data['timezone_string'] ) ) {
+		return '';
+	}
+
+	// Hours
+	$periods = array();
+
+	if ( ! empty( $data['hours'] ) && is_array( $data['hours'] ) ) {
+		foreach ( geodir_day_short_names() as $day_name ) {
+			if ( empty( $data['hours'][ $day_name ] ) || ! is_array( $data['hours'][ $day_name ] ) ) {
+				continue;
+			}
+
+			$slots = array();
+
+			foreach ( $data['hours'][ $day_name ] as $slot ) {
+				$opens = ! empty( $slot['opens'] ) ? geodir_business_hours_sanitize_time( $slot['opens'] ) : '';
+				$closes = ! empty( $slot['closes'] ) ? geodir_business_hours_sanitize_time( $slot['closes'] ) : '';
+
+				if ( $opens !== '' && $closes !== '' ) {
+					$slots[] = $opens . '-' . $closes;
+				}
+			}
+
+			$slots = array_unique( $slots );
+
+			if ( ! empty( $slots ) ) {
+				$periods[] = $day_name . ' ' . implode( ',', $slots );
+			}
+		}
+	}
+
+	// Timezone
+	$timezone_string = ! empty( $data['timezone_string'] ) ? trim( $data['timezone_string'] ) : '';
+	if ( $timezone_string === '' || ! in_array( $timezone_string, timezone_identifiers_list( DateTimeZone::ALL_WITH_BC ) ) ) {
+		$timezone_string = geodir_timezone_string();
+	}
+
+	$utc_offset = isset( $data['utc_offset'] ) ? preg_replace( '/\s+/', '', (string) $data['utc_offset'] ) : '';
+	if ( ! preg_match( '/^[+-]?\d{1,2}(?:[:.]\d{1,2})?$/', $utc_offset ) ) {
+		$timezone_data = geodir_timezone_data( $timezone_string );
+		$utc_offset = $timezone_data['utc_offset'] !== '' ? $timezone_data['utc_offset'] : '+0';
+	}
+
+	$schema = '';
+	if ( ! empty( $periods ) ) {
+		$schema .= wp_json_encode( $periods ) . ',';
+	}
+	$schema .= '["UTC":"' . $utc_offset . '","Timezone":"' . $timezone_string . '"]';
+
+	return $schema;
+}
+
+/**
+ * Sanitize a business hours time value.
+ *
+ * @since 2.8.184
+ *
+ * @param string $time Time in HH:MM or HH:MM:SS format.
+ * @return string Sanitized time or empty string when invalid.
+ */
+function geodir_business_hours_sanitize_time( $time ) {
+	$time = is_scalar( $time ) ? trim( (string) $time ) : '';
+
+	if ( preg_match( '/^([01]?\d|2[0-4]):([0-5]\d)(?::([0-5]\d))?$/', $time ) ) {
+		return $time;
+	}
+
+	return '';
 }
 
 /**
@@ -2173,4 +2245,36 @@ function geodir_business_hours_post_meta( $request ) {
 	}
 
 	return $response;
+}
+
+/**
+ * Generates the inline JavaScript script for business hours input.
+ *
+ * @since 2.8.184
+ *
+ * @param array $args {
+ *     Optional. Array of arguments for initializing business hours.
+ *
+ *     @type string $name     Form field name. Default 'business_hours'.
+ *     @type mixed  $value    Current business hours value or data array. Default empty string.
+ *     @type string $timezone Timezone string (e.g., 'America/New_York'). Defaults to `geodir_timezone_string()`.
+ * }
+ *
+ * @return string Cleaned inline JavaScript execution string (without script tags).
+ */
+function geodir_business_hours_inline_script( $args = array() ) {
+	$name          = ! empty( $args['name'] ) ? $args['name'] : 'business_hours';
+	$value         = ! empty( $args['value'] ) ? $args['value'] : '';
+	$timezone      = ! empty( $args['timezone'] ) ? $args['timezone'] : geodir_timezone_string();
+	$timezone_data = geodir_timezone_data( $timezone );
+
+	ob_start();
+	?>
+		<script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo esc_js( $name ); ?>','value':'<?php echo esc_js( $value ); ?>','json':'<?php echo esc_js( wp_json_encode( $value ) ); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo esc_js( $timezone_data['utc_offset'] ); ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo esc_js( $timezone_data['utc_offset_dst'] ); ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
+	<?php
+	$script = ob_get_clean();
+	$script = str_replace( array( '<script type="text/javascript">', '</script>' ), '', $script );
+	$script = trim( $script );
+
+	return $script;
 }

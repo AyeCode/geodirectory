@@ -2224,162 +2224,159 @@ add_filter( 'geodir_custom_field_input_tags', 'geodir_cfi_tags', 10, 2 );
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_business_hours( $html, $cf ) {
-    global $aui_bs5, $gd_post, $geodir_label_type;
+	global $aui_bs5, $gd_post, $geodir_label_type;
 
-    if ( empty( $html ) ) {
-        $horizontal = empty( $geodir_label_type ) || $geodir_label_type == 'horizontal' ? true : false;
+	if ( empty( $html ) ) {
+		$horizontal   = empty( $geodir_label_type ) || $geodir_label_type == 'horizontal' ? true : false;
+		$htmlvar_name = $cf['htmlvar_name'];
+		$name         = $cf['name'];
+		$label        = __( $cf['frontend_title'], 'geodirectory' );
+		$description  = __( $cf['desc'], 'geodirectory' );
+		$value        = geodir_get_cf_value( $cf );
 
-        $htmlvar_name = $cf['htmlvar_name'];
-        $name = $cf['name'];
-        $label = __( $cf['frontend_title'], 'geodirectory' );
-        $description = __( $cf['desc'], 'geodirectory' );
-        $value = geodir_get_cf_value( $cf );
+		$locale            = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
+		$time_format       = geodir_bh_input_time_format();
+		$timepicker_format = geodir_bh_input_time_format( true );
+		$timezone_string   = geodir_timezone_string();
+		$weekdays          = geodir_get_short_weekdays();
+		$display           = 'none';
+		$time_24hr         = strpos( $timepicker_format, 'H' ) !== false ? true : false;
 
-        $locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
-        $time_format = geodir_bh_input_time_format();
-        $timepicker_format = geodir_bh_input_time_format( true );
-        $timezone_string = geodir_timezone_string();
-        $weekdays = geodir_get_short_weekdays();
-        $display = 'none';
+		if ( $time_24hr && strpos( $timepicker_format, '\H' ) !== false ) {
+			if ( strpos( $timepicker_format, '\H' ) + 1 === strpos( $timepicker_format, 'H' ) ) {
+				$time_24hr = false;
+			}
+		}
 
-        $time_24hr = strpos( $timepicker_format, 'H' ) !== false ? true : false;
-        if ( $time_24hr && strpos( $timepicker_format, '\H' ) !== false ) {
-            if ( strpos( $timepicker_format, '\H' ) + 1 === strpos( $timepicker_format, 'H' ) ) {
-                $time_24hr = false;
-            }
-        }
+		if ( ! empty( $value ) ) {
+			$display = '';
+			$value   = stripslashes_deep( $value );
+			$periods = geodir_schema_to_array( $value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
 
-        if ( ! empty( $value ) ) {
-            $display = '';
-            $value = stripslashes_deep( $value );
-            $periods = geodir_schema_to_array( $value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
-            if ( ! empty( $periods['hours'] ) ) {
-                $hours = $periods['hours'];
-            }
+			if ( ! empty( $periods['hours'] ) ) {
+				$hours = $periods['hours'];
+			}
 
-            if ( ! empty( $periods['timezone_string'] ) ) {
-                $timezone_string = $periods['timezone_string'];
-            }
-        } else {
-            $hours = geodir_bh_default_values(); // Default value
-        }
+			if ( ! empty( $periods['timezone_string'] ) ) {
+				$timezone_string = $periods['timezone_string'];
+			}
+		} else {
+			$hours = geodir_bh_default_values(); // Default value
+		}
 
-        $timezone_data = geodir_timezone_data( $timezone_string );
+		// Enqueue the script.
+		$aui_settings = AyeCode_UI_Settings::instance();
+		$aui_settings->enqueue_flatpickr();
 
+		$inline_script = geodir_business_hours_inline_script( array( 'name' => $htmlvar_name, 'value' => $value, 'timezone' => $timezone_string ) );
+		wp_add_inline_script( 'geodir-add-listing', $inline_script );
 
-        // enqueue the script
-        $aui_settings = AyeCode_UI_Settings::instance();
-        $aui_settings->enqueue_flatpickr();
+		$conditional_attrs = geodir_conditional_field_attrs( $cf, $htmlvar_name, 'hidden' );
 
-        $conditional_attrs = geodir_conditional_field_attrs( $cf, $htmlvar_name, 'hidden' );
+		ob_start();
+		?>
+		<div id="<?php echo esc_attr( $name ); ?>_row" class="gd-bh-row<?php echo ( $horizontal ? ' row' : '' ); ?> <?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>"<?php echo $conditional_attrs; ?>>
+			<label for="<?php echo esc_attr( $htmlvar_name ); ?>_f_active_1" class="<?php echo ( $horizontal ? 'pt-0 col-sm-2 col-form-label' : ( $aui_bs5 ? 'form-label' : '' ) ); ?>"><?php echo esc_html( $label ); ?></label>
+			<div class="gd-bh-field<?php echo ( $horizontal ? ' col-sm-10' : '' ); ?>" data-field-name="<?php echo esc_attr( $htmlvar_name ); ?>" role="radiogroup">
+				<?php echo aui()->radio(
+					array(
+						'id'         => $htmlvar_name . '_f_active',
+						'name'       => $htmlvar_name . '_f_active',
+						'required'   => true,
+						'label'      => '',
+						'label_type' => 'vertical',
+						'type'       => 'radio',
+						'value'      => ( $value ? 1 : 0 ),
+						'options'    => array(
+							'1' => __( 'Yes','geodirectory' ),
+							'0' => __( 'No','geodirectory' )
+						),
+						'extra_attributes' => array(
+							'data-field'   => 'active',
+							'data-no-rule' => 1
+						)
+					)
+				);
+				?>
+				<div class="gd-bh-items" style="display:<?php echo esc_attr( $display ); ?>" data-12am="<?php echo esc_attr( strtoupper( date_i18n( $time_format, strtotime( '00:00' ) ) ) ); ?>">
+					<table class="table table-borderless table-striped">
+						<thead class="<?php echo ( $aui_bs5 ? 'table-light' : 'thead-light' ); ?>">
+						<tr><th class="gd-bh-day"><?php esc_html_e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours text-nowrap"><?php esc_html_e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php esc_html_e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only visually-hidden"><?php esc_html_e( 'Add', 'geodirectory' ); ?></span></th></tr>
+						</thead>
+						<tbody>
+						<tr style="display:none!important">
+							<td colspan="4" class="gd-bh-blank">
+								<div class="gd-bh-hours row">
+									<div class="col-10 p-0 mb-1"><div class="input-group">
+										<div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-time_24hr="<?php echo ( $time_24hr ? 'true' : 'false' ); ?>" data-alt-input-class="gd-alt-open form-control text-center bg-white rounded-0 w-100 GD_UNIQUE_ID_oa" class="form-control text-center bg-white rounded-0 w-100" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" value="09:00"></div>
+										<div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-time_24hr="<?php echo ( $time_24hr ? 'true' : 'false' ); ?>" data-alt-input-class="gd-alt-close form-control text-center bg-white rounded-0 w-100 GD_UNIQUE_ID_oa" class="form-control text-center bg-white rounded-0 w-100" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" value="17:00"></div>
+									</div></div>
+									<div class="col-2 text-left text-start gd-bh-remove"><i class="fas fa-minus-circle text-danger c-pointer mt-2" title="<?php esc_html_e("Remove hours","geodirectory"); ?>" data-toggle="tooltip" aria-hidden="true"></i></div>
+								</div>
+							</td>
+						</tr>
+						<?php foreach ( $weekdays as $day_no => $day ) { ?>
+							<tr class="gd-bh-item<?php echo ( empty( $hours[ $day_no ] ) ? ' gd-bh-item-closed' : '' ); ?>">
+								<td class="gd-bh-day align-top"><?php echo esc_html( $day ); ?></td>
+								<td class="gd-bh-24hours align-top"><div class="form-check mt-1"><input type="checkbox" value="1" class="form-check-input" <?php echo ( empty( $hours[ $day_no ] ) ? 'style="display:none"' : '' ); ?>></div></td>
+								<td class="gd-bh-time" data-day="<?php echo esc_html( $day_no ); ?>" data-field="<?php echo esc_attr( $htmlvar_name ); ?>_f[hours][<?php echo esc_html( $day_no ); ?>]">
+									<?php
+									if ( ! empty( $hours[ $day_no ] ) ) {
+										$slots = $hours[ $day_no ];
 
-        ob_start();
-        ?>
-        <script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
-        <div id="<?php echo $name;?>_row" class="gd-bh-row<?php echo ( $horizontal ? ' row' : '' ); ?> <?php echo ( $aui_bs5 ? 'mb-3' : 'form-group' ); ?>"<?php echo $conditional_attrs; ?>>
-            <label for="<?php echo $htmlvar_name; ?>_f_active_1" class="<?php echo ( $horizontal ? 'pt-0 col-sm-2 col-form-label' : ( $aui_bs5 ? 'form-label' : '' ) ); ?>"><?php echo $label; ?></label>
-            <div class="gd-bh-field<?php echo ( $horizontal ? ' col-sm-10' : '' ); ?>" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
-                <?php echo aui()->radio(
-                    array(
-                        'id' => $htmlvar_name . '_f_active',
-                        'name' => $htmlvar_name . '_f_active',
-                        'required' => true,
-                        'label' => '',
-                        'label_type' => 'vertical',
-                        'type' => 'radio',
-                        'value' => ( $value ? 1 : 0 ),
-                        'options' => array(
-                            '1' => __( 'Yes','geodirectory' ),
-                            '0' => __( 'No','geodirectory' )
-                        ),
-                        'extra_attributes' => array(
-                            'data-field' => 'active',
-                            'data-no-rule' => 1
-                        )
-                    )
-                );
-                ?>
-                <div class="gd-bh-items" style="display:<?php echo $display; ?>" data-12am="<?php echo esc_attr( strtoupper( date_i18n( $time_format, strtotime( '00:00' ) ) ) ); ?>">
-                    <table class="table table-borderless table-striped">
-                        <thead class="<?php echo ( $aui_bs5 ? 'table-light' : 'thead-light' ); ?>">
-                        <tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours text-nowrap"><?php _e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only visually-hidden"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
-                        </thead>
-                        <tbody>
-                        <tr style="display:none!important">
-                            <td colspan="4" class="gd-bh-blank">
-                                <div class="gd-bh-hours row">
-                                    <div class="col-10 p-0 mb-1"><div class="input-group">
-                                        <div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-time_24hr="<?php echo ( $time_24hr ? 'true' : 'false' ); ?>" data-alt-input-class="gd-alt-open form-control text-center bg-white rounded-0 w-100 GD_UNIQUE_ID_oa" class="form-control text-center bg-white rounded-0 w-100" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" value="09:00"></div>
-                                        <div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-time_24hr="<?php echo ( $time_24hr ? 'true' : 'false' ); ?>" data-alt-input-class="gd-alt-close form-control text-center bg-white rounded-0 w-100 GD_UNIQUE_ID_oa" class="form-control text-center bg-white rounded-0 w-100" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" value="17:00"></div>
-                                    </div></div>
-                                    <div class="col-2 text-left text-start gd-bh-remove"><i class="fas fa-minus-circle text-danger c-pointer mt-2" title="<?php _e("Remove hours","geodirectory"); ?>" data-toggle="tooltip" aria-hidden="true"></i></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php foreach ( $weekdays as $day_no => $day ) { ?>
-                            <tr class="gd-bh-item<?php echo ( empty( $hours[ $day_no ] ) ? ' gd-bh-item-closed' : '' ); ?>">
-                                <td class="gd-bh-day align-top"><?php echo $day; ?></td>
-                                <td class="gd-bh-24hours align-top"><div class="form-check mt-1"><input type="checkbox" value="1" class="form-check-input" <?php echo ( empty( $hours[ $day_no ] ) ? 'style="display:none"' : '' ); ?>></div></td>
-                                <td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>]">
-                                    <?php
-                                    if ( ! empty( $hours[ $day_no ] ) ) {
-                                        $slots = $hours[ $day_no ];
+										foreach ( $slots as $slot ) {
+											$open = $close = $open_display = $close_display = $open_His = $close_His = '';
 
-                                        foreach ( $slots as $slot ) {
-                                            $open = $close = $open_display = $close_display = $open_His = $close_His = '';
+											$unique_id = uniqid( rand() );
 
-                                            $unique_id = uniqid( rand() );
+											if ( ! empty( $slot['opens'] ) ) {
+												$open = $slot['opens'];
+												$open_time = strtotime( $open );
+												$open_display = date_i18n( $time_format, $open_time );
+												$open_His = date_i18n( 'H:i:s', $open_time );
+											}
 
-                                            if ( ! empty( $slot['opens'] ) ) {
-                                                $open = $slot['opens'];
-                                                $open_time = strtotime( $open );
-                                                $open_display = date_i18n( $time_format, $open_time );
-                                                $open_His = date_i18n( 'H:i:s', $open_time );
-                                            }
+											if ( ! empty( $slot['closes'] ) ) {
+												$close = $slot['closes'];
+												$close_time = strtotime( $close );
+												$close_display = date_i18n( $time_format, $close_time );
+												$close_His = date_i18n( 'H:i:s', $close_time );
+											}
+											?>
+											<div class="gd-bh-hours<?php echo ( ( $open == '00:00' && $open == $close ) ? ' gd-bh-has24' : '' ); ?> row">
+												<div class="col-10 p-0 mb-1"><div class="input-group">
+													<div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-time_24hr="<?php echo ( $time_24hr ? 'true' : 'false' ); ?>" data-alt-input-class="gd-alt-open form-control text-center bg-white rounded-0 w-100 <?php echo esc_attr( $unique_id ); ?>_oa" data-aui-init="flatpickr" class="form-control text-center bg-white rounded-0 w-100" id="<?php echo esc_attr( $unique_id ); ?>_o" data-field-alt="open" data-bh="time" value="<?php echo esc_attr( $open_His ); ?>" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" data-time="<?php echo esc_attr( $open_His ); ?>" name="<?php echo esc_attr( $htmlvar_name ); ?>_f[hours][<?php echo esc_attr( $day_no ); ?>][open][]"></div>
+													<div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-time_24hr="<?php echo ( $time_24hr ? 'true' : 'false' ); ?>" data-alt-input-class="gd-alt-close form-control text-center bg-white rounded-0 w-100 <?php echo esc_attr( $unique_id ); ?>_oa" data-aui-init="flatpickr" class="form-control text-center bg-white rounded-0 w-100" id="<?php echo esc_attr( $unique_id ); ?>_c" data-field-alt="close" data-bh="time" value="<?php echo esc_attr( $close_His ); ?>" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" data-time="<?php echo esc_attr( $close_His ); ?>" name="<?php echo esc_attr( $htmlvar_name ); ?>_f[hours][<?php echo esc_attr( $day_no ); ?>][close][]"></div>
+												</div></div>
+												<div class="col-2 text-left text-start gd-bh-remove"><i class="fas fa-minus-circle text-danger c-pointer mt-2" title="<?php esc_attr_e( "Remove hours", "geodirectory" ); ?>" data-toggle="tooltip" aria-hidden="true"></i></div>
+											</div>
+										<?php } ?>
+									<?php } else { ?>
+										<div class="gd-bh-closed text-center"><?php esc_html_e( 'Closed', 'geodirectory' ); ?></div>
+									<?php } ?>
+								</td>
+								<td class="gd-bh-act align-top"><span class="gd-bh-add c-pointer" title="<?php esc_attr_e( "Add new set of hours", "geodirectory" ); ?>" data-toggle="tooltip"><i class="fas fa-plus-circle text-primary" aria-hidden="true"></i></span></td>
+							</tr>
+						<?php } ?>
+						<tr class="gd-tz-item">
+							<td colspan="4"><div class="row mb-0"><div class="col-sm-2 col-form-label"><label for="<?php echo esc_attr( $htmlvar_name ); ?>_f_timezone_string" class="mb-0"><?php esc_html_e( 'Timezone:', 'geodirectory' ); ?></label></div><div class="col-sm-10 pt-1"><select data-field="timezone_string" id="<?php echo esc_attr( $htmlvar_name ); ?>_f_timezone_string" class="<?php echo ( $aui_bs5 ? 'form-select form-select-sm' : 'custom-select custom-select-sm' ); ?> aui-select2" data-placeholder="<?php esc_attr_e( 'Select a city/timezone&hellip;', 'geodirectory' ); ?>" data-allow-clear="1" option-ajaxchosen="false" tabindex="-1" aria-hidden="true" data-select2-id="<?php echo esc_attr( $htmlvar_name ); ?>"><?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?></select></div></div>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<input type="hidden" name="<?php echo esc_attr( $htmlvar_name ); ?>" value="<?php echo esc_attr( $value ); ?>">
+				<?php if ( $horizontal ) { echo '<small class="form-text text-muted d-block">' . wp_kses_post( $description ) . '</small>'; } ?>
+			</div>
+			<?php if ( ! $horizontal ) { echo '<small class="form-text text-muted d-block">' . wp_kses_post( $description ) . '</small>'; } ?>
+		</div>
+		<?php
+		$html = ob_get_clean();
+	}
 
-                                            if ( ! empty( $slot['closes'] ) ) {
-                                                $close = $slot['closes'];
-                                                $close_time = strtotime( $close );
-                                                $close_display = date_i18n( $time_format, $close_time );
-                                                $close_His = date_i18n( 'H:i:s', $close_time );
-                                            }
-                                            ?>
-                                            <div class="gd-bh-hours<?php echo ( ( $open == '00:00' && $open == $close ) ? ' gd-bh-has24' : '' ); ?> row">
-                                                <div class="col-10 p-0 mb-1"><div class="input-group">
-                                                    <div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-time_24hr="<?php echo ( $time_24hr ? 'true' : 'false' ); ?>" data-alt-input-class="gd-alt-open form-control text-center bg-white rounded-0 w-100 <?php echo $unique_id; ?>_oa" data-aui-init="flatpickr" class="form-control text-center bg-white rounded-0 w-100" id="<?php echo $unique_id; ?>_o" data-field-alt="open" data-bh="time" value="<?php echo esc_attr( $open_His ); ?>" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" data-time="<?php echo $open_His; ?>" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]"></div>
-                                                    <div class="col-md-6 col-sm-12 m-0 p-0"><input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-time_24hr="<?php echo ( $time_24hr ? 'true' : 'false' ); ?>" data-alt-input-class="gd-alt-close form-control text-center bg-white rounded-0 w-100 <?php echo $unique_id; ?>_oa" data-aui-init="flatpickr" class="form-control text-center bg-white rounded-0 w-100" id="<?php echo $unique_id; ?>_c" data-field-alt="close" data-bh="time" value="<?php echo esc_attr( $close_His ); ?>" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" data-time="<?php echo $close_His; ?>" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]"></div>
-                                                </div></div>
-                                                <div class="col-2 text-left text-start gd-bh-remove"><i class="fas fa-minus-circle text-danger c-pointer mt-2" title="<?php _e( "Remove hours", "geodirectory" ); ?>" data-toggle="tooltip" aria-hidden="true"></i></div>
-                                            </div>
-                                        <?php } ?>
-                                    <?php } else { ?>
-                                        <div class="gd-bh-closed text-center"><?php _e( 'Closed', 'geodirectory' ); ?></div>
-                                    <?php } ?>
-                                </td>
-                                <td class="gd-bh-act align-top"><span class="gd-bh-add c-pointer" title="<?php _e("Add new set of hours","geodirectory"); ?>" data-toggle="tooltip"><i class="fas fa-plus-circle text-primary" aria-hidden="true"></i></span></td>
-                            </tr>
-                        <?php } ?>
-                        <tr class="gd-tz-item">
-                            <td colspan="4"><div class="row mb-0"><div class="col-sm-2 col-form-label"><label for="<?php echo $htmlvar_name; ?>_f_timezone_string" class="mb-0"><?php _e( 'Timezone:', 'geodirectory' ); ?></label></div><div class="col-sm-10 pt-1"><select data-field="timezone_string" id="<?php echo $htmlvar_name; ?>_f_timezone_string" class="<?php echo ( $aui_bs5 ? 'form-select form-select-sm' : 'custom-select custom-select-sm' ); ?> aui-select2" data-placeholder="<?php esc_attr_e( 'Select a city/timezone&hellip;', 'geodirectory' ); ?>" data-allow-clear="1" option-ajaxchosen="false" tabindex="-1" aria-hidden="true" data-select2-id="<?php echo $htmlvar_name; ?>"><?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?></select></div></div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <input type="hidden" name="<?php echo $htmlvar_name; ?>" value="<?php echo esc_attr( $value ); ?>">
-                <?php if($horizontal){echo '<small class="form-text text-muted d-block">'. $description.'</small>';} ?>
-            </div>
-            <?php if(!$horizontal){echo '<small class="form-text text-muted d-block">'. $description.'</small>';} ?>
-        </div>
-        <?php
-        $html = ob_get_clean();
-    }
-
-    return $html;
+	return $html;
 }
 add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hours', 10, 2 );
-
-
 
 /**
  * Get the html input for the custom field: images
