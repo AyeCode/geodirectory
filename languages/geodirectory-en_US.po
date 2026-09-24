@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.184\n"
+"Project-Id-Version: GeoDirectory 2.8.185\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 12:17+0530\n"
-"PO-Revision-Date: 2026-09-24 12:17+0530\n"
+"POT-Creation-Date: 2026-09-24 14:24+0530\n"
+"PO-Revision-Date: 2026-09-24 14:24+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -431,7 +431,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-assets.php:119
 #: includes/admin/class-geodir-admin-blocks.php:231
 #: includes/admin/class-geodir-admin-menus.php:109
-#: includes/class-geodir-elementor.php:157 includes/class-geodir-privacy.php:39
+#: includes/class-geodir-elementor.php:198 includes/class-geodir-privacy.php:39
 #: includes/core-functions.php:937
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
 #: includes/integrations/bricks/class-geodir-bricks.php:584
@@ -3381,7 +3381,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:1057
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:185
-#: includes/class-geodir-elementor.php:1817 includes/helper-functions.php:1696
+#: includes/class-geodir-elementor.php:1858 includes/helper-functions.php:1696
 #: includes/helper-functions.php:1799
 #: includes/widgets/class-geodir-widget-categories.php:163
 #: includes/widgets/class-geodir-widget-categories.php:173
@@ -11538,21 +11538,21 @@ msgstr ""
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:509 includes/core-functions.php:337
+#: includes/class-geodir-elementor.php:550 includes/core-functions.php:337
 #: includes/widgets/class-geodir-widget-single-next-prev.php:94
 #: templates/bootstrap/images/images.php:266
 #: templates/legacy/single/next-prev.php:12
 msgid "Previous"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:513 includes/core-functions.php:338
+#: includes/class-geodir-elementor.php:554 includes/core-functions.php:338
 #: includes/widgets/class-geodir-widget-single-next-prev.php:95
 #: templates/bootstrap/images/images.php:270
 #: templates/legacy/single/next-prev.php:13
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:1221
+#: includes/class-geodir-elementor.php:1262
 msgid "Could not retrieve template."
 msgstr ""
 
