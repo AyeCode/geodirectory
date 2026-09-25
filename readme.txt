@@ -325,6 +325,7 @@ Please include as much relevant information as possible and avoid publicly discl
 7. Geo Directory WordPress Admin Page.
 
 == Changelog ==
+wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](https://wp-rankings.com/plugins/geodirectory)
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
