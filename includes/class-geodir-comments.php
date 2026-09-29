@@ -882,11 +882,11 @@ class GeoDir_Comments {
 		$design_style = geodir_design_style();
 
 		if ( $design_style ) {
-			echo '<div class="gd-rating-outer-wrap gd-rating-' . esc_attr( $type ) . '-wrap d-flex d-flex justify-content-between flex-nowrap w-100">';
+			echo '<div class="gd-rating-outer-wrap gd-rating-' . esc_attr( $type ) . '-wrap d-flex justify-content-between align-items-start flex-nowrap w-100 mw-100">';
 
 			$wrap_class = $type == 'input' ? 'c-pointer' : '';
 			?>
-			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
+			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?> mr-2 me-2">
 			<span class="gd-rating-wrap d-inline-flex text-nowrap position-relative <?php echo $wrap_class; ?>" <?php echo $rating_wrap_title; ?>>
 				<span class="gd-rating-foreground position-absolute text-nowrap overflow-hidden" <?php echo $foreground_style; ?>><?php echo $rating_html; ?></span>
 				<span class="gd-rating-background" <?php echo $rating_color_off; ?>><?php echo $rating_html; ?></span>
@@ -897,7 +897,7 @@ class GeoDir_Comments {
 				<?php } ?>
 			</div>
 			<?php if ( $rating_label ) { ?>
-				<span class="gd-rating-label font-weight-bold fw-bold p-0 m-0 text-nowrap"><?php echo esc_attr( $rating_label ); ?></span>
+				<span class="gd-rating-label font-weight-bold fw-bold p-0 m-0 text-break text-end text-right"><?php echo esc_attr( $rating_label ); ?></span>
 				<?php
 			}
 			echo '</div>';

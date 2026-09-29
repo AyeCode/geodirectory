@@ -12,7 +12,7 @@
  *
  * @see        https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.3.7
+ * @version    2.8.186
  *
  * Variables.
  *
@@ -29,7 +29,7 @@ global $post, $aui_bs5;
 <li <?php comment_class( 'geodir-comment list-unstyled mb-4 pb-3 border-bottom fs-sm' ); ?>
 	id="li-comment-<?php comment_ID(); ?>">
 	<div class="" id="comment-<?php comment_ID(); ?>">
-		<div class="d-flex justify-content-between mb-3">
+		<div class="d-flex justify-content-between flex-wrap mb-3">
 			<div class="d-flex align-items-center pe-2">
 				<?php
 				/**

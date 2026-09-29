@@ -12,7 +12,7 @@
  *
  * @see        https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.3.74
+ * @version    2.8.186
  *
  * Variables.
  *
@@ -28,7 +28,7 @@ global $post, $aui_bs5;
 ?>
 <li <?php comment_class( 'geodir-comment list-unstyled' ); ?> id="li-comment-<?php comment_ID(); ?>">
 	<div id="comment-<?php comment_ID(); ?>" class="card mt-3 shadow-sm">
-		<div class="card-header border-bottom toast-header <?php echo $aui_bs5 ? 'px-2 py-1 border-bottom border-opacity-25' : ''; ?>">
+		<div class="card-header border-bottom toast-header flex-wrap <?php echo $aui_bs5 ? 'px-2 py-1 border-bottom border-opacity-25' : ''; ?>">
 			<?php
 			/**
 			 * Filter to modify comment avatar size
