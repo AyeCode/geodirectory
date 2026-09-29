@@ -329,6 +329,9 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.186 - 2026-09-TBD =
+* Review rating rows with long rating labels overflow the container on mobile devices - FIXED
+
 = GeoDirectory v2.8.185 - 2026-09-24 =
 * GD widgets missing from Elementor v4.3 widget panel & Element Manager - COMPATIBILITY
 
