@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.2.55';
+		public $version = '0.2.56';
 
 		/**
 		 * Class textdomain.
@@ -152,22 +152,23 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 * Setup some constants.
 		 */
 		public function constants(){
-			define( 'AUI_PRIMARY_COLOR_ORIGINAL', "#1e73be" );
-			define( 'AUI_SECONDARY_COLOR_ORIGINAL', '#6c757d' );
-			define( 'AUI_INFO_COLOR_ORIGINAL', '#17a2b8' );
-			define( 'AUI_WARNING_COLOR_ORIGINAL', '#ffc107' );
-			define( 'AUI_DANGER_COLOR_ORIGINAL', '#dc3545' );
-			define( 'AUI_SUCCESS_COLOR_ORIGINAL', '#44c553' );
-			define( 'AUI_LIGHT_COLOR_ORIGINAL', '#f8f9fa' );
-			define( 'AUI_DARK_COLOR_ORIGINAL', '#343a40' );
-			define( 'AUI_WHITE_COLOR_ORIGINAL', '#fff' );
-			define( 'AUI_PURPLE_COLOR_ORIGINAL', '#ad6edd' );
-			define( 'AUI_SALMON_COLOR_ORIGINAL', '#ff977a' );
-			define( 'AUI_CYAN_COLOR_ORIGINAL', '#35bdff' );
-			define( 'AUI_GRAY_COLOR_ORIGINAL', '#ced4da' );
-			define( 'AUI_INDIGO_COLOR_ORIGINAL', '#502c6c' );
-			define( 'AUI_ORANGE_COLOR_ORIGINAL', '#orange' );
-			define( 'AUI_BLACK_COLOR_ORIGINAL', '#000' );
+			// Another copy of this package may have defined these already.
+			defined( 'AUI_PRIMARY_COLOR_ORIGINAL' ) || define( 'AUI_PRIMARY_COLOR_ORIGINAL', "#1e73be" );
+			defined( 'AUI_SECONDARY_COLOR_ORIGINAL' ) || define( 'AUI_SECONDARY_COLOR_ORIGINAL', '#6c757d' );
+			defined( 'AUI_INFO_COLOR_ORIGINAL' ) || define( 'AUI_INFO_COLOR_ORIGINAL', '#17a2b8' );
+			defined( 'AUI_WARNING_COLOR_ORIGINAL' ) || define( 'AUI_WARNING_COLOR_ORIGINAL', '#ffc107' );
+			defined( 'AUI_DANGER_COLOR_ORIGINAL' ) || define( 'AUI_DANGER_COLOR_ORIGINAL', '#dc3545' );
+			defined( 'AUI_SUCCESS_COLOR_ORIGINAL' ) || define( 'AUI_SUCCESS_COLOR_ORIGINAL', '#44c553' );
+			defined( 'AUI_LIGHT_COLOR_ORIGINAL' ) || define( 'AUI_LIGHT_COLOR_ORIGINAL', '#f8f9fa' );
+			defined( 'AUI_DARK_COLOR_ORIGINAL' ) || define( 'AUI_DARK_COLOR_ORIGINAL', '#343a40' );
+			defined( 'AUI_WHITE_COLOR_ORIGINAL' ) || define( 'AUI_WHITE_COLOR_ORIGINAL', '#fff' );
+			defined( 'AUI_PURPLE_COLOR_ORIGINAL' ) || define( 'AUI_PURPLE_COLOR_ORIGINAL', '#ad6edd' );
+			defined( 'AUI_SALMON_COLOR_ORIGINAL' ) || define( 'AUI_SALMON_COLOR_ORIGINAL', '#ff977a' );
+			defined( 'AUI_CYAN_COLOR_ORIGINAL' ) || define( 'AUI_CYAN_COLOR_ORIGINAL', '#35bdff' );
+			defined( 'AUI_GRAY_COLOR_ORIGINAL' ) || define( 'AUI_GRAY_COLOR_ORIGINAL', '#ced4da' );
+			defined( 'AUI_INDIGO_COLOR_ORIGINAL' ) || define( 'AUI_INDIGO_COLOR_ORIGINAL', '#502c6c' );
+			defined( 'AUI_ORANGE_COLOR_ORIGINAL' ) || define( 'AUI_ORANGE_COLOR_ORIGINAL', '#orange' );
+			defined( 'AUI_BLACK_COLOR_ORIGINAL' ) || define( 'AUI_BLACK_COLOR_ORIGINAL', '#000' );
 
 			if ( ! defined( 'AUI_PRIMARY_COLOR' ) ) {
 				define( 'AUI_PRIMARY_COLOR', AUI_PRIMARY_COLOR_ORIGINAL );
@@ -745,50 +746,50 @@ $custom_css .= "
 			wp_enqueue_script( 'iconpicker' );
 		}
 
-        /**
-         * Get the url path to the current folder.
-         *
-         * This can be called very early, hence the need for the dynamic way of getting the URL.
-         *
-         * @since 0.2.31 changed to support edge cases like bitnami containers.
-         * @return string
-         */
-        public function get_url() {
-            $content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
-            $content_url = untrailingslashit( WP_CONTENT_URL );
+		/**
+		 * Get the url path to the current folder.
+		 *
+		 * This can be called very early, hence the need for the dynamic way of getting the URL.
+		 *
+		 * @since 0.2.31 changed to support edge cases like bitnami containers.
+		 * @return string
+		 */
+		public function get_url() {
+			$content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
+			$content_url = untrailingslashit( WP_CONTENT_URL );
 
-            // maybe Replace http:// to https://.
-            if ( strpos( $content_url, 'http://' ) === 0 && strpos( plugins_url(), 'https://' ) === 0 ) {
-                $content_url = str_replace( 'http://', 'https://', $content_url );
-            }
+			// maybe Replace http:// to https://.
+			if ( strpos( $content_url, 'http://' ) === 0 && strpos( plugins_url(), 'https://' ) === 0 ) {
+				$content_url = str_replace( 'http://', 'https://', $content_url );
+			}
 
-            // First find where in the path our content directory starts
-            $content_basename = basename($content_dir);
-            $file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
+			// First find where in the path our content directory starts
+			$content_basename = basename($content_dir);
+			$file_dir = str_replace( "/includes", "", wp_normalize_path( dirname( __FILE__ ) ) );
 
-            // Find the relative path by matching from content directory name
-            $after_content = substr($file_dir, strpos($file_dir, '/' . $content_basename . '/') + strlen('/' . $content_basename . '/'));
+			// Find the relative path by matching from content directory name
+			$after_content = substr($file_dir, strpos($file_dir, '/' . $content_basename . '/') + strlen('/' . $content_basename . '/'));
 
-            // Build URL using WP_CONTENT_URL and the relative path
-            $url = trailingslashit($content_url) . $after_content;
+			// Build URL using WP_CONTENT_URL and the relative path
+			$url = trailingslashit($content_url) . $after_content;
 
-            // some hosts end up with /wp-content/wp-content/
-            $url = str_replace( '/wp-content/wp-content/', '/wp-content/', $url );
+			// some hosts end up with /wp-content/wp-content/
+			$url = str_replace( '/wp-content/wp-content/', '/wp-content/', $url );
 
-            /**
-             * Filters the URL to the AyeCode UI folder.
-             *
-             * Useful when the folder URL can't be worked out from its path, e.g. a symlinked plugin.
-             *
-             * @since 0.2.54
-             *
-             * @param string $url      The AyeCode UI folder URL.
-             * @param string $file_dir The AyeCode UI folder path.
-             */
-            $url = apply_filters( 'ayecode_ui_url', $url, $file_dir );
+			/**
+			 * Filters the URL to the AyeCode UI folder.
+			 *
+			 * Useful when the folder URL can't be worked out from its path, e.g. a symlinked plugin.
+			 *
+			 * @since 0.2.54
+			 *
+			 * @param string $url      The AyeCode UI folder URL.
+			 * @param string $file_dir The AyeCode UI folder path.
+			 */
+			$url = apply_filters( 'ayecode_ui_url', $url, $file_dir );
 
-            return trailingslashit($url);
-        }
+			return trailingslashit($url);
+		}
 
 		/**
 		 * Get the url path to the current folder.
