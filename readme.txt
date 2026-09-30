@@ -331,6 +331,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.186 - 2026-09-TBD =
 * Review rating rows with long rating labels overflow the container on mobile devices - FIXED
+* Update AUI 0.2.56 and SD 1.2.37 - CHANGED
 
 = GeoDirectory v2.8.185 - 2026-09-24 =
 * GD widgets missing from Elementor v4.3 widget panel & Element Manager - COMPATIBILITY
