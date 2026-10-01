@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.8.186
+Stable tag: 2.8.187
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -328,6 +328,9 @@ Please include as much relevant information as possible and avoid publicly discl
 wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](https://wp-rankings.com/plugins/geodirectory)
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
+
+= GeoDirectory v2.8.187 - 2026-10-01 =
+* Added extra sanitization to latitude/longitude to prevent vulnerability - FIXED/SECURITY
 
 = GeoDirectory v2.8.186 - 2026-09-30 =
 * Review rating rows with long rating labels overflow the container on mobile devices - FIXED

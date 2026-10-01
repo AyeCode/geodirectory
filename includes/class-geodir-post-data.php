@@ -647,6 +647,7 @@ class GeoDir_Post_Data {
 					$postarr['country'] = stripslashes( $default_location->country );
 				}
 			}
+
 			if ( isset( $gd_post['region'] ) ) {
 				$postarr['region'] = sanitize_text_field( stripslashes( $gd_post['region'] ) );
 			}
@@ -657,10 +658,10 @@ class GeoDir_Post_Data {
 				$postarr['zip'] = sanitize_text_field( stripslashes( $gd_post['zip'] ) );
 			}
 			if ( isset( $gd_post['latitude'] ) ) {
-				$postarr['latitude'] = sanitize_text_field( stripslashes( $gd_post['latitude'] ) );
+				$postarr['latitude'] = geodir_sanitize_latlon( $gd_post['latitude'], 'lat' );
 			}
 			if ( isset( $gd_post['longitude'] ) ) {
-				$postarr['longitude'] = sanitize_text_field( stripslashes( $gd_post['longitude'] ) );
+				$postarr['longitude'] = geodir_sanitize_latlon( $gd_post['longitude'] );
 			}
 			if ( isset( $gd_post['mapview'] ) ) {
 				$postarr['mapview'] = sanitize_text_field( $gd_post['mapview'] );
@@ -671,7 +672,6 @@ class GeoDir_Post_Data {
 			if ( isset( $gd_post['post_dummy'] ) ) {
 				$postarr['post_dummy'] = $gd_post['post_dummy'];
 			}
-
 
 			// set post images
 			$i_post_id = ! empty( $gd_post['revision_ID'] ) && wp_is_post_revision( absint( $gd_post['revision_ID'] ) ) === $post_id ? absint( $gd_post['revision_ID'] ) : $post_id;
@@ -2230,8 +2230,8 @@ class GeoDir_Post_Data {
 		if ( ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) && $can_see_address ) {
 			$schema['geo'] = array(
 				"@type"     => "GeoCoordinates",
-				"latitude"  => $gd_post->latitude,
-				"longitude" => $gd_post->longitude
+				"latitude"  => geodir_sanitize_latlon( $gd_post->latitude, 'lat' ),
+				"longitude" => geodir_sanitize_latlon( $gd_post->longitude )
 			);
 		}
 

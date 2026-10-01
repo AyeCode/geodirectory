@@ -858,8 +858,12 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$data = apply_filters( 'geodir_widget_listings_ajax_listings', $data );
 
 		if ( ! empty( $data['set_post'] ) ) {
-			$post    = get_post( absint( $data['set_post'] ) );
-			$gd_post = geodir_get_post_info( absint( $data['set_post'] ) );
+			$_post = get_post( absint( $data['set_post'] ) );
+
+			if ( ! empty( $_post ) && geodir_is_gd_post_type( $_post->post_type ) && ( in_array( $_post->post_status, geodir_get_post_stati( 'public', array( 'post_type' => $_post->post_type ) ) ) || geodir_listing_belong_to_current_user( $_post->ID ) ) ) {
+				$post    = $_post;
+				$gd_post = geodir_get_post_info( absint( $data['set_post'] ) );
+			}
 		}
 
 		if ( ! empty( $data['set_query_vars'] ) && is_array( $data['set_query_vars'] ) ) {
@@ -1901,8 +1905,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				}
 
 				if ( ! empty( $_REQUEST['sgeo_lat'] ) && ! empty( $_REQUEST['sgeo_lon'] ) ) {
-					$params['sgeo_lat'] = isset( $_REQUEST['sgeo_lat'] ) ? filter_var( $_REQUEST['sgeo_lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
-					$params['sgeo_lon'] = isset( $_REQUEST['sgeo_lon'] ) ? filter_var( $_REQUEST['sgeo_lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
+					$params['sgeo_lat'] = isset( $_REQUEST['sgeo_lat'] ) ? geodir_sanitize_latlon( sanitize_text_field( wp_unslash( $_REQUEST['sgeo_lat'] ) ), 'lat' ) : '';
+					$params['sgeo_lon'] = isset( $_REQUEST['sgeo_lon'] ) ? geodir_sanitize_latlon( sanitize_text_field( wp_unslash( $_REQUEST['sgeo_lon'] ) ) ) : '';
 				}
 
 				foreach ( $params as $key => $value ) {
