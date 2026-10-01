@@ -1263,17 +1263,17 @@ function geodir_function_widget_listings_fields( $fields, $table, $post_type ) {
 	}
 
 	if ( ! empty( $query_args['distance_to_post'] ) && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
-		$latitude = $gd_post->latitude;
+		$latitude  = $gd_post->latitude;
 		$longitude = $gd_post->longitude;
 	} else if ( ! empty( $query_args['supports_location'] ) && ( ! empty( $query_args['is_gps_query'] ) || empty( $query_args['nearby_gps'] ) ) && ( $latlon = $geodirectory->location->get_latlon() ) ) {
-		$latitude = $latlon['lat'];
+		$latitude  = $latlon['lat'];
 		$longitude = $latlon['lon'];
 	} else if ( ! empty( $query_args['nearby_gps'] ) && ! empty( $query_args['nearby_gps']['latitude'] ) && ! empty( $query_args['nearby_gps']['longitude'] ) ) {
-		$latitude = geodir_sanitize_float( $query_args['nearby_gps']['latitude'] );
-		$longitude = geodir_sanitize_float( $query_args['nearby_gps']['longitude'] );
+		$latitude  = geodir_sanitize_latlon( $query_args['nearby_gps']['latitude'], 'lat' );
+		$longitude = geodir_sanitize_latlon( $query_args['nearby_gps']['longitude'] );
 		$fields .= ", '" . $latitude . "' AS gps_latitude, '" . $longitude . "' AS gps_longitude";
 	} else {
-		$latitude = '';
+		$latitude  = '';
 		$longitude = '';
 	}
 
@@ -1307,7 +1307,10 @@ function geodir_gps_query_part( $latitude, $longitude, $table = '', $radius = ''
 		$radius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
 	}
 
-	$prefix = $table ? $table . '.' : '';
+	$radius    = geodir_sanitize_float( $radius );
+	$latitude  = geodir_sanitize_latlon( $latitude, 'lat');
+	$longitude = geodir_sanitize_latlon( $longitude );
+	$prefix    = $table ? $table . '.' : '';
 
 	$query = "( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ( {$latitude} ) - ( {$prefix}`latitude` ) ) * PI() / 180 / 2 ), 2 ) + COS( ( {$latitude} ) * PI() / 180 ) * COS( ( {$prefix}`latitude` ) * PI() / 180 ) * POWER( SIN( ( {$longitude} - {$prefix}`longitude` ) * PI() / 180 / 2 ), 2 ) ) ) )";
 

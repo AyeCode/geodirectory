@@ -211,11 +211,11 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		global $wpdb;
 
 		// Filter by latitude/longitude.
-		$latitude = '';
+		$latitude  = '';
 		$longitude = '';
 		if ( ! empty( $request['lat'] ) || ! empty( $request['lon'] ) ) {
-			$latitude = ! empty( $request['lat'] ) && geodir_is_valid_lat( $request['lat'] ) ? filter_var( $request['lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
-			$longitude = ! empty( $request['lon'] ) && geodir_is_valid_lon( $request['lon'] ) ? filter_var( $request['lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
+			$latitude  = ! empty( $request['lat'] ) ? geodir_sanitize_latlon( $request['lat'], 'lat') : '';
+			$longitude = ! empty( $request['lon'] ) ? geodir_sanitize_latlon( $request['lon'] ) : '';
 
 			if ( empty( $latitude ) || empty( $longitude ) ) {
 				return new WP_Error( 'rest_invalid_param', __( 'Invalid latitude/longitude.' ) );

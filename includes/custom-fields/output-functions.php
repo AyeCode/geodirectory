@@ -2514,10 +2514,10 @@ function geodir_cf_address( $html, $location, $cf, $p = '', $output = '' ) {
 				$address_fields['country'] = '<span itemprop="addressCountry">' . __( $gd_post->country, 'geodirectory' ) . '</span>';
 			}
 			if ( isset( $gd_post->latitude ) && $gd_post->latitude ) {
-				$address_fields['latitude'] = '<span itemprop="addressLatitude">' . $gd_post->latitude . '</span>';
+				$address_fields['latitude'] = '<span itemprop="addressLatitude">' . geodir_sanitize_latlon( $gd_post->latitude, 'lat' ) . '</span>';
 			}
 			if ( isset( $gd_post->longitude ) && $gd_post->longitude ) {
-				$address_fields['longitude'] = '<span itemprop="addressLongitude">' . $gd_post->longitude . '</span>';
+				$address_fields['longitude'] = '<span itemprop="addressLongitude">' . geodir_sanitize_latlon( $gd_post->longitude ) . '</span>';
 			}
 
 			// Trick LM to add hoods if

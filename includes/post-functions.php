@@ -1094,6 +1094,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$is_date = apply_filters( 'geodir_post_badge_is_date', $is_date, $match_field, $field, $args, $find_post );
 
 			$match_value = isset($find_post->{$match_field}) ? esc_attr( trim( $find_post->{$match_field} ) ) : ''; // escape user input
+			if ( $match_field == 'latitude' ) {
+				$match_value  = geodir_sanitize_latlon( $match_value, 'lat' );
+			} elseif ( $match_field == 'longitude' ) {
+				$match_value = geodir_sanitize_latlon( $match_value );
+			}
 			$match_found = $match_field === '' ? true : false;
 
 			if ( ! $match_found ) {
