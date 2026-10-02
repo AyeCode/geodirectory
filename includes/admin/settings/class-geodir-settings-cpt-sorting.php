@@ -833,7 +833,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		public static function clear_sort_cache( $post_type ) {
 			wp_cache_delete( "geodir_get_posts_default_sort_{$post_type}" );
 			wp_cache_delete( "geodir_get_sort_options_{$post_type}" );
-			geodir_cache_delete( 'gd_sort_by_options_' . $post_type, 'gd_sort_by_options' );
+			// Sort by options are cached per language.
+			geodir_cache_flush_group( 'gd_sort_by_options' );
 		}
 	}
 

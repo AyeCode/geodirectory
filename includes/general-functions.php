@@ -2947,6 +2947,37 @@ function geodir_cache_prefix() {
 }
 
 /**
+ * Get the language part of the cache key for language dependent cached data.
+ *
+ * @since 2.8.188
+ *
+ * @return string Cache language key.
+ */
+function geodir_locale_cache_key() {
+	$locale       = determine_locale();
+	$language_key = (string) $locale;
+
+	// WPML & Polylang current language.
+	$language = apply_filters( 'wpml_current_language', null );
+
+	if ( ! empty( $language ) && is_scalar( $language ) && $language !== 'all' ) {
+		$language_key .= '-' . $language;
+	}
+
+	/**
+	 * Filter the language part of the cache key for language dependent cached data.
+	 *
+	 * @since 2.8.188
+	 *
+	 * @param string $language_key Cache language key.
+	 * @param string $locale Current locale.
+	 */
+	$language_key = apply_filters( 'geodir_get_locale_cache_key', $language_key, $locale );
+
+	return sanitize_key( $language_key );
+}
+
+/**
  * Saves the data to the cache.
  *
  * @since 2.3.5

@@ -329,6 +329,10 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+
+= GeoDirectory v2.8.188 - 2026-10-TBD =
+* Category names and sorting labels translated via TranslatePress display wrongly when cached - FIXED
+
 = GeoDirectory v2.8.187 - 2026-10-01 =
 * Added extra sanitization to latitude/longitude to prevent vulnerability - FIXED/SECURITY
 

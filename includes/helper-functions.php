@@ -1677,16 +1677,14 @@ function geodir_array_splice_assoc( $input, $offset, $length, $replacement ) {
  * @return array
  */
 function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ) {
-	$cache_key = 'gd_category_options_' . $post_type . ':' . $hide_empty;
-	$options = wp_cache_get( $cache_key, 'gd_category_options' );
+	$cache_key = 'gd_category_options_' . $post_type . ':' . $hide_empty . ':' . geodir_locale_cache_key();
+	$options   = wp_cache_get( $cache_key, 'gd_category_options' );
 
 	if ( ! empty( $options ) ) {
 		return $options;
 	}
 
-	$post_types = geodir_get_posttypes();
-
-	if ( ! in_array( $post_type, $post_types ) ) {
+	if ( ! geodir_is_gd_post_type( $post_type ) ) {
 		$post_type = 'gd_place';
 	}
 
@@ -1729,8 +1727,10 @@ function geodir_random_float($min = 0, $max = 1)
  * @return array
  */
 function geodir_sort_by_options( $post_type = 'gd_place' ) {
+	$cache_key = 'gd_sort_by_options_' . $post_type . ':' . geodir_locale_cache_key();
+
 	// Check for cache
-	$cache = geodir_cache_get( 'gd_sort_by_options_' . $post_type, 'gd_sort_by_options' );
+	$cache = geodir_cache_get( $cache_key, 'gd_sort_by_options' );
 
 	if ( $cache ) {
 		return $cache;
@@ -1765,7 +1765,7 @@ function geodir_sort_by_options( $post_type = 'gd_place' ) {
 			} else {
 				if ( $sort_option->sort == 'asc' ) {
 					$options[ $sort_option->htmlvar_name . '_asc' ] = $label;
-				} else if ( $sort_option->sort == 'desc' ) {
+				} elseif ( $sort_option->sort == 'desc' ) {
 					$options[ $sort_option->htmlvar_name . '_desc' ] = $label;
 				}
 			}
@@ -1775,7 +1775,7 @@ function geodir_sort_by_options( $post_type = 'gd_place' ) {
 	$options = apply_filters( 'geodir_sort_by_options', $options, $post_type );
 
 	// Set cache
-	geodir_cache_set( 'gd_sort_by_options_' . $post_type, $options, 'gd_sort_by_options' );
+	geodir_cache_set( $cache_key, $options, 'gd_sort_by_options' );
 
 	return $options;
 }
@@ -1788,8 +1788,10 @@ function geodir_sort_by_options( $post_type = 'gd_place' ) {
  * @return array
  */
 function geodir_category_tree_options( $post_type = 'gd_place', $parent = 0, $hide_empty = false, $all = false, $level = 0 ) {
+	$cache_key = "gd_category_options_" . $post_type . ":" . $parent . ":" . $hide_empty . ":" . $all . ":" . $level . ":" . geodir_locale_cache_key();
+
 	// check for cache
-	$cache = wp_cache_get( "gd_category_options_".$post_type.":".$parent.":".$hide_empty.":".$all.":".$level, 'gd_category_tree_options' );
+	$cache = wp_cache_get( $cache_key, 'gd_category_tree_options' );
 	if($cache){
 		return $cache;
 	}
@@ -1807,7 +1809,7 @@ function geodir_category_tree_options( $post_type = 'gd_place', $parent = 0, $hi
 	if ( ! is_wp_error( $terms ) ) {
 		foreach ( $terms as $term ) {
 			$prefix = $level > 0 ? str_repeat( '-', $level ) . ' ' : '';
-			$options[ $term->term_id ] = $prefix . geodir_utf8_ucfirst( $term->name );
+			$options[ $term->term_id ] = $prefix . $term->name;
 
 			$child_options = geodir_category_tree_options( $post_type, $term->term_id, $hide_empty, $all, ( $level + 1 ) );
 
@@ -1820,7 +1822,7 @@ function geodir_category_tree_options( $post_type = 'gd_place', $parent = 0, $hi
 	}
 
 	// set cache
-	wp_cache_set( "gd_category_options_".$post_type.":".$parent.":".$hide_empty.":".$all.":".$level, $options, 'gd_category_tree_options' );
+	wp_cache_set( $cache_key, $options, 'gd_category_tree_options' );
 
 	return $options;
 }
