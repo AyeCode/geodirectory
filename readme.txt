@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.8.187
+Stable tag: 2.8.188
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -330,8 +330,9 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
 
-= GeoDirectory v2.8.188 - 2026-10-TBD =
+= GeoDirectory v2.8.188 - 2026-10-02 =
 * Category names and sorting labels translated via TranslatePress display wrongly when cached - FIXED
+* Tags widget design param now securely filtered to prevent potential security issue - FIXED/SECURITY
 
 = GeoDirectory v2.8.187 - 2026-10-01 =
 * Added extra sanitization to latitude/longitude to prevent vulnerability - FIXED/SECURITY
@@ -767,191 +768,6 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.3.80 - 2024-09-23 =
 * Carousel control shows opposite icons on directory theme - FIXED
 
-= GeoDirectory v2.3.79 - 2024-09-19 =
-* Image meta not saved properly when multiple file fields on add/edit listing page - FIXED
-* Carousel in BootStrap modal not working on RTL - FIXED
-
-= GeoDirectory v2.3.78 - 2024-09-12 =
-* GD > Post Content read more link don't scrolls to tab content when tab is not placed at first - FIXED
-* geodir_template_page_options() function updated to use custom query for better memory usage - CHANGED
-
-= GeoDirectory v2.3.77 - 2024-09-06 =
-* Theme customize AyeCode UI colors settings not working after update - FIXED
-
-= GeoDirectory v2.3.76 - 2024-09-05 =
-* GD > Post Features shows error when tag does not exists - FIXED
-* Add alt text to OSM marker icon if alt text saved in media - CHANGED
-
-= GeoDirectory v2.3.75 - 2024-08-29 =
-* In some cases SVG icon as map marker is not working on FireFox - FIXED
-* List Save button not working on Fast AJAX search - FIXED
-
-= GeoDirectory v2.3.74 - 2024-08-22 =
-* Email tags added for comment link & comment post link - ADDED
-
-= GeoDirectory v2.3.73 - 2024-08-15 =
-* GD > A-Z Search block added to list the listings alphabetically order - ADDED
-
-= GeoDirectory v2.3.72 - 2024-08-15 =
-* Archive page should use default template for deleted & cached page - FIXED
-
-= GeoDirectory v2.3.71 - 2024-08-08 =
-* Nonce security check added to admin rating link - FIXED
-
-= GeoDirectory v2.3.70 - 2024-08-01 =
-* Avada Builder GD Listings don't reload categories on post type change - FIXED
-
-= GeoDirectory v2.3.69 - 2024-07-25 =
-* Add listing page shows not working on some theme - FIXED
-
-= GeoDirectory v2.3.68 - 2024-07-25 =
-* GD loop broken on search page for some themes - FIXED
-
-= GeoDirectory v2.3.67 - 2024-07-18 =
-* GD search broken on some block theme - FIXED
-* Astra theme GD search broken - FIXED
-* Super Duper lib caused fatal error on WP < 5.9 - FIXED
-
-= GeoDirectory v2.3.66 - 2024-07-17 =
-* non FSE themes can fail to render new blocks - FIXED
-* Image attribute in schema shows location when private address is enabled - FIXED
-* More block theme template updates for new block rendering system - CHANGED
-* GD Search page not rendering on some themes with new block rendering system - FIXED
-
-= GeoDirectory v2.3.64 - 2024-07-16 =
-* GD > Dynamic Content keys added for logged in, logged out, post author, user roles etc - ADDED
-* BIG changes to the way blocks are rendered to help prevent broken blocks in the future - CHANGED
-* GD Block templates updated to new block output types - CHANGED
-
-= GeoDirectory v2.3.62 - 2024-07-08 =
-* GD > Output Location left border issue with "Wrap with lines" option - FIXED
-* Logged in user can break old deprecated tool function SQL in non-useful way - SECURITY
-
-= GeoDirectory v2.3.61 - 2024-07-05 =
-* Multiple carousels on the page breaks carousel in modal - FIXED
-
-= GeoDirectory v2.3.60 - 2024-07-04 =
-* Category default image is not set during dummy data import - FIXED
-* Allow to play video file in post images lightbox - ADDED
-
-= GeoDirectory v2.3.59 - 2024-06-27 =
-* Use default distance radius when service_distance value is not set - CHANGED
-* GD > Dynamic Content block can now do date comparisons with custom date fields - ADDED
-* Thrive Theme compatibility changes - ADDED
-* Elementor icon list css not loading in archive posts - FIXED
-
-= GeoDirectory v2.3.58 - 2024-06-20 =
-* Image slider conflicts with GD Listings carousel on elementor template - FIXED
-* Add AVIF image support - ADDED
-
-= GeoDirectory v2.3.57 - 2024-06-13 =
-* Tool added to merge missing listing categories from WP relationship terms - ADDED
-* Location type missing causes issue in location replace vars - FIXED
-
-= GeoDirectory v2.3.56 - 2024-06-06 =
-* Avada AWB fly-out menu conflicts on GD archive pages - FIXED
-* Map and Location widget not always setting BS5 classes correctly - FIXED
-
-= GeoDirectory v2.3.55 - 2024-05-30 =
-* Elementor custom dynamic property causes error on GD template - FIXED
-* GD > Listings carousel not working with elementor template when center slide active - FIXED
-
-= GeoDirectory v2.3.54 - 2024-05-23 =
-* Dummy category icons can now use SVG images - ADDED
-* GD > Map widget now uses inline CSS SVG instead of URL based for better block template support - CHANGED
-* GD > Map Block not selectable by clicking in editor after block recovery - FIXED
-
-= GeoDirectory v2.3.53 - 2024-05-16 =
-* Elementor container not following GD CSS Hide conditions - FIXED
-* Add to favorite action is not working - FIXED
-* Booking Availability field is not working properly with Fast AJAX - FIXED
-* GD > Post Meta post_type field support added - CHANGED
-* GD > Post title widget not respecting the GD > Listings SEO heading setting - FIXED
-
-= GeoDirectory v2.3.52 - 2024-05-09 =
-* AUI radio set should skip showing optgroup from option values - FIXED
-* GD > Listings block missing title attribute settings - ADDED/FIXED
-* PHP Warning: Undefined array key "heading_tag" - FIXED
-* Dummy data import does not support external images - FIXED
-* Add "id" as reserved field to prevent custom field with id key - CHANGED
-
-= GeoDirectory v2.3.51 - 2024-05-02 =
-* Switching the package looses login user name & email - CHANGED
-* BS4 lightbox displays blurred image in GD Post Images - FIXED
-* Allow to customize lightbox image size via filter - ADDED
-* Post Images rounded setting is not working - FIXED
-
-= GeoDirectory v2.3.50 - 2024-04-25 =
-* Correct leaflet routing icon font family - FIXED
-* CPT settings template field don't have clear setting option - FIXED
-* GD > Listings additional css class(es) attribute is not working - FIXED
-* Near me manual popup for setting location cancel button not working with BS5 styles - FIXED
-
-= GeoDirectory v2.3.49 - 2024-04-15 =
-* Extra sanitization for shortcode tag selectors, contributor+ user with details template access could potentially output JS code - FIXED/SECURITY
-
-= GeoDirectory v2.3.48 - 2024-04-11 =
-* UK regions can sometime contain "Council", we now remove this by default - CHANGED
-* SD and AUI packages updated to latest - UPDATED
-
-= GeoDirectory v2.3.47 - 2024-04-04 =
-* GD images don't allow .svg images even WP media allows - FIXED
-* GD > Post Images masonry is not working when AJAX load option active - FIXED
-
-= GeoDirectory v2.3.46 - 2024-03-27 =
-* GD > Best Of dropdown shows &(ampersand) incorrectly - FIXED
-* Added jobs dummy data type - ADDED
-* Dummy data images CDN url updated - CHANGED
-
-= GeoDirectory v2.3.45 - 2024-03-21 =
-* GD > Post images masonry gallery is not working with BS5 - FIXED
-* Added filter for dummy data posts - ADDED
-* Matterport embed URLs not working - FIXED
-
-= GeoDirectory v2.3.44 - 2024-03-14 =
-* Old MariaDB causes index column size error - FIXED
-* Profile title tag could be changed to non heading tag by a contributor level user - FIXED
-
-= GeoDirectory v2.3.42 - 2024-03-05 =
-* Negative category id don't exclude listings from map markers - FIXED
-* GD > Listings block can show duplicate listings when filtered by taxonomies - FIXED
-
-= GeoDirectory v2.3.41 - 2024-02-22 =
-* OSM directions route should use listing location as an end point - CHANGED
-* Skip TranslatePress plugin from Fast AJAX request - CHANGED
-* Several SQL Query optimizations reducing some query times even further - ADDED
-* GD > Single Next Prev not filtering by same location - FIXED
-* Add listing zip and region discovery improvements - ADDED
-* Setup Wizard fields not showing tooltips with BS5 styles - FIXED
-
-= GeoDirectory v2.3.40 - 2024-02-15 =
-* Custom single post map is not loading on non GD pages - FIXED
-* PHP 8.2 compatibility changes in Emogrifier class - CHANGED
-* OSM marker cluster add maxClusterRadius option support - ADDED
-
-= GeoDirectory v2.3.39 - 2024-02-08 =
-* Address custom field can now be set as optional - CHANGED
-* Function utf8_decode is deprecated - FIXED
-* Google API Key generation shows apiid is missing error - FIXED
-* Category schema types updated to latest release - CHANGED
-
-= GeoDirectory v2.3.38 - 2024-02-01 =
-* GD > Post Features shows fields label special chars encoded incorrectly - FIXED
-* Category icon not generated from FontAwesome icons for some sites - FIXED
-* Function _inject_theme_attribute_in_block_template_content is deprecated - FIXED
-
-= GeoDirectory v2.3.37 - 2024-01-25 =
-* OSM layer url shows apikey parameter twice for custom style map - FIXED
-* Listing ad shows incorrect rating stars on Divi builder template - FIXED
-* Edit logo image title is not working on Chrome browser - FIXED
-* PHP Deprecated: mb_convert_encoding() - FIXED
-* Astra theme conflicts on search page - FIXED
-* Setting changed for Borlabs Cookie v3 - CHANGED
-
-= GeoDirectory v2.3.36 - 2024-01-09 =
-* GD > Categories category text style not working for image design type - FIXED
-* Meta title separator normal dash replaced to en dash when RankMath active - FIXED
-* Blocksy theme conflicts with GD search results page - FIXED
 
 = Older Changelogs =
 [Archive of GeoDirectory changelogs](https://wpgeodirectory.com/change-logs-v2/).

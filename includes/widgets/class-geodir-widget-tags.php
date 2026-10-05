@@ -1040,12 +1040,11 @@ class GeoDir_Widget_Tags extends WP_Super_Duper {
 
 		$design_type = ! empty( $args['design_type'] ) ? $args['design_type'] : '';
 
-		if ( empty( $design_type ) || $design_type == 'icon-left' ) {
-			$style = 'icon-left';
-		} else if ( $design_type == 'icon-top' ) {
+		// Only allow known design types, it is used in the template path.
+		if ( $design_type == 'icon-top' ) {
 			$style = 'icon-top';
 		} else {
-			$style = $design_type;
+			$style = 'icon-left';
 		}
 
 		$card_shadow = ! empty( $args['card_shadow'] ) ? $args['card_shadow'] : 'small';

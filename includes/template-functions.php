@@ -129,7 +129,7 @@ function geodir_get_template( $template_name, $args = array(), $template_path = 
 
 	$located = geodir_locate_template( $template_name, $template_path, $default_path );
 
-	if ( ! file_exists( $located ) ) {
+	if ( ! $located || ! file_exists( $located ) ) {
 		geodir_doing_it_wrong( __FUNCTION__, sprintf( __( '%s does not exist.', 'geodirectory' ), '<code>' . $located . '</code>' ), '2.1' );
 
 		return;
@@ -178,6 +178,11 @@ function geodir_get_template_html( $template_name, $args = array(), $template_pa
  * @return string Template path.
  */
 function geodir_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+	// Block path traversal in the template name.
+	if ( ! geodir_is_safe_template_name( $template_name ) ) {
+		return '';
+	}
+
 	if ( ! $template_path ) {
 		$template_path = geodir_get_theme_template_dir_name();
 	}
@@ -201,6 +206,31 @@ function geodir_locate_template( $template_name, $template_path = '', $default_p
 
 	// Return what we found.
 	return apply_filters( 'geodir_locate_template', $template, $template_name, $template_path );
+}
+
+/**
+ * Check a template name is safe to use in a template path.
+ *
+ * Rejects names containing directory traversal or null bytes.
+ *
+ * @since 2.8.188
+ *
+ * @param string $template_name Template name.
+ * @return bool True if safe.
+ */
+function geodir_is_safe_template_name( $template_name ) {
+	if ( ! is_string( $template_name ) || $template_name === '' ) {
+		return false;
+	}
+
+	if ( strpos( $template_name, "\0" ) !== false ) {
+		return false;
+	}
+
+	// Check each path segment so names like "foo..bar.php" are still allowed.
+	$segments = preg_split( '#[\\\\/]+#', $template_name );
+
+	return ! in_array( '..', $segments, true );
 }
 
 /**
