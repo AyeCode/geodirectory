@@ -884,6 +884,67 @@ function geodir_sanitize_html_class( $string ) {
 }
 
 /**
+ * Sanitize an email address.
+ *
+ * Runs sanitize_email(), then removes characters that are valid in an email
+ * local part but unsafe when the email is output in HTML/JS contexts.
+ *
+ * @since 2.8.189
+ *
+ * @param string $email   Email address.
+ * @param string $context Optional. Context in which the email is sanitized. Default empty.
+ * @return string Sanitized email address, or empty string if invalid.
+ */
+function geodir_sanitize_email( $email, $context = '' ) {
+	if ( ! is_scalar( $email ) ) {
+		return '';
+	}
+
+	$sanitized = sanitize_email( geodir_clean( (string) $email ) );
+
+	if ( '' === $sanitized ) {
+		return '';
+	}
+
+	/**
+	 * Filters the characters removed from a sanitized email address.
+	 *
+	 * @since 2.8.189
+	 *
+	 * @param string[] $strip_chars Characters to remove.
+	 * @param string   $sanitized   Sanitized email address.
+	 * @param string   $context     Context in which the email is sanitized.
+	 */
+	$strip_chars = apply_filters( 'geodir_sanitize_email_strip_chars', array( '`' ), $sanitized, $context );
+
+	if ( ! empty( $strip_chars ) && is_array( $strip_chars ) ) {
+		$sanitized = str_replace( $strip_chars, '', $sanitized );
+	}
+
+	/**
+	 * Filters the sanitized email address.
+	 *
+	 * @since 2.8.189
+	 *
+	 * @param string $sanitized Sanitized email address.
+	 * @param string $email     Original email address.
+	 * @param string $context   Context in which the email is sanitized.
+	 */
+	$sanitized = apply_filters( 'geodir_sanitize_email', $sanitized, $email, $context );
+
+	if ( ! is_scalar( $sanitized ) ) {
+		return '';
+	}
+
+	$sanitized = sanitize_email( (string) $sanitized );
+
+	if ( ! is_email( $sanitized ) ) {
+		return '';
+	}
+
+	return $sanitized;
+}
+/**
  * JavaScript Minifier.
  *
  * @since 2.3.71

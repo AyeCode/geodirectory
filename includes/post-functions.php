@@ -1849,12 +1849,36 @@ function geodir_validate_custom_field_value_text( $value, $gd_post, $custom_fiel
 }
 add_filter( 'geodir_custom_field_value_checkbox', 'geodir_validate_custom_field_value_text', 10, 6 );
 add_filter( 'geodir_custom_field_value_datepicker', 'geodir_validate_custom_field_value_text', 10, 6 );
-add_filter( 'geodir_custom_field_value_email', 'geodir_validate_custom_field_value_text', 10, 6 );
 add_filter( 'geodir_custom_field_value_multiselect', 'geodir_validate_custom_field_value_text', 10, 6 );
 add_filter( 'geodir_custom_field_value_phone', 'geodir_validate_custom_field_value_text', 10, 6 );
 add_filter( 'geodir_custom_field_value_radio', 'geodir_validate_custom_field_value_text', 10, 6 );
 add_filter( 'geodir_custom_field_value_select', 'geodir_validate_custom_field_value_text', 10, 6 );
 add_filter( 'geodir_custom_field_value_text', 'geodir_validate_custom_field_value_text', 10, 6 );
+
+/**
+ * Sanitize email value.
+ *
+ * sanitize_email() keeps RFC 5322 characters like ' and ` in the local part.
+ * Strip them too, so a stored email can't break out of a quoted HTML/JS context.
+ *
+ * @since 2.8.189
+ *
+ * @param string $value Field value.
+ * @param object $gd_post GeoDirectory post object.
+ * @param object $custom_field Custom field.
+ * @param int $post_id Post id.
+ * @param object $post Post.
+ * @param string $update Update.
+ * @return string $value Sanitized email.
+ */
+function geodir_validate_custom_field_value_email( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
+	if ( $value != '' && is_scalar( $value ) ) {
+		$value = geodir_sanitize_email( wp_unslash( $value ), 'save' );
+	}
+
+	return $value;
+}
+add_filter( 'geodir_custom_field_value_email', 'geodir_validate_custom_field_value_email', 10, 6 );
 
 /**
  * Sanitize url value.
