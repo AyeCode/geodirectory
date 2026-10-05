@@ -1348,146 +1348,166 @@ add_filter('geodir_custom_field_output_multiselect','geodir_cf_multiselect',10,5
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_email($html,$location,$cf,$p='',$output=''){
+function geodir_cf_email( $html, $location, $cf, $p = '', $output = '' ) {
+	// Check we have the post value.
+	if ( is_numeric( $p ) ) {
+		$gd_post = geodir_get_post_info( $p );
+	} else {
+		global $gd_post;
+	}
 
-    // check we have the post value
-    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
-    else{ global $gd_post;}
+	if ( ! is_array( $cf ) && $cf != '' ) {
+		$cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
+		if ( ! $cf ) {
+			return null;
+		}
+	}
 
-    if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
-        if(!$cf){return NULL;}
-    }
+	// Block demo content.
+	if ( geodir_is_block_demo() ) {
+		$gd_post->{$cf['htmlvar_name']} = 'testing@example.com';
+	}
 
-    // Block demo content
-    if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = 'testing@example.com';
-    }
+	$html_var = $cf['htmlvar_name'];
 
-    $html_var = $cf['htmlvar_name'];
+	// Check if there is a location specific filter.
+	if ( has_filter( "geodir_custom_field_output_email_loc_{$location}" ) ) {
+		/**
+		 * Filter the email html by location.
+		 *
+		 * @since 1.6.6
+		 * @since 2.0.0 $output param added.
+		 *
+		 * @param string $html   The html to filter.
+		 * @param array  $cf     The custom field array.
+		 * @param string $output The output string that tells us what to output.
+		 */
+		$html = apply_filters( "geodir_custom_field_output_email_loc_{$location}", $html, $cf, $output );
+	}
 
-    // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_email_loc_{$location}")){
-        /**
-         * Filter the email html by location.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 2.0.0 $output param added.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_output_email_loc_{$location}",$html,$cf,$output);
-    }
+	// Check if there is a custom field specific filter.
+	if ( has_filter( "geodir_custom_field_output_email_var_{$html_var}" ) ) {
+		/**
+		 * Filter the email html by individual custom field.
+		 *
+		 * @since 1.6.6
+		 * @since 2.0.0 $output param added.
+		 *
+		 * @param string $html     The html to filter.
+		 * @param string $location The location to output the html.
+		 * @param array  $cf       The custom field array.
+		 * @param string $output   The output string that tells us what to output.
+		 */
+		$html = apply_filters( "geodir_custom_field_output_email_var_{$html_var}", $html, $location, $cf, $output );
+	}
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_email_var_{$html_var}")){
-        /**
-         * Filter the email html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param string $location The location to output the html.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 2.0.0 $output param added.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_output_email_var_{$html_var}",$html,$location,$cf,$output);
-    }
+	// Check if there is a custom field key specific filter.
+	if ( has_filter( "geodir_custom_field_output_email_key_{$cf['field_type_key']}" ) ) {
+		/**
+		 * Filter the email html by field type key.
+		 *
+		 * @since 1.6.6
+		 * @since 2.0.0 $output param added.
+		 *
+		 * @param string $html     The html to filter.
+		 * @param string $location The location to output the html.
+		 * @param array  $cf       The custom field array.
+		 * @param string $output   The output string that tells us what to output.
+		 */
+		$html = apply_filters( "geodir_custom_field_output_email_key_{$cf['field_type_key']}", $html, $location, $cf, $output );
+	}
 
-    // Check if there is a custom field key specific filter.
-    if(has_filter("geodir_custom_field_output_email_key_{$cf['field_type_key']}")){
-        /**
-         * Filter the email html by field type key.
-         *
-         * @param string $html The html to filter.
-         * @param string $location The location to output the html.
-         * @param array $cf The custom field array.
-         * @param string $output The output string that tells us what to output.
-         * @since 2.0.0 $output param added.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_output_email_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
-    }
+	// If not html then we run the standard output.
+	if ( empty( $html ) ) {
+		global $preview;
 
-    // If not html then we run the standard output.
-    if(empty($html)){
+		if ( $cf['htmlvar_name'] == 'geodir_email' && ! ( geodir_is_page( 'detail' ) ) ) {
+			return ''; // Remove Send Enquiry from listings page.
+		}
 
-        global $preview;
-        if ($cf['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail'))) {
-            return ''; // Remove Send Enquiry from listings page
-        }
+		if ( $gd_post->{$cf['htmlvar_name']} ) {
+			$design_style = geodir_design_style();
+			$field_icon   = geodir_field_icon_proccess( $cf );
+			$output       = geodir_field_output_process( $output );
 
+			if ( strpos( $field_icon, 'http' ) !== false ) {
+				$field_icon_af = '';
+			} elseif ( $field_icon == '' ) {
+				$field_icon_af = $design_style ? '<i class="far fa-envelope fa-fw" aria-hidden="true"></i> ' : '<i class="far fa-envelope" aria-hidden="true"></i>';
+			} else {
+				$field_icon_af = $field_icon;
+				$field_icon    = '';
+			}
 
-        if ($gd_post->{$cf['htmlvar_name']}) {
-            $design_style = geodir_design_style();
-            $field_icon = geodir_field_icon_proccess($cf);
-            $output = geodir_field_output_process($output);
-            if (strpos($field_icon, 'http') !== false) {
-                $field_icon_af = '';
-            } elseif ($field_icon == '') {
-                $field_icon_af = $design_style ? '<i class="far fa-envelope fa-fw" aria-hidden="true"></i> ' : '<i class="far fa-envelope" aria-hidden="true"></i>';
-            } else {
-                $field_icon_af = $field_icon;
-                $field_icon = '';
-            }
+			$is_elementor_preview = defined( 'ELEMENTOR_VERSION' ) && class_exists( 'GeoDir_Elementor' ) && GeoDir_Elementor::is_elementor_view() ? true : false; // Check if elementor preview.
+			$email                = geodir_sanitize_email( $gd_post->{$cf['htmlvar_name']}, 'view' );
+			$value                = '';
 
-            $is_elementor_preview = defined( 'ELEMENTOR_VERSION' ) && class_exists( 'GeoDir_Elementor' ) && GeoDir_Elementor::is_elementor_view() ? true : false; // Check if elementor preview
-            $email = sanitize_email( $gd_post->{$cf['htmlvar_name']} ) ;
-            $value = '';
-            if ( ! empty( $email ) && ( $email != 'testing@example.com' ) && ( $e_split = explode( '@', $email ) ) && ! defined( 'REST_REQUEST' ) && ! $is_elementor_preview && ! wp_doing_ajax() && !isset( $output['strip'] ) ) {
-                /**
-                 * Filter email custom field name output.
-                 *
-                 * @since 1.5.3
-                 *
-                 * @param string $email The email string being output.
-                 * @param array $cf Custom field variables array.
-                 */
-                $email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
-                $value .= '<a href="javascript:void(0)" onclick="javascript:window.open(\'mailto:\'+([\'' . $e_split[0] . '\',\'' . $e_split[1] . '\']).join(\'@\'),\'_blank\')">' . str_replace( "@", "<!---->@<!---->", $email_name ) . '</a>';
-            } elseif ( ! empty( $email ) && ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || $is_elementor_preview || wp_doing_ajax() ) && !isset( $output['strip'] ) ) {
-                /**
-                 * Filter email custom field name output.
-                 *
-                 * @since 1.5.3
-                 *
-                 * @param string $email The email string being output.
-                 * @param array $cf Custom field variables array.
-                 */
-                $email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
-                $value .= "<a href='mailto:$email' target='_blank'>$email_name</a>";
-            } else {
-                $value .= $email;
-            }
+			if ( ! empty( $email ) && ( $email != 'testing@example.com' ) && ( $e_split = explode( '@', $email, 2 ) ) && count( $e_split ) == 2 && ! defined( 'REST_REQUEST' ) && ! $is_elementor_preview && ! wp_doing_ajax() && ! isset( $output['strip'] ) ) {
+				/**
+				 * Filter email custom field name output.
+				 *
+				 * @since 1.5.3
+				 *
+				 * @param string $email The email string being output.
+				 * @param array  $cf    Custom field variables array.
+				 */
+				$email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
 
-            $value = apply_filters( 'geodir_custom_field_output_email_value', $value, $gd_post, $location, $cf, $output );
+				$value .= '<a href="javascript:void(0)" onclick="javascript:window.open(\'mailto:\'+([\'' . esc_js( $e_split[0] ) . '\',\'' . esc_js( $e_split[1] ) . '\']).join(\'@\'),\'_blank\')">' . str_replace( '@', '<!---->@<!---->', esc_html( $email_name ) ) . '</a>';
+			} elseif ( ! empty( $email ) && ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || $is_elementor_preview || wp_doing_ajax() ) && ! isset( $output['strip'] ) ) {
+				/**
+				 * Filter email custom field name output.
+				 *
+				 * @since 1.5.3
+				 *
+				 * @param string $email The email string being output.
+				 * @param array  $cf    Custom field variables array.
+				 */
+				$email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
 
-            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                // Database value.
-                return stripslashes( $email );
-            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
-                // Stripped value.
-                return $value;
-            }
+				$value .= '<a href="' . esc_url( 'mailto:' . $email, array( 'mailto' ) ) . '" target="_blank">' . esc_html( $email_name ) . '</a>';
+			} else {
+				$value .= esc_html( $email );
+			}
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+			$value = apply_filters( 'geodir_custom_field_output_email_value', $value, $gd_post, $location, $cf, $output );
 
-            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+			if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+				// Database value.
+				return stripslashes( $email );
+			} elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+				// Stripped value.
+				return $value;
+			}
 
-            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
-            if($output=='' || isset($output['icon']))$html .= '</span>';
-            if($output=='' || isset($output['value']))$html .= stripslashes( $value );
+			$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
-            $html .= '</div>';
-        }
-    }
+			$maybe_secondary_class = isset( $output['icon'] ) ? 'gv-secondary' : '';
 
-    return $html;
+			if ( $output == '' || isset( $output['icon'] ) ) {
+				$html .= '<span class="geodir_post_meta_icon geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
+			}
+
+			if ( $output == '' || isset( $output['label'] ) ) {
+				$html .= ( trim( $cf['frontend_title'] ) ) ? '<span class="geodir_post_meta_title ' . $maybe_secondary_class . '" >' . __( $cf['frontend_title'], 'geodirectory' ) . ': ' . '</span>' : '';
+			}
+
+			if ( $output == '' || isset( $output['icon'] ) ) {
+				$html .= '</span>';
+			}
+
+			if ( $output == '' || isset( $output['value'] ) ) {
+				$html .= $value;
+			}
+
+			$html .= '</div>';
+		}
+	}
+
+	return $html;
 }
-add_filter('geodir_custom_field_output_email','geodir_cf_email',10,5);
-
+add_filter( 'geodir_custom_field_output_email', 'geodir_cf_email', 10, 5 );
 
 /**
  * Get the html output for the custom field: file
