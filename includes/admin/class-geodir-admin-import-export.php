@@ -402,7 +402,20 @@ class GeoDir_Admin_Import_Export {
 					}
 				}
 
+				// Skip blank lines, fgetcsv() returns array( null ) for them.
+				if ( empty( $data ) || ( count( $data ) === 1 && ( $data[0] === null || trim( $data[0] ) === '' ) ) ) {
+					continue;
+				}
+
 				if ( ! empty( $data ) ) {
+					// Match the row column count to the headers, array_combine() throws ValueError on mismatch in PHP 8+.
+					$header_count = count( $headers );
+					if ( count( $data ) < $header_count ) {
+						$data = array_pad( $data, $header_count, '' );
+					} elseif ( count( $data ) > $header_count ) {
+						$data = array_slice( $data, 0, $header_count );
+					}
+
 					//$file[] = $data;
 					$file[] = array_combine( $headers, $data ); // replace the keys with the CSV headers.
 					$f ++;
