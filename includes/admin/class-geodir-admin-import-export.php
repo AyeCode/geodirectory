@@ -384,6 +384,12 @@ class GeoDir_Admin_Import_Export {
 					$l ++;
 					continue;
 				}
+
+				// Skip blank lines before the row window so they never count towards the row cursor, fgetcsv() returns array( null ) for them.
+				if ( empty( $data ) || ( count( $data ) === 1 && ( $data[0] === null || trim( $data[0] ) === '' ) ) ) {
+					continue;
+				}
+
 				// only get the rows needed
 				if ( $row && $count ) {
 
@@ -400,11 +406,6 @@ class GeoDir_Admin_Import_Export {
 					} elseif ( $f > $count ) {
 						break;
 					}
-				}
-
-				// Skip blank lines, fgetcsv() returns array( null ) for them.
-				if ( empty( $data ) || ( count( $data ) === 1 && ( $data[0] === null || trim( $data[0] ) === '' ) ) ) {
-					continue;
 				}
 
 				if ( ! empty( $data ) ) {
