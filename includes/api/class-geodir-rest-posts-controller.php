@@ -37,6 +37,20 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	protected $meta;
 
 	/**
+	 * Category taxonomy.
+	 *
+	 * @var string
+	 */
+	public $cat_taxonomy;
+
+	/**
+	 * Tag taxonomy.
+	 *
+	 * @var string
+	 */
+	public $tag_taxonomy;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string $post_type Post type.

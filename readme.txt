@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.8.189
+Stable tag: 2.8.190
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -329,7 +329,7 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
-= GeoDirectory v2.8.190 - 2026-10-TBD =
+= GeoDirectory v2.8.190 - 2026-10-07 =
 * Fix PHP 8.4+ deprecation notices during CSV import/export - COMPATIBILITY
 * Empty rows in CSV file are counted and imported as invalid rows - FIXED
 * Private address post listed on AJAX search results - FIXED

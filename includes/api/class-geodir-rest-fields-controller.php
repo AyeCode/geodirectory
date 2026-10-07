@@ -9,6 +9,34 @@
  */
 class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 
+	/**
+	 * Object type.
+	 *
+	 * @var string
+	 */
+	public $object_type;
+
+	/**
+	 * Post type.
+	 *
+	 * @var string
+	 */
+	public $post_type;
+
+	/**
+	 * Post type object.
+	 *
+	 * @var WP_Post_Type|array|null
+	 */
+	public $post_type_obj;
+
+	/**
+	 * Post type REST slug.
+	 *
+	 * @var string
+	 */
+	public $post_type_slug;
+
     /**
      * Constructor.
      *
