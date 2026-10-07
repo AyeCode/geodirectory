@@ -66,7 +66,7 @@ class GeoDir_Admin_Import_Export {
 		// check if we have access to the file system
 		$wp_filesystem = geodir_init_filesystem();
 		if ( ! empty( $wp_filesystem ) && isset( $wp_filesystem->errors ) && is_wp_error( $wp_filesystem->errors ) && $wp_filesystem->errors->get_error_code() ) {
-			return new WP_Error( 'gd-no-filesystem', __( "Filesystem ERROR: " . $wp_filesystem->errors->get_error_message(), "geodirectory" ) );
+			return new WP_Error( 'gd-no-filesystem', wp_sprintf( __( 'Filesystem ERROR: %s', 'geodirectory' ), $wp_filesystem->errors->get_error_message() ) );
 		} elseif ( ! $wp_filesystem ) {
 			return new WP_Error( 'gd-no-filesystem', __( "There was a problem accessing the filesystem.", "geodirectory" ) );
 		}
@@ -165,22 +165,20 @@ class GeoDir_Admin_Import_Export {
 		/** @scrutinizer ignore-unhandled */ @ini_set( 'display_errors', 0 );
 
 		// try to set higher limits for import
-		$max_input_time     = ini_get( 'max_input_time' );
-		$max_execution_time = ini_get( 'max_execution_time' );
+		$max_input_time     = (int) ini_get( 'max_input_time' );
+		$max_execution_time = (int) ini_get( 'max_execution_time' );
 		$memory_limit       = ini_get( 'memory_limit' );
 
-		if ( $max_input_time !== 0 && $max_input_time != -1 && ( ! $max_input_time || $max_input_time < 3000 ) ) {
+		if ( $max_input_time > 0 && $max_input_time < 3000 ) {
 			ini_set( 'max_input_time', 3000 ); // @codingStandardsIgnoreLine
 		}
 
-		if ( $max_execution_time !== 0 && ( ! $max_execution_time || $max_execution_time < 3000 ) ) {
+		if ( $max_execution_time > 0 && $max_execution_time < 3000 ) {
 			ini_set( 'max_execution_time', 3000 ); // @codingStandardsIgnoreLine
 		}
 
-		if ( $memory_limit && str_replace( 'M', '', $memory_limit ) ) {
-			if ( str_replace( 'M', '', $memory_limit ) < 256 ) {
-				ini_set( 'memory_limit', '256M' ); // @codingStandardsIgnoreLine
-			}
+		if ( $memory_limit && (int) $memory_limit !== -1 && wp_convert_hr_to_bytes( $memory_limit ) < 256 * MB_IN_BYTES ) {
+			ini_set( 'memory_limit', '256M' ); // @codingStandardsIgnoreLine
 		}
 
 		/*
@@ -195,6 +193,27 @@ class GeoDir_Admin_Import_Export {
 	}
 
 	/**
+	 * Check whether a CSV row has no values, e.g. a blank line or ",,,,".
+	 *
+	 * @param array|false|null $data Row from fgetcsv().
+	 *
+	 * @return bool
+	 */
+	public static function is_empty_csv_row( $data ) {
+		if ( ! is_array( $data ) ) {
+			return true;
+		}
+
+		foreach ( $data as $value ) {
+			if ( $value !== null && trim( (string) $value ) !== '' ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Check the CSV is valid.
 	 *
 	 * @return bool|WP_Error
@@ -206,7 +225,7 @@ class GeoDir_Admin_Import_Export {
 		$uploads     = wp_upload_dir();
 		$uploads_dir = $uploads['basedir'];
 
-		$csv_file = isset( $_POST['_file'] ) ? $_POST['_file'] : null;
+		$csv_file = isset( $_POST['_file'] ) && is_scalar( $_POST['_file'] ) ? (string) $_POST['_file'] : '';
 
 		$csv_file_arr = explode( '/', $csv_file );
 		$csv_filename = end( $csv_file_arr );
@@ -217,27 +236,39 @@ class GeoDir_Admin_Import_Export {
 		$json['error'] = __( 'The uploaded file is not a valid csv file. Please try again.', 'geodirectory' );
 		$file          = array();
 
-		if ( $csv_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
+		if ( $csv_file !== '' && ! empty( $wp_filesystem ) && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
 			$wp_filetype = wp_check_filetype_and_ext( $target_path, $csv_filename );
 
-			if ( ! empty( $wp_filetype ) && isset( $wp_filetype['ext'] ) && geodir_strtolower( $wp_filetype['ext'] ) == 'csv' ) {
+			if ( ! empty( $wp_filetype ) && ! empty( $wp_filetype['ext'] ) && geodir_strtolower( $wp_filetype['ext'] ) == 'csv' ) {
 				$json['error'] = null;
 
-				$lc_all = setlocale( LC_ALL, 0 ); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
+				$lc_all = setlocale( LC_ALL, '0' ); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
 				setlocale( LC_ALL, 'en_US.UTF-8' );
-				if ( ( $handle = fopen( $target_path, "r" ) ) !== false ) {
-					while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== false ) {
-						if ( ! empty( $data ) && count( $data ) > 1 ) {
+
+				if ( ( $handle = fopen( $target_path, 'r' ) ) !== false ) {
+					$enclosure = geodir_get_csv_enclose();
+					$escape    = geodir_get_csv_escape();
+
+					// Pass $escape explicitly, relying on its default value is deprecated since PHP 8.4.
+					while ( ( $data = fgetcsv( $handle, 100000, ',', $enclosure, $escape ) ) !== false ) {
+						$data  = array_map( array( __CLASS__, 'trim_csv_value' ), $data );
+
+						// Prevent empty row.
+						if ( ! self::is_empty_csv_row( $data ) ) {
 							$file[] = $data;
 						}
 					}
+
 					fclose( $handle );
 				}
-				setlocale( LC_ALL, $lc_all );
 
-				$json['rows'] = ( ! empty( $file ) && count( $file ) > 1 ) ? count( $file ) - 1 : 0;
+				if ( $lc_all !== false ) {
+					setlocale( LC_ALL, $lc_all );
+				}
 
-				if ( ! $json['rows'] > 0 ) {
+				$json['rows'] = count( $file ) > 1 ? count( $file ) - 1 : 0;
+
+				if ( $json['rows'] < 1 ) {
 					$json['error'] = __( "No data found in csv file.", "geodirectory" );
 				}
 			}
@@ -307,8 +338,9 @@ class GeoDir_Admin_Import_Export {
 							$updated ++;
 						} else {
 							$invalid ++;
-							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($result->get_error_message()) );
-							geodir_error_log( $line_error . ' ' . $result->get_error_message() );
+							$error_message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Could not save the listing.', 'geodirectory' );
+							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr( $error_message ) );
+							geodir_error_log( $line_error . ' ' . $error_message );
 						}
 
 						// insert
@@ -318,8 +350,9 @@ class GeoDir_Admin_Import_Export {
 							$created ++;
 						} else {
 							$invalid ++;
-							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($result->get_error_message()) );
-							geodir_error_log( $line_error . ' ' . $result->get_error_message() );
+							$error_message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Could not save the listing.', 'geodirectory' );
+							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr( $error_message ) );
+							geodir_error_log( $line_error . ' ' . $error_message );
 						}
 					}
 
@@ -358,25 +391,27 @@ class GeoDir_Admin_Import_Export {
 	 * @return array
 	 */
 	public static function get_csv_rows( $row = 0, $count = 0 ) {
-
-		$csv_file = isset( $_POST['_file'] ) ? $_POST['_file'] : null;
-
+		$csv_file     = isset( $_POST['_file'] ) && is_scalar( $_POST['_file'] ) ? (string) $_POST['_file'] : '';
 		$uploads      = wp_upload_dir();
 		$uploads_dir  = $uploads['basedir'];
 		$csv_file_arr = explode( '/', $csv_file );
 		$csv_filename = end( $csv_file_arr );
 		$target_path  = $uploads_dir . '/geodir_temp/' . $csv_filename;
 
-		//echo '###'.$target_path;
-
 		$file   = array();
-		$lc_all = setlocale( LC_ALL, 0 ); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
+		$lc_all = setlocale( LC_ALL, '0' ); // Fix issue of fgetcsv ignores special characters when they are at the beginning of line
 		setlocale( LC_ALL, 'en_US.UTF-8' );
 		$l       = 0; // loop count
 		$f       = 0; // file count
 		$headers = array();
-		if ( ( $handle = fopen( $target_path, "r" ) ) !== false ) {
-			while ( ( $data = fgetcsv( $handle, 100000, "," ) ) !== false ) {
+		if ( $csv_file !== '' && is_file( $target_path ) && ( $handle = fopen( $target_path, 'r' ) ) !== false ) {
+			$enclosure = geodir_get_csv_enclose();
+			$escape    = geodir_get_csv_escape();
+
+			// Pass $escape explicitly, relying on its default value is deprecated since PHP 8.4.
+			while ( ( $data = fgetcsv( $handle, 100000, ',', $enclosure, $escape ) ) !== false ) {
+				// Skip empty row.
+				$data  = array_map( array( __CLASS__, 'trim_csv_value' ), $data );
 
 				// get headers
 				if ( $l === 0 ) {
@@ -385,23 +420,20 @@ class GeoDir_Admin_Import_Export {
 					continue;
 				}
 
-				// Skip blank lines before the row window so they never count towards the row cursor, fgetcsv() returns array( null ) for them.
-				if ( empty( $data ) || ( count( $data ) === 1 && ( $data[0] === null || trim( $data[0] ) === '' ) ) ) {
+				// Skip empty row.
+				if ( self::is_empty_csv_row( $data ) ) {
 					continue;
 				}
 
-				// only get the rows needed
+				// Only get the rows needed
 				if ( $row && $count ) {
-
 					// if we have everything we need then break;
 					if ( $l == $row + $count ) {
 						break;
-
 						// if its less than the start row then continue;
 					} elseif ( $l && $l < $row ) {
 						$l ++;
 						continue;
-
 						// if we have the count we need then break;
 					} elseif ( $f > $count ) {
 						break;
@@ -411,6 +443,7 @@ class GeoDir_Admin_Import_Export {
 				if ( ! empty( $data ) ) {
 					// Match the row column count to the headers, array_combine() throws ValueError on mismatch in PHP 8+.
 					$header_count = count( $headers );
+
 					if ( count( $data ) < $header_count ) {
 						$data = array_pad( $data, $header_count, '' );
 					} elseif ( count( $data ) > $header_count ) {
@@ -423,12 +456,32 @@ class GeoDir_Admin_Import_Export {
 					$l ++;
 				}
 			}
+
 			fclose( $handle );
 		}
-		setlocale( LC_ALL, $lc_all );
+
+		if ( $lc_all !== false ) {
+			setlocale( LC_ALL, $lc_all );
+		}
 
 		return $file;
+	}
 
+	/**
+	 * Trim a CSV value without passing null to trim(), which is deprecated since PHP 8.1.
+	 *
+	 * @since 2.8.190
+	 *
+	 * @param mixed $value CSV value.
+	 *
+	 * @return mixed Trimmed string for scalar/null values, otherwise the value as it is.
+	 */
+	public static function trim_csv_value( $value ) {
+		if ( $value === null || is_scalar( $value ) ) {
+			return trim( (string) $value );
+		}
+
+		return $value;
 	}
 
 	/**
@@ -443,7 +496,7 @@ class GeoDir_Admin_Import_Export {
 	public static function validate_post( $row ) {
 		$post_info = $row;
 
-		$post_info = array_map( 'trim', $post_info );
+		$post_info = array_map( array( __CLASS__, 'trim_csv_value' ), $post_info );
 
 		// Validate post_type
 		if ( ! empty( $post_info['post_type'] ) ) {
@@ -668,12 +721,12 @@ class GeoDir_Admin_Import_Export {
 	 * Export posts to CSV.
 	 */
 	public static function export_posts() {
-
 		global $wp_filesystem;
 
-		$nonce = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : null;
+		$json  = array();
+		$nonce = isset( $_REQUEST['_nonce'] ) && is_scalar( $_REQUEST['_nonce'] ) ? sanitize_key( $_REQUEST['_nonce'] ) : '';
 
-		$post_type      = isset( $_REQUEST['_pt'] ) ? $_REQUEST['_pt'] : null;
+		$post_type      = isset( $_REQUEST['_pt'] ) && is_scalar( $_REQUEST['_pt'] ) ? sanitize_key( $_REQUEST['_pt'] ) : '';
 		$csv_file_dir   = self::import_export_cache_path( false );
 		$chunk_per_page = isset( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : null;
 		$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
@@ -707,7 +760,7 @@ class GeoDir_Admin_Import_Export {
 			geodir_die();
 		} else if ( isset( $_REQUEST['_st'] ) ) {
 			$line_count = (int) self::file_line_count( $file_path_temp );
-			$percentage = count( $posts_count ) > 0 && $line_count > 0 ? ceil( $line_count / $posts_count ) * 100 : 0;
+			$percentage = (int) $posts_count > 0 && $line_count > 0 ? ceil( ( $line_count / (int) $posts_count ) * 100 ) : 0;
 			$percentage = min( $percentage, 100 );
 
 			$json['percentage'] = $percentage;
@@ -978,11 +1031,14 @@ class GeoDir_Admin_Import_Export {
 		$mode = $clear ? 'w+' : 'a+';
 
 		if ( function_exists( 'fputcsv' ) ) {
-			$file = fopen( $file_path, $mode );
+			$file      = fopen( $file_path, $mode );
+			$enclosure = geodir_get_csv_enclose();
+			$escape    = geodir_get_csv_escape();
+
 			foreach ( $csv_data as $csv_row ) {
 				// Escape data to prevent injection.
 				$csv_row = array_map( 'geodir_escape_csv_data', $csv_row );
-				$write_successful = fputcsv( $file, $csv_row, ",", $enclosure = '"' );
+				$write_successful = fputcsv( $file, $csv_row, ',', $enclosure, $escape );
 			}
 			fclose( $file );
 		} else {
@@ -1002,8 +1058,9 @@ class GeoDir_Admin_Import_Export {
 	public static function export_categories() {
 		global $wp_filesystem;
 
-		$nonce          = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( $_REQUEST['_nonce'] ) : null;
-		$post_type      = isset( $_REQUEST['_pt'] ) ? sanitize_text_field( $_REQUEST['_pt'] ) : null;
+		$json           = array();
+		$nonce          = isset( $_REQUEST['_nonce'] ) && is_scalar( $_REQUEST['_nonce'] ) ? sanitize_key( $_REQUEST['_nonce'] ) : '';
+		$post_type      = isset( $_REQUEST['_pt'] ) && is_scalar( $_REQUEST['_pt'] ) ? sanitize_key( $_REQUEST['_pt'] ) : '';
 		$chunk_per_page = isset( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : null;
 		$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
 		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
@@ -1023,7 +1080,7 @@ class GeoDir_Admin_Import_Export {
 
 		if ( isset( $_REQUEST['_st'] ) ) {
 			$line_count = (int) self::file_line_count( $file_path_temp );
-			$percentage = count( $terms_count ) > 0 && $line_count > 0 ? ceil( $line_count / $terms_count ) * 100 : 0;
+			$percentage = (int) $terms_count > 0 && $line_count > 0 ? ceil( ( $line_count / (int) $terms_count ) * 100 ) : 0;
 			$percentage = min( $percentage, 100 );
 
 			$json['percentage'] = $percentage;
@@ -1171,7 +1228,6 @@ class GeoDir_Admin_Import_Export {
 	 * @return array|string
 	 */
 	public static function import_categories() {
-
 		$limit     = isset( $_POST['limit'] ) && $_POST['limit'] ? (int) $_POST['limit'] : 1;
 		$processed = isset( $_POST['processed'] ) ? (int) $_POST['processed'] : 0;
 
@@ -1188,23 +1244,27 @@ class GeoDir_Admin_Import_Export {
 			$update_or_skip = isset( $_POST['_ch'] ) && $_POST['_ch'] == 'update' ? 'update' : 'skip';
 
 			foreach ( $rows as $cat_info ) {
-
 				$cat_info = self::validate_cat( $cat_info );
+
+				// Match an existing category by slug when cat_id is empty.
+				if ( empty( $cat_info['term_id'] ) && ! empty( $cat_info['slug'] ) && ! empty( $cat_info['taxonomy'] ) ) {
+					$term = get_term_by( 'slug', $cat_info['slug'], $cat_info['taxonomy'] );
+
+					if ( $term instanceof WP_Term ) {
+						$cat_info['term_id'] = $term->term_id;
+					}
+				}
 
 				if ( $update_or_skip == 'skip' && isset( $cat_info['term_id'] ) && $cat_info['term_id'] ) {
 					$skipped ++;
 					continue;
 				}
 
-
-				//print_r($cat_info );exit;
-
 				if ( $cat_info ) {
 					do_action( 'geodir_import_category_set_globals', $cat_info );
 
 					// Update
 					if ( isset( $cat_info['term_id'] ) && $cat_info['term_id'] ) {
-
 						$result = self::update_term( $cat_info['taxonomy'], $cat_info );
 
 						if ( $result ) {
@@ -1212,10 +1272,10 @@ class GeoDir_Admin_Import_Export {
 						} else {
 							$invalid ++;
 						}
-
-						// insert
 					} else {
+						// Insert
 						$result = self::insert_term( $cat_info['taxonomy'], $cat_info );
+
 						if ( $result ) {
 							$created ++;
 						} else {
@@ -1223,8 +1283,6 @@ class GeoDir_Admin_Import_Export {
 						}
 					}
 
-
-					////////////////////////////////////////////////////////// update term meta
 					if ( $result ) {
 						$term_data       = $cat_info;
 						$term_id         = $result;
@@ -1306,16 +1364,12 @@ class GeoDir_Admin_Import_Export {
 							$images ++;
 						}
 					}
-					///////////////////////////////////////////////////////////////////// update term meta end
 
 					do_action( 'geodir_import_category_reset_globals', $cat_info );
-
 				} else {
 					$invalid ++;
 				}
-
 			}
-
 		} else {
 			return new WP_Error( 'gd-csv-empty', __( "No data found in csv file.", "geodirectory" ) );
 		}
@@ -1341,7 +1395,7 @@ class GeoDir_Admin_Import_Export {
 	 * @return array
 	 */
 	public static function validate_cat( $cat_info ) {
-		$cat_info = array_map( 'trim', $cat_info );
+		$cat_info = array_map( array( __CLASS__, 'trim_csv_value' ), $cat_info );
 
 		$cat_info_fixed = array();
 
@@ -1360,11 +1414,9 @@ class GeoDir_Admin_Import_Export {
 		$cat_info_fixed['cat_image']           = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
 		$cat_info_fixed['cat_icon']            = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
 
-		// validate @todo validate the info
-
 		// temp image fix
-		$cat_info_fixed['image'] 				= $cat_info_fixed['cat_image'] != '' ? basename( $cat_info_fixed['cat_image'] ) : '';
-		$cat_info_fixed['icon']  				= $cat_info_fixed['cat_icon'] != '' ? basename( $cat_info_fixed['cat_icon'] ) : '';
+		$cat_info_fixed['image']               = $cat_info_fixed['cat_image'] != '' ? basename( $cat_info_fixed['cat_image'] ) : '';
+		$cat_info_fixed['icon']                = $cat_info_fixed['cat_icon'] != '' ? basename( $cat_info_fixed['cat_icon'] ) : '';
 
 		if ( ! empty( $cat_info_fixed['parent'] ) ) {
 			$parent = 0;
@@ -1393,7 +1445,7 @@ class GeoDir_Admin_Import_Export {
 	public static function validate_review( $data ) {
 		global $gd_cache_user;
 
-		$data = array_map( 'trim', $data );
+		$data = array_map( array( __CLASS__, 'trim_csv_value' ), $data );
 
 		$review_data 							= array();
 		$review_data['comment_ID'] 				= isset( $data['comment_ID'] ) ? absint( $data['comment_ID'] ) : '';
@@ -1512,15 +1564,17 @@ class GeoDir_Admin_Import_Export {
 
 		$term_id = isset( $term_data['term_id'] ) && ! empty( $term_data['term_id'] ) ? $term_data['term_id'] : 0;
 
-		if ( $term_id > 0 && $term_info = (array) get_term( $term_id, $taxonomy ) ) {
-			$term_data['term_id'] = $term_info['term_id'];
+		$term = $term_id > 0 ? get_term( $term_id, $taxonomy ) : null;
+
+		if ( $term instanceof WP_Term ) {
+			$term_data['term_id'] = $term->term_id;
 
 			$result = wp_update_term( $term_data['term_id'], $taxonomy, $term_data );
 
 			if ( ! is_wp_error( $result ) ) {
 				return isset( $result['term_id'] ) ? $result['term_id'] : 0;
 			}
-		} else if ( $term_data['slug'] != '' && $term_info = (array) term_exists( $term_data['slug'], $taxonomy ) ) {
+		} else if ( ! empty( $term_data['slug'] ) && ( $term_info = term_exists( $term_data['slug'], $taxonomy ) ) && is_array( $term_info ) ) {
 			$term_data['term_id'] = $term_info['term_id'];
 
 			$result = wp_update_term( $term_data['term_id'], $taxonomy, $term_data );
@@ -1563,7 +1617,6 @@ class GeoDir_Admin_Import_Export {
 			return false;
 		}
 
-
 		$term                = isset( $term_data['name'] ) && ! empty( $term_data['name'] ) ? $term_data['name'] : '';
 		$args                = array();
 		$args['description'] = isset( $term_data['description'] ) ? $term_data['description'] : '';
@@ -1580,6 +1633,7 @@ class GeoDir_Admin_Import_Export {
 
 		if ( ! empty( $term ) ) {
 			$result = wp_insert_term( $term, $taxonomy, $args );
+
 			if ( ! is_wp_error( $result ) ) {
 				return isset( $result['term_id'] ) ? $result['term_id'] : 0;
 			}
@@ -1613,7 +1667,7 @@ class GeoDir_Admin_Import_Export {
 	 * @return array|WP_Error
 	 */
 	public static function import_settings() {
-		$json_file = isset( $_POST['_file'] ) ? $_POST['_file'] : null;
+		$json_file = isset( $_POST['_file'] ) && is_scalar( $_POST['_file'] ) ? (string) $_POST['_file'] : '';
 
 		$settings  = self::validate_json( $json_file );
 
@@ -1659,7 +1713,7 @@ class GeoDir_Admin_Import_Export {
 		$json_filename = end( $json_file_arr );
 		$target_path   = $uploads_dir . '/geodir_temp/' . $json_filename;
 
-		if ( $json_file && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
+		if ( $json_file && ! empty( $wp_filesystem ) && $wp_filesystem->is_file( $target_path ) && $wp_filesystem->exists( $target_path ) ) {
 			add_filter( 'upload_mimes', array(
 				'GeoDir_Admin_Import_Export',
 				'allow_json_mime'
@@ -1670,12 +1724,12 @@ class GeoDir_Admin_Import_Export {
 			), 10, 4 ); // set file type & extension, it may returns any of from text/plain & application/json.
 			$wp_filetype = wp_check_filetype_and_ext( $target_path, $json_filename );
 
-			if ( ! empty( $wp_filetype ) && isset( $wp_filetype['ext'] ) && geodir_strtolower( $wp_filetype['ext'] ) == 'json' ) {
+			if ( ! empty( $wp_filetype ) && ! empty( $wp_filetype['ext'] ) && geodir_strtolower( $wp_filetype['ext'] ) == 'json' ) {
 				$json['error'] = null;
 
 				$file_contents = $wp_filesystem->get_contents( $target_path );
 
-				if ( $json = json_decode( $file_contents, true ) ) {
+				if ( is_string( $file_contents ) && ( $json = json_decode( $file_contents, true ) ) ) {
 					if ( is_array( $json ) ) {
 						return $json;
 					}
@@ -1715,12 +1769,16 @@ class GeoDir_Admin_Import_Export {
 
 		if ( !empty( $filters ) ) {
 			foreach ( $filters as $field => $value ) {
+				if ( ! is_scalar( $value ) || $value === '' ) {
+					continue;
+				}
+
 				switch ($field) {
 					case 'start_date':
-						$where .= " AND `" . $wpdb->posts . "`.`post_date` >= '" . sanitize_text_field( $value ) . " 00:00:00'";
+						$where .= $wpdb->prepare( " AND `" . $wpdb->posts . "`.`post_date` >= %s", sanitize_text_field( $value ) . ' 00:00:00' );
 						break;
 					case 'end_date':
-						$where .= " AND `" . $wpdb->posts . "`.`post_date` <= '" . sanitize_text_field( $value ) . " 23:59:59'";
+						$where .= $wpdb->prepare( " AND `" . $wpdb->posts . "`.`post_date` <= %s", sanitize_text_field( $value ) . ' 23:59:59' );
 						break;
 				}
 			}
@@ -1755,7 +1813,7 @@ class GeoDir_Admin_Import_Export {
 	public static function file_line_count( $file ) {
 		global $wp_filesystem;
 
-		if ( $wp_filesystem->is_file( $file ) && $wp_filesystem->exists( $file ) ) {
+		if ( ! empty( $wp_filesystem ) && $wp_filesystem->is_file( $file ) && $wp_filesystem->exists( $file ) ) {
 			$contents = $wp_filesystem->get_contents_array( $file );
 
 			if ( !empty( $contents ) && is_array( $contents ) ) {
@@ -1952,7 +2010,8 @@ class GeoDir_Admin_Import_Export {
 		global $wp_filesystem;
 
 		$filters 		= ! empty( $_REQUEST['gd_imex'] ) && is_array( $_REQUEST['gd_imex'] ) ? $_REQUEST['gd_imex'] : null;
-		$nonce          = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : null;
+		$json           = array();
+		$nonce          = isset( $_REQUEST['_nonce'] ) && is_scalar( $_REQUEST['_nonce'] ) ? sanitize_key( $_REQUEST['_nonce'] ) : '';
 		$count 			= isset( $_REQUEST['_c'] ) ? absint( $_REQUEST['_c'] ) : 0;
 		$chunk_per_page = !empty( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : 5000;
 		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
@@ -1975,7 +2034,7 @@ class GeoDir_Admin_Import_Export {
 
 		if ( isset( $_REQUEST['_st'] ) ) {
 			$line_count = (int) self::file_line_count( $file_path_temp );
-			$percentage = count( $count ) > 0 && $line_count > 0 ? ceil( $line_count / $count ) * 100 : 0;
+			$percentage = $count > 0 && $line_count > 0 ? ceil( ( $line_count / $count ) * 100 ) : 0;
 			$percentage = min( $percentage, 100 );
 
 			$json['percentage'] = $percentage;

@@ -2326,6 +2326,56 @@ function geodir_format_csv_data( $data ) {
 }
 
 /**
+ * Get the enclosure character used to read and write CSV files.
+ *
+ * @since 2.8.190
+ *
+ * @return string Enclosure character.
+ */
+function geodir_get_csv_enclose() {
+	/**
+	 * Filters the CSV enclosure character used by import/export.
+	 *
+	 * @since 2.8.190
+	 *
+	 * @param string $enclosure Enclosure character. Default '"'.
+	 */
+	$enclosure = apply_filters( 'geodir_get_csv_enclose', '"' );
+
+	// fgetcsv()/fputcsv() require exactly one character, and it can't be the delimiter.
+	if ( ! is_string( $enclosure ) || strlen( $enclosure ) !== 1 || $enclosure === ',' ) {
+		$enclosure = '"';
+	}
+
+	return $enclosure;
+}
+
+/**
+ * Get the escape character used to read and write CSV files.
+ *
+ * @since 2.8.190
+ *
+ * @return string Escape character.
+ */
+function geodir_get_csv_escape() {
+	/**
+	 * Filters the CSV escape character used by import/export.
+	 *
+	 * @since 2.8.190
+	 *
+	 * @param string $escape Escape character. Default '\\'. An empty string disables escaping (PHP 7.4+ only).
+	 */
+	$escape = apply_filters( 'geodir_get_csv_escape', '\\' );
+
+	// fgetcsv()/fputcsv() accept a single character, or an empty string only on PHP 7.4+.
+	if ( ! is_string( $escape ) || strlen( $escape ) > 1 || $escape === ',' || ( $escape === '' && version_compare( PHP_VERSION, '7.4.0', '<' ) ) ) {
+		$escape = '\\';
+	}
+
+	return $escape;
+}
+
+/**
  * Validates whether a URL host is safe to request.
  *
  * @since 2.8.162
