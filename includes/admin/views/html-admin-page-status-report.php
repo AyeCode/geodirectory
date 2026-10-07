@@ -154,13 +154,16 @@ $pages            = $system_status->get_pages();
 				<td><?php echo $environment['suhosin_installed'] ? '<span class="dashicons dashicons-yes"></span>' : '&ndash;'; ?></td>
 			</tr>
 		<?php endif;
-		if ( $wpdb->use_mysqli ) {
+		if ( method_exists( $wpdb, 'db_server_info' ) ) {
+			$ver = $wpdb->db_server_info();
+		} elseif ( $wpdb->use_mysqli ) {
 			$ver = mysqli_get_server_info( $wpdb->dbh );
-		} elseif(function_exists('mysql_get_server_info')) {
+		} elseif ( function_exists( 'mysql_get_server_info' ) ) {
 			$ver = mysql_get_server_info();
-		}else{
+		} else {
 			$ver = '';
 		}
+
 		if ( ! empty( $wpdb->is_mysql ) && ! stristr( $ver, 'MariaDB' ) ) : ?>
 			<tr>
 				<td data-export-label="MySQL Version"><?php _e( 'MySQL version', 'geodirectory' ); ?>:</td>

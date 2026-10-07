@@ -2319,7 +2319,7 @@ function geodir_escape_csv_data( $data ) {
 function geodir_format_csv_data( $data ) {
 	if ( $data && function_exists( 'mb_convert_encoding' ) ) {
 		$encoding = mb_detect_encoding( $data, 'UTF-8, ISO-8859-1', true );
-		$data = 'UTF-8' === $encoding ? $data : utf8_encode( $data );
+		$data = 'UTF-8' === $encoding ? $data : mb_convert_encoding( $data, 'UTF-8', 'ISO-8859-1' );
 	}
 
 	return geodir_escape_csv_data( $data );
