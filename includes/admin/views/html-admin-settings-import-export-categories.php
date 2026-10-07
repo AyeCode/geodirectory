@@ -74,7 +74,7 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 					$settings = array(
 						array(
 							'name'       => __( 'If cat_id/cat_slug exists', 'geodirectory' ),
-							'desc'       => __( 'If the cat_id/cat_slug column exists in the CSV, you can either update the category or it can be skipped', 'geodirectory' ),
+							'desc'       => __( 'If a cat_id or cat_slug matches an existing category, choose whether to update that category or skip the row. Other rows are imported as new categories.', 'geodirectory' ),
 							'id'         => 'gd_im_choicecat',
 							'default'    => 'skip',
 							'type'       => 'select',
