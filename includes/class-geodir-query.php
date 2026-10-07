@@ -786,8 +786,15 @@ class GeoDir_Query {
 					}
 
 					// Private address
-					if ( GeoDir_Post_types::supports( $post_types, 'private_address' ) ) {
-						$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
+					if ( ! current_user_can( 'manage_options' ) && GeoDir_Post_types::supports( $post_types, 'private_address' ) ) {
+						$user_id = (int) get_current_user_id();
+
+						if ( $user_id > 0 ) {
+							// Logged in user can see private address of own listings.
+							$where .= $wpdb->prepare( " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 OR `" . $wpdb->posts . "`.`post_author` = %d ) ", $user_id );
+						} else {
+							$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
+						}
 					}
 				} else {
 					$post_title_where = $s != "" ? $wpdb->prepare( "{$wpdb->posts}.post_title LIKE %s", array( $wpdb->esc_like( $s ) ) ) : "1=1";

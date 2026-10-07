@@ -606,7 +606,7 @@ class GeoDir_User {
 
 				$_args = wp_parse_args( $args, $defaults );
 
-				if ( GeoDir_Post_Data::has_private_address( $_args['post'] ) ) {
+				if ( ! current_user_can( 'manage_options' ) && GeoDir_Post_Data::has_private_address( $_args['post'] ) ) {
 					if ( ! empty( $_args['author'] ) ) {
 						if ( is_scalar( $_args['post'] ) ) {
 							$post_ID = absint( $_args['post'] );

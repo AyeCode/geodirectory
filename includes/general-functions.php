@@ -1388,19 +1388,26 @@ function geodir_function_widget_listings_where( $where ) {
 
 		if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
 			// Private address filter
-			if ( $geodirectory->location->get_latlon() && GeoDir_Post_types::supports( $post_type, 'private_address' ) ) {
-				$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
+			if ( ! current_user_can( 'manage_options' ) && $geodirectory->location->get_latlon() && GeoDir_Post_types::supports( $post_type, 'private_address' ) ) {
+				$user_id = (int) get_current_user_id();
+
+				if ( $user_id > 0 ) {
+					// Logged in user can see private address of own listings.
+					$where .= $wpdb->prepare( " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 OR `" . $wpdb->posts . "`.`post_author` = %d ) ", $user_id );
+				} else {
+					$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
+				}
 			}
 
 			if ( ! empty( $query_args['count_only'] ) ) {
 				if ( ! empty( $query_args['distance_to_post'] ) && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
-					$latitude = $gd_post->latitude;
+					$latitude  = $gd_post->latitude;
 					$longitude = $gd_post->longitude;
 				} else if ( empty( $query_args['is_gps_query'] ) && ! empty( $query_args['nearby_gps'] ) && ! empty( $query_args['nearby_gps']['latitude'] ) && ! empty( $query_args['nearby_gps']['longitude'] ) ) {
-					$latitude = $query_args['nearby_gps']['latitude'];
+					$latitude  = $query_args['nearby_gps']['latitude'];
 					$longitude = $query_args['nearby_gps']['longitude'];
 				} else {
-					$latitude = '';
+					$latitude  = '';
 					$longitude = '';
 				}
 

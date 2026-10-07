@@ -332,6 +332,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.190 - 2026-10-TBD =
 * Fix PHP 8.4+ deprecation notices during CSV import/export - COMPATIBILITY
 * Empty rows in CSV file are counted and imported as invalid rows - FIXED
+* Private address post listed on AJAX search results - FIXED
 
 = GeoDirectory v2.8.189 - 2026-10-05 =
 * Added extra sanitization and escaping to email field value to prevent XSS vulnerability - FIXED/SECURITY
