@@ -384,6 +384,12 @@ class GeoDir_Admin_Import_Export {
 					$l ++;
 					continue;
 				}
+
+				// Skip blank lines before the row window so they never count towards the row cursor, fgetcsv() returns array( null ) for them.
+				if ( empty( $data ) || ( count( $data ) === 1 && ( $data[0] === null || trim( $data[0] ) === '' ) ) ) {
+					continue;
+				}
+
 				// only get the rows needed
 				if ( $row && $count ) {
 
@@ -403,6 +409,14 @@ class GeoDir_Admin_Import_Export {
 				}
 
 				if ( ! empty( $data ) ) {
+					// Match the row column count to the headers, array_combine() throws ValueError on mismatch in PHP 8+.
+					$header_count = count( $headers );
+					if ( count( $data ) < $header_count ) {
+						$data = array_pad( $data, $header_count, '' );
+					} elseif ( count( $data ) > $header_count ) {
+						$data = array_slice( $data, 0, $header_count );
+					}
+
 					//$file[] = $data;
 					$file[] = array_combine( $headers, $data ); // replace the keys with the CSV headers.
 					$f ++;
