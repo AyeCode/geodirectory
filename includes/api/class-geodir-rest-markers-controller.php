@@ -621,8 +621,15 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 				}
 			}
 
-			if ( ! ( ! empty( $single_post ) && geodir_user_can( 'see_private_address', array( 'post' => $single_post ) ) ) ) {
-				$where .= " AND ( `pd`.`private_address` IS NULL OR `pd`.`private_address` <> 1 ) ";
+			if ( ! current_user_can( 'manage_options' ) && ! ( ! empty( $single_post ) && geodir_user_can( 'see_private_address', array( 'post' => $single_post ) ) ) ) {
+				$user_id = (int) get_current_user_id();
+
+				if ( $user_id > 0 ) {
+					// Logged in user can see private address of own listings.
+					$where .= $wpdb->prepare( " AND ( `pd`.`private_address` IS NULL OR `pd`.`private_address` <> 1 OR `p`.`post_author` = %d ) ", $user_id );
+				} else {
+					$where .= " AND ( `pd`.`private_address` IS NULL OR `pd`.`private_address` <> 1 ) ";
+				}
 			}
 		}
 
