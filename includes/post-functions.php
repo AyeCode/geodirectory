@@ -1730,6 +1730,99 @@ function geodir_get_no_replace_fields(){
 }
 
 /**
+ * Build a map of field key => type info for a post type.
+ *
+ * Used to pick a context-appropriate escaper when replacing %%field%%
+ * tokens. The underlying custom fields query is transient cached.
+ *
+ * @since 2.8.191
+ *
+ * @param string $post_type Post type.
+ * @return array Map of htmlvar_name => array( 'field_type', 'data_type' ).
+ */
+function geodir_dynamic_content_field_types( $post_type = '' ) {
+	$map = array();
+
+	if ( empty( $post_type ) ) {
+		return $map;
+	}
+
+	$fields = geodir_post_custom_fields( '', 'all', $post_type, 'none' );
+
+	if ( ! empty( $fields ) ) {
+		foreach ( $fields as $field ) {
+			$name = ! empty( $field['htmlvar_name'] ) ? $field['htmlvar_name'] : ( ! empty( $field['name'] ) ? $field['name'] : '' );
+
+			if ( $name === '' ) {
+				continue;
+			}
+
+			$map[ $name ] = array(
+				'field_type' => ! empty( $field['field_type'] ) ? $field['field_type'] : ( ! empty( $field['type'] ) ? $field['type'] : '' ),
+				'data_type'  => ! empty( $field['data_type'] ) ? $field['data_type'] : '',
+			);
+		}
+	}
+
+	return apply_filters( 'geodir_dynamic_content_field_types', $map, $post_type );
+}
+
+/**
+ * Escape a Dynamic Content replacement value for safe output.
+ *
+ * @since 2.8.191
+ *
+ * @param mixed  $value      The value being substituted.
+ * @param string $field_type The field type (text, html, url, ...).
+ * @param string $data_type  The field data type (VARCHAR, INT, FLOAT, ...).
+ * @param array  $context    Extra context (key, text) for filters.
+ * @return mixed Escaped value.
+ */
+function geodir_escape_dynamic_value( $value, $field_type = '', $data_type = '', $context = array() ) {
+	// Arrays / objects (e.g. file or serialised fields) are left untouched.
+	if ( ! is_scalar( $value ) ) {
+		return $value;
+	}
+
+	$html_types = apply_filters( 'geodir_dynamic_content_html_field_types', array( 'html', 'textarea' ), $field_type, $data_type, $context );
+
+	if ( in_array( $field_type, (array) $html_types, true ) ) {
+		$mode = 'none';
+	} else if ( $field_type === 'url' ) {
+		$mode = 'url';
+	} else if ( in_array( $data_type, array( 'INT', 'FLOAT', 'DECIMAL' ), true ) ) {
+		$mode = 'none';
+	} else {
+		$mode = 'attr';
+	}
+
+	/**
+	 * Filter the escaping mode used for a replaced Dynamic Content value.
+	 *
+	 * @since 2.8.191
+	 *
+	 * @param string $mode       One of 'attr', 'url', 'html', 'none'.
+	 * @param string $field_type The field type.
+	 * @param string $data_type  The field data type.
+	 * @param mixed  $value      The value being substituted.
+	 * @param array  $context    Extra context (key, text).
+	 */
+	$mode = apply_filters( 'geodir_escape_dynamic_value_mode', $mode, $field_type, $data_type, $value, $context );
+
+	switch ( $mode ) {
+		case 'none':
+			return $value;
+		case 'url':
+			return esc_url( $value );
+		case 'html':
+			return wp_kses_post( $value );
+		case 'attr':
+		default:
+			return esc_attr( $value );
+	}
+}
+
+/**
  * Replace custom variables in text.
  *
  * @param $text
@@ -1744,12 +1837,29 @@ function geodir_replace_variables( $text, $post_id = '' ) {
 	if ( ! empty( $gd_post->ID ) && strpos( $text, '%%' ) !== false ) {
 		$non_replace = geodir_get_no_replace_fields();
 
+		// Field key => type info, used to escape each replacement value for
+		// the context it is output in.
+		$field_types = geodir_dynamic_content_field_types( ! empty( $gd_post->post_type ) ? $gd_post->post_type : '' );
+
 		foreach( $gd_post as $key => $val ) {
 			if ( ! in_array( $key, $non_replace ) ) {
 				// Replace plain variables.
 				if ( strpos( $text, '%%' . $key . '%%' ) !== false ) {
 					$val = apply_filters( 'geodir_replace_variables_' . $key, $val, $text );
-					$text = str_replace( '%%' . $key . '%%', $val, $text );
+
+					$replace_val = $val;
+					if ( ! empty( $replace_val ) ) {
+						$field_type = isset( $field_types[ $key ]['field_type'] ) ? $field_types[ $key ]['field_type'] : '';
+						$data_type  = isset( $field_types[ $key ]['data_type'] ) ? $field_types[ $key ]['data_type'] : '';
+
+						if ( in_array( $key, array( 'post_content', 'post_excerpt' ), true ) ) {
+							$field_type = 'html';
+						}
+
+						$replace_val = geodir_escape_dynamic_value( $replace_val, $field_type, $data_type, array( 'key' => $key, 'text' => $text ) );
+					}
+
+					$text = str_replace( '%%' . $key . '%%', $replace_val, $text );
 				}
 
 				// Replace encoded variables.
