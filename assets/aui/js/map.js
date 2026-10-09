@@ -769,7 +769,7 @@ function create_marker(item, map_canvas) {
                 },
                 success: function(response) {
                     jQuery("#" + map_canvas).goMap();
-                    html = typeof response == 'object' && response.html ? geodir_htmlEscape(response.html) : '';
+                    html = typeof response == 'object' && response.html ? response.html : '';
                     gd_infowindow.setContent(html);
                     gd_infowindow.open(jQuery.goMap.map, marker);
                     setTimeout(function() {
@@ -1540,7 +1540,7 @@ function create_marker_osm(item, map_canvas) {
                 },
                 success: function(response) {
                     jQuery("#" + map_canvas).goMap();
-                    html = typeof response == 'object' && response.html ? geodir_htmlEscape(response.html) : '';
+                    html = typeof response == 'object' && response.html ? response.html : '';
                     marker.bindPopup(html);
                     setTimeout(function() {
                         jQuery(document.body).trigger('geodir_map_infowindow_open', [{

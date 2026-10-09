@@ -105,11 +105,11 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '', $classes = 
 	if(!$height){$height = isset($meta['height']) ? $meta['height'] : '';}
 	$hwstring = image_hwstring($width, $height);
 
-	$id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
-	$_title = isset( $image->title ) && $image->title ? wp_strip_all_tags( stripslashes_deep( $image->title ) ) : '';
-	$title = $_title ? 'title="' . esc_attr( $_title ) . '" ' : '';
+	$id       = isset($image->ID) ? esc_attr( $image->ID ) : 0;
+	$_title   = isset( $image->title ) && $image->title ? wp_strip_all_tags( stripslashes_deep( $image->title ) ) : '';
+	$title    = $_title ? 'title="' . esc_attr( geodir_esc_js_attrs( $_title ) ) . '" ' : '';
 	$_caption = ! empty( $image->caption ) ? wp_strip_all_tags( stripslashes_deep( $image->caption ) ) : '';
-	$caption = $_caption ? ' data-caption="' . esc_attr( $_caption ) . '" ' : '';
+	$caption  = $_caption ? ' data-caption="' . esc_attr( geodir_esc_js_attrs( $_caption ) ) . '" ' : '';
 
 	if ( $_title ) {
 		$alt = $_title;
@@ -121,7 +121,7 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '', $classes = 
 	}
 
 	if ( $alt ) {
-		$alt = esc_attr( trim( $alt ) );
+		$alt = esc_attr( geodir_esc_js_attrs( $alt ) );
 	}
 
 	$class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id .' ' . $classes;

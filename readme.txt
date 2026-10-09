@@ -329,6 +329,9 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.191 - 2026-10-09 =
+* Added extra sanitization and escaping to image title and alt text to prevent vulnerability - FIXED/SECURITY
+
 = GeoDirectory v2.8.190 - 2026-10-07 =
 * Fix PHP 8.4+ deprecation notices during CSV import/export - COMPATIBILITY
 * Empty rows in CSV file are counted and imported as invalid rows - FIXED
