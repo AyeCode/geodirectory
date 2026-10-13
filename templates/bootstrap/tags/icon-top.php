@@ -12,7 +12,7 @@
  *
  * @see        https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.8.103
+ * @version    2.8.192
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,6 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $aui_bs5;
+
+foreach ( array( 'badge_text_color', 'badge_font_size', 'badge_font_weight', 'badge_font_case', 'tag_text_color', 'tag_font_size', 'tag_font_weight', 'tag_font_case' ) as $_gd_key ) {
+	if ( ! isset( $args[ $_gd_key ] ) ) {
+		$args[ $_gd_key ] = '';
+	}
+}
+unset( $_gd_key );
 
 $count_class = '';
 $tag_class   = '';
@@ -33,14 +40,13 @@ if ( $aui_bs5 && ! empty( $args['badge_position'] ) && 'top-right' === $args['ba
 }
 
 if ( ! $hide_count ) {
-	if ( 'none' === $args['badge_color'] ) {
-		// No class
-	} else if ( strpos( $args['badge_color'], 'translucent' ) !== false ) {
-		$count_class .= ' badge btn-' . esc_attr( $args['badge_color'] );
-	} else if ( $args['badge_color'] ) {
-		$count_class .= ' badge badge-' . esc_attr( $args['badge_color'] );
-	} else {
+	$badge_color = isset( $args['badge_color'] ) && is_scalar( $args['badge_color'] ) ? sanitize_html_class( trim( (string) $args['badge_color'] ) ) : '';
+
+	if ( '' === $badge_color ) {
 		$count_class .= ' badge badge-light';
+	} elseif ( 'none' !== $badge_color ) {
+		$prefix       = ( false !== strpos( $badge_color, 'translucent' ) ) ? 'btn-' : 'badge-';
+		$count_class .= ' badge ' . $prefix . $badge_color;
 	}
 
 	$count_class .= ' ' . sd_build_aui_class(
@@ -58,7 +64,7 @@ if ( ! $hide_count ) {
 }
 
 $card_color = ! empty( $args['card_color'] ) ? sanitize_html_class( $args['card_color'] ) : 'outline-primary';
-$card_padding_inside = ! empty( $args['card_padding_inside'] ) ? absint( $args['card_padding_inside'] ) : '4';
+$card_padding_inside = isset( $args['card_padding_inside'] ) && '' !== $args['card_padding_inside'] ? absint( $args['card_padding_inside'] ) : '4';
 $icon = '';
 
 if ( ! $hide_icon ) {
@@ -86,7 +92,8 @@ if ( ! $hide_icon ) {
 
 		$term_color = '';
 	} else {
-		$term_color = $term_color ? ' style="color:' . sanitize_hex_color( $term_color ) . '"' : '';
+		$term_color = $term_color ? sanitize_hex_color( $term_color ) : '';
+		$term_color = $term_color ? ' style="color:' . esc_attr( $term_color ) . '"' : '';
 	}
 
 	$icon = '<a href="' . esc_url( $term_link ) . '" class="gd-cpttag-tag-left border-0 mb-3 overflow-hidden stretched-link ' . esc_attr( $icon_size_class ) . '"><span class="gd-cpttag-icon' . esc_attr( $icon_color_class ) . '"' . $term_color . '>' . $term_icon . '</span></a>';
@@ -95,7 +102,7 @@ if ( ! $hide_icon ) {
 }
 
 // Tag text
-$tag_class .= $args['tag_text_color'] ? '' : ' text-reset';
+$tag_class .= ! empty( $args['tag_text_color'] ) ? '' : ' text-reset';
 $tag_class .= empty( $args['tag_font_size'] ) ? ' h6' : '';
 $tag_class .= empty( $args['tag_font_weight'] ) ? ' font-weight-bold fw-bold' : '';
 $tag_class .= ' ' . sd_build_aui_class(
@@ -111,11 +118,12 @@ $tag_class .= ' ' . sd_build_aui_class(
 <div class="card h-100 p-0 m-0 border-0 bg-transparent <?php echo esc_attr( $card_class ); ?>">
 	<div class="card-body position-relative text-center btn btn-<?php echo esc_attr( $card_color );?> p-1 py-<?php echo esc_attr( $card_padding_inside );?>">
 		<?php echo $icon; ?>
-		<div class="gd-cpttag-tag-right text-truntage">
-			<a href="<?php echo esc_url( $term_link ); ?>" class="<?php echo esc_attr( $tag_class ); ?>"><?php echo esc_attr( $term_name ); ?></a><?php echo $count_text; ?>
+		<div class="gd-cpttag-tag-right text-truncate">
+			<a href="<?php echo esc_url( $term_link ); ?>" class="<?php echo esc_attr( $tag_class ); ?>"><?php echo esc_html( $term_name ); ?></a><?php echo $count_text; ?>
 		</div>
 <?php
 // NOTE: The two closing divs are added in the main loop so that child tags can be added inside.
 //	</div>
 //</div>
 ?>
+																							   
