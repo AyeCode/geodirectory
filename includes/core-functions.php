@@ -1177,7 +1177,7 @@ function geodir_search_form_search_input( $instance ) {
 		$default_search_for_text = geodir_get_search_default_text();
 	}
 
-	if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
+	if ( isset( $_REQUEST['s'] ) && is_scalar( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
 		$search_term = stripslashes_deep( $_REQUEST['s'] );
 		$search_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_term ); // apple suck
 	} else {

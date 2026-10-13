@@ -2116,7 +2116,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	$title = apply_filters( 'geodir_replace_location_variables', $title, $location_array, $gd_page, $sep );
 
 	$search_term = '';
-	if ( isset( $_REQUEST['s'] ) ) {
+	if ( isset( $_REQUEST['s'] ) && is_scalar( $_REQUEST['s'] ) ) {
 		$search_term = esc_attr( $_REQUEST['s'] );
 		$search_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_term ); // apple suck
 		$search_term = trim( stripslashes( $search_term ) );
@@ -2136,7 +2136,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 
 	$search_near_term = '';
 	$search_near = '';
-	if ( isset( $_REQUEST['snear'] ) ) {
+	if ( isset( $_REQUEST['snear'] ) && is_scalar( $_REQUEST['snear'] ) ) {
 		$search_near_term = esc_attr( $_REQUEST['snear'] );
 		$search_near_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_near_term ); // apple suck
 		$search_near_term = trim( stripslashes( $search_near_term ) );
