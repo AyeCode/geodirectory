@@ -677,7 +677,7 @@ class GeoDir_SEO {
 
 		// search
 		$search_term = '';
-		if ( isset( $_REQUEST['s'] ) ) {
+		if ( isset( $_REQUEST['s'] ) && is_scalar( $_REQUEST['s'] ) ) {
 			$search_term = esc_attr( $_REQUEST['s'] );
 			$search_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_term ); // apple suck
 			$search_term = trim( stripslashes( $search_term ) );
