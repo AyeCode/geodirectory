@@ -78,8 +78,12 @@ define('PRO_SUBMIT_BUTTON', __('Publish', 'geodirectory'));
 define('PRO_CANCEL_BUTTON', __('Cancel', 'geodirectory'));
 define('PUBLISH_DAYS_TEXT', __('%s : number of publish days are %s (<span id="%s">%s %s</span>)', 'geodirectory'));
 define('SELECT_PAY_MEHTOD_TEXT', __('Select Payment Method', 'geodirectory'));
-define('FAVOURITE_TEXT', __('Favorite', 'geodirectory'));
-define('UNFAVOURITE_TEXT', __('Unfavorite', 'geodirectory'));
+if ( ! defined( 'FAVOURITE_TEXT' ) ) {
+	define( 'FAVOURITE_TEXT', __( 'Favorite', 'geodirectory' ) );
+}
+if ( ! defined( 'UNFAVOURITE_TEXT' ) ) {
+	define( 'UNFAVOURITE_TEXT', __( 'Unfavorite', 'geodirectory' ) );
+}
 define('MY_FAVOURITE_TEXT', __('My Favorites', 'geodirectory'));
 define('ADD_FAVOURITE_TEXT', __('Add to Favorites', 'geodirectory'));
 define('REMOVE_FAVOURITE_TEXT', __('Remove from Favorites', 'geodirectory'));
