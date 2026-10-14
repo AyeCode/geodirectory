@@ -428,6 +428,7 @@ function geodir_sanitize_html_field( $str, $allowed_html = NULL ) {
 	$filtered = trim( wp_unslash( $str ) );
 	$filtered = wp_kses( $filtered, $allowed_html );
 	$filtered = balanceTags( $filtered ); // Balances tags
+	$filtered = geodir_kses_safe_embed_attributes( $filtered ); // Neutralize dangerous protocols in embed data-* attributes.
 
 	/**
 	 * Filter a sanitized html field string.
@@ -439,6 +440,67 @@ function geodir_sanitize_html_field( $str, $allowed_html = NULL ) {
 	 * @param string $allowed_html List of allowed HTML elements.
 	 */
 	return apply_filters( 'geodir_sanitize_html_field', $filtered, $str, $allowed_html );
+}
+
+/**
+ * Neutralize dangerous URL protocols in data-* attributes used as resource URLs.
+ *
+ * @since 2.8.192
+ *
+ * @param string $str Sanitized HTML content.
+ * @return string Content with unsafe embed data-* attributes removed.
+ */
+function geodir_kses_safe_embed_attributes( $str ) {
+	if ( ! is_string( $str ) || $str === '' ) {
+		return $str;
+	}
+
+	// Attributes that the frontend turns into a resource/iframe URL.
+	$attributes = array( 'data-embed-url', 'data-src', 'data-embed' );
+
+	$found = false;
+	foreach ( $attributes as $attribute ) {
+		if ( stripos( $str, $attribute ) !== false ) {
+			$found = true;
+			break;
+		}
+	}
+
+	if ( ! $found ) {
+		return $str;
+	}
+
+	/**
+	 * Filter the URL protocols allowed in embed data-* attributes.
+	 *
+	 * @since 2.8.192
+	 *
+	 * @param array $protocols Allowed (lowercase) protocols.
+	 */
+	$allowed_protocols = apply_filters( 'geodir_embed_attribute_allowed_protocols', array( 'http', 'https' ) );
+	$allowed_protocols = array_map( 'strtolower', (array) $allowed_protocols );
+
+	$pattern = '#\b(data-(?:embed-url|embed|src))\s*=\s*(["\'])(.*?)\2#is';
+
+	$filtered = preg_replace_callback( $pattern, function( $matches ) use ( $allowed_protocols ) {
+		$value = $matches[3];
+
+		// Decode entities so obfuscated schemes (e.g. java&#115;cript:) are caught,
+		// and drop whitespace/control chars browsers ignore before the scheme.
+		$test = html_entity_decode( $value, ENT_QUOTES, 'UTF-8' );
+		$test = preg_replace( '/[\s\x00-\x20]+/', '', $test );
+
+		if ( $test !== '' && preg_match( '#^([a-z][a-z0-9+.\-]*):#i', $test, $scheme ) ) {
+			if ( ! in_array( strtolower( $scheme[1] ), $allowed_protocols, true ) ) {
+				// Disallowed scheme: blank the value, keeping the (harmless) attribute.
+				return $matches[1] . '=' . $matches[2] . $matches[2];
+			}
+		}
+
+		return $matches[0];
+	}, $str );
+
+	return null === $filtered ? $str : $filtered;
 }
 
 /**
