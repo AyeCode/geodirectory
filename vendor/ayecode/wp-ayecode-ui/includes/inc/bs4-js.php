@@ -306,7 +306,7 @@
             });
 
             //resize the iframe once loaded.
-            iFrame.load(function() {
+            iFrame.on('load', function() {
                 jQuery('.ac-preview-loading').removeClass('d-flex');
             });
         });
@@ -649,7 +649,7 @@
                 // iframe
                 var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
                 var url = aui_sanitize_url(jQuery(a).attr('href'),{fallback:'about:blank'});
-                var iframe = '<iframe class="embed-responsive-item" style="height:'+css_height +'" src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" id="video" allow="autoplay"></iframe>';
+                var iframe = url ? jQuery('<iframe class="embed-responsive-item" id="video" allow="autoplay"></iframe>').attr('style', 'height:' + css_height).attr('src', url + '?rel=0&showinfo=0&modestbranding=1&autoplay=1').get(0).outerHTML : '';
                 var img = iframe ;//.css('height',css_height).get(0).outerHTML;
                 $carousel += img;
 
@@ -1129,5 +1129,43 @@ function aui_sanitize_url(url, options) {
 
     // The parser encodes " < > and spaces but not ' in the path, so encode quotes for any attribute quoting style.
     return parsed.href.replace(/'/g, '%27').replace(/"/g, '%22');
+}
+
+/**
+ * Strip HTML tags.
+ * 
+ * @param {string} text - Text to strip the HTML tags from.
+ * @return {string} Stripped text.
+ */
+function aui_stripTags(text) {
+	if ('string' !== typeof text) {
+		return '';
+	}
+
+	const domParser = new DOMParser();
+	const htmlDocument = domParser.parseFromString(text, 'text/html');
+
+	// Self-assignment forces browser encoding/sanitization
+	htmlDocument.body.innerText = htmlDocument.body.innerText;
+
+	return htmlDocument.body.innerHTML;
+}
+
+/**
+ * Strip HTML tags and convert HTML entities.
+ * 
+ * @param {string} text - Text to strip tags and convert HTML entities.
+ * @return {string} Sanitized text.
+ */
+function aui_stripTagsEscHTML(text) {
+	let _text = aui_stripTags(text);
+	const textarea = document.createElement('textarea');
+
+	try {
+		textarea.textContent = _text;
+		_text = aui_stripTags(textarea.value);
+	} catch (er) {}
+
+	return _text;
 }
 </script>
