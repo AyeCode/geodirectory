@@ -334,7 +334,7 @@
             });
 
             //resize the iframe once loaded.
-            iFrame.load(function() {
+            iFrame.on('load', function() {
                 jQuery('.ac-preview-loading').removeClass('d-flex').addClass('d-none');
             });
         });

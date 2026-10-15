@@ -817,6 +817,11 @@ class GeoDir_Post_Data {
 				 * @param array  $args Args array.
 				 */
 				$data['post_content'] = apply_filters( 'geodir_extra_sanitize_textarea_field', $data['post_content'], array( 'default' => $data['post_content'], 'field_key' => 'post_content', 'postdata' => $data, 'postarr' => $postarr ) );
+
+				// Neutralize dangerous protocols in embed data-* attributes (eg: data-embed-url="javascript:...").
+				if ( is_string( $data['post_content'] ) && $data['post_content'] !== '' ) {
+					$data['post_content'] = wp_slash( geodir_kses_safe_embed_attributes( wp_unslash( $data['post_content'] ) ) );
+				}
 			}
 		} else if ( ! empty( self::$post_temp ) && $data['post_type'] == 'revision' && isset( $data['post_parent'] ) && $data['post_parent'] == self::$post_temp['ID'] ) {
 			// We might be saving a post revision at the same time so we don't blank the post_temp here
