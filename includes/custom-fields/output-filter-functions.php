@@ -34,12 +34,14 @@ function geodir_predefined_custom_field_output_twitter_feed($html,$location,$cf)
 			$field_icon = '';
 		}
 
+		$x_username = $gd_post->{$cf['htmlvar_name']};
+
 		// Database value.
 		if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-			return $gd_post->{$cf['htmlvar_name']};
+			return esc_attr( strip_tags( $x_username ) );
 		}
 
-		$value = '<a class="twitter-timeline" data-height="600" data-dnt="true" href="https://x.com/'.$gd_post->{$cf['htmlvar_name']}.'">' . wp_sprintf( __( 'Tweets by %s', 'geodirectory' ), $gd_post->{$cf['htmlvar_name']} ) . '</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
+		$value = '<a class="twitter-timeline" data-height="600" data-dnt="true" href="' . esc_url( 'https://x.com/' . $x_username ) . '">' . wp_sprintf( __( 'Tweets by %s', 'geodirectory' ), esc_html( $x_username ) ) . '</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
 
 		// Stripped value.
 		if ( ! empty( $output ) && isset( $output['strip'] ) ) {

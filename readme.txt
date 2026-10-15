@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.8.192
+Stable tag: 2.8.193
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -333,6 +333,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * "Auto Draft" appearing in the title when switching languages on the add listing page with TranslatePress - FIXED
 * Sanitize embed/lightbox iframe URLs to block unsafe urls - FIXED/SECURITY
 * Update AUI 0.2.57 - CHANGED
+* Added escaping to X (Twitter) feed output to prevent XSS vulnerability - FIXED/SECURITY
 
 = GeoDirectory v2.8.192 - 2026-10-14 =
 * Resolved conflict with Contact List Pro plugin - FIXED
