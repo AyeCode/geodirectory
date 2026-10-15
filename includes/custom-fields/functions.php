@@ -159,6 +159,7 @@ function geodir_get_cf_value( $cf ) {
 	global $post, $gd_post;
 
 	$value = '';
+
 	if ( is_admin() ) {
 		global $post;
 
@@ -171,7 +172,6 @@ function geodir_get_cf_value( $cf ) {
 			$gd_post = array();
 		}
 	} elseif ( ! empty( $gd_post ) ) {
-
 	}
 
 	if ( empty( $gd_post ) && ! empty( $post ) ) {
@@ -195,7 +195,7 @@ function geodir_get_cf_value( $cf ) {
 	}
 
 	// Blank title for auto drafts
-	if ( $cf['name'] == 'post_title' && $value == __( "Auto Draft" ) ) { // no text domain used here on purpose as we are matching a core WP text.
+	if ( $cf['name'] == 'post_title' && ( $value == "Auto Draft" || $value == __( "Auto Draft" ) ) ) { // no text domain used here on purpose as we are matching a core WP text.
 		$value = "";
 	}
 
