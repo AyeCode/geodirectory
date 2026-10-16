@@ -386,13 +386,12 @@ class GeoDir_Post_Data {
 	 * @param int|string $user_id User id.
 	 */
 	public static function remove_post_revisions( $post_id, $user_id ) {
-		$posts = wp_get_post_revisions( $post_id, array( 'check_enabled' => false, 'author' => $user_id ) );
+		$posts = wp_get_post_revisions( (int) $post_id, array( 'check_enabled' => false, 'author' => $user_id ) );
 
 		if ( ! empty( $posts ) ) {
 			foreach ( $posts as $post ) {
-				if ( $post->ID ) {
-					wp_delete_post( $post->ID, true );
-					delete_post_meta( $post->post_parent, "__" . $post->ID ); // delete any temp stored media values from auto saves
+				if ( ! empty( $post->ID ) && ! empty( $post->post_parent ) && wp_delete_post( $post->ID, true ) ) {
+					delete_post_meta( (int) $post->post_parent, "__" . (int) $post->ID ); // Delete any temp stored media values from auto saves.
 				}
 			}
 		}
@@ -1314,7 +1313,7 @@ class GeoDir_Post_Data {
 
 		$result = wp_delete_post( (int) $post_data['ID'], true );
 
-		if ( ! empty( $post_data['post_parent'] ) ) {
+		if ( $result && ! empty( $post_data['post_parent'] ) ) {
 			delete_post_meta( (int) $post_data['post_parent'], "__" . (int) $post_data['ID'] ); // Delete any temp stored media values from auto saves.
 		}
 
