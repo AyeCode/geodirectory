@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.8.193
+Stable tag: 2.8.194
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -329,7 +329,7 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
-= GeoDirectory v2.8.194 - 2026-10-TBD =
+= GeoDirectory v2.8.194 - 2026-10-20 =
 * Revision temp media values removed even when revision deletion is prevented - FIXED
 * Restrict public access to unpublished listing marker popup content (reported by Karthik Ramakrishnan) - FIXED/SECURITY
 * Prevent showing unpublished listing content to public users (reported by Jacek Sowiński) - FIXED/SECURITY
@@ -339,6 +339,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Escape map widget width and height attributes (reported by Jacek Sowiński) - FIXED/SECURITY
 * Sanitize DB text translation export to prevent PHP code to db-language.php (reported by Karthik Ramakrishnan - FIXED/SECURITY
 * Logged-out visitors could edit guest listings submitted by other logged-out users (reported by Vincent Suen) - FIXED/SECURITY
+* Update AUI 0.2.58 and SD 1.2.38 - CHANGED
 
 = GeoDirectory v2.8.193 - 2026-10-15 =
 * "Auto Draft" appearing in the title when switching languages on the add listing page with TranslatePress - FIXED
