@@ -789,6 +789,7 @@ function geodir_get_post_stati( $context, $args = array() ) {
 
 		case 'single-map':
 		case 'single-map-public':
+		case 'recently-viewed':
 			$statuses = array_merge( $publish_statuses, array( 'gd-closed', 'gd-expired' ) );
 			break;
 

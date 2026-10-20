@@ -624,6 +624,46 @@ class GeoDir_User {
 					}
 				}
 				break;
+			case 'view_listing':
+				$has_cap = false;
+
+				$defaults = array(
+					'post'    => NULL,
+					'context' => 'recently-viewed',
+				);
+
+				$_args = wp_parse_args( $args, $defaults );
+
+				if ( is_scalar( $_args['post'] ) ) {
+					$_post = get_post( absint( $_args['post'] ) );
+				} else if ( is_object( $_args['post'] ) && ! empty( $_args['post']->ID ) ) {
+					$_post = $_args['post'];
+				} else {
+					$_post = NULL;
+				}
+
+				if ( ! empty( $_post ) && ! empty( $_post->ID ) && ! empty( $_post->post_type ) && geodir_is_gd_post_type( $_post->post_type ) ) {
+					if ( current_user_can( 'manage_options' ) ) {
+						$has_cap = true;
+					} else {
+						$post_ID = (int) $_post->ID;
+
+						// Use the status from the posts table, listing objects may carry a stale status from the details table.
+						$post_status = get_post_status( $post_ID );
+						$statuses    = geodir_get_post_stati( $_args['context'], array( 'post_type' => $_post->post_type ) );
+
+						if ( $post_status && in_array( $post_status, $statuses, true ) ) {
+							$has_cap = true;
+						} else if ( is_user_logged_in() ) {
+							if ( geodir_listing_belong_to_current_user( $post_ID ) || current_user_can( 'edit_post', $post_ID ) ) {
+								$has_cap = true;
+							} else if ( $post_status == 'private' && current_user_can( 'read_post', $post_ID ) ) {
+								$has_cap = true;
+							}
+						}
+					}
+				}
+				break;
 			default:
 				$has_cap = false;
 
