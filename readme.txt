@@ -337,6 +337,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Listing save temp media path traversal could save files outside the temp folder (reported by vuxvinh) - FIXED/SECURITY
 * Escape post badge cta value & link attributes to prevent XSS (reported by Karthik Ramakrishnan) - FIXED/SECURITY
 * Escape map widget width and height attributes (reported by Jacek Sowiński) - FIXED/SECURITY
+* Sanitize DB text translation export to prevent PHP code to db-language.php (reported by Karthik Ramakrishnan - FIXED/SECURITY
 
 = GeoDirectory v2.8.193 - 2026-10-15 =
 * "Auto Draft" appearing in the title when switching languages on the add listing page with TranslatePress - FIXED

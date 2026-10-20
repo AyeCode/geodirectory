@@ -3,7 +3,11 @@
  * Translate language string stored in database. Ex: Custom Fields
  *
  * @package GeoDirectory
- * @since 2.0.0
+ * @since 2.8.194
  */
 
-// Language keys
+// This file is only for translation tools, never run it directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
