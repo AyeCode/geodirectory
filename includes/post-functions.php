@@ -575,14 +575,13 @@ function geodir_lisiting_belong_to_user( $listing_id, $user_id ) {
 		return false;
 	}
 
-	$listing_author_id = geodir_get_listing_author( $listing_id );
+	$listing_author_id = absint( geodir_get_listing_author( $listing_id ) );
 
-	if ( $listing_author_id == $user_id ) {
+	if ( $listing_author_id && $listing_author_id === absint( $user_id ) ) {
 		return true;
 	} else {
 		return false;
 	}
-
 }
 
 /**

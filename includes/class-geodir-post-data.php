@@ -1335,18 +1335,19 @@ class GeoDir_Post_Data {
 	 * @return bool
 	 */
 	public static function owner_check( $post_id, $user_id ) {
-		$owner = false;
 		if ( ! $post_id ) {
 			return false;
 		}
-		$author_id = get_post_field( 'post_author', $post_id );
 
-		if ( ! $user_id ) {// check if the current nonce owns the post with no author
-			$post_current_nonce = get_post_meta( $post_id, '_gd_logged_out_post_author', true );
-			if ( $post_current_nonce && $post_current_nonce == geodir_getcookie( '_gd_logged_out_post_author' ) ) {
+		$owner     = false;
+		$user_id   = absint( $user_id );
+		$author_id = absint( get_post_field( 'post_author', $post_id ) );
+
+		if ( ! $user_id ) { // Check if the current nonce owns the post with no author
+			if ( self::guest_owns_post( $post_id ) ) {
 				$owner = true;
 			}
-		} elseif ( $author_id == $user_id ) {
+		} elseif ( $author_id && $author_id === $user_id ) {
 			$owner = true;
 		} elseif ( current_user_can( 'edit_others_posts' ) ) {
 			$owner = true;
@@ -1543,18 +1544,53 @@ class GeoDir_Post_Data {
 			return false;
 		}
 
-		if ( $author_id == $user_id ) {
+		$user_id   = absint( $user_id );
+		$author_id = absint( $author_id );
+
+		if ( ! $user_id ) {
+			// Logged out user: only the guest ownership token can grant access.
+			// Guest posts have author 0 and logged out users have user id 0, so an author match must never be used here.
+			if ( self::guest_owns_post( $post_id ) ) {
+				$owner = true;
+			}
+		} elseif ( $author_id && $author_id === $user_id ) {
 			$owner = true;
 		} elseif ( current_user_can( 'edit_others_posts' ) ) {
 			$owner = true;
-		} elseif ( ! $user_id ) {// check if the current nonce owns the post with no author
-			$post_current_nonce = get_post_meta( $post_id, '_gd_logged_out_post_author', true );
-			if ( $post_current_nonce && $post_current_nonce == geodir_getcookie( '_gd_logged_out_post_author' ) ) {
-				$owner = true;
-			}
 		}
 
 		return $owner;
+	}
+
+	/**
+	 * Check if the current logged out visitor owns a guest post via the guest ownership cookie.
+	 *
+	 * @since 2.8.194
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return bool
+	 */
+	public static function guest_owns_post( $post_id ) {
+		if ( ! $post_id || get_current_user_id() ) {
+			return false;
+		}
+
+		$post_nonce   = get_post_meta( $post_id, '_gd_logged_out_post_author', true );
+		$cookie_nonce = geodir_getcookie( '_gd_logged_out_post_author' );
+
+		if ( ! is_scalar( $post_nonce ) || ! is_scalar( $cookie_nonce ) ) {
+			return false;
+		}
+
+		$post_nonce   = (string) $post_nonce;
+		$cookie_nonce = (string) $cookie_nonce;
+
+		if ( $post_nonce === '' || $cookie_nonce === '' ) {
+			return false;
+		}
+
+		return hash_equals( $post_nonce, $cookie_nonce );
 	}
 
 	/*
