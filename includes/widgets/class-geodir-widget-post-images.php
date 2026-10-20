@@ -418,6 +418,11 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		// Set static post ID.
 		if ( ! empty( $options['id'] ) ) {
 			$post_id = absint( $options['id'] );
+
+			// Don't show listings the current user is not allowed to view.
+			if ( ! geodir_user_can( 'view_widget_listing', array( 'post' => $post_id ) ) ) {
+				return '';
+			}
 		}
 
 		$current_post = ! empty( $gd_post ) && $gd_post->ID == $post_id ? $gd_post : array();

@@ -332,7 +332,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.194 - 2026-10-TBD =
 * Revision temp media values removed even when revision deletion is prevented - FIXED
 * Restrict public access to unpublished listing marker popup content (reported by Karthik Ramakrishnan) - FIXED/SECURITY
-* Prevent showing unpublished listings to public users in Recently Viewed block (reported by Jacek Sowiński) - FIXED/SECURITY
+* Prevent showing unpublished listing content to public users (reported by Jacek Sowiński) - FIXED/SECURITY
 
 = GeoDirectory v2.8.193 - 2026-10-15 =
 * "Auto Draft" appearing in the title when switching languages on the add listing page with TranslatePress - FIXED
