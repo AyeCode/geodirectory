@@ -678,6 +678,11 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 	public function get_marker_item( $request ) {
 		$id = ! empty( $request['id'] ) ? (int)$request['id'] : 0;
 
+		// Never render a popup for a listing the current user is not allowed to view.
+		if ( $id > 0 && ! $this->can_view_marker_item( $id, $request ) ) {
+			return $this->marker_item_not_found_error();
+		}
+
 		$response		  = array();
 		$response['html'] = $id > 0 ? $this->marker_content( $id ) : '';
 
@@ -707,7 +712,93 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 	 * @return bool True if the request has read access for the item, otherwise false.
 	 */
 	public function get_marker_item_permissions_check( $request ) {
-		return $this->show_in_rest();
+		if ( ! $this->show_in_rest() ) {
+			return false;
+		}
+
+		$id = ! empty( $request['id'] ) ? (int) $request['id'] : 0;
+
+		if ( $id > 0 && ! $this->can_view_marker_item( $id, $request ) ) {
+			return $this->marker_item_not_found_error();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Checks whether the current user can view the marker popup for a listing.
+	 *
+	 * @since 2.8.194
+	 *
+	 * @param int             $post_id Listing (or revision) ID.
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return bool True if the popup can be shown, otherwise false.
+	 */
+	public function can_view_marker_item( $post_id, $request = null ) {
+		$post_id = absint( $post_id );
+
+		if ( empty( $post_id ) ) {
+			return false;
+		}
+
+		$post = get_post( $post_id );
+
+		if ( empty( $post ) ) {
+			return false;
+		}
+
+		// Revisions are only previewed by the parent listing's author.
+		$parent_id = $post->post_type == 'revision' ? (int) $post->post_parent : 0;
+		$post_type = $parent_id > 0 ? get_post_type( $parent_id ) : $post->post_type;
+
+		if ( ! ( $post_type && geodir_is_gd_post_type( $post_type ) ) ) {
+			return false;
+		}
+
+		$can_view = false;
+
+		if ( $parent_id <= 0 ) {
+			$statuses = geodir_get_post_stati( 'single-map-public', array( 'post_type' => $post_type ) );
+
+			if ( in_array( $post->post_status, $statuses, true ) ) {
+				$can_view = true;
+			}
+		}
+
+		if ( ! $can_view ) {
+			if ( geodir_listing_belong_to_current_user( $post_id ) || ( $parent_id > 0 && geodir_listing_belong_to_current_user( $parent_id ) ) ) {
+				$can_view = true;
+			} elseif ( current_user_can( 'edit_post', $parent_id > 0 ? $parent_id : $post_id ) ) {
+				$can_view = true;
+			} elseif ( $parent_id <= 0 && $post->post_status == 'private' && current_user_can( 'read_post', $post_id ) ) {
+				$can_view = true;
+			}
+		}
+
+		/**
+		 * Filters whether the current user can view the marker popup for a listing.
+		 *
+		 * @since 2.8.194
+		 *
+		 * @param bool                 $can_view Whether the popup can be shown.
+		 * @param int                  $post_id  Listing (or revision) ID.
+		 * @param WP_REST_Request|null $request  The request.
+		 */
+		return (bool) apply_filters( 'geodir_rest_can_view_marker_item', $can_view, $post_id, $request );
+	}
+
+	/**
+	 * Error returned when a marker popup is not viewable by the current user.
+	 *
+	 * Uses the same code/status as core REST so it does not reveal whether the
+	 * listing exists.
+	 *
+	 * @since 2.8.194
+	 *
+	 * @return WP_Error
+	 */
+	public function marker_item_not_found_error() {
+		return new WP_Error( 'rest_post_invalid_id', __( 'Invalid post ID.' ), array( 'status' => 404 ) );
 	}
 
 	public function get_map_terms_filter( $request ) {
