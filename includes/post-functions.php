@@ -1508,12 +1508,14 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 
 					// CTA
-					if( $args['cta'] != '0' ){
-						$action = $args['cta'] == '' ? esc_attr($args['key']) : esc_attr($args['cta']);
-						$cta = " if(typeof ga == 'function' && !jQuery(this).hasClass('gd-event-tracked')) { ga('send', 'event', {eventCategory: 'CTA',eventAction: '$action',transport: 'beacon' });jQuery(this).addClass('gd-event-tracked');} ";
-						if(!empty($btn_args['onclick'])){
+					if ( $args['cta'] != '0' ) {
+						$action = trim( strip_tags( (string) $args['cta'] ) );
+						$action = $action === '' ? $args['key'] : $action;
+						$cta    = " if(typeof ga=='function'&&!jQuery(this).hasClass('gd-event-tracked')){ga('send','event',{eventCategory:'CTA',eventAction:'" . esc_js( $action ) . "',transport:'beacon'});jQuery(this).addClass('gd-event-tracked')} ";
+
+						if ( ! empty( $btn_args['onclick'] ) ) {
 							$btn_args['onclick'] .= $cta;
-						}else{
+						} else {
 							$btn_args['onclick'] = $cta;
 						}
 					}
