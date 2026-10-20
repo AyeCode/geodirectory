@@ -587,6 +587,11 @@ class GeoDir_Media {
 			return '';
 		}
 
+		// Only allow to update the attachment that belongs to the post being saved.
+		if ( ! self::attachment_belongs_to_post( $file_id, $post_id ) ) {
+			return new WP_Error( 'image_update', __( "Invalid attachment, image update failed.", "geodirectory" ) );
+		}
+
 		// If menu order is 0 then its featured and we need to set the post thumbnail
 		if ( $order === 0 && $field == 'post_images' && ! wp_is_post_revision( absint( $post_id ) ) ) {
 			// Get the path to the upload directory.
@@ -684,6 +689,54 @@ class GeoDir_Media {
 		}
 
 		return $attachment;
+	}
+
+	/**
+	 * Checks whether an attachment belongs to the post being saved.
+	 *
+	 * @since 2.8.194
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @param int $post_id       Post ID being saved (listing or revision).
+	 * @return bool True if the attachment belongs to the post, otherwise false.
+	 */
+	public static function attachment_belongs_to_post( $attachment_id, $post_id ) {
+		global $wpdb;
+
+		$attachment_id = absint( $attachment_id );
+		$post_id       = absint( $post_id );
+
+		if ( empty( $attachment_id ) || empty( $post_id ) ) {
+			return false;
+		}
+
+		$attachment_post_id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE ID = %d", $attachment_id ) );
+
+		$belongs = false;
+
+		if ( $attachment_post_id > 0 ) {
+			$parent_id    = (int) wp_is_post_revision( $post_id );
+			$main_post_id = $parent_id > 0 ? $parent_id : $post_id;
+
+			if ( $attachment_post_id === $post_id || $attachment_post_id === $main_post_id ) {
+				$belongs = true;
+			} else if ( (int) wp_is_post_revision( $attachment_post_id ) === $main_post_id ) {
+				// Attachment of another revision of the same listing.
+				$belongs = true;
+			}
+		}
+
+		/**
+		 * Filters whether an attachment belongs to the post being saved.
+		 *
+		 * @since 2.8.194
+		 *
+		 * @param bool $belongs            Whether the attachment belongs to the post.
+		 * @param int  $attachment_id      Attachment ID.
+		 * @param int  $post_id            Post ID being saved.
+		 * @param int  $attachment_post_id Post ID of the attachment.
+		 */
+		return (bool) apply_filters( 'geodir_attachment_belongs_to_post', $belongs, $attachment_id, $post_id, $attachment_post_id );
 	}
 
 	/**
