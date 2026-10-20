@@ -103,6 +103,11 @@ class GeoDir_Admin_Tools {
 			),
 		);
 
+		// Only admins can export.
+		if ( ! self::can_export_db_texts() ) {
+			unset( $tools['export_db_texts'] );
+		}
+
 		return apply_filters( 'geodir_debug_tools', $tools );
 	}
 
@@ -164,7 +169,10 @@ class GeoDir_Admin_Tools {
 				$message = __( 'All missing GeoDirectory pages successfully installed', 'geodirectory' );
 				break;
 			case 'export_db_texts' :
-				if ($this->load_db_language()) {
+				if ( ! self::can_export_db_texts() ) {
+					$message = __( 'You do not have permission to run this tool.', 'geodirectory' );
+					$ran     = false;
+				} elseif ( $this->load_db_language() ) {
 					$message = __( 'File successfully created: ', 'geodirectory' ). geodir_plugin_path() . 'db-language.php';
 				} else {
 					$message = __( 'There was a problem creating the file, please check file permissions: ', 'geodirectory' ). geodir_plugin_path() . 'db-language.php';
@@ -286,6 +294,63 @@ class GeoDir_Admin_Tools {
 	}
 
 	/**
+	 * Checks whether the current user can run the DB text translation export.
+	 *
+	 * @since 2.8.194
+	 *
+	 * @return bool
+	 */
+	public static function can_export_db_texts() {
+		if ( is_multisite() ) {
+			$can = is_super_admin();
+		} else {
+			$can = current_user_can( 'manage_options' );
+		}
+
+		return (bool) apply_filters( 'geodir_can_export_db_texts', $can );
+	}
+
+	/**
+	 * Checks whether a DB text needs to be added to the translation file.
+	 *
+	 * Skips null, bool, numbers (including numeric strings) and invalid strings
+	 * (empty, whitespace only or invalid UTF-8). The string itself is kept as is
+	 * because it must match the runtime __() call exactly.
+	 *
+	 * @since 2.8.194
+	 *
+	 * @param mixed $string The DB text.
+	 * @return bool True if the string should be translated, otherwise false.
+	 */
+	public static function is_translatable_db_text( $string ) {
+		if ( ! is_string( $string ) ) {
+			// Null, bool, int, float, array, object.
+			$translatable = false;
+		} else if ( trim( $string ) === '' ) {
+			// Empty or whitespace only.
+			$translatable = false;
+		} else if ( ! preg_match( '//u', $string ) ) {
+			// Invalid UTF-8.
+			$translatable = false;
+		} else if ( is_numeric( trim( $string ) ) ) {
+			// Number.
+			$translatable = false;
+		} else {
+			$translatable = true;
+		}
+
+		/**
+		 * Filters whether a DB text should be added to the translation file.
+		 *
+		 * @since 2.8.194
+		 *
+		 * @param bool  $translatable Whether the string should be translated.
+		 * @param mixed $string       The DB text.
+		 */
+		return (bool) apply_filters( 'geodir_is_translatable_db_text', $translatable, $string );
+	}
+
+	/**
 	 * Load language strings in to file to translate via po editor
 	 *
 	 * @since   1.4.2
@@ -296,6 +361,10 @@ class GeoDir_Admin_Tools {
 	 * @return bool True if file created otherwise false
 	 */
 	public function load_db_language() {
+		if ( ! self::can_export_db_texts() ) {
+			return false;
+		}
+
 		$wp_filesystem = geodir_init_filesystem();
 
 		$language_file = geodir_plugin_path() . 'db-language.php';
@@ -331,6 +400,11 @@ class GeoDir_Admin_Tools {
 		$contents_head[] = " * @since ".GEODIRECTORY_VERSION;
 		$contents_head[] = " */";
 		$contents_head[] = "";
+		$contents_head[] = "// This file is only for translation tools, never run it directly.";
+		$contents_head[] = "if ( ! defined( 'ABSPATH' ) ) {";
+		$contents_head[] = "	exit;";
+		$contents_head[] = "}";
+		$contents_head[] = "";
 		$contents_head[] = "// Language keys";
 
 		$contents_foot   = array();
@@ -341,13 +415,15 @@ class GeoDir_Admin_Tools {
 
 		if ( ! empty( $contents_strings ) ) {
 			foreach ( $contents_strings as $string ) {
-				if ( is_scalar( $string ) && $string != '' ) {
-					do_action( 'geodir_language_file_add_string', $string );
-
-					$string = str_replace( "'", "\'", $string );
-
-					$contents .= PHP_EOL . "__('" . $string . "', 'geodirectory');";
+				// Skip null, bool, numbers and invalid strings.
+				if ( ! self::is_translatable_db_text( $string ) ) {
+					continue;
 				}
+
+				do_action( 'geodir_language_file_add_string', $string );
+
+				// var_export() writes a valid PHP string literal (escapes \ and '), so the value can't break out of the string.
+				$contents .= PHP_EOL . "__(" . var_export( $string, true ) . ", 'geodirectory');";
 			}
 		}
 

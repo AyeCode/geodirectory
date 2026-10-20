@@ -559,41 +559,35 @@ function geodir_column_exist( $db, $column ) {
  * @since 2.1.1.0 Conditionally load widget code on the backend to reduce memory usage.
  */
 function goedir_register_widgets() {
+	global $pagenow;
 
 	if ( get_option( 'geodirectory_version' ) ) {
-		global $pagenow;
-
 		$block_widget_init_screens = function_exists('sd_pagenow_exclude') ? sd_pagenow_exclude() : array();
 
-		if ( is_admin() && $pagenow && in_array($pagenow, $block_widget_init_screens)) {
+		if ( is_admin() && $pagenow && in_array( $pagenow, $block_widget_init_screens ) ) {
 			// don't initiate in these conditions.
-		}else{
-
+		} else {
 			$exclude = function_exists('sd_widget_exclude') ? sd_widget_exclude() : array();
 			$widgets = geodir_get_widgets();
 
-			if( !empty($widgets) ){
+			if ( ! empty( $widgets ) ) {
 				foreach ( $widgets as $widget ) {
-					if(!in_array($widget,$exclude)){
-
+					if ( ! in_array( $widget, $exclude ) ) {
 						// SD V1 used to extend the widget class. V2 does not, so we cannot call register widget on it.
 						if ( is_subclass_of( $widget, 'WP_Widget' ) ) {
 							register_widget( $widget );
 						} else {
 							new $widget();
 						}
-
 					}
 				}
 			}
 
 			// Depreciated
 			new GeoDir_Widget_Single_Closed_Text();
-
 		}
 	}
 }
-
 add_action( 'widgets_init', 'goedir_register_widgets' );
 
 /**
