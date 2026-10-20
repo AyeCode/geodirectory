@@ -334,6 +334,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Restrict public access to unpublished listing marker popup content (reported by Karthik Ramakrishnan) - FIXED/SECURITY
 * Prevent showing unpublished listing content to public users (reported by Jacek Sowiński) - FIXED/SECURITY
 * Listing save could update other listings attachments by attachment ID (reported by Karthik Ramakrishnan) - FIXED/SECURITY
+* Listing save temp media path traversal could save files outside the temp folder (reported by vuxvinh) - FIXED/SECURITY
 
 = GeoDirectory v2.8.193 - 2026-10-15 =
 * "Auto Draft" appearing in the title when switching languages on the add listing page with TranslatePress - FIXED
