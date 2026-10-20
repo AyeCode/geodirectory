@@ -1416,6 +1416,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 				}
 
+				// Block unsafe urls.
+				if ( ! empty( $args['link'] ) && $args['link'] !== '#' && $args['link'] !== 'javascript:void(0)' && $args['link'] !== 'javascript:void(0);' ) {
+					$args['link'] = esc_url_raw( $args['link'] );
+				}
+
 				/**
 				 * @since 2.0.0.68
 				 */

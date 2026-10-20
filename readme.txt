@@ -335,7 +335,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Prevent showing unpublished listing content to public users (reported by Jacek Sowiński) - FIXED/SECURITY
 * Listing save could update other listings attachments by attachment ID (reported by Karthik Ramakrishnan) - FIXED/SECURITY
 * Listing save temp media path traversal could save files outside the temp folder (reported by vuxvinh) - FIXED/SECURITY
-* Escape post badge cta value for JavaScript context in onclick handler (reported by Karthik Ramakrishnan) - FIXED/SECURITY
+* Escape post badge cta value & link attributes to prevent XSS (reported by Karthik Ramakrishnan) - FIXED/SECURITY
 * Escape map widget width and height attributes (reported by Jacek Sowiński) - FIXED/SECURITY
 
 = GeoDirectory v2.8.193 - 2026-10-15 =
