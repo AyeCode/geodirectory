@@ -789,6 +789,7 @@ function geodir_get_post_stati( $context, $args = array() ) {
 
 		case 'single-map':
 		case 'single-map-public':
+		case 'recently-viewed':
 			$statuses = array_merge( $publish_statuses, array( 'gd-closed', 'gd-expired' ) );
 			break;
 
@@ -1415,6 +1416,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 				}
 
+				// Block unsafe urls.
+				if ( ! empty( $args['link'] ) && $args['link'] !== '#' && $args['link'] !== 'javascript:void(0)' && $args['link'] !== 'javascript:void(0);' ) {
+					$args['link'] = esc_url_raw( $args['link'] );
+				}
+
 				/**
 				 * @since 2.0.0.68
 				 */
@@ -1507,12 +1513,14 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 
 					// CTA
-					if( $args['cta'] != '0' ){
-						$action = $args['cta'] == '' ? esc_attr($args['key']) : esc_attr($args['cta']);
-						$cta = " if(typeof ga == 'function' && !jQuery(this).hasClass('gd-event-tracked')) { ga('send', 'event', {eventCategory: 'CTA',eventAction: '$action',transport: 'beacon' });jQuery(this).addClass('gd-event-tracked');} ";
-						if(!empty($btn_args['onclick'])){
+					if ( $args['cta'] != '0' ) {
+						$action = trim( strip_tags( (string) $args['cta'] ) );
+						$action = $action === '' ? $args['key'] : $action;
+						$cta    = " if(typeof ga=='function'&&!jQuery(this).hasClass('gd-event-tracked')){ga('send','event',{eventCategory:'CTA',eventAction:'" . esc_js( $action ) . "',transport:'beacon'});jQuery(this).addClass('gd-event-tracked')} ";
+
+						if ( ! empty( $btn_args['onclick'] ) ) {
 							$btn_args['onclick'] .= $cta;
-						}else{
+						} else {
 							$btn_args['onclick'] = $cta;
 						}
 					}

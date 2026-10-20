@@ -1087,6 +1087,9 @@ jQuery(function($){
 			$params['map_class'] = esc_attr( $params['map_class'] );
 		}
 		$params['map_canvas'] = sanitize_key( str_replace( '-', '_', sanitize_title( $params['map_canvas'] ) ) );
+		// Only allow characters that are valid in a CSS length (e.g. 100%, 425px, 50vh, calc(100vh - 10px)).
+		$params['width'] = isset( $params['width'] ) ? trim( preg_replace( '/[^a-zA-Z0-9%.\-+*\/() ]/', '', (string) $params['width'] ) ) : '';
+		$params['height'] = isset( $params['height'] ) ? trim( preg_replace( '/[^a-zA-Z0-9%.\-+*\/() ]/', '', (string) $params['height'] ) ) : '';
 		// width
 		if ( empty( $params['width'] ) ) {
 			$params['width'] = '100%';

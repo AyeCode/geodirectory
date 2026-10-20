@@ -402,6 +402,11 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 
 		$args['id'] = $post_id;
 
+		// Don't show listings the current user is not allowed to view.
+		if ( ! empty( $args['id'] ) && ! geodir_user_can( 'view_widget_listing', array( 'post' => $args['id'] ) ) ) {
+			return '';
+		}
+
 		// Errors.
 		$errors = array();
 		if(!$block_preview){

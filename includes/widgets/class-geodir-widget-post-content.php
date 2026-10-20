@@ -255,6 +255,11 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 			$args['id'] = isset( $gd_post->ID ) ? $gd_post->ID : 0;
 		}
 
+		// Don't show listings the current user is not allowed to view.
+		if ( ! empty( $args['id'] ) && ! geodir_user_can( 'view_widget_listing', array( 'post' => $args['id'] ) ) ) {
+			return '';
+		}
+
 		$post_type = ! $original_id && isset( $post->post_type ) ? $post->post_type : get_post_type( $args['id'] );
 
 		if ( $block_preview ) {

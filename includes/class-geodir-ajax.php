@@ -329,7 +329,7 @@ class GeoDir_AJAX {
 				if ( $post_id > 0 ) {
 					$listing = geodir_get_post_info( $post_id );
 
-					if ( ! empty( $listing ) && ! empty( $listing->post_type ) && $listing->post_type == $post_type ) {
+					if ( ! empty( $listing ) && ! empty( $listing->post_type ) && $listing->post_type == $post_type && geodir_user_can( 'view_listing', array( 'post' => $listing, 'context' => 'recently-viewed' ) ) ) {
 						$widget_listings[] = $listing;
 					}
 				}

@@ -624,6 +624,87 @@ class GeoDir_User {
 					}
 				}
 				break;
+			case 'view_listing':
+				$has_cap = false;
+
+				$defaults = array(
+					'post'    => NULL,
+					'context' => 'recently-viewed',
+				);
+
+				$_args = wp_parse_args( $args, $defaults );
+
+				if ( is_scalar( $_args['post'] ) ) {
+					$_post = get_post( absint( $_args['post'] ) );
+				} else if ( is_object( $_args['post'] ) && ! empty( $_args['post']->ID ) ) {
+					$_post = $_args['post'];
+				} else {
+					$_post = NULL;
+				}
+
+				if ( current_user_can( 'manage_options' ) ) {
+					$has_cap = true;
+				} else if ( ! empty( $_post ) && ! empty( $_post->post_type ) && $_post->post_type == 'revision' ) {
+					// Revisions can hold unpublished changes, only show them to the parent listing's author/editors.
+					$parent_ID = ! empty( $_post->post_parent ) ? (int) $_post->post_parent : 0;
+
+					if ( $parent_ID > 0 && is_user_logged_in() && geodir_is_gd_post_type( get_post_type( $parent_ID ) ) ) {
+						if ( geodir_listing_belong_to_current_user( $parent_ID ) || current_user_can( 'edit_post', $parent_ID ) ) {
+							$has_cap = true;
+						}
+					}
+				} else if ( ! empty( $_post ) && ! empty( $_post->ID ) && ! empty( $_post->post_type ) && geodir_is_gd_post_type( $_post->post_type ) ) {
+					$post_ID = (int) $_post->ID;
+
+					// Use the status from the posts table, listing objects may carry a stale status from the details table.
+					$post_status = get_post_status( $post_ID );
+					$statuses    = geodir_get_post_stati( $_args['context'], array( 'post_type' => $_post->post_type ) );
+
+					if ( $post_status && in_array( $post_status, $statuses, true ) ) {
+						$has_cap = true;
+					} else if ( is_user_logged_in() ) {
+						if ( geodir_listing_belong_to_current_user( $post_ID ) || current_user_can( 'edit_post', $post_ID ) ) {
+							$has_cap = true;
+						} else if ( $post_status == 'private' && current_user_can( 'read_post', $post_ID ) ) {
+							$has_cap = true;
+						}
+					}
+				}
+				break;
+			case 'view_widget_listing':
+				// Listing field shortcodes/widgets/blocks like [gd_post_meta id="123"] can load any listing by ID.
+				global $post, $gd_post;
+
+				$defaults = array(
+					'post' => 0
+				);
+
+				$_args = wp_parse_args( $args, $defaults );
+
+				if ( is_object( $_args['post'] ) ) {
+					$post_ID = ! empty( $_args['post']->ID ) ? absint( $_args['post']->ID ) : 0;
+				} else {
+					$post_ID = absint( $_args['post'] );
+				}
+
+				if ( empty( $post_ID ) || current_user_can( 'manage_options' ) ) {
+					// Nothing to load.
+					$has_cap = true;
+				} else if ( ( ! empty( $gd_post->ID ) && (int) $gd_post->ID === $post_ID ) || ( ! empty( $post->ID ) && (int) $post->ID === $post_ID ) ) {
+					// The post currently being displayed has already passed the WordPress visibility checks.
+					$has_cap = true;
+				} else {
+					$post_type = get_post_type( $post_ID );
+
+					if ( empty( $post_type ) ) {
+						$has_cap = false;
+					} else if ( $post_type == 'revision' || geodir_is_gd_post_type( $post_type ) ) {
+						$has_cap = self::user_can( 'view_listing', array( 'post' => $post_ID, 'context' => 'view-listing' ) );
+					} else {
+						$has_cap = ( function_exists( 'is_post_publicly_viewable' ) && is_post_publicly_viewable( $post_ID ) ) || current_user_can( 'read_post', $post_ID );
+					}
+				}
+				break;
 			default:
 				$has_cap = false;
 

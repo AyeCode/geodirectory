@@ -135,6 +135,11 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 
 		$args = apply_filters( 'geodir_dynamic_content_widget_args', $args );
 
+		// Don't show listings the current user is not allowed to view.
+		if ( ! empty( $args['id'] ) && ! geodir_user_can( 'view_widget_listing', array( 'post' => $args['id'] ) ) ) {
+			return '';
+		}
+
 		// Errors.
 		$errors = array();
 		if ( empty( $args['id'] ) ) {

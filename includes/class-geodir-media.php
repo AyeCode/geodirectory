@@ -587,6 +587,11 @@ class GeoDir_Media {
 			return '';
 		}
 
+		// Only allow to update the attachment that belongs to the post being saved.
+		if ( ! self::attachment_belongs_to_post( $file_id, $post_id ) ) {
+			return new WP_Error( 'image_update', __( "Invalid attachment, image update failed.", "geodirectory" ) );
+		}
+
 		// If menu order is 0 then its featured and we need to set the post thumbnail
 		if ( $order === 0 && $field == 'post_images' && ! wp_is_post_revision( absint( $post_id ) ) ) {
 			// Get the path to the upload directory.
@@ -687,6 +692,54 @@ class GeoDir_Media {
 	}
 
 	/**
+	 * Checks whether an attachment belongs to the post being saved.
+	 *
+	 * @since 2.8.194
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @param int $post_id       Post ID being saved (listing or revision).
+	 * @return bool True if the attachment belongs to the post, otherwise false.
+	 */
+	public static function attachment_belongs_to_post( $attachment_id, $post_id ) {
+		global $wpdb;
+
+		$attachment_id = absint( $attachment_id );
+		$post_id       = absint( $post_id );
+
+		if ( empty( $attachment_id ) || empty( $post_id ) ) {
+			return false;
+		}
+
+		$attachment_post_id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE ID = %d", $attachment_id ) );
+
+		$belongs = false;
+
+		if ( $attachment_post_id > 0 ) {
+			$parent_id    = (int) wp_is_post_revision( $post_id );
+			$main_post_id = $parent_id > 0 ? $parent_id : $post_id;
+
+			if ( $attachment_post_id === $post_id || $attachment_post_id === $main_post_id ) {
+				$belongs = true;
+			} else if ( (int) wp_is_post_revision( $attachment_post_id ) === $main_post_id ) {
+				// Attachment of another revision of the same listing.
+				$belongs = true;
+			}
+		}
+
+		/**
+		 * Filters whether an attachment belongs to the post being saved.
+		 *
+		 * @since 2.8.194
+		 *
+		 * @param bool $belongs            Whether the attachment belongs to the post.
+		 * @param int  $attachment_id      Attachment ID.
+		 * @param int  $post_id            Post ID being saved.
+		 * @param int  $attachment_post_id Post ID of the attachment.
+		 */
+		return (bool) apply_filters( 'geodir_attachment_belongs_to_post', $belongs, $attachment_id, $post_id, $attachment_post_id );
+	}
+
+	/**
 	 * Get files via url.
 	 *
 	 * @param $url
@@ -703,11 +756,12 @@ class GeoDir_Media {
 
 		// Prevent SSL certificate related issues.
 		$temp_file = '';
-		if ( ! empty( $upload_dir ) && strpos( $url, $upload_dir['baseurl'] . '/geodir_temp/' ) === 0 ) {
-			$temp_url = str_replace( $upload_dir['baseurl'] . '/geodir_temp/', $upload_dir['basedir'] . '/geodir_temp/', $url );
+		if ( ! empty( $upload_dir['baseurl'] ) && is_string( $url ) && strpos( $url, $upload_dir['baseurl'] . '/geodir_temp/' ) === 0 ) {
+			// Resolve the file and make sure it is inside the geodir_temp folder.
+			$temp_file = self::get_temp_file_path( $url );
 
-			if ( file_exists( $temp_url ) ) {
-				$temp_file = $temp_url;
+			if ( ! $temp_file ) {
+				return new WP_Error( 'invalid_temp_file', __( 'Invalid file.', 'geodirectory' ) );
 			}
 		}
 
@@ -760,26 +814,64 @@ class GeoDir_Media {
 			// Move the temporary file into the uploads directory
 			$results = wp_handle_sideload( $file, $overrides );
 
-			// unlink the temp file
-			/** @scrutinizer ignore-unhandled */ @unlink($temp_file);
-
-			if ( ! empty( $results['error'] ) ) {
-				// Insert any error handling here
-				return $results;
-			} else {
-
-//				$filename  = $results['file']; // Full path to the file
-//				$local_url = $results['url'];  // URL to the file in the uploads dir
-//				$type      = $results['type']; // MIME type of the file
-
-				// Perform any actions here based in the above results
-
-				return $results;
+			// Unlink the temp file. It is either the downloaded file or a file validated inside the geodir_temp folder.
+			if ( $temp_file && file_exists( $temp_file ) ) {
+				/** @scrutinizer ignore-unhandled */ @unlink( $temp_file );
 			}
 
-		}else{
+			return $results;
+		} else {
 			return $temp_file; // WP-error
 		}
+	}
+
+	/**
+	 * Get the file path for a geodir_temp file URL.
+	 *
+	 * @since 2.8.194
+	 *
+	 * @param string $url The geodir_temp file URL.
+	 * @return string|false The file path, or false if the URL is not a valid temp file.
+	 */
+	public static function get_temp_file_path( $url ) {
+		$upload_dir = wp_upload_dir();
+
+		if ( empty( $upload_dir['basedir'] ) || empty( $upload_dir['baseurl'] ) || ! is_string( $url ) ) {
+			return false;
+		}
+
+		$temp_base_url = $upload_dir['baseurl'] . '/geodir_temp/';
+
+		if ( strpos( $url, $temp_base_url ) !== 0 ) {
+			return false;
+		}
+
+		$file_name = substr( $url, strlen( $temp_base_url ) );
+
+		// Only a plain file name is allowed, no sub folders or traversal.
+		if ( $file_name === '' || $file_name === '.' || strpos( $file_name, '..' ) !== false || preg_match( '/[\/\\\\\x00]/', $file_name ) ) {
+			return false;
+		}
+
+		$temp_dir = realpath( $upload_dir['basedir'] . '/geodir_temp' );
+
+		if ( ! $temp_dir ) {
+			return false;
+		}
+
+		// Resolves symlinks too.
+		$file_path = realpath( $temp_dir . '/' . $file_name );
+
+		if ( ! $file_path || ! is_file( $file_path ) ) {
+			return false;
+		}
+
+		// The resolved file must be directly inside the geodir_temp folder.
+		if ( trailingslashit( wp_normalize_path( dirname( $file_path ) ) ) !== trailingslashit( wp_normalize_path( $temp_dir ) ) ) {
+			return false;
+		}
+
+		return $file_path;
 	}
 
 	/**
