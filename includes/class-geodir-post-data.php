@@ -1410,6 +1410,8 @@ class GeoDir_Post_Data {
 			return new WP_Error( 'save_post', __( "You do not have the privileges to perform this action.", "geodirectory" ) );
 		}
 
+		$post_data = self::strip_protected_fields( $post_data );
+
 		// Set that we are doing an auto save
 		if ( ! defined( 'DOING_AUTOSAVE' ) ) {
 			if ( $doing_autosave ) {
@@ -1492,6 +1494,34 @@ class GeoDir_Post_Data {
 		}
 
 		return apply_filters( 'geodir_auto_post_save_message', $result, $post_data, ! empty( $post_data['post_parent'] ) );
+	}
+
+	/**
+	 * Remove fields a non-admin must not set from a frontend save request.
+	 *
+	 * @since 2.8.195
+	 *
+	 * @param array $post_data Request data.
+	 * @return array
+	 */
+	public static function strip_protected_fields( $post_data ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			return $post_data;
+		}
+
+		$fields = apply_filters( 'geodir_save_post_protected_fields', array( 'post_status', 'featured', 'expire_date' ), $post_data );
+
+		foreach ( $fields as $field ) {
+			unset( $post_data[ $field ] );
+		}
+
+		$id = ! empty( $post_data['ID'] ) ? absint( $post_data['ID'] ) : 0;
+
+		if ( ! ( $id && ( get_post_status( $id ) === 'auto-draft' || wp_is_post_revision( $id ) ) ) ) {
+			unset( $post_data['package_id'] );
+		}
+
+		return $post_data;
 	}
 
 	/**
@@ -1751,6 +1781,9 @@ class GeoDir_Post_Data {
 			$post_data['revision_ID'] = $post_data['ID'];
 			$post_data['ID']          = $post_data['post_parent'];
 		}
+
+		// Checked after the ID swap.
+		$post_data = self::strip_protected_fields( $post_data );
 
 		// get current status
 		$post_status = get_post_status( $post_data['ID'] );
