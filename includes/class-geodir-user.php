@@ -676,7 +676,8 @@ class GeoDir_User {
 				global $post, $gd_post;
 
 				$defaults = array(
-					'post' => 0
+					'post'           => 0,
+					'check_password' => false // Check password protected
 				);
 
 				$_args = wp_parse_args( $args, $defaults );
@@ -703,6 +704,10 @@ class GeoDir_User {
 					} else {
 						$has_cap = ( function_exists( 'is_post_publicly_viewable' ) && is_post_publicly_viewable( $post_ID ) ) || current_user_can( 'read_post', $post_ID );
 					}
+				}
+
+				if ( $has_cap && $post_ID && ! empty( $_args['check_password'] ) && geodir_is_post_protected( $post_ID ) ) {
+					$has_cap = false;
 				}
 				break;
 			default:

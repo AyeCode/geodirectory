@@ -419,8 +419,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		if ( ! empty( $options['id'] ) ) {
 			$post_id = absint( $options['id'] );
 
-			// Don't show listings the current user is not allowed to view.
-			if ( ! geodir_user_can( 'view_widget_listing', array( 'post' => $post_id ) ) ) {
+			// Blocks listings the user may not view, and password protected listings until unlocked.
+			if ( ! geodir_widget_can_view_post( $post_id ) ) {
 				return '';
 			}
 		}

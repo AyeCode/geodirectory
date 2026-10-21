@@ -256,8 +256,13 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 		}
 
 		// Don't show listings the current user is not allowed to view.
-		if ( ! empty( $args['id'] ) && ! geodir_user_can( 'view_widget_listing', array( 'post' => $args['id'] ) ) ) {
+		if ( ! empty( $args['id'] ) && ! geodir_widget_can_view_post( $args['id'], array( 'check_password' => false ) ) ) {
 			return '';
+		}
+
+		// Password protected listing: show the WordPress password form instead of the content.
+		if ( ! empty( $args['id'] ) && geodir_is_post_protected( $args['id'] ) ) {
+			return get_the_password_form( $args['id'] );
 		}
 
 		$post_type = ! $original_id && isset( $post->post_type ) ? $post->post_type : get_post_type( $args['id'] );

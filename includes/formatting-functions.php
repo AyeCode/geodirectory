@@ -1080,6 +1080,37 @@ function geodir_esc_js_attrs_strip( $content ) {
 }
 
 /**
+ * Fully HTML-entity-decode a string, repeating until it stops changing.
+ *
+ * Runs html_entity_decode() in a loop so that multiply-encoded values are
+ * resolved all the way down to their literal characters. For example
+ * "&amp;#39;" decodes to "&#39;" on the first pass and to "'" on the second.
+ * Should be used within attribute escaping before esc_js().
+ *
+ * @since 2.8.195
+ *
+ * @param string $string The value to decode. Non-scalar values decode to an empty string.
+ * @param int    $max    Optional. Maximum number of decode passes, as a safety bound
+ *                       against pathological input. Default 10.
+ * @return string The fully entity-decoded string.
+ */
+function geodir_html_entity_decode_deep( $string, $max = 10 ) {
+	$string = is_scalar( $string ) ? (string) $string : '';
+
+	for ( $i = 0; $i < $max && strpos( $string, '&' ) !== false; $i++ ) {
+		$decoded = html_entity_decode( $string, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+
+		if ( $decoded === $string ) {
+			break;
+		}
+
+		$string = $decoded;
+	}
+
+	return $string;
+}
+
+/**
  * Remove JS-executing attributes/tags from $content while leaving the rest
  * of the string exactly as given — including its original entity-encoding
  * (raw "<img>" stays raw, "&lt;img&gt;" stays "&lt;img&gt;"). Only the
