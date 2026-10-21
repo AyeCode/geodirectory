@@ -329,7 +329,8 @@ class GeoDir_AJAX {
 				if ( $post_id > 0 ) {
 					$listing = geodir_get_post_info( $post_id );
 
-					if ( ! empty( $listing ) && ! empty( $listing->post_type ) && $listing->post_type == $post_type && geodir_user_can( 'view_listing', array( 'post' => $listing, 'context' => 'recently-viewed' ) ) ) {
+					// Only show listings the current user is allowed to view (no drafts, pending, private etc. for public users).
+					if ( ! empty( $listing ) && ! empty( $listing->post_type ) && $listing->post_type == $post_type && geodir_user_can( 'view_listing', array( 'post' => $listing, 'context' => 'recently-viewed' ) ) && ! geodir_is_post_protected( $listing ) ) {
 						$widget_listings[] = $listing;
 					}
 				}

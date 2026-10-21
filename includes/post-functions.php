@@ -855,6 +855,55 @@ function geodir_get_post_stati( $context, $args = array() ) {
 }
 
 /**
+ * Checks whether a listing's content is withheld by WordPress post password protection.
+ *
+ * @since 2.8.195
+ *
+ * @param int|object $post Listing ID or listing object.
+ * @return bool True if the content must be withheld, otherwise false.
+ */
+function geodir_is_post_protected( $post ) {
+	if ( is_object( $post ) ) {
+		$post_id = ! empty( $post->ID ) ? (int) $post->ID : 0;
+	} else {
+		$post_id = absint( $post );
+	}
+
+	$required = $post_id ? post_password_required( $post_id ) : false;
+
+	/**
+	 * Filters whether a listing's content is withheld by password protection.
+	 *
+	 * @since 2.8.195
+	 *
+	 * @param bool $required Whether the content must be withheld.
+	 * @param int  $post_id  The listing ID.
+	 */
+	return (bool) apply_filters( 'geodir_is_post_protected', $required, $post_id );
+}
+
+/**
+ * Whether a listing field widget/shortcode/block may render the given listing's content.
+ *
+ * Wrapper around the 'view_widget_listing' capability for the field widgets. By default it also
+ * withholds password protected listings (check_password); pass array( 'check_password' => false )
+ * when the caller handles the password case itself (e.g. to show the password form instead).
+ *
+ * @since 2.8.195
+ *
+ * @param int|object $post Listing ID or listing object passed to the widget as the id attribute.
+ * @param array      $args Optional. Extra args for geodir_user_can( 'view_widget_listing' ),
+ *                        e.g. array( 'check_password' => false ). Default empty.
+ * @return bool True if the widget may render the listing, otherwise false.
+ */
+function geodir_widget_can_view_post( $post, $args = array() ) {
+	$args = wp_parse_args( $args, array( 'check_password' => true ) );
+	$args['post'] = $post;
+
+	return (bool) geodir_user_can( 'view_widget_listing', $args );
+}
+
+/**
  * Get the nice name for an listing status.
  *
  * @since  2.0.0
@@ -1513,8 +1562,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 					// CTA
 					if ( $args['cta'] != '0' ) {
-						$action = trim( strip_tags( (string) $args['cta'] ) );
-						$action = $action === '' ? $args['key'] : $action;
+						$action = $args['cta'] == '' ? $args['key'] : $args['cta'];
+						$action = geodir_html_entity_decode_deep( $action );
 						$cta    = " if(typeof ga=='function'&&!jQuery(this).hasClass('gd-event-tracked')){ga('send','event',{eventCategory:'CTA',eventAction:'" . esc_js( $action ) . "',transport:'beacon'});jQuery(this).addClass('gd-event-tracked')} ";
 
 						if ( ! empty( $btn_args['onclick'] ) ) {
@@ -1533,12 +1582,15 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$btn_args['data-' . $bs_prefix . 'placement'] = "top";
 						$pop_link = true;
 
+						$popover_url  = geodir_html_entity_decode_deep( $args['link'] );
+						$popover_link = str_replace( array( "'", '"' ), array( '%27', '%22' ), $popover_url );
+
 						if ( ! empty( $args['popover_title'] ) ) {
-							$btn_args['title'] = ! empty( $args['link'] ) && $args['link'] != '#'  ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . esc_html( geodir_esc_js_attrs( $args['popover_title'] ) ) . "</a>" : esc_html( geodir_esc_js_attrs( $args['popover_title'] ) );
+							$btn_args['title'] = ! empty( $args['link'] ) && $args['link'] != '#'  ? "<a href='" . esc_url( $popover_link ) . "' $new_window $rel>" . esc_html( geodir_esc_js_attrs( $args['popover_title'] ) ) . "</a>" : esc_html( geodir_esc_js_attrs( $args['popover_title'] ) );
 						}
 
 						if ( ! empty( $args['popover_text'] ) ) {
-							$btn_args['data-' . $bs_prefix . 'content'] = ! empty( $args['link'] ) && $args['link'] != '#' ? "<a href='" . esc_url( $args['link'] ) . "' $new_window $rel>" . geodir_esc_js_attrs( $args['popover_text'] ) . "</a>" : geodir_esc_js_attrs( $args['popover_text'] );
+							$btn_args['data-' . $bs_prefix . 'content'] = ! empty( $args['link'] ) && $args['link'] != '#' ? "<a href='" . esc_url( $popover_link ) . "' $new_window $rel>" . geodir_esc_js_attrs( $args['popover_text'] ) . "</a>" : geodir_esc_js_attrs( $args['popover_text'] );
 						}
 					} else if ( ! empty( $args['tooltip_text'] ) ) {
 						$btn_args['data-' . $bs_prefix . 'toggle'] = "tooltip";

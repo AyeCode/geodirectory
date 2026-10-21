@@ -590,7 +590,11 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 
 				if ( $map_args['default_map_type'] == 'post' && ! empty( $map_args['post_id'] ) ) {
 					if ( ! ( ! empty( $gd_post ) && ! empty( $gd_post->ID ) && $gd_post->ID == (int) $map_args['post_id'] ) ) {
-						$gd_post = geodir_get_post_info( (int) $map_args['post_id'] );
+						if ( geodir_widget_can_view_post( (int) $map_args['post_id'], array( 'check_password' => false ) ) ) {
+							$gd_post = geodir_get_post_info( (int) $map_args['post_id'] );
+						} else {
+							return;
+						}
 					}
 				}
 

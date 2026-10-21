@@ -521,6 +521,11 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			return $content;
 		}
 
+		// Don't render the popup for a password protected listing until the password is entered.
+		if ( geodir_is_post_protected( $item ) ) {
+			return $content;
+		}
+
 		$post		= $item;
 		$gd_post 	= $item;
 

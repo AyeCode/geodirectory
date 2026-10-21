@@ -2135,6 +2135,11 @@ class GeoDir_Post_Data {
 			return;
 		}
 
+		// Restrict schema for password protected posts.
+		if ( geodir_is_post_protected( $post ) ) {
+			return;
+		}
+
 		$can_see_address = isset( $gd_post->post_type ) && GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) && geodir_user_can( 'see_private_address', array( 'post' => $gd_post ) ) ? true : false;
 
 		// post reviews

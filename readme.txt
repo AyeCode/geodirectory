@@ -329,6 +329,9 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.195 - 2026-10-21 =
+* Enforced listing visibility and password protection across content output paths - FIXED/SECURITY
+
 = GeoDirectory v2.8.194 - 2026-10-20 =
 * Revision temp media values removed even when revision deletion is prevented - FIXED
 * Restrict public access to unpublished listing marker popup content (reported by Karthik Ramakrishnan) - FIXED/SECURITY
