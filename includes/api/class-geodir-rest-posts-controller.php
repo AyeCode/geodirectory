@@ -37,6 +37,13 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	protected $meta;
 
 	/**
+	 * Passwordless post access permitted.
+	 *
+	 * @var int[]
+	 */
+	protected $password_check_passed = array();
+
+	/**
 	 * Category taxonomy.
 	 *
 	 * @var string
@@ -2727,17 +2734,20 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		$has_password_filter = false;
 
 		if ( $this->can_access_password_content( $post, $request ) ) {
+			$this->password_check_passed[ $post->ID ] = true;
 			// Allow access to the post, permissions already checked before.
-			add_filter( 'post_password_required', '__return_false' );
+			add_filter( 'post_password_required', array( $this, 'check_password_required' ), 10, 2 );
 
 			$has_password_filter = true;
 		}
 
+		$is_protected        = post_password_required( $post );
+
 		if (  ! empty( $schema['properties']['content'] ) ) {
 			$data['content'] = array(
-				'raw'       => $gd_post->post_content,
+				'raw'       => $is_protected ? '' : $gd_post->post_content,
 				/** This filter is documented in wp-includes/post-template.php */
-				'rendered'  => post_password_required( $post ) ? '' : apply_filters( 'the_content', $gd_post->post_content ),
+				'rendered'  => $is_protected ? '' : apply_filters( 'the_content', $gd_post->post_content ),
 				'protected' => (bool) $gd_post->post_password,
 			);
 		}
@@ -2745,9 +2755,10 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		if ( ! empty( $schema['properties']['excerpt'] ) ) {
 			/** This filter is documented in wp-includes/post-template.php */
 			$excerpt = apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $gd_post->post_excerpt, $post ) );
+
 			$data['excerpt'] = array(
-				'raw'       => $gd_post->post_excerpt,
-				'rendered'  => post_password_required( $post ) ? '' : $excerpt,
+				'raw'       => $is_protected ? '' : $gd_post->post_excerpt,
+				'rendered'  => $is_protected ? '' : $excerpt,
 				'protected' => (bool) $gd_post->post_password,
 			);
 		}

@@ -1873,6 +1873,7 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
     // If not html then we run the standard output.
     if ( empty( $html ) ) {
         if ( ! empty( $gd_post->{$html_var} ) ) {
+            $is_protected = geodir_is_post_protected( $gd_post );
             $design_style = geodir_design_style();
             $extra_fields = ! empty( $cf['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
             $field_icon = geodir_field_icon_proccess( $cf );
@@ -1889,7 +1890,7 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
 
             // Database value.
             if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                return stripslashes( $gd_post->{$html_var} );
+                return $is_protected ? '' : stripslashes( $gd_post->{$html_var} );
             }
 
             if( $design_style ){
@@ -1908,10 +1909,11 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
             if ( $output == '' || isset( $output['icon'] ) ) $html .= '</span>';
 
             if ( $output == '' || isset( $output['value'] ) ) {
-                $value = stripslashes( $gd_post->{$html_var} );
+                $value = $is_protected ? '' : stripslashes( $gd_post->{$html_var} );
 
                 $gd_skip_the_content = true; // Set global variable to prevent looping on some themes/plugins.
-                $content = '';
+                $content             = '';
+
                 if ( $html_var != 'post_content' ) {
                     if ( isset( $output['strip'] ) ) {
                         $content =  wp_strip_all_tags( do_shortcode( wpautop( $value ) ) );
@@ -1932,6 +1934,10 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
                         $content = do_shortcode( wpautop( $value ) );
                     }
                 } else {
+                    if ( $is_protected ) {
+                        $value = isset( $output['strip'] ) ? '' : get_the_password_form( $gd_post );
+                    }
+
                     // Post content
                     if ( isset( $output['strip'] ) ) {
                         $content = wp_strip_all_tags( apply_filters( 'the_content', $value ) );

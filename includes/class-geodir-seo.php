@@ -571,6 +571,7 @@ class GeoDir_SEO {
 
 		// Private address
 		$check_address = ( $gd_page == 'single' || geodir_is_page( 'single' ) ) && ! empty( $gd_post ) && GeoDir_Post_types::supports( $post_type, 'private_address' ) ? true : false;
+		$is_protected  = geodir_is_post_protected( $post ); // Password protected
 
 		/**
 		 * Filter pre meta title.
@@ -599,13 +600,18 @@ class GeoDir_SEO {
 		}
 
 		if ( strpos( $string, '%%excerpt%%' ) !== false ) {
-			$excerpt_length = apply_filters( 'excerpt_length', 55 );
-			$post_content = !empty($post->post_excerpt) ? strip_tags( $post->post_excerpt ) : '';
-			if(!$post_content){
-				$post_content = !empty($post->post_content) ? strip_tags( wp_trim_words($post->post_content, $excerpt_length,'') ) : '';
+			if ( $is_protected ) {
+				$post_content = '';
+			} else {
+				$post_content = ! empty( $post->post_excerpt ) ? strip_tags( get_the_excerpt( $post ) ) : '';
 
+				if ( ! $post_content && ! empty( $post->post_content ) ) {
+					$excerpt_length = apply_filters( 'excerpt_length', 55 );
+					$post_content   = strip_tags( wp_trim_words( $post->post_content, $excerpt_length, '' ) );
+				}
 			}
-			$string = str_replace( "%%excerpt%%",$post_content , $string );
+
+			$string = str_replace( "%%excerpt%%", $post_content , $string );
 		}
 
 		if ( strpos( $string, '%%id%%' ) !== false ) {
@@ -617,7 +623,7 @@ class GeoDir_SEO {
 			$cat_name = '';
 
 			if ( $gd_page == 'single' || ( empty( $gd_page ) && geodir_is_page( 'single' ) ) ) {
-				if ( $gd_post->default_category ) {
+				if ( ! $is_protected && $gd_post->default_category ) {
 					$cat      = get_term( $gd_post->default_category, $post->post_type . 'category' );
 					$cat_name = ( isset( $cat->name ) ) ? $cat->name : '';
 				}
@@ -640,7 +646,7 @@ class GeoDir_SEO {
 			$cat_name = '';
 
 			if ( $gd_page == 'single' || ( empty( $gd_page ) && geodir_is_page( 'single' ) ) ) {
-				if ( $post->default_category ) {
+				if ( ! $is_protected && $post->default_category ) {
 					$cat      = get_term( $post->default_category, $post->post_type . 'category' );
 					$cat_name = ( isset( $cat->name ) ) ? $cat->name : '';
 				}
@@ -741,8 +747,7 @@ class GeoDir_SEO {
 
 		// Replace _post_images & _featured_image.
 		if ( ( strpos( $string, '%%_featured_image%%' ) !== false || strpos( $string, '%%_post_images%%' ) !== false ) && ! empty( $gd_post->ID ) ) {
-			$post_image = geodir_get_images( (int) $gd_post->ID, 1, false, 0, array( 'post_images' ), array( 'post_images' ) );
-
+			$post_image     = geodir_get_images( (int) $gd_post->ID, 1, false, 0, array( 'post_images' ), array( 'post_images' ) );
 			$post_image_src = ! empty( $post_image ) && ! empty( $post_image[0] ) ? geodir_get_image_src( $post_image[0], 'original' ) : '';
 
 			$string = str_replace( "%%_featured_image%%", $post_image_src, $string );
@@ -760,16 +765,21 @@ class GeoDir_SEO {
 
 				foreach ( $matches as $cf ) {
 					$field_name = str_replace( array( "%%_", "%%" ), "", $cf );
-					$cf_value = isset( $gd_post->{$field_name} ) ? $gd_post->{$field_name} : '';
 
-					// round rating
-					if ( $cf_value && $field_name == 'overall_rating' ) {
-						$cf_value = round($cf_value, 1);
-					}
+					if ( ! $is_protected ) {
+						$cf_value = isset( $gd_post->{$field_name} ) ? $gd_post->{$field_name} : '';
 
-					// Private address
-					if ( ! empty( $cf_value ) && $check_address && isset( $address_fields[ $field_name ] ) ) {
-						$cf_value = geodir_post_address( $cf_value, $field_name, $gd_post, '' );
+						// round rating
+						if ( $cf_value && $field_name == 'overall_rating' ) {
+							$cf_value = round($cf_value, 1);
+						}
+
+						// Private address
+						if ( ! empty( $cf_value ) && $check_address && isset( $address_fields[ $field_name ] ) ) {
+							$cf_value = geodir_post_address( $cf_value, $field_name, $gd_post, '' );
+						}
+					} else {
+						$cf_value = '';
 					}
 
 					$string = str_replace( "%%_{$field_name}%%", $cf_value, $string );
@@ -785,7 +795,7 @@ class GeoDir_SEO {
      *
      * @since 2.0.0
 	 *
-	 * @param string $gd_page Optional. Geo directory page. Default null.
+	 * @param string $gd_page Optional. GeoDirectory page. Default null.
 	 *
 	 * @return array $vars.
 	 */

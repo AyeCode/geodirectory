@@ -120,7 +120,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-		global $aui_bs5;
+		global $post, $aui_bs5;
 
 		$defaults = array(
 			'location' => '',
@@ -141,13 +141,14 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 		 * Parse incoming $args into an array and merge it with $defaults
 		 */
 		$args = wp_parse_args( $args, $defaults );
+
 		if ( ! empty( $args['location'] ) ) {
 			$args['location'] = str_replace( array( '[', ']' ), '', $args['location'] );
 		}
 
-		$wrap_class = '';
-		$inner_class = '';
-		$wrap_style = '';
+		$wrap_class   = '';
+		$inner_class  = '';
+		$wrap_style   = '';
 		$design_style = geodir_design_style();
 
 		if ( $design_style ) {
@@ -187,7 +188,8 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 		}
 
 		$output = '';
-		$geodir_post_detail_fields = geodir_show_listing_info( $args['location'] );
+		$is_protected = ! empty( $post ) ? geodir_is_post_protected( $post ) : false;
+		$geodir_post_detail_fields = $is_protected ? '' : geodir_show_listing_info( $args['location'] );
 
 		if ( ! $geodir_post_detail_fields && $design_style  && $this->is_preview() ) {
 			$geodir_post_detail_fields = $this->get_dummy_data();
