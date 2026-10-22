@@ -1091,13 +1091,15 @@ function geodir_esc_js_attrs_strip( $content ) {
  *
  * @param string $string The value to decode. Non-scalar values decode to an empty string.
  * @param int    $max    Optional. Maximum number of decode passes, as a safety bound
- *                       against pathological input. Default 10.
+ *                       Default 0, which decodes until the value is stable (recommended).
  * @return string The fully entity-decoded string.
  */
-function geodir_html_entity_decode_deep( $string, $max = 10 ) {
+function geodir_html_entity_decode_deep( $string, $max = 0 ) {
 	$string = is_scalar( $string ) ? (string) $string : '';
 
-	for ( $i = 0; $i < $max && strpos( $string, '&' ) !== false; $i++ ) {
+	$limit = $max > 0 ? $max : strlen( $string ) + 1;
+
+	for ( $i = 0; $i < $limit && strpos( $string, '&' ) !== false; $i++ ) {
 		$decoded = html_entity_decode( $string, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 
 		if ( $decoded === $string ) {

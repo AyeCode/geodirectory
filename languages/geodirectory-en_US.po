@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.195\n"
+"Project-Id-Version: GeoDirectory 2.8.196\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-21 20:37+0530\n"
-"PO-Revision-Date: 2026-10-21 20:37+0530\n"
+"POT-Creation-Date: 2026-10-22 18:30+0530\n"
+"PO-Revision-Date: 2026-10-22 18:30+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -58,42 +58,42 @@ msgid "List of delete resources."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:86
-#: includes/api/class-geodir-rest-posts-controller.php:100
+#: includes/api/class-geodir-rest-posts-controller.php:107
 #: includes/api/class-geodir-rest-reviews-controller.php:1369
 msgid "The password for the post if it is password protected."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:105
-#: includes/api/class-geodir-rest-posts-controller.php:131
+#: includes/api/class-geodir-rest-posts-controller.php:138
 msgid "Whether to bypass trash and force deletion."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:147
-#: includes/api/class-geodir-rest-posts-controller.php:1927
+#: includes/api/class-geodir-rest-posts-controller.php:1934
 msgid "Limit result set to posts assigned to specific authors."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:155
-#: includes/api/class-geodir-rest-posts-controller.php:1935
+#: includes/api/class-geodir-rest-posts-controller.php:1942
 msgid "Ensure result set excludes posts assigned to specific authors."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:165
-#: includes/api/class-geodir-rest-posts-controller.php:1951
+#: includes/api/class-geodir-rest-posts-controller.php:1958
 msgid ""
 "Limit response to posts published before a given ISO8601 compliant date."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:171
 #: includes/abstracts/abstract-geodir-rest-terms-controller.php:500
-#: includes/api/class-geodir-rest-posts-controller.php:1966
+#: includes/api/class-geodir-rest-posts-controller.php:1973
 #: includes/api/class-geodir-rest-reviews-controller.php:1278
 msgid "Ensure result set excludes specific IDs."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:180
 #: includes/abstracts/abstract-geodir-rest-terms-controller.php:509
-#: includes/api/class-geodir-rest-posts-controller.php:1957
+#: includes/api/class-geodir-rest-posts-controller.php:1964
 #: includes/api/class-geodir-rest-reviews-controller.php:1287
 msgid "Limit result set to specific IDs."
 msgstr ""
@@ -104,7 +104,7 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:196
 #: includes/abstracts/abstract-geodir-rest-terms-controller.php:519
-#: includes/api/class-geodir-rest-posts-controller.php:1975
+#: includes/api/class-geodir-rest-posts-controller.php:1982
 #: includes/api/class-geodir-rest-reviews-controller.php:1296
 msgid "Offset the result set by a specific number of items."
 msgstr ""
@@ -112,14 +112,14 @@ msgstr ""
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:201
 #: includes/abstracts/abstract-geodir-rest-terms-controller.php:525
 #: includes/api/class-geodir-rest-fields-controller.php:757
-#: includes/api/class-geodir-rest-posts-controller.php:2003
+#: includes/api/class-geodir-rest-posts-controller.php:2010
 #: includes/api/class-geodir-rest-reviews-controller.php:1301
 msgid "Order sort attribute ascending or descending."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:208
 #: includes/api/class-geodir-rest-fields-controller.php:764
-#: includes/api/class-geodir-rest-posts-controller.php:2010
+#: includes/api/class-geodir-rest-posts-controller.php:2017
 #: includes/api/class-geodir-rest-reviews-controller.php:1311
 msgid "Sort collection by object attribute."
 msgstr ""
@@ -129,22 +129,22 @@ msgid "Limit result set to those of particular parent IDs."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:237
-#: includes/api/class-geodir-rest-posts-controller.php:2028
+#: includes/api/class-geodir-rest-posts-controller.php:2035
 msgid "Limit result set to all items except those of a particular parent ID."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:247
-#: includes/api/class-geodir-rest-posts-controller.php:2038
+#: includes/api/class-geodir-rest-posts-controller.php:2045
 msgid "Limit result set to posts with one or more specific slugs."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:257
-#: includes/api/class-geodir-rest-posts-controller.php:1916
+#: includes/api/class-geodir-rest-posts-controller.php:1923
 msgid "Limit result set to posts assigned one or more statuses."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:273
-#: includes/api/class-geodir-rest-posts-controller.php:1895
+#: includes/api/class-geodir-rest-posts-controller.php:1902
 #, php-format
 msgid ""
 "Limit result set to all items that have the specified term assigned in the "
@@ -152,7 +152,7 @@ msgid ""
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:283
-#: includes/api/class-geodir-rest-posts-controller.php:1905
+#: includes/api/class-geodir-rest-posts-controller.php:1912
 #, php-format
 msgid ""
 "Limit result set to all items except those that have the specified term "
@@ -164,14 +164,14 @@ msgid "Limit result set to items that are sticky."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:475
-#: includes/api/class-geodir-rest-posts-controller.php:484
-#: includes/api/class-geodir-rest-posts-controller.php:518
+#: includes/api/class-geodir-rest-posts-controller.php:491
+#: includes/api/class-geodir-rest-posts-controller.php:525
 msgid "Cannot create existing post."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:595
 #: includes/api/class-geodir-rest-markers-controller.php:801
-#: includes/api/class-geodir-rest-posts-controller.php:400
+#: includes/api/class-geodir-rest-posts-controller.php:407
 #: includes/api/class-geodir-rest-reviews-controller.php:326
 #: includes/api/class-geodir-rest-reviews-controller.php:687
 msgid "Invalid post ID."
@@ -192,14 +192,14 @@ msgstr ""
 #: includes/admin/class-geodir-admin-settings.php:1252
 #: includes/admin/class-geodir-admin-tools.php:956
 #: includes/admin/settings/class-geodir-settings-general.php:845
-#: includes/api/class-geodir-rest-posts-controller.php:2192
+#: includes/api/class-geodir-rest-posts-controller.php:2199
 #: includes/class-geodir-location.php:365
 #: includes/class-geodir-location.php:419 includes/post-functions.php:2434
 msgid "Country"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:853
-#: includes/api/class-geodir-rest-posts-controller.php:2193
+#: includes/api/class-geodir-rest-posts-controller.php:2200
 msgid "Choose a country"
 msgstr ""
 
@@ -207,14 +207,14 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1225
 #: includes/admin/class-geodir-admin-tools.php:957
 #: includes/admin/settings/class-geodir-settings-general.php:835
-#: includes/api/class-geodir-rest-posts-controller.php:2206
+#: includes/api/class-geodir-rest-posts-controller.php:2213
 #: includes/class-geodir-location.php:384
 #: includes/class-geodir-location.php:431 includes/post-functions.php:2423
 msgid "Region"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:862
-#: includes/api/class-geodir-rest-posts-controller.php:2207
+#: includes/api/class-geodir-rest-posts-controller.php:2214
 msgid "Choose a region"
 msgstr ""
 
@@ -222,14 +222,14 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1224
 #: includes/admin/class-geodir-admin-tools.php:958
 #: includes/admin/settings/class-geodir-settings-general.php:825
-#: includes/api/class-geodir-rest-posts-controller.php:2220
+#: includes/api/class-geodir-rest-posts-controller.php:2227
 #: includes/class-geodir-location.php:404
 #: includes/class-geodir-location.php:440 includes/post-functions.php:2412
 msgid "City"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:871
-#: includes/api/class-geodir-rest-posts-controller.php:2221
+#: includes/api/class-geodir-rest-posts-controller.php:2228
 msgid "Choose a city"
 msgstr ""
 
@@ -244,8 +244,8 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:890
 #: includes/admin/class-geodir-admin-dummy-data.php:1227
-#: includes/api/class-geodir-rest-posts-controller.php:2234
-#: includes/api/class-geodir-rest-posts-controller.php:2235
+#: includes/api/class-geodir-rest-posts-controller.php:2241
+#: includes/api/class-geodir-rest-posts-controller.php:2242
 #: includes/custom-fields/functions.php:687 includes/post-functions.php:2445
 msgid "Zip/Post Code"
 msgstr ""
@@ -253,7 +253,7 @@ msgstr ""
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:899
 #: includes/admin/class-geodir-admin-install.php:325
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:515
-#: includes/api/class-geodir-rest-posts-controller.php:2247
+#: includes/api/class-geodir-rest-posts-controller.php:2254
 #: includes/widgets/class-geodir-widget-map.php:66
 #: includes/widgets/class-geodir-widget-map.php:360
 #: includes/widgets/class-geodir-widget-map.php:371
@@ -269,7 +269,7 @@ msgid "Map"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:900
-#: includes/api/class-geodir-rest-posts-controller.php:2248
+#: includes/api/class-geodir-rest-posts-controller.php:2255
 #: includes/custom-fields/input-functions.php:1268 language.php:94
 msgid ""
 "Click on \"Set Address on Map\" and then you can also drag pinpoint to "
@@ -277,14 +277,14 @@ msgid ""
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:907
-#: includes/api/class-geodir-rest-posts-controller.php:2260
+#: includes/api/class-geodir-rest-posts-controller.php:2267
 #: includes/custom-fields/input-functions-aui.php:1590
 #: includes/custom-fields/input-functions.php:1276 language.php:46
 msgid "Address Latitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:908
-#: includes/api/class-geodir-rest-posts-controller.php:2261
+#: includes/api/class-geodir-rest-posts-controller.php:2268
 #: includes/custom-fields/input-functions-aui.php:1596
 #: includes/custom-fields/input-functions.php:1280 language.php:95
 msgid ""
@@ -293,14 +293,14 @@ msgid ""
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:917
-#: includes/api/class-geodir-rest-posts-controller.php:2275
+#: includes/api/class-geodir-rest-posts-controller.php:2282
 #: includes/custom-fields/input-functions-aui.php:1621
 #: includes/custom-fields/input-functions.php:1289 language.php:47
 msgid "Address Longitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:918
-#: includes/api/class-geodir-rest-posts-controller.php:2276
+#: includes/api/class-geodir-rest-posts-controller.php:2283
 #: includes/custom-fields/input-functions-aui.php:1627
 #: includes/custom-fields/input-functions.php:1297 language.php:96
 msgid ""
@@ -309,59 +309,59 @@ msgid ""
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:929
-#: includes/api/class-geodir-rest-posts-controller.php:2290
+#: includes/api/class-geodir-rest-posts-controller.php:2297
 msgid "Map View"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:939
-#: includes/api/class-geodir-rest-posts-controller.php:2303
+#: includes/api/class-geodir-rest-posts-controller.php:2310
 msgid "Map Zoom"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:952
-#: includes/api/class-geodir-rest-posts-controller.php:2334
+#: includes/api/class-geodir-rest-posts-controller.php:2341
 msgid "Date for the object, as it exists in the database."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:957
-#: includes/api/class-geodir-rest-posts-controller.php:2339
+#: includes/api/class-geodir-rest-posts-controller.php:2346
 msgid "Date for the object, transformed for display."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:977
-#: includes/api/class-geodir-rest-posts-controller.php:2357
+#: includes/api/class-geodir-rest-posts-controller.php:2364
 msgid "File for the object, as it exists in the database."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:982
-#: includes/api/class-geodir-rest-posts-controller.php:2362
+#: includes/api/class-geodir-rest-posts-controller.php:2369
 msgid "File for the object, transformed for display."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:997
-#: includes/api/class-geodir-rest-posts-controller.php:2378
+#: includes/api/class-geodir-rest-posts-controller.php:2385
 #: includes/api/class-geodir-rest-reviews-controller.php:1135
 msgid "Content for the object, as it exists in the database."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:1002
-#: includes/api/class-geodir-rest-posts-controller.php:2383
+#: includes/api/class-geodir-rest-posts-controller.php:2390
 msgid "Content for the object, transformed for display."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:1015
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:1039
-#: includes/api/class-geodir-rest-posts-controller.php:2314
-#: includes/api/class-geodir-rest-posts-controller.php:2403
-#: includes/api/class-geodir-rest-posts-controller.php:2427
+#: includes/api/class-geodir-rest-posts-controller.php:2321
+#: includes/api/class-geodir-rest-posts-controller.php:2410
+#: includes/api/class-geodir-rest-posts-controller.php:2434
 msgid "Field for the object, as it exists in the database."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:1020
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:1044
-#: includes/api/class-geodir-rest-posts-controller.php:2319
-#: includes/api/class-geodir-rest-posts-controller.php:2408
-#: includes/api/class-geodir-rest-posts-controller.php:2432
+#: includes/api/class-geodir-rest-posts-controller.php:2326
+#: includes/api/class-geodir-rest-posts-controller.php:2415
+#: includes/api/class-geodir-rest-posts-controller.php:2439
 msgid "Field for the object, transformed for display."
 msgstr ""
 
@@ -9244,8 +9244,8 @@ msgstr ""
 
 #: includes/api/class-geodir-rest-fields-controller.php:89
 #: includes/api/class-geodir-rest-markers-controller.php:45
-#: includes/api/class-geodir-rest-posts-controller.php:107
-#: includes/api/class-geodir-rest-posts-controller.php:1577
+#: includes/api/class-geodir-rest-posts-controller.php:114
+#: includes/api/class-geodir-rest-posts-controller.php:1584
 #: includes/api/class-geodir-rest-reviews-controller.php:68
 #: includes/api/class-geodir-rest-reviews-controller.php:1077
 msgid "Unique identifier for the object."
@@ -9256,7 +9256,7 @@ msgid "Sorry, you are not allowed to view fields."
 msgstr ""
 
 #: includes/api/class-geodir-rest-fields-controller.php:226
-#: includes/api/class-geodir-rest-posts-controller.php:360
+#: includes/api/class-geodir-rest-posts-controller.php:367
 msgid "The page number requested is larger than the number of pages available."
 msgstr ""
 
@@ -9517,7 +9517,7 @@ msgid "Cannot view post type."
 msgstr ""
 
 #: includes/api/class-geodir-rest-post-types-controller.php:110
-#: includes/api/class-geodir-rest-posts-controller.php:152
+#: includes/api/class-geodir-rest-posts-controller.php:159
 msgid "Sorry, you are not allowed to edit posts in this post type."
 msgstr ""
 
@@ -9553,191 +9553,191 @@ msgstr ""
 msgid "REST base route for the post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:170
+#: includes/api/class-geodir-rest-posts-controller.php:177
 msgid "You need to define a search term to order by relevance."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:175
+#: includes/api/class-geodir-rest-posts-controller.php:182
 msgid "You need to define an include parameter to order by include."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:428
-#: includes/api/class-geodir-rest-posts-controller.php:624
+#: includes/api/class-geodir-rest-posts-controller.php:435
+#: includes/api/class-geodir-rest-posts-controller.php:631
 msgid "Sorry, you are not allowed to edit this post."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:434
+#: includes/api/class-geodir-rest-posts-controller.php:441
 msgid "Incorrect post password."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:490
-#: includes/api/class-geodir-rest-posts-controller.php:498
+#: includes/api/class-geodir-rest-posts-controller.php:497
+#: includes/api/class-geodir-rest-posts-controller.php:505
 msgid "Sorry, you are not allowed to create posts as this user."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:494
-#: includes/api/class-geodir-rest-posts-controller.php:632
+#: includes/api/class-geodir-rest-posts-controller.php:501
+#: includes/api/class-geodir-rest-posts-controller.php:639
 msgid "Sorry, you are not allowed to make posts sticky."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:502
-#: includes/api/class-geodir-rest-posts-controller.php:636
+#: includes/api/class-geodir-rest-posts-controller.php:509
+#: includes/api/class-geodir-rest-posts-controller.php:643
 msgid "Sorry, you are not allowed to assign the provided terms."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:628
+#: includes/api/class-geodir-rest-posts-controller.php:635
 msgid "Sorry, you are not allowed to update posts as this user."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:740
-#: includes/api/class-geodir-rest-posts-controller.php:780
+#: includes/api/class-geodir-rest-posts-controller.php:747
+#: includes/api/class-geodir-rest-posts-controller.php:787
 msgid "Sorry, you are not allowed to delete this post."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:796
+#: includes/api/class-geodir-rest-posts-controller.php:803
 #, php-format
 msgid "The post does not support trashing. Set '%s' to delete."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:801
+#: includes/api/class-geodir-rest-posts-controller.php:808
 msgid "The post has already been deleted."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:812
+#: includes/api/class-geodir-rest-posts-controller.php:819
 msgid "The post cannot be deleted."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1032
+#: includes/api/class-geodir-rest-posts-controller.php:1039
 msgid "Invalid author ID."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1045
+#: includes/api/class-geodir-rest-posts-controller.php:1052
 msgid "A post can not be sticky and have a password."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1049
+#: includes/api/class-geodir-rest-posts-controller.php:1056
 msgid "A sticky post can not be password protected."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1056
+#: includes/api/class-geodir-rest-posts-controller.php:1063
 msgid "A password protected post can not be set to sticky."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1067
+#: includes/api/class-geodir-rest-posts-controller.php:1074
 msgid "Invalid post parent ID."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1124
+#: includes/api/class-geodir-rest-posts-controller.php:1131
 msgid "Sorry, you are not allowed to create private posts in this post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1130
+#: includes/api/class-geodir-rest-posts-controller.php:1137
 msgid "Sorry, you are not allowed to publish posts in this post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1160
+#: includes/api/class-geodir-rest-posts-controller.php:1167
 msgid "Invalid featured media ID."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1663
+#: includes/api/class-geodir-rest-posts-controller.php:1670
 #, php-format
 msgid "The terms assigned to the post in the %s taxonomy."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1676
+#: includes/api/class-geodir-rest-posts-controller.php:1683
 msgid "An alphanumeric identifier for the object unique to its type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1685
+#: includes/api/class-geodir-rest-posts-controller.php:1692
 msgid "Type of Post for the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1692
+#: includes/api/class-geodir-rest-posts-controller.php:1699
 msgid "A named status for the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1700
+#: includes/api/class-geodir-rest-posts-controller.php:1707
 msgid "The ID for the author of the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1706
+#: includes/api/class-geodir-rest-posts-controller.php:1713
 #: includes/api/class-geodir-rest-reviews-controller.php:1148
 msgid "The date the object was published, in the site's timezone."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1713
+#: includes/api/class-geodir-rest-posts-controller.php:1720
 #: includes/api/class-geodir-rest-reviews-controller.php:1154
 msgid "The date the object was published, as GMT."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1720
+#: includes/api/class-geodir-rest-posts-controller.php:1727
 msgid "The date the object was last modified, in the site's timezone."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1728
+#: includes/api/class-geodir-rest-posts-controller.php:1735
 msgid "The date the object was last modified, as GMT."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1737
+#: includes/api/class-geodir-rest-posts-controller.php:1744
 msgid "The ID of the featured media for the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1794
+#: includes/api/class-geodir-rest-posts-controller.php:1801
 #: includes/api/class-geodir-rest-reviews-controller.php:1160
 msgid "URL to the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1803
+#: includes/api/class-geodir-rest-posts-controller.php:1810
 msgid "Whether or not comments are open on the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1809
+#: includes/api/class-geodir-rest-posts-controller.php:1816
 msgid "Whether or not the object can be pinged."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1817
+#: includes/api/class-geodir-rest-posts-controller.php:1824
 msgid "The globally unique identifier for the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1823
+#: includes/api/class-geodir-rest-posts-controller.php:1830
 msgid "GUID for the object, as it exists in the database."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1829
+#: includes/api/class-geodir-rest-posts-controller.php:1836
 msgid "GUID for the object, transformed for display."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1838
+#: includes/api/class-geodir-rest-posts-controller.php:1845
 msgid "A password to protect access to the content and excerpt."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1845
+#: includes/api/class-geodir-rest-posts-controller.php:1852
 #: includes/api/class-geodir-rest-reviews-controller.php:1167
 msgid "The ID for the parent of the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:1945
+#: includes/api/class-geodir-rest-posts-controller.php:1952
 msgid "Limit response to posts published after a given ISO8601 compliant date."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2020
+#: includes/api/class-geodir-rest-posts-controller.php:2027
 msgid "Limit result set to items with particular parent IDs."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2095
+#: includes/api/class-geodir-rest-posts-controller.php:2102
 msgid "Status is forbidden."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2447
+#: includes/api/class-geodir-rest-posts-controller.php:2454
 msgid "Default category."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2448
+#: includes/api/class-geodir-rest-posts-controller.php:2455
 msgid "Select default category."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2799
-#: includes/api/class-geodir-rest-posts-controller.php:2860
+#: includes/api/class-geodir-rest-posts-controller.php:2810
+#: includes/api/class-geodir-rest-posts-controller.php:2871
 #: includes/class-geodir-privacy-exporters.php:238
 #: includes/class-geodir-privacy-exporters.php:303
 #: includes/core-functions.php:350
@@ -9757,8 +9757,8 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2799
-#: includes/api/class-geodir-rest-posts-controller.php:2858
+#: includes/api/class-geodir-rest-posts-controller.php:2810
+#: includes/api/class-geodir-rest-posts-controller.php:2869
 #: includes/class-geodir-privacy-exporters.php:301
 #: includes/custom-fields/input-functions-aui.php:2292
 #: includes/custom-fields/input-functions.php:1810
@@ -9778,7 +9778,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2813
+#: includes/api/class-geodir-rest-posts-controller.php:2824
 msgctxt "expire date"
 msgid "Never"
 msgstr ""
@@ -10510,7 +10510,7 @@ msgid "Closed"
 msgstr ""
 
 #: includes/business-hours-functions.php:698 includes/core-functions.php:330
-#: includes/custom-fields/output-functions.php:2758
+#: includes/custom-fields/output-functions.php:2764
 msgid "Open now"
 msgstr ""
 
@@ -11599,7 +11599,7 @@ msgid "Near:"
 msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:119
-#: includes/class-geodir-seo.php:703 includes/core-functions.php:292
+#: includes/class-geodir-seo.php:709 includes/core-functions.php:292
 #: includes/core-functions.php:293 includes/core-functions.php:302
 msgid "My Location"
 msgstr ""
@@ -12690,169 +12690,169 @@ msgstr ""
 msgid "Could not save report post."
 msgstr ""
 
-#: includes/class-geodir-seo.php:633 includes/general-functions.php:2041
+#: includes/class-geodir-seo.php:639 includes/general-functions.php:2041
 #, php-format
 msgctxt "in category"
 msgid "in %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:693 includes/general-functions.php:2132
+#: includes/class-geodir-seo.php:699 includes/general-functions.php:2132
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:709 includes/general-functions.php:2145
+#: includes/class-geodir-seo.php:715 includes/general-functions.php:2145
 #, php-format
 msgid "near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:797
+#: includes/class-geodir-seo.php:807
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:798
+#: includes/class-geodir-seo.php:808
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:799
+#: includes/class-geodir-seo.php:809
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:800
+#: includes/class-geodir-seo.php:810
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:804
+#: includes/class-geodir-seo.php:814
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:805
+#: includes/class-geodir-seo.php:815
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:806
+#: includes/class-geodir-seo.php:816
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:807
+#: includes/class-geodir-seo.php:817
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:808
+#: includes/class-geodir-seo.php:818
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:809
+#: includes/class-geodir-seo.php:819
 msgid "The current category name prefixed with `in` eg: in Attractions"
 msgstr ""
 
-#: includes/class-geodir-seo.php:814
+#: includes/class-geodir-seo.php:824
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:815
+#: includes/class-geodir-seo.php:825
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:816
+#: includes/class-geodir-seo.php:826
 msgid "Total post found eg: 10"
 msgstr ""
 
-#: includes/class-geodir-seo.php:817
+#: includes/class-geodir-seo.php:827
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:822
+#: includes/class-geodir-seo.php:832
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:823
+#: includes/class-geodir-seo.php:833
 msgid "The currently used search for term with `for`. Ex: for dinner."
 msgstr ""
 
-#: includes/class-geodir-seo.php:824
+#: includes/class-geodir-seo.php:834
 msgid "The currently used search near term with `near`. Ex: near Philadelphia."
 msgstr ""
 
-#: includes/class-geodir-seo.php:825
+#: includes/class-geodir-seo.php:835
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:830
+#: includes/class-geodir-seo.php:840
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:831
+#: includes/class-geodir-seo.php:841
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:832
+#: includes/class-geodir-seo.php:842
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:833
+#: includes/class-geodir-seo.php:843
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: in "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:834
+#: includes/class-geodir-seo.php:844
 msgid ""
 "The full current location prefixed with `near` eg: near United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:835
+#: includes/class-geodir-seo.php:845
 msgid ""
 "The current viewing location type single name prefixed with `near` eg: near "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:836
+#: includes/class-geodir-seo.php:846
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:837
+#: includes/class-geodir-seo.php:847
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:838
+#: includes/class-geodir-seo.php:848
 msgid "The current viewing country prefixed with `near` eg: near United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:839
+#: includes/class-geodir-seo.php:849
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:840
+#: includes/class-geodir-seo.php:850
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:841
+#: includes/class-geodir-seo.php:851
 msgid "The current viewing region prefixed with `near` eg: near Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:842
+#: includes/class-geodir-seo.php:852
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:843
+#: includes/class-geodir-seo.php:853
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:844
+#: includes/class-geodir-seo.php:854
 msgid "The current viewing city prefixed with `near` eg: near Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:849
+#: includes/class-geodir-seo.php:859
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore. "
 "Ex: _phone."
 msgstr ""
 
-#: includes/class-geodir-seo.php:870
+#: includes/class-geodir-seo.php:880
 msgid "Click to copy"
 msgstr ""
 
@@ -13802,17 +13802,17 @@ msgstr ""
 msgid "Some demo text."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:1962
+#: includes/custom-fields/output-functions.php:1968
 #: includes/widgets/class-geodir-widget-post-content.php:160
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:359
 msgid "Read more..."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2658
+#: includes/custom-fields/output-functions.php:2664
 msgid "View on map"
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2817
+#: includes/custom-fields/output-functions.php:2823
 msgid "Expand opening hours"
 msgstr ""
 
