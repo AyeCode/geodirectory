@@ -443,14 +443,17 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		if ( $block_preview ) {
 			$post_images = $this->get_dummy_images( $options['limit'] );
 		} else {
+			$is_protected = false;
+
 			// Show images with all statuses to admin & post author.
 			if ( is_preview() && geodir_listing_belong_to_current_user( $post_id ) ) {
 				$status = '';
 			} else {
-				$status = '1';
+				$status       = '1';
+				$is_protected = post_password_required( $post_id );
 			}
 
-			$post_images = geodir_get_images( $post_id, $options['limit'], $options['show_logo'], $revision_id, $options['types'], $options['fallback_types'], $status );
+			$post_images = $is_protected ? array() : geodir_get_images( $post_id, $options['limit'], $options['show_logo'], $revision_id, $options['types'], $options['fallback_types'], $status );
 		}
 
 		// Make it just a image if only one

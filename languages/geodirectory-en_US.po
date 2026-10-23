@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.196\n"
+"Project-Id-Version: GeoDirectory 2.8.197\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 18:30+0530\n"
-"PO-Revision-Date: 2026-10-22 18:30+0530\n"
+"POT-Creation-Date: 2026-10-23 16:05+0530\n"
+"PO-Revision-Date: 2026-10-23 16:05+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -9736,8 +9736,8 @@ msgstr ""
 msgid "Select default category."
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2810
-#: includes/api/class-geodir-rest-posts-controller.php:2871
+#: includes/api/class-geodir-rest-posts-controller.php:2817
+#: includes/api/class-geodir-rest-posts-controller.php:2878
 #: includes/class-geodir-privacy-exporters.php:238
 #: includes/class-geodir-privacy-exporters.php:303
 #: includes/core-functions.php:350
@@ -9757,8 +9757,8 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2810
-#: includes/api/class-geodir-rest-posts-controller.php:2869
+#: includes/api/class-geodir-rest-posts-controller.php:2817
+#: includes/api/class-geodir-rest-posts-controller.php:2876
 #: includes/class-geodir-privacy-exporters.php:301
 #: includes/custom-fields/input-functions-aui.php:2292
 #: includes/custom-fields/input-functions.php:1810
@@ -9778,7 +9778,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: includes/api/class-geodir-rest-posts-controller.php:2824
+#: includes/api/class-geodir-rest-posts-controller.php:2831
 msgctxt "expire date"
 msgid "Never"
 msgstr ""
@@ -14990,13 +14990,13 @@ msgid "No image found."
 msgstr ""
 
 #: includes/integrations/bricks/element-image-gallery.php:594
-#: includes/widgets/class-geodir-widget-post-images.php:669
+#: includes/widgets/class-geodir-widget-post-images.php:672
 #, php-format
 msgid "Demo image title %d"
 msgstr ""
 
 #: includes/integrations/bricks/element-image-gallery.php:595
-#: includes/widgets/class-geodir-widget-post-images.php:670
+#: includes/widgets/class-geodir-widget-post-images.php:673
 #, php-format
 msgid "Demo image caption %d"
 msgstr ""

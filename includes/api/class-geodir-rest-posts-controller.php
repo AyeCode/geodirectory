@@ -2789,6 +2789,13 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				continue;
 			}
 
+			// A password protected listing must not expose its field values (address, latitude,
+			// longitude, custom fields, etc.) until the password is supplied.
+			if ( $is_protected ) {
+				$data[ $field_name ] = null;
+				continue;
+			}
+
 			$extra_fields 	= ! empty( $field_info['extra_fields'] ) ? $field_info['extra_fields'] : NULL;
 			$option_values 	= ! empty( $field_info['arg_options']['rendered_options'] ) ? $field_info['arg_options']['rendered_options'] : NULL;
 			$field_value 	= $gd_post->{$field_name};
@@ -2922,19 +2929,19 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		}
 
 		// Extra fields
-		$data['featured'] 		= (bool) $gd_post->featured;
-		$data['rating'] 		= geodir_sanitize_float( $gd_post->overall_rating );
-		$data['rating_count'] 	= (int) $gd_post->rating_count;
+		$data['featured'] 		= $is_protected ? false : (bool) $gd_post->featured;
+		$data['rating'] 		= $is_protected ? 0 : geodir_sanitize_float( $gd_post->overall_rating );
+		$data['rating_count'] 	= $is_protected ? 0 : (int) $gd_post->rating_count;
 
 		// Featured image
 		if ( ! empty( $schema['properties']['featured_media'] ) ) {
-			$data['featured_media'] = (int) get_post_thumbnail_id( $gd_post->ID );
-			$data['featured_image'] = $this->get_featured_image( $gd_post );
+			$data['featured_media'] = $is_protected ? 0 : (int) get_post_thumbnail_id( $gd_post->ID );
+			$data['featured_image'] = $is_protected ? null : $this->get_featured_image( $gd_post );
 		}
 
 		// Images
 		if ( ! empty( $schema['properties']['post_images'] ) ) {
-			$data['images'] = $this->get_post_images( $gd_post );
+			$data['images'] = $is_protected ? array() : $this->get_post_images( $gd_post );
 		}
 
 		return apply_filters( 'geodir_rest_get_post_data', $data, $gd_post, $request, $this );
