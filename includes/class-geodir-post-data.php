@@ -1919,54 +1919,86 @@ class GeoDir_Post_Data {
 	 *
 	 * @return bool|void
 	 */
-	public static function delete_post( $id ) {
-		global $wpdb, $plugin_prefix, $geodir_post_author;
+	public static function delete_post( $id, $post = null ) {
+		global $wpdb, $geodir_post_author;
+
+		$id = absint( $id );
 
 		if ( empty( $id ) ) {
 			return false;
 		}
 
-		// Check if user owns the post
-		if ( ! ( self::owner_check( $id, get_current_user_id() ) || ( ! empty( $geodir_post_author ) && self::owner_check( $id, $geodir_post_author ) ) ) ) {
+		if ( ! ( $post instanceof WP_Post && (int) $post->ID === $id ) ) {
+			$post = get_post( $id );
+		}
+
+		if ( empty( $post ) ) {
 			return false;
 		}
 
-		// Check for multisite deletions
-		if ( strpos( $plugin_prefix, $wpdb->prefix ) === false ) {
-			return false;
-		}
-
-		$post_type = get_post_type( $id );
+		$post_type = $post->post_type;
+		$parent_id = 0;
 
 		// Check for revisions
 		if ( $post_type == 'revision' ) {
-			$post_type = get_post_type( wp_get_post_parent_id( $id ) );
+			$parent_id = (int) $post->post_parent;
+
+			// Without parent get_post_type( 0 ) falls back to the global $post.
+			if ( empty( $parent_id ) ) {
+				return false;
+			}
+
+			$post_type = get_post_type( $parent_id );
 		}
 
 		if ( ! geodir_is_gd_post_type( $post_type ) ) {
 			return false;
 		}
 
-		$table = $plugin_prefix . $post_type . '_detail';
+		$table = geodir_db_cpt_table( $post_type );
 
-		/* Delete custom post meta*/
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM " . $table . " WHERE `post_id` = %d",
-				array( $id )
-			)
-		);
+		// Check for multisite deletions
+		if ( empty( $table ) || strpos( $table, $wpdb->prefix ) === false ) {
+			return false;
+		}
 
-		/* Delete Attachments if not revision*/
-		if ( ! wp_is_post_revision( absint( $id ) ) ) {
+		/*
+		 * WP cron runs without a current user, so skip the owner check there,
+		 * otherwise wp_delete_auto_drafts() leaves orphaned rows in the detail table.
+		 */
+		$skip_owner_check = wp_doing_cron();
+
+		/**
+		 * Filters whether to skip the owner check when deleting post data.
+		 *
+		 * @since 2.8.198
+		 *
+		 * @param bool    $skip_owner_check True to skip the owner check.
+		 * @param int     $id               Post ID.
+		 * @param WP_Post $post             Post object.
+		 */
+		$skip_owner_check = apply_filters( 'geodir_delete_post_skip_owner_check', $skip_owner_check, $id, $post );
+
+		// Check if user owns the post
+		if ( ! $skip_owner_check && ! ( self::owner_check( $id, get_current_user_id() ) || ( ! empty( $geodir_post_author ) && self::owner_check( $id, $geodir_post_author ) ) ) ) {
+			return false;
+		}
+
+		// Delete custom post meta
+		$wpdb->query( $wpdb->prepare( "DELETE FROM `{$table}` WHERE `post_id` = %d", array( $id ) ) );
+
+		wp_cache_delete( "gd_post_" . $id, 'gd_post' );
+
+		if ( $parent_id ) {
+			// Delete any temp stored media values from auto saves.
+			delete_post_meta( $parent_id, "__" . $id );
+		} else {
+			// Delete attachments if not revision
 			GeoDir_Media::delete_files( $id, 'all' );
 		}
 
 		return true;
 	}
-
-
-######################## functions to show preview to logged out user ###########################
 
 	/**
 	 * Outputs the add listing page mandatory message.
