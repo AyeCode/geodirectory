@@ -812,7 +812,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 
 = Older Changelogs =
-[Archive of GeoDirectory changelogs](https://wpgeodirectory.com/change-logs-v2/).
+[Archive of GeoDirectory changelogs](https://wpgeodirectory.com/change-logs/).
 
 == Upgrade Notice ==
 
