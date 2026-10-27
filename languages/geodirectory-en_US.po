@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.197\n"
+"Project-Id-Version: GeoDirectory 2.8.198\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-23 16:05+0530\n"
-"PO-Revision-Date: 2026-10-23 16:05+0530\n"
+"POT-Creation-Date: 2026-10-27 19:59+0530\n"
+"PO-Revision-Date: 2026-10-27 19:59+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1445,7 +1445,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dashboard.php:168
 #: includes/widgets/class-geodir-widget-best-of.php:785
-#: includes/widgets/class-geodir-widget-listings.php:1807
+#: includes/widgets/class-geodir-widget-listings.php:1810
 #: includes/widgets/class-geodir-widget-recently-viewed.php:453
 #: templates/bootstrap/map/map.php:53
 msgid "Loading..."
@@ -1769,7 +1769,7 @@ msgid "GD Dashboard"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1374
-#: includes/class-geodir-email.php:279 includes/class-geodir-user.php:552
+#: includes/class-geodir-email.php:279 includes/class-geodir-user.php:557
 #: includes/widgets/class-geodir-widget-add-listing.php:78
 #: includes/widgets/class-geodir-widget-add-listing.php:87 language.php:30
 #: templates/auth/form-login.php:45
@@ -2478,7 +2478,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:310
 #: includes/admin/views/html-keys-edit.php:12
-#: includes/class-geodir-ajax.php:1393 includes/user-functions.php:213
+#: includes/class-geodir-ajax.php:1406 includes/user-functions.php:213
 #, php-format
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
@@ -2771,43 +2771,43 @@ msgstr ""
 msgid "Select none"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1406
+#: includes/admin/class-geodir-admin-settings.php:1405
 msgid "Verify"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1406
-#: includes/admin/class-geodir-admin-settings.php:1436
+#: includes/admin/class-geodir-admin-settings.php:1405
+#: includes/admin/class-geodir-admin-settings.php:1435
 msgid "API Key Guide"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1406
-#: includes/admin/class-geodir-admin-settings.php:1436
+#: includes/admin/class-geodir-admin-settings.php:1405
+#: includes/admin/class-geodir-admin-settings.php:1435
 msgid "Generate Key"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1464
+#: includes/admin/class-geodir-admin-settings.php:1463
 #: includes/admin/class-geodir-admin-taxonomies.php:560
 #: includes/admin/views/html-admin-settings-cpt-cf-setting-item.php:625
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:42
 msgid "For pro icon variants (light, thin, duotone), paste the class here"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1606
+#: includes/admin/class-geodir-admin-settings.php:1605
 msgid "Choose a city/timezone&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1667
+#: includes/admin/class-geodir-admin-settings.php:1666
 #: includes/admin/views/html-notice-v2-update.php:194
 #: includes/core-functions.php:353 includes/general-functions.php:2766
 #: vendor/ayecode/wp-deactivation-survey/wp-deactivation-survey.php:69
 msgid "Documentation"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1850
+#: includes/admin/class-geodir-admin-settings.php:1849
 msgid "Unable to protect geodir_temp folder from browsing."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1858
+#: includes/admin/class-geodir-admin-settings.php:1857
 msgid "Unable to create geodir_temp folder!"
 msgstr ""
 
@@ -8934,7 +8934,7 @@ msgid "Generate API key"
 msgstr ""
 
 #: includes/admin/views/html-keys-edit.php:127
-#: includes/class-geodir-ajax.php:1328
+#: includes/class-geodir-ajax.php:1341
 msgid "Revoke key"
 msgstr ""
 
@@ -10539,63 +10539,73 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:180
+#: includes/class-geodir-ajax.php:182
 msgid "Select Your Location"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:207
+#: includes/class-geodir-ajax.php:209
 msgid ""
 "Auto location detection failed, please manually set your location below by "
 "dragging the map / marker."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:237 includes/core-functions.php:347
+#: includes/class-geodir-ajax.php:239 includes/core-functions.php:347
 #: language.php:78
 #: vendor/ayecode/wp-deactivation-survey/wp-deactivation-survey.php:64
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:3909
 msgid "Cancel"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:239 includes/class-geodir-ajax.php:244
+#: includes/class-geodir-ajax.php:241 includes/class-geodir-ajax.php:246
 msgid "Please drag the marker or the map to set the position."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:239 includes/class-geodir-ajax.php:244
+#: includes/class-geodir-ajax.php:241 includes/class-geodir-ajax.php:246
 msgid "Set my location"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:265
+#: includes/class-geodir-ajax.php:267
 msgid "No tab_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:445
+#: includes/class-geodir-ajax.php:447
 msgid "Your recently viewed listings will show here."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:472 includes/class-geodir-ajax.php:1196
-#: includes/class-geodir-ajax.php:1229
+#: includes/class-geodir-ajax.php:474 includes/class-geodir-ajax.php:1209
+#: includes/class-geodir-ajax.php:1242
 msgid "No tabs provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:501 includes/class-geodir-ajax.php:530
+#: includes/class-geodir-ajax.php:503 includes/class-geodir-ajax.php:532
 msgid "No tab_type provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:731
+#: includes/class-geodir-ajax.php:560
+msgid "Invalid request."
+msgstr ""
+
+#: includes/class-geodir-ajax.php:568 includes/class-geodir-ajax.php:1584
+#: includes/class-geodir-ajax.php:1588 includes/class-geodir-ajax.php:1633
+#: includes/class-geodir-report-post.php:425
+msgid "Invalid post."
+msgstr ""
+
+#: includes/class-geodir-ajax.php:739
 msgid "No post_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:742
+#: includes/class-geodir-ajax.php:750
 msgid "You have successfully deleted the Listing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:857
+#: includes/class-geodir-ajax.php:870
 #: includes/class-geodir-frontend-scripts.php:905
 #: includes/post-functions.php:397 language.php:85
 msgid "Unfavorite"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:862
+#: includes/class-geodir-ajax.php:875
 #: includes/class-geodir-frontend-scripts.php:903
 #: includes/post-functions.php:377
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1033
@@ -10603,55 +10613,49 @@ msgstr ""
 msgid "Favorite"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:869 includes/class-geodir-ajax.php:872
+#: includes/class-geodir-ajax.php:882 includes/class-geodir-ajax.php:885
 msgid "Action failed."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:981
+#: includes/class-geodir-ajax.php:994
 msgid "Invalid post type"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1262
+#: includes/class-geodir-ajax.php:1275
 msgid "Description is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1265
+#: includes/class-geodir-ajax.php:1278
 msgid "User is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1268
+#: includes/class-geodir-ajax.php:1281
 msgid "Permissions is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1297
+#: includes/class-geodir-ajax.php:1310
 msgid "API Key updated successfully."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1327
+#: includes/class-geodir-ajax.php:1340
 msgid ""
 "API Key generated successfully. Make sure to copy your new keys now as the "
 "secret key will be hidden once you leave this page."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1401
+#: includes/class-geodir-ajax.php:1414
 #, php-format
 msgctxt "Display Name (#ID)"
 msgid "%1$s (#%2$s)"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1571 includes/class-geodir-ajax.php:1575
-#: includes/class-geodir-ajax.php:1616
-#: includes/class-geodir-report-post.php:425
-msgid "Invalid post."
-msgstr ""
-
-#: includes/class-geodir-ajax.php:1609
+#: includes/class-geodir-ajax.php:1626
 #: includes/widgets/class-geodir-widget-report-post.php:52
 #: includes/widgets/class-geodir-widget-report-post.php:258
 msgid "Report Post"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1625
+#: includes/class-geodir-ajax.php:1642
 #: includes/class-geodir-report-post.php:429
 msgid "You can' report this post."
 msgstr ""
@@ -10710,7 +10714,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:402 includes/class-geodir-media.php:1388
+#: includes/class-geodir-auth.php:402 includes/class-geodir-media.php:1424
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -11045,41 +11049,41 @@ msgstr ""
 msgid "(Edit)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:838
+#: includes/class-geodir-comments.php:865
 #, php-format
 msgid "%d star rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:841
+#: includes/class-geodir-comments.php:868
 msgid "No rating yet!"
 msgstr ""
 
-#: includes/class-geodir-comments.php:895
 #: includes/class-geodir-comments.php:922
+#: includes/class-geodir-comments.php:949
 msgid "Select a rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:955
+#: includes/class-geodir-comments.php:982
 msgid "Terrible"
 msgstr ""
 
-#: includes/class-geodir-comments.php:956
+#: includes/class-geodir-comments.php:983
 msgid "Poor"
 msgstr ""
 
-#: includes/class-geodir-comments.php:957
+#: includes/class-geodir-comments.php:984
 msgid "Average"
 msgstr ""
 
-#: includes/class-geodir-comments.php:958
+#: includes/class-geodir-comments.php:985
 msgid "Very Good"
 msgstr ""
 
-#: includes/class-geodir-comments.php:959
+#: includes/class-geodir-comments.php:986
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-comments.php:1297
+#: includes/class-geodir-comments.php:1324
 #, php-format
 msgid "%d review"
 msgid_plural "%d reviews"
@@ -11594,7 +11598,7 @@ msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:119
 #: includes/core-functions.php:293
-#: includes/widgets/class-geodir-widget-listings.php:1344
+#: includes/widgets/class-geodir-widget-listings.php:1347
 msgid "Near:"
 msgstr ""
 
@@ -11843,94 +11847,98 @@ msgstr ""
 msgid "Load Map"
 msgstr ""
 
-#: includes/class-geodir-media.php:105
+#: includes/class-geodir-media.php:104
 msgid "You are not allowed to perform this action."
 msgstr ""
 
-#: includes/class-geodir-media.php:144
+#: includes/class-geodir-media.php:120
+msgid "No file was uploaded."
+msgstr ""
+
+#: includes/class-geodir-media.php:149
 msgid "Fail to upload the post attachment."
 msgstr ""
 
-#: includes/class-geodir-media.php:158
+#: includes/class-geodir-media.php:163
 msgid "Fail to upload the file."
 msgstr ""
 
-#: includes/class-geodir-media.php:334
+#: includes/class-geodir-media.php:339
 msgid "No post_id or file url, file insert failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:448
+#: includes/class-geodir-media.php:453
 msgid "Failed to process uploaded attachment file."
 msgstr ""
 
-#: includes/class-geodir-media.php:490
+#: includes/class-geodir-media.php:495
 msgid "Failed to save attachment data."
 msgstr ""
 
-#: includes/class-geodir-media.php:582
+#: includes/class-geodir-media.php:587
 msgid "No image_id, post_id or image url, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:592
+#: includes/class-geodir-media.php:597
 msgid "Invalid attachment, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:670
+#: includes/class-geodir-media.php:675
 msgid "Failed to update image info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:764
+#: includes/class-geodir-media.php:769
 msgid "Invalid file."
 msgstr ""
 
-#: includes/class-geodir-media.php:888
+#: includes/class-geodir-media.php:893
 msgid "Invalid URL Provided."
 msgstr ""
 
-#: includes/class-geodir-media.php:894
+#: includes/class-geodir-media.php:901
 msgid ""
 "Outbound requests to internal or private loopback addresses are restricted."
 msgstr ""
 
-#: includes/class-geodir-media.php:902
+#: includes/class-geodir-media.php:909
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:1376
+#: includes/class-geodir-media.php:1412
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1388 includes/class-geodir-media.php:1390
+#: includes/class-geodir-media.php:1424 includes/class-geodir-media.php:1426
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1411
+#: includes/class-geodir-media.php:1447
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:1429
+#: includes/class-geodir-media.php:1465
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-media.php:1546 includes/class-geodir-media.php:1588
+#: includes/class-geodir-media.php:1582 includes/class-geodir-media.php:1624
 msgid "Generate attachment metadata"
 msgstr ""
 
-#: includes/class-geodir-media.php:1573
+#: includes/class-geodir-media.php:1609
 msgid "Invalid post id!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1614
+#: includes/class-geodir-media.php:1650
 msgid "Invalid attachment!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1619
+#: includes/class-geodir-media.php:1655
 msgid "Attachment metadata not generated for external image!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1637
+#: includes/class-geodir-media.php:1673
 #, php-format
 msgid "%s not exists!"
 msgstr ""
@@ -12088,7 +12096,7 @@ msgid ""
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1979
+#: includes/class-geodir-post-data.php:2011
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -12874,15 +12882,15 @@ msgstr ""
 msgid "Add Listing"
 msgstr ""
 
-#: includes/class-geodir-user.php:535
+#: includes/class-geodir-user.php:536 includes/class-geodir-user.php:540
 msgid "You do not have permission to delete this post."
 msgstr ""
 
-#: includes/class-geodir-user.php:545
+#: includes/class-geodir-user.php:550
 msgid "Delete post failed."
 msgstr ""
 
-#: includes/class-geodir-user.php:568 language.php:158
+#: includes/class-geodir-user.php:573 language.php:158
 msgid "Register"
 msgstr ""
 
@@ -13449,51 +13457,51 @@ msgstr ""
 msgid "Clear field"
 msgstr ""
 
-#: includes/core-functions.php:1642
+#: includes/core-functions.php:1646
 msgid "Filesystem ERROR during mu-plugin file copy: "
 msgstr ""
 
-#: includes/core-functions.php:1644
+#: includes/core-functions.php:1648
 msgid ""
 "There was a problem accessing the filesystem during copy Fast AJAX mu-plugin "
 "file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1652
+#: includes/core-functions.php:1656
 #, php-format
 msgid ""
 "Unable to create directory %s. Make sure its parent directory writable by "
 "the server."
 msgstr ""
 
-#: includes/core-functions.php:1656
+#: includes/core-functions.php:1660
 #, php-format
 msgid "Must-plugin directory %s is not writable by the server."
 msgstr ""
 
-#: includes/core-functions.php:1664
+#: includes/core-functions.php:1668
 msgid ""
 "There was a problem in copy Fast AJAX mu-plugin file to mu-plugins folder."
 msgstr ""
 
-#: includes/core-functions.php:1704
+#: includes/core-functions.php:1708
 msgctxt "rating filter"
 msgid "Any"
 msgstr ""
 
-#: includes/core-functions.php:1707
+#: includes/core-functions.php:1711
 msgid "5-star"
 msgstr ""
 
-#: includes/core-functions.php:1708
+#: includes/core-functions.php:1712
 msgid "4-star & up"
 msgstr ""
 
-#: includes/core-functions.php:1709
+#: includes/core-functions.php:1713
 msgid "3-star & up"
 msgstr ""
 
-#: includes/core-functions.php:1710
+#: includes/core-functions.php:1714
 msgid "2-star & up"
 msgstr ""
 
@@ -13792,7 +13800,7 @@ msgid "View on Map"
 msgstr ""
 
 #: includes/custom-fields/output-filter-functions.php:819
-#: includes/widgets/class-geodir-widget-post-title.php:213
+#: includes/widgets/class-geodir-widget-post-title.php:215
 #, php-format
 msgctxt "listing title hover"
 msgid "View: %s"
@@ -16155,7 +16163,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:748
 #: includes/widgets/class-geodir-widget-best-of.php:777
-#: includes/widgets/class-geodir-widget-listings.php:1835
+#: includes/widgets/class-geodir-widget-listings.php:1838
 msgid "View all"
 msgstr ""
 
@@ -17250,16 +17258,16 @@ msgstr ""
 msgid "Show center slide and left/right slide with half preview."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1344
+#: includes/widgets/class-geodir-widget-listings.php:1347
 msgid "Me"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1529
+#: includes/widgets/class-geodir-widget-listings.php:1532
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1737
+#: includes/widgets/class-geodir-widget-listings.php:1740
 #: includes/widgets/class-geodir-widget-loop.php:347
 msgid ""
 "This preview shows all content items to give an idea of layout. Dummy data "
