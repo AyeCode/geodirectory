@@ -339,6 +339,8 @@ function plu_show_thumbs(imgId) {
             }
 
             //Esc title and caption
+            image_id      = geodir_esc_entities(image_id);
+            image_url     = geodir_sanitize_url(image_url,{fallback:'about:blank'});
             image_title   = geodir_esc_entities(image_title);
             image_caption = geodir_esc_entities(image_caption);
 
@@ -381,7 +383,7 @@ function plu_show_thumbs(imgId) {
                     file_type_class = 'fa-file-video';
                 }
                 file_display_class = 'file-thumb';
-                file_display = '<i title="' + file_name + '" class="fa ' + file_type_class + ' gd-file-info" data-id="' + image_id + '" data-title="' + image_title + '" data-caption="' + image_caption + '" data-src="' + image_url + '" aria-hidden="true"></i>';
+                file_display = '<i title="' + geodir_esc_entities(file_name) + '" class="fa ' + file_type_class + ' gd-file-info" data-id="' + image_id + '" data-title="' + image_title + '" data-caption="' + image_caption + '" data-src="' + image_url + '" aria-hidden="true"></i>';
             }
 
             var thumb = $('<div class="thumb ' + file_display_class + '" id="thumb' + imgId + i + '">' +
@@ -483,4 +485,124 @@ function gd_set_image_meta(input_id, order_id) {
     jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val(imagesS).trigger("change");
     plu_show_thumbs(input_id);
     jQuery('[data-lity-close]', window.parent.document).trigger('click');
+}
+
+/**
+ * Sanitizes and validates a URL for safe use in an HTML attribute or a DOM property.
+ *
+ * @param {string} url - The URL to sanitize.
+ * @param {Object} [options] - Configuration options.
+ * @param {boolean} [options.allowRelative=false] - Allow same-origin relative URLs.
+ * @param {string} [options.baseOrigin=''] - Base URL for relative URLs when there is no window (SSR).
+ * @param {string[]|null} [options.allowedDomains=null] - Exact hostnames to allow (e.g. 'www.youtube.com').
+ *        null = no allowlist, [] = block all. A non-array, or any entry that is not a valid
+ *        hostname string, blocks all URLs.
+ * @returns {string} The sanitized URL, or fallback.
+ */
+function geodir_sanitize_url(url, options) {
+    const FALLBACK_URL = ''; // '' OR 'about:blank'
+    const {
+		fallback = FALLBACK_URL,
+		allowRelative = false,
+		baseOrigin = '',
+		allowedDomains = null
+	  } = options || {};
+
+    if (typeof url !== 'string' || url.trim() === '') {
+        return fallback;
+    }
+
+    // Validate and normalize the allowlist up front (fail closed if malformed).
+    // Entries are normalized by the same parser as the URL (case, trailing spaces, IDN -> punycode).
+    let allowedHosts = null;
+
+    if (allowedDomains !== null) {
+        if (!Array.isArray(allowedDomains)) {
+            return fallback;
+        }
+
+        allowedHosts = [];
+
+        for (const domain of allowedDomains) {
+            if (typeof domain !== 'string' || domain.trim() === '') {
+                return fallback;
+            }
+
+            try {
+                allowedHosts.push(new URL('https://' + domain.trim()).hostname);
+            } catch (e) {
+                return fallback;
+            }
+        }
+    }
+
+    // Resolve the base used for relative URLs.
+    let currentOrigin = 'http://localhost';
+    let currentHref = 'http://localhost/';
+
+    if (typeof window !== 'undefined') {
+        currentOrigin = window.location.origin;
+        currentHref = window.location.href;
+    } else if (baseOrigin) {
+        try {
+            const normalizedBase = new URL(baseOrigin);
+            currentOrigin = normalizedBase.origin;
+            currentHref = normalizedBase.href;
+        } catch (e) {
+            return fallback;
+        }
+    }
+
+    // Parse with the native WHATWG URL parser (the same parser the browser uses to load the URL).
+    let parsed;
+    let isRelative = false;
+
+    try {
+        parsed = new URL(url);
+    } catch (e) {
+        if (!allowRelative) {
+            return fallback;
+        }
+
+        // On the server, never resolve relative URLs against the localhost placeholder.
+        if (typeof window === 'undefined' && !baseOrigin) {
+            return fallback;
+        }
+
+        try {
+            parsed = new URL(url, currentHref);
+            isRelative = true;
+        } catch (e2) {
+            return fallback;
+        }
+    }
+
+    // Only http and https.
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+        return fallback;
+    }
+
+    // Hostnames are not percent-encoded by the parser, so allow only real hostname characters
+    // (IDNs are already punycode here) or a bracketed IPv6 address. Blocks quotes, "=", "&", etc.
+    if (!/^(?:[a-z0-9_-]+\.)*[a-z0-9_-]+\.?$|^\[[0-9a-f:.]+\]$/.test(parsed.hostname)) {
+        return fallback;
+    }
+
+    // Relative URLs must stay on the current origin (blocks //evil.com, /\evil.com).
+    if (isRelative && parsed.origin !== currentOrigin) {
+        return fallback;
+    }
+
+    // No credentials (blocks https://google.com@evil.com).
+    if (parsed.username || parsed.password) {
+        return fallback;
+    }
+
+    // Exact hostname allowlist.
+    if (allowedHosts !== null && !allowedHosts.includes(parsed.hostname)) {
+        return fallback;
+    }
+
+    // The parser encodes " < > and spaces but not ' in the path, so encode quotes for any attribute quoting style.
+    return parsed.href.replace(/'/g, '%27').replace(/"/g, '%22');
 }

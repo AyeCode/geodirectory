@@ -331,6 +331,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.198 - 2026-10-TBD =
 * Auto-drafts deleted by WP cron leave orphaned rows in the CPT detail table - FIXED
+* Stored XSS via image title on the listing edit screen - FIXED/SECURITY
 
 = GeoDirectory v2.8.197 - 2026-10-23 =
 * REST API: Restrict address & custom fields for password protected listings - FIXED/SECURITY

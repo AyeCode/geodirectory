@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_Media {
 
-
 	/**
 	 * Get the post type fields that are for file uploads and return the allowed file types.
      *
@@ -1226,6 +1225,29 @@ class GeoDir_Media {
 		return self::get_attachments_by_type( $post_id, 'post_images', $limit, $revision_id, '', $status );
 	}
 
+	/**
+	 * Neutralise the characters used as the edit-string's own delimiters.
+	 *
+	 * @since 2.8.198
+	 *
+	 * @param string $value Stored title or caption.
+	 * @return string Value safe to concatenate into the edit string.
+	 */
+	public static function sanitize_edit_string_part( $value ) {
+		if ( $value === null || $value === '' ) {
+			return '';
+		}
+
+		$value = geodir_html_entity_decode_deep( $value );
+
+		// Drop the pipe entirely (it is never a valid field delimiter character
+		// in a title/caption) and collapse any run of colons so "::" can never
+		// form a second entry.
+		$value = str_replace( '|', '', $value );
+		$value = preg_replace( '/:{2,}/', ':', $value );
+
+		return $value;
+	}
 
 	/**
 	 * Get the edit string for files per field.
@@ -1261,8 +1283,12 @@ class GeoDir_Media {
 					$img_src = $wp_upload_dir['baseurl'] . $file->file;
 				}
 
-				$files_arr[] = $img_src . "|" . $file->ID . "|" . $file->title . "|" . $file->caption . $is_approved;
+				$edit_title   = self::sanitize_edit_string_part( $file->title );
+				$edit_caption = self::sanitize_edit_string_part( $file->caption );
+
+				$files_arr[] = $img_src . "|" . $file->ID . "|" . $edit_title . "|" . $edit_caption . $is_approved;
 			}
+
 			return implode( "::", $files_arr );
 		} else {
 			return '';
