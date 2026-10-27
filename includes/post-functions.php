@@ -552,8 +552,8 @@ function geodir_get_listing_author( $listing_id = '' ) {
 			$listing_id = $_REQUEST['pid'];
 		}
 	}
-	$listing           = get_post( strip_tags( $listing_id ) );
-	$listing_author_id = $listing->post_author;
+	$listing           = is_scalar( $listing_id ) ? get_post( absint( strip_tags( (string) $listing_id ) ) ) : null;
+	$listing_author_id = ! empty( $listing ) ? $listing->post_author : 0;
 
 	return $listing_author_id;
 }

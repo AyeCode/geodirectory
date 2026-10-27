@@ -1385,18 +1385,22 @@ function geodir_search_form() {
 			'rounded_size_lg' => isset( $instance['btn_rounded_size_lg'] ) ? $instance['btn_rounded_size_lg'] : '',
 		)
 	);
-	$geodir_search_widget_params['buttons_class'] .= $instance['btn_bg'] ? ' btn-' . esc_attr( $instance['btn_bg'] ) : ' btn-primary';
-	$geodir_search_widget_params['buttons_class'] .= $instance['input_size'] ? ' btn-' . esc_attr( $instance['input_size'] ) : '';
-	if ( 'circle' === $instance['btn_rounded_size'] || 'circle' === $instance['btn_rounded_size_md'] || 'circle' === $instance['btn_rounded_size_lg']) {
+
+	$instance_btn_bg     = ! empty( $instance['btn_bg'] ) && is_scalar( $instance['btn_bg'] ) ? sanitize_html_class( $instance['btn_bg'] ) : '';
+	$instance_input_size = ! empty( $instance['input_size'] ) && is_scalar( $instance['input_size'] ) ? sanitize_html_class( $instance['input_size'] ) : '';
+
+	$geodir_search_widget_params['buttons_class'] .= $instance_btn_bg ? ' btn-' . esc_attr( $instance_btn_bg ) : ' btn-primary';
+	$geodir_search_widget_params['buttons_class'] .= $instance_input_size ? ' btn-' . esc_attr( $instance_input_size ) : '';
+	if ( ( isset( $instance['btn_rounded_size'] ) && 'circle' === $instance['btn_rounded_size'] ) || ( isset( $instance['btn_rounded_size_md'] ) && 'circle' === $instance['btn_rounded_size_md'] ) || ( isset( $instance['btn_rounded_size_lg'] ) && 'circle' === $instance['btn_rounded_size_lg'] ) ) {
 		$geodir_search_widget_params['buttons_class'] .= ' px-3';
 
-		if ( $instance['input_size'] !== 'lg' ) {
+		if ( $instance_input_size !== 'lg' ) {
 			$geodir_search_widget_params['btn_icon_class'] = ' mx-n1';
 		}
 	}
 
 	// input size
-	$geodir_search_widget_params['input_size'] = $instance['input_size'] ? esc_attr( $instance['input_size'] ) : '';
+	$geodir_search_widget_params['input_size'] = $instance_input_size ? esc_attr( $instance_input_size ) : '';
 
 
 	geodir_get_search_post_type();

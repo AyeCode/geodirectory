@@ -112,7 +112,13 @@ class GeoDir_Media {
 		// Set GD temp upload dir
 		add_filter( 'upload_dir', array( __CLASS__, 'temp_upload_dir' ) );
 
-		$fixed_file = $_FILES[ $field_id . 'async-upload' ];
+		$fixed_file = isset( $_FILES[ $field_id . 'async-upload' ] ) && is_array( $_FILES[ $field_id . 'async-upload' ] ) ? $_FILES[ $field_id . 'async-upload' ] : array();
+
+		if ( empty( $fixed_file ) ) {
+			remove_filter( 'upload_dir', array( __CLASS__, 'temp_upload_dir' ) );
+
+			wp_send_json_error( array( 'message' => __( 'No file was uploaded.', 'geodirectory' ) ) );
+		}
 
 		// Handle file upload
 		$status = wp_handle_upload( $fixed_file, array(
@@ -775,7 +781,7 @@ class GeoDir_Media {
 		if ( ! is_wp_error( $temp_file ) ) {
 
 			// make sure its an image
-			$file_type = !empty($dangerously_set_filetype) ? $dangerously_set_filetype : wp_check_filetype(basename( parse_url( $url, PHP_URL_PATH ) ));
+			$file_type = !empty($dangerously_set_filetype) ? $dangerously_set_filetype : wp_check_filetype( basename( (string) parse_url( $url, PHP_URL_PATH ) ) );
 
 			// Set an array containing a list of acceptable formats
 			if ( ! empty( $file_type['ext'] ) && ! empty( $file_type['type'] ) && ( in_array( '*', $allowed_file_types ) || in_array( $file_type['type'], $allowed_file_types ) || in_array( strtolower ( $file_type['ext'] ), $allowed_file_types ) ) ) {
@@ -886,22 +892,26 @@ class GeoDir_Media {
 		if ( ! $url )
 			return new WP_Error('http_no_url', __('Invalid URL Provided.'));
 
+		$is_localhost = geodir_is_localhost();
+
 		// Prevent SSRF by blocking internal/private requests, unless running in a local.
-		if ( ! geodir_is_localhost() && ! geodir_is_safe_host( $url ) ) {
+		if ( ! $is_localhost && ! geodir_is_safe_host( $url ) ) {
 			return new WP_Error( 
 				'geodir_ssrf_blocked', 
 				__( 'Outbound requests to internal or private loopback addresses are restricted.', 'geodirectory' ) 
 			);
 		}
 
-		$url_filename = basename( parse_url( $url, PHP_URL_PATH ) );
+		$url_filename = basename( (string) parse_url( $url, PHP_URL_PATH ) );
 
 		$tmpfname = wp_tempnam( $url_filename );
 		if ( ! $tmpfname )
 			return new WP_Error('http_no_file', __('Could not create Temporary file.'));
 
+		$request_args = array( 'timeout' => $timeout, 'stream' => true, 'filename' => $tmpfname, 'redirection' => 3 );
+
 		// WE CHANGE THIS TO LET US DOWNLOAD URLS WITH QUERY ARGS
-		$response = wp_remote_get( $url, array( 'timeout' => $timeout, 'stream' => true, 'filename' => $tmpfname ) );
+		$response = $is_localhost ? wp_remote_get( $url, $request_args ) : wp_safe_remote_get( $url, $request_args );
 
 		if ( is_wp_error( $response ) ) {
 			if( $tmpfname && file_exists( $tmpfname ) ){
