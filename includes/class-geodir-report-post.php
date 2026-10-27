@@ -421,7 +421,7 @@ if ( isset( $_REQUEST['resolved'] ) || isset( $_REQUEST['rejected'] ) || isset( 
 
 		$gd_post = ! empty( $request['post_id'] ) ? geodir_get_post_info( absint( $request['post_id'] ) ) : array();
 
-		if ( empty( $gd_post ) ) {
+		if ( empty( $gd_post ) || ! geodir_user_can( 'view_listing', array( 'post' => $gd_post, 'context' => 'single-map-public' ) ) ) {
 			return new WP_Error( 'invalid_post', __( 'Invalid post.', 'geodirectory' ) );
 		}
 

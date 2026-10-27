@@ -531,6 +531,11 @@ class GeoDir_User {
      * @return bool|WP_Error
      */
 	public static function delete_post($post_id){
+		// Only GeoDirectory listings can be deleted from the frontend.
+		if ( ! $post_id || ! geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
+			return new WP_Error( 'gd-delete-failed', __( "You do not have permission to delete this post.", "geodirectory" ) );
+		}
+
 	    if(!geodir_listing_belong_to_current_user($post_id)){
 		    return new WP_Error( 'gd-delete-failed', __( "You do not have permission to delete this post.", "geodirectory" ) );
 	    }

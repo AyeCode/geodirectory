@@ -126,7 +126,7 @@ class GeoDir_Admin_API_Keys {
 	 * API Keys admin actions.
 	 */
 	public function actions() {
-		if ( $this->is_api_keys_settings_page() ) {
+		if ( $this->is_api_keys_settings_page() && current_user_can( 'manage_options' ) ) {
 			// Revoke key
 			if ( isset( $_GET['revoke-key'] ) ) {
 				$this->revoke_key();

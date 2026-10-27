@@ -2303,7 +2303,9 @@ class GeoDir_Admin_Import_Export {
 
 			$dest_url = $uploads['basedir'] . '/geodir_temp/' . $post_id . '-' . $temp_file_name . '.jpg';
 
-			if ( $response = wp_remote_get( $url, array( 'timeout' => 300, 'stream' => true, 'filename' => $dest_url ) ) ) {
+			$request_args = array( 'timeout' => 300, 'stream' => true, 'filename' => $dest_url, 'redirection' => 3 );
+
+			if ( $response = ( geodir_is_localhost() ? wp_remote_get( $url, $request_args ) : wp_safe_remote_get( $url, $request_args ) ) ) {
 				if ( ! empty( $response ) && ! is_wp_error( $response ) && 200 == wp_remote_retrieve_response_code( $response ) ) {
 					$url = str_replace( $uploads['basedir'], $uploads['baseurl'], $dest_url );
 				}

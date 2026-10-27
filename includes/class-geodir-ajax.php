@@ -103,16 +103,18 @@ class GeoDir_AJAX {
 	}
 
 	public static function embed_script(){
-		$html = GeoDir_External_Embed::get_embed_script();
-		if($html ){
+		$html = class_exists( 'GeoDir_External_Embed' ) ? GeoDir_External_Embed::get_embed_script() : '';
+
+		if ( $html ) {
 			echo $html;
 		}
 		exit;
 	}
 
 	public static function embed_widget(){
-		$html = GeoDir_External_Embed::get_embed_widget();
-		if($html ){
+		$html = class_exists( 'GeoDir_External_Embed' ) ? GeoDir_External_Embed::get_embed_widget() : '';
+
+		if ( $html ) {
 			echo $html;
 		}
 		exit;
@@ -288,8 +290,8 @@ class GeoDir_AJAX {
 			$post_type = 'gd_place';
 		}
 
-		$layout = ! empty( $_REQUEST['layout'] ) ? absint( $_REQUEST['layout'] ) : 2;
-		$post_ids = ! empty( $_REQUEST['viewed_post_id'] ) ? json_decode( stripslashes( $_REQUEST['viewed_post_id'] ), true ) : '';
+		$layout   = ! empty( $_REQUEST['layout'] ) ? absint( $_REQUEST['layout'] ) : 2;
+		$post_ids = ! empty( $_REQUEST['viewed_post_id'] ) && is_string( $_REQUEST['viewed_post_id'] ) ? json_decode( stripslashes( $_REQUEST['viewed_post_id'] ), true ) : '';
 
 		// Templates
 		$template_type = ! empty( $_REQUEST['template_type'] ) ? sanitize_text_field( $_REQUEST['template_type'] ) : '';
@@ -310,13 +312,13 @@ class GeoDir_AJAX {
 		$listings_ids = array();
 
 		if ( ! empty( $post_type ) ) {
-			if ( ! empty( $post_ids ) && is_array( $post_ids ) && ! empty( $post_ids[ $post_type ] ) ) {
-				$listings_ids = $post_ids[ $post_type ];
+			if ( ! empty( $post_ids ) && is_array( $post_ids ) && ! empty( $post_ids[ $post_type ] ) && is_array( $post_ids[ $post_type ] ) ) {
+				$listings_ids = array_filter( $post_ids[ $post_type ], 'is_scalar' );
 			}
 
 			if ( ! empty( $listings_ids ) ) {
 				$listings_ids = array_reverse( array_unique( $listings_ids ) );
-				$listings_ids = array_slice( $listings_ids, 0, $list_per_page );
+				$listings_ids = array_slice( $listings_ids, 0, ( $list_per_page ? $list_per_page : null ) );
 			}
 		}
 
@@ -385,23 +387,23 @@ class GeoDir_AJAX {
 			// Card border class
 			$card_border_class = '';
 
-			if ( ! empty( $args['card_border'] ) ) {
-				if ( $args['card_border'] == 'none' ) {
+			if ( ! empty( $card_border ) ) {
+				if ( $card_border == 'none' ) {
 					$card_border_class = 'border-0';
 				} else {
-					$card_border_class = 'border-' . sanitize_html_class( $args['card_border'] );
+					$card_border_class = 'border-' . sanitize_html_class( $card_border );
 				}
 			}
 
 			// Card shadow
 			$card_shadow_class = '';
 
-			if ( ! empty( $args['card_shadow'] ) ) {
-				if ( $args['card_shadow'] == 'small' ) {
+			if ( ! empty( $card_shadow ) ) {
+				if ( $card_shadow == 'small' ) {
 					$card_shadow_class = 'shadow-sm';
-				} else if ( $args['card_shadow'] == 'medium' ) {
+				} else if ( $card_shadow == 'medium' ) {
 					$card_shadow_class = 'shadow';
-				} else if ( $args['card_shadow'] == 'large' ) {
+				} else if ( $card_shadow == 'large' ) {
 					$card_shadow_class = 'shadow-lg';
 				}
 			}
@@ -555,11 +557,17 @@ class GeoDir_AJAX {
 		$form_id = isset($_REQUEST['extra']) ? absint($_REQUEST['extra']) : '';
 
 		if ( ! $post_id || ! $form_id ) {
-			return 'no post id';
+			wp_die( esc_html__( 'Invalid request.', 'geodirectory' ) );
 		}
 
 		global $post;
 		$the_post = get_post( $post_id );
+
+		// Only load the form for an existing listing the current user is allowed to view.
+		if ( empty( $the_post ) || ! geodir_is_gd_post_type( $the_post->post_type ) || ! geodir_user_can( 'view_listing', array( 'post' => $the_post, 'context' => 'single-map-public' ) ) || geodir_is_post_protected( $the_post ) ) {
+			wp_die( esc_html__( 'Invalid post.', 'geodirectory' ) );
+		}
+
 		$post = $the_post;
 
 		// fake the post_id for ninja forms
@@ -845,8 +853,13 @@ class GeoDir_AJAX {
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
 		$user_id = get_current_user_id();
-		$post_id = absint( $_REQUEST['pid'] );
+		$post_id = isset( $_REQUEST['pid'] ) && is_scalar( $_REQUEST['pid'] ) ? absint( $_REQUEST['pid'] ) : 0;
 		$type_action = isset( $_REQUEST['type_action'] ) && $_REQUEST['type_action'] == 'add' ? 'add' : 'remove';
+
+		// Only allow to favorite GD listings the user can view.
+		if ( $type_action == 'add' && $post_id && ! ( geodir_is_gd_post_type( get_post_type( $post_id ) ) && geodir_user_can( 'view_listing', array( 'post' => $post_id, 'context' => 'single-map-public' ) ) ) ) {
+			$post_id = 0;
+		}
 
 		if ( $user_id && $post_id ) {
 			$data = array();
@@ -1268,7 +1281,7 @@ class GeoDir_AJAX {
 				throw new Exception( __( 'Permissions is missing.', 'geodirectory' ) );
 			}
 
-			$key_id      = absint( $_POST['key_id'] );
+			$key_id      = ! empty( $_POST['key_id'] ) ? absint( $_POST['key_id'] ) : 0;
 			$description = sanitize_text_field( wp_unslash( $_POST['description'] ) );
 			$permissions = ( in_array( $_POST['permissions'], array( 'read', 'write', 'read_write' ) ) ) ? sanitize_text_field( $_POST['permissions'] ) : 'read';
 			$user_id     = absint( $_POST['user'] );
@@ -1348,7 +1361,7 @@ class GeoDir_AJAX {
 			wp_die( -1 );
 		}
 
-		$term    = geodir_clean( stripslashes( $_GET['term'] ) );
+		$term    = isset( $_GET['term'] ) && is_scalar( $_GET['term'] ) ? geodir_clean( stripslashes( $_GET['term'] ) ) : '';
 		$exclude = array();
 		$limit   = '';
 
@@ -1480,11 +1493,11 @@ class GeoDir_AJAX {
 		// security
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
-		$latitude = isset( $_POST['lat'] ) ? sanitize_text_field( $_POST['lat'] ) : '';
+		$latitude  = isset( $_POST['lat'] ) ? sanitize_text_field( $_POST['lat'] ) : '';
 		$longitude = isset( $_POST['lon'] ) ? sanitize_text_field( $_POST['lon'] ) : '';
 		$timestamp = isset( $_POST['ts'] ) ? absint( $_POST['ts'] ) : 0;
 
-		$data = geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 );
+		$data      = geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp );
 
 		if ( is_wp_error( $data ) ) {
 			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
@@ -1510,7 +1523,7 @@ class GeoDir_AJAX {
 			wp_die( -1 );
 		}
 
-		$page = ! empty( $_POST['per_page'] ) ? absint( $_POST['page'] ) : 1;
+		$page     = ! empty( $_POST['page'] ) ? absint( $_POST['page'] ) : 1;
 		$per_page = ! empty( $_POST['per_page'] ) ? absint( $_POST['per_page'] ) : 10;
 
 		$data = GeoDir_Media::generate_bulk_attachment_metadata( $page, $per_page );
@@ -1603,6 +1616,10 @@ class GeoDir_AJAX {
 
 		$the_post = ! empty( $_POST['post_id'] ) ? geodir_get_post_info( absint( $_POST['post_id'] ) ) : array();
 		$extra = ! empty( $_POST['extra'] ) ? geodir_clean( $_POST['extra'] ) : '';
+
+		if ( ! empty( $the_post ) && ! geodir_user_can( 'view_listing', array( 'post' => $the_post, 'context' => 'single-map-public' ) ) ) {
+			$the_post = array();
+		}
 
 		$success = false;
 		$data = array(

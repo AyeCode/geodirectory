@@ -922,6 +922,42 @@ function geodir_sanitize_latlon( $value, $type = 'lng', $default = 0.0 ) {
 }
 
 /**
+ * Sanitize an HTML tag name against a list of allowed tags.
+ *
+ * @since 2.8.198
+ *
+ * @param string $tag     The tag name to check.
+ * @param string $default Optional. Tag to use when the value is not allowed. Default 'div'.
+ * @param array  $allowed Optional. Allowed tag names.
+ * @return string Safe tag name.
+ */
+function geodir_sanitize_html_tag( $tag, $default = 'div', $allowed = array() ) {
+	if ( empty( $allowed ) || ! is_array( $allowed ) ) {
+		$allowed = array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'div', 'span', 'strong', 'b', 'em', 'i', 'small', 'label', 'li', 'dt', 'dd', 'figcaption' );
+	}
+
+	/**
+	 * Filters the allowed HTML tag names for user supplied tag arguments.
+	 *
+	 * @since 2.8.198
+	 *
+	 * @param array  $allowed Allowed tag names.
+	 * @param string $tag     The requested tag.
+	 */
+	$allowed = (array) apply_filters( 'geodir_allowed_html_tag_names', $allowed, $tag );
+
+	$tag = is_scalar( $tag ) ? strtolower( trim( (string) $tag ) ) : '';
+
+	if ( $tag !== '' && preg_match( '/^[a-z][a-z0-9]*$/', $tag ) && in_array( $tag, $allowed, true ) ) {
+		return $tag;
+	}
+
+	$default = is_scalar( $default ) ? strtolower( trim( (string) $default ) ) : '';
+
+	return ( $default !== '' && preg_match( '/^[a-z][a-z0-9]*$/', $default ) && in_array( $default, $allowed, true ) ) ? $default : 'div';
+}
+
+/**
  * Emulate the WP native sanitize_html_class to sanitize css class.
  *
  * @since 2.2.22

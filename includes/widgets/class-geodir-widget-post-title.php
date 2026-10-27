@@ -174,6 +174,8 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		 */
 		$title_tag = apply_filters( 'geodir_widget_gd_post_title_tag', $tag, $instance, $args, $this );
 
+		$title_tag = geodir_sanitize_html_tag( $title_tag, $tag );
+
 		$design_style = geodir_design_style();
 		$classes = '';
 		$link_class = '';

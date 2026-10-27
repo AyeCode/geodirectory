@@ -379,7 +379,7 @@ class GeoDir_Admin {
 	 */
 	public function preview_emails() {
 		if ( isset( $_GET['geodir_preview_mail'] ) ) {
-			if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'geodir-preview-mail' ) ) {
+			if ( empty( $_REQUEST['_wpnonce'] ) || ! is_scalar( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'geodir-preview-mail' ) || ! current_user_can( 'manage_options' ) ) {
 				die( 'Security check' );
 			}
 

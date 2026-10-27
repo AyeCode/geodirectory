@@ -317,7 +317,7 @@ class GeoDir_Comments {
 		$post_id    = $comment_info->comment_post_ID;
 		$old_rating = geodir_get_comment_rating( $comment_info->comment_ID );
 		$post_type  = get_post_type( $post_id );
-		$rating     = absint( $_REQUEST['geodir_overallrating'] );
+		$rating     = self::sanitize_rating_value( $_REQUEST['geodir_overallrating'] );
 
 		if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
 			if ( ! empty( $old_rating ) ) {
@@ -428,7 +428,7 @@ class GeoDir_Comments {
 			return;
 		}
 
-		$rating = absint( $_REQUEST['geodir_overallrating'] );
+		$rating = self::sanitize_rating_value( $_REQUEST['geodir_overallrating'] );
 
 		if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
 			$sqlqry = $wpdb->prepare(
@@ -767,6 +767,33 @@ class GeoDir_Comments {
 	 */
 	public static function rating_input_count() {
 		return 5;
+	}
+
+	/**
+	 * Sanitize a submitted overall rating value.
+	 *
+	 * @since 2.8.198
+	 *
+	 * @param mixed $rating Submitted rating.
+	 * @return int Sanitized rating.
+	 */
+	public static function sanitize_rating_value( $rating ) {
+		$rating = is_scalar( $rating ) ? absint( $rating ) : 0;
+
+		/**
+		 * Filters the max allowed overall rating value.
+		 *
+		 * @since 2.8.198
+		 *
+		 * @param int $max_rating Max rating. Default rating input count.
+		 */
+		$max_rating = absint( apply_filters( 'geodir_review_max_rating', self::rating_input_count() ) );
+
+		if ( $max_rating > 0 && $rating > $max_rating ) {
+			$rating = $max_rating;
+		}
+
+		return $rating;
 	}
 
 	/**

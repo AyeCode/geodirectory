@@ -2199,6 +2199,11 @@ function geodir_business_hours_post_meta( $request ) {
 				continue;
 			}
 
+			// Skip listings the current user is not allowed to view (draft, pending, private, password protected etc.).
+			if ( ! geodir_user_can( 'view_listing', array( 'post' => $gd_post, 'context' => 'single-map-public' ) ) || geodir_is_post_protected( $gd_post ) ) {
+				continue;
+			}
+
 			$business_hours = geodir_get_business_hours( stripslashes_deep( $gd_post->business_hours ), ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
 
 			if ( ! ( ! empty( $business_hours['days'] ) && ! empty( $business_hours['days'][ $day ] ) ) ) {

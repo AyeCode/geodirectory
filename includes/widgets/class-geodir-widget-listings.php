@@ -1129,6 +1129,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		 *
 		 */
 		$title_tag = empty( $instance['title_tag'] ) ? 'h3' : apply_filters( 'widget_title_tag', $instance['title_tag'] );
+
+		$title_tag = geodir_sanitize_html_tag( $title_tag, 'h3' );
+
 		/**
 		 * Filter widget's "show_favorites_only" type.
 		 *
