@@ -519,9 +519,8 @@ class GeoDir_Query {
 					return $where;
 				}
 
-				$s   = trim( $s );
+				$s   = is_scalar( $s ) ? trim( (string) $s ) : "";
 				$s   = wp_specialchars_decode( $s, ENT_QUOTES );
-				//$s_A = wp_specialchars_decode( $s_A, ENT_QUOTES ); // Already applied esc_sql() wp_specialchars_decode();
 
 				// Exact search with quotes
 				$gd_exact_search = false;

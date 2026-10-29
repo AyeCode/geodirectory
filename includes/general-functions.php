@@ -391,10 +391,10 @@ function geodir_check_page( $gdpage = '' ) {
 			}
 			break;
 		case 'search':
-			if ( isset( $_REQUEST['geodir_search'] ) || ( is_page() && $page_id == geodir_search_page_id() ) ) {
+			if ( ( isset( $_REQUEST['geodir_search'] ) || ( is_page() && (int) $page_id == (int) geodir_search_page_id() ) ) && ! is_post_type_archive() ) {
 				return true;
-			}elseif(isset($wp->query_vars['pagename']) && $page = get_page_by_path( $wp->query_vars['pagename'] )  ){
-				if( isset($page->ID) && $page->ID==geodir_search_page_id()){
+			} elseif( isset( $wp->query_vars['pagename'] ) && ( $page = get_page_by_path( $wp->query_vars['pagename'] ) ) ) {
+				if ( ! empty( $page ) && ! empty( $page->ID ) && (int) $page->ID == (int) geodir_search_page_id() && ! is_post_type_archive() ) {
 					return true;
 				}
 			}
@@ -404,8 +404,6 @@ function geodir_check_page( $gdpage = '' ) {
 			break;
 
 	endswitch;
-
-	//endif;
 
 	return false;
 }
