@@ -1909,7 +1909,7 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
             if ( $output == '' || isset( $output['icon'] ) ) $html .= '</span>';
 
             if ( $output == '' || isset( $output['value'] ) ) {
-                $value = $is_protected ? '' : stripslashes( $gd_post->{$html_var} );
+                $value = $is_protected ? '' : geodir_kses_safe_aui_attributes( stripslashes( $gd_post->{$html_var} ) );
 
                 $gd_skip_the_content = true; // Set global variable to prevent looping on some themes/plugins.
                 $content             = '';
@@ -2091,7 +2091,7 @@ function geodir_cf_html($html,$location,$cf,$p='',$output=''){
                 return stripslashes( $gd_post->{$cf['htmlvar_name']} );
             }
 
-            $value = wpautop(do_shortcode(stripslashes($gd_post->{$cf['htmlvar_name']})));
+            $value = wpautop( do_shortcode( geodir_kses_safe_aui_attributes( stripslashes( $gd_post->{$cf['htmlvar_name']} ) ) ) );
 
             if ( ! empty( $output ) && isset( $output['strip'] ) ) {
                 // Stripped value.
