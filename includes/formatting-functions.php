@@ -1286,3 +1286,33 @@ function geodir_esc_js_attrs( $content, $args = array() ) {
 
 	return $cleaned;
 }
+
+/**
+ * Unserialize a value without allowing PHP objects.
+ *
+ * Use it in place of unserialize() / maybe_unserialize() for data that may be
+ * changed by users, to prevent PHP object injection.
+ *
+ * @since 2.8.199
+ *
+ * @param mixed $data Data that might be serialized.
+ * @return mixed Unserialized data or original value if not serialized. False if the data contains PHP object.
+ */
+function geodir_safe_unserialize( $data ) {
+	if ( ! is_string( $data ) || ! is_serialized( $data ) ) {
+		return $data;
+	}
+
+	$data = trim( $data );
+
+	if ( version_compare( PHP_VERSION, '7.0', '>=' ) ) {
+		return @unserialize( $data, array( 'allowed_classes' => false ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
+	}
+
+	// Older PHP versions don't support allowed_classes, so block serialized objects.
+	if ( preg_match( '/(^|;|\{|\})\s*[OC]:\+?\d+:"/', $data ) ) {
+		return false;
+	}
+
+	return @unserialize( $data ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
+}

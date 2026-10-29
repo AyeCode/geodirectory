@@ -1027,17 +1027,17 @@ class GeoDir_Email {
 			$email_vars['comment_approve_link']    = add_query_arg( array(
 				'_gd_action' => 'approve_comment',
 				'c'          => $comment_ID,
-				'_nonce'     => md5( 'approve_comment_' . $comment_ID )
+				'_nonce'     => geodir_comment_moderation_token( 'approve_comment', $comment_ID )
 			), $home_url );
 			$email_vars['comment_trash_link']      = add_query_arg( array(
 				'_gd_action' => 'trash_comment',
 				'c'          => $comment_ID,
-				'_nonce'     => md5( 'trash_comment_' . $comment_ID )
+				'_nonce'     => geodir_comment_moderation_token( 'trash_comment', $comment_ID )
 			), $home_url );
 			$email_vars['comment_spam_link']       = add_query_arg( array(
 				'_gd_action' => 'spam_comment',
 				'c'          => $comment_ID,
-				'_nonce'     => md5( 'spam_comment_' . $comment_ID )
+				'_nonce'     => geodir_comment_moderation_token( 'spam_comment', $comment_ID )
 			), $home_url );
 			$email_vars['comment_moderation_link'] = '';
 		}

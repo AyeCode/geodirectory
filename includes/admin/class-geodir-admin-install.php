@@ -122,10 +122,20 @@ class GeoDir_Admin_Install {
 	 * This function is hooked into admin_init to affect admin only.
 	 */
 	public static function install_actions() {
+		if ( empty( $_GET['do_update_geodirectory'] ) && empty( $_GET['force_update_geodirectory'] ) ) {
+			return;
+		}
+
+		// Only admins can run the database updates and the request must have a valid nonce.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'geodirectory' ), 403 );
+		}
+
 		if ( ! empty( $_GET['do_update_geodirectory'] ) ) {
 			self::update();
 			GeoDir_Admin_Notices::add_notice( 'update' );
 		}
+
 		if ( ! empty( $_GET['force_update_geodirectory'] ) ) {
 			$blog_id = get_current_blog_id();
 

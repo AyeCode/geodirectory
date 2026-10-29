@@ -344,7 +344,7 @@ class GeoDir_AJAX {
 		if ( ! empty( $widget_listings ) ) {
 			$geodir_item_tmpl = array();
 
-			if ( ! empty( $template_page ) && get_post_type( $template_page ) == 'page' && get_post_status( $template_page ) == 'publish' ) {
+			if ( ! empty( $template_page ) && get_post_type( $template_page ) == 'page' && get_post_status( $template_page ) == 'publish' && ! post_password_required( (int) $template_page ) ) {
 				$geodir_item_tmpl = array(
 					'id'   => $template_page,
 					'type' => 'page',
@@ -362,7 +362,7 @@ class GeoDir_AJAX {
 			$elementor_wrapper_class = '';
 
 			if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $skin_id ) {
-				if ( get_post_status( $skin_id ) == 'publish' ) {
+				if ( get_post_status( $skin_id ) == 'publish' && ! post_password_required( $skin_id ) ) {
 					$skin_active = true;
 
 					$geodir_item_tmpl = array(

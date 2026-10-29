@@ -451,12 +451,12 @@ class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags {
 			$post_id = absint( url_to_postid( wp_get_referer() ) );
 
 			// Check referer contains correct post
-			if ( $post_id && ! geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
+			if ( $post_id && ! $this->is_valid_listing( $post_id ) ) {
 				$post_id = 0;
 			}
 
 			// Retrieve value from form data.
-			if ( empty( $post_id ) && ( $_post_id = (int) $this->get_submitted_value( 'listing_id' ) ) ) {
+			if ( empty( $post_id ) && ( $_post_id = absint( $this->get_submitted_value( 'listing_id' ) ) ) && $this->is_valid_listing( $_post_id ) ) {
 				$post_id = $_post_id;
 			}
 		} elseif ( $post ) {
@@ -466,6 +466,24 @@ class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags {
 		}
 
 		return $post_id;
+	}
+
+	/**
+	 * Check the listing is a GD listing and the current user is allowed to view it.
+	 *
+	 * @since 2.8.199
+	 *
+	 * @param int $post_id Post ID.
+	 * @return bool
+	 */
+	protected function is_valid_listing( $post_id ) {
+		$post_id = absint( $post_id );
+
+		if ( ! $post_id || ! geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
+			return false;
+		}
+
+		return geodir_user_can( 'view_listing', array( 'post' => $post_id, 'context' => 'single-map-public' ) ) && ! geodir_is_post_protected( $post_id );
 	}
 
 	/**

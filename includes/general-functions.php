@@ -999,6 +999,11 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	global $wp,$wpdb, $plugin_prefix, $table_prefix,$geodirectory;
 
 	$post_type = empty( $query_args['post_type'] ) ? 'gd_place' : $query_args['post_type'];
+
+	if ( ! geodir_is_gd_post_type( $post_type ) ) {
+		return $count_only ? 0 : array();
+	}
+
 	$table     = geodir_db_cpt_table( $post_type );
 
 	// check if this is a GPS filtered query
@@ -1055,7 +1060,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$where = "AND {$wpdb->posts}.post_status = '{$statuses[0]}'";
 	}
 
-	$where .= " AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
+	$where .= $wpdb->prepare( " AND " . $wpdb->posts . ".post_type = %s", $post_type );
 
 	// in / not in
 	if ( ! empty( $query_args['post__in'] ) ) {

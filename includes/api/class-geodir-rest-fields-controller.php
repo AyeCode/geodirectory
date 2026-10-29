@@ -826,11 +826,11 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		}
 
 		if ( ! empty( $args['show_in'] ) && $args['show_in'] != 'none' ) {
-			$query_where .= " AND show_in LIKE '%[" . $args['show_in'] . "]%'";
+			$query_where .= $wpdb->prepare( ' AND show_in LIKE %s', '%[' . $wpdb->esc_like( $args['show_in'] ) . ']%' );
 		}
 
 		if ( ! empty( $args['packages'] ) ) {
-			$query_where .= $wpdb->prepare( ' FIND_IN_SET( %d, packages )', array( $args['packages'] ) );
+			$query_where .= $wpdb->prepare( ' AND FIND_IN_SET( %d, packages )', array( $args['packages'] ) );
 		}
 
 		if ( isset( $args['is_active'] ) && $args['is_active'] !== '' ) {
@@ -846,7 +846,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		}
 
 		$orderby_array = array();
-		if ( ! empty( $args['orderby'] ) ) {
+		if ( ! empty( $args['orderby'] ) && is_scalar( $args['orderby'] ) && in_array( $args['orderby'], array_values( $this->orderby_options() ), true ) ) {
 			$orderby_array[] = $args['orderby'] . ' ' . ( ! empty( $args['order'] ) && strtolower( $args['order'] ) == 'asc' ? 'ASC' : 'DESC' );
 		}
 		$orderby_array[] = 'frontend_title ASC';

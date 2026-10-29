@@ -928,7 +928,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			}
 			if ( GeoDir_Post_types::supports( $ajax_cpt, 'location' ) ) {
 				foreach ( $params as $_key => $_value ) {
-					if ( strpos( $_key, '_gd_set_loc_' ) === 0 && ( $_key = substr( sanitize_text_field( $_key ), 12 ) ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
+					if ( strpos( $_key, '_gd_set_loc_' ) === 0 && ( $_key = sanitize_key( substr( $_key, 12 ) ) ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
 						$set_location[ $_key ] = sanitize_text_field( stripslashes( $_value ) );
 					}
 				}
@@ -961,7 +961,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$args['cpt_name_lcase'] = geodir_strtolower( $args['cpt_name'] );
 				$args['cpt_singular_name_lcase'] = geodir_strtolower( $args['cpt_singular_name'] );
 
-				$cpt_options[] = '<option value="' . $cpt . '" ' . selected( $cpt, $current_posttype, false ) . '>' . wp_sprintf( __( '%s Categories', 'geodirectory' ), $args['cpt_singular_name'] ) . '</option>';
+				$cpt_options[] = '<option value="' . esc_attr( $cpt ) . '" ' . selected( $cpt, $current_posttype, false ) . '>' . wp_sprintf( __( '%s Categories', 'geodirectory' ), $args['cpt_singular_name'] ) . '</option>';
 
 				// if ajaxed then only show the first one
 				if ( $cpt_ajax && $cpt_list != '' ) {

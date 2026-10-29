@@ -476,9 +476,13 @@ function geodir_post_author_moderate_comment() {
 	$request = $_REQUEST;
 	$action  = sanitize_text_field( $request['_gd_action'] );
 
-	if ( ! empty( $request['c'] ) && ! empty( $request['_nonce'] ) && ( $user_ID = get_current_user_id() ) ) {
-		$comment_ID = (int) $request['c'];
-		if ( md5( $action . '_' . $comment_ID ) != $request['_nonce'] ) {
+	if ( ! in_array( $action, array( 'approve_comment', 'trash_comment', 'spam_comment' ), true ) ) {
+		return;
+	}
+
+	if ( ! empty( $request['c'] ) && ! empty( $request['_nonce'] ) && is_scalar( $request['_nonce'] ) && ( $user_ID = get_current_user_id() ) ) {
+		$comment_ID = absint( $request['c'] );
+		if ( ! $comment_ID || ! hash_equals( geodir_comment_moderation_token( $action, $comment_ID ), (string) $request['_nonce'] ) ) {
 			return;
 		}
 
@@ -516,6 +520,18 @@ function geodir_post_author_moderate_comment() {
 
 add_action( 'template_redirect', 'geodir_post_author_moderate_comment' );
 
+/**
+ * Get the secret token used to verify the comment moderation links sent by email.
+ *
+ * @since 2.8.199
+ *
+ * @param string $action Moderation action.
+ * @param int    $comment_ID Comment ID.
+ * @return string Token.
+ */
+function geodir_comment_moderation_token( $action, $comment_ID ) {
+	return hash_hmac( 'sha256', 'geodir_' . $action . '_' . absint( $comment_ID ), wp_salt( 'nonce' ) );
+}
 
 /**
  * Function for delete comment metadata by comment id.
