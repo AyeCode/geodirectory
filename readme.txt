@@ -332,6 +332,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.199 - TBD =
 * Validate listings widget advanced pagination info to prevent shortcode injection - FIXED/SECURITY
 * PHP warnings from is_page() & is_front_page() on search results page - FIXED
+* Listings with equal sort values shown twice or missing when paging results - FIXED
 
 = GeoDirectory v2.8.198 - 2026-10-27 =
 * Auto-drafts deleted by WP cron leave orphaned rows in the CPT detail table - FIXED

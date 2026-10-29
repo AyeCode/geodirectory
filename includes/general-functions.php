@@ -1183,6 +1183,8 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		 */
 		$orderby = apply_filters( 'geodir_filter_widget_listings_orderby', $orderby, $table, $post_type );
 
+		$orderby = GeoDir_Query::add_unique_sort( $orderby, ( ! empty( $query_args['order_by'] ) ? $query_args['order_by'] : '' ), $post_type, $query_args );
+
 		$orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
 
 		$limit = ! empty( $query_args['posts_per_page'] ) ? $query_args['posts_per_page'] : 5;
