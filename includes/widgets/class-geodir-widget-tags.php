@@ -765,7 +765,7 @@ class GeoDir_Widget_Tags extends WP_Super_Duper {
 
 			if ( GeoDir_Post_types::supports( $ajax_cpt, 'location' ) ) {
 				foreach ( $params as $_key => $_value ) {
-					if ( strpos( $_key, '_gd_set_loc_' ) === 0 && ( $_key = substr( sanitize_text_field( $_key ), 12 ) ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
+					if ( strpos( $_key, '_gd_set_loc_' ) === 0 && ( $_key = sanitize_key( substr( $_key, 12 ) ) ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
 						$set_location[ $_key ] = sanitize_text_field( stripslashes( $_value ) );
 					}
 				}

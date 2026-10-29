@@ -519,9 +519,8 @@ class GeoDir_Query {
 					return $where;
 				}
 
-				$s   = trim( $s );
+				$s   = is_scalar( $s ) ? trim( (string) $s ) : "";
 				$s   = wp_specialchars_decode( $s, ENT_QUOTES );
-				//$s_A = wp_specialchars_decode( $s_A, ENT_QUOTES ); // Already applied esc_sql() wp_specialchars_decode();
 
 				// Exact search with quotes
 				$gd_exact_search = false;
@@ -1003,6 +1002,51 @@ class GeoDir_Query {
 			 * @param WP_Query $query The WP_Query.
 			 */
 			$orderby = apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $query );
+
+			if ( $orderby ) {
+				$orderby = self::add_unique_sort( $orderby, $sort_by, $geodir_post_type, $query );
+			}
+		}
+
+		return $orderby;
+	}
+
+	/**
+	 * Add the post ID as last sort key to make the order of the results unique.
+	 *
+	 * @since 2.8.199
+	 *
+	 * @param string $orderby Order by SQL.
+	 * @param string $sort_by Sort by.
+	 * @param string $post_type Post type.
+	 * @param WP_Query|array $query Optional. Query. Default array.
+	 * @return string Order by SQL.
+	 */
+	public static function add_unique_sort( $orderby, $sort_by = '', $post_type = '', $query = array() ) {
+		global $wpdb;
+
+		$orderby = trim( (string) $orderby, " \t\n\r\0\x0B," );
+
+		// Post ID is already used as a sort key.
+		if ( $orderby != '' && preg_match( '/`?' . preg_quote( $wpdb->posts, '/' ) . '`?\.`?ID`?(\s|,|$)/i', $orderby ) ) {
+			return $orderby;
+		}
+
+		/**
+		 * Filters the unique last sort key added to the listings order by SQL.
+		 *
+		 * @since 2.8.199
+		 *
+		 * @param string $unique_sort Unique sort key SQL. Return empty to not add.
+		 * @param string $orderby Order by SQL.
+		 * @param string $sort_by Sort by.
+		 * @param string $post_type Post type.
+		 * @param WP_Query|array $query Query.
+		 */
+		$unique_sort = apply_filters( 'geodir_posts_order_by_unique_sort', "{$wpdb->posts}.ID DESC", $orderby, $sort_by, $post_type, $query );
+
+		if ( ! empty( $unique_sort ) ) {
+			$orderby = $orderby != '' ? $orderby . ", " . $unique_sort : $unique_sort;
 		}
 
 		return $orderby;
@@ -1183,7 +1227,7 @@ class GeoDir_Query {
 
 				if ( $default_sort == '' && $sort_by == $default_sort ) {
 					$order_by_parts[] = "{$wpdb->posts}.post_date desc";
-				 }else {
+				} else {
 					$order_by_parts[] = self::custom_sort( $orderby, $sort_by, $table, $post_type, $wp_query );
 				}
 				break;

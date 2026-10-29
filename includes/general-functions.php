@@ -391,10 +391,10 @@ function geodir_check_page( $gdpage = '' ) {
 			}
 			break;
 		case 'search':
-			if ( isset( $_REQUEST['geodir_search'] ) || ( is_page() && $page_id == geodir_search_page_id() ) ) {
+			if ( ( isset( $_REQUEST['geodir_search'] ) || ( is_page() && (int) $page_id == (int) geodir_search_page_id() ) ) && ! is_post_type_archive() ) {
 				return true;
-			}elseif(isset($wp->query_vars['pagename']) && $page = get_page_by_path( $wp->query_vars['pagename'] )  ){
-				if( isset($page->ID) && $page->ID==geodir_search_page_id()){
+			} elseif( isset( $wp->query_vars['pagename'] ) && ( $page = get_page_by_path( $wp->query_vars['pagename'] ) ) ) {
+				if ( ! empty( $page ) && ! empty( $page->ID ) && (int) $page->ID == (int) geodir_search_page_id() && ! is_post_type_archive() ) {
 					return true;
 				}
 			}
@@ -404,8 +404,6 @@ function geodir_check_page( $gdpage = '' ) {
 			break;
 
 	endswitch;
-
-	//endif;
 
 	return false;
 }
@@ -999,6 +997,11 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	global $wp,$wpdb, $plugin_prefix, $table_prefix,$geodirectory;
 
 	$post_type = empty( $query_args['post_type'] ) ? 'gd_place' : $query_args['post_type'];
+
+	if ( ! geodir_is_gd_post_type( $post_type ) ) {
+		return $count_only ? 0 : array();
+	}
+
 	$table     = geodir_db_cpt_table( $post_type );
 
 	// check if this is a GPS filtered query
@@ -1055,7 +1058,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$where = "AND {$wpdb->posts}.post_status = '{$statuses[0]}'";
 	}
 
-	$where .= " AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
+	$where .= $wpdb->prepare( " AND " . $wpdb->posts . ".post_type = %s", $post_type );
 
 	// in / not in
 	if ( ! empty( $query_args['post__in'] ) ) {
@@ -1179,6 +1182,8 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		 * @param string $post_type Post type.
 		 */
 		$orderby = apply_filters( 'geodir_filter_widget_listings_orderby', $orderby, $table, $post_type );
+
+		$orderby = GeoDir_Query::add_unique_sort( $orderby, ( ! empty( $query_args['order_by'] ) ? $query_args['order_by'] : '' ), $post_type, $query_args );
 
 		$orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
 

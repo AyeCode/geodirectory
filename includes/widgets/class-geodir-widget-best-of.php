@@ -531,10 +531,21 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			}
 		}
 
+		if ( ! ( is_scalar( $post_type ) && geodir_is_gd_post_type( $post_type ) ) ) {
+			if ( ! $is_ajax || isset( $_REQUEST['shortcode'] ) ) {
+				echo '</div>';
+			}
+
+			return;
+		}
+
+		$post_limit  = absint( $post_limit ) > 0 ? absint( $post_limit ) : 5;
+		$categ_limit = absint( $categ_limit ) > 0 ? absint( $categ_limit ) : 3;
+
 		// Set location
 		if ( $is_ajax && $add_location_filter && GeoDir_Post_types::supports( $post_type, 'location' ) ) {
 			foreach ( $instance as $_key => $_value ) {
-				if ( strpos( $_key, '_gd_set_loc_' ) === 0 && ( $_key = substr( sanitize_text_field( $_key ), 12 ) ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
+				if ( strpos( $_key, '_gd_set_loc_' ) === 0 && ( $_key = sanitize_key( substr( $_key, 12 ) ) ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
 					$geodirectory->location->{$_key} = sanitize_text_field( stripslashes( $_value ) );
 				}
 			}
@@ -695,6 +706,9 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		$first_term = '';
 		if ($terms) {
 			$first_term = $is_ajax && isset($instance['term_id']) ? get_term( absint($instance['term_id']), $category_taxonomy ) : $terms[0];
+			if ( empty( $first_term ) || is_wp_error( $first_term ) ) {
+				$first_term = $terms[0];
+			}
 			$tax_query = array(
 				'taxonomy' => $category_taxonomy,
 				'field' => 'id',
@@ -742,10 +756,10 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				 */
 				$view_all_link = apply_filters('geodir_bestof_widget_view_all_link', $view_all_link, $post_type, $first_term);
 
-				if($design_style){
-					echo '<h4 class="bestof-cat-title h4  pb-3 p-0 m-0 w-100">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '</h4>';
-				}else{
-					echo '<h4 class="bestof-cat-title">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '<a href="' . esc_url($view_all_link) . '">' . __("View all", 'geodirectory') . '</a></h4>';
+				if ( $design_style ) {
+					echo '<h4 class="bestof-cat-title h4  pb-3 p-0 m-0 w-100">' . esc_html( wp_sprintf( __( 'Best of %s', 'geodirectory' ), $first_term->name ) ) . '</h4>';
+				} else {
+					echo '<h4 class="bestof-cat-title">' . esc_html( wp_sprintf( __( 'Best of %s', 'geodirectory' ), $first_term->name ) ) . '<a href="' . esc_url($view_all_link) . '">' . esc_html__( "View all", 'geodirectory' ) . '</a></h4>';
 				}
 			}
 			if ($excerpt_type == 'show-reviews') {
@@ -833,7 +847,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		$design_style = geodir_design_style();
 
 		$geodir_item_tmpl = array();
-		if ( ! empty( $instance['tmpl_page'] ) && get_post_type( (int) $instance['tmpl_page'] ) == 'page' && get_post_status( (int) $instance['tmpl_page'] ) == 'publish' ) {
+		if ( ! empty( $instance['tmpl_page'] ) && get_post_type( (int) $instance['tmpl_page'] ) == 'page' && get_post_status( (int) $instance['tmpl_page'] ) == 'publish' && ! post_password_required( (int) $instance['tmpl_page'] ) ) {
 			$geodir_item_tmpl = array( 'id' => (int) $instance['tmpl_page'], 'type' => 'page' );
 		} else if ( ! empty( $instance['tmpl_part'] ) && ( $_template_part = geodir_get_template_part_by_slug( $instance['tmpl_part'] ) ) ) {
 			$geodir_item_tmpl = array( 'id' => $_template_part->slug, 'content' => $_template_part->content, 'type' => 'template_part' );
@@ -887,7 +901,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		$skin_active = false;
 		$elementor_wrapper_class = '';
 		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && ! empty( $instance['skin_id'] ) ) {
-			if ( get_post_status ( $instance['skin_id'] ) == 'publish' ) {
+			if ( get_post_status ( $instance['skin_id'] ) == 'publish' && ! post_password_required( (int) $instance['skin_id'] ) ) {
 				$skin_active = true;
 
 				$geodir_item_tmpl = array( 'id' => $instance['skin_id'], 'type' => 'elementor_skin' );

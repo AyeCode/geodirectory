@@ -219,6 +219,20 @@ class GeoDir_Template_Loader {
 				$wp_query->is_page = 1;
 				$wp_query->is_archive = 1;
 				$wp_query->is_search = 1;
+
+				/*
+				 * is_page() & is_front_page() read the queried object when is_page is set,
+				 * so point it to the search page to prevent PHP warnings.
+				 */
+				if ( ! ( $wp_query->get_queried_object() instanceof WP_Post ) ) {
+					$search_page_id = (int) geodir_search_page_id();
+					$search_page    = $search_page_id ? get_post( $search_page_id ) : null;
+
+					if ( $search_page instanceof WP_Post ) {
+						$wp_query->queried_object = $search_page;
+						$wp_query->queried_object_id = (int) $search_page->ID;
+					}
+				}
 			}
 		}
 

@@ -240,7 +240,7 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 		$design_style = geodir_design_style();
 
 		$key = $instance['key'];
-		$css_class = 'geodir-cpt-meta geodir-meta-' . $key;
+		$css_class = 'geodir-cpt-meta geodir-meta-' . sanitize_html_class( $key );
 
 		if ( $instance['css_class'] != '' ) {
 			$css_class .= " " . geodir_sanitize_html_class( $instance['css_class'] );

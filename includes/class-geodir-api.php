@@ -487,7 +487,13 @@ class GeoDir_API {
 			$orderby = GeoDir_Query::sort_by_children( $orderby, $sort_by, $post_type, $wp_query );
 		}
 
-		return apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $wp_query );
+		$orderby = apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $wp_query );
+
+		if ( $orderby ) {
+			$orderby = GeoDir_Query::add_unique_sort( $orderby, $sort_by, $post_type, $wp_query );
+		}
+
+		return $orderby;
 	}
 
     /**

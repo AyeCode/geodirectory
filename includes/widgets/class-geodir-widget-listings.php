@@ -1162,6 +1162,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			}
 		}
 
+		if ( ! ( isset( $instance['pagination_info'] ) && is_scalar( $instance['pagination_info'] ) && in_array( $instance['pagination_info'], array( 'before', 'after', 'inline_before', 'inline_after', 'only' ), true ) ) ) {
+			$instance['pagination_info'] = '';
+		}
+
 		$view_all_link         = ! empty( $instance['view_all_link'] ) ? true : false;
 		$use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
 		$use_viewing_term      = ! empty( $instance['use_viewing_term'] ) ? true : false;
@@ -1244,7 +1248,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		}
 
 		$geodir_item_tmpl = array();
-		if ( ! empty( $template_page ) && get_post_type( $template_page ) == 'page' && get_post_status( $template_page ) == 'publish' ) {
+		if ( ! empty( $template_page ) && get_post_type( $template_page ) == 'page' && get_post_status( $template_page ) == 'publish' && ! post_password_required( (int) $template_page ) ) {
 			$geodir_item_tmpl = array(
 				'id'   => $template_page,
 				'type' => 'page',
@@ -1709,7 +1713,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$skin_active             = false;
 		$elementor_wrapper_class = '';
 		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $skin_id ) {
-			if ( get_post_status( $skin_id ) == 'publish' ) {
+			if ( get_post_status( $skin_id ) == 'publish' && ! post_password_required( $skin_id ) ) {
 				$skin_active = true;
 
 				$geodir_item_tmpl = array(
@@ -1997,6 +2001,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$wp_query->is_paged      = true;
 
 		add_filter( 'geodir_pagination_args', array( __CLASS__, 'filter_pagination_args' ), 999999, 1 );
+
+		if ( ! ( is_scalar( $show_advanced ) && in_array( $show_advanced, array( 'before', 'after', 'inline_before', 'inline_after', 'only' ), true ) ) ) {
+			$show_advanced = '';
+		}
 
 		if ( wp_is_mobile() && $show_advanced ) {
 			$show_advanced = str_replace( 'inline_', '', $show_advanced );

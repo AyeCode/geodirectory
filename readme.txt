@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.8.198
+Stable tag: 2.8.199
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -328,6 +328,11 @@ Please include as much relevant information as possible and avoid publicly discl
 wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](https://wp-rankings.com/plugins/geodirectory)
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
+
+= GeoDirectory v2.8.199 - 2026-10-29 =
+* Validate listings widget advanced pagination info to prevent shortcode injection - FIXED/SECURITY
+* PHP warnings from is_page() & is_front_page() on search results page - FIXED
+* Listings with equal sort values shown twice or missing when paging results - FIXED
 
 = GeoDirectory v2.8.198 - 2026-10-27 =
 * Auto-drafts deleted by WP cron leave orphaned rows in the CPT detail table - FIXED
