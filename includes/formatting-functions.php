@@ -429,6 +429,7 @@ function geodir_sanitize_html_field( $str, $allowed_html = NULL ) {
 	$filtered = wp_kses( $filtered, $allowed_html );
 	$filtered = balanceTags( $filtered ); // Balances tags
 	$filtered = geodir_kses_safe_embed_attributes( $filtered ); // Neutralize dangerous protocols in embed data-* attributes.
+	$filtered = geodir_kses_safe_aui_attributes( $filtered ); // Neutralize AUI popover-html triggers (rendered unsanitized).
 
 	/**
 	 * Filter a sanitized html field string.
@@ -501,6 +502,55 @@ function geodir_kses_safe_embed_attributes( $str ) {
 	}, $str );
 
 	return null === $filtered ? $str : $filtered;
+}
+
+/**
+ * Neutralize AyeCode UI HTML popover triggers in user supplied content.
+ *
+ * @since 2.8.200
+ *
+ * @param string $str HTML content.
+ * @return string Content with unsafe AUI toggle values neutralized.
+ */
+function geodir_kses_safe_aui_attributes( $str ) {
+	if ( ! is_string( $str ) || $str === '' || stripos( $str, 'toggle' ) === false ) {
+		return $str;
+	}
+
+	// data-toggle / data-bs-toggle with a double quoted, single quoted or unquoted value.
+	$pattern = '#(?<![\w\-])(data-(?:bs-)?toggle)\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#i';
+
+	$filtered = preg_replace_callback( $pattern, function( $matches ) {
+		$value = $matches[2];
+		$quote = ( $value[0] === '"' || $value[0] === "'" ) ? $value[0] : '';
+
+		if ( $quote ) {
+			$value = substr( $value, 1, -1 );
+		}
+
+		// Toggle values never need entities, so treat any entity as an obfuscation attempt.
+		if ( strpos( $value, '&' ) === false && stripos( $value, 'popover-html' ) === false ) {
+			return $matches[0];
+		}
+
+		$quote = $quote ? $quote : '"';
+
+		return $matches[1] . '=' . $quote . 'popover' . $quote;
+	}, $str );
+
+	if ( null === $filtered ) {
+		$filtered = $str;
+	}
+
+	/**
+	 * Filter the content after unsafe AUI toggle attributes are neutralized.
+	 *
+	 * @since 2.8.200
+	 *
+	 * @param string $filtered Filtered content.
+	 * @param string $str      Original content.
+	 */
+	return apply_filters( 'geodir_kses_safe_aui_attributes', $filtered, $str );
 }
 
 /**

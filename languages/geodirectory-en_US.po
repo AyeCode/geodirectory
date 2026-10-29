@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.199\n"
+"Project-Id-Version: GeoDirectory 2.8.200\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-29 20:02+0530\n"
-"PO-Revision-Date: 2026-10-29 20:03+0530\n"
+"POT-Creation-Date: 2026-10-29 22:04+0530\n"
+"PO-Revision-Date: 2026-10-29 22:04+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -940,7 +940,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:514
 #: includes/admin/settings/class-geodir-settings-general.php:557
 #: includes/admin/settings/class-geodir-settings-general.php:599
-#: includes/class-geodir-post-data.php:1749 includes/core-functions.php:373
+#: includes/class-geodir-post-data.php:1750 includes/core-functions.php:373
 #: includes/widgets/class-geodir-widget-add-listing.php:329
 #: includes/widgets/class-geodir-widget-az-search.php:45
 #: includes/widgets/class-geodir-widget-az-search.php:94
@@ -1581,8 +1581,8 @@ msgstr ""
 #: includes/admin/dummy-data/job_board.php:572
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:418
 #: includes/class-geodir-comments.php:95
-#: includes/class-geodir-post-data.php:994
-#: includes/class-geodir-post-data.php:1011
+#: includes/class-geodir-post-data.php:995
+#: includes/class-geodir-post-data.php:1012
 #: includes/widgets/class-geodir-widget-ninja-forms.php:429 language.php:35
 #: language.php:55 language.php:128 language.php:144
 msgid "Email"
@@ -1659,7 +1659,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1134
 #: includes/admin/dummy-data/classifieds.php:914
-#: includes/class-geodir-post-data.php:928
+#: includes/class-geodir-post-data.php:929
 msgid "Listing"
 msgstr ""
 
@@ -1698,7 +1698,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1190
 #: includes/admin/class-geodir-admin-dummy-data.php:1192
 #: includes/admin/class-geodir-admin-dummy-data.php:1201
-#: includes/class-geodir-post-data.php:1755
+#: includes/class-geodir-post-data.php:1756
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1034
 #: includes/widgets/class-geodir-widget-simple-archive.php:427 language.php:59
 #: language.php:179
@@ -1712,7 +1712,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1210
 #: includes/admin/class-geodir-admin-dummy-data.php:1212
 #: includes/admin/class-geodir-admin-dummy-data.php:1222
-#: includes/class-geodir-post-data.php:1752
+#: includes/class-geodir-post-data.php:1753
 #: includes/custom-fields/functions.php:677 includes/post-functions.php:2390
 msgid "Address"
 msgstr ""
@@ -5855,8 +5855,8 @@ msgstr ""
 #: includes/admin/views/html-admin-page-status-report.php:581
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:22
 #: includes/class-geodir-comments.php:79
-#: includes/class-geodir-post-data.php:980
-#: includes/class-geodir-post-data.php:1005 language.php:33 language.php:127
+#: includes/class-geodir-post-data.php:981
+#: includes/class-geodir-post-data.php:1006 language.php:33 language.php:127
 msgid "Name"
 msgstr ""
 
@@ -11970,8 +11970,8 @@ msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
 #: includes/class-geodir-post-data.php:433
-#: includes/class-geodir-post-data.php:1475
-#: includes/class-geodir-post-data.php:1818
+#: includes/class-geodir-post-data.php:1476
+#: includes/class-geodir-post-data.php:1819
 msgid "Invalid post!"
 msgstr ""
 
@@ -11985,11 +11985,11 @@ msgstr ""
 msgid "Could not insert post into the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:874
+#: includes/class-geodir-post-data.php:875
 msgid "You do not have permission to edit this post."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:892
+#: includes/class-geodir-post-data.php:893
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -11997,7 +11997,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:914
+#: includes/class-geodir-post-data.php:915
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -12005,99 +12005,99 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:971
-#: includes/class-geodir-post-data.php:1003
+#: includes/class-geodir-post-data.php:972
+#: includes/class-geodir-post-data.php:1004
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:982
-#: includes/class-geodir-post-data.php:1007
+#: includes/class-geodir-post-data.php:983
+#: includes/class-geodir-post-data.php:1008
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:996
-#: includes/class-geodir-post-data.php:1013
+#: includes/class-geodir-post-data.php:997
+#: includes/class-geodir-post-data.php:1014
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1038 language.php:36
+#: includes/class-geodir-post-data.php:1039 language.php:36
 msgid "Enter Listing Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1079
-#: includes/class-geodir-post-data.php:1083
+#: includes/class-geodir-post-data.php:1080
+#: includes/class-geodir-post-data.php:1084
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1089
+#: includes/class-geodir-post-data.php:1090
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1107
+#: includes/class-geodir-post-data.php:1108
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1297
+#: includes/class-geodir-post-data.php:1298
 msgid "You do not have permission to delete this post revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1303
+#: includes/class-geodir-post-data.php:1304
 msgid "The requested item is not a valid post revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1310
+#: includes/class-geodir-post-data.php:1311
 msgid "The requested post is not a valid post type."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1321
+#: includes/class-geodir-post-data.php:1322
 msgid "Could not delete the post revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1410
-#: includes/class-geodir-post-data.php:1737
+#: includes/class-geodir-post-data.php:1411
+#: includes/class-geodir-post-data.php:1738
 msgid "You do not have the privileges to perform this action."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1644
+#: includes/class-geodir-post-data.php:1645
 msgid "User name must have atleast 3 characters."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1646
+#: includes/class-geodir-post-data.php:1647
 msgid "Invalid user email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1672
+#: includes/class-geodir-post-data.php:1673
 msgid "Something wrong! Fail to register a new user."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1759
+#: includes/class-geodir-post-data.php:1760
 #, php-format
 msgid "%s is empty but is a mandatory field, please check and try again."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1873
+#: includes/class-geodir-post-data.php:1874
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1876
+#: includes/class-geodir-post-data.php:1877
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1883
+#: includes/class-geodir-post-data.php:1884
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1889
+#: includes/class-geodir-post-data.php:1890
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:2011
+#: includes/class-geodir-post-data.php:2012
 msgid "Indicates mandatory fields"
 msgstr ""
 
