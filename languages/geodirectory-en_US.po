@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoDirectory 2.8.199\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 19:59+0530\n"
-"PO-Revision-Date: 2026-10-29 20:02+0530\n"
+"POT-Creation-Date: 2026-10-29 20:02+0530\n"
+"PO-Revision-Date: 2026-10-29 20:03+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -251,7 +251,7 @@ msgid "Zip/Post Code"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:899
-#: includes/admin/class-geodir-admin-install.php:325
+#: includes/admin/class-geodir-admin-install.php:335
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:515
 #: includes/api/class-geodir-rest-posts-controller.php:2254
 #: includes/widgets/class-geodir-widget-map.php:66
@@ -1444,8 +1444,8 @@ msgid "Statistics"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dashboard.php:168
-#: includes/widgets/class-geodir-widget-best-of.php:785
-#: includes/widgets/class-geodir-widget-listings.php:1810
+#: includes/widgets/class-geodir-widget-best-of.php:799
+#: includes/widgets/class-geodir-widget-listings.php:1814
 #: includes/widgets/class-geodir-widget-recently-viewed.php:453
 #: templates/bootstrap/map/map.php:53
 msgid "Loading..."
@@ -1638,7 +1638,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1083
 #: includes/admin/class-geodir-admin-dummy-data.php:1091
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:795
-#: includes/general-functions.php:2767
+#: includes/general-functions.php:2772
 msgid "Video"
 msgstr ""
 
@@ -2048,16 +2048,22 @@ msgstr ""
 msgid "invalid data."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:299
+#: includes/admin/class-geodir-admin-install.php:131
+#: includes/class-geodir-classifieds.php:306
+#: includes/class-geodir-classifieds.php:353
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: includes/admin/class-geodir-admin-install.php:309
 msgid "Profile"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:312
+#: includes/admin/class-geodir-admin-install.php:322
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:524
 msgid "Photos"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:338
+#: includes/admin/class-geodir-admin-install.php:348
 #: includes/admin/dashboard-functions.php:278
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:506
 #: includes/admin/settings/class-geodir-settings-design.php:49
@@ -2067,92 +2073,92 @@ msgstr ""
 msgid "Reviews"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:444
+#: includes/admin/class-geodir-admin-install.php:454
 #: includes/class-geodir-compatibility.php:290
 msgid "Once Monthly"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:470
+#: includes/admin/class-geodir-admin-install.php:480
 msgctxt "Page slug"
 msgid "add-listing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:471
+#: includes/admin/class-geodir-admin-install.php:481
 msgctxt "Page title"
 msgid "Add Listing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:475
+#: includes/admin/class-geodir-admin-install.php:485
 msgctxt "Page slug"
 msgid "search"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:476
+#: includes/admin/class-geodir-admin-install.php:486
 msgctxt "Page title"
 msgid "Search page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:480
+#: includes/admin/class-geodir-admin-install.php:490
 msgctxt "Page slug"
 msgid "terms-and-conditions"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:481
+#: includes/admin/class-geodir-admin-install.php:491
 msgctxt "Page title"
 msgid "Terms and Conditions"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:482
+#: includes/admin/class-geodir-admin-install.php:492
 #: includes/admin/settings/class-geodir-settings-general.php:325
 #: includes/class-geodir-block-theme.php:160
 msgid "ENTER YOUR SITE TERMS AND CONDITIONS HERE"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:485
+#: includes/admin/class-geodir-admin-install.php:495
 msgctxt "Page slug"
 msgid "location"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:486
+#: includes/admin/class-geodir-admin-install.php:496
 msgctxt "Page title"
 msgid "Location"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:490
+#: includes/admin/class-geodir-admin-install.php:500
 msgctxt "Page slug"
 msgid "gd-archive"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:491
+#: includes/admin/class-geodir-admin-install.php:501
 msgctxt "Page title"
 msgid "GD Archive"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:495
+#: includes/admin/class-geodir-admin-install.php:505
 msgctxt "Page slug"
 msgid "gd-archive-item"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:496
+#: includes/admin/class-geodir-admin-install.php:506
 msgctxt "Page title"
 msgid "GD Archive Item"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:500
+#: includes/admin/class-geodir-admin-install.php:510
 msgctxt "Page slug"
 msgid "gd-details"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:501
+#: includes/admin/class-geodir-admin-install.php:511
 msgctxt "Page title"
 msgid "GD Details"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:881
+#: includes/admin/class-geodir-admin-install.php:891
 msgid "View GeoDirectory settings"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:881
+#: includes/admin/class-geodir-admin-install.php:891
 #: includes/admin/class-geodir-admin-menus.php:130
 #: includes/admin/class-geodir-admin-menus.php:139
 #: includes/admin/settings/class-geodir-settings-api.php:43
@@ -2163,38 +2169,38 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:897
+#: includes/admin/class-geodir-admin-install.php:907
 msgid "View GeoDirectory documentation"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:897
+#: includes/admin/class-geodir-admin-install.php:907
 msgid "Docs"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:898
+#: includes/admin/class-geodir-admin-install.php:908
 msgid "Visit GeoDirectory support"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:898
+#: includes/admin/class-geodir-admin-install.php:908
 msgid "Support"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:899
+#: includes/admin/class-geodir-admin-install.php:909
 msgid "View translations"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:899
+#: includes/admin/class-geodir-admin-install.php:909
 msgid "Translations"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:1081
+#: includes/admin/class-geodir-admin-install.php:1091
 #, php-format
 msgid ""
 "%1$s could not be installed (%2$s). <a href=\"%3$s\">Please install it "
 "manually by clicking here.</a>"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:1107
+#: includes/admin/class-geodir-admin-install.php:1117
 #, php-format
 msgid ""
 "%1$s was installed but could not be activated. <a href=\"%2$s\">Please "
@@ -2478,7 +2484,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:310
 #: includes/admin/views/html-keys-edit.php:12
-#: includes/class-geodir-ajax.php:1406 includes/user-functions.php:213
+#: includes/class-geodir-ajax.php:1406 includes/user-functions.php:217
 #, php-format
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
@@ -2798,7 +2804,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:1666
 #: includes/admin/views/html-notice-v2-update.php:194
-#: includes/core-functions.php:353 includes/general-functions.php:2766
+#: includes/core-functions.php:353 includes/general-functions.php:2771
 #: vendor/ayecode/wp-deactivation-survey/wp-deactivation-survey.php:69
 msgid "Documentation"
 msgstr ""
@@ -4469,7 +4475,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:390
 #: includes/elementor/class-geodir-elementor-form-contact.php:96
 #: includes/elementor/class-geodir-elementor-form-contact.php:404
-#: includes/general-functions.php:2671 language.php:53
+#: includes/general-functions.php:2676 language.php:53
 msgid "Time"
 msgstr ""
 
@@ -10933,11 +10939,6 @@ msgstr ""
 msgid "Undo Sold"
 msgstr ""
 
-#: includes/class-geodir-classifieds.php:306
-#: includes/class-geodir-classifieds.php:353
-msgid "You do not have permission to perform this action."
-msgstr ""
-
 #: includes/class-geodir-classifieds.php:314
 msgid "Failed to perform action \"Mark as Sale Agreed\"."
 msgstr ""
@@ -11598,7 +11599,7 @@ msgstr ""
 
 #: includes/class-geodir-frontend-scripts.php:119
 #: includes/core-functions.php:293
-#: includes/widgets/class-geodir-widget-listings.php:1347
+#: includes/widgets/class-geodir-widget-listings.php:1351
 msgid "Near:"
 msgstr ""
 
@@ -12698,18 +12699,18 @@ msgstr ""
 msgid "Could not save report post."
 msgstr ""
 
-#: includes/class-geodir-seo.php:639 includes/general-functions.php:2041
+#: includes/class-geodir-seo.php:639 includes/general-functions.php:2046
 #, php-format
 msgctxt "in category"
 msgid "in %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:699 includes/general-functions.php:2132
+#: includes/class-geodir-seo.php:699 includes/general-functions.php:2137
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:715 includes/general-functions.php:2145
+#: includes/class-geodir-seo.php:715 includes/general-functions.php:2150
 #, php-format
 msgid "near %s"
 msgstr ""
@@ -13687,8 +13688,8 @@ msgstr ""
 #: includes/custom-fields/input-functions.php:1520
 #: includes/custom-fields/input-functions.php:1590
 #: includes/taxonomy-functions.php:282
-#: includes/widgets/class-geodir-widget-best-of.php:619
-#: includes/widgets/class-geodir-widget-best-of.php:621
+#: includes/widgets/class-geodir-widget-best-of.php:630
+#: includes/widgets/class-geodir-widget-best-of.php:632
 msgid "Select Category"
 msgstr ""
 
@@ -14195,7 +14196,7 @@ msgstr ""
 msgid "First"
 msgstr ""
 
-#: includes/general-functions.php:248 includes/general-functions.php:2674
+#: includes/general-functions.php:248 includes/general-functions.php:2679
 msgid "Second"
 msgstr ""
 
@@ -14211,126 +14212,126 @@ msgstr ""
 msgid "Last"
 msgstr ""
 
-#: includes/general-functions.php:633
+#: includes/general-functions.php:631
 msgid "Given image size is not valid"
 msgstr ""
 
-#: includes/general-functions.php:2280
+#: includes/general-functions.php:2285
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: includes/general-functions.php:2670
+#: includes/general-functions.php:2675
 msgid "Choose Time"
 msgstr ""
 
-#: includes/general-functions.php:2672
+#: includes/general-functions.php:2677
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2471
 msgid "Hour"
 msgstr ""
 
-#: includes/general-functions.php:2673
+#: includes/general-functions.php:2678
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2472
 msgid "Minute"
 msgstr ""
 
-#: includes/general-functions.php:2675
+#: includes/general-functions.php:2680
 msgid "Millisecond"
 msgstr ""
 
-#: includes/general-functions.php:2676
+#: includes/general-functions.php:2681
 msgid "Microsecond"
 msgstr ""
 
-#: includes/general-functions.php:2677
+#: includes/general-functions.php:2682
 msgid "Time Zone"
 msgstr ""
 
-#: includes/general-functions.php:2678
+#: includes/general-functions.php:2683
 msgid "Now"
 msgstr ""
 
-#: includes/general-functions.php:2679
+#: includes/general-functions.php:2684
 msgid "Done"
 msgstr ""
 
-#: includes/general-functions.php:2680 includes/helper-functions.php:709
+#: includes/general-functions.php:2685 includes/helper-functions.php:709
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2466
 msgid "AM"
 msgstr ""
 
-#: includes/general-functions.php:2681 includes/helper-functions.php:710
+#: includes/general-functions.php:2686 includes/helper-functions.php:710
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2467
 msgid "PM"
 msgstr ""
 
-#: includes/general-functions.php:2709
+#: includes/general-functions.php:2714
 msgid "View: Grid 1"
 msgstr ""
 
-#: includes/general-functions.php:2709
+#: includes/general-functions.php:2714
 msgid "Grid View (One Column)"
 msgstr ""
 
-#: includes/general-functions.php:2710
+#: includes/general-functions.php:2715
 msgid "View: Grid 2"
 msgstr ""
 
-#: includes/general-functions.php:2710
+#: includes/general-functions.php:2715
 msgid "Grid View (Two Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2711
+#: includes/general-functions.php:2716
 msgid "View: Grid 3"
 msgstr ""
 
-#: includes/general-functions.php:2711
+#: includes/general-functions.php:2716
 msgid "Grid View (Three Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2712
+#: includes/general-functions.php:2717
 msgid "View: Grid 4"
 msgstr ""
 
-#: includes/general-functions.php:2712
+#: includes/general-functions.php:2717
 msgid "Grid View (Four Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2713
+#: includes/general-functions.php:2718
 msgid "View: Grid 5"
 msgstr ""
 
-#: includes/general-functions.php:2713
+#: includes/general-functions.php:2718
 msgid "Grid View (Five Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2714
+#: includes/general-functions.php:2719
 #: templates/bootstrap/loop/select-layout.php:108
 #: templates/loop/select-layout.php:118
 msgid "View: List"
 msgstr ""
 
-#: includes/general-functions.php:2714
+#: includes/general-functions.php:2719
 msgid "List view"
 msgstr ""
 
-#: includes/general-functions.php:2765
+#: includes/general-functions.php:2770
 msgid "Disable hints"
 msgstr ""
 
-#: includes/general-functions.php:2768
+#: includes/general-functions.php:2773
 msgid "Feedback"
 msgstr ""
 
-#: includes/general-functions.php:2769
+#: includes/general-functions.php:2774
 msgid "Admin Hints:"
 msgstr ""
 
-#: includes/general-functions.php:2829 includes/general-functions.php:2843
+#: includes/general-functions.php:2834 includes/general-functions.php:2848
 msgid "meters"
 msgstr ""
 
-#: includes/general-functions.php:2832 includes/general-functions.php:2846
+#: includes/general-functions.php:2837 includes/general-functions.php:2851
 msgid "feet"
 msgstr ""
 
@@ -15307,7 +15308,7 @@ msgstr ""
 msgid "Select Template Part..."
 msgstr ""
 
-#: includes/user-functions.php:200 includes/user-functions.php:206
+#: includes/user-functions.php:204 includes/user-functions.php:210
 #, php-format
 msgctxt "user dropdown"
 msgid "%1$s (%2$s)"
@@ -16155,15 +16156,15 @@ msgid "Set the card shadow style."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:417
-#: includes/widgets/class-geodir-widget-best-of.php:746
-#: includes/widgets/class-geodir-widget-best-of.php:748
+#: includes/widgets/class-geodir-widget-best-of.php:760
+#: includes/widgets/class-geodir-widget-best-of.php:762
 #, php-format
 msgid "Best of %s"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-best-of.php:748
-#: includes/widgets/class-geodir-widget-best-of.php:777
-#: includes/widgets/class-geodir-widget-listings.php:1838
+#: includes/widgets/class-geodir-widget-best-of.php:762
+#: includes/widgets/class-geodir-widget-best-of.php:791
+#: includes/widgets/class-geodir-widget-listings.php:1842
 msgid "View all"
 msgstr ""
 
@@ -17258,16 +17259,16 @@ msgstr ""
 msgid "Show center slide and left/right slide with half preview."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1347
+#: includes/widgets/class-geodir-widget-listings.php:1351
 msgid "Me"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1532
+#: includes/widgets/class-geodir-widget-listings.php:1536
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:1740
+#: includes/widgets/class-geodir-widget-listings.php:1744
 #: includes/widgets/class-geodir-widget-loop.php:347
 msgid ""
 "This preview shows all content items to give an idea of layout. Dummy data "
@@ -18198,92 +18199,92 @@ msgid ""
 "<span class=\"dashicons-before dashicons-admin-site\"> GeoDirectory</span>"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:535
+#: includes/widgets/class-geodir-widget-ninja-forms.php:553
 msgid "GeoDirectory Contact Form"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:536
+#: includes/widgets/class-geodir-widget-ninja-forms.php:554
 msgid ""
 "Allow your users to contact the listing owners. You can add and remove "
 "fields as needed."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:553
+#: includes/widgets/class-geodir-widget-ninja-forms.php:571
 msgctxt "GD ninja form"
 msgid "GeoDirectory Contact Form"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:686
+#: includes/widgets/class-geodir-widget-ninja-forms.php:704
 msgctxt "GD ninja form"
 msgid "Listing ID"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:697
+#: includes/widgets/class-geodir-widget-ninja-forms.php:715
 msgctxt "GD ninja form"
 msgid "Contact"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:718
+#: includes/widgets/class-geodir-widget-ninja-forms.php:736
 msgctxt "GD ninja form"
 msgid "<p>This is for your reference only and can't be changed.</p>"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:731
+#: includes/widgets/class-geodir-widget-ninja-forms.php:749
 msgctxt "GD ninja form"
 msgid "Name"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:802
+#: includes/widgets/class-geodir-widget-ninja-forms.php:820
 msgctxt "GD ninja form"
 msgid "Email"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:869
+#: includes/widgets/class-geodir-widget-ninja-forms.php:887
 msgctxt "GD ninja form"
 msgid "Phone"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:889
+#: includes/widgets/class-geodir-widget-ninja-forms.php:907
 msgctxt "GD ninja form"
 msgid "Message"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:961
+#: includes/widgets/class-geodir-widget-ninja-forms.php:979
 msgctxt "GD ninja form"
 msgid "Submit"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:966
+#: includes/widgets/class-geodir-widget-ninja-forms.php:984
 msgctxt "GD ninja form"
 msgid "Processing"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:1107
+#: includes/widgets/class-geodir-widget-ninja-forms.php:1125
 msgctxt "GD ninja form"
 msgid "Submission Confirmation"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:1108
+#: includes/widgets/class-geodir-widget-ninja-forms.php:1126
 msgctxt "GD ninja form"
 msgid "<p>{all_fields_table}<br></p>"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:1152
+#: includes/widgets/class-geodir-widget-ninja-forms.php:1170
 msgctxt "GD ninja form"
 msgid "New contact form: {wp:site_title}"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:1153
+#: includes/widgets/class-geodir-widget-ninja-forms.php:1171
 msgctxt "GD ninja form"
 msgid "<p>{all_fields_table}</p><p>-{field:name} ( {field:email} )</p>"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:1169
+#: includes/widgets/class-geodir-widget-ninja-forms.php:1187
 msgctxt "GD ninja form"
 msgid "Thank you {field:name} your contact form has been sent to the user!"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:1208
+#: includes/widgets/class-geodir-widget-ninja-forms.php:1226
 msgctxt "GD ninja form"
 msgid ""
 "<p>Form submitted successfully.</p><p>A confirmation email was sent to "
