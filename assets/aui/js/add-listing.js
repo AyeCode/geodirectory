@@ -272,7 +272,8 @@ function geodir_save_post() {
                         window.location = data.data.redirect_to;
                     }
                 } else {
-                    $container = jQuery('#gd-add-listing-replace-container').length ? jQuery('#gd-add-listing-replace-container').val() : '#geodirectory-add-post';
+                    $container = jQuery('#gd-add-listing-replace-container').val() || '';
+                    $container = $container && jQuery($container).length ? $container : '#geodirectory-add-post';
                     jQuery($container).replaceWith(data.data); // remove the form and replace with the notification
                     jQuery(window).scrollTop(jQuery('.gd-notification').offset().top - 100); // scroll to new notification
                 }
