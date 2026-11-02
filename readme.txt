@@ -332,6 +332,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 = GeoDirectory v2.8.201 - TBD =
 * Strip nested shortcodes & sanitize Dynamic Content widget html to prevent XSS - FIXED/SECURITY
 * Validate add listing replace container selector to prevent JS error - FIXED
+* Update AUI 0.2.59 - CHANGED
 
 = GeoDirectory v2.8.200 - 2026-10-29 =
 * Sanitize popover-html attributes in listing description to prevent XSS - FIXED/SECURITY
