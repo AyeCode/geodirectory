@@ -441,12 +441,15 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				}
 
 				if ( ! ( ! empty( $output ) || $output === '0' ) && $is_preview && ( $args['html'] || $args['html'] === '0' ) ) {
-					$output = $args['html'];
+					$output = geodir_sanitize_html_field( wp_slash( $args['html'] ) );
 				}
 
 				// Replace other post variables
 				if ( ! empty( $html ) || $html === '0' ) {
 					$html = geodir_replace_variables( $html, $post_id );
+
+					// Sanitize after all %%variables%% are replaced, so field values.
+					$html = geodir_sanitize_html_field( wp_slash( $html ) );
 
 					if ( ! empty( $html ) || $html === '0' ) {
 						if ( $is_preview || $block_preview ) {
@@ -460,7 +463,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		}
 
 		if ( ! ( ! empty( $output ) || $output === '0' ) && $is_preview && ( $args['html'] || $args['html'] === '0' ) ) {
-			$output = $args['html'];
+			$output = geodir_sanitize_html_field( wp_slash( $args['html'] ) );
 		}
 
 		return $output;

@@ -636,8 +636,27 @@ function geodir_strip_shortcodes( $content ) {
 	}
 
 	if ( $strip ) {
-		// Strip shortcodes.
-		$filtered = trim( strip_shortcodes( $content ) );
+		// strip_shortcodes() makes a single pass, so a nested shortcode such as
+		// [gd_dynamic_conten[gd_tags]t ...] rebuilds a working shortcode once the
+		// inner one is removed. Keep stripping until the content stops changing.
+		$filtered = $content;
+		$max_passes = 20;
+
+		for ( $pass = 0; $pass < $max_passes; $pass++ ) {
+			$previous = $filtered;
+			$filtered = strip_shortcodes( $filtered );
+
+			if ( $filtered === $previous ) {
+				break;
+			}
+		}
+
+		// Still changing after the pass limit: disable any remaining shortcode brackets.
+		if ( $filtered !== $previous ) {
+			$filtered = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $filtered );
+		}
+
+		$filtered = trim( $filtered );
 	} else {
 		$filtered = $content;
 	}
