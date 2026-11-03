@@ -329,6 +329,10 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+
+= GeoDirectory v2.8.202 - TBD =
+* Validated column names and escaped values in post meta get/save/delete functions - FIXED
+
 = GeoDirectory v2.8.201 - 2026-11-02 =
 * Strip nested shortcodes & sanitize Dynamic Content widget html to prevent XSS - FIXED/SECURITY
 * Validate add listing replace container selector to prevent JS error - FIXED
