@@ -2063,6 +2063,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 				// clear cache
 				delete_transient( 'geodir_post_custom_fields' );
+				geodir_flush_detail_table_columns( $table );
 
 				return $field_id;
 			} else {

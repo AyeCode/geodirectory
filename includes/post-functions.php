@@ -90,139 +90,231 @@ function geodir_get_post_info( $post_id = '', $cached = true ) {
 }
 
 /**
- * Save or update post custom fields.
+ * Save or update a single detail table column for a listing.
  *
  * @since 1.0.0
- * @package GeoDirectory
+ *
  * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
- * @param int $post_id The post ID.
- * @param string $postmeta Detail table column name.
- * @param string $meta_value Detail table column value.
+ * @param int          $post_id    The post ID.
+ * @param string       $postmeta   Detail table column name.
+ * @param string|array $meta_value Detail table column value. Arrays are saved as a comma separated list.
  *
- * @return void|bool
+ * @return bool True on success, false on failure.
  */
 function geodir_save_post_meta( $post_id, $postmeta = '', $meta_value = '' ) {
+	global $wpdb;
 
-	global $wpdb, $plugin_prefix;
+	$post_id  = absint( $post_id );
+	$postmeta = is_string( $postmeta ) ? trim( $postmeta ) : '';
 
-	$post_type = get_post_type( $post_id );
-
-	$table = $plugin_prefix . $post_type . '_detail';
-
-	if ( $postmeta != '' && geodir_column_exist( $table, $postmeta ) && $post_id ) {
-
-		if ( is_array( $meta_value ) ) {
-			$meta_value = implode( ",", $meta_value );
-		}
-
-		if ( $wpdb->get_var( $wpdb->prepare( "SELECT post_id from " . $table . " where post_id = %d", array( $post_id ) ) ) ) {
-
-			$wpdb->query(
-				$wpdb->prepare(
-					"UPDATE " . $table . " SET " . $postmeta . " = '" . $meta_value . "' where post_id =%d",
-					array( $post_id )
-				)
-			);
-
-		} else {
-
-			$wpdb->query(
-				$wpdb->prepare(
-					"INSERT INTO " . $table . " SET post_id = %d, " . $postmeta . " = '" . $meta_value . "'",
-					array( $post_id )
-				)
-			);
-		}
-
-		// clear the post cache
-		wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
-
-	} else {
+	// Never allow the primary key to be changed, that would move the detail row to another post.
+	if ( ! $post_id || $postmeta === '' || $postmeta === 'post_id' ) {
 		return false;
 	}
-}
-
-
-/**
- * Delete post custom fields.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- *
- * @param int $post_id The post ID.
- * @param string $postmeta Detail table column name.
- *
- * @return bool
- */
-function geodir_delete_post_meta( $post_id, $postmeta ) {
-
-	global $wpdb, $plugin_prefix;
 
 	$post_type = get_post_type( $post_id );
 
-	$table = $plugin_prefix . $post_type . '_detail';
+	if ( ! $post_type || ! geodir_is_gd_post_type( $post_type ) ) {
+		return false;
+	}
 
-	// clear the post cache
+	$table = geodir_db_cpt_table( $post_type );
+
+	if ( empty( $table ) ) {
+		return false;
+	}
+
+	if ( ! geodir_detail_table_column_exists( $table, $postmeta ) ) {
+		return false;
+	}
+
+	if ( is_array( $meta_value ) ) {
+		$meta_value = implode( ',', array_map( 'geodir_save_post_meta_scalar', $meta_value ) );
+	} else {
+		$meta_value = geodir_save_post_meta_scalar( $meta_value );
+	}
+
+	$column = geodir_detail_table_column_sql( $postmeta );
+
+	$result = $wpdb->query(
+		$wpdb->prepare(
+			"INSERT INTO `{$table}` (`post_id`, {$column}) VALUES (%d, %s) ON DUPLICATE KEY UPDATE {$column} = %s",
+			$post_id,
+			$meta_value,
+			$meta_value
+		)
+	);
+
+	if ( false === $result ) {
+		return false;
+	}
+
+	// Clear the post cache.
 	wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
 
-	if ( is_array( $postmeta ) && ! empty( $postmeta ) && $post_id ) {
-		$post_meta_set_query = '';
+	return true;
+}
 
-		foreach ( $postmeta as $mkey ) {
-			if ( $mkey != '' ) {
-				$post_meta_set_query .= $mkey . " = '', ";
-			}
-		}
+/**
+ * Convert a value to the string saved by geodir_save_post_meta().
+ *
+ * @since 2.8.202
+ *
+ * @param mixed $value The value.
+ * @return string The value as a string.
+ */
+function geodir_save_post_meta_scalar( $value ) {
+	return is_scalar( $value ) ? (string) $value : '';
+}
 
-		$post_meta_set_query = trim( $post_meta_set_query, ", " );
+/**
+ * Clear one or more detail table columns for a listing.
+ *
+ * @since 1.0.0
+ * @global object $wpdb WordPress Database object.
+ *
+ * @param int          $post_id  The post ID.
+ * @param string|array $postmeta Detail table column name, or an array of column names.
+ *
+ * @return bool True on success, false on failure or when no valid column was given.
+ */
+function geodir_delete_post_meta( $post_id, $postmeta ) {
+	global $wpdb;
 
-		if ( empty( $post_meta_set_query ) || trim( $post_meta_set_query ) == '' ) {
-			return false;
-		}
+	$post_id = absint( $post_id );
 
-		if ( $wpdb->get_var( "SHOW COLUMNS FROM " . $table . " WHERE field = '" . $postmeta . "'" ) != '' ) {
-
-			$wpdb->query(
-				$wpdb->prepare(
-					"UPDATE " . $table . " SET " . $post_meta_set_query . " where post_id = %d",
-					array( $post_id )
-				)
-			);
-
-			return true;
-		}
-
-	} elseif ( $postmeta != '' && $post_id ) {
-		if ( $wpdb->get_var( "SHOW COLUMNS FROM " . $table . " WHERE field = '" . $postmeta . "'" ) != '' ) {
-
-			$wpdb->query(
-				$wpdb->prepare(
-					"UPDATE " . $table . " SET " . $postmeta . "= '' where post_id = %d",
-					array( $post_id )
-				)
-			);
-
-			return true;
-		}
-
-	} else {
+	if ( ! $post_id ) {
 		return false;
+	}
+
+	$post_type = get_post_type( $post_id );
+
+	if ( ! $post_type || ! geodir_is_gd_post_type( $post_type ) ) {
+		return false;
+	}
+
+	$table = geodir_db_cpt_table( $post_type );
+
+	if ( empty( $table ) ) {
+		return false;
+	}
+
+	$columns = is_array( $postmeta ) ? $postmeta : array( $postmeta );
+	$set     = array();
+
+	foreach ( $columns as $column ) {
+		$column = is_string( $column ) ? trim( $column ) : '';
+
+		// Only accept existing column names, never the primary key.
+		if ( $column === '' || $column === 'post_id' || isset( $set[ $column ] ) || ! geodir_detail_table_column_exists( $table, $column ) ) {
+			continue;
+		}
+
+		$set[ $column ] = geodir_detail_table_column_sql( $column ) . " = ''";
+	}
+
+	if ( empty( $set ) ) {
+		return false;
+	}
+
+	$result = $wpdb->query(
+		$wpdb->prepare(
+			"UPDATE `{$table}` SET " . implode( ', ', $set ) . " WHERE post_id = %d",
+			$post_id
+		)
+	);
+
+	if ( false === $result ) {
+		return false;
+	}
+
+	// Clear the post cache.
+	wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
+
+	return true;
+}
+
+/**
+ * Check whether a column exists in a listing detail table.
+ *
+ * @since 2.8.202
+ * @global object $wpdb WordPress Database object.
+ * @global array  $geodir_detail_columns Detail table columns cache for the request.
+ *
+ * @param string $table  The detail table name.
+ * @param string $column The column name.
+ * @return bool True if the column exists, otherwise false.
+ */
+function geodir_detail_table_column_exists( $table, $column ) {
+	global $wpdb, $geodir_detail_columns;
+
+	if ( ! is_string( $table ) || ! is_string( $column ) || $column === '' || ! preg_match( '/^[A-Za-z0-9_\-]+$/', $table ) ) {
+		return false;
+	}
+
+	if ( ! is_array( $geodir_detail_columns ) ) {
+		$geodir_detail_columns = array();
+	}
+
+	if ( isset( $geodir_detail_columns[ $table ]['columns'] ) && in_array( $column, $geodir_detail_columns[ $table ]['columns'], true ) ) {
+		return true;
+	}
+
+	if ( isset( $geodir_detail_columns[ $table ]['missing'][ $column ] ) ) {
+		return false;
+	}
+
+	// Load the columns, or reload them once in case the column was added earlier in this request.
+	$geodir_detail_columns[ $table ]['columns'] = (array) $wpdb->get_col( "SHOW COLUMNS FROM `{$table}`" );
+
+	if ( in_array( $column, $geodir_detail_columns[ $table ]['columns'], true ) ) {
+		return true;
+	}
+
+	$geodir_detail_columns[ $table ]['missing'][ $column ] = true;
+
+	return false;
+}
+
+/**
+ * Clear the detail table columns cache used by geodir_detail_table_column_exists().
+ *
+ * @since 2.8.202
+ * @global array $geodir_detail_columns Detail table columns cache for the request.
+ *
+ * @param string $table Optional. The detail table name. Default empty to clear all tables.
+ */
+function geodir_flush_detail_table_columns( $table = '' ) {
+	global $geodir_detail_columns;
+
+	if ( $table !== '' && is_array( $geodir_detail_columns ) ) {
+		unset( $geodir_detail_columns[ $table ] );
+	} else {
+		$geodir_detail_columns = array();
 	}
 }
 
+/**
+ * Quote a detail table column name for use in a query passed to $wpdb->prepare().
+ *
+ * @since 2.8.202
+ *
+ * @param string $column The column name.
+ * @return string The quoted column name.
+ */
+function geodir_detail_table_column_sql( $column ) {
+	return '`' . str_replace( array( '`', '%' ), array( '``', '%%' ), (string) $column ) . '`';
+}
 
 /**
- * Get post custom meta.
+ * Get a listing's detail table value.
  *
  * @since 1.0.0
  * @since 1.6.20 Hook added to filter value.
- * @package GeoDirectory
+ *
  * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global bool   $preview Whether the listing preview is being shown.
  *
  * @param int $post_id The post ID.
  * @param string $meta_key The meta key to retrieve.
@@ -233,12 +325,13 @@ function geodir_delete_post_meta( $post_id, $postmeta ) {
  */
 if ( ! function_exists( 'geodir_get_post_meta' ) ) {
 function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
+	global $wpdb, $preview;
+
+	$post_id = absint( $post_id );
+
 	if ( ! $post_id ) {
 		return false;
 	}
-	global $wpdb, $plugin_prefix, $preview;
-
-	$all_postypes = geodir_get_posttypes();
 
 	$post_type = get_post_type( $post_id );
 
@@ -246,12 +339,12 @@ function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
 		$post_type = get_post_type( wp_get_post_parent_id( $post_id ) );
 	}
 
-	// check if preview
+	// Check if preview.
 	if ( $preview ) {
 		$post_id = GeoDir_Post_Data::get_post_preview_id( $post_id );
 	}
 
-	if ( ! in_array( $post_type, $all_postypes ) ) {
+	if ( ! geodir_is_gd_post_type( $post_type ) ) {
 		return false;
 	}
 
@@ -259,23 +352,24 @@ function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
 	 * Short circuit the DB query if needed.
 	 */
 	$pre_value = apply_filters( 'geodir_pre_get_post_meta', null, $post_id, $meta_key, $single );
-	if($pre_value!==null){
+
+	if ( $pre_value !== null ) {
 		return $pre_value;
 	}
 
-	$table = $plugin_prefix . $post_type . '_detail';
+	$meta_value = false;
+	$table      = geodir_db_cpt_table( $post_type );
 
-	if ( $table && $meta_key ) {
-		//if ( $wpdb->get_var( "SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'" ) != '' ) {
-		$meta_value = $wpdb->get_var( $wpdb->prepare( "SELECT `" . $meta_key . "` from " . $table . " where post_id = %d", array( $post_id ) ) );
+	// Only query a column that exists in the detail table. Unknown keys don't run a query.
+	if ( $table && is_string( $meta_key ) && $meta_key !== '' && geodir_detail_table_column_exists( $table, $meta_key ) ) {
+		$column     = geodir_detail_table_column_sql( $meta_key );
+		$meta_value = $wpdb->get_var( $wpdb->prepare( "SELECT {$column} FROM `{$table}` WHERE post_id = %d", $post_id ) );
 
-		if ( ($meta_value || $meta_value==='0') && $meta_value !== '' ) {
+		if ( ( $meta_value || $meta_value === '0' ) && $meta_value !== '' ) {
 			$meta_value = maybe_serialize( $meta_value );
-		}else{
+		} else {
 			$meta_value = false;
 		}
-	} else {
-		$meta_value = false;
 	}
 
 	/**

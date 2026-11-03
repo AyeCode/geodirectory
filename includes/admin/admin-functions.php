@@ -444,10 +444,15 @@ function geodir_admin_current_post_type() {
 function geodir_add_column_if_not_exist( $db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL" ) {
 	global $wpdb;
 
-	$result = 0; // No rows affected
+	$result = 0;
 
 	if ( ! empty( $db ) && ! empty( $column ) && ! geodir_column_exist( $db, $column ) ) {
 		$result = $wpdb->query( "ALTER TABLE `$db` ADD `$column` $column_attr" );
+
+		// Clear the detail table columns cache.
+		if ( function_exists( 'geodir_flush_detail_table_columns' ) ) {
+			geodir_flush_detail_table_columns( $db );
+		}
 	}
 
 	return $result;
