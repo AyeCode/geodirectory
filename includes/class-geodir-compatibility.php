@@ -58,6 +58,12 @@ class GeoDir_Compatibility {
 		add_action( 'plugins_loaded', array( __CLASS__, 'jetpack' ) );
 
 		/*######################################################
+		JetPack Search :: Don't let Jetpack Search take over GD search/archive queries.
+		######################################################*/
+		add_filter( 'jetpack_search_should_handle_query', array( __CLASS__, 'jetpack_search_should_handle_query' ), 20, 2 );
+		add_filter( 'posts_pre_query', array( __CLASS__, 'jetpack_search_blocks_posts_pre_query' ), 9, 2 );
+
+		/*######################################################
 		Ninja Forms :: Add our own form tags.
 		######################################################*/
 		add_action( 'ninja_forms_loaded', array( __CLASS__, 'ninja_forms' ) );
@@ -2040,6 +2046,57 @@ class GeoDir_Compatibility {
 		}
 	}
 
+	/**
+	 * Check whether the query is the GD main query (GD search, archive, etc).
+	 *
+	 * @since 2.8.202
+	 *
+	 * @param WP_Query $query The WP_Query object.
+	 * @return bool True if GD main query.
+	 */
+	public static function is_gd_main_wp_query( $query ) {
+		if ( ! ( $query instanceof WP_Query ) || ! $query->is_main_query() ) {
+			return false;
+		}
+
+		return geodir_is_geodir_page() || ! empty( $query->query_vars['gd_is_geodir_page'] ) || geodir_is_page( 'search' );
+	}
+
+	/**
+	 * Prevent Jetpack Search from handling GD main query.
+	 *
+	 * @since 2.8.202
+	 *
+	 * @param bool     $should_handle Should be handled by Jetpack Search.
+	 * @param WP_Query $query The WP_Query object.
+	 * @return bool
+	 */
+	public static function jetpack_search_should_handle_query( $should_handle, $query ) {
+		if ( $should_handle && self::is_gd_main_wp_query( $query ) ) {
+			$should_handle = false;
+		}
+
+		return $should_handle;
+	}
+
+	/**
+	 * Prevent Jetpack Search blocks from short-circuiting GD main query.
+	 *
+	 * @since 2.8.202
+	 *
+	 * @param array|null $posts Posts to return in place of the query.
+	 * @param WP_Query   $query The WP_Query object.
+	 * @return array|null
+	 */
+	public static function jetpack_search_blocks_posts_pre_query( $posts, $query ) {
+		$callback = array( 'Automattic\Jetpack\Search\Search_Blocks', 'filter__posts_pre_query' );
+
+		if ( has_filter( 'posts_pre_query', $callback ) && $query instanceof WP_Query && $query->is_search() && self::is_gd_main_wp_query( $query ) ) {
+			remove_filter( 'posts_pre_query', $callback, 10 );
+		}
+
+		return $posts;
+	}
 
 	/*######################################################
 		Boss. (BuddyBoss)
