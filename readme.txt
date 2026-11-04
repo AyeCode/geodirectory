@@ -332,6 +332,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.202 - TBD =
 * Validated column names and escaped values in post meta get/save/delete functions - FIXED
+* Jetpack Search replaces GD search page results with its own results - FIXED
 
 = GeoDirectory v2.8.201 - 2026-11-02 =
 * Strip nested shortcodes & sanitize Dynamic Content widget html to prevent XSS - FIXED/SECURITY
