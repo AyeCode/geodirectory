@@ -394,6 +394,31 @@ function geodir_replace_location_variables($content, $location_array = array(), 
 add_filter('geodir_replace_location_variables', 'geodir_replace_location_variables');
 
 /**
+ * Sanitize a location name used in SEO/title replacement variables.
+ *
+ * @since 2.8.203
+ *
+ * @param string $name Location name.
+ * @return string Sanitized location name.
+ */
+function geodir_sanitize_location_name( $name ) {
+	if ( ! is_scalar( $name ) ) {
+		return '';
+	}
+
+	$name = (string) $name;
+
+	if ( $name === '' ) {
+		return $name;
+	}
+
+	// Decode entities first so encoded tags can't slip through, then strip all tags.
+	$name = wp_strip_all_tags( html_entity_decode( $name, ENT_QUOTES, get_bloginfo( 'charset' ) ) );
+
+	return trim( esc_html( $name ) );
+}
+
+/**
  * Function for replace location values.
  *
  * @since 2.0.0
@@ -468,6 +493,9 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
                 $location = preg_replace( '/[_-]/', ' ', $location );
                 $location = __( geodir_ucwords( $location ), 'geodirectory' );
             }
+
+            // Location value can come from request query vars, strip any HTML.
+            $location = geodir_sanitize_location_name( $location );
         }
 
 		if ( $check_address && ! empty( $location ) ) {
@@ -499,7 +527,7 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
                 }
             }
 
-            $location_name = $location_name ? trim( $location_name ) : '';
+            $location_name = $location_name ? trim( geodir_sanitize_location_name( $location_name ) ) : '';
 
 			// Private address
 			if ( $check_address && ! empty( $location_name ) ) {
