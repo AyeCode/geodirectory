@@ -338,6 +338,9 @@ class GeoDir_SEO {
 		// Strip duplicate whitespace.
 		if ( $title != '' && $normalize ) {
 			$title = normalize_whitespace( $title );
+
+			// Filter unsafe HTML.
+			$title = wp_kses_post( $title );
 		}
 
 		return $title;
@@ -371,6 +374,9 @@ class GeoDir_SEO {
 		// Strip duplicate whitespace.
 		if ( $title != '' ) {
 			$title = normalize_whitespace( $title );
+
+			// Escape unsafe HTML.
+			$title = esc_html( wp_strip_all_tags( $title ) );
 		}
 
 		return $title;
