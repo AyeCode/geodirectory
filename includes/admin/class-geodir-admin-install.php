@@ -1208,6 +1208,62 @@ CREATE TABLE " . GEODIR_POST_REPORTS_TABLE . " (
 			global $wpdb;
 			$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
 		}
+
+		/**
+		 * Remove category fields that should never have been stored against tags.
+		 */
+		if ( get_option( 'geodirectory_version' ) && version_compare( get_option( 'geodirectory_version' ), '2.8.204', '<' ) ) {
+			self::delete_tag_category_fields();
+		}
+	}
+
+	/**
+	 * Delete category only term meta from GD tag terms.
+	 *
+	 * @since 2.8.204
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 *
+	 * @return int Number of terms cleaned.
+	 */
+	public static function delete_tag_category_fields() {
+		global $wpdb;
+
+		$meta_keys  = array( 'ct_cat_top_desc', 'ct_cat_bottom_desc', 'ct_cat_default_img', 'ct_cat_icon', 'ct_cat_font_icon', 'ct_cat_color', 'ct_cat_schema' );
+		$post_types = array_keys( (array) geodir_get_option( 'post_types', array() ) );
+
+		if ( empty( $post_types ) ) {
+			return 0;
+		}
+
+		$tags = array();
+		$cats = array();
+
+		foreach ( $post_types as $post_type ) {
+			$tags[] = $post_type . '_tags';
+			$cats[] = $post_type . 'category';
+		}
+
+		$keys_in = implode( ',', array_fill( 0, count( $meta_keys ), '%s' ) );
+		$tags_in = implode( ',', array_fill( 0, count( $tags ), '%s' ) );
+		$cats_in = implode( ',', array_fill( 0, count( $cats ), '%s' ) );
+
+		// Tag terms holding a category field, skipping any term ID shared with a category.
+		$term_ids = $wpdb->get_col( $wpdb->prepare(
+			"SELECT DISTINCT tm.term_id FROM {$wpdb->termmeta} AS tm
+			INNER JOIN {$wpdb->term_taxonomy} AS tt ON tt.term_id = tm.term_id
+			WHERE tm.meta_key IN ( {$keys_in} ) AND tt.taxonomy IN ( {$tags_in} )
+			AND tm.term_id NOT IN ( SELECT term_id FROM {$wpdb->term_taxonomy} WHERE taxonomy IN ( {$cats_in} ) )",
+			array_merge( $meta_keys, $tags, $cats )
+		) );
+
+		foreach ( $term_ids as $term_id ) {
+			foreach ( $meta_keys as $meta_key ) {
+				delete_term_meta( (int) $term_id, $meta_key );
+			}
+		}
+
+		return count( $term_ids );
 	}
 
 	/**
