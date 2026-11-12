@@ -725,7 +725,7 @@ class GeoDir_Admin_Taxonomies {
      * its terms, and with the nonce of one of those screens. Terms created any
      * other way (front end tags, imports, REST) set their own meta directly.
      *
-     * @since 2.8.204
+     * @since 2.8.205
      *
      * @param int    $term_id  Term ID.
      * @param string $taxonomy Taxonomy slug.
