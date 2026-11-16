@@ -172,11 +172,89 @@
             iframeUrl = transferHash(hashUrl, iframeUrl);
         }
 
-        return '<div class="lity-iframe-container"><iframe onload="jQuery(\'.lity-iframe-container .svg-inline--fa, .lity-iframe-container i\').remove();" frameborder="0" allowfullscreen src="' + iframeUrl + '"></iframe><i class="fas fa-sync fa-spin fa-3x fa-fw"></i></div>';
+        if (!isSafeUrl(iframeUrl)) {
+            return false;
+        }
+
+        return '<div class="lity-iframe-container"><iframe onload="jQuery(\'.lity-iframe-container .svg-inline--fa, .lity-iframe-container i\').remove();" frameborder="0" allowfullscreen src="' + escHtml(iframeUrl) + '"></iframe><i class="fas fa-sync fa-spin fa-3x fa-fw"></i></div>';
     }
 
     function error(msg) {
         return $('<span class="lity-error"></span>').append(msg);
+    }
+
+    /**
+     * Escape a value for use in HTML text or a quoted attribute.
+     */
+    function escHtml(value) {
+        return String(value === undefined || value === null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    /**
+     * Check a URL only uses a scheme that is safe to load in an image or iframe.
+     */
+    function isSafeUrl(url) {
+        // Browsers ignore whitespace and control chars inside the scheme.
+        var test = String(url).replace(/[\s\x00-\x20]+/g, '');
+        var scheme = /^([a-z][a-z0-9+.\-]*):/i.exec(test);
+
+        if (!scheme) {
+            return true;
+        }
+
+        scheme = scheme[1].toLowerCase();
+
+        return scheme === 'http' || scheme === 'https' || /^data:image\//i.test(test);
+    }
+
+    /**
+     * Validate a target read from the attributes of a clicked [data-lity] element.
+     *
+     * Attribute values can come from user content, so unlike a target passed to
+     * lity() from script they must never be parsed as HTML. Only a selector or a
+     * URL is accepted.
+     */
+    function safeOpenerTarget(target) {
+        if (typeof target !== 'string') {
+            return '';
+        }
+
+        target = target.replace(/^\s+|\s+$/g, '');
+
+        if (!target || /[<>]/.test(target) || !isSafeUrl(target)) {
+            return '';
+        }
+
+        return target;
+    }
+
+    /**
+     * Validate options read from the attributes of a clicked [data-lity] element.
+     *
+     * The template is parsed as HTML and handlers are callbacks, so neither can
+     * be set from markup.
+     */
+    function safeOpenerOptions(options) {
+        var safe = {};
+
+        if (!$.isPlainObject(options)) {
+            return safe;
+        }
+
+        if (typeof options.esc === 'boolean') {
+            safe.esc = options.esc;
+        }
+
+        if (typeof options.handler === 'string' && _defaultOptions.handlers.hasOwnProperty(options.handler)) {
+            safe.handler = options.handler;
+        }
+
+        return safe;
     }
 
     function imageHandler(target, instance) {
@@ -235,14 +313,18 @@
         if(title || desc){
             caption = '<div class="lity-caption">';
             if(title){
-                caption = caption + '<span class="lity-caption-title">'+title+'</span>';
+                caption = caption + '<span class="lity-caption-title">'+escHtml(title)+'</span>';
             }
             if(desc){
-                caption = caption + '<span class="lity-caption-desc">'+desc+'</span>';
+                caption = caption + '<span class="lity-caption-desc">'+escHtml(desc)+'</span>';
             }
             caption = caption + '</div>';
         }
-        var img = $('<img src="' + target + '" alt="' + alt + '" srcset="'+srcset+'"/>'+caption+gallery_nav);//+gallery_nav;
+        if (!isSafeUrl(target)) {
+            return false;
+        }
+
+        var img = $('<img src="' + escHtml(target) + '" alt="' + escHtml(alt) + '" srcset="' + escHtml(srcset) + '"/>'+caption+gallery_nav);//+gallery_nav;
         var deferred = _deferred();
         var failed = function() {
             deferred.reject(error('Failed loading image'));
@@ -707,26 +789,36 @@
     }
 
     function lity(target, options, opener) {
-        if (!target.preventDefault) {
+        var isEvent = !!target.preventDefault;
+
+        if (!isEvent) {
             opener = $(opener);
         } else {
             target.preventDefault();
             opener = $(this);
-            target = opener.data('lity-target') || opener.attr('href') || opener.attr('src');
+            target = safeOpenerTarget(opener.attr('data-lity-target') || opener.attr('href') || opener.attr('src'));
+
+            // Nothing safe to open.
+            if (!target) {
+                return;
+            }
+
+            // Extra args passed to a triggered click are not options.
+            options = {};
         }
 
         var instance = new Lity(
             target,
             $.extend(
                 {},
-                opener.data('lity-options') || opener.data('lity'),
+                safeOpenerOptions(opener.data('lity-options') || opener.data('lity')),
                 options
             ),
             opener,
             document.activeElement
         );
 
-        if (!target.preventDefault) {
+        if (!isEvent) {
             return instance;
         }
     }

@@ -268,7 +268,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
 
 		ob_start();
 		if ( ! $user_id && !geodir_get_option( 'post_logged_out' ) ) {
-			echo geodir_notification( array( 'info' => $params['login_msg'] ) );
+			echo geodir_notification( array( 'info' => wp_kses_post( $params['login_msg'] ) ) );
 
 			if ( $params['show_login'] ) {
 				echo "<br />";

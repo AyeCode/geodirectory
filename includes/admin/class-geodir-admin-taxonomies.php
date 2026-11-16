@@ -657,6 +657,10 @@ class GeoDir_Admin_Taxonomies {
      * @param string $taxonomy Taxonomy slug.
      */
     public function save_category_fields( $term_id, $tt_id = '', $taxonomy = '' ) {
+        if ( ! self::can_save_category_fields( $term_id, $taxonomy ) ) {
+            return;
+        }
+
         // Category top description.
         if ( isset( $_POST['ct_cat_top_desc'] ) ) {
             update_term_meta( $term_id, 'ct_cat_top_desc', self::sanitize_category_description( $_POST['ct_cat_top_desc'] ) );
@@ -711,6 +715,44 @@ class GeoDir_Admin_Taxonomies {
         }
 
         do_action( 'geodir_term_save_category_fields', $term_id, $tt_id, $taxonomy );
+    }
+
+    /**
+     * Check whether the current request may save the category form fields.
+     *
+     * The fields are only ever posted by the core add/edit term screens, so
+     * they are saved only for a GD category taxonomy, for a user who can edit
+     * its terms, and with the nonce of one of those screens. Terms created any
+     * other way (front end tags, imports, REST) set their own meta directly.
+     *
+     * @since 2.8.205
+     *
+     * @param int    $term_id  Term ID.
+     * @param string $taxonomy Taxonomy slug.
+     * @return bool True when the fields may be saved.
+     */
+    public static function can_save_category_fields( $term_id, $taxonomy ) {
+        if ( empty( $taxonomy ) || ! geodir_is_gd_taxonomy( $taxonomy ) || geodir_taxonomy_type( $taxonomy ) != 'category' ) {
+            return false;
+        }
+
+        $taxonomy_obj = get_taxonomy( $taxonomy );
+
+        if ( empty( $taxonomy_obj ) || ! current_user_can( $taxonomy_obj->cap->edit_terms ) ) {
+            return false;
+        }
+
+        // Add term form (AJAX and no-JS).
+        if ( isset( $_POST['_wpnonce_add-tag'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce_add-tag'] ) ), 'add-tag' ) ) {
+            return true;
+        }
+
+        // Edit term form.
+        if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'update-tag_' . (int) $term_id ) ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -1122,6 +1164,15 @@ class GeoDir_Admin_Taxonomies {
 	 * @return mixed|void
 	 */
 	public static function get_category_description( $term_id, $type = 'top' ) {
+		// Top & bottom descriptions only exist for categories, never show one stored against a tag.
+		if ( $type != 'main' ) {
+			$term = get_term( $term_id );
+
+			if ( empty( $term ) || is_wp_error( $term ) || geodir_taxonomy_type( $term->taxonomy ) != 'category' ) {
+				return apply_filters( 'geodir_get_category_description', '', $term_id, $type );
+			}
+		}
+
 		if ( $type && in_array( $type, array( 'bottom', 'main' ) ) ) {
 			if ( $type == 'bottom' ) {
 				$description = get_term_meta( $term_id, 'ct_cat_bottom_desc', true );

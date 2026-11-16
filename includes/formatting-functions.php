@@ -430,6 +430,7 @@ function geodir_sanitize_html_field( $str, $allowed_html = NULL ) {
 	$filtered = balanceTags( $filtered ); // Balances tags
 	$filtered = geodir_kses_safe_embed_attributes( $filtered ); // Neutralize dangerous protocols in embed data-* attributes.
 	$filtered = geodir_kses_safe_aui_attributes( $filtered ); // Neutralize AUI popover-html triggers (rendered unsanitized).
+	$filtered = geodir_kses_safe_lity_attributes( $filtered ); // Neutralize lightbox targets/options that are parsed as HTML.
 
 	/**
 	 * Filter a sanitized html field string.
@@ -551,6 +552,78 @@ function geodir_kses_safe_aui_attributes( $str ) {
 	 * @param string $str      Original content.
 	 */
 	return apply_filters( 'geodir_kses_safe_aui_attributes', $filtered, $str );
+}
+
+/**
+ * Neutralize lightbox (lity) attributes in user supplied content.
+ *
+ * The lightbox script reads data-lity-target and data-lity / data-lity-options
+ * from the clicked element. A target is passed to jQuery, which parses a HTML
+ * shaped value as HTML, and the options can replace the lightbox template. Both
+ * allow script execution from content that is otherwise kses safe.
+ *
+ * @since 2.8.206
+ *
+ * @param string $str HTML content.
+ * @return string Content with unsafe lightbox attribute values blanked.
+ */
+function geodir_kses_safe_lity_attributes( $str ) {
+	if ( ! is_string( $str ) || $str === '' || stripos( $str, 'data-lity' ) === false ) {
+		return $str;
+	}
+
+	// data-lity / data-lity-target / data-lity-options with a double quoted, single quoted or unquoted value.
+	$pattern = '#(?<![\w\-])(data-lity(?:-target|-options)?)\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#i';
+
+	$filtered = preg_replace_callback( $pattern, function( $matches ) {
+		$value = $matches[2];
+		$quote = ( $value[0] === '"' || $value[0] === "'" ) ? $value[0] : '';
+
+		if ( $quote ) {
+			$value = substr( $value, 1, -1 );
+		}
+
+		if ( $value === '' ) {
+			return $matches[0];
+		}
+
+		if ( strtolower( $matches[1] ) === 'data-lity-target' ) {
+			// Decode entities so an encoded payload (e.g. &lt;img onerror=...&gt;) is caught,
+			// and drop whitespace/control chars browsers ignore before the scheme.
+			$test = html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+			$test = preg_replace( '/[\s\x00-\x20]+/', '', $test );
+
+			$safe = ! preg_match( '#[<>"\'`]#', $test );
+
+			if ( $safe && preg_match( '#^([a-z][a-z0-9+.\-]*):#i', $test, $scheme ) ) {
+				$safe = in_array( strtolower( $scheme[1] ), array( 'http', 'https' ), true );
+			}
+
+			if ( $safe ) {
+				return $matches[0];
+			}
+		}
+
+		// Options are never needed in user content, and an unsafe target is dropped:
+		// blank the value, keeping the (harmless) attribute.
+		$quote = $quote ? $quote : '"';
+
+		return $matches[1] . '=' . $quote . $quote;
+	}, $str );
+
+	if ( null === $filtered ) {
+		$filtered = $str;
+	}
+
+	/**
+	 * Filter the content after unsafe lightbox attributes are neutralized.
+	 *
+	 * @since 2.8.206
+	 *
+	 * @param string $filtered Filtered content.
+	 * @param string $str      Original content.
+	 */
+	return apply_filters( 'geodir_kses_safe_lity_attributes', $filtered, $str );
 }
 
 /**
