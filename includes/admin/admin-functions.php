@@ -270,25 +270,29 @@ function geodir_get_terms_count( $post_type ) {
 function geodir_create_page( $slug, $option, $page_title = '', $page_content = '', $post_parent = 0, $status = 'publish' ) {
 	global $wpdb, $current_user;
 
-	$option_value = geodir_get_option( $option );
+	$option_value = absint( geodir_get_option( $option ) );
 
 	if ( $option_value > 0 ) :
-		if ( get_post( $option_value ) ) :
+		$option_page = get_post( $option_value );
+
+		// Assigned page exists and is not trashed.
+		if ( ! empty( $option_page ) && $option_page->post_type == 'page' && ! in_array( $option_page->post_status, array( 'trash', 'auto-draft', 'inherit' ) ) ) :
 			// Page exists
 			return;
 		endif;
 	endif;
 
-	$page_found = $wpdb->get_var(
+	// The assigned page no longer exists (or is trashed), look for a page with the default slug.
+	$page_found = (int) $wpdb->get_var(
 		$wpdb->prepare(
-			"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_type = 'page' LIMIT 1;",
+			"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_type = 'page' AND post_status NOT IN ( 'trash', 'auto-draft', 'inherit' ) ORDER BY ( post_status = 'publish' ) DESC, ID ASC LIMIT 1;",
 			array( $slug )
 		)
 	);
 
 	if ( $page_found ) :
-		// Page exists
-		if ( ! $option_value ) {
+		// Page exists, make sure the option points to the found page.
+		if ( $option_value !== $page_found ) {
 			geodir_update_option( $option, $page_found );
 		}
 
