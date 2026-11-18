@@ -331,6 +331,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.207 - TBD =
 * Create missing pages tool fails to assign a recreated page after the original was deleted - FIXED
+* Escape business hours day name on output to prevent XSS - FIXED/SECURITY
 
 = GeoDirectory v2.8.206 - 2026-11-12 =
 * Lightbox attributes in listing content could be used for stored XSS on the legacy design style - FIXED/SECURITY

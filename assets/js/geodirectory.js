@@ -1069,11 +1069,11 @@ function geodir_refresh_business_hour($this) {
             if (isOpen) {
                 hasPrevOpen = true;
                 jQuery(this).addClass('gd-bh-slot-open');
-                prevopens.push($pd.find('.gd-bh-days-d').text() + " " + jQuery(this).find('.gd-bh-slot-r').html());
+                prevopens.push(geodirEscHtml($pd.find('.gd-bh-days-d').text()) + " " + jQuery(this).find('.gd-bh-slot-r').html());
             } else {
                 jQuery(this).addClass('gd-bh-slot-close');
             }
-            prevtimes.push($pd.find('.gd-bh-days-d').text() + " " + jQuery(this).find('.gd-bh-slot-r').html());
+            prevtimes.push(geodirEscHtml($pd.find('.gd-bh-days-d').text()) + " " + jQuery(this).find('.gd-bh-slot-r').html());
         });
         if (hasPrevOpen) {
             prevtimes = prevopens;
@@ -1088,7 +1088,7 @@ function geodir_refresh_business_hour($this) {
         if (hasPrevOpen) {
             times = prevtimes;
             opens = prevopens;
-            dayname = $d.find('.gd-bh-days-d').text() + " ";
+            dayname = geodirEscHtml($d.find('.gd-bh-days-d').text()) + " ";
         } else {
             $this.removeClass('gd-bh-open gd-bh-close');
             $this.find('div').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today');
@@ -1310,9 +1310,9 @@ function gd_ajax_lightbox($action, $nonce, $post_id, $extra) {
 
         if ($action == 'geodir_ninja_forms') {
             // clear all form data so we can reload the same form via ajax
-            delete form;
-            delete formDisplay;
-            delete nfForms;
+            form = null;
+            formDisplay = null;
+            nfForms = null;
         }
 
         $lightbox = lity(geodir_params.ajax_url + "?action=" + $action + "&security=" + $nonce + "&p=" + $post_id + "&extra=" + $extra);
@@ -1972,4 +1972,17 @@ function geodir_init_listings_carousel(el, index) {
         $el.find(wEl).addClass('geodir-slides');
         geodir_init_slider($el.prop('id'));
     }
+}
+
+/**
+ * Escape a string for safe insertion into HTML.
+ *
+ * @since 2.8.207
+ *
+ * @param {string} str The raw string to escape. null/undefined become "".
+ * @return {string} The HTML-escaped string.
+ */
+function geodirEscHtml(str) {
+    var map = { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;', '/':'&#x2F;', '`':'&#x60;', '=':'&#x3D;' };
+    return String(str == null ? '' : str).replace(/[&<>"'`=\/]/g, function(s){ return map[s]; });
 }
