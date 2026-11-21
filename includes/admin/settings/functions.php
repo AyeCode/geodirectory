@@ -54,8 +54,14 @@ function geodir_update_option( $key = '', $value = false ) {
 		return false;
 	}
 
-	$options = get_option( 'geodir_settings' );
-	if ( empty( $options ) ) {
+	// A missing option returns the default array, so false means the stored settings could not
+	// be read (e.g. they failed to unserialize). Never save over settings we could not read.
+	$options = get_option( 'geodir_settings', array() );
+	if ( false === $options ) {
+		return false;
+	}
+
+	if ( ! is_array( $options ) ) {
 		$options = array();
 	}
 
@@ -90,8 +96,13 @@ function geodir_delete_option( $key = '' ) {
 		return false;
 	}
 
-	$options = get_option( 'geodir_settings' );
-	if ( empty( $options ) ) {
+	// False means the stored settings could not be read. See geodir_update_option().
+	$options = get_option( 'geodir_settings', array() );
+	if ( false === $options ) {
+		return false;
+	}
+
+	if ( ! is_array( $options ) ) {
 		$options = array();
 	}
 
@@ -119,13 +130,12 @@ function geodir_delete_option( $key = '' ) {
  * @return array GD settings
  */
 function geodir_get_settings() {
-	$settings = get_option( 'geodir_settings' );
+	$settings = get_option( 'geodir_settings', array() );
 
-	if ( empty( $settings ) ) {
-		// Update old settings with new single option.
+	// Settings that are missing or could not be read are treated as empty for this request only.
+	// Reading must never save: an empty array written here would replace the real settings.
+	if ( ! is_array( $settings ) ) {
 		$settings = array();
-
-		update_option( 'geodir_settings', $settings );
 	}
 
 	return apply_filters( 'geodir_get_settings', $settings );
