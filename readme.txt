@@ -331,6 +331,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.208 - TBD =
 * Settings could be reset to defaults when the saved settings could not be read, e.g. during a backup that changes the database connection character set - FIXED
+* Search "main-no-advanced" option may affect other search forms on the same page - FIXED
 
 = GeoDirectory v2.8.207 - 2026-11-18 =
 * Create missing pages tool fails to assign a recreated page after the original was deleted - FIXED

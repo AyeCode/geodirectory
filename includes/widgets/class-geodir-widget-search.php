@@ -313,9 +313,14 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 			geodir_get_search_post_type(); // set the post type
 		}
 
-		// maybe remove advanced search main fields
-		if( !empty($instance['show']) && 'main-no-advanced' === $instance['show']){
-			remove_action( 'geodir_before_search_form', 'geodir_search_add_to_main', 0 );
+		// Maybe remove advanced search main fields for this form only.
+		$main_fields_priority = false;
+		if ( ! empty( $instance['show'] ) && 'main-no-advanced' === $instance['show'] ) {
+			$main_fields_priority = has_action( 'geodir_before_search_form', 'geodir_search_add_to_main' );
+
+			if ( false !== $main_fields_priority ) {
+				remove_action( 'geodir_before_search_form', 'geodir_search_add_to_main', $main_fields_priority );
+			}
 		}
 
 		// Set if the cpt selector, search, near should be hidden
@@ -456,6 +461,11 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 		$template_params = apply_filters( 'geodir_search_form_template_params', $template_params, $instance, $widget_args );
 
 		echo geodir_get_template_html( $template_params['template'], $template_params['template_args'], $template_params['template_path'], $template_params['default_path'] );
+
+		// Restore advanced search main fields so other search forms on the page still show them.
+		if ( false !== $main_fields_priority ) {
+			add_action( 'geodir_before_search_form', 'geodir_search_add_to_main', $main_fields_priority );
+		}
 
 		// After outputing the search reset the CPT
 		global $geodir_search_post_type;
