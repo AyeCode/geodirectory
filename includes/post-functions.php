@@ -2135,13 +2135,96 @@ add_filter( 'geodir_custom_field_value_text', 'geodir_validate_custom_field_valu
  * @return string $value Sanitized email.
  */
 function geodir_validate_custom_field_value_email( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
-	if ( $value != '' && is_scalar( $value ) ) {
-		$value = geodir_sanitize_email( wp_unslash( $value ), 'save' );
+	if ( is_array( $value ) ) {
+		// Email field holds a single value. Sanitize every element so an array can't bypass sanitization.
+		$value = array_filter( array_map( function( $_value ) {
+			return is_scalar( $_value ) ? geodir_sanitize_email( wp_unslash( $_value ), 'save' ) : '';
+		}, $value ) );
+		$value = ! empty( $value ) ? implode( ',', $value ) : '';
+	} elseif ( $value != '' ) {
+		$value = is_scalar( $value ) ? geodir_sanitize_email( wp_unslash( $value ), 'save' ) : '';
 	}
 
 	return $value;
 }
 add_filter( 'geodir_custom_field_value_email', 'geodir_validate_custom_field_value_email', 10, 6 );
+
+/**
+ * Sanitize time value.
+ *
+ * Time field stores a single plain text value (ex: 10:30). The value is not
+ * reformatted so imported values (ex: "10:30 am") are kept as they are, but
+ * HTML tags are always removed.
+ *
+ * @since 2.8.208
+ *
+ * @param string $value Field value.
+ * @param object $gd_post GeoDirectory post object.
+ * @param object $custom_field Custom field.
+ * @param int $post_id Post id.
+ * @param object $post Post.
+ * @param string $update Update.
+ * @return string $value Sanitized time.
+ */
+function geodir_validate_custom_field_value_time( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
+	if ( $value === null || $value === '' ) {
+		return $value;
+	}
+
+	// Time field holds a single value.
+	if ( is_array( $value ) ) {
+		$value = ! empty( $value ) ? reset( $value ) : '';
+	}
+
+	return is_scalar( $value ) ? geodir_clean( (string) $value ) : '';
+}
+add_filter( 'geodir_custom_field_value_time', 'geodir_validate_custom_field_value_time', 10, 6 );
+
+/**
+ * Fallback sanitization for custom field types that don't register their
+ * own "geodir_custom_field_value_{$field_type}" sanitize callback.
+ *
+ * @since 2.8.208
+ *
+ * @param mixed  $value Field value.
+ * @param object $custom_field Custom field.
+ * @return mixed Sanitized value.
+ */
+function geodir_sanitize_custom_field_value_fallback( $value, $custom_field ) {
+	if ( $value === null || $value === '' ) {
+		return $value;
+	}
+
+	$field_type = ! empty( $custom_field->field_type ) ? $custom_field->field_type : '';
+
+	// Slashes are not removed here, the save loop runs stripslashes_deep() after this.
+	if ( in_array( $field_type, array( 'file', 'images' ) ) ) {
+		// File strings contain urls which may have encoded octets, so only strip tags.
+		$callback = function( $_value ) {
+			return is_scalar( $_value ) ? wp_strip_all_tags( (string) $_value ) : '';
+		};
+	} else {
+		$callback = function( $_value ) {
+			return is_scalar( $_value ) ? geodir_clean( $_value ) : '';
+		};
+	}
+
+	if ( is_array( $value ) ) {
+		$value = array_map( $callback, $value );
+	} else {
+		$value = call_user_func( $callback, $value );
+	}
+
+	/**
+	 * Filters the fallback sanitized custom field value.
+	 *
+	 * @since 2.8.208
+	 *
+	 * @param mixed  $value Sanitized value.
+	 * @param object $custom_field Custom field.
+	 */
+	return apply_filters( 'geodir_sanitize_custom_field_value_fallback', $value, $custom_field );
+}
 
 /**
  * Sanitize url value.
@@ -2184,55 +2267,10 @@ add_filter( 'geodir_custom_field_value_url', 'geodir_validate_custom_field_value
  */
 function geodir_validate_custom_field_value_textarea( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
 	if ( $value != '' ) {
-		$html = false;
-		// Post content & video contains html/embed code.
-		if ( $custom_field->field_type == 'html' || $custom_field->htmlvar_name == 'post_content' || $custom_field->htmlvar_name == 'video' ) {
-			$html = true;
-		} else {
-			// Check if textarea field has html/embed enabled.
-			$extra_fields = ! empty( $custom_field->extra_fields ) ? stripslashes_deep( maybe_unserialize( $custom_field->extra_fields ) ) : NULL;
-			if ( is_array( $extra_fields ) && ( ! empty( $extra_fields['advanced_editor'] ) || ! empty( $extra_fields['embed'] ) )  ) {
-				$html = true;
-			}
-		}
+		$html = geodir_custom_field_allows_html( $custom_field );
 
 		if ( $html ) {
-			$allowed_html = wp_kses_allowed_html( 'post' );
-
-			if ( is_array( $allowed_html ) ) {
-				// <iframe>
-				if ( ! isset( $allowed_html['iframe'] ) ) {
-					$allowed_html['iframe']     = array(
-						'class'        => true,
-						'id'           => true,
-						'src'          => true,
-						'width'        => true,
-						'height'       => true,
-						'frameborder'  => true,
-						'marginwidth'  => true,
-						'marginheight' => true,
-						'scrolling'    => true,
-						'style'        => true,
-						'title'        => true,
-						'allow'        => true,
-						'allowfullscreen' => true,
-						'data-*'       => true,
-					);
-				}
-			}
-
-			/**
-			 * Filters the HTML that is allowed for a given field.
-			 *
-			 * @since 2.0.0.68
-			 *
-			 * @param array[]|string $allowed_html Allowed html tags.
-			 * @param object $custom_field Custom field.
-			 * @param string $value Field value.
-			 * @param object $gd_post GeoDirectory post object.
-			 * @param string $context_type Context name.
-			 */
-			$allowed_html = apply_filters( 'geodir_custom_field_kses_allowed_html', $allowed_html, $custom_field, $value, $gd_post );
+			$allowed_html = geodir_custom_field_kses_allowed_html( $custom_field, $value, $gd_post );
 
 			if ( is_array( $value ) ) {
 				$value = array_map( function( $value ) use ( $allowed_html ) {
@@ -2260,6 +2298,142 @@ function geodir_validate_custom_field_value_textarea( $value, $gd_post, $custom_
 }
 add_filter( 'geodir_custom_field_value_html', 'geodir_validate_custom_field_value_textarea', 10, 6 );
 add_filter( 'geodir_custom_field_value_textarea', 'geodir_validate_custom_field_value_textarea', 10, 6 );
+
+/**
+ * Check whether a custom field is allowed to contain HTML.
+ *
+ * HTML fields, post content, video and textarea fields with advanced editor
+ * or embed enabled can contain html/embed code.
+ *
+ * @since 2.8.208
+ *
+ * @param object|array $custom_field Custom field.
+ * @return bool True if field can contain HTML.
+ */
+function geodir_custom_field_allows_html( $custom_field ) {
+	$custom_field = is_array( $custom_field ) ? (object) $custom_field : $custom_field;
+
+	if ( ! is_object( $custom_field ) ) {
+		return false;
+	}
+
+	$field_type   = ! empty( $custom_field->field_type ) ? $custom_field->field_type : ( ! empty( $custom_field->type ) ? $custom_field->type : '' );
+	$htmlvar_name = ! empty( $custom_field->htmlvar_name ) ? $custom_field->htmlvar_name : '';
+
+	// Post content & video contains html/embed code.
+	if ( $field_type == 'html' || $htmlvar_name == 'post_content' || $htmlvar_name == 'video' ) {
+		return true;
+	}
+
+	// Check if textarea field has html/embed enabled.
+	if ( $field_type == 'textarea' && ! empty( $custom_field->extra_fields ) ) {
+		$extra_fields = is_array( $custom_field->extra_fields ) ? $custom_field->extra_fields : stripslashes_deep( maybe_unserialize( $custom_field->extra_fields ) );
+
+		if ( is_array( $extra_fields ) && ( ! empty( $extra_fields['advanced_editor'] ) || ! empty( $extra_fields['embed'] ) ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Get the HTML allowed for a custom field that can contain HTML.
+ *
+ * @since 2.8.208
+ *
+ * @param object|array $custom_field Custom field.
+ * @param string       $value Field value.
+ * @param array|object $gd_post GeoDirectory post object.
+ * @return array[]|string Allowed html tags.
+ */
+function geodir_custom_field_kses_allowed_html( $custom_field, $value = '', $gd_post = array() ) {
+	$custom_field = is_array( $custom_field ) ? (object) $custom_field : $custom_field;
+
+	$allowed_html = wp_kses_allowed_html( 'post' );
+
+	if ( is_array( $allowed_html ) ) {
+		// <iframe>
+		if ( ! isset( $allowed_html['iframe'] ) ) {
+			$allowed_html['iframe']     = array(
+				'class'        => true,
+				'id'           => true,
+				'src'          => true,
+				'width'        => true,
+				'height'       => true,
+				'frameborder'  => true,
+				'marginwidth'  => true,
+				'marginheight' => true,
+				'scrolling'    => true,
+				'style'        => true,
+				'title'        => true,
+				'allow'        => true,
+				'allowfullscreen' => true,
+				'data-*'       => true,
+			);
+		}
+	}
+
+	/**
+	 * Filters the HTML that is allowed for a given field.
+	 *
+	 * @since 2.0.0.68
+	 *
+	 * @param array[]|string $allowed_html Allowed html tags.
+	 * @param object $custom_field Custom field.
+	 * @param string $value Field value.
+	 * @param object $gd_post GeoDirectory post object.
+	 * @param string $context_type Context name.
+	 */
+	return apply_filters( 'geodir_custom_field_kses_allowed_html', $allowed_html, $custom_field, $value, $gd_post );
+}
+
+/**
+ * Sanitize a custom field value displayed with "value (saved in database)" output.
+ *
+ * The raw database value is printed on the page, so escape it. Fields that
+ * can contain HTML are filtered with the same allowed html used on save,
+ * all other field values are escaped as plain text.
+ *
+ * @since 2.8.208
+ *
+ * @param string       $value Raw output value.
+ * @param object|array $custom_field Custom field.
+ * @return string Safe output value.
+ */
+function geodir_sanitize_custom_field_raw_output( $value, $custom_field ) {
+	if ( ! is_scalar( $value ) ) {
+		return '';
+	}
+
+	$raw_value = $value;
+	$value     = (string) $value;
+
+	if ( $value !== '' ) {
+		$_custom_field = is_array( $custom_field ) ? (object) $custom_field : $custom_field;
+		$htmlvar_name  = is_object( $_custom_field ) && ! empty( $_custom_field->htmlvar_name ) ? $_custom_field->htmlvar_name : '';
+
+		if ( $htmlvar_name == 'post_content' || geodir_custom_field_allows_html( $_custom_field ) ) {
+			$value = wp_kses( $value, geodir_custom_field_kses_allowed_html( $_custom_field, $value ) );
+			$value = geodir_kses_safe_embed_attributes( $value );
+			$value = geodir_kses_safe_aui_attributes( $value );
+			$value = geodir_kses_safe_lity_attributes( $value );
+		} else {
+			$value = esc_html( $value );
+		}
+	}
+
+	/**
+	 * Filters the sanitized raw output value of a custom field.
+	 *
+	 * @since 2.8.208
+	 *
+	 * @param string       $value Safe output value.
+	 * @param string       $raw_value Raw output value.
+	 * @param object|array $custom_field Custom field.
+	 */
+	return apply_filters( 'geodir_sanitize_custom_field_raw_output', $value, $raw_value, $custom_field );
+}
 
 /**
  * Get the post meta advance custom fields.
