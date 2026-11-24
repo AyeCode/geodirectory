@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.8.207\n"
+"Project-Id-Version: GeoDirectory 2.8.208\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-18 19:32+0530\n"
-"PO-Revision-Date: 2026-11-18 19:32+0530\n"
+"POT-Creation-Date: 2026-11-24 19:48+0530\n"
+"PO-Revision-Date: 2026-11-24 19:48+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -194,7 +194,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:845
 #: includes/api/class-geodir-rest-posts-controller.php:2199
 #: includes/class-geodir-location.php:365
-#: includes/class-geodir-location.php:419 includes/post-functions.php:2528
+#: includes/class-geodir-location.php:419 includes/post-functions.php:2702
 msgid "Country"
 msgstr ""
 
@@ -209,7 +209,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:835
 #: includes/api/class-geodir-rest-posts-controller.php:2213
 #: includes/class-geodir-location.php:384
-#: includes/class-geodir-location.php:431 includes/post-functions.php:2517
+#: includes/class-geodir-location.php:431 includes/post-functions.php:2691
 msgid "Region"
 msgstr ""
 
@@ -224,7 +224,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:825
 #: includes/api/class-geodir-rest-posts-controller.php:2227
 #: includes/class-geodir-location.php:404
-#: includes/class-geodir-location.php:440 includes/post-functions.php:2506
+#: includes/class-geodir-location.php:440 includes/post-functions.php:2680
 msgid "City"
 msgstr ""
 
@@ -246,7 +246,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1227
 #: includes/api/class-geodir-rest-posts-controller.php:2241
 #: includes/api/class-geodir-rest-posts-controller.php:2242
-#: includes/custom-fields/functions.php:687 includes/post-functions.php:2539
+#: includes/custom-fields/functions.php:687 includes/post-functions.php:2713
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -940,7 +940,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:514
 #: includes/admin/settings/class-geodir-settings-general.php:557
 #: includes/admin/settings/class-geodir-settings-general.php:599
-#: includes/class-geodir-post-data.php:1751 includes/core-functions.php:373
+#: includes/class-geodir-post-data.php:1757 includes/core-functions.php:373
 #: includes/widgets/class-geodir-widget-add-listing.php:329
 #: includes/widgets/class-geodir-widget-az-search.php:45
 #: includes/widgets/class-geodir-widget-az-search.php:94
@@ -1386,7 +1386,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-conditional-fields.php:258
 #: includes/class-geodir-privacy-exporters.php:344
 #: includes/custom-fields/input-functions-aui.php:1992
-#: includes/post-functions.php:1366 includes/post-functions.php:2310
+#: includes/post-functions.php:1366 includes/post-functions.php:2484
 #: includes/widgets/class-geodir-widget-dynamic-content.php:423
 #: includes/widgets/class-geodir-widget-dynamic-content.php:489
 #: includes/widgets/class-geodir-widget-dynamic-content.php:514
@@ -1581,8 +1581,8 @@ msgstr ""
 #: includes/admin/dummy-data/job_board.php:572
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:418
 #: includes/class-geodir-comments.php:95
-#: includes/class-geodir-post-data.php:996
-#: includes/class-geodir-post-data.php:1013
+#: includes/class-geodir-post-data.php:1002
+#: includes/class-geodir-post-data.php:1019
 #: includes/widgets/class-geodir-widget-ninja-forms.php:429 language.php:35
 #: language.php:55 language.php:128 language.php:144
 msgid "Email"
@@ -1659,7 +1659,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1134
 #: includes/admin/dummy-data/classifieds.php:914
-#: includes/class-geodir-post-data.php:930
+#: includes/class-geodir-post-data.php:936
 msgid "Listing"
 msgstr ""
 
@@ -1698,7 +1698,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1190
 #: includes/admin/class-geodir-admin-dummy-data.php:1192
 #: includes/admin/class-geodir-admin-dummy-data.php:1201
-#: includes/class-geodir-post-data.php:1757
+#: includes/class-geodir-post-data.php:1763
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:1034
 #: includes/widgets/class-geodir-widget-simple-archive.php:427 language.php:59
 #: language.php:179
@@ -1712,8 +1712,8 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1210
 #: includes/admin/class-geodir-admin-dummy-data.php:1212
 #: includes/admin/class-geodir-admin-dummy-data.php:1222
-#: includes/class-geodir-post-data.php:1754
-#: includes/custom-fields/functions.php:677 includes/post-functions.php:2484
+#: includes/class-geodir-post-data.php:1760
+#: includes/custom-fields/functions.php:677 includes/post-functions.php:2658
 msgid "Address"
 msgstr ""
 
@@ -2226,7 +2226,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:147
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:300
-#: includes/post-functions.php:2409
+#: includes/post-functions.php:2583
 msgid "Status"
 msgstr ""
 
@@ -2663,7 +2663,7 @@ msgid "Unpublished"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-report-post-list-table.php:773
-#: includes/post-functions.php:2353 includes/post-functions.php:2364
+#: includes/post-functions.php:2527 includes/post-functions.php:2538
 #: includes/widgets/class-geodir-widget-author-actions.php:364
 msgid "Published"
 msgstr ""
@@ -3651,7 +3651,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-categories.php:211
 #: includes/admin/views/html-admin-settings-import-export-listings.php:197
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:193
-#: includes/core-functions.php:1108 includes/post-functions.php:2343
+#: includes/core-functions.php:1108 includes/post-functions.php:2517
 #: includes/widgets/class-geodir-widget-dynamic-content.php:518
 #: language.php:178 templates/bootstrap/map/filter-cpt.php:24
 msgid "Post Type"
@@ -5855,8 +5855,8 @@ msgstr ""
 #: includes/admin/views/html-admin-page-status-report.php:581
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:22
 #: includes/class-geodir-comments.php:79
-#: includes/class-geodir-post-data.php:982
-#: includes/class-geodir-post-data.php:1007 language.php:33 language.php:127
+#: includes/class-geodir-post-data.php:988
+#: includes/class-geodir-post-data.php:1013 language.php:33 language.php:127
 msgid "Name"
 msgstr ""
 
@@ -6336,7 +6336,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-map.php:958
 #: includes/widgets/class-geodir-widget-post-features.php:708
 #: includes/widgets/class-geodir-widget-post-meta.php:293
-#: includes/widgets/class-geodir-widget-search.php:484
+#: includes/widgets/class-geodir-widget-search.php:494
 #: includes/widgets/class-geodir-widget-tags.php:154
 #: vendor/ayecode/wp-super-duper/sd-functions.php:2034
 msgid "Auto"
@@ -10468,43 +10468,43 @@ msgid "Sunday"
 msgstr ""
 
 #: includes/business-hours-functions.php:62
-#: includes/business-hours-functions.php:2156 includes/helper-functions.php:690
+#: includes/business-hours-functions.php:2168 includes/helper-functions.php:690
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2565
 msgid "Mon"
 msgstr ""
 
 #: includes/business-hours-functions.php:63
-#: includes/business-hours-functions.php:2157 includes/helper-functions.php:691
+#: includes/business-hours-functions.php:2169 includes/helper-functions.php:691
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2566
 msgid "Tue"
 msgstr ""
 
 #: includes/business-hours-functions.php:64
-#: includes/business-hours-functions.php:2158 includes/helper-functions.php:692
+#: includes/business-hours-functions.php:2170 includes/helper-functions.php:692
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2567
 msgid "Wed"
 msgstr ""
 
 #: includes/business-hours-functions.php:65
-#: includes/business-hours-functions.php:2159 includes/helper-functions.php:693
+#: includes/business-hours-functions.php:2171 includes/helper-functions.php:693
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2568
 msgid "Thu"
 msgstr ""
 
 #: includes/business-hours-functions.php:66
-#: includes/business-hours-functions.php:2160 includes/helper-functions.php:694
+#: includes/business-hours-functions.php:2172 includes/helper-functions.php:694
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2569
 msgid "Fri"
 msgstr ""
 
 #: includes/business-hours-functions.php:67
-#: includes/business-hours-functions.php:2161 includes/helper-functions.php:695
+#: includes/business-hours-functions.php:2173 includes/helper-functions.php:695
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2570
 msgid "Sat"
 msgstr ""
 
 #: includes/business-hours-functions.php:68
-#: includes/business-hours-functions.php:2162 includes/helper-functions.php:689
+#: includes/business-hours-functions.php:2174 includes/helper-functions.php:689
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2564
 msgid "Sun"
 msgstr ""
@@ -10516,7 +10516,7 @@ msgid "Closed"
 msgstr ""
 
 #: includes/business-hours-functions.php:698 includes/core-functions.php:330
-#: includes/custom-fields/output-functions.php:2764
+#: includes/custom-fields/output-functions.php:2775
 msgid "Open now"
 msgstr ""
 
@@ -10530,18 +10530,18 @@ msgstr ""
 msgid "Open 24 hours"
 msgstr ""
 
-#: includes/business-hours-functions.php:1213
-#: includes/business-hours-functions.php:1215
-#: includes/business-hours-functions.php:1221
-#: includes/business-hours-functions.php:1226
+#: includes/business-hours-functions.php:1225
+#: includes/business-hours-functions.php:1227
+#: includes/business-hours-functions.php:1233
+#: includes/business-hours-functions.php:1238
 msgid "UTC"
 msgstr ""
 
-#: includes/business-hours-functions.php:1284
+#: includes/business-hours-functions.php:1296
 msgid "Manual Offsets"
 msgstr ""
 
-#: includes/business-hours-functions.php:2155
+#: includes/business-hours-functions.php:2167
 msgid "Today"
 msgstr ""
 
@@ -11592,7 +11592,7 @@ msgstr ""
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1188 includes/post-functions.php:2397
+#: includes/class-geodir-email.php:1188 includes/post-functions.php:2571
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:279
 msgid "Author"
 msgstr ""
@@ -11970,26 +11970,26 @@ msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
 #: includes/class-geodir-post-data.php:433
-#: includes/class-geodir-post-data.php:1477
-#: includes/class-geodir-post-data.php:1820
+#: includes/class-geodir-post-data.php:1483
+#: includes/class-geodir-post-data.php:1826
 msgid "Invalid post!"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:715
+#: includes/class-geodir-post-data.php:721
 #, php-format
 msgid "Could not update post in the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:725
+#: includes/class-geodir-post-data.php:731
 #, php-format
 msgid "Could not insert post into the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:876
+#: includes/class-geodir-post-data.php:882
 msgid "You do not have permission to edit this post."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:894
+#: includes/class-geodir-post-data.php:900
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -11997,7 +11997,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:916
+#: includes/class-geodir-post-data.php:922
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -12005,99 +12005,99 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:973
-#: includes/class-geodir-post-data.php:1005
+#: includes/class-geodir-post-data.php:979
+#: includes/class-geodir-post-data.php:1011
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:984
-#: includes/class-geodir-post-data.php:1009
+#: includes/class-geodir-post-data.php:990
+#: includes/class-geodir-post-data.php:1015
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:998
-#: includes/class-geodir-post-data.php:1015
+#: includes/class-geodir-post-data.php:1004
+#: includes/class-geodir-post-data.php:1021
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1040 language.php:36
+#: includes/class-geodir-post-data.php:1046 language.php:36
 msgid "Enter Listing Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1081
-#: includes/class-geodir-post-data.php:1085
+#: includes/class-geodir-post-data.php:1087
+#: includes/class-geodir-post-data.php:1091
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1091
+#: includes/class-geodir-post-data.php:1097
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1109
+#: includes/class-geodir-post-data.php:1115
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1299
+#: includes/class-geodir-post-data.php:1305
 msgid "You do not have permission to delete this post revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1305
+#: includes/class-geodir-post-data.php:1311
 msgid "The requested item is not a valid post revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1312
+#: includes/class-geodir-post-data.php:1318
 msgid "The requested post is not a valid post type."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1323
+#: includes/class-geodir-post-data.php:1329
 msgid "Could not delete the post revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1412
-#: includes/class-geodir-post-data.php:1739
+#: includes/class-geodir-post-data.php:1418
+#: includes/class-geodir-post-data.php:1745
 msgid "You do not have the privileges to perform this action."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1646
+#: includes/class-geodir-post-data.php:1652
 msgid "User name must have atleast 3 characters."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1648
+#: includes/class-geodir-post-data.php:1654
 msgid "Invalid user email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1674
+#: includes/class-geodir-post-data.php:1680
 msgid "Something wrong! Fail to register a new user."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1761
+#: includes/class-geodir-post-data.php:1767
 #, php-format
 msgid "%s is empty but is a mandatory field, please check and try again."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1875
+#: includes/class-geodir-post-data.php:1881
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1878
+#: includes/class-geodir-post-data.php:1884
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1885
+#: includes/class-geodir-post-data.php:1891
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1891
+#: includes/class-geodir-post-data.php:1897
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:2013
+#: includes/class-geodir-post-data.php:2019
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -13787,20 +13787,20 @@ msgstr ""
 msgid "My location"
 msgstr ""
 
-#: includes/custom-fields/output-filter-functions.php:44
+#: includes/custom-fields/output-filter-functions.php:40
 #, php-format
 msgid "Tweets by %s"
 msgstr ""
 
-#: includes/custom-fields/output-filter-functions.php:126
+#: includes/custom-fields/output-filter-functions.php:122
 msgid "View on Google map"
 msgstr ""
 
-#: includes/custom-fields/output-filter-functions.php:474
+#: includes/custom-fields/output-filter-functions.php:470
 msgid "View on Map"
 msgstr ""
 
-#: includes/custom-fields/output-filter-functions.php:819
+#: includes/custom-fields/output-filter-functions.php:815
 #: includes/widgets/class-geodir-widget-post-title.php:215
 #, php-format
 msgctxt "listing title hover"
@@ -13811,17 +13811,17 @@ msgstr ""
 msgid "Some demo text."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:1968
+#: includes/custom-fields/output-functions.php:1978
 #: includes/widgets/class-geodir-widget-post-content.php:160
 #: includes/widgets/class-geodir-widget-simple-archive-item.php:359
 msgid "Read more..."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2664
+#: includes/custom-fields/output-functions.php:2675
 msgid "View on map"
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2823
+#: includes/custom-fields/output-functions.php:2834
 msgid "Expand opening hours"
 msgstr ""
 
@@ -15129,41 +15129,41 @@ msgstr ""
 msgid "Watch Video"
 msgstr ""
 
-#: includes/post-functions.php:2321
+#: includes/post-functions.php:2495
 #: includes/widgets/class-geodir-widget-dynamic-content.php:515
 msgid "Overall Rating"
 msgstr ""
 
-#: includes/post-functions.php:2332
+#: includes/post-functions.php:2506
 #: includes/widgets/class-geodir-widget-dynamic-content.php:516
 msgid "Rating Count"
 msgstr ""
 
-#: includes/post-functions.php:2375 includes/post-functions.php:2386
+#: includes/post-functions.php:2549 includes/post-functions.php:2560
 msgid "Modified"
 msgstr ""
 
-#: includes/post-functions.php:2420
+#: includes/post-functions.php:2594
 msgid "ID"
 msgstr ""
 
-#: includes/post-functions.php:2431
+#: includes/post-functions.php:2605
 msgid "Post Link"
 msgstr ""
 
-#: includes/post-functions.php:2495
+#: includes/post-functions.php:2669
 msgid "Address line 2"
 msgstr ""
 
-#: includes/post-functions.php:2550
+#: includes/post-functions.php:2724
 msgid "Latitude"
 msgstr ""
 
-#: includes/post-functions.php:2561
+#: includes/post-functions.php:2735
 msgid "Longitude"
 msgstr ""
 
-#: includes/post-functions.php:2572
+#: includes/post-functions.php:2746
 msgid "Map Directions"
 msgstr ""
 
