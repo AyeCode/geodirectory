@@ -489,7 +489,13 @@ class GeoDir_Post_Data {
 						$gd_post_value = null;
 					}
 
-					$gd_post_value = apply_filters( "geodir_custom_field_value_{$cf->field_type}", $gd_post_value, $gd_post, $cf, $post_id, $post, $update );
+					if ( has_filter( "geodir_custom_field_value_{$cf->field_type}" ) ) {
+						$gd_post_value = apply_filters( "geodir_custom_field_value_{$cf->field_type}", $gd_post_value, $gd_post, $cf, $post_id, $post, $update );
+					} else {
+						// No sanitize callback registered for this field type, so never store the raw input.
+						$gd_post_value = geodir_sanitize_custom_field_value_fallback( $gd_post_value, $cf );
+					}
+
 					if ( is_array( $gd_post_value ) ) {
 						$gd_post_value = ! empty( $gd_post_value ) ? implode( ',', $gd_post_value ) : '';
 					}

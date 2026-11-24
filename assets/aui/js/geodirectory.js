@@ -655,7 +655,7 @@ jQuery(document).ready(function($) {
 
 	jQuery('.gd-category-dd ul li a').on("click",function(ele) {
 		jQuery('.gd-category-dd').find('input').val(jQuery(this).attr('data-slug'));
-		jQuery('.gd-category-dd > a').html(jQuery(this).attr('data-name'));
+		jQuery('.gd-category-dd > a').text(jQuery(this).attr('data-name'));
 		jQuery('.gd-category-dd ul').hide();
 	});
 

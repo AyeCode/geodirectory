@@ -15,6 +15,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class GeoDir_Fast_AJAX {
 
 	/**
+	 * Locale used to load the GeoDirectory translations.
+	 *
+	 * @var string
+	 */
+	private static $textdomain_locale = '';
+
+	/**
 	 * Init.
 	 */
 	public static function init() {
@@ -27,6 +34,9 @@ class GeoDir_Fast_AJAX {
 			self::define_ajax();
 
 			add_filter( 'option_active_plugins', array( __CLASS__, 'allowed_plugins' ), 11, 1 );
+
+			// Remember the locale GeoDirectory loaded its translations with (on plugins_loaded priority 10).
+			add_action( 'plugins_loaded', array( __CLASS__, 'set_textdomain_locale' ), 11 );
 
 			if ( ! empty( $_REQUEST['gd-no-auth'] ) ) {
 				// Don't needs authentication (faster).
@@ -76,6 +86,14 @@ class GeoDir_Fast_AJAX {
 		$action = ! empty( $_REQUEST['action'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) : '';
 
 		if ( $action ) {
+			// Reload translations if other plugins (eg: TranslatePress) changed the request's language after they were loaded.
+			if ( self::get_textdomain_locale() !== self::$textdomain_locale ) {
+				GeoDir()->load_textdomain();
+			}
+
+			// TranslatePress applies its gettext translations on wp_loaded, which never fires on GD Fast AJAX.
+			self::translatepress_gettext();
+
 			self::gd_ajax_headers();
 			do_action( 'geodir_ajax_' . $action );
 			wp_die();
@@ -83,6 +101,50 @@ class GeoDir_Fast_AJAX {
 
 		if ( ! self::is_rest_request() ) {
 			exit;
+		}
+	}
+
+	/**
+	 * Store the locale used to load the GeoDirectory translations.
+	 *
+	 * @since 2.8.208
+	 */
+	public static function set_textdomain_locale() {
+		self::$textdomain_locale = self::get_textdomain_locale();
+	}
+
+	/**
+	 * Get the current locale for the GeoDirectory translations.
+	 *
+	 * @since 2.8.208
+	 *
+	 * @return string
+	 */
+	public static function get_textdomain_locale() {
+		/** This filter is documented in geodirectory.php */
+		return apply_filters( 'plugin_locale', determine_locale(), 'geodirectory' );
+	}
+
+	/**
+	 * Apply TranslatePress gettext translations (eg: category names translated in TranslatePress).
+	 *
+	 * TranslatePress adds its gettext filters on wp_loaded for frontend AJAX requests, but
+	 * GD Fast AJAX finishes before wp_loaded, so apply them before the AJAX action runs.
+	 *
+	 * @since 2.8.208
+	 */
+	private static function translatepress_gettext() {
+		if ( did_action( 'wp_loaded' ) || ! class_exists( 'TRP_Translate_Press' ) ) {
+			return;
+		}
+
+		$trp = TRP_Translate_Press::get_trp_instance();
+		$gettext_manager = $trp ? $trp->get_component( 'gettext_manager' ) : null;
+
+		if ( $gettext_manager && has_action( 'wp_loaded', array( $gettext_manager, 'apply_gettext_filter' ) ) ) {
+			remove_action( 'wp_loaded', array( $gettext_manager, 'apply_gettext_filter' ) );
+
+			$gettext_manager->apply_gettext_filter();
 		}
 	}
 

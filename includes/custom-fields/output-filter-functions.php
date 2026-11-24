@@ -19,11 +19,7 @@
 function geodir_predefined_custom_field_output_twitter_feed($html,$location,$cf){
 	global $gd_post;
 
-
 	if (isset($gd_post->{$cf['htmlvar_name']}) && $gd_post->{$cf['htmlvar_name']} != '' ):
-
-		$class = ($cf['htmlvar_name'] == 'geodir_timing') ? "geodir-i-time" : "geodir-i-text";
-
 		$field_icon = geodir_field_icon_proccess($cf);
 		if (strpos($field_icon, 'http') !== false) {
 			$field_icon_af = '';
@@ -38,7 +34,7 @@ function geodir_predefined_custom_field_output_twitter_feed($html,$location,$cf)
 
 		// Database value.
 		if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-			return esc_attr( strip_tags( $x_username ) );
+			return esc_html( strip_tags( $x_username ) );
 		}
 
 		$value = '<a class="twitter-timeline" data-height="600" data-dnt="true" href="' . esc_url( 'https://x.com/' . $x_username ) . '">' . wp_sprintf( __( 'Tweets by %s', 'geodirectory' ), esc_html( $x_username ) ) . '</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
@@ -107,7 +103,7 @@ function geodir_predefined_custom_field_output_distanceto( $html, $location, $cf
 
 		if ( ! empty( $output ) && isset( $output['raw'] ) ) {
 			// Database value.
-			return $value;
+			return geodir_clean( $value );
 		} elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
 			// Stripped value.
 			return $_distance;
@@ -330,7 +326,7 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '', $the_po
 			$address_fields = geodir_post_meta_address_fields( $gd_post->post_type );
 
 			if ( ! empty( $value ) && ! empty( $address_fields ) && isset( $address_fields[ $htmlvar_name ] ) ) {
-				$value = geodir_post_address( $value, $htmlvar_name, $gd_post );
+				$value = geodir_post_address( geodir_clean( $value ), $htmlvar_name, $gd_post );
 			}
 		}
 
@@ -349,7 +345,7 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '', $the_po
 
 			// Database value.
 			if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-				return $value;
+				return geodir_sanitize_custom_field_raw_output( $value, $cf );
 			}
 
 			$value = apply_filters( 'geodir_custom_field_output_field_value', $value, $location, $cf, $gd_post );
@@ -433,8 +429,8 @@ function geodir_custom_field_output_map_directions( $html, $location, $cf, $outp
 
 	if ( ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
 		$label = trim( $cf['frontend_title'] );
-		$latitude = $gd_post->latitude;
-		$longitude = $gd_post->longitude;
+		$latitude  = geodir_sanitize_latlon( $gd_post->latitude, 'lat' );
+		$longitude = geodir_sanitize_latlon( $gd_post->longitude );
 
 		$field_icon = geodir_field_icon_proccess( $cf );
 		$output = geodir_field_output_process( $output );
@@ -525,7 +521,7 @@ function geodir_custom_field_output_post_status( $html, $location, $cf, $output,
 			$field_icon = '';
 		}
 
-		$value = $gd_post->{$htmlvar_name};
+		$value = geodir_clean( $gd_post->{$htmlvar_name} );
 
 		// Database value.
 		if ( ! empty( $output ) && isset( $output['raw'] ) ) {
@@ -601,7 +597,7 @@ function geodir_custom_field_output_default_category( $html, $location, $cf, $ou
 			$field_icon = '';
 		}
 
-		$value = $gd_post->{$htmlvar_name};
+		$value = absint( $gd_post->{$htmlvar_name} );
 
 		// Database value.
 		if ( ! empty( $output ) && isset( $output['raw'] ) ) {

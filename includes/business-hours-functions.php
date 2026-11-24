@@ -959,24 +959,36 @@ function geodir_hhmm_to_bh_minutes( $hm, $day_no = 0 ) {
  * @return string $value Sanitize business hours.
  */
 function geodir_sanitize_business_hours_value( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
-	if ( ! empty( $value ) && ! is_array( $value ) ) {
-		$value = stripslashes_deep( $value );
-		$country = '';
-
-		if ( strpos( $value, '"UTC"' ) === false || strpos( $value, '"Timezone"' ) === false ) {
-			if ( ! empty( $gd_post['country'] ) ) {
-				$country = $gd_post['country'];
-			} elseif ( GeoDir_Post_types::supports( $post->post_type, 'location' ) ) {
-				$country = geodir_get_post_meta( $post_id, 'country', true );
-			} else {
-				$country = geodir_get_option( 'default_location_country' );
-			}
-		}
-
-		// Always rebuild the schema from validated parts to prevent malicious input.
-		$value = geodir_business_hours_sanitize_schema( $value, $country );
+	if ( empty( $value ) ) {
+		return '';
 	}
-	return $value;
+
+	if ( is_array( $value ) ) {
+		$value = implode( ',', array_filter( array_map( function( $_value ) {
+			return is_scalar( $_value ) ? (string) $_value : '';
+		}, $value ) ) );
+	}
+
+	// Only a string can hold a valid business hours value.
+	if ( empty( $value ) || ! is_scalar( $value ) || is_bool( $value ) ) {
+		return '';
+	}
+
+	$value   = stripslashes( $value );
+	$country = '';
+
+	if ( strpos( $value, '"UTC"' ) === false || strpos( $value, '"Timezone"' ) === false ) {
+		if ( ! empty( $gd_post['country'] ) ) {
+			$country = $gd_post['country'];
+		} elseif ( GeoDir_Post_types::supports( $post->post_type, 'location' ) ) {
+			$country = geodir_get_post_meta( $post_id, 'country', true );
+		} else {
+			$country = geodir_get_option( 'default_location_country' );
+		}
+	}
+
+	// Always rebuild the schema from validated parts to prevent malicious input.
+	return geodir_business_hours_sanitize_schema( $value, $country );
 }
 add_filter( 'geodir_custom_field_value_business_hours', 'geodir_sanitize_business_hours_value', 10, 6 );
 
