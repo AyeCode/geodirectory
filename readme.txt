@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, listings, directory plugin, classifieds, directory
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 2.8.207
+Stable tag: 2.8.208
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -329,11 +329,12 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
-= GeoDirectory v2.8.208 - TBD =
+= GeoDirectory v2.8.208 - 2026-11-24 =
 * Settings could be reset to defaults when the saved settings could not be read, e.g. during a backup that changes the database connection character set - FIXED
 * Search "main-no-advanced" option may affect other search forms on the same page - FIXED
 * Time field value was not sanitized, allowing stored XSS when displaying raw value - FIXED/SECURITY
 * Category dropdown data-name in listing content could be used for stored XSS - FIXED/SECURITY
+* TranslatePress compatibility on fast AJAX loaded content - CHANGED
 
 = GeoDirectory v2.8.207 - 2026-11-18 =
 * Create missing pages tool fails to assign a recreated page after the original was deleted - FIXED
