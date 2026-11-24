@@ -976,6 +976,7 @@ function geodir_sanitize_business_hours_value( $value, $gd_post, $custom_field, 
 		// Always rebuild the schema from validated parts to prevent malicious input.
 		$value = geodir_business_hours_sanitize_schema( $value, $country );
 	}
+
 	return $value;
 }
 add_filter( 'geodir_custom_field_value_business_hours', 'geodir_sanitize_business_hours_value', 10, 6 );

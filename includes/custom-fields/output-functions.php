@@ -330,7 +330,7 @@ function geodir_cf_url( $html, $location, $cf, $p = '', $output = '' ) {
 
 			if ( ! empty( $output ) && isset( $output['raw'] ) ) {
 				// Database value.
-				return geodir_clean( stripslashes( $gd_post->{$cf['htmlvar_name']} ) );
+				return esc_html( stripslashes( $gd_post->{$cf['htmlvar_name']} ) );
 			} elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
 				// Stripped value.
 				return $website;
@@ -1619,7 +1619,7 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
 
             // Database value.
             if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                $value_raw = ( isset( $gd_post->{$html_var} ) ? stripslashes_deep( $gd_post->{$html_var} ) : '' );
+                $value_raw = ( isset( $gd_post->{$html_var} ) && is_scalar( $gd_post->{$html_var} ) ? esc_html( stripslashes( $gd_post->{$html_var} ) ) : '' );
 
                 return apply_filters( 'geodir_cf_file_output_value_raw', $value_raw, $files, $location, $cf, $output );
             }
@@ -1912,8 +1912,13 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
                 $value = $is_protected ? '' : stripslashes( $gd_post->{$html_var} );
 
                 if ( $value ) {
-                    $allowed_html = geodir_custom_field_kses_allowed_html( $cf, $value, $gd_post );
-                    $value        = geodir_sanitize_html_field( $value, $allowed_html );
+                    if ( $html_var == 'post_content' && ! empty( $gd_post->post_author ) && user_can( (int) $gd_post->post_author, 'unfiltered_html' ) ) {
+                        // Author is allowed to save unfiltered HTML (WordPress capability), so keep content as saved.
+                        $value = geodir_kses_safe_aui_attributes( $value );
+                    } else {
+                        $allowed_html = geodir_custom_field_kses_allowed_html( $cf, $value, $gd_post );
+                        $value        = geodir_sanitize_html_field( $value, $allowed_html );
+                    }
                 }
 
                 $gd_skip_the_content = true; // Set global variable to prevent looping on some themes/plugins.
@@ -2626,7 +2631,7 @@ function geodir_cf_address( $html, $location, $cf, $p = '', $output = '' ) {
 
 			// Database / Stripped value.
 			if ( ! empty( $output ) && ( isset( $output['raw'] ) || isset( $output['strip'] ) ) ) {
-				$address_fields = str_replace( "<br>", ",", $address_fields );
+				$address_fields = str_replace( array( ",<br>", "<br>" ), array( ",", "," ), $address_fields );
 				return stripslashes( wp_strip_all_tags( $address_fields, true ) );
 			}
 
