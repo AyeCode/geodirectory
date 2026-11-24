@@ -333,6 +333,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 * Settings could be reset to defaults when the saved settings could not be read, e.g. during a backup that changes the database connection character set - FIXED
 * Search "main-no-advanced" option may affect other search forms on the same page - FIXED
 * Time field value was not sanitized, allowing stored XSS when displaying raw value - FIXED/SECURITY
+* Category dropdown data-name in listing content could be used for stored XSS - FIXED/SECURITY
 
 = GeoDirectory v2.8.207 - 2026-11-18 =
 * Create missing pages tool fails to assign a recreated page after the original was deleted - FIXED
