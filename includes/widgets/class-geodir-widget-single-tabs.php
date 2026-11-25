@@ -409,7 +409,14 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 
 		// Main content
 		if ( ! empty( $tab->tab_content ) ) { // override content
-			$content = geodir_replace_variables( stripslashes( $tab->tab_content ) );
+			$_tab_content = stripslashes( $tab->tab_content );
+			$content      = geodir_replace_variables( $_tab_content );
+
+			// Sanitize after %%variables%% are replaced, so field values can't inject attributes/scripts.
+			if ( $content !== $_tab_content ) {
+				$content = geodir_sanitize_html_field( wp_slash( $content ) );
+			}
+
 			echo do_shortcode( $content );
 		} elseif ( $tab->tab_type == 'meta' ) { // meta info
 			echo do_shortcode( '[gd_post_meta key="' . $tab->tab_key . '" show="value"]' );
@@ -467,7 +474,14 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 				do_action( 'geodir_single_tab_content_before', $child_tab, $tab );
 
 				if ( ! empty( $child_tab->tab_content ) ) { // override content
-					$_content = geodir_replace_variables( stripslashes( $child_tab->tab_content ) );
+					$_tab_content = stripslashes( $child_tab->tab_content );
+					$_content     = geodir_replace_variables( $_tab_content );
+
+					// Sanitize after %%variables%% are replaced, so field values can't inject attributes/scripts.
+					if ( $_content !== $_tab_content ) {
+						$_content = geodir_sanitize_html_field( wp_slash( $_content ) );
+					}
+
 					echo do_shortcode( $_content );
 				} elseif ( $child_tab->tab_type == 'meta' ) { // meta info
 					echo do_shortcode( '[gd_post_meta key="' . $child_tab->tab_key . '"]' );
