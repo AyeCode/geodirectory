@@ -1991,8 +1991,8 @@ function geodir_replace_variables( $text, $post_id = '' ) {
 		return $text;
 	}
 
-	// Find every %%token%% in the ORIGINAL template, with byte offsets.
-	if ( ! preg_match_all( '/%%([A-Za-z0-9_\-]+)%%/', $text, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE ) ) {
+	// Only run if the text contains a %%variable%%.
+	if ( ! preg_match( '/%%[A-Za-z0-9_\-]+%%/', $text ) ) {
 		return $text;
 	}
 
