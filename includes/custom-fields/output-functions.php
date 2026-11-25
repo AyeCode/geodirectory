@@ -2624,6 +2624,9 @@ function geodir_cf_address( $html, $location, $cf, $p = '', $output = '' ) {
 			// Render private address.
 			$address_fields = geodir_post_address( $address_fields, 'address', $gd_post );
 
+			// Strip slashes before sanitizing so that no markup can be re-formed after sanitization.
+			$address_fields = stripslashes( $address_fields );
+
 			$plain_value = wp_strip_all_tags( $address_fields, true );
 			if ( $plain_value == '' ) {
 				return $html;
@@ -2632,8 +2635,11 @@ function geodir_cf_address( $html, $location, $cf, $p = '', $output = '' ) {
 			// Database / Stripped value.
 			if ( ! empty( $output ) && ( isset( $output['raw'] ) || isset( $output['strip'] ) ) ) {
 				$address_fields = str_replace( array( ",<br>", "<br>" ), array( ",", "," ), $address_fields );
-				return stripslashes( wp_strip_all_tags( $address_fields, true ) );
+				return wp_strip_all_tags( $address_fields, true );
 			}
+
+			// Sanitize the address HTML before output.
+			$address_fields = geodir_kses_address( $address_fields );
 
 			$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" itemscope itemtype="http://schema.org/PostalAddress">';
 
@@ -2652,11 +2658,11 @@ function geodir_cf_address( $html, $location, $cf, $p = '', $output = '' ) {
 			}
 
 			if ( $output == '' || isset( $output['value'] ) ) {
-				$html .= stripslashes( $address_fields );
+				$html .= $address_fields;
 			}
 
 			if ( ! empty( $output ) && isset( $output['link'] ) ) {
-				$value = stripslashes( $address_fields );
+				$value = $address_fields;
 				$address = normalize_whitespace( wp_strip_all_tags( $value ) );
 				$map_link = 'https://www.google.com/maps?q=' . urlencode( $address );
 

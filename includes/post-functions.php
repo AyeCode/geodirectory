@@ -1987,40 +1987,47 @@ function geodir_replace_variables( $text, $post_id = '' ) {
 	global $gd_post;
 
 	// Only run if we have a GD post and the start of a var
-	if ( ! empty( $gd_post->ID ) && strpos( $text, '%%' ) !== false ) {
-		$non_replace = geodir_get_no_replace_fields();
+	if ( empty( $gd_post->ID ) || ! is_string( $text ) || strpos( $text, '%%' ) === false ) {
+		return $text;
+	}
 
-		// Field key => type info, used to escape each replacement value for
-		// the context it is output in.
-		$field_types = geodir_dynamic_content_field_types( ! empty( $gd_post->post_type ) ? $gd_post->post_type : '' );
+	// Only run if the text contains a %%variable%%.
+	if ( ! preg_match( '/%%[A-Za-z0-9_\-]+%%/', $text ) ) {
+		return $text;
+	}
 
-		foreach( $gd_post as $key => $val ) {
-			if ( ! in_array( $key, $non_replace ) ) {
-				// Replace plain variables.
-				if ( strpos( $text, '%%' . $key . '%%' ) !== false ) {
-					$val = apply_filters( 'geodir_replace_variables_' . $key, $val, $text );
+	$non_replace = geodir_get_no_replace_fields();
 
-					$replace_val = $val;
-					if ( ! empty( $replace_val ) ) {
-						$field_type = isset( $field_types[ $key ]['field_type'] ) ? $field_types[ $key ]['field_type'] : '';
-						$data_type  = isset( $field_types[ $key ]['data_type'] ) ? $field_types[ $key ]['data_type'] : '';
+	// Field key => type info, used to escape each replacement value for
+	// the context it is output in.
+	$field_types = geodir_dynamic_content_field_types( ! empty( $gd_post->post_type ) ? $gd_post->post_type : '' );
 
-						if ( in_array( $key, array( 'post_content', 'post_excerpt' ), true ) ) {
-							$field_type = 'html';
-						}
+	foreach( $gd_post as $key => $val ) {
+		if ( ! in_array( $key, $non_replace ) ) {
+			// Replace plain variables.
+			if ( strpos( $text, '%%' . $key . '%%' ) !== false ) {
+				$val = apply_filters( 'geodir_replace_variables_' . $key, $val, $text );
 
-						$replace_val = geodir_escape_dynamic_value( $replace_val, $field_type, $data_type, array( 'key' => $key, 'text' => $text ) );
+				$replace_val = $val;
+				if ( ! empty( $replace_val ) ) {
+					$field_type = isset( $field_types[ $key ]['field_type'] ) ? $field_types[ $key ]['field_type'] : '';
+					$data_type  = isset( $field_types[ $key ]['data_type'] ) ? $field_types[ $key ]['data_type'] : '';
+
+					if ( in_array( $key, array( 'post_content', 'post_excerpt' ), true ) ) {
+						$field_type = 'html';
 					}
 
-					$text = str_replace( '%%' . $key . '%%', $replace_val, $text );
+					$replace_val = geodir_escape_dynamic_value( $replace_val, $field_type, $data_type, array( 'key' => $key, 'text' => $text ) );
 				}
 
-				// Replace encoded variables.
-				if ( strpos( $text, '%%' . $key . '_encode%%' ) !== false ) {
-					$encode_val = ! empty( $val ) ? urlencode( trim( $val ) ) : '';
-					$encode_val = apply_filters( 'geodir_replace_variables_encode_' . $key, $encode_val, $text );
-					$text = str_replace( '%%' . $key . '_encode%%', $encode_val, $text );
-				}
+				$text = str_replace( '%%' . $key . '%%', $replace_val, $text );
+			}
+
+			// Replace encoded variables.
+			if ( strpos( $text, '%%' . $key . '_encode%%' ) !== false ) {
+				$encode_val = ! empty( $val ) ? urlencode( trim( $val ) ) : '';
+				$encode_val = apply_filters( 'geodir_replace_variables_encode_' . $key, $encode_val, $text );
+				$text = str_replace( '%%' . $key . '_encode%%', $encode_val, $text );
 			}
 		}
 	}

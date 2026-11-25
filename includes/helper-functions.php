@@ -13,13 +13,16 @@
  *
  * @return bool|string
  */
-function geodir_db_cpt_table($post_type){
-	if(!empty($post_type)){
-		global $plugin_prefix;
-		return $plugin_prefix . $post_type . '_detail';
+function geodir_db_cpt_table( $post_type ) {
+	global $wpdb;
+
+	$post_type = sanitize_key( $post_type );
+
+	if ( $post_type === '' ) {
+		return false;
 	}
 
-	return false;
+	return $wpdb->prefix . 'geodir_' . $post_type . '_detail';
 }
 
 /**

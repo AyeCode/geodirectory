@@ -593,6 +593,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			$comment_id      = $comment->comment_ID;
 			$comment_content = strip_tags( $comment->comment_content );
 			$comment_content = preg_replace( '#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_content );
+			$comment_content = geodir_neutralize_untrusted_content( $comment_content );
 
 			$permalink            = get_permalink( $comment->post_id ) . '#comment-' . $comment->comment_ID;
 			$comment_author_email = $comment->comment_author_email;
