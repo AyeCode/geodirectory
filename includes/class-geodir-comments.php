@@ -22,6 +22,10 @@ class GeoDir_Comments {
 		// add ratings to comment text
 		add_filter( 'comment_text', array( __CLASS__, 'wrap_comment_text' ), 40, 2 );
 
+		// Prevent review text from being parsed as shortcodes when the listing content is re-parsed.
+		add_filter( 'comment_text', array( __CLASS__, 'neutralize_comment_shortcodes' ), PHP_INT_MAX, 2 );
+		add_filter( 'get_comment_excerpt', array( __CLASS__, 'neutralize_comment_excerpt_shortcodes' ), PHP_INT_MAX, 3 );
+
 		// replace comments template
 		add_filter( 'comments_template', array( __CLASS__, 'comments_template' ) ); // @todo, maybe we want to use the themes own template?
 
@@ -632,6 +636,45 @@ class GeoDir_Comments {
 				return $content;
 			}
 		}
+	}
+
+	/**
+	 * Encode shortcode brackets in GD review text.
+	 *
+	 * The single listing page content is filtered through the_content, which
+	 * runs do_shortcode() on the already rendered output (including the reviews).
+	 * Review text is untrusted user input and must never be parsed as shortcodes.
+	 *
+	 * @since 2.8.209
+	 *
+	 * @param string $content The comment content.
+	 * @param object|string $comment The comment object.
+	 * @return string The comment content.
+	 */
+	public static function neutralize_comment_shortcodes( $content, $comment = '' ) {
+		if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( (int) $comment->comment_post_ID ) ) ) {
+			$content = geodir_neutralize_untrusted_content( $content );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Encode shortcode brackets in GD review excerpt.
+	 *
+	 * @since 2.8.209
+	 *
+	 * @param string $content The comment excerpt.
+	 * @param string $comment_id The comment ID as a numeric string.
+	 * @param object|string $comment The comment object.
+	 * @return string The comment excerpt.
+	 */
+	public static function neutralize_comment_excerpt_shortcodes( $content, $comment_id = 0, $comment = '' ) {
+		if ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( (int) $comment->comment_post_ID ) ) ) {
+			$content = geodir_neutralize_untrusted_content( $content );
+		}
+
+		return $content;
 	}
 
 	/**

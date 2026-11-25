@@ -1,12 +1,19 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
-global $aui_bs5;
-
 /**
+ * Display Recent Review Item
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/bootstrap/reviews/recent-item-clean.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://wpgeodirectory.com/documentation/article/how-tos/customizing-templates/
+ * @package    GeoDirectory
+ * @version    2.8.209
+ *
  * Variables.
  *
  * @var object $comment The comment object.
@@ -21,6 +28,12 @@ global $aui_bs5;
  * @var bool $active If the item is in a carousel and active.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+global $aui_bs5;
+
 $comment_content = wp_strip_all_tags( $comment->comment_content );
 $comment_content = preg_replace( '#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_content );
 $comment_excerpt = geodir_utf8_substr( $comment_content, 0, 150 ) . '&#8230;';
@@ -29,7 +42,7 @@ $comment_excerpt = geodir_utf8_substr( $comment_content, 0, 150 ) . '&#8230;';
 	<div class="card h-100 mw-100 shadow-sm border-0">
 		<div class="card-body">
 			<div class="fs-xs mb-2"><?php echo geodir_get_rating_stars( $comment->rating, $comment_post_ID ); ?></div>
-			<p class="geodir_reviewer_text p-0 m-0 fs-base text-muted"><?php echo esc_html( $comment_excerpt ); ?></p>
+			<p class="geodir_reviewer_text p-0 m-0 fs-base text-muted"><?php echo geodir_neutralize_untrusted_content( esc_html( $comment_excerpt ) ); ?></p>
 		</div>
 
 		<div class="card-footer border-0 pt-0 d-flex align-items-center">

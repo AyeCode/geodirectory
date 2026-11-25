@@ -329,6 +329,9 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.209 - TBD =
+* Review text could be parsed as shortcodes, allowing stored XSS - FIXED/SECURITY
+
 = GeoDirectory v2.8.208 - 2026-11-24 =
 * Settings could be reset to defaults when the saved settings could not be read, e.g. during a backup that changes the database connection character set - FIXED
 * Search "main-no-advanced" option may affect other search forms on the same page - FIXED

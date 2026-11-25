@@ -30,6 +30,75 @@ function geodir_clean( $var ) {
 }
 
 /**
+ * Neutralize shortcodes and block delimiters in visitor supplied content.
+ *
+ * @since 2.8.209
+ *
+ * @param string $content The content.
+ * @return string The text with shortcode brackets encoded.
+ */
+function geodir_neutralize_untrusted_content( $content ) {
+	if ( ! is_string( $content ) || $content === '' ) {
+		return $content;
+	}
+
+	// Strip block delimiters.
+	if ( strpos( $content, '<!--' ) !== false ) {
+		$content = preg_replace( '/<!--\s*\/?wp:.*?-->/s', '', $content );
+	}
+
+	// Encode square brackets so shortcodes can't be executed.
+	if ( strpos( $content, '[' ) !== false || strpos( $content, ']' ) !== false ) {
+		$content = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $content );
+	}
+
+	return $content;
+}
+
+/**
+ * Sanitize the address HTML built from the address template.
+ *
+ * @since 2.8.209
+ *
+ * @param string $html The address HTML.
+ * @return string Sanitized address HTML.
+ */
+function geodir_kses_address( $html ) {
+	if ( ! is_string( $html ) || $html === '' ) {
+		return $html;
+	}
+
+	static $allowed_html = null;
+
+	if ( null === $allowed_html ) {
+		$allowed_html = wp_kses_allowed_html( 'post' );
+
+		foreach ( $allowed_html as $tag => $attributes ) {
+			if ( ! is_array( $attributes ) ) {
+				$attributes = array();
+			}
+
+			$attributes['itemprop']  = true;
+			$attributes['itemscope'] = true;
+			$attributes['itemtype']  = true;
+
+			$allowed_html[ $tag ] = $attributes;
+		}
+
+		/**
+		 * Filter the HTML tags & attributes allowed in the address output.
+		 *
+		 * @since 2.8.209
+		 *
+		 * @param array $allowed_html Allowed HTML.
+		 */
+		$allowed_html = apply_filters( 'geodir_kses_address_allowed_html', $allowed_html );
+	}
+
+	return wp_kses( $html, $allowed_html );
+}
+
+/**
  * Emulate the WP native sanitize_text_field function in a %%variable%% safe way.
  *
  * @see   https://core.trac.wordpress.org/browser/trunk/src/wp-includes/formatting.php for the original
