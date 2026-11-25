@@ -540,8 +540,20 @@ function geodir_api_hash( $data ) {
  */
 function geodir_column_exist( $db, $column ) {
 	global $wpdb;
-	$exists  = false;
-	$columns = $wpdb->get_col( "show columns from $db" );
+
+	$exists = false;
+
+	// Allow only a valid table identifier.
+	if ( empty( $db ) || ! is_string( $db ) || ! preg_match( '/^[A-Za-z0-9_\-\$]+$/', $db ) ) {
+		return $exists;
+	}
+
+	$columns = $wpdb->get_col( "SHOW COLUMNS FROM `{$db}`" );
+
+	if ( empty( $columns ) || ! is_array( $columns ) ) {
+		return $exists;
+	}
+
 	foreach ( $columns as $c ) {
 		if ( $c == $column ) {
 			$exists = true;

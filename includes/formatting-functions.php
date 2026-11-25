@@ -48,8 +48,38 @@ function geodir_neutralize_untrusted_content( $content ) {
 	}
 
 	// Encode square brackets so shortcodes can't be executed.
+	return geodir_encode_shortcode_brackets( $content );
+}
+
+/**
+ * Encode square brackets so the text can never be parsed as shortcodes.
+ *
+ * Brackets are encoded as hex entities (&#x5B; / &#x5D;) instead of &#91; / &#93;.
+ * WordPress uses &#91; / &#93; as internal placeholders in do_shortcode() and
+ * unescape_invalid_shortcodes() turns them back into [ ] at the end of every
+ * do_shortcode() call. When review text is rendered inside a shortcode (e.g.
+ * [gd_single_tabs] / [gd_single_reviews] within the single page template) the
+ * decimal entities are converted back to brackets, and the following
+ * do_shortcode() on the_content then executes them. Hex entities are left
+ * untouched by the shortcode API and by entity normalization.
+ *
+ * @since 2.8.209
+ *
+ * @param string $content The content.
+ * @return string The content with square brackets encoded.
+ */
+function geodir_encode_shortcode_brackets( $content ) {
+	if ( ! is_string( $content ) || $content === '' ) {
+		return $content;
+	}
+
+	// Decimal bracket entities already present in the text would also be decoded by do_shortcode().
+	if ( strpos( $content, '&#' ) !== false ) {
+		$content = preg_replace( array( '/&#0*91;/', '/&#0*93;/' ), array( '&#x5B;', '&#x5D;' ), $content );
+	}
+
 	if ( strpos( $content, '[' ) !== false || strpos( $content, ']' ) !== false ) {
-		$content = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $content );
+		$content = str_replace( array( '[', ']' ), array( '&#x5B;', '&#x5D;' ), $content );
 	}
 
 	return $content;

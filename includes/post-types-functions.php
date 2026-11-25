@@ -125,33 +125,33 @@ function geodir_post_type_options( $plural_name = false, $translated = false ) {
  * @return bool True if given post type is GD post type, otherwise False.
  */
 function geodir_is_gd_post_type( $post_type ) {
-    global $gd_is_post_type;
+	global $gd_is_post_type;
 
-    if ( empty( $post_type ) || is_array($post_type) ) {
-        return false;
-    }
+	// Must be a scalar following the GD post type naming convention (gd_*).
+	if ( ! is_scalar( $post_type ) || strpos( (string) $post_type, 'gd_' ) !== 0 ) {
+		return false;
+	}
 
-    if ( strpos( $post_type, 'gd_' ) !== 0 ) {
-        return false;
-    }
+	$post_type = (string) $post_type;
 
-    if ( !empty( $gd_is_post_type ) && !empty( $gd_is_post_type[ $post_type ] ) ) {
-        return true;
-    }
+	// Fast path: already confirmed earlier in this request.
+	if ( ! empty( $gd_is_post_type[ $post_type ] ) ) {
+		return true;
+	}
 
-    $gd_posttypes = geodir_get_posttypes();
+	$post_types = geodir_get_posttypes();
 
-    if ( !empty( $gd_posttypes ) && in_array( $post_type, $gd_posttypes ) ) {
-        if ( !is_array( $gd_is_post_type ) ) {
-            $gd_is_post_type = array();
-        }
+	if ( ! empty( $post_types ) && in_array( $post_type, $post_types, true ) ) {
+		if ( ! is_array( $gd_is_post_type ) ) {
+			$gd_is_post_type = array();
+		}
 
-        $gd_is_post_type[ $post_type ] = true;
+		$gd_is_post_type[ $post_type ] = true;
 
-        return true;
-    }
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 /**
@@ -626,53 +626,60 @@ function geodir_cpt_set_has_post() {
  * @return string The post type.
  */
 function geodir_get_current_posttype() {
-    global $wp_query, $post, $geodir_post_type;
+	global $post, $geodir_post_type;
 
-    $geodir_post_type = get_query_var('post_type');
+	// Get from the queried post type.
+	$geodir_post_type = get_query_var( 'post_type' );
 
-    if (geodir_is_page('add-listing') || geodir_is_page('preview')) {
-        if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
-            $geodir_post_type = get_post_type((int)$_REQUEST['pid']);
-        elseif (isset($_REQUEST['listing_type']))
-            $geodir_post_type = sanitize_text_field($_REQUEST['listing_type']);
-    }
+	// Add listing / preview pages: use the edited post, else the chosen listing type.
+	if ( geodir_is_page( 'add-listing' ) || geodir_is_page( 'preview' ) ) {
+		if ( ! empty( $_REQUEST['pid'] ) ) {
+			$geodir_post_type = get_post_type( absint( $_REQUEST['pid'] ) );
+		} elseif ( isset( $_REQUEST['listing_type'] ) && is_scalar( $_REQUEST['listing_type'] ) ) {
+			$geodir_post_type = sanitize_key( wp_unslash( $_REQUEST['listing_type'] ) );
+		}
+	}
 
-    if ((geodir_is_page('search') || geodir_is_page('author')) && isset($_REQUEST['stype']))
-        $geodir_post_type = sanitize_text_field($_REQUEST['stype']);
+	// Search / author pages: use the submitted search type.
+	if ( ( geodir_is_page( 'search' ) || geodir_is_page( 'author' ) ) && isset( $_REQUEST['stype'] ) && is_scalar( $_REQUEST['stype'] ) ) {
+		$geodir_post_type = sanitize_key( wp_unslash( $_REQUEST['stype'] ) );
+	}
 
-    if (is_tax())
-        $geodir_post_type = geodir_get_taxonomy_posttype();
+	// Taxonomy archives.
+	if ( is_tax() ) {
+		$geodir_post_type = geodir_get_taxonomy_posttype();
+	}
 
-    // Retrieve post type for map marker html ajax request on preview page.
-    if (empty($geodir_post_type) && defined('DOING_AJAX') && !empty($post)) {
-        if (!empty($post->post_type)) {
-            $geodir_post_type = $post->post_type;
-        } else if (!empty($post->listing_type)) {
-            $geodir_post_type = $post->listing_type;
-        }
-    }
+	// AJAX search requests (eg: GD Fast AJAX) pass the post type via "stype".
+	if ( defined( 'DOING_AJAX' ) && isset( $_REQUEST['stype'] ) && is_scalar( $_REQUEST['stype'] ) ) {
+		$geodir_post_type = sanitize_key( wp_unslash( $_REQUEST['stype'] ) );
+	}
 
-    $all_postypes = geodir_get_posttypes();
-    $all_postypes = stripslashes_deep($all_postypes);
+	// Map marker HTML AJAX request on the preview page: read from the global post.
+	if ( empty( $geodir_post_type ) && defined( 'DOING_AJAX' ) && ! empty( $post ) ) {
+		if ( ! empty( $post->post_type ) ) {
+			$geodir_post_type = $post->post_type;
+		} elseif ( ! empty( $post->listing_type ) ) {
+			$geodir_post_type = $post->listing_type;
+		}
+	}
 
-    if (is_array($all_postypes) && !in_array($geodir_post_type, $all_postypes))
-        $geodir_post_type = '';
+	// Check GD post type.
+	if ( ! geodir_is_gd_post_type( $geodir_post_type ) ) {
+		$geodir_post_type = '';
+	}
 
-    if( defined( 'DOING_AJAX' ) && isset($_REQUEST['stype'])){
-        $geodir_post_type = sanitize_text_field($_REQUEST['stype']);
-    }
+	// Fall back to the default post type on the search page.
+	if ( empty( $geodir_post_type ) && geodir_is_page( 'search' ) ) {
+		$geodir_post_type = geodir_get_default_posttype();
+	}
 
-    // Set default past type on search page when stype is not set.
-    if ( empty( $geodir_post_type ) && geodir_is_page( 'search' ) ) {
-        $geodir_post_type = geodir_get_default_posttype();
-    }
-
-    /**
-     * Filter the default CPT return.
-     *
-     * @since 1.6.9
-     */
-    return apply_filters('geodir_get_current_posttype',$geodir_post_type);
+	/**
+	 * Filter the default CPT return.
+	 *
+	 * @since 1.6.9
+	 */
+	return apply_filters( 'geodir_get_current_posttype', $geodir_post_type );
 }
 
 /**

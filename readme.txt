@@ -331,6 +331,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require manual work, s
 
 = GeoDirectory v2.8.209 - TBD =
 * Review text could be parsed as shortcodes, allowing stored XSS - FIXED/SECURITY
+* SQL injection via AJAX search post type (stype) parameter - FIXED/SECURITY
 
 = GeoDirectory v2.8.208 - 2026-11-24 =
 * Settings could be reset to defaults when the saved settings could not be read, e.g. during a backup that changes the database connection character set - FIXED
