@@ -329,6 +329,9 @@ wp-rankings verification string: [https://wp-rankings.com/plugins/geodirectory](
 
 __WARNING: GDv2 is a significant update over GDv1 and may require manual work, such as adding widgets to sidebars to recreate your current layout. As always, we recommend trying this on a staging site first. [Learn more](https://wpgeodirectory.com/documentation/article/how-tos/upgrading-from-gdv1-to-gdv2/)__
 
+= GeoDirectory v2.8.210 - TBD =
+* Guest add listing could assign the listing to another user when logged out posting is enabled - FIXED/SECURITY
+
 = GeoDirectory v2.8.209 - 2026-11-25 =
 * Review text could be parsed as shortcodes, allowing stored XSS - FIXED/SECURITY
 * SQL injection via AJAX search post type (stype) parameter - FIXED/SECURITY

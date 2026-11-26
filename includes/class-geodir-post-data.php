@@ -1523,6 +1523,11 @@ class GeoDir_Post_Data {
 			unset( $post_data[ $field ] );
 		}
 
+		// The post author must never be taken from the request for non-admins.
+		if ( isset( $post_data['post_author'] ) ) {
+			unset( $post_data['post_author'] );
+		}
+
 		$id = ! empty( $post_data['ID'] ) ? absint( $post_data['ID'] ) : 0;
 
 		if ( ! ( $id && ( get_post_status( $id ) === 'auto-draft' || wp_is_post_revision( $id ) ) ) ) {
@@ -1657,10 +1662,12 @@ class GeoDir_Post_Data {
 				$user_id_from_email = email_exists( $user_email );
 				$post_author = 0;
 
-				if ( $user_id_from_username && $user_id_from_email && $user_id_from_username == $user_id_from_email ) { // user already exists
-					$post_author = $user_id_from_email;
-				} elseif ( $user_id_from_email ) { // user exists from email
-					$post_author = $user_id_from_email;
+				// A logged out visitor can not prove they own an existing account, so the listing must
+				// not be attributed to that account (or consume its listing quota). Ask them to log in.
+				if ( $user_id_from_email ) { // user exists from email
+					$error = new WP_Error( 'geodir_user_email_exists', __( 'An account is already registered with this email address. Please log in to submit the listing.', 'geodirectory' ) );
+				} elseif ( $user_id_from_username ) { // user exists from username
+					$error = new WP_Error( 'geodir_username_exists', __( 'An account is already registered with this username. Please log in to submit the listing.', 'geodirectory' ) );
 				} else { // register new user
 					$user_name = geodir_generate_unique_username( $user_name );
 					if ( empty( $user_name ) ) {
